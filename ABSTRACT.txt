@@ -1,0 +1,9 @@
+Hermes: A Multi-Scale Spatial-Temporal Hypergraph Network for Stock Time Series Forecasting
+
+Condensed abstract
+
+Uses a hypergraph network to capture industry relationships, inter-industry lead-lag
+effects, and stock dynamics at multiple temporal scales. Moving aggregation learns
+changing lead-lag dependencies, while cross-scale message passing combines information
+across resolutions. Experiments on real stock datasets report improved forecasting
+accuracy over existing methods.

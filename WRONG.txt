@@ -1,0 +1,48 @@
+Methodological vulnerabilities to investigate — assessed 2026-11-17
+
+Scope: mathematical properties of the published equations and measurements of
+the independent local reconstruction. These do not establish that the authors'
+implementation has the same behavior, that their reported results are false,
+or that the paper has lookahead bias. No author implementation was available
+in the inspected local evidence.
+
+1. The ranking objective can reward shrinking predictions without better ranking.
+Paper Section 3.7, Eq.24 defines the sum of max(0, -prediction_difference *
+return_difference). For predictions p and any positive c, this ranking term
+satisfies R(c*p) = c*R(p), while Pearson IC is unchanged. Constant predictions
+have zero ranking loss. Thus this term alone does not distinguish a useful
+ordering from ties; shrinking scores can reduce it without improving IC.
+MSE supplies a competing constraint, so this is not proof that constant
+predictions minimize the combined objective.
+
+With mean MSE, the written pair sum also changes relative weighting with
+universe size: for 474 valid stocks, sum versus mean differs by 224,676.
+Local Figure 3 runs have training ranking/MSE ratios of 2,042, 12,381 and
+11,686 at their selected epochs. The local loss-based checkpoint rule is an
+assumption; its mismatch with IC must not be attributed to author selection.
+Earlier mean-pair runs still failed (three-seed test IC -0.002929), so changing
+reduction alone is not an established remedy.
+
+2. Inverse-distance fusion is undefined for coincident off-diagonal embeddings.
+Paper Eqs.17–18 take the reciprocal of a PSD squared distance before softmax.
+Distinct nodes can have identical embeddings, or a PSD metric can have a
+nullspace, making that distance zero. A stabilizer is needed but is not given
+in these equations. The reconstruction adds a 1e-6 floor. On the first 32
+training target dates at the Figure 3 checkpoints, 97.3–99.5% of softmax columns
+have maximum weight above 0.999. This establishes concentrated local routing,
+not that it caused the test failure or that author routing behaves identically.
+
+Remedies to test: recover author preprocessing/configuration; separately compare
+loss weighting, validation-IC checkpoint selection, and stabilized fusion on
+training/validation data. Retain current outputs and treat the already inspected
+test period as a replication diagnostic, not an untouched tuning benchmark.
+
+Evidence (relative to this project):
+- Original captured paper, Eqs.17–18 and 24:
+  ../.replication-local/artifacts/hermes/sources/paper-browser.txt:315-316,364
+  https://arxiv.org/html/2509.23668v3
+- Local objective and fusion: hermes/model.py
+- New fixed-checkpoint probes: analysis/ic_diagnostics_20261117.json
+- Earlier audit and controls:
+  ../.replication-local/artifacts/hermes/results/exact-audit-2026-11-11/TRAINING_METHOD_AUDIT.txt
+  ../.replication-local/artifacts/hermes/results/comparison.csv

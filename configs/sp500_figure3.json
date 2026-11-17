@@ -1,0 +1,34 @@
+{
+  "paper": "https://arxiv.org/html/2509.23668v3",
+  "evidence": "Figure 3(b,c): best plotted S&P500 hidden dimension 5 and lag windows [3,3,3]. These are not a complete author headline-run configuration.",
+  "changed_from_historical": {
+    "hidden": {"before": 8, "after": 5},
+    "windows": {"before": [3,2,1], "after": [3,3,3]}
+  },
+  "seeds": [0,1,2],
+  "training": {
+    "epochs": 100,
+    "patience": 15,
+    "batch_size": 32,
+    "lookback": 16,
+    "hidden": 5,
+    "scales": [1,2,4],
+    "windows": [3,3,3],
+    "lr": 0.005,
+    "alpha": 1.0,
+    "rank_reduction": "sum",
+    "ablation": "full",
+    "top_k": 5,
+    "train_end": 1006,
+    "val_end": 1259,
+    "threads": 4
+  },
+  "retained_uncertainties": [
+    "Convolution schedule [1,2,4] is still a reconstruction choice.",
+    "Prediction-head depth, activation and width are not specified enough to recover the author heads; historical affine heads are retained.",
+    "Preprocessing, accuracy-training batch size, epoch budget, patience and checkpoint rule remain reconstruction choices.",
+    "Summed pair loss and column-softmax B@E already follow the written equations, so they are retained.",
+    "User dollar-neutral buy-only-fee portfolio is retained; paper Sharpe is not directly comparable."
+  ],
+  "selection": "Minimum validation combined loss; no settings or seed chosen using these test results. Historical test results have already been inspected."
+}

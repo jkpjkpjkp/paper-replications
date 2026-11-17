@@ -1,0 +1,1056 @@
+Hermes: A Multi-Scale Spatial-Temporal Hypergraph Network for Stock Time Series Forecasting
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: html_text
+Original source: ../.replication-local/artifacts/hermes/sources/paper-browser.txt
+Source SHA-256: 58e429726dda3350981824049712438e37e28093ccc69dbd8fcd661e5b4b5e9b
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+
+=== BEGIN SOURCE TEXT ===
+
+=== TEXT SEGMENT 1 ===
+# Hermes: A Multi-Scale Spatial-Temporal Hypergraph Network for Stock Time Series Forecasting
+
+Xiangfei Qiu
+
+Affiliation: East China Normal University, Shanghai, China
+
+Liu Yang
+
+Affiliation: East China Normal University, Shanghai, China
+
+Xiangyu Xu
+
+Affiliation: East China Normal University, Shanghai, China
+
+Hanyin Cheng
+
+Affiliation: East China Normal University, Shanghai, China
+
+Xingjian Wu
+
+Affiliation: East China Normal University, Shanghai, China
+
+Rongjia Wu
+
+Affiliation: CFETS Information Technology (Shanghai) Co., Ltd, Shanghai, China
+
+Zhigang Zhang
+
+Affiliation: CFETS Information Technology (Shanghai) Co., Ltd, Shanghai, China
+
+Ding Tu
+
+Affiliation: CFETS Information Technology (Shanghai) Co., Ltd, Shanghai, China
+
+Chenjuan Guo
+
+Affiliation: East China Normal University, Shanghai, China
+
+Bin Yang
+
+Affiliation: East China Normal University, Shanghai, China
+
+Christian S. Jensen
+
+Affiliation: Aalborg University, Aalborg, Denmark
+
+Jilin Hu
+
+Affiliation: East China Normal University, Shanghai, China
+
+###### Abstract
+
+Time series forecasting occurs in a range of financial applications providing essential decision-making support to investors, regulatory institutions, and analysts. Unlike multivariate time series from other domains, stock time series exhibit industry correlation. Exploiting this kind of correlation can improve forecasting accuracy. However, existing methods based on hypergraphs can only capture industry correlation relatively superficially. These methods face two key limitations: they do not fully consider inter-industry lead-lag interactions, and they do not model multi-scale information within and among industries. This study proposes the Hermes framework for stock time series forecasting that aims to improve the exploitation of industry correlation by addressing these limitations. The framework integrates moving aggregation and multi-scale fusion modules in a hypergraph network. Specifically, to more flexibly capture the lead-lag relationships among industries, Hermes proposes a hyperedge-based moving aggregation module. This module incorporates a sliding window and utilizes dynamic temporal aggregation operations to consider lead-lag dependencies among industries. Additionally, to effectively model multi-scale information, Hermes employs cross-scale, edge-to-edge message passing to integrate information from different scales while maintaining the consistency of each scale. Experimental results on multiple real-world stock datasets show that Hermes outperforms existing state-of-the-art methods.
+
+## 1 Introduction
+
+Stock time series are typically composed of data from multiple stocks, each of which includes multiple key indicators such as stock opening prices, closing prices, etc. Fan and Shen (2024); Li et al. (2024). Stock time series forecasting (STSF) is important in financial applications, providing crucial decision-making support for investors, regulatory institutions, and analysts, helping them make data-driven decisions in complex and ever-changing market environments Rather et al. (2017); Faloutsos et al. (2018); Jacob and Shasha (1999); Zheng et al. (2023).
+
+Most existing studies treat stocks in stock time series independently, thus disregarding the interconnected nature of market dynamics and contradicting the intrinsic interdependencies observed in real-world financial systems Diebold and Yılmaz (2014). In reality, stocks are often interrelated, and there are rich signals in the relationships between them Nobi et al. (2014). For example, with the breakthroughs of Artificial Intelligence technology, companies like Apple, Microsoft, and Alphabet that actively invest and innovate in this domain are expected to lead in the market due to their technological advantages. It is one of the important factors for their stock prices to show a steady upward trend in the overall stock market11
+1
+
+www.morningstar.co.uk/uk/news/258865/tech-and-communication-stocks-drove-us-market-gains-in-2024.aspx
+—see Figure 1(a).
+At the same time, the soaring power demand, driven by electrification, decarbonization, and the advent of artificial intelligence, led to a concurrent rise in the stock prices of companies in the energy sector22
+2
+
+https://finance.yahoo.com/news/american-electric-power-aep-among-121752028.html?—see Figure 1(a). Such industry correlations have gradually attracted more attention. Especially within the same industry, different stocks often exhibit correlations, reflecting the common economic environment, market fluctuations, policy changes, and other factors that impact the stocks.
+
+Hypergraphs can connect multiple graph nodes (representing, e.g., stocks) through hyperedges. By connecting stocks within the same industry by hyperedges to construct a hypergraph network, it is possible to capture more comprehensively the interrelationships and dynamics among stocks within an industry. However, existing hypergraph-based STSF methods that consider industry correlations still have the following challenges.
+
+((a))
+
+((b))
+
+((c))
+
+Figure 1: (a): Intra-industry correlation. Relations between stocks within an industry (hyperedge) can be
+represented by a hypergraph. (b): Lead-lag correlation. (c): Multi-scale correlation.
+
+Challenge 1: Current methods fail to fully consider inter-industry lead-lag interactions. In financial markets, there are time dependencies among industries, and these relationships are highly diverse and complex. As shown in Figure 1(b), the technology industry has flourished with breakthroughs in key technologies and market innovations, achieving significant progress. Technological innovations from technology companies have injected new vitality into the development of renewable energy, and energy companies have leveraged technologies such as big data, AI, and the Internet of Things to enhance the efficiency of energy production and management2, thereby driving up stock prices Abid et al. (2025); Olanrewaju et al. (2024); Rafiei et al. (2025). Therefore, in the modeling process, it is important to capture lead-lag correlations among industries more accurately, so as to better reflect the dynamic interactions and dependencies in financial markets, ultimately improving the accuracy and practicality of the forecasts.
+
+Challenge 2: Current methods do not model multi-scale information within and among industries. Stock time series inherently possess multi-scale characteristics, and markets exhibit different features and patterns at different time scales. For example, in Figure 1(c), we can observe a clear overall trend at a coarse-grained scale, and a cyclical pattern at a fine-grained scale. Moreover, two different industries, may exhibit correlations at a coarse-grained scale. However, delving deeper into a fine-grained analysis might find that two industries show opposite trends. Single-scale analysis methods cannot fully capture such characteristics, so there is a pressing need to adopt multi-scale analysis to reveal the dynamic changes in financial markets across different time scales, thereby providing richer and more accurate information for stock time series forecasting.
+
+In this study, we address the two challenges by proposing a general stock time series forecasting framework, Hermes, which integrates hyperedge-based moving aggregation and hyperedge-based multi-scale fusion modules into a spatial-temporal hypergraph network. These integrations enhance the precision and stability of stock forecasting. First, to more flexibly model lead-lag relationships among industries, we integrate a hyperedge-based moving aggregation module into the hypergraph network. This module incorporates a sliding window and utilizes dynamic temporal aggregation operations to consider lead-lag dependencies among industries. This approach aims to capture a market’s complex structure more precisely. Second, to address the issue that existing methods fail to effectively model multi-scale information, we decompose raw data at multiple scales and integrate a multi-scale fusion module into the hypergraph network. This module employs cross-scale, edge-to-edge message passing to integrate information from different scales while preserving the consistency of each scale, thereby boosting both the accuracy and stability of forecasts. Experimental results on multiple real-world stock datasets show that Hermes outperforms existing state-of-the-art methods.
+
+Our contributions are summarized as follows.
+
+- •
+
+To solve the STSF problem, we propose a general spatial-temporal hypergraph network framework, Hermes, which learns more accurate and adaptive forecasting models by considering lead-lag and multi-scale industry correlations.
+
+- •
+
+We propose a hyperedge-based moving aggregation module that introduces a sliding window and utilizes dynamic temporal aggregation operations to consider lead-lag dependencies among industries.
+
+- •
+
+We design a hyperedge-based multi-scale fusion module. This module utilizes a cross-scale, edge-to-edge message-passing to integrate information from different scales while maintaining the consistency of each scale.
+
+- •
+
+We report on extensive experiments on public stock datasets, finding that Hermes is capable of outperforming state-of-the-art baselines.
+
+## 2 Related Work
+
+### 2.1 Deep Learning Stock Time Series Forecasting
+
+With the rise of deep learning, notable progress has occurred in stock forecasting. This is mainly because deep neural networks can model complex nonlinear patterns. Some studies use recurrent neural networks (RNNs) Nelson et al. (2017); Qin et al. (2017); Akita et al. (2016); Rahman et al. (2019) to capture the historical development in individual stock prices and predict their short-term trends. In addition, due to the significant progress of Multi-Layer Perceptrons (MLPs) architecture in the general time series field Zeng et al. (2023); Lin et al. (2025); Lin et al. (2024). Increasingly many proposals target stock forecasting performance by improving the MLPs architecture. For example, a series of studies Fan and Shen (2024); Lazcano et al. (2024); Tashakkori et al. (2024) enhance the learning ability of simple MLPs structures by utilizing the MLP-Mixer backbone, thereby improving forecasting accuracy. Next, the Transformer model has become increasingly popular due to the ability of its self-attention mechanism to capture long-term dependencies. For example, Master Li et al. (2024) proposes a novel stock transformer for stock price forecasting to effectively capture stock correlation. While these deep learning methods have advanced stock forecasting, the complexity of stock data and the need to account for intricate relationships among stocks have led researchers to explore new methods based on hypergraphs.
+
+### 2.2 Hypergraph-based Stock Time Series Forecasting
+
+Traditional graphs have limitations when it comes to modeling higher-order multivariate relationships, as they can only represent relations between pairs of nodes. To address this issue, Hypergraph Neural Networks (HGNNs) Feng et al. (2019c) were introduced. Hypergraphs extend the concept of simple graphs to enable the capture of relationships among multiple stocks Chen et al. (2020). Hypergraphs have gained increasing attention and application across various fields. Hyperedge in a hypergraph represents a set of vertices, making them suitable for modeling non-pairwise relationships Luo et al. (2014); Sawhney et al. (2020); Huynh et al. (2023). For example, HGAM Li et al. (2022) is a hypergraph-based reinforcement learning method for stock portfolio selection. THGNN Xiang et al. (2022) is a temporal and heterogeneous graph neural network model that aims to learn dynamic relationships by using two-stage attention mechanisms. STHAN-SR Sawhney et al. (2021) enhances corporate relevance based on Wiki data and uses hypergraph convolution to propagate information from higher-order neighbors. ESTIMATE Huynh et al. (2023), employs hypergraphs to capture non-pairwise correlations, utilizing temporal generative filters to identify individual patterns for each stock. Unlike the above methods, we propose a new hypergraph-based stock time series forecasting model that specifically takes into account the multi-scale nature of stock data, enabling it to capture the complexity of market dynamics more comprehensively. Furthermore, our approach places particular emphasis on the lead-lag relationships between financial industries, where the changes in one industry may precede or lag behind those in another. By capturing these key relationships more fully, we aim to improve forecasting accuracy.
+
+Figure 2: The architecture of Hermes.
+
+## 3 Methodology
+
+In financial markets, a stock time series 𝑿={𝑿1,…,𝑿N}{\bm{\mathsfit{X}}}=\left\{{\bm{X}}_{1},\ldots,{\bm{X}}_{N}\right\} records the historical data of NN stocks, where 𝑿i∈ℝT×F{\bm{X}}_{i}\in\mathbb{R}^{T\times F} is data of one stock with a lookback window of TT time steps and with FF technical indicators at each time step. In stock time series, the indicators may include opening price, closing price, highest price, lowest price, and trading volume. Following existing studies Huynh et al. (2023); Fan and Shen (2024), we input a stock time series with multiple indicators, denoted as 𝑿∈ℝN×T×F{\bm{\mathsfit{X}}}\in\mathbb{R}^{N\times T\times F}, and aim to predict the closing price pitp_{i}^{t} at time step tt. We define the 1-day return ratio as rit=pit−pit−1pit−1r_{i}^{t}=\frac{p_{i}^{t}-p_{i}^{t-1}}{p_{i}^{t-1}}. With θ\theta representing the model parameters, the process can be expressed as follows.
+
+| | | | |
+| --- | --- | --- | --- |
+| | 𝑿∈ℝN×T×F→θp∈ℝN×1→r∈ℝN×1.\displaystyle{\bm{\mathsfit{X}}}\in\mathbb{R}^{N\times T\times F}\stackrel{{\scriptstyle\theta}}{{\rightarrow}}p\in\mathbb{R}^{N\times 1}\rightarrow r\in\mathbb{R}^{N\times 1}. | | (1) |
+
+### 3.1 Framework Overview
+
+In this section, we introduce the framework of our proposed spatiotemporal hypergraph neural network that considers multiple time scales and models the lead-lag relationships between industries—see Figure 2. Our framework takes historical financial sequences as input, first samples the time series into several sequences of different granularities according to different time scales, and maps the feature dimension to the hidden dimension to consider the high-dimensional correlations between time series segments under different scales. Subsequently, we consider constructing relationships between stocks at each scale, specifically considering constructing hyperedges for stocks in the same industry, and modeling the lead-lag relationships between industries in the corresponding hypergraphs. Then, we model the interactions between different scales, construct hyperedges for industries of different scales, and adaptively learn the correlations between them under the corresponding multi-scale hypergraph, thereby playing a role in fusing scales. Finally, we predict the corresponding indicators for each stock for the next day through a prediction head based on a multilayer perceptron.
+
+### 3.2 Multi-Scale Feature Extraction
+
+Multi-Scale Decomposition.
+Time series of different scales exhibit different characteristics, among which fine scales primarily describe detailed patterns and contain more periodic information, while coarse scales highlight macro changes and cover the overall trend changes. This multi-scale perspective can essentially unravel the complex variations within multiple components, thereby facilitating time variation modeling. It is worth noting that, especially for prediction tasks, due to their different dominant time patterns, multi-scale time series show different predictive capabilities.
+
+Specifically, for the financial input time series 𝑿∈ℝN×T×F{\bm{\mathsfit{X}}}\in\mathbb{R}^{N\times T\times F}, which denotes the records of FF key indicators for NN stocks of TT timestamps in the past. To decouple the intricate multi-resolution information, we use convolutional layers of different sizes to adaptively down-sample the time series into sequences of different scales:
+
+| | | | |
+| --- | --- | --- | --- |
+| | 𝑿i=1D-Convi​(𝑿),\displaystyle{\bm{\mathsfit{X}}}^{i}=\text{1D-Conv}^{i}({\bm{\mathsfit{X}}}), | | (2) |
+
+where 𝑿i∈ℝN×Ti×F{\bm{\mathsfit{X}}}^{i}\in\mathbb{R}^{N\times T^{i}\times F} denotes the ii-th scale of financial time series, TiT^{i} is the down-sampled length. We then obtain the multi-scale time series sequences {𝑿1,𝑿2,⋯,𝑿S}\{{\bm{\mathsfit{X}}}^{1},{\bm{\mathsfit{X}}}^{2},\cdots,{\bm{\mathsfit{X}}}^{S}\} of SS kinds of scales through SS convolutional layers with different kernel sizes and stride lengths.
+
+Feature Extraction.
+Subsequently, for time series of different scales, we enhance their representations at two aspects. First, we adopt the Causal-Mixing technique to process the temporal dimension. The Causal-Mixing technique ensures causal relationships rather than full connectivity, and ensure that time series points can only see previous points. It consists of a group of MLP layers:
+
+| | | | |
+| --- | --- | --- | --- |
+| | Causal-Mixingi={MLPi,1,MLPi,2,⋯,MLPi,Ti},\displaystyle\text{Causal-Mixing}^{i}=\{\text{MLP}^{i,1},\text{MLP}^{i,2},\cdots,\text{MLP}^{i,T^{i}}\}, | | (3) |
+| | MLPi,j=ℝj→ℝ,𝕏i=Causal-Mixingi​(𝑿i).\displaystyle\text{MLP}^{i,j}=\mathbb{R}^{j}\to\mathbb{R},\mathbb{X}^{i}=\text{Causal-Mixing}^{i}({\bm{\mathsfit{X}}}^{i}). | | (4) |
+
+The Causal-Mixing is applied along the temporal dimension, which maps Xi1:jX^{i}_{1:j} through MLPi,j\text{MLP}^{i,j} to 𝕏ji\mathbb{X}^{i}_{j}. The new representation 𝕏∈ℝN×Ti×F\mathbb{X}\in\mathbb{R}^{N\times T^{i}\times F} keeps the original shape.
+
+Then their feature dimensions are mapped into the high-dimension hidden spaces to enrich their representation capabilities, facilitating the extraction of more complex hidden relationships:
+
+| | | | |
+| --- | --- | --- | --- |
+| | 𝒳i=𝕏i⋅Wi,\displaystyle\mathcal{X}^{i}=\mathbb{X}^{i}\cdot W^{i}, | | (5) |
+
+where 𝒳i∈ℝN×Ti×d\mathcal{X}^{i}\in\mathbb{R}^{N\times T^{i}\times d}, dd is the dimension of the latent space. Wi∈ℝF×dW^{i}\in\mathbb{R}^{F\times d}, constructing a linear projection to enhance representational capability.
+
+### 3.3 Adaptive Spatial-Temporal Hypergraph Construction
+
+For the representation 𝒳i∈ℝN×Ti×d\mathcal{X}^{i}\in\mathbb{R}^{N\times T^{i}\times d} of ii-th scale, the hypergraph of ii-th scale 𝒳i\mathcal{X}^{i} can be constructed through a global-shared matrix H∈ℝN×KH\in\mathbb{R}^{N\times K}, where NN represents the number of stocks, KK represents the number of industries, and Hl,m=1H_{l,m}=1 denotes that the ll-th stock belongs to the mm-th industry. The ii-th Spatial-Temporal hypergraph 𝒢i\mathcal{G}^{i} is formulated as:
+
+| | | | |
+| --- | --- | --- | --- |
+| | 𝒢i=(H,𝒳i,Ei),\displaystyle\mathcal{G}^{i}=(H,\mathcal{X}^{i},E^{i}), | | (6) |
+
+where 𝒳i\mathcal{X}^{i} is the representation of ii-th scale and works as the nodes of the 𝒢i\mathcal{G}^{i}, Ei∈ℝK×Ti×dE^{i}\in\mathbb{R}^{K\times T^{i}\times d} is the hyperedge constructed through the stock-industry relationship matrix HH:
+
+| | | | |
+| --- | --- | --- | --- |
+| | scoresi=Lineari​(𝒳i)∈ℝN×1,Lineari=ℝTi×d→ℝ,\displaystyle\text{scores}^{i}=\text{Linear}^{i}(\mathcal{X}^{i})\in\mathbb{R}^{N\times 1},\text{Linear}^{i}=\mathbb{R}^{T^{i}\times d}\to\mathbb{R}, | | (7) |
+| | Hi=H⊙scoresi+(1−H)⊙(−∞),\displaystyle H^{i}=H\odot\text{scores}^{i}+(1-H)\odot(-\infty), | | (8) |
+| | ℋi=SoftMax​(Hi,dim=0),Ei=(ℋi)T⋅𝒳i,\displaystyle\mathcal{H}^{i}=\text{SoftMax}(H^{i},\text{dim}=0),E^{i}=(\mathcal{H}^{i})^{T}\cdot\mathcal{X}^{i}, | | (9) |
+
+where the matrix HH is first processed with a learnable renovation to adapt to the current representation 𝒳i\mathcal{X}^{i}. HiH^{i} is the intermediate result obtained through endowing the Hl,m=1H_{l,m}=1 parts with learnable scoresi\text{scores}^{i} and Hl,m=0H_{l,m}=0 parts with −∞-\infty to ensure zeros in the SoftMax step. Then the ℋi∈ℝN×K\mathcal{H}^{i}\in\mathbb{R}^{N\times K} with Continuous Weights is obtained, and the hyperedges Ei∈ℝK×Ti×dE^{i}\in\mathbb{R}^{K\times T^{i}\times d} of industries are generated through information integration from all the related stocks. We obtain all the Spatial-Temporal hypergraphs {𝒢1,𝒢2,⋯𝒢S}\{\mathcal{G}^{1},\mathcal{G}^{2},\cdots\mathcal{G}^{S}\} for each scale as above mentioned.
+
+### 3.4 Hyperedge-based Moving Aggregation
+
+After delineating different time series scales with Spatial-Temporal hypergraphs {𝒢1,𝒢2,⋯𝒢S}\{\mathcal{G}^{1},\mathcal{G}^{2},\cdots\mathcal{G}^{S}\}, we further consider the lead-lag relationships between industries under each scale to analyze the complex correlations in financial markets—see Figure 5 in Appendix D.4.
+
+We construct a message passing mechanism on the hyperedges to capture the lead-lag relationships between industries. First, we employ a fixed-size sliding window as the range for examining the lead-lag relationships. For each hyperedge, through the sliding window, we can delineate different patches, which serve as the smallest units for constructing the lead-lag relationships:
+
+| | | | |
+| --- | --- | --- | --- |
+| | 𝒫i=SlidingWindow​(Ei,size=ki,stride=1),\displaystyle\mathcal{P}^{i}=\text{SlidingWindow}(E^{i},\text{size}=k^{i},\text{stride}=1), | | (10) |
+
+where 𝒫i∈ℝK×(Ti−ki+1)×ki×d\mathcal{P}^{i}\in\mathbb{R}^{K\times(T^{i}-k^{i}+1)\times k^{i}\times d} denotes the patches of EiE^{i}, containing local information with the size of kik^{i}. From the perspective of causality, considering the relationship between the entire window and its last point, we can construct the relationship matrix of the leading part and the lagging part. We then mine the lead-lag relationships inside each patch by considering the correlations between 𝒫b​e​f​o​r​ei\mathcal{P}^{i}_{before} and 𝒫l​a​s​ti\mathcal{P}^{i}_{last}:
+
+| | | | |
+| --- | --- | --- | --- |
+| | 𝒫b​e​f​o​r​ei=Reshape​(𝒫)i∈ℝ(Ti−ki+1)×[K×ki]×d,\displaystyle\mathcal{P}^{i}_{before}=\text{Reshape}(\mathcal{P})^{i}\in\mathbb{R}^{(T^{i}-k^{i}+1)\times[K\times k^{i}]\times d}, | | (11) |
+| | 𝒫l​a​s​ti=Reshape​(𝒫)−1i∈ℝ(Ti−ki+1)×[K×1]×d.\displaystyle\mathcal{P}^{i}_{last}=\text{Reshape}(\mathcal{P})^{i}_{-1}\in\mathbb{R}^{(T^{i}-k^{i}+1)\times[K\times 1]\times d}. | | (12) |
+
+Subsequently, by using the message passing method to propagate through the leading part, we obtain the feature fusion among hyperedges:
+
+| | | | |
+| --- | --- | --- | --- |
+| | A~i=𝒫b​e​f​o​r​ei⊗𝒫l​a​s​ti∈ℝ(Ti−ki+1)×[K×ki]×K,Ai=S​o​f​t​M​a​x​(A~i,dim=1),\displaystyle\tilde{A}^{i}=\mathcal{P}^{i}_{before}\otimes\mathcal{P}^{i}_{last}\in\mathbb{R}^{(T^{i}-k^{i}+1)\times[K\times k^{i}]\times K},A^{i}=SoftMax(\tilde{A}^{i},\text{dim}=1), | | (13) |
+| | E~i=Ai⊗𝒫b​e​f​o​r​ei∈ℝK×(Ti−ki+1)×d,E^i∈ℝK×Ti×d={Ei,t<kiE~i,ki≤t≤Ti,\displaystyle\tilde{E}^{i}=A^{i}\otimes\mathcal{P}^{i}_{before}\in\mathbb{R}^{K\times(T^{i}-k^{i}+1)\times d},\hat{E}^{i}\in\mathbb{R}^{K\times T^{i}\times d}=\begin{cases}E^{i},&t<k^{i}\\ {\tilde{E}^{i}},&k^{i}\leq t\leq T^{i}\end{cases}, | | (14) |
+
+where A~i\tilde{A}^{i} considers the correlations among the leading parts and lagging parts, AiA^{i} probabilityizes A~i\tilde{A}^{i} to control weightsuming, E^i∈ℝK×Ti×d\hat{E}^{i}\in\mathbb{R}^{K\times T^{i}\times d} denotes the embedding of hyperedges integrated with lead-lag relationships among different industries. It is particularly important to note that when t<kit<k^{i}, no transformation is performed; when ki≤t≤Tik^{i}\leq t\leq T^{i}, the result incorporating lead-lag interactions is used as the new hyperedges.
+
+This is the method of considering the leading and lagging relationships between industries under each scale using Spatial-Temporal hypergraphs. After performing the above operation for each scale, we obtain a multi-scale representation of hyperedges {E^1,E^2,⋯,E^S}\{\hat{E}^{1},\hat{E}^{2},\cdots,\hat{E}^{S}\}. Subsequently, fusion between scales will be carried out to integrate information of different granularities.
+
+### 3.5 Hyperedge-based Multi-scale Fusion
+
+For multi-scale representation of hyperedges {E^1,E^2,⋯,E^S}\{\hat{E}^{1},\hat{E}^{2},\cdots,\hat{E}^{S}\} which contains the industry information, we further extract the potential correlations among different scales to reveal the latent interactions among different industries. First, we up-sample different scales back to the original length to ensure uniform representation size:
+
+| | | | |
+| --- | --- | --- | --- |
+| | ℰ^i=Lineari​(E^i)∈ℝK×T×d,Lineari=ℝTi→ℝT,\displaystyle\hat{\mathcal{E}}^{i}=\text{Linear}^{i}(\hat{E}^{i})\in\mathbb{R}^{K\times T\times d},\text{Linear}^{i}=\mathbb{R}^{T^{i}}\to\mathbb{R}^{T}, | | (15) |
+| | ℰ^={ℰ^1,ℰ^2,⋯,ℰ^S}∈ℝS×K×T×d.\displaystyle\hat{\mathcal{E}}=\{\hat{\mathcal{E}}^{1},\hat{\mathcal{E}}^{2},\cdots,\hat{\mathcal{E}}^{S}\}\in\mathbb{R}^{S\times K\times T\times d}. | | (16) |
+
+Then, we construct adaptive adjacency matrices for these hyperedges of different scales to measure the correlations between different industries at various information granularities. We employ metric learning for this task and use a learnable Mahalanobis distance Goldberger et al. (2004); Qiu et al. (2025) to automatically build relationships between different industries in the hidden space. Since the operations across the time dimension TT are independent and can be executed in parallel, we omit this dimension in the following formulations for notational simplicity.
+
+| | | | |
+| --- | --- | --- | --- |
+| | ℰ~=Flatten​(ℰ^)∈ℝ(S×K)×d,Di​j=(ℰ~i−ℰ~j)⋅Q⋅(ℰ~i−ℰ~j)T,\displaystyle\tilde{\mathcal{E}}=\text{Flatten}(\hat{\mathcal{E}})\in\mathbb{R}^{(S\times K)\times d},D_{ij}=(\tilde{\mathcal{E}}_{i}-\tilde{\mathcal{E}}_{j})\cdot Q\cdot(\tilde{\mathcal{E}}_{i}-\tilde{\mathcal{E}}_{j})^{T}, | | (17) |
+| | Ci​j={1Di​jif ​i≠j0if ​i=j,B=SoftMax​(C,dim=0),\displaystyle C_{ij}=\begin{cases}\frac{1}{D_{ij}}&\text{if }i\neq j\\ 0&\text{if }i=j\end{cases},~~B=\text{SoftMax}(C,\text{dim}=0), | | (18) |
+
+where D,C,B∈ℝ(S×K)×(S×K)D,C,B\in\mathbb{R}^{(S\times K)\times(S\times K)}. Q∈ℝd×dQ\in\mathbb{R}^{d\times d} is a learnable semi-positive definite matrix, and can be practically constructed by Q=AT⋅AQ=A^{T}\cdot A, where A is also a learnable matrix. Subsequently, we construct interactions between hyperedges at different scales using message passing and further update the representation of hyperedges.
+
+| | | | |
+| --- | --- | --- | --- |
+| | ℰ′=B⋅ℰ~⋅We∈ℝ(S×K)×d,\displaystyle\mathcal{E}^{\prime}=B\cdot\tilde{\mathcal{E}}\cdot W^{e}\in\mathbb{R}^{(S\times K)\times d}, | | (19) |
+
+where
+We∈ℝd×dW^{e}\in\mathbb{R}^{d\times d} is the learnable parameters in the graph message passing mechanism. After integrating the lead-lag relationships between industries on the hyperedges and fusing the hidden relationships between different scales, the representation of the hyperedges ℰ′\mathcal{E}^{\prime} is adaptively updated. We then continue to complete the message passing from hyperedges to nodes—see Figure 5 in Appendix D.4, thereby feeding back the complex correlations within the industry to specific stocks and completing the update of the representation of stock nodes. Finally, we restore the omitted TT dimension:
+
+| | | | | |
+| --- | --- | --- | --- | --- |
+| | 𝒱\displaystyle\mathcal{V} | =ℰ′⊗ℋ∈ℝ(S×N)×T×d.\displaystyle=\mathcal{E}^{\prime}\otimes\mathcal{H}\in\mathbb{R}^{(S\times N)\times T\times d}. | | (20) |
+
+### 3.6 Predictor
+
+After completing the complex representation extraction using a hypergraph-based structure, we employ an MLP-based predictor and incorporate residual connection modules to forecast financial indicators across each scale ii.
+
+| | | | |
+| --- | --- | --- | --- |
+| | 𝒳^i=MLP1i​(𝒳i)∈ℝN×1,\displaystyle\hat{\mathcal{X}}^{i}=\text{MLP}^{i}_{1}(\mathcal{X}^{i})\in\mathbb{R}^{N\times 1}, | | (21) |
+| | 𝒱~i=MLP2i​(𝒱i)∈ℝN×1,\displaystyle\tilde{\mathcal{V}}^{i}=\text{MLP}^{i}_{2}(\mathcal{V}^{i})\in\mathbb{R}^{N\times 1}, | | (22) |
+| | Y^i=𝒳^i+𝒱~i,Y^=∑i=1SY^i,\displaystyle\hat{Y}^{i}=\hat{\mathcal{X}}^{i}+\tilde{\mathcal{V}}^{i},~~\hat{Y}=\sum_{i=1}^{S}\hat{Y}^{i}, | | (23) |
+
+where 𝒳i∈ℝ(N×Ti×d)\mathcal{X}^{i}\in\mathbb{R}^{(N\times T^{i}\times d)} represents the initial node embedding in Equation 5 that does not consider the lead-lag relationship and multi-scale interaction effects. However, 𝒱i∈ℝ(N×T×d)\mathcal{V}^{i}\in\mathbb{R}^{(N\times T\times d)} is the spatio-temporal hypernode embedding in Equation 20 that incorporates lead-lag correlation and multi-scale information. Finally, we combine the prediction results at different scales to obtain the final prediction result.
+
+Table 1: Comparison results on public stock market datasets (measured by t-test with p-value < 0.01). The methods for comparison are mainly divided into five types: HGNN (HyperGraph Neural Network), Transformer, MLP (Multi-Layer Perceptron), GNN (Graph Neural Network), and RNN (Recurrent Neural Network). Bold indicates the best (SOTA) results.
+
+Models	HGNN	Transformer	MLP	GNN	RNN
+Hermes	EST.	STHAN.	ASHyper	iTrans.	PatchTST	DUET	SMixer.	DLin.	TMixer.	RSR-I	GAT	RGCN	ALSTM	LSTM
+NASDAQ	IC	0.044	0.037	0.039	0.041	0.038	0.039	0.039	0.043	0.031	0.041	0.038	0.035	0.034	0.035	0.032
+RIC	0.538	0.444	0.451	0.508	0.420	0.496	0.494	0.501	0.453	0.532	0.398	0.377	0.382	0.371	0.354
+SR	2.161	1.307	1.416	1.157	1.877	1.261	1.751	1.465	1.778	1.177	1.238	1.233	1.054	0.941	0.892
+NYSE	IC	0.032	0.030	0.029	0.025	0.023	0.029	0.024	0.029	0.026	0.031	0.026	0.025	0.025	0.023	0.024
+RIC	0.466	0.327	0.344	0.250	0.303	0.284	0.327	0.351	0.277	0.314	0.284	0.297	0.275	0.276	0.256
+SR	1.655	1.115	1.228	1.208	1.520	0.898	1.361	1.454	1.526	1.556	0.098	1.070	0.932	0.764	0.857
+S&P500	IC	0.050	0.035	0.037	0.046	0.048	0.046	0.049	0.041	0.043	0.040	0.033	0.034	0.028	0.029	0.031
+RIC	0.334	0.241	0.227	0.268	0.242	0.249	0.275	0.262	0.214	0.253	0.200	0.191	0.175	0.181	0.186
+SR	2.247	1.547	1.533	2.148	1.326	1.402	1.982	1.586	1.557	2.170	1.437	1.484	1.359	1.298	1.332
+Model abbreviations: EST. (ESTIMATE), STHAN. (STHAN-SR), iTrans. (iTransformer), SMX (StockMixer), DLin. (DLinear), and TMX (TimeMixer).
+
+### 3.7 Optimization Objectives
+
+Following StockMixer Fan and Shen (2024), We use the 1-day return ratio of a stock as the ground-truth rather than the normalized price used in previous work using a combination of a pointwise regression and pairwise ranking-aware loss to minimize the MSE between the predicted and actual return ratios while maintaining the relative order of top ranked stocks with higher expected return for investment as:
+
+| | | | |
+| --- | --- | --- | --- |
+| | L=LMSE+α​∑i=1N∑j=1Nmax⁡(0,−(r^it−r^jt)​(rit−rjt)),\displaystyle L=L_{\text{MSE}}+\alpha\displaystyle\sum_{i=1}^{N}\sum_{j=1}^{N}\max(0,-(\hat{r}_{i}^{t}-\hat{r}_{j}^{t})(r_{i}^{t}-r_{j}^{t})), | | (24) |
+
+where r^t\hat{r}^{t} and rt{r}^{t} are the predicted and actual ranking scores, respectively, and α\alpha is a weighting parameter.
+
+## 4 Experiments
+
+### 4.1 Experimental Setup
+
+Datasets and Baselines.
+We evaluate our approach using three real-world datasets from the US stock market. These datasets contain relatively complete stock-industry relationships or Wiki-based company relations. Besides, we conduct a comparative analysis between our proposed Hermes and a range of baseline methods, which include prominent approaches in both machine learning and deep learning methods for STSF. Given that existing research has demonstrated the limited effectiveness of traditional statistical methods Fan and Shen (2024); Li et al. (2024), we exclude them from our comparative evaluation to focus on more competitive approaches.
+
+Implementation Details.
+For fair comparison, all samples are generated by moving a 16 time steps lookback window. All experiments with Hermes are conducted using PyTorch Paszke et al. (2019) in Python 3.9, and are executed on a server featuring an Intel(R) Xeon(R) Platinum 8358 CPU and an NVIDIA Tesla-A800 GPU. We use ADAM Kingma and Ba (2015) with an initial learning rate of 5e-3. Detailed descriptions of the experimental datasets, baselines, and evaluation metrics are provided in the Appendix A.1.
+
+Table 2: Ablation study results on public datasets NASDAQ, NYSE, and S&P500.
+
+| | | | | | | | | | |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Ablation | NASDAQ | | | NYSE | | | S&P500 | | |
+| Model Component | IC | ICIR | SR | IC | ICIR | SR | IC | ICIR | SR |
+| w/o Multi-Scale Fusion | 0.038 | 0.464 | 1.374 | 0.028 | 0.421 | 1.354 | 0.031 | 0.248 | 1.517 |
+| w/o Total Multi-Scale | 0.030 | 0.422 | 0.975 | 0.023 | 0.347 | 1.199 | 0.032 | 0.213 | 1.075 |
+| w/o Lead-Lag | 0.039 | 0.472 | 1.451 | 0.028 | 0.420 | 1.225 | 0.037 | 0.201 | 1.628 |
+| w/o Skip-Connection | 0.041 | 0.441 | 1.655 | 0.029 | 0.345 | 1.449 | 0.043 | 0.252 | 1.653 |
+| Only Initial Node Embedding | 0.019 | 0.174 | 0.695 | 0.016 | 0.113 | 0.449 | 0.018 | 0.122 | 0.659 |
+| Hermes (Ours) | 0.044 | 0.538 | 2.161 | 0.032 | 0.466 | 1.655 | 0.050 | 0.334 | 2.247 |
+
+Table 3: Efficiency analysis on public stock datasets, concerning the training time, inference time (measured in milliseconds per batch under the condition of a batch size being 1), and memory usage (quantified in GB) of different HGNN-based (HyperGraph Neural Network) models. Model abbreviations: EST. (ESTIMATE) and STHAN. (STHAN-SR).
+
+| | | | | | | | | | | | | |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Dataset | NASDAQ | | | | NYSE | | | | S&P500 | | | |
+| Property | STHAN. | EST. | ASHyper | Hermes | STHAN. | EST. | ASHyper | Hermes | STHAN. | EST. | ASHyper | Hermes |
+| Training Time | 257 ms | 1,267 ms | 288 ms | 215 ms | 384 ms | 1,462 ms | 378 ms | 282 ms | 297 ms | 1,317 ms | 314 ms | 211 ms |
+| Inference Time | 52 ms | 163 ms | 58 ms | 42 ms | 73 ms | 241 ms | 71 ms | 61 ms | 32 ms | 109 ms | 36 ms | 25 ms |
+| Memory Usage | 2.15 GB | 9.62 GB | 1.99 GB | 0.98 GB | 2.82 GB | 10.25 GB | 2.17 GB | 1.14 GB | 1.23 GB | 4.52 GB | 1.51 GB | 0.54 GB |
+
+### 4.2 Overall Performance
+
+We conduct a comprehensive comparison of Hermes against five categories of baseline methods (HGNN, Transformer, MLP, GNN, and RNN) across three representative stock market datasets: NASDAQ, NYSE, and S&P 500. As demonstrated in Table 1. We have the following observations: 1) Hermes consistently achieves State-of-the-Art (SOTA) performance across all datasets and evaluation metrics. 2) For univariate methods, whether it is LSTM or ALSTM, their performance is inferior to that of other hybrid architectures. This strongly highlights the necessity and importance of capturing the complex industry and stock relationships in financial markets. 3) For GNNs algorithms such as RGCN, GAT, and RSR-I, their performance shows a significant improvement over RNNs, indicating that GNNs have strong stock relationship modeling capabilities. However, compared to HGNNs algorithms like STHAN-SR, ESTIMATE, and ASHyper, GNNs perform slightly worse. This suggests that in the context of the financial market industry, using hypergraph models to unify the relationships of stocks within the industry plays a crucial role in enhancing forecasting performance. 4) Compared to other hypergraph algorithms that consider stock relationships within industries (such as STHAN-SR, ESTIMATE, and ASHyper), the Hermes algorithm we propose shows significant performance improvement. This clearly demonstrates that, based on the consideration of stock relationships within industries, incorporating inter-industry lead-lag relationships and multi-scale relationships plays a crucial role in enhancing forecasting performance.
+
+### 4.3 Ablation Studies
+
+Table 2 illustrates the unique impact of each module. We have the following observations: 1) When the multi-scale fusion module in Section 3.5 and the total multi-scale module (Remove the Total Multi-Scale module, including Decomposition in Section 3.2 and Fusion in Section 3.5, respectively) are removed, the performance of the model decreases in both cases. This underscores the effectiveness of our multi-scale approach, confirming that both multi-scale decomposition and fusion are essential to the model’s predictive power. 2) The ablation of the lead–lag module in Section 3.4 causes a substantial decline in performance, demonstrating that explicitly modeling inter-industry lead–lag relationships is essential for strong predictive accuracy. 3) Removing the skip-connection module in Section 3.6 also reduces performance, confirming its crucial role in facilitating information transmission and gradient flow, thereby improving the model’s feature extraction capabilities. 4) When the Predictor relies solely on the initial node embedding from Equation 21 without integrating the updated features from Equation 22, the model performance undergoes a significant degradation. This is expected given the inherent complexity of stock forecasting, where primitive encodings are insufficient to capture intricate market dynamics. Such a sharp decline underscores the necessity and effectiveness of our proposed hypergraph framework.
+
+### 4.4 Efficiency Analysis
+
+In order to ensure good applicability of the model in practical applications, the runtime and memory usage of the model are crucial. We conducted an efficiency comparison analysis of Hermes and other hypergraph-based methods, STHAN-SR, ESTIMATE, and ASHyper—see Table 3.
+
+Runtime Analysis: In practical application scenarios, fast response is one of the key factors. For example, in the field of financial market forecasting, timely obtaining forecasting results can provide valuable decision-making basis for investors. If the model takes too long to operate, even if the prediction accuracy is high, it will be difficult to meet the actual needs. Therefore, we evaluate the computational speed by recording the time each model takes to train and infer a sample (that is, the batch size is uniformly set to 1) with the same dataset. The results show that the Hermes model performs excellently. Compared with the other two hypergraph-based methods, its computational time is reduced. This is mainly attributed to the fact that some modules of the Hermes model adopt an efficient MLP structure in the algorithm design process. This structure can significantly improve the computational efficiency while ensuring the accuracy of forecasting results.
+
+Memory Analysis: Memory usage is also an important factor to measure the efficiency of the model. Excessive memory usage will not only limit the application range of the model in different hardware environments but also may cause the system to run slowly or even crash. In this experiment, we monitored the memory usage of each model in detail during operation. The results show that the Hermes has a lower memory usage rate. This advantage primarily stems from its unique architectural design, which enables superior performance without requiring large hidden dimensions, as further validated in Section D.5 through sensitivity analysis of the Latent Space Dimension parameter. Consequently, Hermes effectively reduces memory usage while maintaining high performance, enhancing both the practicality and deployment flexibility of the model.
+
+## 5 Conclusions
+
+Stock time series forecasting plays a pivotal role in the modern economy, serving as a key tool for investors, financial institutions, and policymakers to make accurate decisions. However, existing forecasting methods often fall short in fully considering the lead-lag between industries and multi-scale information, resulting in limited predictive performance. To address these challenges, this study introduces the Hermes framework. By ingeniously fusing multi-scale analysis with lead-lag modules within a hypergraph network, the Hermes framework significantly boosts the performance of stock forecasting. Specifically, the hyperedge-based moving aggregation module incorporates a sliding window and utilizes dynamic temporal aggregation operations to consider lead-lag dependencies among industries. Meanwhile, the hyperedge-based multi-scale fusion module decomposes raw data at multiple scales, and then employs cross-scale, edge-to-edge message passing to integrate information from different scales while preserving the consistency of each scale.
+
+## References
+
+- Abid et al. (2025)
+M. S. Abid, R. Ahshan, M. Al-Abri, and R. Al Abri
+
+Robust deep learning model with attention framework for spatiotemporal forecasting of solar and wind energy production.
+
+Energy Conversion and Management: X, pp. 100919.
+
+Cited by: §1.
+
+- Akita et al. (2016)
+R. Akita, A. Yoshihara, T. Matsubara, and K. Uehara
+
+Deep learning for stock prediction using numerical and textual information.
+
+In ICIS,
+
+pp. 1–6.
+
+Cited by: §D.2,
+§2.1.
+
+- Alkhatib et al. (2013)
+K. Alkhatib, H. Najadat, I. Hmeidi, and M. K. A. Shatnawi
+
+Stock price prediction using k-nearest neighbor (knn) algorithm.
+
+IJBHT 3 (3), pp. 32–44.
+
+Cited by: §D.1.
+
+- Ariyo et al. (2014)
+A. A. Ariyo, A. O. Adewumi, and C. K. Ayo
+
+Stock price prediction using the ARIMA model.
+
+In ICCMS,
+
+pp. 106–112.
+
+Cited by: §D.1.
+
+- Chen et al. (2020)
+C. Chen, Z. Cheng, Z. Li, and M. Wang
+
+Hypergraph attention networks.
+
+In TrustCom,
+
+pp. 1560–1565.
+
+Cited by: §D.3,
+§2.2.
+
+- Diebold and Yılmaz (2014)
+F. X. Diebold and K. Yılmaz
+
+On the network topology of variance decompositions: measuring the connectedness of financial firms.
+
+Journal of econometrics 182 (1), pp. 119–134.
+
+Cited by: §1.
+
+- Elton et al. (2009)
+E. J. Elton, M. J. Gruber, S. J. Brown, and W. N. Goetzmann
+
+Modern portfolio theory and investment analysis.
+
+Cited by: §D.1.
+
+- Faloutsos et al. (2018)
+C. Faloutsos, J. Gasthaus, T. Januschowski, and Y. Wang
+
+Forecasting big time series: old and new.
+
+In Proc. VLDB Endow.,
+
+pp. 2102–2105.
+
+Cited by: §1.
+
+- Fan and Shen (2024)
+J. Fan and Y. Shen
+
+StockMixer: A simple yet strong mlp-based architecture for stock price forecasting.
+
+In AAAI,
+
+pp. 8389–8397.
+
+Cited by: 9th item,
+§A.1.3,
+§D.2,
+§D.2,
+§1,
+§2.1,
+§3.7,
+§3,
+§4.1.
+
+- Feng et al. (2019a)
+F. Feng, H. Chen, X. He, J. Ding, M. Sun, and T. Chua
+
+Enhancing stock movement prediction with adversarial training.
+
+In IJCAI,
+
+pp. 5843–5849.
+
+Cited by: 2nd item.
+
+- Feng et al. (2019b)
+F. Feng, X. He, X. Wang, C. Luo, Y. Liu, and T. Chua
+
+Temporal relational ranking for stock prediction.
+
+TOIS 37 (2), pp. 1–30.
+
+Cited by: 5th item,
+§A.1.1.
+
+- Feng et al. (2019c)
+Y. Feng, H. You, Z. Zhang, R. Ji, and Y. Gao
+
+Hypergraph neural networks.
+
+In AAAI,
+
+pp. 3558–3565.
+
+Cited by: §D.3,
+§2.2.
+
+- Goldberger et al. (2004)
+J. Goldberger, G. E. Hinton, S. Roweis, and R. R. Salakhutdinov
+
+Neighbourhood components analysis.
+
+In NeurIPS,
+
+Vol. 17.
+
+Cited by: §3.5.
+
+- Gupta and Dhingra (2012)
+A. Gupta and B. Dhingra
+
+Stock market prediction using hidden markov models.
+
+In SCES,
+
+pp. 1–4.
+
+Cited by: §D.1.
+
+- Hochreiter and Schmidhuber (1997)
+S. Hochreiter and J. Schmidhuber
+
+Long short-term memory.
+
+Neural computation 9 (8), pp. 1735–1780.
+
+Cited by: 1st item.
+
+- Huynh et al. (2023)
+T. T. Huynh, M. H. Nguyen, T. T. Nguyen, P. L. Nguyen, M. Weidlich, Q. V. H. Nguyen, and K. Aberer
+
+Efficient integration of multi-order dynamics and internal dynamics in stock movement prediction.
+
+In WSDM,
+
+pp. 850–858.
+
+Cited by: 7th item,
+§A.1.1,
+§D.2,
+§D.3,
+§2.2,
+§3.
+
+- Jacob and Shasha (1999)
+K. J. Jacob and D. Shasha
+
+Fintime: a financial time series benchmark.
+
+ACM SIGMOD Record 28 (4), pp. 42–48.
+
+Cited by: §1.
+
+- Kim (2003)
+K. Kim
+
+Financial time series forecasting using support vector machines.
+
+Neurocomputing 55 (1-2), pp. 307–319.
+
+Cited by: §D.1.
+
+- Kingma and Ba (2015)
+D. P. Kingma and J. Ba
+
+Adam: A method for stochastic optimization.
+
+In ICLR,
+
+Cited by: §4.1.
+
+- Lazcano et al. (2024)
+A. Lazcano, M. A. Jaramillo-Morán, and J. E. Sandubete
+
+Back to basics: the power of the multilayer perceptron in financial time series forecasting.
+
+Mathematics 12 (12), pp. 1920.
+
+Cited by: §D.2,
+§2.1.
+
+- Li et al. (2024)
+T. Li, Z. Liu, Y. Shen, X. Wang, H. Chen, and S. Huang
+
+Master: market-guided stock transformer for stock price forecasting.
+
+In AAAI,
+
+pp. 162–170.
+
+Cited by: §A.1.3,
+§D.2,
+§1,
+§2.1,
+§4.1.
+
+- Li et al. (2021)
+W. Li, R. Bao, K. Harimoto, D. Chen, J. Xu, and Q. Su
+
+Modeling the stock relation with graph network for overnight stock movement prediction.
+
+In IJCAI,
+
+pp. 4541–4547.
+
+Cited by: 3rd item.
+
+- Li et al. (2022)
+X. Li, C. Cui, D. Cao, J. Du, and C. Zhang
+
+Hypergraph-based reinforcement learning for stock portfolio selection.
+
+In ICASSP,
+
+pp. 4028–4032.
+
+Cited by: §D.3,
+§2.2.
+
+- Liao et al. (2024)
+S. Liao, L. Xie, Y. Du, S. Chen, H. Wan, and H. Xu
+
+Stock trend prediction based on dynamic hypergraph spatio-temporal network.
+
+Applied Soft Computing 154, pp. 111329.
+
+Cited by: §D.3.
+
+- Lin et al. (2025)
+S. Lin, W. Lin, X. Hu, W. Wu, R. Mo, and H. Zhong
+
+Cyclenet: enhancing time series forecasting through modeling periodic patterns.
+
+pp. 106315–106345.
+
+Cited by: §D.2,
+§2.1.
+
+- Lin et al. (2024)
+S. Lin, W. Lin, W. Wu, H. Chen, and J. Yang
+
+SparseTSF: modeling long-term time series forecasting with *1k* parameters.
+
+In ICML,
+
+pp. 30211–30226.
+
+Cited by: §D.2,
+§2.1.
+
+- Liu et al. (2024)
+Y. Liu, T. Hu, H. Zhang, H. Wu, S. Wang, L. Ma, and M. Long
+
+ITransformer: inverted transformers are effective for time series forecasting.
+
+In ICLR,
+
+Cited by: 11st item.
+
+- Luo et al. (2014)
+Y. Luo, J. Hu, X. Wei, D. Fang, and H. Shao
+
+Stock trends prediction based on hypergraph modeling clustering algorithm.
+
+In PIC,
+
+pp. 27–31.
+
+Cited by: §D.3,
+§2.2.
+
+- Nelson et al. (2017)
+D. M. Nelson, A. C. Pereira, and R. A. De Oliveira
+
+Stock market’s price movement prediction with lstm neural networks.
+
+In IJCNN,
+
+pp. 1419–1426.
+
+Cited by: §D.2,
+§2.1.
+
+- Nie et al. (2023)
+Y. Nie, N. H. Nguyen, P. Sinthong, and J. Kalagnanam
+
+A time series is worth 64 words: long-term forecasting with transformers.
+
+In ICLR,
+
+Cited by: 13rd item.
+
+- Nobi et al. (2014)
+A. Nobi, S. E. Maeng, G. G. Ha, and J. W. Lee
+
+Effects of global financial crisis on network structure in a local stock market.
+
+Physica A: Statistical Mechanics and its Applications 407, pp. 135–143.
+
+Cited by: §1.
+
+- Nugroho et al. (2014)
+F. S. D. Nugroho, T. B. Adji, and S. Fauziati
+
+Decision support system for stock trading using multiple indicators decision tree.
+
+In ICITACEE,
+
+pp. 291–296.
+
+Cited by: §D.1.
+
+- Olanrewaju et al. (2024)
+O. I. K. Olanrewaju, G. O. Daramola, and D. E. Ekechukwu
+
+Strategic financial decision-making in sustainable energy investments: leveraging big data for maximum impact.
+
+World Journal of Advanced Research and Reviews 22 (3), pp. 564–573.
+
+Cited by: §1.
+
+- Paszke et al. (2019)
+A. Paszke, S. Gross, F. Massa, A. Lerer, J. Bradbury, G. Chanan, T. Killeen, Z. Lin, N. Gimelshein, L. Antiga, A. Desmaison, A. Köpf, E. Z. Yang, Z. DeVito, M. Raison, A. Tejani, S. Chilamkurthy, B. Steiner, L. Fang, J. Bai, and S. Chintala
+
+PyTorch: an imperative style, high-performance deep learning library.
+
+In NeurIPS,
+
+pp. 8024–8035.
+
+Cited by: §4.1.
+
+- Qin et al. (2017)
+Y. Qin, D. Song, H. Chen, W. Cheng, G. Jiang, and G. Cottrell
+
+A dual-stage attention-based recurrent neural network for time series prediction.
+
+arXiv preprint arXiv:1704.02971.
+
+Cited by: §D.2,
+§2.1.
+
+- Qiu et al. (2025)
+X. Qiu, X. Wu, Y. Lin, C. Guo, J. Hu, and B. Yang
+
+DUET: dual clustering enhanced multivariate time series forecasting.
+
+In SIGKDD,
+
+pp. 1185–1196.
+
+Cited by: 15th item,
+§3.5.
+
+- Rafiei et al. (2025)
+S. S. Rafiei, M. S. Naderi, and M. Abedi
+
+A comprehensive energy management application method considering smart home occupant behavior using iot and real big data.
+
+arXiv preprint arXiv:2502.06052.
+
+Cited by: §1.
+
+- Rahman et al. (2019)
+M. O. Rahman, M. S. Hossain, T. Junaid, M. S. A. Forhad, and M. K. Hossen
+
+Predicting prices of stock market using gated recurrent units (grus) neural networks.
+
+International Journal of Computer Science and Network Security 19 (1), pp. 213–222.
+
+Cited by: §D.2,
+§2.1.
+
+- Rather et al. (2017)
+A. M. Rather, V. Sastry, and A. Agarwal
+
+Stock market prediction and portfolio selection models: a survey.
+
+Opsearch 54, pp. 558–579.
+
+Cited by: §1.
+
+- Sawhney et al. (2021)
+R. Sawhney, S. Agarwal, A. Wadhwa, T. Derr, and R. R. Shah
+
+Stock selection via spatiotemporal hypergraph attention network: a learning to rank approach.
+
+In AAAI,
+
+pp. 497–504.
+
+Cited by: 6th item,
+§D.3,
+§2.2.
+
+- Sawhney et al. (2020)
+R. Sawhney, S. Agarwal, A. Wadhwa, and R. R. Shah
+
+Spatiotemporal hypergraph convolution network for stock movement forecasting.
+
+In ICDM,
+
+pp. 482–491.
+
+Cited by: §D.3,
+§2.2.
+
+- Shang et al. (2024)
+Z. Shang, L. Chen, B. Wu, and D. Cui
+
+Ada-mshyper: adaptive multi-scale hypergraph transformer for time series forecasting.
+
+In NeurIPS,
+
+pp. 33310–33337.
+
+Cited by: 14th item.
+
+- Sharpe (1994)
+W. F. Sharpe
+
+The sharpe ratio.
+
+Journal of portfolio management 21 (1), pp. 49–58.
+
+Cited by: 3rd item.
+
+- Tashakkori et al. (2024)
+A. Tashakkori, M. Talebzadeh, F. Salboukh, and L. Deshmukh
+
+Forecasting gold prices with mlp neural networks: a machine learning approach.
+
+IJSEA, pp. 13–20.
+
+Cited by: §D.2,
+§2.1.
+
+- Veličković et al. (2017)
+P. Veličković, G. Cucurull, A. Casanova, A. Romero, P. Lio, and Y. Bengio
+
+Graph attention networks.
+
+arXiv preprint arXiv:1710.10903.
+
+Cited by: 4th item.
+
+- Wang et al. (2024)
+S. Wang, H. Wu, X. Shi, T. Hu, H. Luo, L. Ma, J. Y. Zhang, and J. Zhou
+
+TimeMixer: decomposable multiscale mixing for time series forecasting.
+
+In ICLR,
+
+Cited by: 12nd item.
+
+- Xiang et al. (2022)
+S. Xiang, D. Cheng, C. Shang, Y. Zhang, and Y. Liang
+
+Temporal and heterogeneous graph neural network for financial time series prediction.
+
+In CIKM,
+
+pp. 3584–3593.
+
+Cited by: §D.3,
+§2.2.
+
+- Ye et al. (2016)
+F. Ye, L. Zhang, D. Zhang, H. Fujita, and Z. Gong
+
+A novel forecasting method based on multi-order fuzzy time series and technical analysis.
+
+Information Sciences 367, pp. 41–57.
+
+Cited by: §D.1.
+
+- Zeng et al. (2023)
+A. Zeng, M. Chen, L. Zhang, and Q. Xu
+
+Are transformers effective for time series forecasting?.
+
+In AAAI,
+
+pp. 11121–11128.
+
+Cited by: 10th item,
+8th item,
+§D.2,
+§2.1.
+
+- Zheng et al. (2023)
+Z. Zheng, J. Shao, J. Zhu, and H. T. Shen
+
+Relational temporal graph convolutional networks for ranking-based stock prediction.
+
+In ICDE,
+
+pp. 123–136.
+
+Cited by: §1.
+
+## Appendix A Appendix
+
+### A.1 Experimental Setup
+
+#### A.1.1 Datasets
+
+To validate the performance of Hermes, we use three publicly available stock market datasets, with the dataset statistics provided in Table 4. These datasets provide a diverse set of stock time series, allowing us to comprehensively assess the model’s effectiveness across different financial scenarios.
+We evaluate our approach using three real-world datasets from the US stock market. These datasets contain relatively complete stock-industry relationships or Wiki-based company relations. The NASDAQ and NYSE datasets Feng et al. (2019b) include EOD data from 01/02/2013 to 12/08/2017, filtered from the respective markets. Abnormal patterns and penny stocks were removed, while preserving their representative properties, with NASDAQ being more volatile and NYSE more stable. The S&P500 dataset Huynh et al. (2023) gathers historical price data and industry information for the companies listed in the S&P500 index from the Yahoo Finance database, covering the period from 01/04/2016 to 05/25/2022.
+
+Table 4: Statistics of datasets.
+
+| | | | |
+| --- | --- | --- | --- |
+| | NASDAQ | NYSE | S&P500 |
+| # Stocks | 1026 | 1737 | 474 |
+| # Industries | 113 | 130 | 11 |
+| # Technical Indicators | 5 | 5 | 5 |
+| Start Time | 13-01-02 | 13-01-02 | 16-01-04 |
+| End Time | 17-12-08 | 17-12-08 | 22-05-25 |
+| Total Time Steps | 1281 | 1281 | 1611 |
+| Train Time Steps | 756 | 756 | 1006 |
+| Validate Time Steps | 252 | 252 | 253 |
+| Test Time Steps | 273 | 273 | 352 |
+
+#### A.1.2 Metrics
+
+Previous studies use different evaluation metrics, making it challenging to perform a comprehensive comparison of various methods. To provide a thorough assessment of the methods performance, we use four of the most commonly applied and reliable metrics: IC and ICIR, which are rank-based evaluation metrics; and SR, which is return-based.
+
+- •
+
+Information Coefficient (IC): IC is a coefficient that shows how close the prediction is to the actual result, computed by the average pearson correlation coefficient.
+
+| | | | |
+| --- | --- | --- | --- |
+| | I​Ct=1N​(Y^t−m​e​a​n​(Y^t))T​(Yt−m​e​a​n​(Yt))s​t​d​(Y^t)⋅s​t​d​(Yt),\displaystyle IC_{t}=\frac{1}{N}\frac{(\hat{Y}_{t}-mean(\hat{Y}_{t}))^{T}(Y_{t}-mean(Y_{t}))}{std(\hat{Y}_{t})\cdot std(Y_{t})}, | | (25) |
+
+where YtY_{t} are the raw stock price trends and Y^t\hat{Y}_{t} are the model predictions at each timestamp. We report the average IC over all test dataset.
+
+- •
+
+Information Ratio-based Information Coefficient (ICIR): The information ratio of the IC metric, calculated by:
+
+| | | | |
+| --- | --- | --- | --- |
+| | I​C​I​R=m​e​a​n​(I​C)s​t​d​(I​C).\displaystyle ICIR=\frac{mean(IC)}{std(IC)}. | | (26) |
+
+- •
+
+Sharpe Ratio (SR): Sharpe ratio Sharpe (1994) measures the profitability of the investment method and take into account risk.
+
+| | | | |
+| --- | --- | --- | --- |
+| | S​R=Et​[ρt−ρF]vart​(ρt−ρF),\displaystyle SR=\frac{E_{t}[\rho_{t}-\rho_{F}]}{\sqrt{\mathrm{var}_{t}(\rho_{t}-\rho_{F})}}, | | (27) |
+
+where ρt=ptpt−1−1\rho_{t}=\frac{p_{t}}{p_{t-1}}-1 is the return on the portfolio and pFp_{F} is the return on the risk-free asset which is always 0.
+
+#### A.1.3 Baselines
+
+We conduct a comparative analysis between our proposed Hermes and a range of baseline methods, which include prominent approaches in both machine learning and deep learning methods for STSF. Given that existing research has demonstrated the limited effectiveness of traditional statistical methods Fan and Shen (2024); Li et al. (2024), we exclude them from our comparative evaluation to focus on more competitive approaches.
+
+- •
+
+LSTM Hochreiter and Schmidhuber (1997) refers to the standard LSTM model, which operates on sequential data, including closing prices and moving averages over 5, 10, 20, and 30 days, to generate a sequential embedding. A fully connected (FC) layer is then employed to predict the return ratio.
+
+- •
+
+ALSTM Feng et al. (2019a) integrates adversarial training and stochastic simulation into an enhanced LSTM model, allowing it to more effectively capture market dynamics.
+
+- •
+
+RGCN Li et al. (2021) introduces a model that captures both positive and negative correlations among stocks using a correlation matrix computed from historical market data. The LSTM mechanism in RGCN layers helps mitigate over-smoothing issues when predicting overnight stock price movements.
+
+- •
+
+GAT Veličković et al. (2017) employs Graph Attention Networks (GAT) to aggregate stock embeddings, which are encoded by a GRU, on the stock graph. By combining the advantages of Graph Neural Networks (GNN) and attention mechanisms, it enhances performance in large-scale graph settings.
+
+- •
+
+RSR Feng et al. (2019b) introduces a novel neural network-based framework called Relational Stock Ranking, which addresses the stock forecasting problem in a learning-to-rank approach. Additionally, it proposes a new component in neural network modeling, called Temporal Graph Convolution, which is designed to explicitly capture the domain knowledge of stock relationships in a time-sensitive manner.
+
+- •
+
+STHAN-SR Sawhney et al. (2021) introduces a novel Spatio-Temporal Hypergraph Attention Network that models inter-stock relationships of different types and strengths as a hypergraph for stock ranking. It combines temporal Hawkes attention with spatial hypergraph convolutions through hypergraph attention to capture both the correlations in the movements of related stocks and the temporal evolution of their historical features.
+
+- •
+
+ESTIMATE Huynh et al. (2023) integrates temporal generative filters within a memory-based shared parameter LSTM network, enhancing the model’s ability to learn temporal patterns for each stock. Furthermore, it introduces attention hypergraph convolutional layers that utilize the wavelet basis—a convolution approach that leverages the polynomial wavelet basis to streamline message passing and focus on localized convolutions.
+
+- •
+
+Linear Zeng et al. (2023) employs a straightforward approach by utilizing only fully connected layers to predict the final price. This method does not incorporate any advanced architectures or temporal dependencies, relying solely on basic linear transformations to generate the forecasting. Despite its simplicity, it serves as a baseline model for comparison with more complex models.
+
+- •
+
+StockMixer Fan and Shen (2024) introduces a lightweight yet effective MLP-based architecture for stock price forecasting. The model incorporates three key components—indicator mixing, time mixing, and stock mixing—which work together to capture the intricate correlations within the stock data.
+
+- •
+
+DLinear Zeng et al. (2023) employs a straightforward linear regression approach that challenges complex Transformer-based architectures. It decomposes the time series and directly regresses historical data for future prediction using a weighted sum operation, demonstrating that simple linear formulations can effectively capture long-term temporal trends.
+
+- •
+
+iTransformer Liu et al. (2024) applies attention and feed-forward networks on inverted dimensions to better capture multivariate correlations. Specifically, it embeds the time series of each variable into variate tokens to model dependencies among variables via attention, while utilizing feed-forward networks to learn nonlinear representations for each token.
+
+- •
+
+TimeMixer Wang et al. (2024) utilizes a fully MLP-based architecture designed to leverage disentangled multiscale time series. It incorporates Past-Decomposable-Mixing (PDM) blocks to mix seasonal and trend components across different scales, and Future-Multipredictor-Mixing (FMM) blocks to aggregate predictions, thereby capturing both microscopic and macroscopic information effectively.
+
+- •
+
+PatchTST Nie et al. (2023) presents an efficient Transformer-based design centered on patching and channel independence. It segments time series into subseries-level patches to serve as input tokens, allowing the model to attend to longer histories with reduced computational costs while retaining local semantic information through independent channel processing.
+
+- •
+
+ASHyper Shang et al. (2024) proposes an Adaptive Multi-Scale Hypergraph Transformer to model group-wise interactions in time series. It features an adaptive hypergraph learning module and a multi-scale interaction module to capture comprehensive patterns. Additionally, it employs node and hyperedge constraints to cluster nodes with similar semantics and differentiate temporal variations.
+
+- •
+
+DUET Qiu et al. (2025) introduces a dual clustering framework that operates on both temporal and channel dimensions to address pattern heterogeneity. It employs a Temporal Clustering Module (TCM) to group time series into fine-grained distributions and a Channel Clustering Module (CCM) to capture inter-channel relationships in the frequency domain, effectively mitigating noise and modeling complex dependencies.
+
+((a))
+
+((b))
+
+((c))
+
+((d))
+
+Figure 3: Parameter sensitivity studies of main hyper-parameters in Hermes.
+
+## Appendix B Limitations
+
+Despite the strong performance of Hermes on multiple real-world stock forecasting benchmarks, several limitations remain. Hermes relies on predefined industry relationships to construct hyperedges, which may not fully capture rapidly evolving or latent market structures in real financial systems. And, although the proposed multi-scale fusion and lead-lag aggregation modules improve forecasting accuracy, the model may still face scalability challenges when applied to extremely large-scale financial markets with thousands of assets and dense inter-industry interactions.
+
+## Appendix C Impact Statement
+
+This work proposes Hermes, a spatial-temporal hypergraph framework for stock time series forecasting that explicitly models inter-industry lead-lag relationships and multi-scale market dynamics. The proposed framework may benefit financial forecasting systems, quantitative investment research, and market analysis by improving the modeling of complex stock correlations. This research is conducted for academic purposes only. All datasets used in this work are publicly available, and no private or sensitive personal information is involved. And we only use LLMs for grammatical polishing during writing, with all research content being original and ethically compliant.
+
+## Appendix D Related Work
+
+### D.1 Traditional Stock Time Series Forecasting
+
+Early stock forecasting methods rely mainly on statistical learning techniques to capture patterns and relationships in time series Ye et al. (2016); Ariyo et al. (2014); Gupta and Dhingra (2012); Elton et al. (2009). One of the most widely used techniques is the Autoregressive Integrated Moving Average (ARIMA) Ariyo et al. (2014) model, which stabilizes data by combining Autoregressive components, Moving Average, and differencing, thereby modeling time series. Another commonly used traditional method is the Hidden Markov Model (HMM) Gupta and Dhingra (2012), which is used to describe unobservable states in the market and can detect changes in market conditions, making it suitable for analyzing market transitions. Although these methods provide predictive capabilities, they exhibit significant limitations when dealing with nonlinear, dynamic changes, and sudden events in financial markets. As a market environment becomes more complex, traditional statistical methods increasingly fail to provide sufficient predictive accuracy and robustness.
+
+With the rapid development in machine learning, machine learning methods for stock time series forecasting have emerged Alkhatib et al. (2013); Nugroho et al. (2014); Kim (2003). For example, Support Vector Machines (SVMs) Kim (2003) map data to high-dimensional spaces using kernel functions and find optimal separating hyperplanes in those spaces, which allows them to capture complex relationships and dynamics in financial markets. However, SVMs are highly sensitive to parameter selection and often struggles to capture long-term dependencies. Overall, although machine learning methods show considerable potential in stock forecasting, they still rely on manual feature engineering and model design. Moreover, these traditional stock forecasting methods have not delved into the exploration of lead-lag relationships and multi-scale modeling.
+
+### D.2 Deep Learning Stock Time Series Forecasting
+
+With the rise of deep learning, notable progress has occurred in stock forecasting. This is mainly because deep neural networks can model complex nonlinear patterns. Some studies use recurrent neural networks (RNNs) Nelson et al. (2017); Qin et al. (2017); Akita et al. (2016); Rahman et al. (2019) to capture the historical development in individual stock prices and predict their short-term trends. For example, Long Short-Term Memory (LSTM) networks combined with historical stock data and text information are used to predict stock prices Akita et al. (2016). In addition, due to the significant progress of Multi-Layer Perceptrons (MLPs) architecture in the general time series field, the DLinear Zeng et al. (2023), CycleNet Lin et al. (2025), and SparseTSF Lin et al. (2024) show the benefits of this simple architecture for time series forecasting. Increasingly many proposals target stock forecasting performance by improving the MLPs architecture. For example, a series of studies Fan and Shen (2024); Lazcano et al. (2024); Tashakkori et al. (2024) enhance the learning ability of simple MLPs structures by utilizing the MLP-Mixer backbone, thereby improving forecasting accuracy. Next, the Transformer model has become increasingly popular due to the ability of its self-attention mechanism to capture long-term dependencies. For example, Master Li et al. (2024) proposes a novel stock transformer for stock price forecasting to effectively capture stock correlation.
+
+Some deep learning models have begun to explore lead-lag relationships and multi-scale modeling. For instance, StockMixer Fan and Shen (2024) engages in multi-scale modeling by segmenting the original time series into subsequence-level patches and mixing features at different scales. However, this approach lacks effective integration of information across scales; it merely concatenates information from different scales without thorough fusion. On the other hand, ESTIMATE Huynh et al. (2023) takes into account lead-lag relationships through data-driven detection of leading and lagging time series clusters. Nonetheless, this method falls short in capturing fine-grained lead-lag dynamics, as clustering can only reveal global lead-lag relationships. Distinctive from the aforementioned approaches, Hermes employs a sliding window technique and utilizes dynamic temporal aggregation operations to consider fine-grained lead-lag dependencies among stock industries. Moreover, it features a multi-scale fusion module, which utilizes a cross-scale, edge-to-edge message-passing to integrate information from different scales while maintaining the consistency of each scale.
+
+While these deep learning methods have advanced stock forecasting, the complexity of stock data and the need to account for intricate relationships among stocks have led researchers to explore new methods based on hypergraphs.
+
+### D.3 Hypergraph-based Stock Time Series Forecasting
+
+Traditional graphs have limitations when it comes to modeling higher-order multivariate relationships, as they can only represent relations between pairs of nodes. To address this issue, Hypergraph Neural Networks (HGNNs) Feng et al. (2019c) were introduced. Hypergraphs extend the concept of simple graphs to enable the capture of relationships among multiple stocks Chen et al. (2020). Hypergraphs have gained increasing attention and application across various fields. Hyperedge in a hypergraph represents a set of vertices, making them suitable for modeling non-pairwise relationships Luo et al. (2014); Sawhney et al. (2020). For example, HGAM Li et al. (2022) is a hypergraph-based reinforcement learning method for stock portfolio selection. THGNN Xiang et al. (2022) is a temporal and heterogeneous graph neural network model that aims to learn dynamic relationships by using two-stage attention mechanisms. STHAN-SR Sawhney et al. (2021) enhances corporate relevance based on Wiki data and uses hypergraph convolution to propagate information from higher-order neighbors. DHSTN Liao et al. (2024) is a dynamic hypergraph network for learning spatio-temporal relations of stocks. Dynamic hypergraphs are generated adaptively using (Graph Attention Networks) GATs to capture time-varying higher-order spatial relationships among stocks. The latest method, ESTIMATE Huynh et al. (2023), employs hypergraphs to capture non-pairwise correlations, utilizing temporal generative filters to identify individual patterns for each stock.
+
+Unlike the above methods, we propose a new hypergraph-based stock forecasting model that specifically takes into account the multi-scale nature of stock data, enabling it to capture the complexity of market dynamics more comprehensively. Furthermore, our approach places particular emphasis on the lead-lag relationships between financial industries, where the changes in one industry may precede or lag behind those in another. By capturing these key relationships more fully, we aim to improve forecasting accuracy.
+
+### D.4 Illustration Figures
+
+Figure 5 illustrates the specific lead-lag interaction process within the window, with a lead-lag step of 3 as an example. Figure 5 depicts three types of message passing: hypernodes for stocks and hyperedges for industries.
+
+Figure 4: The specific lead-lag interaction process within the window, with a lead-lag step of 3 as an example.
+
+Figure 5: Three types of message passing: hypernodes for stocks and hyperedges for industries.
+
+### D.5 Hyperparameter Sensitivity
+
+We also study the parameter sensitivity of the Hermes—see Figure 3.
+
+Lookback window length TT: We examine the predictive performance of Hermes as we adjust the lookback window length, TT, illustrated in Figure 3(a). Consistently across all datasets, a balanced window length emerges as the most effective. Window lengths that are too short result in a swift decline in performance due to inadequate information, whereas excessively lengthy sequences also underperform because of the absence of timely information benefits and the heightened learning expenses for stocks.
+
+Latent space dimension dd: In Section 3.2, we enhance the representational capacity of indicators by mapping them into a high-dimensional hidden space dd, thereby facilitating the extraction of more intricate hidden relationships. In Figure 3(b), we explore the impact of different hidden dimensions dd and observe that datasets exhibit optimal performance at varying mm values. Notably, when dd is set to smaller values such as 5 or 8, models tend to achieve good performance; however, as dd increases, models become prone to overfitting, leading to a decline in performance. Furthermore, selecting smaller dd not only improves model performance but also effectively reduces the number of model parameters.
+
+Multi-scale Lead-Lag steps w1,w2,⋯,wSw^{1},w^{2},\cdots,w^{S}: In Section 3.4, for time series at each scale, we study the lead-lag correlations within wsw^{s} time steps to better extract complex dependencies in the time series, thereby improving forecasting performance. Here, we select three scales and specify the lead-lag time steps as w1w^{1}, w2w^{2}, and w3w^{3}, respectively. As shown in Figure 3(c), we find that different datasets have variations in their multi-scale lead-lag time steps when achieving optimal performance. This is because different datasets possess unique characteristics, and their cyclicity (fine-grained scale) and trend (coarse-grained scale) may change due to external factors. Therefore, we recommend adjusting this parameter specifically when dealing with new datasets.
+
+Score weight α\alpha: Besides, we adopt the score weight in section 3.7 to trade off the MSE loss and the ranking-aware loss—see Figure 3(d). Experimental results show that all datasets achieve optimal performance and exhibit high stability when the score weight is set to 1. Therefore, we recommend setting this parameter to 1 in future research to obtain more optimized results.
+
+=== END SOURCE TEXT ===

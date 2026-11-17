@@ -1,0 +1,73 @@
+{
+  "assessment_date": "2026-11-17",
+  "scope": "Read-only first 32 training-date CPU float32 checkpoint probes; saved Figure 3 test predictions; no retraining",
+  "checks": "All three saved targets, dates, tickers and recomputed daily IC match; all test stocks valid",
+  "runs": [
+    {
+      "seed": 0,
+      "selected_epoch": 68,
+      "selected_val_IC": 0.009078197006800855,
+      "max_logged_val_IC": 0.04009924326217483,
+      "max_logged_val_IC_epoch": 81,
+      "selected_train_rank_over_mse": 2041.635116882155,
+      "train_probe_rank_over_mse": 1008.3836059570312,
+      "initial_over_graph_std": 13.906304359436035,
+      "test_IC": -0.0014970764507108909,
+      "test_daily_IC_std": 0.1351586580921748,
+      "fusion": {
+        "saturated_column_fraction": 0.9946733117103577,
+        "floor_fraction": 0.0013020833721384406
+      }
+    },
+    {
+      "seed": 1,
+      "selected_epoch": 7,
+      "selected_val_IC": 0.015589533986064698,
+      "max_logged_val_IC": 0.04063017902643379,
+      "max_logged_val_IC_epoch": 16,
+      "selected_train_rank_over_mse": 12380.539511907613,
+      "train_probe_rank_over_mse": 7597.08740234375,
+      "initial_over_graph_std": 8.200724601745605,
+      "test_IC": -0.0005393614409296686,
+      "test_daily_IC_std": 0.12864749295281058,
+      "fusion": {
+        "saturated_column_fraction": 0.9733073115348816,
+        "floor_fraction": 0.0035992246121168137
+      }
+    },
+    {
+      "seed": 2,
+      "selected_epoch": 46,
+      "selected_val_IC": -0.0252127228243808,
+      "max_logged_val_IC": 0.03883891346819883,
+      "max_logged_val_IC_epoch": 18,
+      "selected_train_rank_over_mse": 11686.416305680303,
+      "train_probe_rank_over_mse": 3085.16455078125,
+      "initial_over_graph_std": 15.092853546142578,
+      "test_IC": -0.0009737253915529268,
+      "test_daily_IC_std": 0.14402418382926058,
+      "fusion": {
+        "saturated_column_fraction": 0.9925426244735718,
+        "floor_fraction": 0.00031442352337762713
+      }
+    }
+  ],
+  "seed_mean_daily_IC": -0.0010033877610644943,
+  "bootstrap": {
+    "method": "Circular moving-block percentile bootstrap of daily IC averaged across seeds, 10000 replicates; seed=20261117; block length in days. Descriptive uncertainty for this fixed test period, not independent-market uncertainty or author-performance validation.",
+    "ci_95_by_block_length": {
+      "5": [
+        -0.009428956786630959,
+        0.007043106698235771
+      ],
+      "10": [
+        -0.009210418666028806,
+        0.006976178537409713
+      ],
+      "20": [
+        -0.009132938889262504,
+        0.0069625401666813065
+      ]
+    }
+  }
+}

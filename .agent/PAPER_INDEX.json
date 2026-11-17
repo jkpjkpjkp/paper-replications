@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "hermes",
+  "title": "Hermes: A Multi-Scale Spatial-Temporal Hypergraph Network for Stock Time Series Forecasting",
+  "coverage": "html_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/hermes/sources/paper-browser.txt",
+    "path_relative_to_collection": ".replication-local/artifacts/hermes/sources/paper-browser.txt",
+    "sha256": "58e429726dda3350981824049712438e37e28093ccc69dbd8fcd661e5b4b5e9b",
+    "bytes": 75646,
+    "urls": [
+      "https://arxiv.org/abs/2509.23668v3"
+    ]
+  },
+  "method": "Article body; navigation and known site footer removed",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": null,
+  "pages": [
+    {
+      "page": null,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 1055
+    }
+  ],
+  "layout_file": null,
+  "layout_pages": null,
+  "heading_candidates": [
+    {
+      "line": 15,
+      "text": "# Hermes: A Multi-Scale Spatial-Temporal Hypergraph Network for Stock Time Series Forecasting"
+    },
+    {
+      "line": 65,
+      "text": "###### Abstract"
+    },
+    {
+      "line": 69,
+      "text": "## 1 Introduction"
+    },
+    {
+      "line": 118,
+      "text": "## 2 Related Work"
+    },
+    {
+      "line": 120,
+      "text": "### 2.1 Deep Learning Stock Time Series Forecasting"
+    },
+    {
+      "line": 124,
+      "text": "### 2.2 Hypergraph-based Stock Time Series Forecasting"
+    },
+    {
+      "line": 130,
+      "text": "## 3 Methodology"
+    },
+    {
+      "line": 138,
+      "text": "### 3.1 Framework Overview"
+    },
+    {
+      "line": 142,
+      "text": "### 3.2 Multi-Scale Feature Extraction"
+    },
+    {
+      "line": 173,
+      "text": "### 3.3 Adaptive Spatial-Temporal Hypergraph Construction"
+    },
+    {
+      "line": 191,
+      "text": "### 3.4 Hyperedge-based Moving Aggregation"
+    },
+    {
+      "line": 219,
+      "text": "### 3.5 Hyperedge-based Multi-scale Fusion"
+    },
+    {
+      "line": 248,
+      "text": "### 3.6 Predictor"
+    },
+    {
+      "line": 275,
+      "text": "### 3.7 Optimization Objectives"
+    },
+    {
+      "line": 285,
+      "text": "## 4 Experiments"
+    },
+    {
+      "line": 287,
+      "text": "### 4.1 Experimental Setup"
+    },
+    {
+      "line": 318,
+      "text": "### 4.2 Overall Performance"
+    },
+    {
+      "line": 322,
+      "text": "### 4.3 Ablation Studies"
+    },
+    {
+      "line": 326,
+      "text": "### 4.4 Efficiency Analysis"
+    },
+    {
+      "line": 334,
+      "text": "## 5 Conclusions"
+    },
+    {
+      "line": 338,
+      "text": "## References"
+    },
+    {
+      "line": 876,
+      "text": "## Appendix A Appendix"
+    },
+    {
+      "line": 878,
+      "text": "### A.1 Experimental Setup"
+    },
+    {
+      "line": 880,
+      "text": "#### A.1.1 Datasets"
+    },
+    {
+      "line": 900,
+      "text": "#### A.1.2 Metrics"
+    },
+    {
+      "line": 932,
+      "text": "#### A.1.3 Baselines"
+    },
+    {
+      "line": 1006,
+      "text": "## Appendix B Limitations"
+    },
+    {
+      "line": 1010,
+      "text": "## Appendix C Impact Statement"
+    },
+    {
+      "line": 1014,
+      "text": "## Appendix D Related Work"
+    },
+    {
+      "line": 1016,
+      "text": "### D.1 Traditional Stock Time Series Forecasting"
+    },
+    {
+      "line": 1022,
+      "text": "### D.2 Deep Learning Stock Time Series Forecasting"
+    },
+    {
+      "line": 1030,
+      "text": "### D.3 Hypergraph-based Stock Time Series Forecasting"
+    },
+    {
+      "line": 1036,
+      "text": "### D.4 Illustration Figures"
+    },
+    {
+      "line": 1044,
+      "text": "### D.5 Hyperparameter Sensitivity"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1056
+    }
+  ],
+  "line_count": 1056,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "fc113d55404df713dda6a363df43437659117d22b46e6f95c0e6d7e32501f060",
+      "bytes": 72225
+    }
+  }
+}

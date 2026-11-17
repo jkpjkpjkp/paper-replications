@@ -1,0 +1,23 @@
+{
+  "fixed_before_results": "2026-11-06",
+  "universe": "the original 474 benchmark securities, mapped to permanent CRSP IDs using names known by 2022-05-25; later inactive securities excluded from trading using prior-day information",
+  "data_endpoint": "2025-12-31, latest local CRSP daily release",
+  "primary_test": "original no-skip seed-0 checkpoint and original training normalizer, frozen; 2022-05-26 through 2025-12-31",
+  "source_alignment": "OHLC split-adjusted CRSP prices and volumes calibrated to the original vendor's units using only overlap ending 2022-05-25",
+  "rolling_tests": [
+    {"train_years":[2018,2019,2020,2021],"validation_year":2022,"test_year":2023},
+    {"train_years":[2019,2020,2021,2022],"validation_year":2023,"test_year":2024},
+    {"train_years":[2020,2021,2022,2023],"validation_year":2024,"test_year":2025}
+  ],
+  "rolling_seeds": [0,1,2],
+  "model": "no_skip; original 16-day lookback, hidden=8, scales=1/2/4, lag=3/2/1, summed pair loss alpha=1, Adam lr=.005, batch=32, max epochs=100, patience=15, minimum validation loss",
+  "training_target": "CRSP daily price return dlyretx",
+  "portfolio_PnL": "CRSP total return dlyret, including dividend obligations on shorts",
+  "portfolio": "top 5 long, bottom 5 short; +50%/-50% NAV at daily rebalance, gross 100%, net zero",
+  "costs": "5bp times buy dollar turnover only; long purchases and short covers pay; sales/new shorts free; start flat and include final cover",
+  "selection": "no model, hyperparameter, seed, or epoch selection using test performance",
+  "other_costs": "no additional borrow, financing, spread, or slippage charges beyond the requested buy cost",
+  "year_boundaries": "each rolling test starts flat and ends liquidated; no cross-year order netting; all entry/cover fees included",
+  "historical_missing_labels": "two unavailable pre-2022 regression labels excluded from training; no eligible validation/test return missing or excluded using future information",
+  "execution": "idealized close-to-close daily benchmark, as in the original reproduction; not a live execution simulation"
+}

@@ -1,0 +1,24 @@
+1: HERMES S&P500 Figure 3 reconstruction (three seeds), IC: rerun -0.001003 +/- 0.000480 seed SD; paper 0.050.
+
+
+
+Scope: Three-seed S&P500 equation reconstruction, including the newer Figure 3 run.
+
+Evidence and explanation:
+The newer completed Figure 3 reconstruction has IC -0.001003 +/- 0.000480 seed SD versus
+paper 0.050, and ICIR -0.007354 +/- 0.003484 versus 0.334. It does not recover the
+claimed predictive signal. The earlier run was also near zero (IC 0.000535 +/-
+0.002315); it is not evidence of a match. Saved checkpoint checks apply to the local
+reconstruction.
+
+Limits / next requirement:
+No verified author implementation is available. Head/convolution, preprocessing,
+training and ranking-loss conventions remain uncertain. Local portfolio conventions
+differ, so Sharpe is not used here as a matched paper comparison; remaining paper
+experiments are not validated.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/hermes/results/sp500-figure3-2026-11-11/summary.json
+- ../.replication-local/artifacts/hermes/results/sp500-figure3-2026-11-11/comparison.csv
+- ../.replication-local/artifacts/paper-claim-validation/results/claim_registry.csv
+

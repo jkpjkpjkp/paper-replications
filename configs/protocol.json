@@ -1,0 +1,63 @@
+{
+  "paper": "https://arxiv.org/html/2509.23668v3",
+  "data": "S&P500 from the cited ESTIMATE release",
+  "paper_specified": {
+    "lookback": 16,
+    "learning_rate": 0.005,
+    "optimizer": "Adam",
+    "alpha": 1,
+    "train_days": 1006,
+    "validation_days": 253,
+    "test_days": 352,
+    "loss": "return MSE plus sum of all pairwise ranking hinges"
+  },
+  "reconstruction_choices": {
+    "hidden": 8,
+    "conv_kernel_and_stride": [
+      1,
+      2,
+      4
+    ],
+    "lead_lag_windows": [
+      3,
+      2,
+      1
+    ],
+    "causal_mlp": "prefix linear, GELU, linear",
+    "prediction_heads": "affine flattened representations",
+    "cross_scale_softmax": "column normalized as written in Eq.18; literal B@E in Eq.19",
+    "mahalanobis_distance_floor": 1e-06,
+    "normalization": "per-stock train z-score, log1p volume",
+    "batch_size": 32,
+    "maximum_epochs": 100,
+    "early_stopping_patience": 15,
+    "checkpoint_selection": "minimum validation loss",
+    "portfolio": {
+      "name": "dollar_neutral_top_bottom_equal_weight",
+      "rebalance": "daily",
+      "long_exposure": 0.5,
+      "short_exposure": -0.5,
+      "gross_exposure": 1.0,
+      "net_exposure": 0.0,
+      "selection": "highest top_k scores long; lowest top_k scores short; disjoint books",
+      "small_universe": "use min(top_k, valid_stocks//2) stocks on each side",
+      "ties": "stable descending score order, then stored ticker order; bottom book uses the end of the same ordering",
+      "buy_cost_bps": 5.0,
+      "sell_cost_bps": 0.0,
+      "cost_convention": "buys only: long purchases and short covers; sells and new shorts free",
+      "cost_turnover": "actual traded dollars after drift; initial entry and final liquidation included",
+      "position_drift": "price returns mark holdings; total returns determine P&L when supplied",
+      "annualization_days": 252,
+      "definition": "dollar neutrality at each daily rebalance; beta neutrality is not imposed"
+    },
+    "annualization": "gross and net SR use sqrt(252); paper portfolio convention is unverified, so SR is not directly comparable",
+    "main_seeds": [
+      0,
+      1,
+      2
+    ],
+    "ablation_seed": 0,
+    "loss_sensitivity": "also run mean pairwise hinge, as in the cited StockMixer code; not mixed with main results"
+  },
+  "user_correction_date": "2026-11-06"
+}
