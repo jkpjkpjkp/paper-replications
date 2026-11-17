@@ -1,0 +1,726 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "alphasage",
+  "title": "AlphaSAGE: Structure-Aware Alpha Mining via GFlowNets for Robust Exploration",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/paper-reproduction-audit/workspaces/099-alphasage/sources/paper-iclr2026.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/paper-reproduction-audit/workspaces/099-alphasage/sources/paper-iclr2026.pdf",
+    "sha256": "a7cfd014a29d14be51de052c94906026193ca500c4bb0cf4722e6fdf0737a83b",
+    "bytes": 22120702,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 28,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 81
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 82,
+      "line_end": 139
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 140,
+      "line_end": 201
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 202,
+      "line_end": 274
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 275,
+      "line_end": 326
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 327,
+      "line_end": 425
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 426,
+      "line_end": 494
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 495,
+      "line_end": 538
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 539,
+      "line_end": 826
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 827,
+      "line_end": 928
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 929,
+      "line_end": 978
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 979,
+      "line_end": 1024
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1025,
+      "line_end": 1067
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1068,
+      "line_end": 1187
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1188,
+      "line_end": 1268
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1269,
+      "line_end": 1369
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1370,
+      "line_end": 1509
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1510,
+      "line_end": 1602
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1603,
+      "line_end": 1674
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1675,
+      "line_end": 1719
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1720,
+      "line_end": 1742
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 1743,
+      "line_end": 1859
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 1860,
+      "line_end": 2041
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 2042,
+      "line_end": 2189
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 2190,
+      "line_end": 2346
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 2347,
+      "line_end": 2461
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 2462,
+      "line_end": 2622
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 2623,
+      "line_end": 2662
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 82
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 83,
+      "line_end": 149
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 150,
+      "line_end": 216
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 217,
+      "line_end": 283
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 284,
+      "line_end": 334
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 335,
+      "line_end": 412
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 413,
+      "line_end": 480
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 481,
+      "line_end": 533
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 534,
+      "line_end": 597
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 598,
+      "line_end": 643
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 644,
+      "line_end": 700
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 701,
+      "line_end": 770
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 771,
+      "line_end": 819
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 820,
+      "line_end": 900
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 901,
+      "line_end": 975
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 976,
+      "line_end": 1041
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1042,
+      "line_end": 1099
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1100,
+      "line_end": 1173
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1174,
+      "line_end": 1238
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1239,
+      "line_end": 1292
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1293,
+      "line_end": 1323
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 1324,
+      "line_end": 1374
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 1375,
+      "line_end": 1437
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 1438,
+      "line_end": 1502
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 1503,
+      "line_end": 1569
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 1570,
+      "line_end": 1634
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 1635,
+      "line_end": 1715
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 1716,
+      "line_end": 1751
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 17,
+      "text": "A LPHA SAGE: S TRUCTURE -A WARE A LPHA M INING"
+    },
+    {
+      "line": 41,
+      "text": "A BSTRACT"
+    },
+    {
+      "line": 58,
+      "text": "I NTRODUCTION"
+    },
+    {
+      "line": 131,
+      "text": "A LPHAS IN QUANTITATIVE TRADING"
+    },
+    {
+      "line": 162,
+      "text": "A LPHA M INING AND C OMBINATION"
+    },
+    {
+      "line": 180,
+      "text": "G RAPH N EURAL N ETWORKS"
+    },
+    {
+      "line": 190,
+      "text": "G ENERATIVE F LOW N ETWORKS"
+    },
+    {
+      "line": 207,
+      "text": "M ETHODOLOGY"
+    },
+    {
+      "line": 211,
+      "text": "F RAMEWORK OVERVIEW AND P ROBLEM F ORMULATION"
+    },
+    {
+      "line": 400,
+      "text": "M ULTI -FACETED R EWARD F UNCTION AND T RAINING O BJECTIVE"
+    },
+    {
+      "line": 406,
+      "text": "1. Terminal Performance Reward (RIC ): The primary measure of an alpha’s predictive"
+    },
+    {
+      "line": 415,
+      "text": "2. Structure-Aware Reward (RSA ): As defined in Eq. 11, this reward provides a dense signal"
+    },
+    {
+      "line": 463,
+      "text": "A LPHA C OMBINATION"
+    },
+    {
+      "line": 474,
+      "text": "E XPERIMENTS AND R ESULTS"
+    },
+    {
+      "line": 478,
+      "text": "E XPERIMENT S ETTING"
+    },
+    {
+      "line": 522,
+      "text": "A BLATION S TUDY"
+    },
+    {
+      "line": 533,
+      "text": "S ENSITIVITY A NALYSIS"
+    },
+    {
+      "line": 821,
+      "text": "C ONCLUSION"
+    },
+    {
+      "line": 936,
+      "text": "R EFERENCES"
+    },
+    {
+      "line": 987,
+      "text": "18300. PMLR, 2023."
+    },
+    {
+      "line": 995,
+      "text": "2024. Association for Computational Linguistics. doi: 10.18653/v1/2024.findings-acl.233. URL"
+    },
+    {
+      "line": 1073,
+      "text": "T HE U SE OF L ARGE L ANGUAGE M ODELS (LLM S )"
+    },
+    {
+      "line": 1083,
+      "text": "S UPPLEMENTARY BACKGROUND ON R ELATED W ORK"
+    },
+    {
+      "line": 1087,
+      "text": "A LPHA M INING AND C OMBINATION"
+    },
+    {
+      "line": 1130,
+      "text": "G RAPH N EURAL N ETWORKS (GNN S )"
+    },
+    {
+      "line": 1223,
+      "text": "G ENERATIVE F LOW N ETWORKS (GF LOW N ETS )"
+    },
+    {
+      "line": 1274,
+      "text": "I MPLEMENTATION D ETAILS"
+    },
+    {
+      "line": 1278,
+      "text": "P SEUDO C ODE"
+    },
+    {
+      "line": 1358,
+      "text": "R ELATION T YPE OF RGCN"
+    },
+    {
+      "line": 1365,
+      "text": "F EATURES AND O PERATORS"
+    },
+    {
+      "line": 1515,
+      "text": "E XPERIMENT D ETAILS"
+    },
+    {
+      "line": 1519,
+      "text": "M ETRIC D ETAILS"
+    },
+    {
+      "line": 1594,
+      "text": "K Ed [Rd − rf,d ]"
+    },
+    {
+      "line": 1615,
+      "text": "H YPERPARAMETER S ETTING"
+    },
+    {
+      "line": 1693,
+      "text": "A DDITIONAL R ESULTS"
+    },
+    {
+      "line": 1968,
+      "text": "R EWARD - WEIGHT SCHEDULES"
+    },
+    {
+      "line": 2035,
+      "text": "E NCODER ARCHITECTURES"
+    },
+    {
+      "line": 2238,
+      "text": "S TABILITY ACROSS RANDOM SEEDS"
+    },
+    {
+      "line": 2332,
+      "text": "S UBPERIOD PERFORMANCE UNDER REGIME SHIFTS"
+    },
+    {
+      "line": 2418,
+      "text": "P ROOF"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2663
+    }
+  ],
+  "line_count": 2663,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "03918a4c7e2b40990ac3c4da44479d639b30635746cc76323df6122142706e1f",
+      "bytes": 84069
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "98d772e9107b950ba1791527287c2819023747ecb1e62362cee04c09dad99291",
+      "bytes": 105041
+    }
+  }
+}

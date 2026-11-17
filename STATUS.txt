@@ -1,0 +1,57 @@
+1: AlphaSAGE CSI300 adaptive 50-alpha pool (seed 0), IC: rerun 0.049129; paper 0.079.
+
+
+
+Assessment date: 2026-11-17.
+Scope: Historical completed CSI300 adaptation; corrected full-budget reruns are in progress.
+The first-line numbers remain the historical result until a corrected representative run completes.
+
+Evidence and explanation:
+Saved AlphaSAGE adaptive-pool IC is 0.049129 versus 0.079 (-37.8%); RankIC is 0.067127
+versus 0.094 (-28.6%); ICIR 0.38657 versus 0.496 and RankICIR 0.50834 versus 0.583. This
+is one seed with no empirical seed error bar. GP/XGBoost comparisons also differ. These
+saved numbers and the later discrepancy register do not establish a matched original-
+data experiment.
+
+Limits / next requirement:
+Substitute data, price/evaluator corrections and combination conventions complicate
+attribution. The later data-recovery pipeline is only recorded as waiting, not a
+completed replacement result. Other markets, seeds, ablations and executable original
+portfolio results remain unresolved; overlapping return-label proxies do not count as
+backtests.
+
+Corrective work on 2026-11-17:
+Adapter v3 explicitly adjusts raw prices by the stored factor and converts volume from
+100-share lots to adjusted shares. Formation membership is separate from full endpoint
+close history. Missing labels are not zero-filled. Runtime expression/normalization guards
+exclude nonmembers, rank ties are averaged, and SSL means exclude absent columns.
+Caches identify actual input file hashes; archived inputs and outputs are preserved.
+Training dates are explicit: default purged 2020-11-30, optional nominal 2020-12-31.
+Return proxies are disabled by default; an executable portfolio backtest remains unresolved.
+
+Verification passed for the data regressions, baseline construction, and causal OLS checks.
+A 64-episode seed-0 smoke run and adaptive evaluation completed with 64 finite / 0 nonfinite
+losses. This is integration evidence only, not a representative paper match.
+The new batch freezes seeds 0/1/2, 10,000 AlphaSAGE episodes each, GP 1,000 x 40 and
+XGBoost 100/10 rounds, with two concurrent jobs. Inspect the live pipeline receipt below
+for completion/failure; do not infer completion from this launch note. No corrected
+full-budget AlphaSAGE metric or measured multi-seed uncertainty was available at this update.
+
+The corrected XGBoost seed-0 rerun has completed: intended 100-round test IC 0.060283,
+RankIC 0.065794; literal 10-round ordinary IC 0.030712, RankIC 0.037710 (paper 0.031,
+0.033). The close single IC cell does not establish representative numerical replication.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/alphasage/results/comparison.csv
+- ../.replication-local/artifacts/alphasage/README.txt
+- ../.replication-local/artifacts/ordered-reproductions/results/discrepancy-causes-20261114/factor-discrepancies.json
+- ../.replication-local/artifacts/ordered-reproductions/results/alphasage-recovered-20261115/pipeline-status.json
+- ../.replication-local/runs/alphasage-corrected-20261117/alphasage/results/corrected-pipeline.json
+- ../.replication-local/runs/alphasage-corrected-20261117/alphasage/results/corrected-protocol.json
+- ../.replication-local/runs/alphasage-corrected-20261117/alphasage/results/data-verification.log
+- ../.replication-local/runs/alphasage-corrected-20261117/alphasage/results/verification.log
+- ../.replication-local/runs/alphasage-corrected-20261117/alphasage/results/baseline-verification.log
+- ../.replication-local/runs/alphasage-corrected-20261117/alphasage/results/smoke64/summary.json
+- ../.replication-local/runs/alphasage-corrected-20261117/alphasage/results/smoke64/adaptive/summary.json
+- ../.replication-local/runs/alphasage-corrected-20261117/alphasage/results/xgboost-csi300-seed0/summary.json
+

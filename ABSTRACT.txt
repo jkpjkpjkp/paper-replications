@@ -1,0 +1,9 @@
+AlphaSAGE: Structure-Aware Alpha Mining via GFlowNets for Robust Exploration
+
+Condensed abstract
+
+Combines a relational graph encoder, generative flow networks, and dense rewards to
+discover diverse formulaic investment signals. Modeling expression structure and
+sampling multiple promising modes address sparse feedback and mode collapse in
+conventional reinforcement learning. Experiments report improvements in alpha diversity,
+novelty, and predictive performance.

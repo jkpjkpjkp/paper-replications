@@ -1,0 +1,20 @@
+--- upstream/train_GP.py
++++ runtime/train_GP.py
+@@ -116,7 +116,7 @@
+     target = Ref(close, -20) / close - 1
+ 
+     train_start_time = '2010-01-01'
+-    train_end_time = f'{args.train_end_year}-12-31'
++    train_end_time = '2020-11-30'
+     valid_start_time = f'{args.train_end_year + 1}-01-01'
+     valid_end_time = f'{args.train_end_year + 1}-12-31'
+     test_start_time = f'{args.train_end_year + 2}-01-01'
+@@ -135,7 +135,7 @@
+                           end_time=test_end_time,
+                           qlib_path=QLIB_PATH)
+ 
+-    save_dir = f'out_gp/{args.instruments}_{args.train_end_year}_{args.freq}_{args.seed}'
++    save_dir = args.output
+ 
+     Metric = make_fitness(function=_metric, greater_is_better=True)
+     funcs = [make_function(**func._asdict()) for func in generic_funcs]
