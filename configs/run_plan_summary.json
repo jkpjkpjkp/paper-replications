@@ -1,0 +1,18 @@
+{
+  "gross_equity_fits": 600,
+  "net_equity_fits": 450,
+  "total_equity_fits": 1050,
+  "estimate_at_paper_reported_minutes_per_fit": 30,
+  "implied_a6000_gpu_hours": 525.0,
+  "caveat": "Planning extrapolation from paper timings, not a local benchmark. Excludes domain baselines and mortgages. Assumes 5 seeds for net experiments as for gross; Table 9 does not explicitly restate seed count.",
+  "table5_set_sequence": "Can evaluate 2002-2016 subset of gross fits; verify whether authors used identical fits.",
+  "additional_required": [
+    "Table 5 domain baselines: CNN-Transformer K=5,8,10,15; Fourier-FNN K=10,15; OU-Threshold K=10,15",
+    "Table 9 domain baselines: CNN-Transformer/IPCA K=0,1,3,5,10,15",
+    "Table 6: six sequence/set models plus 5-layer NN and logistic regression",
+    "Figures 3 and 13: ten evaluation subsets, 25 sequences x 2500 loans per subset",
+    "Figure 14: no-refit, uniform-refit, 24-month-half-life refit",
+    "Figures 15-16: Set-Sequence, gated Set-Sequence, NN, logistic yearly refits",
+    "Figures 8-12 and 17: aligned returns, transition summaries and learned representations"
+  ]
+}

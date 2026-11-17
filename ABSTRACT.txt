@@ -1,0 +1,9 @@
+A Set-Sequence Model for Time Series
+
+Condensed abstract
+
+Models collections of related time series by combining a permutation-invariant summary
+of each cross-section with a temporal model for each individual unit. The architecture
+handles varying population sizes and unaligned sequences with linear cross-sectional
+scaling. Experiments on contagion, equity portfolios, and mortgage risk report improved
+predictions and interpretable cross-sectional summaries.

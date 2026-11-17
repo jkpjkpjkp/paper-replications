@@ -1,0 +1,33 @@
+PRINTED EQUATION INCONSISTENCY; EFFECT ON AUTHOR RESULTS UNKNOWN
+Assessment date: 2026-11-17
+
+The synthetic contagion baseline has inconsistent update equations. This is
+verified in the paper text and original PDF, not inferred from a failed fit.
+It does not establish that the authors implemented the inconsistent version.
+
+Source: arXiv:2505.11243v2, Section 5 (p.5), Appendix E.3 (pp.19-20).
+Local original: ../.replication-local/artifacts/Set Sequence/sources/paper-v2.pdf
+SHA256: 49ca24743305f2f9016bb51b0f94d448f9c100798fcd5b5fe2d081dcb2789d3a
+Search mapping: .agent/PAPER_TEXT.txt lines 347-351, 1875-1970.
+
+Section 5 defines lambda_next = beta*lambda + alpha*N, with alpha=4.
+The summary equation on p.19 preserves alpha in both expected and observed
+default fractions. But the displayed prediction and correction on p.20 are
+  lambda_prediction = beta*lambda + p
+  lambda_next = lambda_prediction + K*(N_observed-p).
+At full observation K=1 these imply beta*lambda+N, missing alpha.
+With beta=.5, lambda=.01, and N=.002, the first rule gives .013 and the
+second .007. The discrepancy is .006, and is not a stochastic sampling error.
+The p.20 caption also states alpha=4, so alpha=1 is not a stated resolution.
+
+If implemented literally, the p.20 rule would underweight the observed-default
+contribution by four at full observation, defeating the claimed full-observation
+tracking property. This is a conditional methodological concern. It could be a
+typesetting omission; no author implementation was located to distinguish it.
+The paper's trained Set-Sequence scores are not refuted by this check.
+
+Evidence: ../.replication-local/status-resolution-20261117/remaining-evidence.json
+Reproduction: ../.replication-local/status-resolution-20261117/audit_remaining.py
+Original page renderings:
+/mnt/data/home/jkp/replications/status-resolution-20261117/pdf/setsequence-19.png
+/mnt/data/home/jkp/replications/status-resolution-20261117/pdf/setsequence-20.png

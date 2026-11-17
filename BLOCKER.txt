@@ -1,0 +1,35 @@
+PRIMARY BLOCKER: DATA + IMPLEMENTATION/SPECIFICATION
+Assessed: 2026-11-17 (Asia/Shanghai)
+
+DATA: YES: exact equity feature construction and CoreLogic extract missing
+COMPUTE: SECONDARY: full suite large; not the current gate
+SPECIFICATION / PAPER TARGET: YES: no model/trainer; key architecture/optimizer choices unresolved
+
+Local CRSP/Compustat can form provisional equity cohorts, but the exact daily
+79-feature panel and selection/preprocessing conventions are not established.
+The four-ZIP CoreLogic Loan-Level Market Analytics extract is unavailable.
+No Set-Sequence trainer exists locally. The live author page still links arXiv
+without a Set-Sequence code release; LongConv code is a separate dependency.
+The old 1,050-fit estimate is a suite estimate, not a measured local requirement.
+
+Action / next requirement:
+No financial training launch. Obtain/construct the specified inputs and resolve
+implementation choices first. Raw CRSP availability alone does not supply the
+paper experiment. No mortgage replacement or synthetic smoke score is counted.
+
+Evidence (paths relative to /home/jkp/data):
+- Set Sequence/configs/paper_protocol.json
+- .replication-local/artifacts/Set Sequence/reports/REPRODUCTION_STATUS.txt
+- .replication-local/runs/blocked-20261117/set-sequence-author.txt
+
+Numerical replication status remains 0 until a representative comparison is
+completed and assessed. Starting a job or matching a smoke-test cell is not a match.
+
+Resolution follow-up -- 2026-11-17:
+The synthetic contagion experiment is a possible route without proprietary
+market or mortgage inputs; DATA is not its gate. Its exact simulator
+initialization/split, trainer and optimizer remain unspecified locally. The
+Kalman comparator additionally has inconsistent alpha scaling across the
+printed equations (WRONG.txt), verified with an arithmetic counterexample.
+No learned synthetic score was produced. Resolve/freeze these choices before
+representing a run as the original synthetic comparison.

@@ -1,0 +1,37 @@
+0: blocked
+Assessment date: 2026-11-17
+
+
+
+Scope: Blocked: audit/metric helpers only; no trained Set-Sequence result.
+
+Evidence and explanation:
+There is no completed representative paper experiment. The archive contains 297
+published reference values, a provisional 1,050-fit equity plan, data/cohort audits and
+metric tests; those targets and planned fits are not computed results. No numerical
+error bar or paper agreement can be reported.
+
+Limits / next requirement:
+Implement the model/trainer and resolve the original cohort, feature, mortgage-data and
+evaluation specifications before a paper comparison is possible.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/Set Sequence/README.txt
+- ../.replication-local/artifacts/Set Sequence/reports/REPRODUCTION_STATUS.txt
+
+
+Blocker triage and new work — 2026-11-17:
+Primary blocker: DATA + IMPLEMENTATION/SPECIFICATION. See BLOCKER.txt for data/compute flags,
+current actions, remaining requirements and evidence. Grade remains 0.
+
+Resolution attempt -- 2026-11-17:
+Checked the synthetic task as a route around proprietary equity/mortgage data.
+It needs no proprietary input, but no trained Set-Sequence result or exact
+generator/trainer implementation is available. The live author research page
+still links the paper without a Set-Sequence code release. The printed Kalman
+baseline equations also disagree at full observation: Section 5/p.19 includes
+alpha=4, while p.20's prediction/correction omit it. An executable arithmetic
+check and original-PDF inspection confirm the discrepancy; effects on the
+authors' implementation/results are unknown. See WRONG.txt.
+Grade stays 0; no paper/local trained metric or matching tolerance exists.
+Evidence: ../.replication-local/status-resolution-20261117/remaining-evidence.json

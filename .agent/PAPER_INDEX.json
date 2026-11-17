@@ -1,0 +1,857 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "Set Sequence",
+  "title": "A Set-Sequence Model for Time Series",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/Set Sequence/sources/paper-v2.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/Set Sequence/sources/paper-v2.pdf",
+    "sha256": "49ca24743305f2f9016bb51b0f94d448f9c100798fcd5b5fe2d081dcb2789d3a",
+    "bytes": 5413669,
+    "urls": [
+      "https://arxiv.org/abs/2505.11243v2"
+    ]
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 29,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 72
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 73,
+      "line_end": 106
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 107,
+      "line_end": 186
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 187,
+      "line_end": 271
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 272,
+      "line_end": 362
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 363,
+      "line_end": 527
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 528,
+      "line_end": 715
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 716,
+      "line_end": 897
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 898,
+      "line_end": 1051
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1052,
+      "line_end": 1101
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1102,
+      "line_end": 1150
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1151,
+      "line_end": 1200
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1201,
+      "line_end": 1226
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1227,
+      "line_end": 1295
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1296,
+      "line_end": 1427
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1428,
+      "line_end": 1491
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1492,
+      "line_end": 1598
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1599,
+      "line_end": 1793
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1794,
+      "line_end": 1926
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1927,
+      "line_end": 2160
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 2161,
+      "line_end": 2344
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 2345,
+      "line_end": 2453
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 2454,
+      "line_end": 2655
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 2656,
+      "line_end": 2726
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 2727,
+      "line_end": 3097
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 3098,
+      "line_end": 3237
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 3238,
+      "line_end": 3576
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 3577,
+      "line_end": 3779
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 3780,
+      "line_end": 3834
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 81
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 82,
+      "line_end": 123
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 124,
+      "line_end": 190
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 191,
+      "line_end": 260
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 261,
+      "line_end": 326
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 327,
+      "line_end": 388
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 389,
+      "line_end": 463
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 464,
+      "line_end": 527
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 528,
+      "line_end": 608
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 609,
+      "line_end": 672
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 673,
+      "line_end": 738
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 739,
+      "line_end": 792
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 793,
+      "line_end": 823
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 824,
+      "line_end": 894
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 895,
+      "line_end": 975
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 976,
+      "line_end": 1038
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1039,
+      "line_end": 1100
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1101,
+      "line_end": 1172
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1173,
+      "line_end": 1256
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1257,
+      "line_end": 1336
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1337,
+      "line_end": 1450
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 1451,
+      "line_end": 1515
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 1516,
+      "line_end": 1572
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 1573,
+      "line_end": 1616
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 1617,
+      "line_end": 1786
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 1787,
+      "line_end": 1901
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 1902,
+      "line_end": 2187
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 2188,
+      "line_end": 2272
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 2273,
+      "line_end": 2319
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 25,
+      "text": "A BSTRACT"
+    },
+    {
+      "line": 41,
+      "text": "I NTRODUCTION"
+    },
+    {
+      "line": 120,
+      "text": "R ELATED L ITERATURE"
+    },
+    {
+      "line": 151,
+      "text": "S ET-S EQUENCE M ODEL"
+    },
+    {
+      "line": 329,
+      "text": "S YNTHETIC TASK"
+    },
+    {
+      "line": 353,
+      "text": "C OMPARISON WITH S EQUENCE M ODELS"
+    },
+    {
+      "line": 572,
+      "text": "# Units for Inference / Non-hidden units"
+    },
+    {
+      "line": 594,
+      "text": "# Units for Inference / Non-hidden units"
+    },
+    {
+      "line": 612,
+      "text": "# Units for Inference / Non-hidden units"
+    },
+    {
+      "line": 625,
+      "text": "# obs"
+    },
+    {
+      "line": 681,
+      "text": "A PPLICATION : E QUITY P ORTFOLIO C ONSTRUCTION"
+    },
+    {
+      "line": 901,
+      "text": "A PPLICATION : M ORTGAGE R ISK P REDICTION"
+    },
+    {
+      "line": 1055,
+      "text": "C ONCLUSION"
+    },
+    {
+      "line": 1063,
+      "text": "R EFERENCES"
+    },
+    {
+      "line": 1066,
+      "text": "2527. URL https://www.aeaweb.org/articles?id=10.1257/aer.104.8.2527."
+    },
+    {
+      "line": 1067,
+      "text": "S Azizpour, K. Giesecke, and G. Schwenkler. Exploring the sources of default clustering."
+    },
+    {
+      "line": 1082,
+      "text": "2023. ISSN 2835-8856. URL https://openreview.net/forum?id=wbpxTuXgm0."
+    },
+    {
+      "line": 1148,
+      "text": "14680262. URL http://www.jstor.org/stable/1912017."
+    },
+    {
+      "line": 1230,
+      "text": "T HEORY"
+    },
+    {
+      "line": 1234,
+      "text": "P ROOF OF P ROPOSITION 1 AND A C OROLLARY"
+    },
+    {
+      "line": 1299,
+      "text": "P ROOF OF P ROPOSITION 2"
+    },
+    {
+      "line": 1420,
+      "text": "A DDITIONAL L ITERATURE R EVIEW"
+    },
+    {
+      "line": 1445,
+      "text": "2. Joint deep models. Applying the methods from Paragraph B to the full cross-section"
+    },
+    {
+      "line": 1463,
+      "text": "S ET-S EQUENCE MODEL WITH G ATED S ELECTION"
+    },
+    {
+      "line": 1511,
+      "text": "E XPERIMENT D ETAILS"
+    },
+    {
+      "line": 1534,
+      "text": "# Samples"
+    },
+    {
+      "line": 1681,
+      "text": "# Units for Inference / Non-hidden units"
+    },
+    {
+      "line": 1749,
+      "text": "# Units for Inference / Non-hidden units"
+    },
+    {
+      "line": 1751,
+      "text": "# Units for Inference / Non-hidden units"
+    },
+    {
+      "line": 1766,
+      "text": "S YNTHETIC TASK : A DDITIONAL D ETAILS AND R ESULTS"
+    },
+    {
+      "line": 1770,
+      "text": "A BLATIONS ON THE TRAINING INPUT UNITS SAMPLING"
+    },
+    {
+      "line": 1785,
+      "text": "I NTERPRETABILITY"
+    },
+    {
+      "line": 1873,
+      "text": "K ALMAN F ILTER BASELINE"
+    },
+    {
+      "line": 2217,
+      "text": "# Units for Inference / Non-hidden units"
+    },
+    {
+      "line": 2232,
+      "text": "# Units for Inference / Non-hidden units"
+    },
+    {
+      "line": 2248,
+      "text": "# Units for Inference / Non-hidden units"
+    },
+    {
+      "line": 2331,
+      "text": "E QUITY P ORTFOLIO P REDICTION : A DDITIONAL D ETAILS AND R ESULTS"
+    },
+    {
+      "line": 2411,
+      "text": "2016. We see the gain from modeling the cross-section as the Set-Sequence model outperforms all"
+    },
+    {
+      "line": 2420,
+      "text": "M ORTGAGE R ISK P REDICTION : A DDITIONAL D ETAILS AND R ESULTS"
+    },
+    {
+      "line": 2424,
+      "text": "A DDITIONAL DATA D ESCRIPTIONS"
+    },
+    {
+      "line": 2445,
+      "text": "M ODEL F ITTING"
+    },
+    {
+      "line": 2989,
+      "text": "# Active Loans"
+    },
+    {
+      "line": 3083,
+      "text": "A DDITIONAL E XPERIMENTS M ORTGAGE R ISK P REDICTION"
+    },
+    {
+      "line": 3084,
+      "text": "I NTERPRETABILITY"
+    },
+    {
+      "line": 3091,
+      "text": "T RANSITION A NALYSIS"
+    },
+    {
+      "line": 3217,
+      "text": "Y EAR - BY- YEAR RESULTS"
+    },
+    {
+      "line": 3565,
+      "text": "I NTERPRETABILITY"
+    },
+    {
+      "line": 3774,
+      "text": "A DDITIONAL M ETRIC D ETAILS"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2757
+    },
+    {
+      "id": 39,
+      "line_start": 2750,
+      "line_end": 2829
+    },
+    {
+      "id": 40,
+      "line_start": 2822,
+      "line_end": 2901
+    },
+    {
+      "id": 41,
+      "line_start": 2894,
+      "line_end": 2973
+    },
+    {
+      "id": 42,
+      "line_start": 2966,
+      "line_end": 3045
+    },
+    {
+      "id": 43,
+      "line_start": 3038,
+      "line_end": 3117
+    },
+    {
+      "id": 44,
+      "line_start": 3110,
+      "line_end": 3189
+    },
+    {
+      "id": 45,
+      "line_start": 3182,
+      "line_end": 3261
+    },
+    {
+      "id": 46,
+      "line_start": 3254,
+      "line_end": 3333
+    },
+    {
+      "id": 47,
+      "line_start": 3326,
+      "line_end": 3405
+    },
+    {
+      "id": 48,
+      "line_start": 3398,
+      "line_end": 3477
+    },
+    {
+      "id": 49,
+      "line_start": 3470,
+      "line_end": 3549
+    },
+    {
+      "id": 50,
+      "line_start": 3542,
+      "line_end": 3621
+    },
+    {
+      "id": 51,
+      "line_start": 3614,
+      "line_end": 3693
+    },
+    {
+      "id": 52,
+      "line_start": 3686,
+      "line_end": 3765
+    },
+    {
+      "id": 53,
+      "line_start": 3758,
+      "line_end": 3835
+    },
+    {
+      "id": 54,
+      "line_start": 3830,
+      "line_end": 3835
+    }
+  ],
+  "line_count": 3835,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "301a2f3be82c2d72b0d6547dc4bd3d0471fe5df705cad860eda5fc6ba1e3a830",
+      "bytes": 90298
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "7af6a73e7cdccb7d9ba3c9d7073d1ea0d57d235cc3c8bfd8de1fbd23eb154a11",
+      "bytes": 159141
+    }
+  }
+}

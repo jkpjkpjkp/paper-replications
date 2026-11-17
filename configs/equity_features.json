@@ -1,0 +1,32 @@
+{
+  "source": "2505.11243v2 Tables 10 and 11, PDF page 23",
+  "status": "names_and_transform_codes_only_not_constructed_features",
+  "unit_features_in_table10": [
+    "r2_1", "r12_2", "r12_7", "r36_13", "ST_Rev", "Ret_D1", "Ret_W1", "STD_W1",
+    "Investment", "NOA", "DPI2A", "PROF", "CTO", "FC2Y", "OP", "PM", "RNA", "D2A",
+    "OA", "OL", "PCM", "A2ME", "BEME", "C", "CF", "CF2P", "Q", "Lev", "E2P",
+    "AT", "LME", "LTurnover", "Rel2High", "Resid_Var", "Spread", "SUV", "Variance", "Vol", "RF", "Beta"
+  ],
+  "cross_sectional_median_tcodes_in_table11": {
+    "A2ME": 3, "AT": 4, "BEME": 3, "Beta": 1,
+    "C": 3, "CF": 2, "CF2P": 3, "CTO": 3,
+    "D2A": 3, "DP2A": 3, "E2P": 3, "FC2Y": 3,
+    "Investment": 3, "Lev": 3, "LME": 4, "LTurnover": 3,
+    "NOA": 3, "OA": 2, "OL": 3, "OP": 3,
+    "PCM": 3, "PM": 3, "PROF": 3, "Q": 3,
+    "Ret_D1": 2, "Rel2High": 3, "Resid_Var": 3, "RNA": 3,
+    "r2_1": 2, "r12_2": 2, "r12_7": 2, "r36_13": 2,
+    "Spread": 3, "ST_REV": 2, "SUV": 1, "Variance": 3,
+    "Vol": 4, "STD_W1": 3, "Ret_W1": 2
+  },
+  "tcodes": {"1": "identity", "2": "first difference", "3": "first difference of logarithm", "4": "second difference of logarithm"},
+  "unresolved": [
+    "DPI2A in Table 10 versus DP2A in Table 11 is preserved, not silently corrected",
+    "ST_Rev in Table 10 versus ST_REV in Table 11",
+    "Rank scaling and ties; RF is common across stocks and cannot retain information under ordinary per-date rank normalization",
+    "Daily versus monthly/quarterly feature update timing and accounting publication lags",
+    "Nonpositive values under logarithm transforms",
+    "Exact reference cross-section for ranks and medians",
+    "Missing value handling and warm-up history"
+  ]
+}
