@@ -1,0 +1,35 @@
+METHODOLOGICAL / SPECIFICATION AUDIT — 2026-11-17
+
+1. Verified test-set checkpoint selection in released synthetic code.
+   synthetic_example/nets_toy.py:486-497 compares test_loss to best_val,
+   saves that epoch's parameters, and reloads them before final test evaluation.
+   Thus the same test labels influence model selection and the reported test
+   performance. This can bias the reported estimate downward. The code finding
+   is verified; we have not established which exact script/checkpoint produced
+   the paper's Table 1 or quantified this bias in that table.
+   Source release commit recorded in the archive:
+   5f69e42a1b8505f27cd3233bbb57ca98723dbb12.
+   The new GPUShare pilot selects on validation loss and documents the deviation.
+
+2. Verified paper / released-code synthetic distribution conflict.
+   Paper section 6.1 (.agent/PAPER_TEXT.txt:317-323) states independent
+   Y_i ~ .8 N(1,.15^2) + .2 N(-3,.15^2), C=2, d=10 for Table 1, no context.
+   synthetic_example/data_gen.py:159-169 defaults to probability .9 and scales
+   the generated Y by .5. main_toy.py:121 does not override either parameter;
+   the generator also supplies independent random context features.
+   Therefore running the released defaults does not implement the stated law.
+   Treat this as a specification inconsistency, not proof of deliberate error.
+
+   Under the paper's stated independent law, the population expected loss is
+   product_i [exp(.5*.15^2*z_i^2) * (.8 exp(-z_i)+.2 exp(3*z_i))].
+   Its minimum on [0,2]^10 is about .9293755313, attained at each z_i about
+   .07138484478. Table 1 lists diffusion losses .365 and .362. Those values
+   cannot be population expected losses for that stated law. Finite empirical
+   losses can be below a population minimum; this calculation alone does not
+   establish a defective estimator or that the table cannot be reproduced on
+   a finite test set / different data-generating law.
+
+References:
+https://pmc.ncbi.nlm.nih.gov/articles/PMC13460018/ (sections 6.1, A.8, Table 1)
+https://github.com/GT-KOALA/Diffusion_DFL
+Local reproducible pilot: reproduction/gpushare_synthetic.py

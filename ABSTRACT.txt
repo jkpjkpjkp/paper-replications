@@ -1,0 +1,9 @@
+Diffusion-DFL: Decision-focused Diffusion Models for Stochastic Optimization
+
+Condensed abstract
+
+Trains diffusion models to improve downstream decisions by representing uncertain
+parameters as distributions rather than point forecasts. The framework supports end-to-
+end optimization through sampling and a cheaper score-function estimator that avoids
+backpropagating through the full diffusion process. Experiments report improved decision
+quality over strong baselines.

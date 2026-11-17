@@ -1,0 +1,98 @@
+GPUShare synthetic pilot — assessed 2026-11-17
+
+Outcome: completed fresh training of one seed, with a paired pretrained baseline.
+Project status is 2 at the user's request (2026-11-17), scoped to the approximate
+numerical agreement of this synthetic experiment and its paired baseline.
+The observed errors were accepted after the run; no tolerance was predeclared.
+This does not verify the paper's ten-run mean/SEM or population advantage.
+The earlier portfolio mismatch and the protocol differences remain unresolved.
+
+Method                        Local test loss   Paper Table 1   Relative difference
+Two-stage diffusion           0.405261308       0.393           +3.120%
+Diffusion score function      0.343821317       0.362           -5.022%
+Test sample RMSE: baseline 0.859712362 (paper .905),
+score 0.837701976 (paper .849).
+One seed has no measured seed SD/SEM. Paper task SEMs round to .00; neither
+local test loss matches the printed mean to rounding precision.
+
+Measured compute
+RTX 3090 24 GB, PyTorch 2.4.0+cu121, Python 3.11, four PyTorch CPU threads.
+Completed run wall time: 945.523 seconds (15.759 minutes),
+including pretraining, baseline evaluation, DFL training and final evaluation.
+DFL training-loop time excluding validation/test overhead: 659.160 seconds.
+Peak torch.cuda.max_memory_allocated: 0.542732 GiB.
+This is allocated tensor memory, not total device/context/reserved memory.
+The separate initial joblib-incompatible attempt took 25.630 seconds and failed
+before baseline evaluation; its logs/receipt are retained.
+
+At identical settings, ten seeds extrapolate to 2.626
+GPU-hours, or approximately CNY 3.15 at CNY 1.20/hour.
+This is an extrapolation, not ten completed runs. It excludes cloud setup,
+package downloads, idle time, debugging and artifact transfer. The original
+one-day/24-GB planning allowance was conservative; this chunked implementation
+uses far less tensor memory and should be considered for the local 8-GB GPU.
+Local RTX 4060 throughput has not been measured.
+
+GPUShare instance I2c6856192f00801399 is confirmed shut down, with console
+last shutdown time 2026-11-17 21:16:28 Asia/Shanghai. A scheduled shutdown
+ended the training session; the instance was briefly restarted to retrieve
+artifacts, then explicitly shut down again. Actual cloud billing includes
+setup/transfer and has not been independently reconciled with the invoice.
+
+Protocol
+Seed 1; d=10; capacity 2; 1000 generated observations; split 640/160/200.
+Released distribution: positive probability .9, means +1/-3, sigma .15,
+Y scaled by .5; independent Gaussian context of dimension 20.
+1000 pretraining epochs, pretraining batches 512, ten DFL epochs, batches 32.
+M=10 Monte Carlo samples; 1000 diffusion sampling steps; 1000 uniform score-time
+samples per generated vector; learning rate 8e-6. Released model/sampler/KKT
+and training loop are used. The released three-hidden-layer architecture is
+retained; the paper table describes two hidden layers.
+
+Documented changes
+1. Select the checkpoint by validation loss, instead of the test-loss selection
+   in synthetic_example/nets_toy.py:486-497.
+2. Initialize the seed before the split and isolate checkpoints by seed/protocol.
+3. Recompute score gradients in chunks of 2048 rows, retaining all time/noise
+   draws. GPU equivalence check across a chunk boundary passed: maximum loss
+   error 1.33514404e-05; maximum parameter-gradient error
+   2.86102295e-06.
+4. Use the release's SCS fallback because a MOSEK license is not provided.
+5. Save the data split, decisions, per-epoch checkpoint and parameter hashes;
+   independently recompute empirical losses in NumPy and check box feasibility.
+
+Metric interpretation and important limitation
+The comparison above uses the release's final pooled-sample evaluation
+(nets_toy.eval_diffusion), not its per-mini-batch training-monitor metric.
+The latter prints final test loss .4356 and uses different sampled decisions.
+All saved final decisions satisfy the [0,2] constraints with zero violation.
+Independent empirical test-loss recomputation agrees within 5e-9.
+
+Under the known released data-generating law, exact population expected cost
+of the saved TEST decisions is 0.481246088 for baseline and
+0.519134453 for DFL (lower is better). Thus this seed's empirical
+test improvement does NOT establish a population improvement. Hold-out pooled
+cost is also worse for DFL: 2.871287 versus 1.382123.
+
+The paper specifies p=.8 and no .5 scaling, with no context; those settings
+conflict with released defaults. The separate --protocol paper mode is
+implemented but was NOT executed in this session. The population optimum for
+the stated paper law is .9293755313, versus .4005598628 for the released law;
+see WRONG.txt for evidence and the distinction between finite empirical losses
+and population expectations. More compute alone cannot reconcile specification
+ambiguity. Required next work: paper-law run and multiple independent seeds,
+with consistent evaluation and predeclared tolerances.
+
+Artifacts
+/home/jkp/data/.replication-local/runs/diffusion-gpushare-20261117/diffusion-pilot-results.tar.gz
+SHA-256: 0668fb8741f4bc82f42b4f5fcb1fd1d921137bbb8a597dafdf210ffa99c26bed
+/home/jkp/data/.replication-local/runs/diffusion-gpushare-20261117/retrieved/results/release-seed1-v2/receipt.json
+/home/jkp/data/.replication-local/runs/diffusion-gpushare-20261117/retrieved/results/release-seed1-v2/*_decisions.npz
+/home/jkp/data/.replication-local/runs/diffusion-gpushare-20261117/retrieved/results/release-seed1-v2/data_split.pt
+/home/jkp/data/.replication-local/runs/diffusion-gpushare-20261117/retrieved/results/release-seed1-v2/synthetic-results/
+/home/jkp/data/.replication-local/runs/diffusion-gpushare-20261117/retrieved/release-v2.log
+/home/jkp/data/.replication-local/runs/diffusion-gpushare-20261117/environment.txt
+/home/jkp/data/.replication-local/runs/diffusion-gpushare-20261117/population_check.json
+Launcher: reproduction/gpushare_synthetic.py
+Requirements: reproduction/requirements-synthetic.txt
+Paper: https://pmc.ncbi.nlm.nih.gov/articles/PMC13460018/

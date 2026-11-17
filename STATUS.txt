@@ -1,0 +1,60 @@
+2: Diffusion-DFL synthetic score function (fresh training, one seed), test task loss: rerun 0.343821317; paper Table 1 0.362; absolute error 0.018178683 (5.022%). Paired two-stage baseline: 0.405261308 vs 0.393 (3.120%).
+
+Status updated 2026-11-17 at the user's request: the observed synthetic losses
+are accepted as an approximate numerical match for this scoped experiment.
+No tolerance was predeclared, and one seed supplies no measured seed SD/SEM.
+This status does not establish the paper's ten-run mean/SEM, population advantage,
+or whole-paper replication. Protocol differences and prior failures remain below.
+
+Earlier portfolio experiment: nine methods x three seeds on CRSP substitute data
+and reduced compute; this experiment remains materially mismatched.
+
+Evidence and explanation:
+Diffusion reparameterization gives mean daily return 0.06971% +/- 0.02792 percentage
+points seed SEM, versus paper 4.17% +/- 0.24 points. Diffusion score gives 0.05742% +/-
+0.03576 points versus 3.98% +/- 0.31 points. These are about 60x and 69x smaller; the
+claimed large advantage is absent in this setup. Uncertainty is SEM across three
+seed/basket runs, not daily-return volatility.
+
+Limits / next requirement:
+Original WIKI prices, full portfolio training/sampling budgets, ten seeds, and
+power tasks are not reproduced. Data, optimizer repairs and sampling changes
+prevent a controlled refutation of the original portfolio experiment. The fresh
+synthetic experiment below covers one seed using released defaults.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/diffusion-dfl/results/local/comparison.csv
+- ../.replication-local/artifacts/diffusion-dfl/REPRODUCTION.txt
+- ../.replication-local/artifacts/diffusion-dfl/results/local/verification.json
+
+Fresh synthetic pilot assessed 2026-11-17 (GPUShare RTX 3090):
+Completed one independently initialized seed with 1000 pretraining epochs,
+ten DFL epochs, 1000 sampler steps, and 1000 score-time draws. Released-default
+data and architecture were used; checkpoint selection uses validation loss.
+Final pooled test task loss: score-function DFL 0.343821317 versus Table 1
+0.362 (-5.022%); paired two-stage diffusion 0.405261308 versus 0.393 (+3.120%).
+Neither matches printed rounding; no seed SD/SEM can be estimated from one seed.
+No approximate-match tolerance was predeclared. The paper reports ten runs.
+The saved decisions' exact population costs under the released law are 0.519134453
+for DFL and 0.481246088 for baseline, so this seed's empirical improvement does
+not establish a population advantage. Hold-out loss is also worse for DFL.
+
+Measured run time: 945.523 seconds (15.759 minutes); peak PyTorch allocated
+tensor memory 0.542732 GiB, excluding CUDA/context/reserved overhead. Ten such
+seeds extrapolate to 2.626 GPU-hours, excluding setup and transfer.
+The run used chunked score gradients; a GPU loss/gradient equivalence check
+passed, and independent NumPy empirical losses and decision bounds were checked.
+
+Grade 2 is scoped to the user-accepted approximate synthetic comparison above;
+the prior portfolio mismatch is preserved. Released data defaults differ from
+the stated paper law; the paper-law mode was not executed.
+Test-set checkpoint selection in the release and the distribution inconsistency
+are documented in WRONG.txt. Multiple independent seeds and a resolved protocol
+are still needed. GPUShare shutdown was verified after artifact retrieval.
+
+New evidence:
+- reproduction/GPU_SYNTHETIC_REPORT.txt
+- reproduction/gpushare_synthetic.py
+- ../.replication-local/runs/diffusion-gpushare-20261117/retrieved/results/release-seed1-v2/receipt.json
+- ../.replication-local/runs/diffusion-gpushare-20261117/diffusion-pilot-results.tar.gz
+

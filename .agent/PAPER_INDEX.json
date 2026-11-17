@@ -1,0 +1,510 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "diffusion-dfl",
+  "title": "Diffusion-DFL: Decision-focused Diffusion Models for Stochastic Optimization",
+  "coverage": "html_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/diffusion-dfl/sources/paper.txt",
+    "path_relative_to_collection": ".replication-local/artifacts/diffusion-dfl/sources/paper.txt",
+    "sha256": "b9c570c301d0e572ae2cbc6c3107e69164457cf733b8809f055ea41026786ba6",
+    "bytes": 84681,
+    "urls": []
+  },
+  "method": "Article body; navigation and known site footer removed",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": null,
+  "pages": [
+    {
+      "page": null,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 1112
+    }
+  ],
+  "layout_file": null,
+  "layout_pages": null,
+  "heading_candidates": [
+    {
+      "line": 15,
+      "text": "# Diffusion-DFL: Decision-focused Diffusion Models for Stochastic Optimization"
+    },
+    {
+      "line": 19,
+      "text": "### Zihao Zhao"
+    },
+    {
+      "line": 27,
+      "text": "### Christopher Yeh"
+    },
+    {
+      "line": 35,
+      "text": "### Lingkai Kong"
+    },
+    {
+      "line": 43,
+      "text": "### Kai Wang"
+    },
+    {
+      "line": 71,
+      "text": "## Abstract"
+    },
+    {
+      "line": 75,
+      "text": "## 1. Introduction"
+    },
+    {
+      "line": 101,
+      "text": "## 2. Related Works"
+    },
+    {
+      "line": 103,
+      "text": "### Decision-focused learning."
+    },
+    {
+      "line": 113,
+      "text": "### Diffusion models in optimization."
+    },
+    {
+      "line": 119,
+      "text": "## 3. Problem Statement"
+    },
+    {
+      "line": 121,
+      "text": "### 3.1. Decision-focused learning"
+    },
+    {
+      "line": 147,
+      "text": "### 3.2. Diffusion probabilistic model"
+    },
+    {
+      "line": 165,
+      "text": "#### Conditional Diffusion Model."
+    },
+    {
+      "line": 169,
+      "text": "## 4. Stochastic Optimization and Reparameterization estimator"
+    },
+    {
+      "line": 173,
+      "text": "### Figure 1:"
+    },
+    {
+      "line": 179,
+      "text": "### Solving stochastic DFL."
+    },
+    {
+      "line": 205,
+      "text": "## 5. Score function estimator"
+    },
+    {
+      "line": 209,
+      "text": "### 5.1. Transform the Jacobian into Score Function"
+    },
+    {
+      "line": 248,
+      "text": "#### Figure 2:"
+    },
+    {
+      "line": 254,
+      "text": "### 5.2. Overall Gradient for Score Function"
+    },
+    {
+      "line": 262,
+      "text": "#### Practical algorithm – weighted ELBO gradient."
+    },
+    {
+      "line": 272,
+      "text": "#### Variance-reduction strategy."
+    },
+    {
+      "line": 280,
+      "text": "## 6. Experiments"
+    },
+    {
+      "line": 306,
+      "text": "### 6.1. Synthetic Product Allocation Task"
+    },
+    {
+      "line": 317,
+      "text": "#### Experimental setup."
+    },
+    {
+      "line": 325,
+      "text": "##### Table 1:"
+    },
+    {
+      "line": 346,
+      "text": "### 6.2. Power Scheduling Task"
+    },
+    {
+      "line": 352,
+      "text": "#### Experimental setup."
+    },
+    {
+      "line": 356,
+      "text": "### 6.3. Stock Market Portfolio Task"
+    },
+    {
+      "line": 364,
+      "text": "#### Experimental setup."
+    },
+    {
+      "line": 368,
+      "text": "## 7. Discussion of Experimental Results and Ablation Study"
+    },
+    {
+      "line": 370,
+      "text": "### 7.1. Discussion of Results in Table 1"
+    },
+    {
+      "line": 372,
+      "text": "#### Two-stage vs. DFL."
+    },
+    {
+      "line": 376,
+      "text": "#### Offline Contextual Bandits vs. DFL."
+    },
+    {
+      "line": 382,
+      "text": "#### Deterministic vs. Stochastic Optimization."
+    },
+    {
+      "line": 386,
+      "text": "#### Benefits of Diffusion DFL."
+    },
+    {
+      "line": 390,
+      "text": "### 7.2. Ablation Study"
+    },
+    {
+      "line": 392,
+      "text": "#### Comparison Cost for Reparameterization and Score function."
+    },
+    {
+      "line": 398,
+      "text": "##### Figure 4:"
+    },
+    {
+      "line": 404,
+      "text": "#### Gradient variance reduction."
+    },
+    {
+      "line": 410,
+      "text": "#### Comparison on different problem sizes."
+    },
+    {
+      "line": 414,
+      "text": "##### Figure 5:"
+    },
+    {
+      "line": 420,
+      "text": "## 8. Conclusion"
+    },
+    {
+      "line": 424,
+      "text": "## Figure 3:"
+    },
+    {
+      "line": 430,
+      "text": "## Acknowledgments"
+    },
+    {
+      "line": 434,
+      "text": "## A Appendix"
+    },
+    {
+      "line": 436,
+      "text": "### Notation."
+    },
+    {
+      "line": 446,
+      "text": "### A.1. Proofs for Section 4"
+    },
+    {
+      "line": 538,
+      "text": "### A.2. Proofs for Section 5"
+    },
+    {
+      "line": 636,
+      "text": "### A.3. Proof for Eq. 10"
+    },
+    {
+      "line": 642,
+      "text": "### A.4. Gradient Error of ELBO vs. Log-likelihood"
+    },
+    {
+      "line": 675,
+      "text": "### A.5. Empirical evidence for ELBO gradient approximation"
+    },
+    {
+      "line": 679,
+      "text": "### A.6. Deterministic Optimization and Gaussian Model in Stochastic Optimization"
+    },
+    {
+      "line": 681,
+      "text": "#### Deterministic Optimization"
+    },
+    {
+      "line": 685,
+      "text": "#### Gaussian Model in Stochastic Optimization"
+    },
+    {
+      "line": 697,
+      "text": "##### Figure 6:"
+    },
+    {
+      "line": 711,
+      "text": "### A.7. Connections with Offline Contextual Bandit Methods"
+    },
+    {
+      "line": 723,
+      "text": "### A.8. Training Details and Hyperparameters"
+    },
+    {
+      "line": 729,
+      "text": "#### Implementation Details"
+    },
+    {
+      "line": 733,
+      "text": "##### Table 2:"
+    },
+    {
+      "line": 764,
+      "text": "### A.9. Details of synthetic task"
+    },
+    {
+      "line": 790,
+      "text": "### A.10. Details on power schedule task"
+    },
+    {
+      "line": 820,
+      "text": "#### Figure 7:"
+    },
+    {
+      "line": 826,
+      "text": "#### Dataset."
+    },
+    {
+      "line": 832,
+      "text": "##### Figure 8:"
+    },
+    {
+      "line": 838,
+      "text": "##### Figure 9:"
+    },
+    {
+      "line": 844,
+      "text": "### A.11. Details on stock portfolio task"
+    },
+    {
+      "line": 866,
+      "text": "#### Dataset."
+    },
+    {
+      "line": 870,
+      "text": "### A.12. (Additional task) Details on inventory stock problem"
+    },
+    {
+      "line": 884,
+      "text": "#### Figure 10:"
+    },
+    {
+      "line": 892,
+      "text": "#### Figure 11:"
+    },
+    {
+      "line": 898,
+      "text": "### A.13. Additional Related Works and Discussions"
+    },
+    {
+      "line": 904,
+      "text": "#### Offline Contextual Bandits (OCB)"
+    },
+    {
+      "line": 908,
+      "text": "## Footnotes"
+    },
+    {
+      "line": 926,
+      "text": "## Contributor Information"
+    },
+    {
+      "line": 936,
+      "text": "## References"
+    },
+    {
+      "line": 940,
+      "text": "2020. URL https://proceedings.mlr.press/v119/agarwal20c.html. [Google Scholar]"
+    },
+    {
+      "line": 944,
+      "text": "2017. URL https://proceedings.mlr.press/v70/amos17a.html. [Google Scholar]"
+    },
+    {
+      "line": 948,
+      "text": "2020. URL https://proceedings.mlr.press/v125/arjevani20a.html. [Google Scholar]"
+    },
+    {
+      "line": 956,
+      "text": "2021. URL https://proceedings.mlr.press/v139/brandfonbrener21a.html. [Google Scholar]"
+    },
+    {
+      "line": 971,
+      "text": "2024. URL https://proceedings.mlr.press/v237/gabbianelli24a.html. [Google Scholar]"
+    },
+    {
+      "line": 988,
+      "text": "2014. URL http://arxiv.org/abs/1312.6114. [Google Scholar]"
+    },
+    {
+      "line": 996,
+      "text": "2015. ISBN 978-0-262-02925-4. [Google Scholar]"
+    },
+    {
+      "line": 1000,
+      "text": "2025. URL https://proceedings.mlr.press/v258/kong25b.html. [Google Scholar]"
+    },
+    {
+      "line": 1004,
+      "text": "2023. URL https://proceedings.mlr.press/v202/krishnamoorthy23a.html. [Google Scholar]"
+    },
+    {
+      "line": 1016,
+      "text": "2022. URL https://proceedings.mlr.press/v162/mandi22a.html. [Google Scholar]"
+    },
+    {
+      "line": 1028,
+      "text": "2021. URL https://openreview.net/forum?id=sPIFuucA3F. [Google Scholar]"
+    },
+    {
+      "line": 1032,
+      "text": "2021. URL https://proceedings.mlr.press/v139/nichol21a.html. [Google Scholar]"
+    },
+    {
+      "line": 1044,
+      "text": "2025. URL http://arxiv.org/abs/2406.01661.arXiv:2406.01661 [cs]. [Google Scholar]"
+    },
+    {
+      "line": 1055,
+      "text": "2025. URL http://arxiv.org/abs/2502.17984. arXiv:2502.17984 [cs]. [Google Scholar]"
+    },
+    {
+      "line": 1063,
+      "text": "2015. URL https://proceedings.mlr.press/v37/sohl-dickstein15.html. [Google Scholar]"
+    },
+    {
+      "line": 1073,
+      "text": "2023. URL https://openreview.net/forum?id=JV8Ff0lgVV. [Google Scholar]"
+    },
+    {
+      "line": 1095,
+      "text": "2025. URL http://arxiv.org/abs/2502.05468.arXiv:2502.05468 [cs]. [Google Scholar]"
+    },
+    {
+      "line": 1103,
+      "text": "2017. URL https://proceedings.mlr.press/v70/wang17a.html. [Google Scholar]"
+    },
+    {
+      "line": 1111,
+      "text": "2023. URL https://proceedings.mlr.press/v206/yang23f.html. [Google Scholar]"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1113
+    }
+  ],
+  "line_count": 1113,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "ae3f8790d03aba4683ca27ab6509164ce21ebea755a5f4af42da395d2d7911ce",
+      "bytes": 83183
+    }
+  }
+}
