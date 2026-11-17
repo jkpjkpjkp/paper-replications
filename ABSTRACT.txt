@@ -1,0 +1,9 @@
+Vector-Quantized Discrete Latent Factors Meet Financial Priors: Dynamic Cross-Sectional Stock Ranking Prediction for Portfolio Construction
+
+Condensed abstract
+
+Combines expert financial factors with discrete latent factors learned through vector
+quantization. The discrete representations suppress noise and guide a mixture of experts
+that produces changing factor loadings. CSI300 and S&P500 experiments report improved
+cross-sectional return prediction and portfolio performance while retaining factor-based
+interpretability.

@@ -1,0 +1,15 @@
+[project]
+name = "prism-vq-reproduction"
+version = "0.1.0"
+description = "Auditable adaptation of IJCAI 2026 PRISM-VQ with the pinned author model"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "torch==2.4.1", "numpy==1.26.4", "pandas==2.2.3", "pyarrow==21.0.0",
+  "pyqlib==0.9.7", "pytorch-lightning==2.1.0", "torchmetrics==1.6.1",
+  "hydra-core==1.3.2", "einops==0.8.1", "wandb==0.19.11",
+  "scipy==1.16.3", "scikit-learn==1.7.2", "matplotlib==3.10.7",
+  "setuptools==80.9.0", "pytest==8.4.2", "psutil==7.2.2"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

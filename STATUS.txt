@@ -1,0 +1,24 @@
+2: at least one representative experiment matches the paper's claim
+
+
+
+Scope: Approximate native-feature ranking replication, five seeds per market; adapted data.
+
+Evidence and explanation:
+CSI300 RankIC is 0.069198 +/- 0.006157 seed SD versus 0.0646 (gap +0.004598, 0.75 SD);
+RankICIR is 0.425180 +/- 0.043652 versus 0.4224 (gap +0.002780, 0.064 SD). S&P500 RankIC
+0.010321 +/- 0.006654 versus 0.0141 and RankICIR 0.092839 +/- 0.061103 versus 0.1208 are
+also within one local seed SD. This supports a rough representative ranking match; seed
+SD is not a confidence interval or formal equivalence test.
+
+Limits / next requirement:
+Ten saved native-feature checkpoints were replayed, but CSI history starts later and US
+inputs/portfolio construction differ. Original trading claims, baselines and ablations
+are not all validated. The separate CZ202 run is not the experiment credited here.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/paper-claim-validation/results/native_claim_comparison.csv
+- ../.replication-local/artifacts/paper-claim-validation/results/claim_registry.csv
+- ../.replication-local/artifacts/prism-vq/results/report.json
+- ../.replication-local/artifacts/prism-vq/results/verification.json
+

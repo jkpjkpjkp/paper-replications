@@ -1,0 +1,571 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "prism-vq",
+  "title": "Vector-Quantized Discrete Latent Factors Meet Financial Priors: Dynamic Cross-Sectional Stock Ranking Prediction for Portfolio Construction",
+  "coverage": "html_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/prism-vq/sources/arxiv.txt",
+    "path_relative_to_collection": ".replication-local/artifacts/prism-vq/sources/arxiv.txt",
+    "sha256": "93cdef10fcfd92d4e89711a49c937a42e882e28495667c1338d7817091809ccc",
+    "bytes": 92507,
+    "urls": [
+      "https://arxiv.org/abs/2605.13407v1"
+    ]
+  },
+  "method": "Article body; navigation and known site footer removed",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": null,
+  "pages": [
+    {
+      "page": null,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 1633
+    }
+  ],
+  "layout_file": null,
+  "layout_pages": null,
+  "heading_candidates": [
+    {
+      "line": 15,
+      "text": "# Vector-Quantized Discrete Latent Factors Meet Financial Priors: Dynamic Cross-Sectional Stock Ranking Prediction for Portfolio Construction"
+    },
+    {
+      "line": 29,
+      "text": "###### Abstract"
+    },
+    {
+      "line": 33,
+      "text": "## 1 Introduction"
+    },
+    {
+      "line": 64,
+      "text": "## 2 Related Works"
+    },
+    {
+      "line": 66,
+      "text": "### 2.1 Machine Learning-Based Factor Models"
+    },
+    {
+      "line": 73,
+      "text": "### 2.2 Deep Learning for Stock Prediction"
+    },
+    {
+      "line": 83,
+      "text": "### 2.3 Representation Learning for Finance"
+    },
+    {
+      "line": 91,
+      "text": "## 3 Problem Formulation"
+    },
+    {
+      "line": 95,
+      "text": "### 3.1 Data and Factor Model Framework"
+    },
+    {
+      "line": 117,
+      "text": "### 3.2 Modeling Challenges"
+    },
+    {
+      "line": 121,
+      "text": "## 4 Proposed Model"
+    },
+    {
+      "line": 123,
+      "text": "### 4.1 Overview: Two-Stage Learning"
+    },
+    {
+      "line": 129,
+      "text": "##### Stage 1: Code assignment."
+    },
+    {
+      "line": 143,
+      "text": "##### Stage 2: Code-conditioned loading generation."
+    },
+    {
+      "line": 153,
+      "text": "### 4.2 Spatial Learning: Discrete Cross-Sectional Factor Discovery"
+    },
+    {
+      "line": 155,
+      "text": "#### 4.2.1 Cross-Sectional Feature Extraction"
+    },
+    {
+      "line": 172,
+      "text": "#### 4.2.2 Vector Quantization for Discrete Factor Learning"
+    },
+    {
+      "line": 192,
+      "text": "#### 4.2.3 Contrastive Learning for Semantic Clustering"
+    },
+    {
+      "line": 202,
+      "text": "#### 4.2.4 Reconstruction and Auxiliary Prediction"
+    },
+    {
+      "line": 206,
+      "text": "##### Reconstruction."
+    },
+    {
+      "line": 217,
+      "text": "##### Multi-horizon prediction."
+    },
+    {
+      "line": 226,
+      "text": "#### 4.2.5 Spatial Learning Objective"
+    },
+    {
+      "line": 236,
+      "text": "### 4.3 Temporal Learning: Structure-Conditioned Dynamic Factor Loadings"
+    },
+    {
+      "line": 238,
+      "text": "#### 4.3.1 Temporal Context Encoding with a Structure Token"
+    },
+    {
+      "line": 254,
+      "text": "#### 4.3.2 Structure-Conditioned MoE for Dynamic Loadings and Return Prediction"
+    },
+    {
+      "line": 258,
+      "text": "##### Stochastic gating mechanism."
+    },
+    {
+      "line": 281,
+      "text": "##### Expert aggregation and loading projection."
+    },
+    {
+      "line": 296,
+      "text": "##### Return prediction."
+    },
+    {
+      "line": 307,
+      "text": "#### 4.3.3 Training Objective with Load-Balancing Regularization"
+    },
+    {
+      "line": 314,
+      "text": "### 4.4 Two-Stage Training Procedure"
+    },
+    {
+      "line": 316,
+      "text": "##### Stage 1: Spatial learning."
+    },
+    {
+      "line": 321,
+      "text": "##### Stage 2: Temporal learning."
+    },
+    {
+      "line": 326,
+      "text": "##### Design rationale."
+    },
+    {
+      "line": 333,
+      "text": "## 5 Experiments and Results"
+    },
+    {
+      "line": 338,
+      "text": "##### Research Questions."
+    },
+    {
+      "line": 362,
+      "text": "### 5.1 Experimental Setting"
+    },
+    {
+      "line": 364,
+      "text": "#### 5.1.1 Datasets and Protocol"
+    },
+    {
+      "line": 374,
+      "text": "#### 5.1.2 Baselines"
+    },
+    {
+      "line": 381,
+      "text": "#### 5.1.3 Evaluation Metrics"
+    },
+    {
+      "line": 388,
+      "text": "#### 5.1.4 Implementation Details"
+    },
+    {
+      "line": 392,
+      "text": "### 5.2 Main Results (RQ1)"
+    },
+    {
+      "line": 566,
+      "text": "### 5.3 Ablation Study (RQ2)"
+    },
+    {
+      "line": 580,
+      "text": "### 5.4 Robustness Analysis(RQ3)"
+    },
+    {
+      "line": 582,
+      "text": "##### Model hyperparameters."
+    },
+    {
+      "line": 589,
+      "text": "##### Portfolio size."
+    },
+    {
+      "line": 615,
+      "text": "### 5.5 Interpretation of Representations (RQ4)"
+    },
+    {
+      "line": 619,
+      "text": "##### Visualization of learned representations."
+    },
+    {
+      "line": 626,
+      "text": "##### Factor exposure analysis."
+    },
+    {
+      "line": 640,
+      "text": "34\tQual.\tSize\tProf.\t−-.113\t+.097\t−-.077"
+    },
+    {
+      "line": 641,
+      "text": "224\tProf.\tLowLev.\tLowRisk\t−-.113\t+.112\t−-.110"
+    },
+    {
+      "line": 643,
+      "text": "247\tLowLev.\tValue\tInvest.\t−-.117\t+.117\t+.103"
+    },
+    {
+      "line": 644,
+      "text": "179\tSize\tProf.\tQual.\t+.117\t−-.081\t−-.077"
+    },
+    {
+      "line": 646,
+      "text": "### 5.6 Expert Specialization (RQ5)"
+    },
+    {
+      "line": 658,
+      "text": "## 6 Conclusion"
+    },
+    {
+      "line": 662,
+      "text": "## Acknowledgments"
+    },
+    {
+      "line": 666,
+      "text": "## References"
+    },
+    {
+      "line": 1033,
+      "text": "## Appendix A Architecture and Implementation Details"
+    },
+    {
+      "line": 1041,
+      "text": "### A.1 Shared Model Building Blocks"
+    },
+    {
+      "line": 1045,
+      "text": "#### A.1.1 Transformer Encoder Block"
+    },
+    {
+      "line": 1052,
+      "text": "##### Multi-Head Self-Attention (MHA)."
+    },
+    {
+      "line": 1077,
+      "text": "##### Feed-Forward Network (FFN)."
+    },
+    {
+      "line": 1089,
+      "text": "##### Encoder block structure."
+    },
+    {
+      "line": 1100,
+      "text": "#### A.1.2 Rotary Position Embeddings (RoPE)"
+    },
+    {
+      "line": 1122,
+      "text": "### A.2 Two-Stage Training: What is Learned vs. Fixed"
+    },
+    {
+      "line": 1154,
+      "text": "### A.3 Stage 1 (Spatial Learning): Quantizer, Decoder, and Auxiliary Prediction"
+    },
+    {
+      "line": 1158,
+      "text": "##### Input normalization (RevIN)."
+    },
+    {
+      "line": 1164,
+      "text": "##### Cross-asset encoding."
+    },
+    {
+      "line": 1169,
+      "text": "##### Vector quantization."
+    },
+    {
+      "line": 1180,
+      "text": "##### FiLM-conditioned reconstruction decoder 𝒢\\mathcal{G}."
+    },
+    {
+      "line": 1195,
+      "text": "##### Multi-horizon auxiliary prediction ψpred\\psi_{\\text{pred}}."
+    },
+    {
+      "line": 1203,
+      "text": "### A.4 Stage 2 (Temporal Learning): Temporal Encoding and Structure-Conditioned MoE"
+    },
+    {
+      "line": 1208,
+      "text": "##### Temporal encoder 𝒯\\mathcal{T}."
+    },
+    {
+      "line": 1220,
+      "text": "##### Structure-conditioned MoE and loading head ψload\\psi_{\\text{load}}."
+    },
+    {
+      "line": 1226,
+      "text": "##### Fusion to form expert inputs."
+    },
+    {
+      "line": 1239,
+      "text": "##### Code-conditioned sparse routing."
+    },
+    {
+      "line": 1259,
+      "text": "##### Dynamic loadings via base–modulation decomposition."
+    },
+    {
+      "line": 1284,
+      "text": "##### Regularization and training objective."
+    },
+    {
+      "line": 1291,
+      "text": "### A.5 Optimization and Reproducibility"
+    },
+    {
+      "line": 1295,
+      "text": "## Appendix B Expert Prior Factors"
+    },
+    {
+      "line": 1357,
+      "text": "##### Rolling cumulative return construction (excluding current day)."
+    },
+    {
+      "line": 1373,
+      "text": "##### Normalization and usage."
+    },
+    {
+      "line": 1379,
+      "text": "## Appendix C Evaluation Metrics"
+    },
+    {
+      "line": 1388,
+      "text": "### C.1 Ranking Performance Metrics"
+    },
+    {
+      "line": 1394,
+      "text": "##### RankIC."
+    },
+    {
+      "line": 1413,
+      "text": "##### RankICIR."
+    },
+    {
+      "line": 1426,
+      "text": "### C.2 Portfolio Performance Metrics"
+    },
+    {
+      "line": 1432,
+      "text": "##### Daily portfolio return."
+    },
+    {
+      "line": 1442,
+      "text": "##### Annualized return (AR)."
+    },
+    {
+      "line": 1450,
+      "text": "##### Maximum drawdown (MDD)."
+    },
+    {
+      "line": 1460,
+      "text": "##### Sharpe ratio (SR)."
+    },
+    {
+      "line": 1470,
+      "text": "##### Transaction costs."
+    },
+    {
+      "line": 1474,
+      "text": "## Appendix D Portfolio Construction"
+    },
+    {
+      "line": 1482,
+      "text": "##### Ranking-based candidate selection."
+    },
+    {
+      "line": 1493,
+      "text": "##### Turnover-constrained rebalancing."
+    },
+    {
+      "line": 1500,
+      "text": "##### Portfolio weights."
+    },
+    {
+      "line": 1506,
+      "text": "##### Algorithmic description."
+    },
+    {
+      "line": 1548,
+      "text": "## Appendix E Transaction-Cost Robustness"
+    },
+    {
+      "line": 1560,
+      "text": "##### Transaction-cost regimes."
+    },
+    {
+      "line": 1566,
+      "text": "##### Results and interpretation."
+    },
+    {
+      "line": 1574,
+      "text": "## Appendix F Sensitivity to TopK–DropN Rebalancing Rate"
+    },
+    {
+      "line": 1596,
+      "text": "## Appendix G Stock Universe for t-SNE"
+    },
+    {
+      "line": 1620,
+      "text": "## Appendix H Code Transition Dynamics"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1634
+    }
+  ],
+  "line_count": 1634,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "f68af4c510977c25d6022a3d8e047781305d3a0672e2a77acb67577b59f4f64a",
+      "bytes": 88029
+    }
+  }
+}

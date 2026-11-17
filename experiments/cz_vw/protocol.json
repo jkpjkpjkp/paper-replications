@@ -1,0 +1,31 @@
+{
+  "scope": "One US PRISM-VQ CZ/value-weighted empirical adaptation, separate from the old Alpha158 experiment. Retrospective specification; no claim of exact published reproduction.",
+  "required_protocol": "../../.. / protocol.txt (hashed before training)",
+  "universe": "Existing historical S&P500 membership, then require immediately previous-calendar-month eligible CRSP common-stock status, positive observed market capitalization at least NYSE20, and an observed CZ record. This is a large-cap universe experiment.",
+  "microcap": "Each month calculate NYSE common-stock 20th percentile over regular-way active US-incorporated corporate ordinary shares (EQTY/COM/NS/CORP/Y, primaryexch=N, conditionaltype=RW, tradingstatusflg=A, mthdelflg=N, mthcap>0). Apply the immediately preceding month's threshold and capitalization; exclude unknown lagged size. No USD5 price filter.",
+  "features": "209 unsigned official CZ Predictors.parquet columns. Within each source month rank observed eligible nonmicrocap CRSP common shares to [-1,1], average ties, missing neutral zero. Remove only all-empty/constant columns on training-period S&P500 eligible observations; require exactly 202 retained. Price, Size, STreversal are omitted in the source and are not reconstructed.",
+  "timing": "Every daily input uses immediately previous calendar month CZ data. Each of the 20 historical sessions uses its own previous-month information set. No stale cross-month carry. Current-vintage data include authors' publication lags but do not prove historical as-published values.",
+  "train": ["2009-01-01", "2019-12-31"],
+  "valid": ["2020-01-01", "2021-12-31"],
+  "test": ["2022-01-01", "2024-12-31"],
+  "lookback": 20,
+  "labels": "Unchanged released-code close[t+h+1]/close[t+1]-1, h=0..9; main label index4 close[t+5]/close[t+1]-1. Train/valid rank normalized and purged at split boundaries. No future-return selection of test stocks.",
+  "priors": "Unchanged 13 official JKP US theme trailing-20-session returns ending t-1; original training-only robust normalization.",
+  "training": {"stage1_seed": 42, "stage2_seeds": [0], "epochs": 50, "patience": 15, "learning_rate": 0.0001, "device": "cuda", "threads": 2, "selection": "Minimum validation loss only, retained authors' architecture and losses; frozen Stage1 eval mode, fused Transformer eval disabled. Feature dimension 202 in both stages."},
+  "portfolio": {
+    "primary": "Value-weighted score deciles D10-D1, high prediction long; +100%/-100% prior-close NAV, 200% gross exposure. Deterministic score ties by PERMNO. No sign flip or winner-seed choice.",
+    "weight": "Positive immediately previous-calendar-month-end CRSP mthcap within each decile, known at signal time.",
+    "execution": "Signal t; execution t+1 close; first payoff t+2 close. Daily rebalancing, fractional shares. Non-executable positions remain held with a minimum-change dollar-neutral projection. Delistings settle after source total return; dividends in P&L, price-only returns for position drift. Gross exposures may deviate when positions are frozen.",
+    "cost_bp_all_trades": [0, 10],
+    "costs": "Basis points per absolute traded dollar on both sides, including entry, rebalancing and final liquidation. Target exposures use pre-trade NAV; post-fee gross exposure is slightly larger. No borrow fees, financing, impact or collateral yield. Net results depend on these explicit cost assumptions.",
+    "missing": "Primary missing held daily total return uses zero with affected count/weight reported; adverse diagnostic long -100%, short +100%. No fabricated executable sale. Last rebalance leaves two sessions for payoff and liquidation within 2024."
+  },
+  "inference": {
+    "primary_model": "FF5+UMD",
+    "factors": ["mkt_rf", "smb", "hml", "rmw", "cma", "mom"],
+    "primary_hac_lag": 20,
+    "sensitivity_hac_lags": [5, 60],
+    "method": "OLS explicit intercept, Bartlett HAC with small-sample correction, t-reference two-sided p and 95% confidence intervals. Regress zero-net long-short returns directly without subtracting RF. Join factors on realized payoff date. Annual arithmetic alpha = intercept *252. Also report 100%-gross arithmetic equivalents by dividing returns/alpha by two.",
+    "multiplicity": "Two primary FF5+UMD alpha tests (gross and after10bp); report nominal and Holm2 p values. Lag and missing-return stress are diagnostics. Historical specification choices are outside this correction."
+  }
+}
