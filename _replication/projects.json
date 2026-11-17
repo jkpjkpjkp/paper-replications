@@ -39,7 +39,7 @@
     "archive": "arboreal"
   },
   "archetypetrader": {
-    "source": "archetypetrader",
+    "source": "CRYPTO/archetypetrader",
     "archive": "archetypetrader"
   },
   "diffusion-dfl": {
@@ -51,7 +51,7 @@
     "archive": "hermes"
   },
   "hga-mt": {
-    "source": "hga-mt",
+    "source": "NODATA/hga-mt",
     "archive": "hga-mt"
   },
   "limt": {
@@ -83,7 +83,7 @@
     "archive": "song26l"
   },
   "stable-alpha": {
-    "source": "stable-alpha",
+    "source": "NIPS26/stable-alpha",
     "archive": "stable-alpha"
   },
   "monthly-coforecast": {

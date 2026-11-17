@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Prepare independent source-only paper branches for one GitHub repository.
 
-Never pushes. Existing HEADs, indexes, remotes and history are preserved.
+Never pushes. Original branches, staged work, remotes and history are preserved.
 Publication commits use an isolated index and have no original-history parents.
 """
 import argparse
@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import tempfile
 
@@ -134,11 +135,20 @@ def snapshot(repo, branch, files, new_repo):
         old = textgit(repo, 'rev-parse', '--verify', ref, check=False)
         if old and textgit(repo, 'rev-parse', ref + '^{tree}') == tree:
             return old
+        # Keep a clean index on the active publication branch clean. Never
+        # replace staged work or the index of an original/upstream branch.
+        sync_index = new_repo
+        if old and textgit(repo, 'symbolic-ref', '--quiet', 'HEAD', check=False) == ref:
+            check_index = Path(tmp) / 'existing-index'
+            if (gitdir / 'index').exists():
+                shutil.copyfile(gitdir / 'index', check_index)
+                check_env = {**os.environ, 'GIT_INDEX_FILE': str(check_index)}
+                sync_index = textgit(repo, 'write-tree', env=check_env) == textgit(repo, 'rev-parse', old + '^{tree}')
         parents = ['-p', old] if old else []
         commit = textgit(repo, 'commit-tree', tree, *parents,
                          data=f'Prepare source-only upload: {branch}\n'.encode())
         git(repo, 'update-ref', ref, commit, old or '0' * 40)
-        if new_repo:
+        if sync_index:
             git(repo, 'read-tree', commit)
         return commit
 

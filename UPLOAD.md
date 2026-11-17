@@ -16,12 +16,14 @@ python _replication/prepare_upload.py --audit-only
 
 The first command installs the shared ignore policy in each paper and creates
 source-only commits. It gathers those branches into the root repository.
-Existing repositories retain their current HEAD, index, remotes and old
+Existing upstream repositories retain their current HEAD, index, remotes and old
 history. Their upload branch is separate, so earlier data/checkpoint commits
 cannot reach GitHub through this workflow. New repositories start on their
 paper branch. Later refreshes append a commit only if the source tree changes.
-Existing indexes are not staged or reset; use the helper to refresh publication
-branches, rather than committing from an old upstream branch.
+Staged edits are preserved. A clean index on an active publication branch follows
+its refreshed commit; indexes on original upstream branches are unchanged. Use
+the helper to refresh publication branches rather than committing from an old
+upstream branch.
 
 Nested upstream repositories are flattened into regular source files in the
 upload commit; their local Git directories are preserved. Symlinks are omitted,
@@ -50,7 +52,7 @@ it has the intended URL. Push only `main` and the `paper/*` refs. Avoid `--mirro
 upstream branches/tags and previously committed data local. No remote is created
 or pushed by the preparation script itself.
 
-The main catalogue's ordinary `git status` may show changes as files are edited;
+The main catalogue's ordinary `git status` shows changes as files are edited;
 the helper's commit uses a separate index to preserve any existing staging.
 Inspect the upload with `git show main:README.md` and
 `git ls-tree -r paper/alphaqcm`, or clone a paper branch into a new directory.

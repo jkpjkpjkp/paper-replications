@@ -87,6 +87,20 @@ class UploadTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, 'large source'):
             upload.inspect(self.repo, ['large.txt'])
 
+    def test_active_publication_branch_keeps_clean_index(self):
+        upload.git(self.repo, 'symbolic-ref', 'HEAD', 'refs/heads/paper/test')
+        self.file('code.py', 'first\n')
+        upload.snapshot(self.repo, 'paper/test', ['code.py'], True)
+        self.file('code.py', 'second\n')
+        upload.snapshot(self.repo, 'paper/test', ['code.py'], False)
+        self.assertEqual(upload.textgit(self.repo, 'status', '--porcelain'), '')
+        self.file('code.py', 'staged\n')
+        upload.git(self.repo, 'add', 'code.py')
+        staged = (self.repo / '.git/index').read_bytes()
+        self.file('code.py', 'third\n')
+        upload.snapshot(self.repo, 'paper/test', ['code.py'], False)
+        self.assertEqual(staged, (self.repo / '.git/index').read_bytes())
+
 
 if __name__ == '__main__':
     unittest.main()
