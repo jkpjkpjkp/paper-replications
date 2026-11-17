@@ -1,0 +1,28 @@
+2: at least one representative experiment matches the paper's claim
+
+
+
+Scope: Table 1 aggregate reproduction plus close corrected-training risk experiment.
+
+Evidence and explanation:
+All 18 original Table 1 means reconstructed from released seed outputs match at four
+decimals. Independently corrected training also approximately recovers the industry
+graph-contract risk level: CVaR95 loss 2.309342 versus paper 2.3096 (about -0.0112%).
+Its paired graph-penalty minus feature-only difference is -0.009459, with saved seed-
+bootstrap interval [-0.010831,-0.007914]. Ten seeds share market states: this interval
+is not uncertainty across independent markets. Overall 140 fresh models and 140
+released-checkpoint evaluations completed.
+
+Limits / next requirement:
+Original raw snapshot/environment and some checkpoint lineage are unresolved; corrected
+training changes label purging, VIX timing and IC treatment. The actual-node versus
+released-mean coefficient mechanism reverses the qualitative contraction pattern. Thus
+numerical risk agreement does not certify every mechanism/claim or full original
+replication.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/412/REPRODUCE.txt
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/412/results/release_audit/paper_table1_means.csv
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/412/results/final_audit/principal_paper_comparisons.csv
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/412/results/final_audit/mechanism_construction_comparison.json
+

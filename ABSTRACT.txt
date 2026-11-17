@@ -1,0 +1,9 @@
+Feature or Penalty? A Placement Diagnostic for Graph-Risk Signals in Learned Portfolio Decisions
+
+Condensed abstract
+
+Tests whether graph-derived risk signals work better as predictor features or explicit
+portfolio penalties. A within-state permutation control separates the effect of penalty
+placement from asset-specific graph ordering. Industry-portfolio and ETF experiments
+attribute most aggregate downside-risk reduction to explicit penalties, with graph
+ordering providing more selective benefits.

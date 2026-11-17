@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "graph-risk-placement",
+  "title": "Feature or Penalty? A Placement Diagnostic for Graph-Risk Signals in Learned Portfolio Decisions",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/paper-reproduction-audit/workspaces/412/sources/CIKM.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/paper-reproduction-audit/workspaces/412/sources/CIKM.pdf",
+    "sha256": "6715d99931208c155fd28d70f5a1cb27d3aab2f105b77af8020efec90a8f7587",
+    "bytes": 507015,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 5,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 102
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 103,
+      "line_end": 232
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 233,
+      "line_end": 371
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 372,
+      "line_end": 527
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 528,
+      "line_end": 610
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 78
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 79,
+      "line_end": 167
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 168,
+      "line_end": 245
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 246,
+      "line_end": 318
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 319,
+      "line_end": 401
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 22,
+      "text": "Abstract"
+    },
+    {
+      "line": 127,
+      "text": "A Within-State Permutation Diagnostic for"
+    },
+    {
+      "line": 365,
+      "text": "1 For decision state 𝑡 , let 𝑠 ∗"
+    },
+    {
+      "line": 368,
+      "text": "2 Co-crash is the fraction of bootstrap scenario paths in which at least 20% of nodes"
+    },
+    {
+      "line": 493,
+      "text": "Conclusion"
+    },
+    {
+      "line": 523,
+      "text": "References"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 611
+    }
+  ],
+  "line_count": 611,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "f5680d4d78ef327e0e6a7119605f541a3c196f6f43f644aee835bb9b42f5a489",
+      "bytes": 28485
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "90a87917dd6b6e98cbe86d3fbd18cfc0816d69038e98009b948851f5b090aa86",
+      "bytes": 38765
+    }
+  }
+}

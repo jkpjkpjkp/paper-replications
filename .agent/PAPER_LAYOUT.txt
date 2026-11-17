@@ -1,0 +1,402 @@
+Feature or Penalty? A Placement Diagnostic for Graph-Risk Signals in Learned Portfolio Decisions
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/artifacts/paper-reproduction-audit/workspaces/412/sources/CIKM.pdf
+Source SHA-256: 6715d99931208c155fd28d70f5a1cb27d3aab2f105b77af8020efec90a8f7587
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Layout extraction: spacing retains approximate PDF columns and tables.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+       Feature or Penalty? A Placement Diagnostic for Graph-Risk
+                  Signals in Learned Portfolio Decisions
+                                                                           Tenghan Zhong
+                                                                 University of Southern California
+                                                                   Los Angeles, California, USA
+                                                                        tenghanz@usc.edu
+
+Abstract                                                                                1   Introduction
+Graph-derived domain signals create a placement problem in learned                      Graph-derived signals are increasingly used in learned decision sys-
+decision systems: they may inform the predictor, or they may enter                      tems, but standard feature-based use does not determine whether
+the downstream decision layer directly. We study this question in                       the signal should also enter the downstream decision rule directly.
+learned portfolio contracts, where a graph-risk score can be sup-                       We study this question in delegated portfolio risk control, an in-
+plied as a neural feature (Feature-only contract) or additionally                       stance of graph-based decision support where a graph-risk score
+priced as an explicit penalty on risky exposure (Graph-penalty                          can remain in the feature map or be additionally priced through
+contract). To separate placement from asset-specific graph-score                        an explicit exposure penalty in the decision layer. Financial graph
+ordering, we introduce a within-state permutation diagnostic. The                       signals model relations among traded assets [18, 25]; in risk-control
+control permutes the graph-risk scores across assets within each de-                    settings, these relations often encode tail dependence, crowded
+cision state, preserving the state-level marginal distribution and the                  trading, and systemic exposure in financial networks [1, 12, 19]. In
+explicit penalty placement while breaking the asset-specific graph-                     portfolio-delegation contracts, a principal compensates an agent
+risk assignment. On Fama-French industry portfolios and an exter-                       for output while limiting downside and systemic exposure [5, 16].
+nal universe of exchange-traded funds (ETFs), explicit penalty place-                   The key question is placement; the randomized-score comparison
+ment reduces conditional value-at-risk at the 95% level (CVaR95),                       diagnoses whether the graph-derived ordering adds metric-specific
+crowding, and co-crash risk relative to feature-only placement over                     value beyond that placement.
+ten seeds, with essentially matched effort. All variants use matched                        Much of financial graph learning concentrates on the signal it-
+architecture, decision rule, benchmark, and feasibility constraints.                    self, through richer graph estimators, attention mechanisms, or
+The diagnostic separates two channels: explicit penalty placement,                      tail-aware encoders. The implicit assumption is that more informa-
+not graph ordering, accounts for the aggregate CVaR reduction;                          tive signals propagate to better decisions. A flexible neural learner
+the permutation control attains lower CVaR than the true ordering                       can in principle use such a signal through its feature map, but its
+in both universes, while the true ordering helps most clearly for                       marginal effect is then learned indirectly and can be entangled with
+industry crowding. We therefore identify explicit decision-layer                        other predictors, finite-sample noise, and the training objective. The
+placement as the more reliable source of risk control in this setting.                  same signal written into the contract changes the marginal price of
+                                                                                        risky exposure by construction. Standard feature-removal ablations
+CCS Concepts                                                                            cannot separate these two channels: they conflate the loss from ab-
+                                                                                        sent information with the loss from absent placement, leaving open
+• Information systems → Decision support systems; Data
+                                                                                        whether placement effects exist beyond signal informativeness.
+analytics; • Computing methodologies → Machine learning; •
+                                                                                            Related work on decision-focused learning trains predictive com-
+Applied computing → Economics.
+                                                                                        ponents through downstream decisions [9, 20, 22, 24], while differ-
+                                                                                        entiable optimization layers embed optimization problems inside
+Keywords                                                                                neural architectures [3, 6]. Algorithmic contract design instead
+graph-based decision systems, signal placement, permutation diag-                       studies how to compute globally optimal contracts under specified
+nostics, financial risk control, portfolio contracts, systemic risk                     information structures [10, 14, 23]. Our goal is different: we fix the
+                                                                                        contract’s functional form, learn its coefficients, and study where
+ACM Reference Format:
+                                                                                        in the contract a graph-risk signal should enter. The contribution
+Tenghan Zhong. 2026. Feature or Penalty? A Placement Diagnostic for
+                                                                                        is therefore a placement–ordering diagnostic.
+Graph-Risk Signals in Learned Portfolio Decisions. In Proceedings of the 35th
+ACM International Conference on Information and Knowledge Management                        We instantiate the diagnostic in portfolio delegation, treating
+(CIKM ’26), November 07–11, 2026, Rome, Italy. ACM, New York, NY, USA,                  industry portfolios or exchange-traded funds (ETFs) as delegated
+5 pages. https://doi.org/10.1145/3799682.3839875                                        assets. A learner maps asset features and a pre-contract graph-risk
+                                                                                        score to payment-rule coefficients; the agent’s best-response ex-
+                                                                                        posure is computed by an analytic feasibility step that enforces
+                                                                                        incentive compatibility, individual rationality, and a minimum ef-
+                                                                                        fort bound. The graph-penalty contract is first compared with the
+This work is licensed under a Creative Commons Attribution 4.0 International License.
+CIKM ’26, Rome, Italy                                                                   feature-only contract to measure explicit penalty placement, and
+© 2026 Copyright held by the owner/author(s).
+ACM ISBN 979-8-4007-2539-5/2026/11
+https://doi.org/10.1145/3799682.3839875
+
+=== PDF PAGE 2 ===
+CIKM ’26, November 07–11, 2026, Rome, Italy                                                                                                 Tenghan Zhong
+
+
+then with the randomized-score contract to test whether true graph-               window. The peer-benchmark term follows relative-performance
+score ordering adds value under the same explicit penalty place-                  evaluation logic for filtering common shocks in incentive con-
+ment.                                                                             tracts [15, 17]. The feature-only variant observes 𝑚𝐺  𝑖 but sets 𝜆𝑖 = 0.
+   Our contributions are as follows:                                              The graph-penalty variant keeps the same features and allows
+    • Separable placement and ordering channels. We frame                         𝜆𝑖 > 0, giving 𝑚𝐺   𝑖 𝑠ˆ𝑖 an explicit marginal price. To isolate the ex-
+       the value of a graph-derived signal in a learned decision rule             plicit penalty channel, the constant-score control keeps 𝑚𝐺     𝑖 in the
+       as two separately testable design questions: where the signal              feature map but sets the explicit penalty multiplier to one, yielding
+       enters the decision rule, and how it ranks assets within a                 −𝜆𝑖 𝑠ˆ𝑖 . This separates the graph-score multiplier from an unscored
+       decision state. This framing exposes distinct failure modes:               heterogeneous penalty channel. The randomized-score variant uses,
+       a graph score can be informative yet weakly placed, or ex-                 for each seed, a fixed within-state permutation of node scores in
+       plicitly placed but metric-specific in its ordering value.                 both the feature map and the same explicit penalty term. This yields
+    • Within-state permutation control. We introduce a score-                     a node-level mechanism prediction: relative to the feature-only con-
+       marginal-matched randomized control that preserves the                     tract, explicit graph-risk pricing should contract deployed exposure
+      within-state score distribution and explicit penalty place-                 more strongly for nodes with larger pre-contract 𝑚𝐺       𝑖 . For visual
+       ment while breaking asset-specific ordering. Unlike feature-               reference, the top panels of Figure 1 also include a no-graph neural
+       removal ablations, this control tests graph-specific value                 baseline that omits 𝑚𝐺     𝑖 from the feature map and sets 𝜆𝑖 = 0. This
+       under the same explicit penalty placement.                                 baseline is not part of the formal diagnostic and is omitted from
+    • Two-universe empirical evidence. We instantiate the di-                     Table 1.
+       agnostic in Fama–French industry portfolios and an exter-
+                                                                                     Learner and diagnostic contrasts. Given the state features, in-
+       nal ETF universe, showing that explicit penalty placement
+                                                                                  cluding 𝑚𝐺 𝑖 , the neural component outputs the effective incentive
+       consistently reduces downside and systemic-risk metrics,
+                                                                                  intensity 𝑧𝑖 , the peer-benchmark loading 𝜂𝑖 , and the graph-penalty
+      while graph-specific value is metric-dependent. Effort checks
+                                                                                  loading 𝜆𝑖 ; the own-output loading is then 𝜃 𝑖 = 𝑧𝑖 −𝜂𝑖 . A constrained
+       and node-level exposure diagnostics support the intended
+                                                                                  output step keeps incentives nonnegative and above the minimum
+       exposure-reweighting channel.
+                                                                                  effort bound. Given these coefficients, an analytic feasibility step
+                                                                                  computes each agent’s best-response exposure 𝑠𝑖∗ , distinct from the
+2    A Within-State Permutation Diagnostic for
+                                                                                  realized exposure 𝑠ˆ𝑖 entering the contract formula, and sets the
+     Learned Portfolio Contracts                                                  base payment 𝑏𝑖 so that participation binds. Placement compares
+    Graph-risk score. Let 𝑁 denote the number of portfolio nodes and              Graph-penalty contract with Feature-only contract, whereas or-
+let 𝑡 denote a decision state. For nodes 𝑖, 𝑗 ∈ {1, . . . , 𝑁 }, we compute       dering compares Graph-penalty contract with Randomized-score
+a public rolling co-tail adjacency matrix 𝐴𝑡 ∈ R𝑁 ×𝑁 over a lookback              contract. Given the rolling tail indicators, constructing the co-tail
+window of length 𝐿. Its entry 𝐴𝑖 𝑗,𝑡 is the fraction of lookback days             graph costs 𝑂 (𝐿𝑁 2 ) time and 𝑂 (𝑁 2 ) storage per state, while con-
+on which nodes 𝑖 and 𝑗 both fall below their rolling 5% return                    structing the within-state permutation adds 𝑂 (𝑁 ) time and storage.
+quantiles. This co-tail construction is motivated by tail comovement
+and financial connectedness measures for systemic exposure [2, 7].                3    Empirical Placement–Ordering Diagnostic
+Let 1𝑁 be the 𝑁 -vector of ones, let 𝐷𝑡 = diag(𝐴𝑡 1𝑁 ) be the tail-
+                                                                                     Data and evaluation protocol. We evaluate on two traded-asset
+degree matrix, let 𝐼 𝑁 be the 𝑁 × 𝑁 identity matrix, let 𝛿 = 10−3 be
+                                                                                  universes. The main universe is the Fama-French 49-industry port-
+an identity-shift stabilizer, and set 𝐻𝑡 = 𝐷𝑡 + 𝐴𝑡 + 𝛿𝐼 𝑁 . Let ℓ𝑡 ∈ R+𝑁
+                                                                                  folio panel [13]; a universe of 20 ETFs, constructed from daily
+denote rolling lower-tail loss magnitudes and let 𝜀 num > 0 be a
+                                                                                  adjusted ETF prices from Yahoo Finance, provides an external vali-
+numerical stabilizer. The public graph-risk score of node 𝑖 is
+                                                                                  dation setting [26]. The ETF ticker list and preprocessing rules are
+                                         (𝐻𝑡 ℓ𝑡 )𝑖                                provided in the artifact. Each decision state uses a 252-day lookback
+                    𝑚𝐺
+                     𝑖,𝑡 =                                    .
+                             𝑁 −1                                                 and a 20-day horizon. Training uses 50 bootstrap scenario paths
+                                    Í𝑁
+                                     𝑗=1 (𝐻𝑡 ℓ𝑡 ) 𝑗 + 𝜀 num
+                                                                                  per decision state for computational efficiency. Reported test-set
+The score is pre-contract, nonnegative, and normalized around
+                                                                                  risk metrics are computed by re-evaluating the trained models with
+one, so 𝑚𝐺
+         𝑖,𝑡 > 1 denotes above-average graph-weighted lower-tail                  500 common bootstrap scenario paths per state. Residual shocks
+exposure.
+                                                                                  𝜖 ∈ R𝑁 are propagated as 𝜖˜ = (𝐼 𝑁 − 𝜌𝑊𝑡 ) −1𝜖, where 𝑊𝑡 is the
+    Contract variants. For a fixed decision state, write 𝑚𝐺      𝑖 = 𝑚𝑖,𝑡 . Let
+                                                                       𝐺
+                                                                                  row-normalized version of 𝐴𝑡 and 𝜌 = 0.25 is the propagation pa-
+𝜉𝑖 denote the compensation paid to agent 𝑖, 𝑏𝑖 the base transfer, 𝑋𝑖              rameter. The industry split is chronological: train 1990–2005 (190
+output, 𝑋¯𝑖GLS the covariance-regularized generalized least squares               states), validation 2006–2007 (25 states), and test 2008–2026Q1 (228
+(GLS) peer benchmark [4], 𝜃 𝑖 the own-output loading, 𝜂𝑖 the peer-                states). The ETF split uses train 2015–2018 (28 states), validation
+benchmark loading, 𝜆𝑖 the graph-penalty loading, and 𝑠ˆ𝑖 realized                 2019 (13 states), and test 2020–2026Q1 (77 states). Learned models
+risky exposure. Agent 𝑖’s contract is                                             are trained over ten fixed seeds.
+                                                                                     The learner is a two-hidden-layer ReLU network of width 32,
+              𝜉𝑖 = 𝑏𝑖 + 𝜃 𝑖 𝑋𝑖 + 𝜂𝑖 (𝑋𝑖 − 𝑋¯𝑖GLS ) − 𝜆𝑖 𝑚𝐺
+                                                         𝑖 𝑠ˆ𝑖 .
+                                                                                  trained with Adam [21], with 𝑧𝑖 ∈ [0.80, 1.20] enforcing the effort-
+The GLS benchmark is 𝑋¯𝑖GLS = 𝑗≠𝑖 𝑤𝑖GLS
+                                      Í
+                                              𝑗 𝑋 𝑗 , where the weights           preserving range. All learned variants solve the feasibility system
+𝑤𝑖 𝑗 minimize Var(𝑋𝑖 − 𝑗≠𝑖 𝑤𝑖 𝑗 𝑋 𝑗 ) subject to 𝑗≠𝑖 𝑤𝑖GLS
+  GLS                                 GLS
+                              Í                             Í
+                                                                     𝑗     = 1,   during training rather than as a post-hoc correction, so learned
+with covariance regularization computed from the rolling lookback                 coefficients are computed under the same feasibility constraints that
+
+=== PDF PAGE 3 ===
+Feature or Penalty? A Placement Diagnostic for Graph-Risk Signals in Learned Portfolio Decisions                                      CIKM ’26, November 07–11, 2026, Rome, Italy
+
+
+                            No-graph neural baseline            Feature-only contract         Graph-penalty contract                    Randomized-score contract
+
+
+
+                                                        (a) Industry                                                                 (b) ETF
+                            2.3225
+                                      lower-left is better                                                   lower-left is better
+                            2.3200                                                             0.900
+
+                            2.3175
+
+
+
+        CVaR95 loss
+                                                                                               0.895
+                            2.3150
+
+                            2.3125                                                             0.890
+                            2.3100
+                                                                                               0.885
+                            2.3075
+
+                            2.3050
+                                          2.24   2.25    2.26     2.27   2.28    2.29                       0.984           0.988             0.992        0.996
+                                                         Crowding                                                                   Crowding
+                                                         (c) Industry                                                             (d) ETF
+                             0.00
+
+                            −0.01
+
+
+
+
+           Delta exposure
+                            −0.02
+
+                            −0.03
+
+                            −0.04
+
+                            −0.05
+
+
+                                     Q1          Q2             Q3         Q4            Q5         Q1               Q2              Q3               Q4            Q5
+                                                  Graph-risk score quintile                                          Graph-risk score quintile
+
+Figure 1: Aggregate and node-level diagnostics. Top: Crowding versus CVaR95 over ten seeds for the industry and ETF universes;
+lower-left is better. Randomized-score contract preserves explicit penalty placement while permuting graph-risk scores,
+testing ordering value. Bottom: On matched test states, we recompute each asset’s optimal exposure 𝑠𝑖∗ and report Δ𝑠𝑖∗ =
+ ∗
+𝑠𝑖,GraphPenalty    ∗
+                − 𝑠𝑖,FeatureOnly by graph-risk quintile. More negative values indicate stronger exposure contraction under explicit
+graph-risk pricing. Error bars show 95% intervals across seed-level quintile means.
+
+
+govern evaluation. The three formal variants in Table 1 optimize                              concentrated the induced risk-taking is across nodes. Co-crash2
+the same risk-sensitive objective: mean principal payoff penalized                            measures joint lower-tail exposure. Principal certainty equivalent
+by CVaR95 loss, payment variation, crowding, effort shortfall below                           (CE) and raw payoff are secondary outcomes because the explicit
+0.04, and coefficient smoothness. The corresponding weights are                               penalty is designed to trade off upside for lower downside and
+0.65, 0.05, 0.10, 50, and 0.01. These weights are held identical across                       systemic exposure.
+the tabled learned variants and were fixed before the reported test-                             All reported contrasts are paired on the same test states and
+set evaluation; the constant-score control uses the same training                             scenario draws; intervals are 95% seed-clustered bootstrap inter-
+and evaluation protocol.                                                                      vals [8, 11], and tests aggregate across the ten training seeds.
+   We report outcomes aligned with the diagnostic. CVaR95 is com-
+puted over all test states and 500 re-evaluation scenario paths and                             Figure evidence. The top panels of Figure 1 give the aggregate di-
+measures lower-tail downside exposure. Crowding1 measures how                                 agnostic: Graph-penalty contract moves from Feature-only contract
+
+
+1 For decision state 𝑡 , let 𝑠 ∗   ∗ , . . . , 𝑠 ∗ ) ⊤ ∈ R𝑁 denote the induced risky-
+                              = (𝑠 1,𝑡
+                              𝑡                  𝑁 ,𝑡
+exposure vector, and let 𝑄𝑡 = 𝐻𝑡 = 𝐷𝑡 + 𝐴𝑡 + 10 −3 𝐼 𝑁 denote the evaluation tail-risk        2 Co-crash is the fraction of bootstrap scenario paths in which at least 20% of nodes
+matrix. The crowding score is 𝑐𝑡 = (𝑠𝑡∗ ) ⊤𝑄𝑡 𝑠𝑡∗ /𝑁 .                                        fall below their rolling 5% return quantiles.
+
+=== PDF PAGE 4 ===
+CIKM ’26, November 07–11, 2026, Rome, Italy                                                                                                         Tenghan Zhong
+
+
+Table 1: Combined placement–ordering diagnostic. Feature, Graph, and Rand. report mean risk outcomes for the Feature-only
+contract, Graph-penalty contract, and Randomized-score contract, respectively. Placement deltas are Graph-penalty contract
+minus Feature-only contract; ordering deltas are Graph-penalty contract minus Randomized-score contract. Lower is better for
+all reported metrics. CVaR95 uses pooled test-set payoff losses; crowding and co-crash are averaged over matched test states. CI
+denotes 95% confidence interval.
+
+                                                       Mean outcome                                              Paired delta [95% CI]
+Dataset            Metric                 Feature         Graph       Rand.                       Placement                                    Ordering
+Industry           CVaR95 loss                2.3191       2.3096     2.3073            −0.0095 [ −0.0109, −0.0079]                 +0.0023 [+0.0009, +0.0039]
+Industry           Crowding                   2.2877       2.2412     2.2602            −0.0465 [ −0.0510, −0.0424]                 −0.0190 [ −0.0224, −0.0159]
+Industry           Co-crash                   0.1060       0.1037     0.1046            −0.0023 [ −0.0026, −0.0021]                 −0.0008 [ −0.0011, −0.0007]
+ETF                CVaR95 loss                0.9006       0.8922     0.8838            −0.0084 [ −0.0094, −0.0074]                 +0.0084 [+0.0075, +0.0093]
+ETF                Crowding                   0.9967       0.9847     0.9868            −0.0120 [ −0.0154, −0.0090]                 −0.0021 [ −0.0051, +0.0001]
+ETF                Co-crash                   0.1743       0.1733     0.1730            −0.0010 [ −0.0014, −0.0007]                 +0.0003 [ −0.0001, +0.0006]
+
+
+toward lower crowding and lower CVaR95 loss, while Randomized-                 evidence: aggregate-CVaR control comes from the explicit exposure
+score contract keeps the explicit penalty term but breaks the graph-           penalty.
+score ordering; in both universes, Randomized-score contract at-                  The risk reduction is not driven by effort substitution: mean effort
+tains lower CVaR than Graph-penalty contract. The bottom pan-                  changes by −4.4 × 10−6 (industry) and 1.2 × 10−5 (ETF), with both
+els examine the allocation channel behind this movement: higher                intervals including zero, supporting the node-level reweighting
+graph-risk quintiles show stronger exposure contraction under                  channel in the bottom panels of Figure 1.
+Graph-penalty contract relative to Feature-only contract. Together,
+the panels connect the contract term −𝜆𝑖 𝑚𝐺   𝑖 𝑠ˆ𝑖 to both asset-level        4    Conclusion
+exposure changes and aggregate downside-risk reductions.                       Whether a domain signal is informative and where it should enter
+   Table 1 reports the placement–ordering diagnostic. The mean                 a learned decision rule are separately testable design questions,
+columns give the absolute risk levels of the feature-only, graph-              and the within-state permutation diagnostic separates them. In
+penalty, and randomized-score contracts; the paired contrasts give             portfolio-delegation contracts on Fama–French industries and ETFs,
+the two diagnostic comparisons. Placement is the primary claim:                placement yields directionally consistent risk reductions across all
+Graph-penalty contract lowers CVaR95 loss, crowding, and co-                   six universe–metric cells, with the same sign across every seed.
+crash risk relative to Feature-only contract in all six pre-specified          The explicit penalty channel, isolated by a constant-score control,
+universe–metric cells, with the 95% seed-clustered bootstrap inter-            accounts for the aggregate CVaR reduction, while the graph-score
+vals for these risk deltas excluding zero. The same sign appears for           multiplier carries the crowding benefit, clearest in the industry
+every seed in all six cells. Relative reductions are 0.4–2.2% in the           universe. We view these as distinct design dimensions: progress
+industry universe and 0.6–1.2% in the ETF universe, incremental                on graph estimators and progress on signal placement should be
+to a feature-only contract with GLS benchmarking, an effort floor,             evaluated separately, and a learner that already consumes a graph
+and participation adjustment. These improvements represent risk                score may still benefit from explicit placement. A natural next step
+control rather than payoff dominance: relative to Feature-only con-            is to characterize when cross-sectional graph ordering survives
+tract, raw principal payoff under Graph-penalty contract is lower              the downstream best-response map and adds value beyond explicit
+by about 0.0077 in the industry universe and 0.0017 in the ETF                 placement, and to use that characterization to co-design dynamic
+universe, while principal CE is mixed.                                         or learned graph estimators with the decision layer.
+   The constant-score control sharpens this attribution: it keeps              Code and Artifact Availability. Code repository is available at
+𝑚𝐺𝑖 in the feature map but sets 𝑚𝑖 ≡ 1 inside the explicit penalty;
+                                    𝐺
+                                                                               https://github.com/TenghanZhong/within-state-score.
+relative to Feature-only contract, it improves all six risk cells, with
+CVaR95 deltas of −0.0094 and −0.0163 in the industry and ETF                   GenAI Usage Disclosure
+universes, respectively, and all six CIs excluding zero. Relative to
+                                                                               During the preparation of this manuscript, generative AI tools
+this control, Graph-penalty contract is not better on aggregate
+                                                                               were used only for limited writing and editing support, including
+CVaR (industry −0.0002, CI spans zero; ETF +0.0079, CI excludes
+                                                                               grammar correction, sentence rephrasing, and language polishing.
+zero) but lowers crowding in both universes (industry −0.0079, ETF
+                                                                               No generative AI tools were used to generate technical ideas, ex-
+−0.0043; CIs exclude zero).
+                                                                               perimental results, analytical claims, or scientific conclusions. All
+   Graph-specific ordering value is secondary and metric-specific.
+                                                                               methodological decisions, implementation, experiments, and final
+Relative to Randomized-score contract, the true graph ordering
+                                                                               manuscript content were produced and verified by the author.
+raises CVaR95 loss in both universes, improves industry crowding
+and co-crash risk, and gives mixed ETF ordering effects. Thus the
+randomized-score and constant-score controls provide converging
+                                                                               References
+                                                                                [1] Daron Acemoglu, Asuman Ozdaglar, and Alireza Tahbaz-Salehi. 2015. Systemic
+                                                                                    Risk and Stability in Financial Networks. American Economic Review 105, 2 (2015),
+                                                                                    564–608. doi:10.1257/aer.20130456
+
+=== PDF PAGE 5 ===
+Feature or Penalty? A Placement Diagnostic for Graph-Risk Signals in Learned Portfolio Decisions                                 CIKM ’26, November 07–11, 2026, Rome, Italy
+
+
+ [2] Tobias Adrian and Markus K. Brunnermeier. 2016. CoVaR. American Economic                  Prediction. In Proceedings of the 31st ACM International Conference on Information
+     Review 106, 7 (2016), 1705–1741. doi:10.1257/aer.20120555                                 & Knowledge Management. Association for Computing Machinery, 3584–3593.
+ [3] Akshay Agrawal, Brandon Amos, Shane Barratt, Stephen Boyd, Steven Diamond,                doi:10.1145/3511808.3557089
+     and J. Zico Kolter. 2019. Differentiable Convex Optimization Layers. In Ad-          [26] Yahoo Finance. 2026. Yahoo Finance Historical Market Data. Accessed: 2026-05-
+     vances in Neural Information Processing Systems 32. Curran Associates, Inc., 9562–        23. https://finance.yahoo.com/
+     9574. https://papers.neurips.cc/paper/9152-differentiable-convex-optimization-
+     layers
+ [4] A. C. Aitken. 1936. On Least Squares and Linear Combination of Observations.
+     Proceedings of the Royal Society of Edinburgh 55 (1936), 42–48. doi:10.1017/
+     S0370164600014346
+ [5] Rui Albuquerque, Luís Cabral, and José Guedes. 2019. Incentive Pay and Systemic
+     Risk. The Review of Financial Studies 32, 11 (2019), 4304–4342. doi:10.1093/rfs/
+     hhz028
+ [6] Brandon Amos and J. Zico Kolter. 2017. OptNet: Differentiable Optimization as
+     a Layer in Neural Networks. In Proceedings of the 34th International Conference
+     on Machine Learning (Proceedings of Machine Learning Research, Vol. 70). PMLR,
+     136–145. https://proceedings.mlr.press/v70/amos17a.html
+ [7] Monica Billio, Mila Getmansky, Andrew W. Lo, and Loriana Pelizzon. 2012.
+     Econometric Measures of Connectedness and Systemic Risk in the Finance
+     and Insurance Sectors. Journal of Financial Economics 104, 3 (2012), 535–559.
+     doi:10.1016/j.jfineco.2011.12.010
+ [8] A. Colin Cameron, Jonah B. Gelbach, and Douglas L. Miller. 2008. Bootstrap-Based
+     Improvements for Inference with Clustered Errors. The Review of Economics and
+     Statistics 90, 3 (2008), 414–427. doi:10.1162/rest.90.3.414
+ [9] Priya L. Donti, Brandon Amos, and J. Zico Kolter. 2017.               Task-Based
+     End-to-End Model Learning in Stochastic Optimization. In Advances in
+     Neural Information Processing Systems 30. Curran Associates, Inc., 5484–
+     5494.      https://papers.neurips.cc/paper/7132-task-based-end-to-end-model-
+     learning-in-stochastic-optimization
+[10] Paul Dütting, Tim Roughgarden, and Inbal Talgam-Cohen. 2019. Simple versus
+     Optimal Contracts. In Proceedings of the 2019 ACM Conference on Economics and
+     Computation (EC ’19). ACM, 369–387. doi:10.1145/3328526.3329591
+[11] Bradley Efron and Robert J. Tibshirani. 1993. An Introduction to the Bootstrap.
+     Chapman and Hall, New York.
+[12] Larry Eisenberg and Thomas H. Noe. 2001. Systemic Risk in Financial Systems.
+     Management Science 47, 2 (2001), 236–249. doi:10.1287/mnsc.47.2.236.9835
+[13] Kenneth R. French. 2026. Kenneth R. French Data Library: 49 Industry Portfolios
+     [Daily]. Accessed: 2026-05-21. https://mba.tuck.dartmouth.edu/pages/faculty/
+     ken.french/Data_Library/det_49_ind_port.html
+[14] Tomer Galanti, Aarya Bookseller, and Korok Ray. 2025. Scalable Principal-Agent
+     Contract Design via Gradient-Based Optimization. arXiv:2510.21177 [cs.LG]
+     doi:10.48550/arXiv.2510.21177
+[15] Robert Gibbons and Kevin J. Murphy. 1990. Relative Performance Evaluation
+     for Chief Executive Officers. Industrial and Labor Relations Review 43, 3 (1990),
+     30S–51S. doi:10.1177/001979399004300303
+[16] Bengt Holmström. 1979. Moral Hazard and Observability. The Bell Journal of
+     Economics 10, 1 (1979), 74–91. doi:10.2307/3003320
+[17] Bengt Holmström. 1982. Moral Hazard in Teams. The Bell Journal of Economics
+     13, 2 (1982), 324–340. doi:10.2307/3003457
+[18] Yoonsik Hong and Diego Klabjan. 2025. Graph Learning for Foreign Exchange
+     Rate Prediction and Statistical Arbitrage. In Proceedings of the 6th ACM Inter-
+     national Conference on AI in Finance. Association for Computing Machinery,
+     692–699. doi:10.1145/3768292.3770418
+[19] Amir E. Khandani and Andrew W. Lo. 2011. What Happened to the Quants in
+     August 2007? Evidence from Factors and Transactions Data. Journal of Financial
+     Markets 14, 1 (2011), 1–46. doi:10.1016/j.finmar.2010.07.005
+[20] Juchan Kim, Inwoo Tae, and Yongjae Lee. 2025. Estimating Covariance for
+     Global Minimum Variance Portfolio: A Decision-Focused Learning Approach. In
+     Proceedings of the 6th ACM International Conference on AI in Finance. Association
+     for Computing Machinery, 105–113. doi:10.1145/3768292.3770378
+[21] Diederik P. Kingma and Jimmy Ba. 2015. Adam: A Method for Stochastic
+     Optimization. In International Conference on Learning Representations. https:
+     //arxiv.org/abs/1412.6980
+[22] Jayanta Mandi, James Kotary, Senne Berden, Maxime Mulamba, Victor Bucarey,
+     Tias Guns, and Ferdinando Fioretto. 2024. Decision-Focused Learning: Founda-
+     tions, State of the Art, Benchmark and Future Opportunities. Journal of Artificial
+     Intelligence Research 80 (2024), 1623–1701. doi:10.1613/jair.1.15320
+[23] Kanstantsin Pashkovich and Jacob Skitsko. 2026. Linear Contracts for Supermod-
+     ular Functions Based on Graphs. In Algorithmic Game Theory: 18th International
+     Symposium, SAGT 2025, Bath, UK, September 2–5, 2025, Proceedings (Lecture Notes
+     in Computer Science, Vol. 15953). Springer, 422–438. doi:10.1007/978-3-032-03639-
+     1_23
+[24] Bryan Wilder, Bistra Dilkina, and Milind Tambe. 2019. Melding the Data-
+     Decisions Pipeline: Decision-Focused Learning for Combinatorial Optimization.
+     Proceedings of the AAAI Conference on Artificial Intelligence 33, 01 (2019), 1658–
+     1665. doi:10.1609/aaai.v33i01.33011658
+[25] Sheng Xiang, Dawei Cheng, Chencheng Shang, Ying Zhang, and Yuqi Liang. 2022.
+     Temporal and Heterogeneous Graph Neural Network for Financial Time Series
+
+=== END SOURCE TEXT ===
