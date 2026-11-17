@@ -1,0 +1,50 @@
+PRIMARY BLOCKER: BENCHMARK DATA + SPECIFICATION
+Assessed: 2026-11-17 (Asia/Shanghai)
+
+DATA: YES: matched evaluation sample/universe not recovered
+COMPUTE: RUNNING with limited shared-GPU memory; no pretraining requested
+SPECIFICATION / PAPER TARGET: YES
+
+Pretrained small/base models and local daily Qlib prices are available, but the
+64-window pilot does not use the paper benchmark. Checked the live author repo
+and arXiv v1 on 2026-11-17. Appendix D specifies July 2024 onward evaluation,
+daily lookback 40/horizon 12, and OHLC-only crypto evaluation over all Binance
+spot pairs; the released fine-tuning example is explicitly a simplified demo.
+The exact benchmark sample manifest, terminal date and selection/stride are not
+established by these releases. CSI backtests also require the original universe,
+90-day/10-day signal, holding/drop rules and costs. More inference on the old
+2026 pilot cannot be compared to these published tables.
+
+Current action — 2026-11-17:
+A full CSI300 investment-simulation reconstruction is now running, targeting
+Table 10 Kronos-base AER 0.1911 and IR 1.3782. It evaluates 66,338 stock-day
+windows over 225 signal dates for seeds 0/1/2. The paper's 90/10 context/horizon,
+ten paths, T=0.6, top-p=0.9, top50/drop5, minimum hold5 and 0.15% costs are used.
+The 2025-06-05 end comes from released finetune/config.py. Community data and
+remaining execution assumptions are explicitly frozen in protocol.json.
+
+The cached float32 implementation passed released-code numerical checks and
+the Qlib pipeline passed a trading/cost integration check. Initial fully/partly
+resident GPU attempts exhausted shared memory; initial successful shards used blockwise CPU
+transfers. When GPU memory became available, inference resumed with the model
+on GPU, preserving the original sampling configuration and saved shards. It is managed by the user systemd service
+kronos-base-20261117.service, saves atomic prediction shards and resumes them.
+No completed model AER/IR is available yet. Inspect progress.json and run.log,
+and failure.json if present; a service launch is not evidence of completion.
+
+Next requirement:
+Complete and assess the three-seed reconstruction. Exact author-data equivalence
+still requires the original snapshot, terminal date and full execution details.
+Forecasting tables average over frequencies, so daily-only forecasting cannot
+be substituted for those reported aggregate metrics. The old 2026 pilot remains
+non-comparable and is not being rerun.
+
+Evidence (paths relative to /home/jkp/data):
+- Kronos/README.md
+- .replication-local/artifacts/LLM/alpha-research-reproduction/results/kronos/summary.json
+- .replication-local/runs/blocked-20261117/kronos-paper-read.txt
+- /mnt/data/home/jkp/replications/kronos-base-20261117/protocol.json
+- /mnt/data/home/jkp/replications/kronos-base-20261117/RUN_NOTES.txt
+
+Numerical replication status remains 0 until a representative comparison is
+completed and assessed. Starting a job or matching a smoke-test cell is not a match.

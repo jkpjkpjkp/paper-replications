@@ -1,0 +1,79 @@
+0: blocked
+Assessment date: 2026-11-17
+
+
+
+Scope: Pretrained Kronos-base CSI300 Table 10 reconstruction is running;
+no completed representative paper comparison yet.
+
+Current attempt — 2026-11-17:
+Target: CSI300 investment simulation, paper annualized excess return 0.1911
+(19.11%/year) and information ratio 1.3782. Printed rounding tolerance: 0.00005;
+paper seed SD/SEM/CI is not reported for Table 10. Local AER/IR and their errors
+are pending full inference/backtesting. Seeds 0/1/2 are requested; report their
+SD separately, not as a confidence interval.
+
+Prepared 66,338 eligible stock-day windows, 317 historical CSI300 constituents,
+225 signal dates. Test trades span 2024-07-01 through 2025-06-05. Released base
+revision 2b554741eca47781b64468546e77fef3e85130e6 and tokenizer revision
+0e0117387f39004a9016484a186a908917e22426 are pinned and SHA256-verified.
+No training or fine-tuning: 90-session context, 10-session forecast, temperature
+0.6, top-p 0.9, ten sampled paths, top 50/drop 5, hold at least five sessions,
+0.15% buy/sell costs. Qlib uses previous-close signals and next-open execution.
+
+Scope limitations: the shared community data are not the original author
+snapshot. The terminal date comes from the released demo config; the paper only
+specifies July 2024 onward. Open execution, minimum fees, 95% allocation and the
+9.5% price-limit proxy follow released example/Qlib defaults, not a fully
+recovered paper specification. Primary annualization is Qlib's 238 days; a
+252-day sensitivity is saved. Full details are frozen in protocol.json.
+
+Completed validation is execution evidence only:
+- Context/input/checkpoint hashes recorded; raw shared files remain unchanged.
+- Five-day Qlib plumbing check produced trades, finite reports and nonzero costs.
+- Float32 cached inference checked against the released implementation across
+  context lengths 90–100; maximum checked logit difference < 0.00002, within
+  atol=rtol=0.0001. Two actual contexts with ten sampled paths each produced
+  exactly equal reference/cached forecasts in the recorded validation case.
+- Fully resident GPU inference and the first partially resident launch failed
+  due to shared-GPU memory pressure. Logs are retained. The initial successful shards
+  used blockwise CPU transfers. After GPU memory became available, the run
+  resumed with the full model on GPU, preserving saved shards and RNG grouping.
+  No weights were quantized.
+
+Live artifacts: /mnt/data/home/jkp/replications/kronos-base-20261117/
+Service: systemctl --user status kronos-base-20261117.service
+Read progress.json, run.log, and failure.json if present. Each completed seed
+automatically writes seed-N/metrics.json and updates summary.json. Grade remains
+0 pending completed inference/backtests and evidence review; job launch and
+numerical implementation checks do not constitute matching paper results.
+
+Evidence and explanation:
+Saved inference covers 64 windows per model/seed/horizon, not the paper's benchmark
+suite or pretraining. For illustration Kronos-base seed 0 horizon 1 has return MAE
+0.018520 versus local persistence 0.017179, but neither is a matched published target.
+This is execution evidence, not evidence of agreement or a paper-level numerical
+failure.
+
+Limits / next requirement:
+Complete and assess the current three-seed CSI300 reconstruction against Table
+10, while retaining the data/protocol substitutions. Exact author-data replay,
+CSI800, multi-frequency forecasting, volatility and synthetic-data tasks remain
+unverified. Other items in the old alpha-research workspace are separate projects,
+not Kronos replication results.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/LLM/alpha-research-reproduction/results/kronos/summary.json
+- README.md
+- scripts/reproduce_pretrained.py and scripts/kronos_cached.py
+- /mnt/data/home/jkp/replications/kronos-base-20261117/protocol.json
+- /mnt/data/home/jkp/replications/kronos-base-20261117/manifest.json
+- /mnt/data/home/jkp/replications/kronos-base-20261117/cache_validation.json
+- /mnt/data/home/jkp/replications/kronos-base-20261117/backtest_validation.json
+- /mnt/data/home/jkp/replications/kronos-base-20261117/RUN_NOTES.txt
+
+
+Blocker triage and new work — 2026-11-17:
+Original blocker: BENCHMARK DATA + SPECIFICATION. A complete CSI300 reconstruction
+is now being attempted with documented substitutions. Exact data/specification
+gaps remain, and numerical results are pending. See BLOCKER.txt. Grade remains 0.

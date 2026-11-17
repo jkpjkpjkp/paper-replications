@@ -1,0 +1,25 @@
+--- /home/jkp/data/alpha-research-reproduction/upstream/alphasage/train_gfn.py	2026-11-05 12:34:28.919773834 +0800
++++ /home/jkp/data/alpha-research-reproduction/runtime/alphasage_train.py	2026-11-05 12:38:51.398475719 +0800
+@@ -13,14 +13,14 @@
+ from torch.utils.tensorboard import SummaryWriter
+ from alphagen.rl.env.wrapper import action2token
+ 
+-from src.alpha_gfn.config import *
+-from src.alpha_gfn.env.core import GFNEnvCore
+-from src.alpha_gfn.modules import SequenceEncoder
+-from src.alpha_gfn.alpha_pool import AlphaPoolGFN
+-from src.alphagen.data.expression import *
+-from src.alphagen_qlib.stock_data import StockData
+-from src.alphagen.utils.correlation import batch_pearsonr
+-from src.alpha_gfn.gflownet import EntropyTBGFlowNet
++from alpha_gfn.config import *
++from alpha_gfn.env.core import GFNEnvCore
++from alpha_gfn.modules import SequenceEncoder
++from alpha_gfn.alpha_pool import AlphaPoolGFN
++from alphagen.data.expression import *
++from alphagen_qlib.stock_data import StockData
++from alphagen.utils.correlation import batch_pearsonr
++from alpha_gfn.gflownet import EntropyTBGFlowNet
+ 
+ from gfn.samplers import Sampler
+ from gfn.gflownet.trajectory_balance import TBGFlowNet

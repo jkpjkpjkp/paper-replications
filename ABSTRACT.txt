@@ -1,0 +1,9 @@
+Kronos: A Foundation Model for the Language of Financial Markets
+
+Concise summary from the released project description
+
+Represents financial candlestick sequences as hierarchical discrete tokens and trains
+autoregressive transformers to model their evolution. The resulting pretrained models
+support forecasting and other quantitative tasks across markets. The released
+implementation provides several model sizes, inference tools, and fine-tuning workflows
+for adapting the models to financial data.

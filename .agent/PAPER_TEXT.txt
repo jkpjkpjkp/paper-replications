@@ -1,0 +1,39 @@
+Kronos: A Foundation Model for the Language of Financial Markets
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: linked_paper_guide
+Original source: ../.replication-local/paper-text-sources/kronos-arxiv-v1.txt
+Source SHA-256: 6555c9bc0f9f983fc4dda85b31a9fb85586ba532c2c20665c5cfe6a19bf3184d
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Note: Concise navigation guide to the linked paper. This is not the full manuscript and has no PDF page mapping.
+
+=== BEGIN SOURCE TEXT ===
+
+=== TEXT SEGMENT 1 ===
+Kronos: A Foundation Model for the Language of Financial Markets
+Paper: https://arxiv.org/abs/2508.02739v1
+Full article: https://arxiv.org/html/2508.02739v1
+
+Kronos models financial candlestick sequences with a discrete tokenizer and an
+autoregressive transformer. Its tokenizer compresses price and trading-activity
+information into hierarchical tokens, which the predictor models over time.
+The paper evaluates forecasting, synthetic sequence generation, and investment
+simulations, alongside architecture ablations and inference-sampling choices.
+
+Navigation for future work:
+- Section 3: tokenization, hierarchical modeling, pretraining and inference.
+- Section 4: experimental setup, main results and ablations.
+- Appendix B: datasets, cleaning and missing observations.
+- Appendix C: architecture, training and inference configurations.
+- Appendix D: evaluation tasks, baselines, metrics, portfolio rules and costs.
+- Appendices E-F: additional and full experimental results.
+
+Match the paper version and model checkpoint before comparing results. The local
+folder provides reduced pretrained inference; consult STATUS.txt and README.md
+for its actual scope. The original article is the reference for equations,
+numeric tables, figures and complete protocol details.
+
+=== END SOURCE TEXT ===

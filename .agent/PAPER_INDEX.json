@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "Kronos",
+  "title": "Kronos: A Foundation Model for the Language of Financial Markets",
+  "coverage": "linked_paper_guide",
+  "source": {
+    "path_relative_to_project": "../.replication-local/paper-text-sources/kronos-arxiv-v1.txt",
+    "path_relative_to_collection": ".replication-local/paper-text-sources/kronos-arxiv-v1.txt",
+    "sha256": "6555c9bc0f9f983fc4dda85b31a9fb85586ba532c2c20665c5cfe6a19bf3184d",
+    "bytes": 149956,
+    "urls": [
+      "https://arxiv.org/html/2508.02739v1"
+    ]
+  },
+  "method": "Concise paper guide; original full text linked, not reproduced",
+  "note": "Concise navigation guide to the linked paper. This is not the full manuscript and has no PDF page mapping.",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": null,
+  "pages": [
+    {
+      "page": null,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 38
+    }
+  ],
+  "layout_file": null,
+  "layout_pages": null,
+  "heading_candidates": [],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 15,
+      "line_end": 39
+    }
+  ],
+  "line_count": 39,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "e5f9ce1e6a2f95c1768819f375b1e79ff8047896687de89342e03843596fd1c9",
+      "bytes": 1993
+    }
+  }
+}
