@@ -1,0 +1,32 @@
+0: blocked
+Assessment date: 2026-11-17
+
+
+
+Scope: Blocked original Lookahead/LFM experiment; see also reproduction/STATUS.txt.
+
+Evidence and explanation:
+Standard Compustat access is working, and annual/quarterly files are already local.
+Fresh WRDS SELECT checks on 2026-11-17 confirm that the full historical Snapshot
+panel remains unavailable: comp_snapshot annual/quarterly PIT tables and compsnap
+aliases return permission denied (SQLSTATE 42501); comp_pit also denies access.
+Snapshot sample annual/quarterly queries succeed. This confirms the archived failure.
+The local TensorFlow adapter passed
+synthetic integration checks and verified 1,440 synthetic forecast rows, but no original
+experiment ran. Synthetic execution is not a match to a published financial result.
+
+Limits / next requirement:
+Obtain an authorized historical Snapshot source or the original processed panel with
+vintage provenance, then run the original forecasting/portfolio comparison. Current-
+vintage Compustat is not an equivalent replacement.
+
+Evidence paths (relative to this STATUS.txt):
+- reproduction/evidence/wrds-compustat-access-20261117.json
+- ../compustat/README.txt
+- ../.replication-local/artifacts/lfm-quant/results/status.json
+- README.md
+
+
+Blocker triage and new work — 2026-11-17:
+Primary blocker: DATA (LICENSED HISTORICAL SNAPSHOT) + SPECIFICATION. See BLOCKER.txt for data/compute flags,
+current actions, remaining requirements and evidence. Grade remains 0.

@@ -1,0 +1,35 @@
+PRIMARY BLOCKER: DATA (LICENSED HISTORICAL SNAPSHOT) + SPECIFICATION
+Assessed: 2026-11-17 (Asia/Shanghai)
+
+DATA: YES
+COMPUTE: NO: local TensorFlow CPU integration already works
+SPECIFICATION / PAPER TARGET: YES: empirical mappings/universe not fully specified
+
+Standard Compustat is accessible and downloaded; the full historical Compustat
+Snapshot panel remains unavailable to the current WRDS account. Fresh read-only
+SELECT probes on 2026-11-17 succeeded for comp.funda, comp.fundq, comp.co_filedate
+and comp.sec_shortint. Local annual/quarterly downloads contain 942,762/2,146,839
+rows respectively (downloaded 2026-11-02).
+
+Full annual/quarterly Snapshot PIT queries (comp_snapshot.wrds_csa_pit and
+comp_snapshot.wrds_csq_pit), including their compsnap aliases, still fail with
+SQLSTATE 42501: permission denied for schema comp_snapshot. comp_pit also denies
+access. Annual/quarterly compsamp_snapshot queries succeed, but sample access is
+not the full experiment. This confirms the earlier archived access failures.
+Current/restated Compustat is not a substitute for original vintage history.
+The synthetic 1,440-row integration check is not a financial paper comparison.
+
+Action / next requirement:
+No empirical launch. Obtain authorized historical Snapshot data or a processed
+panel with vintage provenance and validate prices, short interest, industry,
+capitalization and field mappings. Reuse the reproduction adapter afterward.
+
+Evidence (paths relative to /home/jkp/data):
+- Lookahead/reproduction/evidence/wrds-compustat-access-20261117.json
+- compustat/README.txt
+- .replication-local/artifacts/lfm-quant/evidence/wrds-snapshot-access.json
+- .replication-local/artifacts/lfm-quant/results/status.json
+- Lookahead/reproduction/README.md
+
+Numerical replication status remains 0 until a representative comparison is
+completed and assessed. Starting a job or matching a smoke-test cell is not a match.

@@ -1,0 +1,9 @@
+Uncertainty-Aware Lookahead Factor Models for Quantitative Investing
+
+Condensed abstract
+
+Forecasts future company fundamentals from five years of historical data and substitutes
+those forecasts into conventional investment factors. Neural uncertainty estimates
+adjust portfolio selection to reduce forecast risk. Retrospective simulations report
+higher annualized returns and Sharpe ratios than a standard factor model, motivating
+uncertainty-aware use of predicted fundamentals.

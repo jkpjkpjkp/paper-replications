@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "Lookahead",
+  "title": "Uncertainty-Aware Lookahead Factor Models for Quantitative Investing",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/lfm-quant/evidence/paper.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/lfm-quant/evidence/paper.pdf",
+    "sha256": "8f88f25359c9c5a4654c2a9350a2f0c6bc991bd3b4152e79610fafe344b165de",
+    "bytes": 3179101,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 11,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 86
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 87,
+      "line_end": 247
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 248,
+      "line_end": 338
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 339,
+      "line_end": 429
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 430,
+      "line_end": 573
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 574,
+      "line_end": 678
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 679,
+      "line_end": 833
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 834,
+      "line_end": 1061
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1062,
+      "line_end": 1164
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1165,
+      "line_end": 1237
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1238,
+      "line_end": 1282
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 83
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 84,
+      "line_end": 156
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 157,
+      "line_end": 215
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 216,
+      "line_end": 293
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 294,
+      "line_end": 370
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 371,
+      "line_end": 444
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 445,
+      "line_end": 543
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 544,
+      "line_end": 609
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 610,
+      "line_end": 671
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 672,
+      "line_end": 748
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 749,
+      "line_end": 801
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 19,
+      "text": "Abstract"
+    },
+    {
+      "line": 35,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 245,
+      "text": "2. Related Work"
+    },
+    {
+      "line": 308,
+      "text": "3. Data"
+    },
+    {
+      "line": 377,
+      "text": "4. Methods"
+    },
+    {
+      "line": 378,
+      "text": "4.1. Forecasting Model"
+    },
+    {
+      "line": 484,
+      "text": "4.2. Uncertainty Quantiﬁcation"
+    },
+    {
+      "line": 552,
+      "text": "4.3. Quantitative Factor Models"
+    },
+    {
+      "line": 608,
+      "text": "5. Portfolio Simulation"
+    },
+    {
+      "line": 673,
+      "text": "6. Experiments"
+    },
+    {
+      "line": 1092,
+      "text": "7. Conclusion"
+    },
+    {
+      "line": 1126,
+      "text": "References"
+    },
+    {
+      "line": 1141,
+      "text": "1993. URL https://ideas.repec.org/a/eee/"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1283
+    }
+  ],
+  "line_count": 1283,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "28047d5868239660afb6d35932201275171bae96852b4424f30d0f63092e8950",
+      "bytes": 47501
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "012bf6b5f7b9eb7e1e9d5d20f60878e410fa874c641f78be3a2ff1a9f5b963f9",
+      "bytes": 74417
+    }
+  }
+}

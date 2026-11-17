@@ -1,0 +1,2125 @@
+{
+  "checked_at_utc": "2026-11-17T12:34:50.902332+00:00",
+  "schemas": [
+    {
+      "nspname": "comp",
+      "usage": true
+    },
+    {
+      "nspname": "comp_na_daily_all",
+      "usage": true
+    },
+    {
+      "nspname": "comp_pit",
+      "usage": false
+    },
+    {
+      "nspname": "comp_snapshot",
+      "usage": false
+    },
+    {
+      "nspname": "compsamp_snapshot",
+      "usage": true
+    },
+    {
+      "nspname": "compsnap",
+      "usage": true
+    }
+  ],
+  "tables": [
+    {
+      "schema": "comp",
+      "table": "co_filedate",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Filing Date (Updated 2026-11-17)"
+    },
+    {
+      "schema": "comp",
+      "table": "funda",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Merged Fundamental Annual File (Updated 2026-11-17)"
+    },
+    {
+      "schema": "comp",
+      "table": "fundq",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Merged Fundamental Quarterly File (Updated 2026-11-17)"
+    },
+    {
+      "schema": "comp",
+      "table": "sec_shortint",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Security Short Interest (Updated 2026-11-17)"
+    },
+    {
+      "schema": "comp_na_daily_all",
+      "table": "co_filedate",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Filing Date (Updated 2026-11-17)"
+    },
+    {
+      "schema": "comp_na_daily_all",
+      "table": "funda",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Merged Fundamental Annual File (Updated 2026-11-17)"
+    },
+    {
+      "schema": "comp_na_daily_all",
+      "table": "fundq",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Merged Fundamental Quarterly File (Updated 2026-11-17)"
+    },
+    {
+      "schema": "comp_na_daily_all",
+      "table": "sec_shortint",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Security Short Interest (Updated 2026-11-17)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pit_hist_date_tablecdn",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Table of dates & calendar qtrs for each gvkey*pointdate*qtrsback combination (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pit_hist_date_tableus",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Table of dates & calendar qtrs for each gvkey*pointdate*qtrsback combination (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pit_monthly_date_tablecdn",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Table of 20 prior dates & calendar qtrs for each gvkey*pointdate combination - Canada (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pit_monthly_date_tableus",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Table of 20 prior DATADATES & calendar qtrs for each gvkey*pointdate combination - US (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pithistdatacdn",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Point in Time - Data Items and Footnotes (1993 forward) - Canada (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pithistdataus",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Point in Time - Data Items and Footnotes (1987 forward) - US (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pitidhistcdn",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Point_in_Time - Canadian Historical Identifiers (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pitidhistus",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Point_in_Time - Historical Identifiers (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pitnamescdn",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Point_in_Time - Canadian Company Descriptors (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pitnamesus",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Point_in_Time - Company Descriptors (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pitqtrdatacdn",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Point in Time - Quarterly Descriptors, Data Items, and Footnotes - Canada (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_pit",
+      "table": "pitqtrdataus",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Point in Time - Quarterly Descriptors, Data Items, and Footnotes - US (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "chars",
+      "schema_usage": false,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "cs_items",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Items (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_aaudit",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Auditor Information (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_afnd",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Annual Fundamentals and Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_afntind",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Annual Footnotes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_ainvval",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Annual Inventory Valuation (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_akey",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Company Annual Fundamental Period Reference (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_atxt",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Company Annual Fundamental Period Descriptor data (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_iaudit",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Interim Auditor Information (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_ifndq",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Interim Balance Sheet and Quarterly Income Statement Items (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_ifndytd",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Interim YTD Income Statement and Cash Flow Items (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_ifntq",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Interim Balance Sheet and Quarterly Income Statement Footnotes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_ifntytd",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Interim YTD Income Statement and Cash Flow Footnotes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_ikey",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Company Interim Fundamental Period Reference (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_ipcd",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Annual Industry Presentation Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "csco_itxt",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Company Interim Fundamental Period Descriptor data (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "cscompany",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Company Descriptive Information (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "cssecurity",
+      "schema_usage": false,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "dd_group",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Data Group (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "dd_group_xref",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Data Group to Item (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "dd_item",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Item (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "dd_package",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Package (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "r_actioncd",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Corporate Action Reference Data (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "sec_idhist",
+      "schema_usage": false,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_cs_names",
+      "schema_usage": false,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csa_pit",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Point-In-Time (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csa_pit_dc",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Point-In-Time - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csa_pit_dc_sorted",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Point-In-Time - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csa_pit_sorted",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Point-In-Time (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csa_restated",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Most Recently Restated (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csa_restated_dc",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Most Recently Restated - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csa_unrestated",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - As First Reported (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csa_unrestated_dc",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - As First Reported - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csq_pit",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Point-In-Time (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csq_pit_dc",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Point-In-Time - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csq_pit_dc_sorted",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Point-In-Time - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csq_pit_sorted",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Point-In-Time (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csq_restated",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Most Recently Restated (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csq_restated_dc",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Most Recently Restated - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csq_unrestated",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - As First Reported (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "wrds_csq_unrestated_dc",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - As First Reported - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_actionstartconditiontype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_actionstatetype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_actiontype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_activitytype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_changeflagtype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_cleanuptype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_column",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_columntodatabasetype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_columnusetype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_databasetype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_datetimeformattype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_datetimetodatabasetype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_daynotinfeedfrequency",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_delimitertype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_emailaccounttype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_errormessage",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_failuretype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_feedfrequencytype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_feedpop",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_hosttype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_indextype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_lengthsemantictype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_loaderobjecttype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_loadersetting",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_loaderver",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_loadjobtype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_loadsubstatetype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_loadsubtype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_notificationtype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pac",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacgroup",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacsource",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacsourcetohost",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacsourcetype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacver",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacverfeedpoptopacsrchost",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacverfeedpoptotableinst",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacverfeedpoptozipfile",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacverfeedpopupgrade",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacverrelationship",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_pacvertofeedpop",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_phasetype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_prepostloadsql",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_prepostloadtype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_progresstype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_proxyprotocoltype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_relationshiptype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_resulttype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_table",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_tableinst",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_tableinstindex",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_tableinstindexcolumn",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_tableinsttocolumn",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_tabletype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_textfile",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_textfilecolumnmapping",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_textfiletype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_upgradeabstraction",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_upgradetable",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_upgradetablesql",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_upgradetype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_validationtype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_zipfile",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_zipfiletotextfile",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_zipfiletype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfc_zipruntype",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_column",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_datagroup",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_datagroup_table",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_db_version",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_file_datagroup",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_filelayout",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_lrm_cstat_fsup0",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_lrm_cstat_fsup0_2",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_lrm_cstat_rsup0",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_lrm_cstat_tsup0",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_lrm_user_load_plan",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_mapping",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_package",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_package_file",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_package_rel",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_refer",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_sequence",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "comp_snapshot",
+      "table": "xfl_table",
+      "schema_usage": false,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsamp_snapshot",
+      "table": "chars",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsamp_snapshot",
+      "table": "wrds_cs_names",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsamp_snapshot",
+      "table": "wrds_csa_pit",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsamp_snapshot",
+      "table": "wrds_csa_pit_sorted",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsamp_snapshot",
+      "table": "wrds_csa_restated",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsamp_snapshot",
+      "table": "wrds_csa_unrestated",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsamp_snapshot",
+      "table": "wrds_csq_pit",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsamp_snapshot",
+      "table": "wrds_csq_pit_sorted",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsamp_snapshot",
+      "table": "wrds_csq_restated",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsamp_snapshot",
+      "table": "wrds_csq_unrestated",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsnap",
+      "table": "chars",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsnap",
+      "table": "cs_items",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Items (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_aaudit",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Auditor Information (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_afnd",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Annual Fundamentals and Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_afntind",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Annual Footnotes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_ainvval",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Annual Inventory Valuation (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_akey",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Company Annual Fundamental Period Reference (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_atxt",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Company Annual Fundamental Period Descriptor data (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_iaudit",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Interim Auditor Information (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_ifndq",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Interim Balance Sheet and Quarterly Income Statement Items (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_ifndytd",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Interim YTD Income Statement and Cash Flow Items (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_ifntq",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Interim Balance Sheet and Quarterly Income Statement Footnotes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_ifntytd",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Interim YTD Income Statement and Cash Flow Footnotes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_ikey",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Company Interim Fundamental Period Reference (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_ipcd",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Annual Industry Presentation Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "csco_itxt",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Company Interim Fundamental Period Descriptor data (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "cscompany",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Company Descriptive Information (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "cssecurity",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsnap",
+      "table": "dd_group",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Data Group (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "dd_group_xref",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Data Group to Item (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "dd_item",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Item (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "dd_package",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Package (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "r_actioncd",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Corporate Action Reference Data (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "sec_idhist",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_cs_names",
+      "schema_usage": true,
+      "table_select": true,
+      "description": null
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csa_pit",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Point-In-Time (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csa_pit_dc",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Point-In-Time - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csa_pit_dc_sorted",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Point-In-Time - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csa_pit_sorted",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Point-In-Time (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csa_restated",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Most Recently Restated (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csa_restated_dc",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - Most Recently Restated - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csa_unrestated",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - As First Reported (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csa_unrestated_dc",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Annual - As First Reported - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csq_pit",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Point-In-Time (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csq_pit_dc",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Point-In-Time - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csq_pit_dc_sorted",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Point-In-Time - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csq_pit_sorted",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Point-In-Time (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csq_restated",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Most Recently Restated (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csq_restated_dc",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - Most Recently Restated - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csq_unrestated",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - As First Reported (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "wrds_csq_unrestated_dc",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "Compustat Snapshot Quarterly/YTD - As First Reported - Data Codes (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_actionstartconditiontype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_actionstatetype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_actiontype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_activitytype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_changeflagtype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_cleanuptype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_column",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_columntodatabasetype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_columnusetype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_databasetype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_datetimeformattype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_datetimetodatabasetype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_daynotinfeedfrequency",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_delimitertype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_emailaccounttype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_errormessage",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_failuretype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_feedfrequencytype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_feedpop",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_hosttype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_indextype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_lengthsemantictype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_loaderobjecttype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_loadersetting",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_loaderver",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_loadjobtype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_loadsubstatetype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_loadsubtype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_notificationtype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pac",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacgroup",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacsource",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacsourcetohost",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacsourcetype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacver",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacverfeedpoptopacsrchost",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacverfeedpoptotableinst",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacverfeedpoptozipfile",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacverfeedpopupgrade",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacverrelationship",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_pacvertofeedpop",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_phasetype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_prepostloadsql",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_prepostloadtype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_progresstype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_proxyprotocoltype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_relationshiptype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_resulttype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_table",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_tableinst",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_tableinstindex",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_tableinstindexcolumn",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_tableinsttocolumn",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_tabletype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_textfile",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_textfilecolumnmapping",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_textfiletype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_upgradeabstraction",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_upgradetable",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_upgradetablesql",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_upgradetype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_validationtype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_zipfile",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_zipfiletotextfile",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_zipfiletype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfc_zipruntype",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_column",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_datagroup",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_datagroup_table",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_db_version",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_file_datagroup",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_filelayout",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_lrm_cstat_fsup0",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_lrm_cstat_fsup0_2",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_lrm_cstat_rsup0",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_lrm_cstat_tsup0",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_lrm_user_load_plan",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_mapping",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_package",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_package_file",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_package_rel",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_refer",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_sequence",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    },
+    {
+      "schema": "compsnap",
+      "table": "xfl_table",
+      "schema_usage": true,
+      "table_select": true,
+      "description": "&tabledesc (Updated 2026-11-05)"
+    }
+  ],
+  "probes": [
+    {
+      "table": "comp.co_filedate",
+      "accessible": true,
+      "rows_returned": 1
+    },
+    {
+      "table": "comp.funda",
+      "accessible": true,
+      "rows_returned": 1
+    },
+    {
+      "table": "comp.fundq",
+      "accessible": true,
+      "rows_returned": 1
+    },
+    {
+      "table": "comp.sec_shortint",
+      "accessible": true,
+      "rows_returned": 1
+    },
+    {
+      "table": "comp_na_daily_all.co_filedate",
+      "accessible": true,
+      "rows_returned": 1
+    },
+    {
+      "table": "comp_na_daily_all.funda",
+      "accessible": true,
+      "rows_returned": 1
+    },
+    {
+      "table": "comp_na_daily_all.fundq",
+      "accessible": true,
+      "rows_returned": 1
+    },
+    {
+      "table": "comp_na_daily_all.sec_shortint",
+      "accessible": true,
+      "rows_returned": 1
+    },
+    {
+      "table": "comp_snapshot.chars",
+      "accessible": false,
+      "error_type": "InsufficientPrivilege",
+      "sqlstate": "42501",
+      "error": "permission denied for schema comp_snapshot"
+    },
+    {
+      "table": "comp_snapshot.cs_items",
+      "accessible": false,
+      "error_type": "InsufficientPrivilege",
+      "sqlstate": "42501",
+      "error": "permission denied for schema comp_snapshot"
+    },
+    {
+      "table": "compsnap.chars",
+      "accessible": false,
+      "error_type": "InsufficientPrivilege",
+      "sqlstate": "42501",
+      "error": "permission denied for schema comp_snapshot"
+    },
+    {
+      "table": "compsnap.cs_items",
+      "accessible": false,
+      "error_type": "InsufficientPrivilege",
+      "sqlstate": "42501",
+      "error": "permission denied for schema comp_snapshot"
+    },
+    {
+      "table": "compsamp_snapshot.chars",
+      "accessible": true,
+      "rows_returned": 0
+    },
+    {
+      "table": "compsamp_snapshot.wrds_cs_names",
+      "accessible": true,
+      "rows_returned": 1
+    },
+    {
+      "table": "comp_pit.pit_hist_date_tablecdn",
+      "accessible": false,
+      "error_type": "InsufficientPrivilege",
+      "sqlstate": "42501",
+      "error": "permission denied for schema comp_pit"
+    },
+    {
+      "table": "comp_pit.pit_hist_date_tableus",
+      "accessible": false,
+      "error_type": "InsufficientPrivilege",
+      "sqlstate": "42501",
+      "error": "permission denied for schema comp_pit"
+    },
+    {
+      "table": "comp_snapshot.wrds_csa_pit",
+      "accessible": false,
+      "error_type": "InsufficientPrivilege",
+      "sqlstate": "42501",
+      "error": "permission denied for schema comp_snapshot"
+    },
+    {
+      "table": "comp_snapshot.wrds_csq_pit",
+      "accessible": false,
+      "error_type": "InsufficientPrivilege",
+      "sqlstate": "42501",
+      "error": "permission denied for schema comp_snapshot"
+    },
+    {
+      "table": "compsnap.wrds_csa_pit",
+      "accessible": false,
+      "error_type": "InsufficientPrivilege",
+      "sqlstate": "42501",
+      "error": "permission denied for schema comp_snapshot"
+    },
+    {
+      "table": "compsnap.wrds_csq_pit",
+      "accessible": false,
+      "error_type": "InsufficientPrivilege",
+      "sqlstate": "42501",
+      "error": "permission denied for schema comp_snapshot"
+    },
+    {
+      "table": "compsamp_snapshot.wrds_csa_pit",
+      "accessible": true,
+      "rows_returned": 1
+    },
+    {
+      "table": "compsamp_snapshot.wrds_csq_pit",
+      "accessible": true,
+      "rows_returned": 1
+    }
+  ],
+  "status": "catalog_and_select_probes_completed",
+  "completed_at_utc": "2026-11-17T12:35:44.535886+00:00"
+}

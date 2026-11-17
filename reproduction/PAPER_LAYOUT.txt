@@ -1,0 +1,803 @@
+Uncertainty-Aware Lookahead Factor Models for Quantitative Investing
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../../.replication-local/artifacts/lfm-quant/evidence/paper.pdf
+Source SHA-256: 8f88f25359c9c5a4654c2a9350a2f0c6bc991bd3b4152e79610fafe344b165de
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Note: Shares the Lookahead paper; this folder contains its reproduction adapter. Separate supplemental PDF remains in the original evidence directory.
+Layout extraction: spacing retains approximate PDF columns and tables.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+       Uncertainty-Aware Lookahead Factor Models for Quantitative Investing
+
+
+                                  Lakshay Chauhan 1 John Alberg 1 Zachary C. Lipton 2 3
+
+
+                           Abstract                               2016; McGroarty et al., 2018). On the scale of days, price
+                                                                  ﬂuctuation might be driven by the news cycle (Boudoukh
+       On a periodic basis, publicly traded companies
+                                                                  et al., 2013; Rothenstein et al., 2011; Schumaker & Maida,
+       report fundamentals, ﬁnancial data including rev-
+                                                                  2018; Cruz et al., 2013), reports of sales numbers, or product
+       enue, earnings, debt, among others. Quantita-
+                                                                  launches (Koku et al., 1997). In the long run, we expect a
+       tive ﬁnance research has identiﬁed several factors,
+                                                                  company’s market value to reﬂect its ﬁnancial performance
+       functions of the reported data that historically cor-
+                                                                  as captured in fundamental data, i.e., reported ﬁnancial
+       relate with stock market performance. In this
+                                                                  information such as income, revenue, assets, dividends, and
+       paper, we ﬁrst show through simulation that if we
+                                                                  debt (Goedhart et al., 2005b; Dimson et al., 2017; Goedhart
+       could select stocks via factors calculated on fu-
+                                                                  et al., 2005a). One popular strategy called value investing is
+       ture fundamentals (via oracle), that our portfolios
+                                                                  predicated on the idea that the best features for predicting the
+       would far outperform standard factor models. Mo-
+                                                                  long-term returns on shares in a company are the currently-
+       tivated by this insight, we train deep nets to fore-
+                                                                  available fundamental data.
+       cast future fundamentals from a trailing 5-year his-
+       tory. We propose lookahead factor models which             In a typical quantitative (systematic) investing strategy, we
+       plug these predicted future fundamentals into tra-         sort the set of available stocks according to some factor and
+       ditional factors. Finally, we incorporate uncer-           construct investment portfolios comprised of those stocks
+       tainty estimates from both neural heteroscedastic          which score highest (Dimson et al., 2017). Many quanti-
+       regression and a dropout-based heuristic, improv-          tative investors engineer value factors, typically a ratio of
+       ing performance by adjusting our portfolios to             some fundamental to the stock’s price. Examples include
+       avert risk. In retrospective analysis, we leverage         book-to-market (the ratio of book value to market value)
+       an industry-grade portfolio simulator (backtester)         and EBIT /EV (earnings before interest and taxes normal-
+       to show simultaneous improvement in annualized             ized by enterprise value). Stocks with high value factor
+       return and Sharpe ratio. Speciﬁcally, the simu-            ratios are called value stocks and those with low ratios are
+       lated annualized return for the uncertainty-aware          called growth stocks—presumably the high prices of these
+       model is 17.7% (vs 14.0% for a standard factor             stocks is predicated on anticipated growth in the future. A
+       model) and the Sharpe ratio is 0.84 (vs 0.52).             basic premise of value investors is that the market tends
+                                                                  to systematically over-value growth stocks. Academic re-
+                                                                  searchers have demonstrated (empirically) that portfolios
+1. Introduction                                                   that upweight value stocks have historically outperformed
+                                                                  portfolios that upweight growth stocks over the long run
+Public stock markets provide a venue for buying and selling
+                                                                  (Pätäri & Leivo, 2017; Fama & French, 1992).
+shares, which represent fractional ownership of individual
+companies. Prices ﬂuctuate frequently, with the drivers of        In this paper, we propose an investment strategy that con-
+price movement occurring on multiple time scales. In the          structs portfolios of stocks based on predicted future funda-
+short run, price movements might reﬂect the dynamics of           mentals. Rather than comparing current fundamentals to the
+order execution (Barclay & Warner, 1993; Bessembinder,            current price, our approach is based on the intuition that the
+2003) and the behavior of high frequency traders (Menkveld,       long-term success of an investment depends on how well the
+   1
+                                                                  stock is currently priced relative to future fundamentals. To
+    Euclidean Technologies, Seattle, USA 2 Carnegie Mellon Uni-   verify this hypothesis, we run backtests with a clairvoyant
+versity, Pittsburgh, USA 3 Amazon AI, Seattle, USA. Correspon-
+dence to: Lakshay Chauhan <lakshay.chauhan@euclidean.com>,        model (oracle) that can access future ﬁnancial reports.
+John Alberg <john.alberg@euclidean.com>, Zachary Lipton <zlip-    Our experiments show that from Jan 1, 2000 to Dec 31, 2019,
+ton@cmu.edu>.
+                                                                  a clairvoyant EBIT /EV factor model that perfectly fore-
+Proceedings of the 37 th International Conference on Machine      casts future EBIT (12 months out) would have achieved
+Learning, Online, PMLR 119, 2020. Copyright 2020 by the au-       a 40% compound annualized return (Figure 2). That com-
+thor(s).
+
+=== PDF PAGE 2 ===
+                                                                                         Uncertainty-Aware Lookahead Factor Models
+
+                                                                           Best Buy                                                             Johnson & Johnson
+                                                 Actual Earnings
+                                                 Forecast Earnings
+
+
+
+
+                                        2000      2001          2002       2003      2004       2005     2006       2007   2000     2002        2004     2006          2008     2010      2012
+
+                                                                              Ebay                                                                       Kroger
+
+
+
+
+                                        2005     2006     2007         2008   2009       2010    2011        2012   2013   2000   2002   2004    2006   2008    2010     2012   2014   2016   2018
+
+
+
+Figure 1. Actual earnings (orange) plotted against deep LSTM forecasts (blue) and uncertainty bounds for selected public companies Best
+Buy, Johnson & Johnson, Ebay, and Kroger over different time periods. The LSTM was trained on data from Jan 1, 1970 to Jan 1, 2000.
+
+
+                                                                                                                            eroscedasticity, with noise levels varying across companies
+                                   60          Book/Market
+                                                                                                                            and time periods. For example, a mature consumer goods
+                                               Sales/EV
+                                                                                                                            company may have less uncertainty in its future earnings
+
+
+
+
+     Simulated Annualized Return
+                                               FCF/EV
+                                   50
+                                               EBIT/EV                                                                      than a rapidly growing technology company. Moreover, the
+                                               S&P 500 TR Over Same Period
+                                   40                                                                                       predictability of earnings might vary across time periods.
+                                   30
+                                                                                                                            For example we expect the task to be more difﬁcult in the
+                                                                                                                            wake of the 2008 ﬁnancial crisis than in a comparatively
+                                   20
+                                                                                                                            stable period. In Figure 1, we plot the forecast distribu-
+                                   10                                                                                       tion of future earnings against actual earnings for several
+                                    0
+                                                                                                                            companies in different time periods.
+                                          0        3        6          9      12      24        36      48
+                                                                Months of Clairvoyance
+                                                                                                                            Classical portfolio allocation theory dictates that both the
+                                                                                                                            expectation and variance of returns are essential for mak-
+Figure 2. Annualized return for various factor models for different                                                         ing decisions. Therefore, in addition to training DNNs to
+degrees of clairvoyance.                                                                                                    generate point forecasts to be plugged into our factor mod-
+                                                                                                                            els, we also consider methods to forecast the variance of
+                                                                                                                            the predicted future earnings. Our uncertainty estimates
+pares to a 14.0% annualized return over the same period for                                                                 are derived both via neural heteroscedastic regression (Ng
+a standard factor model using current instead of future earn-                                                               et al., 2017) and a popular dropout-based heuristic (Gal,
+ings. While future EBIT (or earnings) are unknowable,                                                                       2016). To construct our uncertainty-aware factor, we scale
+we hypothesize that some of these gains might be realized                                                                   the earnings forecast in inverse proportion to the modeled
+by plugging in forecasted future earnings. To test this hy-                                                                 earnings variance. We show that investment portfolios con-
+pothesis, we investigate the use of deep neural networks                                                                    structed using this factor exhibit less volatility and enjoy
+(DNNs), speciﬁcally Multi-Layer Perceptrons (MLPs) and                                                                      higher returns. Simulations demonstrate that investing with
+Long Short-Term Memory (LSTM) (Hochreiter & Schmid-                                                                         LFMs based on the risk-adjusted forecast earnings achieves
+huber, 1997) Recurrent Neural Networks (RNNs) to predict                                                                    a Compound Annualized Return (CAR) of 17.7%, vs 14.0%
+future earnings based on trailing time series of 5 years of                                                                 for a standard factor model and a Sharpe ratio .84 vs .52.
+fundamental data. We denote these models as Lookahead
+Factor Models (LFMs).
+                                                                                                                            2. Related Work
+Forecasting future fundamentals is a difﬁcult task compli-
+cated by substantial uncertainty over both model parame-                                                                    Deep neural network models have proven useful for a di-
+ters and inherent noise. Notably, the problem exhibits het-                                                                 verse set of sequence learning tasks, including machine
+
+=== PDF PAGE 3 ===
+                                        Uncertainty-Aware Lookahead Factor Models
+
+translation (Sutskever et al., 2014; Bahdanau et al., 2015),     derivation of predictive distributions and thus estimates of
+video captioning (Mao et al., 2015; Vinyals et al., 2015),       epistemic uncertainty. In one approach to training BNNs,
+video recognition (Donahue et al., 2015; Tripathi et al.,        Blundell et al. (2015) employs variational inference, choos-
+2016), and time series modeling (Lipton et al., 2016a;b; Che     ing a variational distribution consisting of independent
+et al., 2018).                                                   Gaussians—thus each weight is characterized by two pa-
+                                                                 rameters. Then, employing the reparamterization trick, they
+Deep networks for stock market forecasting A number              optimize the variational parameters by gradient descent in
+of recent papers consider deep learning approaches for pre-      a scheme they call Bayes-by-backprop. In this paper, we
+dicting stock market performance. Batres-Estrada (12015)         follow the related work of Gal & Ghahramani (2015b); Gal
+use MLPs for stock market prediction and Qiu & Song              et al. (2017); Gal (2016), who propose Monte Carlo dropout
+(2016) use neural networks to predict the direction of a         (MC-dropout), a heuristic that obtains uncertainty estimates
+broad market index using technical indicators such as price.     by using dropout during prediction. Their approach is based
+Ding et al. (2015) use recursive tensor nets to extract events   on insights from analysis establishing a correspondence be-
+from CNN news reports and use convolutional neural nets          tween stochastically-regularized neural networks and deep
+to predict future performance from a sequence of extracted       Gaussian processes.
+events. Several researchers have considered deep learning
+for stock-related predictions (Chen et al., 2015; Wanjawa        3. Data
+& Muchemi, 2014; Jia, 2016), however, in all cases, the
+empirical studies are limited to few stocks or short time        In this research, we consider all stocks that were publicly
+periods. To our knowledge, an early version of this paper        traded on the NYSE, NASDAQ, or AMEX exchanges for at
+was the ﬁrst public work to apply modern deep networks to        least 12 consecutive months between Jan 1, 1970, and Dec
+large-scale time series of ﬁnancial fundamentals data and        31, 2019. From this list, we exclude non-US-based compa-
+the ﬁrst to introduce lookahead factor models.                   nies, ﬁnancial sector companies, and any company with an
+                                                                 inﬂation-adjusted market capitalization value below 100 mil-
+Uncertainty Estimation Approaches for estimating un-             lion dollars in January 1, 2010 terms. The ﬁnal list contains
+certainty are differentiated both according to what notion       12, 415 stocks. Our features consist of reported ﬁnancial
+of uncertainty they address and by the methods they em-          information as archived by the Compustat North America
+ploy. For example, some methods address uncertainty in the       and Compustat Snapshot databases. Because reported infor-
+model parameters (Gal & Ghahramani, 2015b;a; Gal et al.,         mation arrives intermittently throughout a ﬁnancial period,
+2017; Blundell, 2017; Heskes, 1997; Nix & Weigend, 1994)         we discretize the raw data to a monthly time step. Because
+while others use neural networks to directly output predic-      we are interested in long-term predictions and in order to
+tion intervals (Pearce et al., 2018; Su et al., 2018; Khosravi   smooth out seasonality in the data, at every month, we feed
+et al., 2011). Prediction uncertainty can be decoupled into      a time-series of inputs with a one year gap between time
+model uncertainty (epistemic uncertainty) and the inherent       steps and predict the earnings one year into the future from
+noise due to conditional variability in the label (aleatoric     the last time step. For example, one trajectory in our dataset
+uncertainty) (Der Kiureghian & Ditlevsen, 2009; Kendall          might consist of data for a given company from (Jan 2000,
+& Gal, 2017). Epistemic uncertainty can arise from uncer-        Jan 2001, ..., Jan 2007), which are used to forecasts earnings
+tainty over the value of the model parameters and/or model       for Jan 2008. For the same company, we will also have
+structure. In contrast, aleatoric uncertainty owes to the in-    another trajectory consisting of data from (Feb 2000, Feb
+herently stochastic nature of the data. Note that yet other      2001, ..., Feb 2007) that are used to forecast earnings for
+sources exist but are unaccounted for in this dichotomy, e.g.,   Feb 2008. Although smaller forecast periods such as 3 or
+uncertainty due to distribution shift.                           6 months may be easier to forecast, we use a forecast pe-
+                                                                 riod of 12 months as it provides the best trade-off between
+Assuming heteroscedasticity, i.e., that the noise is data de-    model accuracy and portfolio performance. We discuss this
+pendent, Nix & Weigend (1994); Heskes (1997) train two           trade-off in Figure 4 in Section 6.
+neural networks, one to estimate the target value and an-
+other to estimate the predictive variance. More recently,        Three classes of time-series data are used at each time-step
+Ng et al. (2017) used a single network to forecast both the      t: fundamental features, momentum features, and auxiliary
+mean and the conditional variance when predicting surgery        features. For fundamental features, income statement and
+durations. Nix & Weigend (1994); Blundell (2017) use the         cash ﬂow items are cumulative trailing twelve months, de-
+bootstrap method where multiple networks are trained on          noted TTM, and balance sheet items are of the most recent
+random subsets of the data to obtain uncertainty estimates.      quarter, denoted MRQ. TTM items include revenue; cost of
+                                                                 goods sold; selling, general & admin expense; earnings be-
+Bayesian Neural Networks (BNN), learn an approximate             fore interest and taxes or EBIT ; and free cash ﬂow, deﬁned
+posterior distribution over model parameters, enabling the
+
+=== PDF PAGE 4 ===
+                                         Uncertainty-Aware Lookahead Factor Models
+
+as operating cash ﬂow minus capital expenditures. MRQ             objective function weights. We also use this set to determine
+items include cash and cash equivalents; receivables; inven-      early-stopping criteria. When training, we record the vali-
+tories; other current assets; property plant and equipment;       dation set accuracy after each epoch, saving the model for
+other assets; debt in current liabilities; accounts payable;      each best score achieved. We halt the training if the model
+taxes payable; other current liabilities; shareholders’ equity;   doesn’t improve for 25 epochs and select the model with
+total assets; and total liabilities. For all features, we deal    best validation set performance. In addition to evaluating
+with missing values by ﬁlling forward previously observed         how well our model generalizes on the in-sample holdout
+values, following the methods of Lipton et al. (2016a). Ad-       set, we evaluate whether the model successfully forecasts
+ditionally, we incorporate 4 momentum features, which indi-       fundamentals in the out-of-sample period.
+cate the price movement of the stock over the previous 1, 3,
+                                                                  Financial fundamental data is inherently temporal. Our
+6, and 9 months, respectively. So that our model picks up
+                                                                  methods apply LSTM and MLP models to forecast a com-
+on relative changes and does not focus overly on trends in
+                                                                  pany’s future ﬁnancial fundamental data from past funda-
+speciﬁc time periods, we use the percentile among all stocks
+                                                                  mental data. We choose each input to consist of a ﬁve
+as a feature (vs absolute numbers).
+                                                                  year window of data with an annual time step. Companies
+Finally, we consider a set of auxiliary features that include     with less than ﬁve years of historical fundamentals are ex-
+a company’s short interest (% of a company’s outstanding          cluded from the training and testing set. As output, we
+shares that are held short); a company’s industry group as        are interested in predicting EBIT (earnings before interest
+deﬁned by Standard and Poor’s GICS code (encoded as a             and taxes) twelve months into the future because forecasted
+27 element one-hot vector with 26 industry groups plus one        EBIT is required to compute the factor that drives our
+for indicating an unknown industry classiﬁcation); and the        investment models.
+company’s size category of micro-cap, small-cap, mid-cap,
+                                                                  Previously, we tried to predict relative returns directly (us-
+and large-cap (encoded as a one-hot vector).
+                                                                  ing price data) with an LSTM model. While the LSTM
+There can be wide differences in the absolute value of the        outperformed other approaches on the in-sample data, it
+fundamental features described above when compared be-            failed to meaningfully outperform a linear model on the
+tween companies and across time. For example, Exxon               out-of-sample data. Given only returns data as targets, the
+Mobil’s annual revenue for ﬁscal 2018 was $279 billion            LSTM easily overﬁt the training data while failing to im-
+USD whereas Zoom Video Communications had revenue                 prove performance on in-sample validation. While the price
+of $330 million USD for the same period. Intuitively, these       movement of stocks is known to be extremely noisy, we
+statistics are more meaningful when scaled by some mea-           suspected that temporal relationships among the fundamen-
+sure of a company’s size. In preprocessing, we scale all          tal data may exhibit a larger signal to noise ratio, and this
+fundamental features in a given time series by the market         intuition motivates us to focus on forecasting future funda-
+capitalization in the last input time-step of the series. We      mentals.
+scale all time steps by the same value so that the DNN can
+                                                                  Although we only need an estimate of the fundamental
+assess the relative change in fundamental values between
+                                                                  feature EBIT in order to construct our factor, we forecast all
+time steps. While other notions of size are used, such as
+                                                                  17 fundamental features. One key beneﬁt of our approach is
+enterprise value and book equity, we choose to avoid these
+                                                                  that by doing multi-task learning (Evgeniou & Pontil, 2004;
+measures because they can, although rarely, take negative
+                                                                  Ruder, 2017), predicting all 17 fundamentals, we provide
+values. We then further scale the features so that they each
+                                                                  the model with considerable training signal so that it is less
+individually have zero mean and unit standard deviation.
+                                                                  susceptible to overﬁtting. We also predict the uncertainty
+                                                                  (or risk) for those targets (described in detail in the next
+4. Methods                                                        section). Since we care more about EBIT over other outputs,
+                                                                  we up-weight it in the loss (introducing a hyperparameter
+4.1. Forecasting Model
+                                                                  α1 ). For LSTMs, the prediction at the ﬁnal time step is
+We divide the timeline into in-sample and out-of-sample pe-       more important and hence we use hyperparameter α2 to
+riods. Data in the in-sample period range from Jan 1, 1970        up-weight the loss for the ﬁnal time step.
+to Dec 31, 1999 (1.2M data points), while out-of-sample
+                                                                  During experimentation we examined several hyperparame-
+test data range from Jan 1, 2000, to Dec 31, 2019 (1M data
+                                                                  ters. We clip the gradients, rescaling to a maximum L2 norm
+points). Since we do not want to overﬁt the ﬁnite training
+                                                                  to avoid exploding gradients. We constrain the maximum
+sample, we hold out a validation set by randomly select-
+                                                                  norm of the vector of weights incoming to each hidden unit.
+ing 30% of the stocks from the in-sample period. We use
+                                                                  We also experiment with L2 regularization and dropout for
+this in-sample validation set to tune the hyperparameters
+                                                                  further regularization. Our MLPs use ReLu activation func-
+including the initial learning rate, model architecture, and
+                                                                  tions in all hidden layers. Our models tend to be sensitive to
+
+=== PDF PAGE 5 ===
+                                          Uncertainty-Aware Lookahead Factor Models
+
+the weight initialization hyperparameters. Based on valida-
+tion performance, we settled on GlorotUniform Intialization                         n
+                                                                                                            −(yi − fθ (xi ))2
+                                                                                                                               
+                                                                       MLE
+                                                                                    Y         1
+(Glorot & Bengio, 2010), which made results more consis-           θ         = max                    exp
+                                                                                                                2gθ (xi )2
+                                                                                       p
+tent across runs. We also use batch normalization (Ioffe &                      θ
+                                                                                   i=1
+                                                                                         2πgθ (xi )2
+Szegedy, 2015). Each model is an ensemble of 10 models                              n 
+                                                                                                        (yi − fθ (xi ))2
+                                                                                   X                                     
+trained with a different random seed. For LSTM models,                       = min      log(gθ (xi )) +                    .
+                                                                                θ                          2gθ (xi )2
+in addition to the hyperparameters discussed above, we use                         i=1
+recurrent dropout to randomly mask the recurrent units.
+                                                                  In the above loss function, the ﬁrst term penalizes large
+We use a genetic algorithm (Goldberg, 1989) for hyperpa-          uncertainty in the model. This allows the DNN to minimize
+rameter optimization. The optimizer AdaDelta (D. Zeiler,          the prediction interval width and provide meaningful bounds.
+2012) is used with an initial learning rate of 0.01. It took      The second term penalizes an over-conﬁdent model (low
+150 epochs to train an ensemble on a machine with 16 Intel        uncertainty) with high error focusing on model accuracy.
+Xeon E5 cores and 1 Nvidia P100 GPU. The ﬁnal hyperpa-
+rameters as a result of the optimization process are presented    To estimate the epistemic uncertainty, we train the DNN
+in Table 1.                                                       model using dropout and leverage a heuristic by Gal &
+                                                                  Ghahramani (2015b) that applies dropout during predic-
+                                                                  tion. Model variance is given by the variance in the out-
+                                                                  puts across 10 Monte Carlo draws of the dropout mask
+                                                                  where the dropout rate is 0.25. The number 10 is selected
+            Table 1. MLP, LSTM Hyperparameters
+                                                                  based on the maximum number of parallel executions that
+            Hyperparameter         MLP      LSTM                  could be launched on the computing infrastructure. Hence
+            Batch Size              256     256                   the total variance is given by the sum of model variance
+            Hidden Units           2048     512                   (variance in the predictions) and noise variance (predicted
+            Hidden Layers            1        1                   variance). In summary, the ﬁnal model is an ensemble of
+            Dropout                0.25      0.0                  10 equally-weighed DNN models with different random
+            Recurrent Dropout       n/a     0.25                  seeds for dropout. Variance is estimated as a sum of the
+            Max Gradient Norm        1        1                   variance across dropout forward passes and the estimated
+            Max Norm                 3        3                   input-conditioned noise gθ (x).
+            α1                     0.75      0.5
+            α2                      n/a      0.7                  4.3. Quantitative Factor Models
+                                                                  Typical quantitative investment strategies use factors such
+                                                                  as EBIT /EV to construct portfolios by investing in the
+                                                                  stocks that score highest. Whereas a standard Quantitative
+                                                                  Factor Model (QFM) uses current EBIT , we are inter-
+                                                                  ested in comparing such investment strategies with strate-
+4.2. Uncertainty Quantiﬁcation                                    gies that use forecast EBIT . We construct a look-ahead
+                                                                  factor EBITm /EV for each model m, where EBITm is
+We model the targets as conditionally Gaussian distributed
+                                                                  the model’s forecast EBIT . Hence there is a LFM for auto-
+about a mean fθ (x), which is the predicted output. While
+                                                                  regression (LFM Auto Reg), multivariate linear model point
+standard least squares regression relies on the assumption
+                                                                  forecast (LFM Linear), multi-layer perceptron point forecast
+that the noise level is independent of the inputs x, we jointly
+                                                                  (LFM MLP), LSTM point forecast (LFM LSTM), variance
+model the conditional mean and variance, denoting our
+                                                                  scaled MLP forecast (LFM UQ-MLP), and variance scaled
+model variance by gθ (x). Following Ng et al. (2017), we
+                                                                  LSTM forecast (LFM UQ-LSTM).
+model this heteroscedasticity by emitting two outputs for
+each target variable in the ﬁnal layer: one set of outputs        Variance scaled models (UQ-MLP, UQ-LSTM) incorporate
+corresponds to the predicted means of the target values fθ (x)    uncertainty over the forecasted EBIT to reduce the risk
+and the second half predicts the variance of the output values    of the portfolio. Two companies with the same EBIT
+gθ (x). We use the softplus activation function for outputs       might have very different levels of uncertainty. The one
+corresponding to the variance gθ (x) to ensure non-negativity.    with higher uncertainty around EBIT (higher variance) is
+The predictors share representations (and thus parameters         more risky for investors. Such a company will not only
+for all representation layers) and are differentiated only at     increase the portfolio risk but also decrease the expected
+the output layer. To learn the network parameters θ, we train     returns due to higher forecast error. Hence, we scale the
+the neural network with the maximum likelihood objective          EBIT in inverse proportion to the total variance for the
+as follows:                                                       LFM UQ models. A portfolio created with the risk-adjusted
+
+=== PDF PAGE 6 ===
+                                              Uncertainty-Aware Lookahead Factor Models
+
+                                                                         factored in as $0.01 per share, plus an additional slippage
+                                                                         factor that increases as a square of the simulation’s volume
+                                                                         participation in a security. Speciﬁcally, if participating at
+                                                                         the maximum 10% of monthly volume, the simulation buys
+                                                                         at 1% more than the average market price and sells at 1%
+                                                                         less than the average market price. This form of slippage is
+                                                                         common in portfolio simulations as a way of modeling the
+                                                                         fact that as an investor’s volume participation increases in a
+                                                                         stock, it has a negative impact on the price of the stock for
+                                                                         the investor.
+                                                                         Monthly return values rt are determined by calculating the
+                                                                         percentage change in total portfolio value between the begin-
+                                                                         ning and end of each simulated month. From the sequence
+                                                                         of monthly portfolio return values and knowledge of the
+Figure 3. Simulated returns of a quantitative (systematic) strategy      annualized risk free rates of return Rf over the same period,
+vs. the returns generated from live trading of the same strategy over    we compute standard portfolio performance statistics such
+the period Jan 1, 2009 to Dec 31, 2018. The shaded band represents       as the Compound Annualized Return (CAR) and the Sharpe
+the distribution of simulated returns generated by varying the initial   ratio. These are deﬁned as follows:
+state of the portfolio at t0 .                                                                  h T         i12/T
+                                                                                                 Y
+                                                                                       CAR =        (rt + 1)      −1               (1)
+                                                                                                  t
+look-ahead factor EBIT
+                     σ 2 EV is expected to have lower aver-                                               CAR − Rf
+age volatility of earnings than a portfolio created using the                           Sharpe Ratio =      √      ,               (2)
+EBIT                                                                                                          12σ
+  EV factor.
+                                                                         where σ is the standard deviation of monthly portfolio re-
+5. Portfolio Simulation                                                  turns rt . The Sharpe ratio is commonly used as a measure
+                                                                         of risk adjusted portfolio performance.
+While we train and evaluate our models using the negative
+                                                                         Due to how a portfolio is initially constructed and the timing
+log likelihood objective, for our purposes, this metric is
+                                                                         of cash ﬂows, two portfolio managers can get different
+merely a surrogate measure of performance. What investors
+                                                                         investment results over the same period using the same
+actually care about is a portfolio’s performance in terms of
+                                                                         quantitative model. To account for this variation, we run 300
+both return and risk (volatility) over some speciﬁed time
+                                                                         portfolio simulations for each model where each portfolio
+period. To establish a correspondence between predictive
+                                                                         is initialized from a randomly chosen starting state. The
+performance and investment returns, we employ an industry-
+                                                                         portfolio statistics, such as CAR and Sharpe ratio, that are
+grade investment simulator.
+                                                                         presented in this paper are the mean of statistics generated
+The goal of the simulator is to recreate as accurately as possi-         by the 300 simulations.
+ble the investment returns an investor would have achieved
+                                                                         To illustrate the accuracy of the simulator, we compare the
+had they been using the model over a speciﬁc period of
+                                                                         returns generated by the simulator with the actual returns
+time and within a speciﬁc universe of stocks. To this end,
+                                                                         generated by a quantitative strategy that was executed be-
+the simulation must incorporate transaction costs, liquidity
+                                                                         tween Jan 1, 2009 and Dec 31, 2018 (Figure 3). In this
+constraints, bid-ask spreads, and other types of friction that
+                                                                         case, it can be clearly seen that the distribution of returns
+exist in the management of a real-life portfolio of stocks.
+                                                                         generated by the 300 portfolios with different random initial
+The simulation algorithm works as follows: We construct                  starting states almost always encompassed the actual returns
+portfolios by ranking all stocks according to the factor of              of the quantitative strategy. Furthermore, the mid-point of
+interest and invest equal amounts of capital into the top 50             the simulated returns tracks the actual returns very closely.
+stocks, re-balancing monthly. We limit the number of shares
+of a security bought or sold in a month to no more than 10%              6. Experiments
+of the monthly volume for a security. Simulated prices for
+stock purchases and sales are based on the volume-weighted               Recall that in Section 1, we demonstrated that if we could
+daily closing price of the security during the ﬁrst 10 trading           forecast EBIT perfectly (the clairvoyant model), the port-
+days of each month. If a stock paid a dividend during the                folios built using the lookahead factor would far outperform
+period it was held, the dividend was credited to the simulated           standard factor models. Of course, perfect knowledge of
+fund in proportion to the shares held. Transaction costs are             future EBIT is impossible, but we speculate that by fore-
+
+=== PDF PAGE 7 ===
+                                                                         Uncertainty-Aware Lookahead Factor Models
+
+
+                                 Out of Sample MSE
+                                                                                                                                        18.0%
+                                 DNN Annualized Return
+
+
+
+
+                                                                                           DNN Annualized Return
+                       0.6                                                                                                              17.0%
+                                                                                       17.0%
+
+
+
+
+   Out of Sample MSE
+                                                                                                                    Annualized Return
+                                                                                                                                        16.0%
+                       0.5
+                                                                                       16.0%
+                                                                                                                                        15.0%
+                       0.4
+                                                                                                                                        14.0%
+                                                                                       15.0%
+
+                       0.3                                                                                                              13.0%
+
+                                                                                       14.0%
+                                                                                                                                        12.0%
+                       0.2
+                             3          6         9      12     15      18        24                                                    11.0%
+                                                  Forecast Period (months)                                                                                          0.5       0.6      0.7      0.8        0.9     1.0
+                                                                                                                                                                                     Out of Sample MSE
+
+Figure 4. MSE (red) of the out-of-sample period 2000-2019 in-
+creases with forecast period length. The forecasting model be-                                                     Figure 5. Correspondence between the LSTM model accuracy and
+comes less accurate the further we go out in the future. Simulated                                                 portfolio returns. Bottom-rightmost point is evaluated after the
+returns of the LSTM model (blue) increase with forecast period up                                                  ﬁrst epoch. As training progresses, points in the graph move
+to 12 months and then start decreasing.                                                                            towards the upper left corner. Portfolio returns increase as the
+                                                                                                                   model accuracy improves (out-of-sample MSE decreases).
+
+
+casting future EBIT we can also realize some of these
+gains, outperforming standard factor models. The question
+arises as to how far into the future to forecast. Clearly fore-                                                                                                           QFM
+                                                                                                                                                              4
+                                                                                                                                                                          QFM Mean
+casting becomes more difﬁcult the further into the future
+                                                                                                                                                                          MLP
+
+
+
+
+                                                                                                                                         Mean Squared Error
+we set the target. In Figure 4, we plot the out-of-sample                                                                                                                 MLP Mean
+                                                                                                                                                              3
+MSE for different forecast periods. The further we try to
+predict, the less accurate our model becomes. However, at
+the same time, the clairvoyance study (Figure 2) tells us that                                                                                                2
+
+the value of a forecast increases monotonically as we see
+further into the future. In our experiments, the best trade-off                                                                                               1
+is achieved with a forecasting period of 12 months as shown
+by the blue curve in Figure 4. Simulated returns increase as
+                                                                                                                                                              0
+the forecasting window lengthens up until 12 months after                                                                                                         2000      2004      2008          2012    2016     2020
+                                                                                                                                                                                             Time
+which the returns start to fall.
+Motivated by our study with clairvoyant factor models, we
+                                                                                                                   Figure 6. MSE over out-of-sample time period for MLP (red) and
+ﬁrst establish a correspondence between the accuracy of                                                            QFM or Naive predictor (blue)
+DNN forecasts and portfolio returns. While training the
+LSTM model, we checkpoint our model’s parameters after
+each epoch. These models have sequentially decreasing
+mean squared error. Once training is complete, for each                                                            where the predicted fundamentals at time t are assumed to
+saved model we generate EBIT forecasts for the out-of-                                                             be the same as the fundamentals at t – 12. In nearly all
+sample period. We then use the forecasts to generate cor-                                                          the months, however turbulent the market, neural networks
+responding portfolio returns by simulating the portfolios                                                          outperform the naive predictor (Figure 6).
+constructed using the forecast EBIT /EV factors. As a
+                                                                                                                   Table 2 demonstrates a clear advantage of using look-ahead
+result, we have a sequence of M SE and portfolio return
+                                                                                                                   factor models or LFMs over standard QFM. MLP and LSTM
+pairs, allowing us to evaluate the correspondence between
+                                                                                                                   LFMs achieve higher model accuracy than linear or auto-
+decreasing M SE and portfolio return.
+                                                                                                                   regression models and thus yield better portfolio perfor-
+Figure 5 shows the relationship between increasing model                                                           mance. Figure 7 shows the cumulative return of all portfo-
+accuracy and improving portfolio returns. This experiment                                                          lios across the out-of-sample period.
+validates our hypothesis that returns are strongly dependent
+                                                                                                                   Investors not only care about return of a portfolio but also
+on the accuracy of the forecasting model.
+                                                                                                                   the risk undertaken as measured by volatility. Risk adjusted
+As a ﬁrst step in evaluating the forecast produced by the                                                          return or Sharpe ratio is meaningfully higher for LFM UQ
+neural networks, we compare the MSE of the predicted                                                               models which reduce the risk by scaling the EBIT forecast
+fundamentals on out-of-sample data with a naive predictor                                                          in inverse proportion to the total variance.
+
+=== PDF PAGE 8 ===
+                                                                     Uncertainty-Aware Lookahead Factor Models
+
+
+
+
+                                     3000              QFM
+                                                       LFM Auto Reg
+
+
+
+
+             Cumulative Return (%)
+                                     2500              LFM Linear
+                                                       LFM MLP-UQ
+                                     2000              LFM LSTM-UQ
+
+                                     1500
+
+                                     1000
+
+                                      500
+
+                                        0
+                                                              2004                       2009                  2014                      2019
+                                                                                           Time
+Figure 7. Cumulative return of different strategies for the out-of-sample period. LFM UQ-LSTM consistently outperforms throughout the
+entire period.
+
+
+
+Table 2. Out-of-sample performance for the 2000-2019 time period.                               Table 4. Cross section of monthly returns. The universe of stocks
+All factor models use EBIT/EV. QFM uses current EBIT while our                                  is ranked by the given factor and divided into 10 groups of equally
+proposed LFMs use predicted future EBIT.                                                        weighted stocks. The top decile (marked as High) is formed by the
+                                                                                                top 10% of the stocks ranked by the factor and the bottom decile
+     Strategy                                  MSE          CAR       Sharpe Ratio              (marked as Low) is formed by the bottom 10% of the rankings. H –
+                                                                                                L represents the factor premium.
+     S&P 500                                     n/a        6.05%         0.32
+     QFM                                        0.65        14.0%         0.52                                Decile     QFM     LSTM      UQ-LSTM
+     LFM Auto Reg                               0.58        14.2%         0.56
+     LFM Linear                                 0.52        15.5%         0.64                                 High 1    1.39     1.38          1.47
+     LFM MLP                                    0.48        16.1%         0.68                                      2    1.24     1.21          1.18
+     LFM LSTM                                   0.48        16.2%         0.68                                      3    1.15     1.12          1.13
+     LFM UQ-LSTM                                0.48        17.7%         0.84                                      4    1.16     1.08          1.04
+     LFM UQ-MLP                                 0.47        17.3%         0.83                                      5    1.06     1.14          0.97
+                                                                                                                    6    1.00     1.04          0.98
+                                                                                                                    7    0.95     0.94          0.98
+                                                                                                                    8    0.85     0.75          0.90
+Table 3. Pairwise t-statistic for Sharpe ratio. The models are or-                                                  9    0.78     0.79          0.74
+ganized in increasing order of Sharpe ratio values. t-statistic for                                           Low 10     0.73     0.57          0.64
+LFM UQ models are marked in bold if they are signiﬁcant with a
+signiﬁcance level of 0.05.                                                                                     H–L       0.66     0.80          0.83
+                                                                                                           t-statistic   2.31     2.78          3.57
+             Auto-Reg                       Linear   MLP     LSTM     UQ-LSTM    UQ-MLP
+
+  QFM                  0.76                 2.52     2.93     2.96     5.57       6.01
+  Auto Reg                                  1.89     2.31     2.36     5.10       5.57          run 300 simulations with varying initial start state for each
+  Linear                                             0.36     0.46     3.12       3.66          model. Additionally, we randomly restrict the universe of
+  MLP                                                         0.10     2.82       3.39          stocks to 70% of the total universe making the signiﬁcance
+  LSTM                                                                 2.66       3.22          test more robust to different portfolio requirements. We
+                                                                                                aggregate the monthly returns of these 300 simulations by
+                                                                                                taking the mean and perform bootstrap resampling on the
+We provide pairwise t-statistics for Sharpe ratio in Table 3,                                   monthly returns to generate the t-statistic values for Sharpe
+where improvement in Sharpe ratio for LFM UQ models                                             ratio shown in Table 3. The last two columns correspond-
+is statistically signiﬁcant. As discussed in Section 5, we                                      ing to LFM UQ models provide strong evidence that the
+
+=== PDF PAGE 9 ===
+                                        Uncertainty-Aware Lookahead Factor Models
+
+Sharpe ratio is signiﬁcantly improved by using the estimated      time series. Master’s thesis, Royal Institute of Technology,
+uncertainty to reduce risk.                                       Stockholm, Sweden, 12015.
+In addition to providing simulation results of concentrated     Bessembinder, H. Trade execution costs and market quality
+50 stock portfolios (Table 2), we also provide the cross          after decimalization. Journal of Financial and Quan-
+section of returns generated for the models LFM-LSTM and          titative Analysis, 38(4):747–777, 2003. doi: 10.2307/
+LFM UQ-LSTM on the out-of-sample period (Table 4). The            4126742.
+cross section is constructed by sorting stocks by each factor
+and splitting them into 10 equally sized portfolios ranging     Blundell, B. L. A. P. C. Simple and scalable predictive
+from the top decile (highest factor values) to the bottom         uncertainty estimation using deep ensembles. Advances
+decile (lowest factor values). The portfolios are rebalanced      in Neural Information Processing Systems (NeurIPS),
+quarterly according to the factor sorts. The cross section        2017.
+shows the efﬁcacy of the factor when looked at across the
+entire investment universe, where monthly returns increase      Blundell, C., Cornebise, J., Kavukcuoglu, K., and Wierstra,
+almost monotonically as we go from the bottom decile to the       D. Weight uncertainty in neural networks. International
+top decile. The difference between the top and bottom decile      Conference on Machine Learning (ICML), 2015.
+(high minus low or H −L) is called the factor premium. The
+t-statistic for the factor premium is signiﬁcant and greater    Boudoukh, J., Feldman, R., Kogan, S., and Richardson,
+for UQ-LSTM than LSTM and QFM (Table 4).                          M. Which news moves stock prices? a textual analysis.
+                                                                  Working Paper 18725, National Bureau of Economic Re-
+                                                                  search, January 2013. URL http://www.nber.org/
+7. Conclusion                                                     papers/w18725.
+In this paper, we demonstrate that by predicting fundamen-      Che, Z., Purushotham, S., Cho, K., Sontag, D., and Liu, Y.
+tal data with deep learning, we can construct lookahead           Recurrent neural networks for multivariate time series
+factor models that signiﬁcantly outperform equity portfolios      with missing values. Scientiﬁc reports, 8(1):1–12, 2018.
+based on traditional factors. Moreover, we achieve further
+gains by incorporating uncertainty estimates to avert risk.     Chen, K., Zhou, Y., and Dai, F. A lstm-based method for
+Retrospective analysis of portfolio performance with perfect      stock returns prediction: A case study of china stock
+earnings forecasts motivates this approach, demonstrating         market. In International Conference on Big Data (Big
+the superiority of LFM over standard factor approaches            Data). IEEE, 2015.
+for both absolute returns and risk adjusted returns. In fu-
+ture work, we will examine how well the DNN forecasts           Cruz, F. M. d., Gomes, M. Y. F. S. d., et al. The inﬂuence of
+compare to human analyst consensus forecasts and whether          rumors in the stock market: a case study with petrobras.
+DNN forecasts can be improved by the consensus forecast           Transinformação, 25(3):187–193, 2013.
+via an ensemble approach. Finally, observing that there is a
+great amount of unstructured textual data about companies,      D. Zeiler, M. Adadelta: An adaptive learning rate method.
+such as quarterly reports and earnings transcripts, we would      arXiv:1212.570, 1212, 2012.
+like to explore whether such data can be used to improve
+                                                                Der Kiureghian, A. and Ditlevsen, O. Aleatory or epistemic?
+our earnings forecasts.
+                                                                  does it matter? Structural safety, 31(2):105–112, 2009.
+
+References                                                      Dimson, E., Marsh, P., and Staunton, M. Factor-based
+                                                                  investing: The long-term evidence. The Journal of
+Bahdanau, D., Cho, K., and Bengio, Y. Neural machine              Portfolio Management, 43(5):15–37, 2017. ISSN 0095-
+  translation by jointly learning to align and translate. In      4918. doi: 10.3905/jpm.2017.43.5.015. URL https:
+  International Conference on Learning Representations            //jpm.iijournals.com/content/43/5/15.
+  (ICLR), 2015.
+                                                                Ding, X., Zhang, Y., Liu, T., and Duan, J. Deep learning
+Barclay, M. J. and Warner, J. B. Stealth trading and              for event-driven stock prediction. In International Joint
+  volatility : Which trades move prices?     Journal              Conference on Artiﬁcial Intelligence (IJCAI), 2015.
+  of Financial Economics, 34(3):281–305, December
+                                                                Donahue, J., Anne Hendricks, L., Guadarrama, S.,
+  1993. URL https://ideas.repec.org/a/eee/
+                                                                  Rohrbach, M., Venugopalan, S., Saenko, K., and Dar-
+  jfinec/v34y1993i3p281-305.html.
+                                                                  rell, T. Long-term recurrent convolutional networks for
+                                                                 visual recognition and description. In Computer Vision
+Batres-Estrada, B. Deep learning for multivariate ﬁnancial        and Pattern Recognition (CVPR), 2015.
+
+=== PDF PAGE 10 ===
+                                        Uncertainty-Aware Lookahead Factor Models
+
+Evgeniou, T. and Pontil, M. Regularized multi–task learn-       Jia, H. Investigation into the effectiveness of long
+  ing. In Proceedings of the Tenth ACM SIGKDD In-                  short term memory networks for stock price prediction.
+  ternational Conference on Knowledge Discovery and                arXiv:1603.07893, 2016.
+  Data Mining, KDD ’04, pp. 109–117, New York, NY,
+  USA, 2004. ACM. ISBN 1-58113-888-1. doi: 10.1145/             Kendall, A. and Gal, Y. What uncertainties do we need in
+  1014052.1014067.       URL http://doi.acm.org/                  bayesian deep learning for computer vision? In Advances
+  10.1145/1014052.1014067.                                        in neural information processing systems (NeurIPS),
+                                                                  2017.
+Fama, E. F. and French, K. R. The cross-section of expected
+  stock returns. Journal of Finance 47, 427-465., 1992.         Khosravi, A., Nahavandi, S., Creighton, D., and Atiya, A. F.
+                                                                  Comprehensive review of neural network-based predic-
+Gal, Y. Uncertainty in Deep Learning. PhD thesis, Univer-         tion intervals and new advances. IEEE Transactions on
+  sity of Cambridge, 2016.                                        Neural Networks, 22(9):1341–1356, Sep. 2011. ISSN
+                                                                 1045-9227. doi: 10.1109/TNN.2011.2162110.
+Gal, Y. and Ghahramani, Z. Dropout as a Bayesian ap-
+  proximation: Insights and applications. In International      Koku, P. S., Jagpal, H. S., and Viswanath, P. V. The ef-
+  Conference on Machine Learning (ICML) Deep Learning             fect of new product announcements and preannounce-
+ Workshop, 2015a.                                                 ments on stock price. Journal of Market-Focused
+                                                                  Management, 2(2):183–199, Nov 1997. ISSN 1572-
+Gal, Y. and Ghahramani, Z. Dropout as a bayesian approxi-
+                                                                  8846. doi: 10.1023/A:1009735620253. URL https:
+  mation: Appendix. arXiv:1506.02157, 2015b.
+                                                                 //doi.org/10.1023/A:1009735620253.
+Gal, Y., Hron, J., and Kendall, A. Concrete Dropout.
+                                                                Lipton, Z. C., Kale, D. C., Elkan, C., and Wetzell, R. Learn-
+ Advances in Neural Information Processing Systems
+                                                                  ing to diagnose with lstm recurrent neural networks. In
+ (NeurIPS), 2017.
+                                                                  International Conference on Learning Representations
+Glorot, X. and Bengio, Y. Understanding the difﬁculty of          (ICLR), 2016a.
+  training deep feedforward neural networks. In In Pro-
+                                                                Lipton, Z. C., Kale, D. C., and Wetzel, R. Directly mod-
+  ceedings of the International Conference on Artiﬁcial
+                                                                  eling missing data in sequences with rnns: Improved
+  Intelligence and Statistics (AISTATS’10). Society for Arti-
+                                                                  classiﬁcation of clinical time series. Machine Learning
+  ﬁcial Intelligence and Statistics, 2010.
+                                                                  for Healthcare (MLHC), 2016b.
+Goedhart, M., Koller, T., and Wessels, D. Do fundamen-
+                                                                Mao, J., Xu, W., Yang, Y., Wang, J., Huang, Z., and Yuille,
+  tals—or emotions—drive the stock market? https:
+                                                                 A. Deep captioning with multimodal recurrent neural
+ //www.mckinsey.com/business-functions/
+                                                                 networks (m-rnn). International Conference on Learning
+  strategy-and-corporate-finance/
+                                                                 Representations (ICLR), 2015.
+  our-insights/do-fundamentalsor-
+  emotionsdrive-the-stock-market, 2005a.                        McGroarty, F., Booth, A., Gerding, E., and Chinthalapati, V.
+                                                                 L. R. High frequency trading strategies, market fragility
+Goedhart, M., Koller, T., and Wessels, D. Valuation: Mea-
+                                                                 and price spikes: an agent based model perspective. An-
+  suring and Managing the Value of Companies, 4th Edi-
+                                                                 nals of Operations Research, Aug 2018. ISSN 1572-
+  tion. Wiley, 2005b.
+                                                                 9338. doi: 10.1007/s10479-018-3019-4. URL https:
+Goldberg, D. E. Genetic Algorithms in Search, Optimiza-          //doi.org/10.1007/s10479-018-3019-4.
+  tion and Machine Learning. Addison-Wesley Longman
+                                                                Menkveld, A. J. The economics of high-frequency trad-
+  Publishing Co., Inc., Boston, MA, USA, 1st edition, 1989.
+                                                                 ing: Taking stock. Annual Review of Financial Eco-
+  ISBN 0201157675.
+                                                                 nomics, 8(1):1–24, 2016. doi: 10.1146/annurev-ﬁnancial-
+Heskes, T. Practical conﬁdence and prediction intervals.         121415-033010. URL https://doi.org/10.1146/
+  In Advances in Neural Information Processing Systems           annurev-financial-121415-033010.
+ (NeurIPS). MIT press, 1997.
+                                                                Ng, N., Gabriel, R. A., McAuley, J., Elkan, C., and Lip-
+Hochreiter, S. and Schmidhuber, J. Long short-term memory.        ton, Z. C. Predicting surgery duration with neural het-
+  Neural Computation, 9(8):1735–1780, 1997.                       eroscedastic regression. In Machine Learning for Health-
+                                                                  care (MLHC), 2017.
+Ioffe, S. and Szegedy, C. Batch normalization: Accelerat-
+  ing deep network training by reducing internal covariate      Nix, D. A. and Weigend, A. S. Estimating the mean and
+  shift. In International Conference on Machine Learning          variance of the target probability distribution. In Proceed-
+  (ICML), 2015.                                                   ings of 1994 IEEE International Conference on Neural
+
+=== PDF PAGE 11 ===
+                                       Uncertainty-Aware Lookahead Factor Models
+
+  Networks (ICNN’94), volume 1, pp. 55–60 vol.1, June
+  1994. doi: 10.1109/ICNN.1994.374138.
+Pearce, T., Brintrup, A., Zaki, M., and Neely, A.
+  High-quality prediction intervals for deep learning: A
+  distribution-free, ensembled approach. In Dy, J. and
+  Krause, A. (eds.), Proceedings of the 35th International
+  Conference on Machine Learning, volume 80 of Pro-
+  ceedings of Machine Learning Research, pp. 4075–4084,
+  Stockholmsmässan, Stockholm Sweden, 10–15 Jul 2018.
+  PMLR. URL http://proceedings.mlr.press/
+  v80/pearce18a.html.
+Pätäri, E. and Leivo, T. A closer look at the value premium.
+  Journal of Economic Surveys, Vol. 31, Issue 1, pp. 79-168,
+  2017, 2017.
+Qiu, M. and Song, Y. Predicting the direction of stock mar-
+  ket index movement using an optimized artiﬁcial neural
+  network model. PLOS ONE, 11:e0155133, 05 2016. doi:
+  10.1371/journal.pone.0155133.
+Rothenstein, J. M., Tomlinson, G., Tannock, I. F., and Det-
+  sky, A. S. Company Stock Prices Before and After Pub-
+  lic Announcements Related to Oncology Drugs. JNCI:
+  Journal of the National Cancer Institute, 103(20):1507–
+  1512, 09 2011. ISSN 0027-8874. doi: 10.1093/jnci/
+  djr338. URL https://doi.org/10.1093/jnci/
+  djr338.
+Ruder, S. An overview of multi-task learning in deep neural
+  networks. ArXiv, abs/1706.05098, 2017.
+
+Schumaker, R. P. and Maida, N. Analysis of stock price
+  movement following ﬁnancial news article release. Com-
+  munications of the IIMA, 16, 2018.
+Su, D., Ting, Y. Y., and Ansel, J. Tight prediction in-
+  tervals using expanded interval minimization. CoRR,
+  abs/1806.11222, 2018. URL http://arxiv.org/
+  abs/1806.11222.
+Sutskever, I., Vinyals, O., and Le, Q. V. Sequence to se-
+  quence learning with neural networks. In Advances in
+  Neural Information Processing (NeurIPS), 2014.
+
+Tripathi, S., Lipton, Z. C., Belongie, S., and Nguyen, T.
+  Context matters: Reﬁning object detection in video with
+  recurrent neural networks. In British Machine Vision
+  Conference (BMVC), 2016.
+Vinyals, O., Toshev, A., Bengio, S., and Erhan, D. Show
+  and tell: A neural image caption generator. In Computer
+  Vision and Pattern Recognition (CVPR), 2015.
+Wanjawa, B. W. and Muchemi, L.          Ann model
+ to predict stock prices at stock exchange markets.
+ arXiv:1502.06434, 2014.
+
+=== END SOURCE TEXT ===

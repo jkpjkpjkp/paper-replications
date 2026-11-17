@@ -1,0 +1,48 @@
+{
+  "source": "https://proceedings.mlr.press/v119/chauhan20a/chauhan20a.pdf",
+  "source_sections": [
+    "3",
+    "4.1",
+    "4.2",
+    "Table 1"
+  ],
+  "executable": false,
+  "requires_original_panel": true,
+  "model": "RNNUqRangeEstimate",
+  "input_steps": 5,
+  "stride_months": 12,
+  "forecast_months": 12,
+  "financial_targets": 17,
+  "train_period": [
+    "1970-01-01",
+    "1999-12-31"
+  ],
+  "test_period": [
+    "2000-01-01",
+    "2019-12-31"
+  ],
+  "validation_fraction_companies": 0.3,
+  "num_layers": 1,
+  "num_hidden": 512,
+  "batch_size": 256,
+  "dropout": 0.0,
+  "recurrent_dropout": 0.25,
+  "max_grad_norm": 1.0,
+  "max_norm": 3,
+  "target_lambda": 0.5,
+  "rnn_lambda": 0.7,
+  "optimizer": "Adadelta",
+  "learning_rate": 0.01,
+  "initializer": "GlorotUniform",
+  "use_custom_init": false,
+  "early_stop_nonimproving_epochs": 25,
+  "reported_training_epochs": 150,
+  "ensemble_members": 10,
+  "mc_dropout_draws": 10,
+  "scaling": "normalize financial sequence by last-input market cap, then featurewise zero mean / unit standard deviation",
+  "unresolved": [
+    "Exact released field schema/config is absent",
+    "Historical input vintages and original processed panel are unavailable",
+    "Full ensemble orchestration and portfolio protocol require validation"
+  ]
+}

@@ -1,0 +1,30 @@
+0: blocked
+Assessment date: 2026-11-17
+
+
+
+Scope: Blocked original-paper adapter; same paper as the parent Lookahead folder.
+
+Evidence and explanation:
+Eight regression tests and synthetic integration passed, including 1,440 forecast rows.
+The archived status explicitly records original_experiment_run=false and
+paper_reproduction=blocked. Full historical Compustat Snapshot data/processed monthly
+panel is missing; there are no paper-comparable measured errors or confidence intervals.
+
+Fresh WRDS access check on 2026-11-17: ordinary comp.funda, comp.fundq,
+comp.co_filedate and comp.sec_shortint SELECTs succeed. Full annual/quarterly
+Snapshot PIT tables and their compsnap aliases still return permission denied for
+schema comp_snapshot (SQLSTATE 42501); comp_pit also denies access. Snapshot sample
+annual/quarterly queries succeed. Standard data availability does not resolve the
+historical-vintage requirement. Numerical grade remains 0; no new empirical run.
+
+Limits / next requirement:
+Supply the historical panel and run the paper's representative experiment. Do not count
+this extension as another successfully replicated paper.
+
+Evidence paths (relative to this STATUS.txt):
+- evidence/wrds-compustat-access-20261117.json
+- ../../.replication-local/artifacts/lfm-quant/results/status.json
+- ../../.replication-local/artifacts/lfm-quant/README.txt
+
+Scale and update instructions: ../../AGENTS.md
