@@ -1,0 +1,57 @@
+{
+  "locked_utc": "2026-11-14T10:34:29.704551+00:00",
+  "paper": "Learning Multiple Stock Trading Patterns with Temporal Routing Adaptor and Optimal Transport (KDD 2021)",
+  "source_commit": "3fc2f8c93c91baac5f0dd1af23dd8ef215abe2d4",
+  "scope": "Original ALSTM+TRA Table 1 row, all seeds named in released run.sh",
+  "run_order": [
+    1000,
+    1,
+    2000,
+    3000,
+    4000,
+    5000
+  ],
+  "selection": "Unchanged validation IC / early stop 20 / up to 500 epochs / 100 updates per epoch / five-checkpoint smoothing",
+  "seed_ambiguity": "Paper caption says five; script lists six; report all six and all leave-one-out subsets, no result-based selection",
+  "data_sha256": {
+    "feature.pkl": "8e652185d768a9f39802ff3e35f309e5b1fe61d5bdbc2be175b9558846685d8b",
+    "label.pkl": "1f2ec1162e7d40661257fcf2db9223f9c9107caec3e1f469f4d2328f94f20cee",
+    "ret.pkl": "edd2ff6cff66d3caa029b27016e2cc2dff8d19f6bab7a0a105bfd1180b59cba4"
+  },
+  "target": {
+    "MSE": 0.157,
+    "MAE": 0.318,
+    "IC": 0.059,
+    "ICIR": 0.46,
+    "AR": 0.124,
+    "AV": 0.14,
+    "SR": 0.885,
+    "MDD": 0.204
+  },
+  "evaluation": "Preserve author top/bottom 80, return clip +/-10%, 365 calendar-day annualization, arithmetic cumulative MDD, rank metrics",
+  "source_behavior": "Preserve cross-stock slice bug and stochastic Gumbel routing, including native validation and final-test memory behavior",
+  "runtime_explicit_pins": {
+    "python": "3.8.20 (original patch unspecified)",
+    "torch": "1.7.0+cu110",
+    "qlib": "0.7.1",
+    "numpy": "1.17.4",
+    "pandas": "1.1.2",
+    "scikit-learn": "0.23.2"
+  },
+  "exact_numerical_reproduction_promise": false,
+  "no_test_tuning": true,
+  "no_cz_gate_or_adaptation": true,
+  "artifact_hashes_before_training": {
+    "download_torch.py": "63f35d359631fe76624b067c01adccd859cd9fca623ae87ba6d9630de30de417",
+    "evaluate.py": "0b7aca2a217d61859cf94e726349d97400f37364311fbb868ea18fa19b3fba15",
+    "restore_environment.sh": "310c3a4e80a62df9286c9b750099fd0a21359df30c2de375ff615f09ca7aec36",
+    "run_all.py": "62e4f9d96132b1ad06ebc51d1e16c035b1d6051643ed9dc5c9ebf3e529306bc0",
+    "run_stage.py": "c98c2e22a295729d8846338940da514ae9198a871a54b7d42a553c917e02c28b",
+    "status.py": "add21100adef8e835120ab5d8e3138df2ed82330062405319e050b468b251471",
+    "summarize.py": "361eeb46ccb9e47ac02f31bee907e7466839d70ceef6fb2a5167881896baa979"
+  },
+  "runtime_decision_utc": "2026-11-15T04:40:56.986152+00:00",
+  "execution_device": "cpu",
+  "device_reason": "Original CUDA batch failed on occupied GPU; both original CPU batch-size preflights passed. CPU is a declared hardware deviation, not a model or batch-size change.",
+  "environment_lock_sha256": "5bade04843ac778c2886624df9f8166688f17470f4ca1d60b0e1c07158389be8"
+}

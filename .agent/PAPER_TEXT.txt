@@ -1,0 +1,1019 @@
+Learning Multiple Stock Trading Patterns with Temporal Routing Adaptor and Optimal Transport
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: html_text
+Original source: sources/paper-web.txt
+Source SHA-256: 36c665769e7da828518c20a958084085822e1011dd6da7dcffb11057de2e576d
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+
+=== BEGIN SOURCE TEXT ===
+
+=== TEXT SEGMENT 1 ===
+# Learning Multiple Stock Trading Patterns with Temporal Routing Adaptor and Optimal Transport
+
+Conference: Proceedings of the 27th ACM SIGKDD Conference on Knowledge Discovery and Data Mining; August 14–18, 2021; Virtual Event, Singapore.Proceedings of the 27th ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD ’21), August 14–18, 2021, Virtual Event, SingaporePrice: 15.00ISBN: 978-1-4503-8332-5/21/08DOI: 10.1145/3447548.3467358CCS: Computing methodologies Machine learningCCS: Applied computing Forecasting
+
+Hengxu Lin
+
+Note: The first two authors have equal contribution.
+
+Note: This work was done when the first author was an intern at Microsoft Research Asia.
+
+Affiliation: Sun Yat-sen University, Guangdong, China
+
+email: v-hengxl@microsoft.com
+
+,
+Dong Zhou
+
+Affiliation: Microsoft Research, No.5 Danling Street, Beijing, China, 100080
+
+email: Zhou.Dong@microsoft.com
+
+,
+Weiqing Liu
+
+Affiliation: Microsoft Research, No.5 Danling Street, Beijing, China, 100080
+
+email: Weiqing.Liu@microsoft.com
+
+and
+Jiang Bian
+
+Affiliation: Microsoft Research, No.5 Danling Street, Beijing, China, 100080
+
+email: Jiang.Bian@microsoft.com
+
+© acmcopyright
+
+###### Abstract.
+
+Successful quantitative investment usually relies on precise predictions of the future movement of the stock price. Recently, machine learning based solutions have shown their capacity to give more accurate stock prediction and become indispensable components in modern quantitative investment systems. However, the i.i.d. assumption behind existing methods is inconsistent with the existence of diverse trading patterns11
+1
+
+In this paper, a trading pattern means the causal relation between the available information at the current time (i.e., feature) and the stock price movement in the future (i.e., label). in the stock market, which inevitably limits their ability to achieve better stock prediction performance.
+In this paper, we propose a novel architecture, Temporal Routing Adaptor (TRA), to empower existing stock prediction models with the ability to model multiple stock trading patterns. Essentially, TRA is a lightweight module that consists of a set of independent predictors for learning multiple patterns as well as a router to dispatch samples to different predictors. Nevertheless, the lack of explicit pattern identifiers makes it quite challenging to train an effective TRA-based model. To tackle this challenge, we further design a learning algorithm based on Optimal Transport (OT) to obtain the optimal sample to predictor assignment and effectively optimize the router with such assignment through an auxiliary loss term.
+Experiments on the real-world stock ranking task show that compared to the state-of-the-art baselines, e.g., Attention LSTM and Transformer, the proposed method can improve information coefficient (IC) from 0.0530.053 to 0.0590.059 and 0.0510.051 to 0.0560.056 respectively. Our dataset and code used in this work are publicly available22
+2
+
+https://github.com/microsoft/qlib/tree/main/examples/benchmarks/TRA.
+
+###### Keywords:
+
+computational finance; stock prediction; gated network; conditional computing; optimal transport; multi-domain learning
+
+## 1. Introduction
+
+Stock investing is one of the most popular channels for investors to pursue desirable investment goals. A successful investment usually requires precise predictions of the future movements of the stock price. Although the efficient market hypothesis (EMH) (Fama, 1965) states that predicting the stock movement is impossible given the market is efficient enough, many researchers found that the market is, in reality, less efficient than expected and can be potentially predicted. One example of well-observed predictable patterns is mean-reversion (Poterba and
+Summers, 1988) meaning that the stock price tends to fall if it is higher than its historical average. Therefore, in some sense, the stock’s future price movement can be predicted based on its historical price trend. Lately, machine learning based solutions have been employed in modern quantitative investment systems for stock prediction and prove their capacity to capture more complex patterns with powerful non-linear models from heterogeneous data sources (Zhang
+et al., 2017; Hu
+et al., 2018; Xu and Cohen, 2018; Feng
+et al., 2019; Ding
+et al., 2020; Wang
+et al., 2020).
+
+To apply machine learning algorithms for stock prediction, existing approaches usually adopt a supervised learning formulation: use observable information (e.g., price, news) as features 𝐱i∈𝒳\mathbf{x}_{i}\in\mathcal{X} and stock return ranks or price movement directions in the future as the label yi∈𝒴\mathrm{y}_{i}\in\mathcal{Y} per stock per day respectively, then train an estimator parameterized with θ\theta to model the underlying distribution ℙ\mathbb{P}. Given a collection of NN observations33
+3
+
+Unless otherwise stated, in this paper we use ii to denote the index of stock ss at time tt for simplicity. {(𝐱i,yi)}i=1N\{(\mathbf{x}_{i},\mathrm{y}_{i})\}_{i=1}^{N} as the training data, parameter θ\theta can be effectively optimized to capture the underlying distribution by maximum likelihood estimation or empirical risk minimization. To pursue superior stock prediction performance, a variety of features extracted from diverse information sources like price (Zhang
+et al., 2017; Feng
+et al., 2019; Ding
+et al., 2020), fundamental factors (Chauhan
+et al., 2020), social media texts (Xu and Cohen, 2018; Hu
+et al., 2018), stock relation (Chen
+et al., 2018; Chen
+et al., 2019) and many model architectures like LSTM (Nelson
+et al., 2017), Attention LSTM (Qin et al., 2017; Feng
+et al., 2019), Transformer (Ding
+et al., 2020) have been adopted and show promising gains.
+
+Despite the success of these methods for stock prediction, they rely on the assumption that all stock samples follow an identical distribution. However, as the stock market data is a consequence of trading actions from a large number of participants, their diverse investing strategies will introduce multiple trading patterns that will be reflected in the data (Ritter, 2003). One such evidence is the coexistence of two contradictory phenomenons observed in stock market data: the momentum effect (Fama and French, 2012; Asness
+et al., 2013) (the stocks that have higher returns in the past will continue to outperform others in the future) and the reversal effect (Jegadeesh, 1990) (the stocks that have lower returns in the past may have higher returns in the future). Neglecting multiple patterns in the training samples will inevitably undermine the performance of machine learning models, which has been widely observed and discussed in other related research fields (Dredze
+et al., 2010; Joshi
+et al., 2012; Rebuffi
+et al., 2017; Rebuffi
+et al., 2018; Houlsby
+et al., 2019). Therefore, it is necessary to take into account the existence of multiple patterns when designing stock prediction solutions to pursue superior stock prediction performance.
+
+In this work, we consider enhancing stock prediction by learning multiple stock trading patterns. Formally, we assume there are multiple distributions (patterns) in the stock market data ℙ=∑kνk​ℙk\mathbb{P}=\sum_{k}\nu_{k}\mathbb{P}_{k} with νk\nu_{k} is the relative share of the kk-th distribution, and all training and test samples come from one of these distributions44
+4
+
+Note that if we consider collecting new test samples from an online environment, there may also be new emerging patterns. In this paper, we assume the model can be periodically updated to capture such new patterns and leave the online learning setting where the new pattern only appears during test as future work.. In fact, if we have explicit pattern identifiers for both training and test samples, our problem can be effectively solved by Multi-Domain Learning (Dredze
+et al., 2010; Rebuffi
+et al., 2017; Rebuffi
+et al., 2018; Houlsby
+et al., 2019). However, such identifiers don’t pre-exist in stock market data and are hard to determine even for human experts. Even if it is possible to distinguish different patterns for model training by using ground-truth labels, it is not applicable for the test period in which labels will not be available. Therefore, the main challenge to learn multiple trading patterns in stock market data is how to design a unified solution to discover and distinguish different patterns for both the training stage and the testing stage.
+
+To this end, we propose a new architecture, Temporal Routing Adaptor (TRA), as an extension module to empower existing stock prediction models with the ability to model multiple stock trading patterns. Essentially, TRA consists of a set of predictors to model different patterns and a router to predict which pattern a sample belongs to. The router leverages both the latent representation extracted from the backbone model (e.g., last hidden states from LSTM) as well as the temporal prediction errors of different predictors to determine a sample’s pattern and assign to a specific predictor with a gating architecture (Shazeer et al., 2017; Hua
+et al., 2019; Abati et al., 2020; Guo
+et al., 2020). To further guarantee the discovery of diverse trading patterns, we formulate the optimal sample to predictor assignment problem as an Optimal Transport (OT) problem (Villani, 2008; Cuturi, 2013) and use the optimized solution from OT to guide the learning of router through an auxiliary regularization loss term.
+
+To demonstrate the practical value of the proposed framework, we conduct extensive experiments with real-world stock market data. Experiment results show that the proposed method can bring significant gains to existing stock prediction methods. Specifically, our method can improve the information coefficient (IC) from 0.0530.053 to 0.0590.059 when compared to Attention LSTM (Qin et al., 2017; Feng
+et al., 2019), and from 0.0510.051 to 0.0560.056 when compared to Transformer (Ding
+et al., 2020). Further investigations demonstrate the effectiveness of different components designed in the proposed framework.
+
+The main contributions are summarized as follows:
+
+- •
+
+To the best of our knowledge, we are the first to consider designing stock prediction methods under the existence of multiple trading patterns and we also give thorough investigations of the existence and impact of multiple patterns.
+
+- •
+
+We propose Temporal Routing Adaptor (TRA) as an extension module to empower existing stock prediction methods with the capacity of modeling multiple stock trading patterns, and we design an effective learning algorithm based on optimal transport to further guarantee the discovery of multiple patterns.
+
+- •
+
+We conduct extensive experiments with real-world stock market data and compare with existing state-of-the-art baselines. Experiment results demonstrate the effectiveness of the proposed method.
+
+## 2. Related Work
+
+##### Stock Prediction with Deep Neural Networks
+
+Recently, there are many research studies to design deep learning solutions for stock prediction, which mainly fall under two categories, technical analysis (TA) and fundamental analysis (FA). TA methods focus on predicting the future movement of a stock price from market data (mainly price and volume). Among them, (Zhang
+et al., 2017) proposes a variant of LSTM to discover multiple frequency patterns in stock market data, (Qin et al., 2017) designs a dual-stage attention-based LSTM for stock prediction, (Feng
+et al., 2019) further improves the attention LSTM by leveraging adversarial learning, and (Ding
+et al., 2020) also demonstrates Transformer can bring performance gains for mining long-term financial time series. FA methods are often design to capture more diversified alternative data and the most well studied data are news texts. (Hu
+et al., 2018) propose a Hybrid Attention Networks (HAN) to predict stock trend based on the sequence of recent related news, (Xu and Cohen, 2018) designs a stochastic recurrent model (SRM) to address the adaptability of stock markets and (Cheng
+et al., 2020) designs a framework to leverage knowledge graph to event-based stock prediction. However, all these methods follow the identical distribution assumption and neglect the existence of multiple patterns, which limit their capacity to achieve desirable performance.
+
+##### Multi-Domain Learning
+
+Multi-Domain Learning (MDL) is the field that addresses the learning challenges when the training data violates the i.i.d. assumption and contains multiple domains (patterns) (Dredze
+et al., 2010; Joshi
+et al., 2012; Rebuffi
+et al., 2017; Rebuffi
+et al., 2018; Houlsby
+et al., 2019). In MDL, the domain identifiers are assumed known during both training and test. The most straightforward approach to solve this challenge is separating the whole training set into several subsets according to their domain identifiers, and then training different models for different domains respectively. Recent studies in MDL often take the aforementioned method as the oracle baseline and mainly focus on designing more parameter-efficient network architectures, e.g., residual adaptors (Rebuffi
+et al., 2017; Rebuffi
+et al., 2018; Houlsby
+et al., 2019) or depth-wise separable convolution based gating (Guo
+et al., 2019). However, there are no explicit domain identifiers in the stock market data and thus existing MDL solutions fall to address the challenges in this work.
+
+## 3. Multiple Trading Patterns
+
+In this section, we will give several empirical evidence of the existence of multiple stock trading patterns from both investment practice and model behavior.
+
+In the real world, most investors will follow specific strategies to purchase and sell stocks. When a large number of individuals adopt the same investing strategy, it will become a pattern in stock market data. Figure 1 shows the annualized excess returns relative to the market of three most known investment strategies (Fama and French, 2012): size (buy the small-cap stocks), value (buy the stocks with the highest book-to-market ratio), and momentum (buy the stocks that perform the best in the past 12 months). It can be observed that different strategies will take the lead in different periods (e.g., size before 2017, momentum since 2019), which implies there will be diverse trading patterns in the stock market data.
+
+Figure 1. Annualized excess return relative to the market when equally investing in the top quintile stocks by using three investment strategies size, value and momentum in China stock market.
+
+When there are multiple patterns in the data, a single model will be insufficient to capture all of them, especially when some of them are contrary to each other. In the below example, we learn multiple linear models for stock prediction with observations from different periods. We use the market capitalization rank (size), book-to-market ratio rank (value), and total return rank in the past 12 months (momentum) as features (𝐗\mathbf{X}), as well as the stock return ranks in the next month as the label (OPEN𝐲)\mathbf{y}). The learned linear coefficients can be found in Figure 2 and they can be used to characterize the underlying data patterns. For example, the negative coefficient of momentum in 2009 tells us the pattern is that stock returns will be negatively correlated with their past performance. However, in 2013 the momentum coefficient becomes positive which indicates there is an opposite pattern. It will not be possible to model both these two patterns without introducing different sets of parameters to model these two patterns respectively.
+
+Figure 2. Linear coefficients on three features when learned with observations from different periods. Negative coefficient will be stacked below 00. The height of the bar represents the absolute value of the coefficient.
+
+## 4. Problem Formulation
+
+Based on the empirical observations in Section 3, it becomes obvious that we should take into account multiple trading patterns when designing stock prediction methods. In this section, we will give a formal formulation of the learning task studied in this paper.
+
+Let 𝒳\mathcal{X} denote the feature space and 𝒴\mathcal{Y} denote the label space. We assume data are sampled from some mixture of distributions ℙ=∑kνk​ℙk\mathbb{P}=\sum_{k}\nu_{k}\mathbb{P}_{k} on 𝒳×𝒴\mathcal{X}\times\mathcal{Y}, with subscript kk to denote the index of the kk-th pattern and νk\nu_{k} denotes its relative share. Note that both ℙk\mathbb{P}_{k} and νk\nu_{k} are unknown in the studied task. In practice, we will have a dataset containing NN observations 𝒟={(𝐱i,yi)}i=1N\mathcal{D}=\big\{(\mathbf{x}_{i},\mathrm{y}_{i})\big\}_{i=1}^{N} sampled from the mixture of distributions ℙ\mathbb{P}, where an observation 𝐱i∈𝒳\mathbf{x}_{i}\in\mathcal{X} and yi∈𝒴\mathrm{y}_{i}\in\mathcal{Y} denote the feature and label of ii-th sample. For model training and inference, we assume νk\nu_{k} has the same proportion between the training dataset 𝒟train\mathcal{D}^{\mathrm{train}} and test dataset 𝒟test\mathcal{D}^{\mathrm{test}}. Let θ\theta denote the parameters that we want to learn, then the goal of learning is
+
+| | | | |
+| --- | --- | --- | --- |
+| (1) | | minθ⁡𝔼(𝐱i,yi)∈𝒟test​ℓ​(𝐱i,yi,θ),\min_{\theta}\mathbb{E}_{(\mathbf{x}_{i},\mathrm{y}_{i})\in\mathcal{D}^{\mathrm{test}}}\ell(\mathbf{x}_{i},\mathrm{y}_{i};\theta), | |
+
+where ℓ\ell is some measurement function.
+
+In order to optimize θ\theta, a common practice in existing supervised learning settings is altering 𝒟test\mathcal{D}^{\mathrm{test}} with 𝒟train\mathcal{D}^{\mathrm{train}} in Equation 1 to optimize the parameter through empirical risk minimization. However, when there are multiple patterns in 𝒟train\mathcal{D}^{\mathrm{train}}, the learned single model with such an objective often performs worse than the multiple models for different patterns (Rebuffi
+et al., 2017; Rebuffi
+et al., 2018; Houlsby
+et al., 2019). Therefore, it’s desired to identify different patterns and learn different sets of parameters for each pattern respectively in order to further enhance the stock prediction performance.
+
+## 5. Temporal Routing Adaptor
+
+In this section, we first propose the architecture of Temporal Routing Adaptor (TRA) that can be used as an extension module to empower existing stock prediction models with the capacity to learn multiple patterns. Then we design a learning algorithm based on Optimal Transport (OT) to further guarantee the discovery of multiple patterns. Last, we will give more implementation details for effectively training TRA-based models.
+
+### 5.1. Architecture
+
+In order to capture multiple stock trading patterns, the model needs to has the ability to provide different parameters for samples that belongs to different patterns. In this work, we propose Temporal Routing Adaptor (TRA) with two components to fulfill this goal: a set of predictors to learn different trading patterns, and a router to select the appropriate predictor. As illustrated in Figure 3, the router will assign samples with the same pattern to the same predictor, such that during the training stage the assigned predictor will capture the corresponding pattern from the assigned samples, and during the testing stage the best matched predictor will be used for inference.
+
+Figure 3. An overview of the proposed predictors + router framework. The predictors are responsible for learning different patterns while the router controls how samples are assigned to different predictors.
+
+Let’s first consider the design of the predictors. The most straightforward approach should be introducing multiple parallel models for different patterns, yet it will introduce (K−1)×(K-1)\times more parameters compared to the original model if we want to model KK different patterns. Using such many parameters will make the model more prone to over-fitting as observed in our experiments. Therefore, we only replace the output layer in the traditional stock prediction models with a set of linear predictors. This design can be easily plugged into existing stock prediction networks with negligible added parameters. We use Attention LSTM as the backbone feature extractor to demonstrate this in Figure 4. Another benefit of using this design is that if we keep only one predictor, then TRA will become the classical Attention LSTM and thus our framework won’t cause any performance regression.
+
+Figure 4. An example to use Temporal Routing Adaptor (TRA) as an extension module on Attention LSTM. The router uses both latent representation from Attention LSTM and temporal prediction errors stored in memory to select the best predictor for the current sample.
+
+For the design of the router, it depends on what kind of information we want to use to predict the underlying pattern to which a sample belongs. In this work, we utilize two types of information to predict a sample’s pattern and assign it to the appropriate predictor: 1) the latent representation from the backbone feature extractor, 2) temporal prediction errors of different predictors. The first type of information should be easy to understand: certain patterns can be directly distinguished from the latent representation p⁡(𝐱)p(\mathbf{x}). And instead of using raw features, we choose to use latent representation because it is more related to the underlying pattern p⁡(y|𝐱)p(\mathrm{y}|\mathbf{x}). Moreover, considering that the latent representation still cannot give enough information on p⁡(y|𝐱)p(\mathrm{y}|\mathbf{x}) as the patterns in stock market data are extremely hard to capture, we leverage the second type of information as a supplement.
+
+The second type of information is inspired by the real-world investment practice: investors will periodically change their investment strategies (analogue to multiple predictors) from one to the other based on the recent performances (analogue to prediction errors) of these strategies. Merrill Lynch investment Clock55
+5
+
+https://macro-ops.com/the-investment-clock/ is such an example that shows certain investment strategies will take the lead following the macroeconomic cycle. Therefore, we can use the temporal prediction errors of different predictors in the past days to predict which predictor should be chosen in the next day for the current sample. To this end, we use a recurrent neural network to summarize the history performance of different predictors into an embedding vector and concatenate this embedding with the latent representation as the input of the router to predict the pattern.
+
+Formally, let Θ={θ1,θ2,…,θK}\Theta=\{\theta_{1},\theta_{2},...,\theta_{K}\} denote the parameters of KK predictors, π\pi denote the parameter of the router, and ψ\psi denote the parameter of the shared feature extractor. For the kk-th predictor, we denote the entire model (feature extractor and predictor) to give prediction for the ii-th sample as y^i​k=θk∘ψ⁡(𝐱i)\hat{\mathrm{y}}_{ik}=\theta_{k}\circ\psi(\mathbf{x}_{i}). We also use bold symbol 𝐲^i=Θ∘ψ⁡(𝐱i)≜[θ1∘ψ⁡(𝐱1),θ2∘ψ⁡(𝐱2),…,θK∘ψ⁡(𝐱K)]⊺\hat{\mathbf{y}}_{i}=\Theta\circ\psi(\mathbf{x}_{i})\triangleq[\theta_{1}\circ\psi(\mathbf{x}_{1}),\theta_{2}\circ\psi(\mathbf{x}_{2}),...,\theta_{K}\circ\psi(\mathbf{x}_{K})]^{\intercal} to denote the predictions from all predictors. The prediction errors for the ii-th sample can be then calculated as
+
+| | | | |
+| --- | --- | --- | --- |
+| (2) | | li=ℓ⁡(𝐲i^,𝐲),l_{i}=\ell(\hat{\mathbf{y}_{i}},\mathbf{y}), | |
+
+where we use lil_{i} to denote the vectorized prediction errors [ℓ(y^1,y1)[\ell(\hat{\mathrm{y}}_{1},\mathrm{y}_{1}), ℓ⁡(y^2,y2)\ell(\hat{\mathrm{y}}_{2},\mathrm{y}_{2}), ..., ℓ(y^K,yK)]⊺\ell(\hat{\mathrm{y}}_{K},\mathrm{y}_{K})]^{\intercal} of the ii-th sample for simplicity, and ℓ\ell is some measurement function related to the stock prediction task.
+
+Note that we can also index the ii-th sample by the stock id ss and the timestamp tt, thus we can aggregate the temporal prediction errors for this sample as
+
+| | | | |
+| --- | --- | --- | --- |
+| (3) | | 𝐞i≜𝐞i=(s,t)=[l(s,t−T),l(s,t−T+1),…,l(s,t−h)]⊺,\mathbf{e}_{i}\triangleq\mathbf{e}_{i=(s,t)}=\big[l_{(s,t-T)},l_{(s,t-T+1)},...,l_{(s,t-h)}\big]^{\intercal}, | |
+
+where TT is a maximized lookback window, hh is an extra gap to avoid using future information66
+6
+
+hh should be larger than the horizon of label to avoid using future information.. To speed up model training, we also leverage memory to store the prediction errors. More details about the memory implementation can be found in Section 5.3.
+
+Given both latent representation and temporal prediction errors, a straightforward approach for the router to give prediction is by applying a soft attention on different predictors through softmax. Denote the latent representation of sample ii extracted from ψ\psi as 𝐡i=ψ⁡(𝐱i)\mathbf{h}_{i}=\psi(\mathbf{x}_{i}), then such softmax-based routing mechanism can be generated by
+
+(4)		𝐚i\displaystyle\mathbf{a}_{i}	=π⁡(𝐡i,𝐞i),\displaystyle=\pi(\mathbf{h}_{i},\mathbf{e}_{i}),
+	𝐪i\displaystyle\mathbf{q}_{i}	=exp⁡(𝐚i)sum⁡(exp⁡(𝐚i)),\displaystyle=\frac{\mathrm{exp}(\mathbf{a}_{i})}{\mathrm{sum}(\mathrm{exp}(\mathbf{a}_{i}))},
+	p^i\displaystyle\hat{\mathrm{p}}_{i}	=𝐪i⊺​𝐲^i\displaystyle=\mathbf{q}_{i}^{\intercal}\hat{\mathbf{y}}_{i}
+
+where 𝐪i\mathbf{q}_{i} is the routing attention and p^i\hat{\mathrm{p}}_{i} is the final prediction of the entire model.
+
+However, it’s important for the router to give discrete selection in order to really distinguish different patterns. Instead of using the continuous softmax in Equation 4, the straight approach to achieve the discrete selection is using a​r​g​m​a​x​(𝐪i)argmax(\mathbf{q}_{i}), which however is not differentiable. To achieve differentiable but discrete routing, we utilize the gumbel-softmax trick (Jang
+et al., 2016) to enable the differentiability of the router. Essentially, it will add gumbel noise to the logits 𝐚i\mathbf{a}_{i} and leverage the reparametrization trick to make the computation fully differentiable.
+
+| | | | | |
+| --- | --- | --- | --- | --- |
+| (5) | | 𝐪i\displaystyle\mathbf{q}_{i} | =exp⁡((𝐚i+ϵ)/τ)sum⁡(exp⁡((𝐚i+ϵ)/τ)),\displaystyle=\frac{\mathrm{exp}((\mathbf{a}_{i}+\epsilon)/\tau)}{\mathrm{sum}(\mathrm{exp}((\mathbf{a}_{i}+\epsilon)/\tau))}, | |
+
+where ϵ=[ϵ1,ϵ2,…,ϵK]\epsilon=[\epsilon_{1},\epsilon_{2},...,\epsilon_{K}] are i.i.d. sampled drawn from Gumbel(0, 1)77
+7
+
+The Gumbel(0,1) distribution can be sampled by first drawing uniform distribution z∼Uniform⁡(0,1)z\sim\mathrm{Uniform}(0,1) then applying −log⁡(−log⁡(z))-\mathrm{log}(-\mathrm{log}(z)). distribution and τ\tau is the temperature that controls the sharpness of the output distribution.
+
+### 5.2. Optimal Transport
+
+While TRA enables the capacity of modeling multiple trading patterns in a single network, it’s still challenging to discover the underlying multiple trading patterns. In fact, we observed in our experiments that directly training TRA will end up with some trivial solutions, where all samples are routed to the same predictor and thus fails to capture the diverse patterns. A straightforward approach is to directly add strong regularization to force the router give relatively balanced sample assignment to different predictors. In this work, we propose a better approach to achieve such regularization in the meanwhile encourage the discovery of multiple trading patterns.
+
+Figure 5. Our goal is assigning samples x1x_{1} to x6x_{6} to three predictors θ1\theta_{1} to θ3\theta_{3} with the goal of minimizing the prediction loss while keeping the number of assigned samples balanced.
+
+Our main idea is to assign a sample to the predictor that has the smallest loss (objective) while keeping the number of assigned samples to a specific predictor proportional to the relative share of the corresponding pattern (constraint). Figure 5 gives an illustration of our idea and we can further formalize it as an optimization problem.
+First we can pack the prediction errors of all samples ×\times all predictors into a loss matrix 𝐋\mathbf{L}, with Li​k=ℓ⁡(θk∘ψ⁡(𝐱i),yi)\mathrm{L}_{ik}=\ell\big(\theta_{k}\circ\psi(\mathbf{x}_{i}),\mathrm{y}_{i}\big) is the prediction loss of sample ii when choosing predictor θk\theta_{k}. Denote the sample assignment matrix for NN samples and KK predictors as 𝐏∈{0,1}N×K\mathbf{P}\in\{0,1\}^{N\times K}, then we are able to get the assignment 𝐏\mathbf{P} by solving the following optimal transport problem (Villani, 2008; Cuturi, 2013)
+
+(6)		min𝐏\displaystyle\min_{\mathbf{P}}	⟨𝐏,𝐋⟩,\displaystyle\langle\mathbf{P},\mathbf{L}\rangle,
+	s.t.\displaystyle s.t.	∑i=1N𝐏i​k=νk∗N,∀k=1​…​K\displaystyle\sum_{i=1}^{N}\mathbf{P}_{ik}=\nu_{k}*N,\ \forall k=1...K
+		∑k=1K𝐏i​k=1,∀i=1​…​N\displaystyle\sum_{k=1}^{K}\mathbf{P}_{ik}=1,\ \forall i=1...N
+		Pi​k∈{0,1},∀i=1…N,k=1…K,\displaystyle\mathrm{P}_{ik}\in\{0,1\},\ \forall i=1...N,k=1...K,
+
+where ⟨⋅,⋅⟩\langle\cdot,\cdot\rangle stands for the Frobenius dot-product and νk\nu_{k} is the relative share of the kk-th pattern as introduced in Section 4. The first constraint ensures the assigned samples are proportional to the relative shares of the latent patterns, and the second to third constraints ensure the discrete choice of only one predictor. This problem is combinatorial and it will take a great amount of time to get the exact solution with the standard solvers. To overcome this challenge, we leverage the Sinkhorn’s matrix scaling algorithm (Cuturi, 2013) to obtain an approximated solution with the benefit of several orders of magnitude speed-ups.
+
+After obtaining the optimal sample assignment matrix 𝐏\mathbf{P}, we further investigate how to use it to assist the training of TRA. Note that the optimized sample assignment 𝐏\mathbf{P} depends on the prediction loss 𝐋\mathbf{L} and thus also depends on the unknown label, it cannot be directly used to assign samples to different predictors during the testing stage as labels will not be available. Here we consider to use it to guide the learning of the router through adding an auxiliary regularization term into the objective
+
+| | | | |
+| --- | --- | --- | --- |
+| (7) | | minΘ,π,ψ⁡𝔼(𝐱i,yi)∈𝒟train​[ℓ⁡(𝐱i,yi,Θ,π,ψ)−λ​∑k=1KPi​k​log​(qi​k)],\min_{\Theta,\pi,\psi}\mathbb{E}_{(\mathbf{x}_{i},\mathrm{y}_{i})\in\mathcal{D}^{\mathrm{train}}}\big[\ell(\mathbf{x}_{i},\mathrm{y}_{i};\Theta,\pi,\psi)-\lambda\textstyle\sum_{k=1}^{K}\mathrm{P}_{ik}\mathrm{log}(q_{ik})\big], | |
+
+where qi​kq_{ik} is the predicted probability from gumbel-softmax in Equation 5, and λ\lambda is a hyper-parameter controlling the regularization strength. The regularization term is defined by cross entropy with 𝐏\mathbf{P} as the target distribution.
+
+Note that we don’t know the exact number of trading patterns KK, so it is treated as a hyper-parameter and will be compared by setting different values in our experiments. Besides, the relative shares νk\nu_{k} for different patterns in Problem 6 are also unknown. We address this by first treating different patterns having equal shares (i.e., νk=1K\nu_{k}=\frac{1}{K}) in the early stage of training, then we gradually decay λ\lambda with decay rate ρ\rho during training so the router can discover more suitable pattern share in the later stage.
+
+### 5.3. Implementation
+
+As TRA needs temporal prediction errors to determine the assignment of a sample, the straightforward approach to implement this will require a all forward pass of all training samples in each single training step, which will make computation costs too high to bear. To this end, we introduce an external memory 𝐌∈ℝN×K\mathbf{M}\in\mathbb{R}^{N\times K} to cache the prediction errors for all NN samples with KK predictors calculated in previous training steps. Then we follow a two-stage procedure to update the memory: refresh the whole memory before each training epoch and refresh partial memory of mini-batch samples only appeared in the current training steps on the fly. By using this strategy we can achieve N/batchsizeN/\mathrm{batchsize} speed-ups.
+
+Algorithm 1 lists the whole process of training TRA, with the optimal transport regularized objective and the two-stage memory updating strategy. Essentially, each training epoch consists of: 1) inference all training samples and store the prediction errors of all predictors into the memory 𝐌\mathbf{M}; 2) sample mini batches to update the model parameters with Equation 7 as well as update the memory for samples in this mini batch. Note that it is important to strictly follow the temporal order to sample batch samples during testing, because TRA needs prediction errors from former timestamps as input information for the router to select the right predictor for the current timestamp.
+
+Algorithm 1 Algorithm for Training TRA.
+
+Input: training data 𝒟train\mathcal{D}^{\mathrm{train}}, model parameters π\pi, ψ\psi, Θ\Theta (with size KK), hyper-parameters λ\lambda, ρ\rho
+
+Output: ψ∗\psi^{*}, π∗\pi^{*}, Θ∗\Theta^{*}
+
+1
+Randomly initialize π\pi, ψ\psi, Θ\Theta;
+
+2
+Initialize memory 𝐌\mathbf{M};
+
+3
+while not meet the stopping criteria do
+
+/* step 1: update the memory. */
+
+4
+for i←1i\leftarrow 1 to NN do
+
+5
+Update the memory of the ii-th sample by 𝐌i=ℓ⁡(Θ∘ψ⁡(𝐱i),𝐲i)\mathbf{M}_{i}=\ell(\Theta\circ\psi(\mathbf{x}_{i}),\mathbf{y}_{i});
+
+6
+end for
+
+/* step 2: optimize model parameters. */
+
+7
+for 𝒟batch←𝒟train\mathcal{D}^{\mathrm{batch}}\leftarrow\mathcal{D}^{\mathrm{train}} do
+
+8
+Decay regularization parameter λ=λ∗ρ\lambda=\lambda*\rho;
+
+9
+Get the loss matrix 𝐋\mathbf{L} for current batch 𝒟batch\mathcal{D}^{\mathrm{batch}};
+
+10
+Solve the optimal transport problem in Equation 6 via Sinkhorn’s algorithm;
+
+11
+Calculate the regularized loss with Equation 7 and update Θ\Theta, π\pi, ψ\psi via gradient descent algorithms;
+
+12
+Update memory 𝐌\mathbf{M} for samples in this batch;
+
+13
+end for
+
+14
+end while
+
+## 6. Experiments
+
+To demonstrate the effectiveness of the proposed method, we further conduct extensive experiments on the real-world stock market data. In the following subsections, we will first introduce our experimental settings, including task and dataset description, baseline methods, evaluation metrics and hyper-parameter settings. Then we will give the experiment results of the compared methods. Last, we further conduct comprehensive experiments to demonstrate the effectiveness of the proposed method.
+
+### 6.1. Settings
+
+#### 6.1.1. Task.
+
+In this work, we study the stock ranking prediction task with labels defined as the percentiles of cross-sectional stock returns at the end of next month. Using percentiles instead of raw returns as the learning targets has the following advantages: 1) the learning process will be less affected by extraordinary return outliers; 2) percentiles are uniform distributed and not affected by the market fluctuation (which will make the data non-stationary); 3) the model trained to predict cross-section stock return percentiles can be easily used by most portfolio construction strategies like long-short portfolio. As percentiles are continuous, the stock ranking prediction will be studies as a regression task in this work.
+
+#### 6.1.2. Dataset
+
+We construct our dataset based on China stock market data88
+8
+
+The China stock is less mature such that the publicly available information can still be used for stock prediction. For the developed market, the public information are no longer enough to predict the market and the proprietary data sources are demanded in order to learn stock prediction models, which however are hard to obtain for the research community.. Specifically, we collect publicly available data for CSI800 stocks99
+9
+
+CSI800 consists of the 800 largest and most liquid China stocks. More information can be found at http://www.csindex.com.cn/en/indices/index-detail/000906. from baostock.com. Then we extract 16 features that have been proved informative in China stock market, including market capitalization, price-to-EPS, price-to-book value, price-to-sales, price-to-net cash flow, asset turnover ratio, net profit margin, receivables turnover ratio, EPS growth, asset growth, equity growth, 12 month momentum, 1 month reversal, close to 12 month highest, close to 12 month lowest, and maximum return in last month. All features are transformed into their ranks to match the stock ranking task within each trading day.
+
+Finally, we follow the temporal order (avoid the data leakage problem) to split data into training (from 10/30/2007 to 05/27/2016), validation (from 09/26/2016 to 05/29/2018) and test (from 09/21/2018 to 06/30/2020). Note that the extra splitting gaps (e.g., 05/29/2018 to 09/21/2018) are intentionally introduced to avoid the leakage of both feature and label, because we will use the features in last 6060 trading days for time series models and stock returns ranks in the next 2121 trading days (1 month) as the learning targets.
+
+#### 6.1.3. Baselines.
+
+We compare our proposed method with the following baselines:
+
+- •
+
+Linear is a linear regression model.
+
+- •
+
+LightGBM (Ke et al., 2017) is non-linear model based on gradient boosted trees.
+
+- •
+
+MLP is a non-linear model based on neural networks.
+
+- •
+
+SFM (Zhang
+et al., 2017) is a redesigned recurrent neural network by decomposing the hidden states of LSTM into multiple frequency components to model multi-frequency trading patterns.
+
+- •
+
+ALSTM (Qin et al., 2017; Feng
+et al., 2019) adds an external attention layer into the LSTM architecture to attentively aggregate information from all hidden states in previous timestamps.
+
+- •
+
+Trans. (Ding
+et al., 2020) adopts the Transformer (Vaswani et al., 2017) architecture that has been used by (Ding
+et al., 2020) for stock prediction.
+
+In addition to the above baselines, we also consider the following heuristic approach introduced in Section 3 to learn multiple trading patterns
+
+- •
+
+ALSTM+TS/Trans.+TS simply assigns samples to different predictors according to which time periods they belong to. As test samples belong to a new time period and thus cannot be assigned to the learned models, we simply average predictions from all the learned models.
+
+#### 6.1.4. Evaluation Metrics
+
+In addition to evaluating the prediction errors of stock ranking by regression metrics like Mean Square Error (MSE) and Mean Absolute Error (MAE), the dominate ranking metric used in finance is the information coefficients (IC), which can be calculated as
+
+| | | | |
+| --- | --- | --- | --- |
+| (8) | | IC=1N​(𝐲^−m​e​a​n​(𝐲^))⊺​(𝐲−m​e​a​n​(𝐲))s​t​d​(𝐲^)∗s​t​d​(𝐲),\mathrm{IC}=\frac{1}{N}\frac{(\hat{\mathbf{y}}-mean(\hat{\mathbf{y}}))^{\intercal}(\mathbf{y}-mean(\mathbf{y}))}{std(\hat{\mathbf{y}})*std(\mathbf{y})}, | |
+
+where 𝐲^\hat{\mathbf{y}} and 𝐲\mathbf{y} are the predicted rankings and actual rankings respectively. In practice, IC is calculated for different trading days and their average will be reported. To show the stability of IC, we also report the information ratio of IC, i.e., ICIR, which is calculated by dividing the average by the standard deviation of IC.
+
+In addition, we also evaluate the ranking performance of the learned model by constructing a long-short portfolio by longing stocks of the top decile and shorting stocks of the bottom decile1010
+10
+
+In China stock market, shorting stocks can be achieved by securities margin trading.. We will measure the portfolio’s performance by annualized return (AR), annualized volatility (AV), annualized Sharpe Ratio (SR) and maximum drawdown (MDD). The details for portfolio construction and metric definitions can be found in in Appendix A.
+
+#### 6.1.5. Parameter Settings
+
+To compare the performance of different baselines on our dataset, we first search architecture parameters and hyper-parameters for LightGBM, MLP, SFM, ALSTM and Trans. and select the best parameter based on the performance of validation set. The architecture parameters and hyper-parameter configurations for the search space can be found in Appendix B. For our methods, we use the same architecture parameter as the backbone models ALSTM and Trans. for fair comparison and only search the learning rate and decay rate ρ\rho for regularization strength λ\lambda used in Equation 7.
+
+### 6.2. Main Results
+
+Table 1. Stock ranking and portfolio performance of the compared methods. For MSE and MAE, we also report the standard deviation of 5 random seeds as (⋅)(\cdot). ↑\uparrow means the larger the better while ↓\downarrow means the smaller the better.
+
+Method	Ranking Metrics	Portfolio Metrics
+MSE (↓\downarrow)	MAE (↓\downarrow)	IC (↑\uparrow)	ICIR (↑\uparrow)	AR (↑\uparrow)	AV (↓\downarrow)	SR (↑\uparrow)	MDD (↓\downarrow)
+Linear	0.163	0.327	0.020	0.132	-3.2%	16.8%	-0.191	32.1%
+LightGBM	0.160(0.000)	0.323(0.000)	0.041	0.292	7.8%	15.5%	0.503	25.7%
+MLP	0.160 (0.002)	0.323 (0.003)	0.037	0.273	3.7%	15.3%	0.264	26.2%
+SFM	0.159 (0.001)	0.321 (0.001)	0.047	0.381	7.1%	14.3%	0.497	22.9%
+ALSTM	0.158 (0.001)	0.320 (0.001)	0.053	0.419	12.3%	13.7%	0.897	20.2%
+Trans.	0.158 (0.001)	0.322 (0.001)	0.051	0.400	14.5%	14.2%	1.028	22.5%
+ALSTM+TS	0.160 (0.002)	0.321 (0.002)	0.039	0.291	6.7%	14.6%	0.480	22.3%
+Trans.+TS	0.160 (0.004)	0.324 (0.005)	0.037	0.278	10.4%	14.7%	0.722	23.7%
+ALSTM+TRA (Ours)	0.157 (0.000)	0.318 (0.000)	0.059	0.460	12.4%	14.0%	0.885	20.4%
+Trans.+TRA (Ours)	0.157 (0.000)	0.320 (0.000)	0.056	0.442	16.1%	14.2%	1.133	23.1%
+
+Table 1 summarized the evaluation performances of all compared methods. From the exhibited results, we have the following observations:
+
+- •
+
+The proposed method can be used to further improve the performance of previous state-of-the-art baselines (ALSTM and Trans.). Specifically, compared to ALSTM, our method ALSTM+TRA can reduce the prediction errors measured by MSE from 0.1580.158 to 0.1570.157 and improve the ranking metric measured by IC from 0.0530.053 to 0.0590.059. Also compared to Trans., our method Trans.+TRA can also improve IC from 0.0510.051 to 0.0560.056. These results demonstrate the efficacy of the proposed method to enhance stock prediction.
+
+- •
+
+The two heuristic methods ALSTM+TS and Trans.+TS that model multiple patterns by splitting the dataset into multiple periods even harm the model’s performance. We postulate the reason is that the learned individual models can only capture the pattern of a specific period and simply averaging predictions from these models during testing will mixes up different patterns and thus performs poorly. This shows that selecting the right model for inference is also critical to ensure the performance. As a comparison, the router in the proposed TRA framework has the ability to fulfill this goal.
+
+- •
+
+From the portfolio metrics, it can be observed that our method can also achieve desirable performance. Compared to Trans., our method achieves higher annualized return (ours 16.116.1% vs Trans. 14.514.5%) as well as higher Sharpe ratio (ours 1.1331.133 vs Trans. 1.0281.028). These results further demonstrate that the proposed method can be used in real-world investment to achieve higher risk-return rewards.
+
+### 6.3. Incremental Analysis
+
+In this section, we want to answer the following research questions through incremental analysis:
+
+- •
+
+RQ1 Can TRA learn multiple trading patterns and select the correct one for prediction?
+
+- •
+
+RQ2 Are both latent representation and temporal prediction errors useful for the router?
+
+- •
+
+RQ3 How does optimal transport help the training of TRA?
+
+- •
+
+RQ4 Is TRA sensitive to the number of KK predictors used?
+
+#### 6.3.1. RQ1
+
+We first analyse the learned multiple predictors with K=3K=3 by showing their prediction loss of a randomly selected stock in Figure 6. It can be observed that the learned predictors have different performances at the same time, which demonstrates TRA does capture the diverse trading patterns. We also plot the selections given by the router in the right side and it can be observed that the router successfully picks the right model for prediction (the one with the lowest prediction loss). This evidence further justify the capability of TRA to select the correct model for inference.
+
+Figure 6. Loss of different predictors (left) and the router’s selection (right). Loss is normalized by subtracting the minimum value of three.
+
+#### 6.3.2. RQ2
+
+To understand what types of information can be used by the router to make good assignments of different samples, we compare the following information sources with ALSTM as the backbone model
+
+- •
+
+Random simply uses Gaussian noise as the input information for the router.
+
+- •
+
+Latent Representations, LR are the extracted latent representation from the backbone feature extractor.
+
+- •
+
+Temporal Prediction Errors, TPE are prediction errors of different predictors defined in Equation 3.
+
+- •
+
+LR+TPE combines LR and TPE as the input for the router.
+
+The model performances when using the above different types of information are summarized in Table 2. We can see that compared to Random, both LR and TPE consistently improve TRA’s performance and the best performance can be achieved when both LR and TPE are used in TRA.
+
+Table 2. TRA’s performance when used with different information sources.
+
+| Information | MSE (↓\downarrow) | MAE (↓\downarrow) | IC (↑\uparrow) | ICIR (↑\uparrow) |
+| --- | --- | --- | --- | --- |
+| Random | 0.159 (0.001) | 0.321 (0.002) | 0.048 | 0.362 |
+| LR | 0.158 (0.001) | 0.320 (0.001) | 0.053 | 0.409 |
+| TPE | 0.158 (0.001) | 0.321 (0.001) | 0.049 | 0.381 |
+| LR+TPE | 0.157 (0.000) | 0.318 (0.000) | 0.059 | 0.460 |
+
+#### 6.3.3. RQ3
+
+We now investigate the role of optimal transport (OT) used in our method. In our framework, we formalize the quest of optimal sample to predictor assignment task as an OT problem in Equation 6, and use the solution from OT to guide the learning of the router through a regularization term in Equation 7. We demonstrate the value of OT by comparing it with the naive objective without the regularization term. As illustrated in Figure 7, after removing the OT regularization, the router tends to give some trivial assignment, where almost all samples are assigned to the same predictor and the remaining predictors are left unused. With OT, the assigned samples are more balanced thus all predictors can be well trained to capture the diverse trading patterns.
+
+Figure 7. The relative shares of samples assigned to different predictors trained with or without optimal transport (OT).
+
+#### 6.3.4. RQ4
+
+Recall that TRA relies on a set of KK predictors to model multiple patterns where KK represents the number of latent patterns. As shown in Figure 8, we compare TRA’s performance measured by both IC and MSE when using different KKs. It can be observed that compared to K=1K=1 (i.e., only use the backbone model), introducing more predictors will consistently lead to better model performance. Specifically, adding four predictors (K=5K=5) can bring huge performance gains, while adding more predictors can achieve slightly better performance. This suggests that a moderate selection of KK should give desirable performance.
+
+Figure 8. TRA’s performance when using different number of predictors.
+
+## 7. Conclusion
+
+In this paper, we show how the stock prediction performance can be further improved by learning multiple trading patterns in the stock market data. Specifically, We propose Temporal Routing Adaptor (TRA), which is a lightweight extension module that can be used to empower existing stock prediction networks with the ability of modeling multiple trading patterns. In order to encourage the discovery of the diverse trading patterns, we solve the sample to predictor assignment task as an Optimal Transport (OT) problem and use the solution from OT to guide the learning of the router. Experiments results demonstrate the effectiveness of the proposed method for learning multiple patterns and enhancing the stock prediction performance. Future work will take into account the new patterns emerging in the online environment.
+
+## References
+
+- Abati et al. (2020)
+
+Davide Abati, Jakub
+Tomczak, Tijmen Blankevoort, Simone
+Calderara, Rita Cucchiara, and
+Babak Ehteshami Bejnordi. 2020.
+
+Conditional channel gated networks for task-aware
+continual learning. In Proceedings of the IEEE/CVF
+Conference on Computer Vision and Pattern Recognition.
+3931–3940.
+
+- Asness
+et al. (2013)
+
+Clifford S Asness,
+Tobias J Moskowitz, and Lasse Heje
+Pedersen. 2013.
+
+Value and momentum everywhere.
+
+The Journal of Finance
+68, 3 (2013),
+929–985.
+
+- Chauhan
+et al. (2020)
+
+Lakshay Chauhan, John
+Alberg, and Zachary Lipton.
+2020.
+
+Uncertainty-Aware Lookahead Factor Models for
+Quantitative Investing. In International
+Conference on Machine Learning. PMLR, 1489–1499.
+
+- Chen
+et al. (2019)
+
+Chi Chen, Li Zhao,
+Jiang Bian, Chunxiao Xing, and
+Tie-Yan Liu. 2019.
+
+Investment behaviors can tell what inside:
+Exploring stock intrinsic properties for stock trend prediction. In
+Proceedings of the 25th ACM SIGKDD International
+Conference on Knowledge Discovery & Data Mining.
+2376–2384.
+
+- Chen
+et al. (2018)
+
+Yingmei Chen, Zhongyu
+Wei, and Xuanjing Huang.
+2018.
+
+Incorporating corporation relationship via graph
+convolutional neural networks for stock price prediction. In
+Proceedings of the 27th ACM International
+Conference on Information and Knowledge Management.
+1655–1658.
+
+- Cheng
+et al. (2020)
+
+Dawei Cheng, Fangzhou
+Yang, Xiaoyang Wang, Ying Zhang, and
+Liqing Zhang. 2020.
+
+Knowledge Graph-based Event Embedding Framework for
+Financial Quantitative Investments. In Proceedings
+of the 43rd International ACM SIGIR Conference on Research and Development in
+Information Retrieval. 2221–2230.
+
+- Cuturi (2013)
+
+Marco Cuturi.
+2013.
+
+Sinkhorn distances: lightspeed computation of
+optimal transport.. In NIPS,
+Vol. 2. 4.
+
+- Ding
+et al. (2020)
+
+Qianggang Ding, Sifan Wu,
+Hao Sun, Jiadong Guo, and
+Jian Guo. 2020.
+
+Hierarchical Multi-Scale Gaussian Transformer for
+Stock Movement Prediction. In Proceedings of the
+Twenty-Ninth International Joint Conference on Artificial Intelligence,
+IJCAI-20. International Joint Conferences on
+Artificial Intelligence Organization, 4640–4646.
+
+- Dredze
+et al. (2010)
+
+Mark Dredze, Alex
+Kulesza, and Koby Crammer.
+2010.
+
+Multi-domain learning by confidence-weighted
+parameter combination.
+
+Machine Learning 79,
+1-2 (2010), 123–149.
+
+- Fama (1965)
+
+Eugene F Fama.
+1965.
+
+The behavior of stock-market prices.
+
+The journal of Business
+38, 1 (1965),
+34–105.
+
+- Fama and French (2012)
+
+Eugene F Fama and
+Kenneth R French. 2012.
+
+Size, value, and momentum in international stock
+returns.
+
+Journal of financial economics
+105, 3 (2012),
+457–472.
+
+- Feng
+et al. (2019)
+
+Fuli Feng, Huimin Chen,
+Xiangnan He, Ji Ding,
+Maosong Sun, and Tat-Seng Chua.
+2019.
+
+Enhancing Stock Movement Prediction with
+Adversarial Training.
+
+IJCAI (2019).
+
+- Guo
+et al. (2020)
+
+Pengsheng Guo, Chen-Yu
+Lee, and Daniel Ulbricht.
+2020.
+
+Learning to branch for multi-task learning. In
+International Conference on Machine Learning.
+PMLR, 3854–3863.
+
+- Guo
+et al. (2019)
+
+Yunhui Guo, Yandong Li,
+Liqiang Wang, and Tajana Rosing.
+2019.
+
+Depthwise Convolution Is All You Need for Learning
+Multiple Visual Domains.
+
+Proceedings of the AAAI Conference on
+Artificial Intelligence 33 (2019),
+8368–8375.
+
+https://doi.org/10.1609/aaai.v33i01.33018368
+arXiv:1902.00927
+
+- Houlsby
+et al. (2019)
+
+Neil Houlsby, Andrei
+Giurgiu, Stanislaw Jastrzebski, Bruna
+Morrone, Quentin De Laroussilhe, Andrea
+Gesmundo, Mona Attariyan, and Sylvain
+Gelly. 2019.
+
+Parameter-efficient transfer learning for NLP. In
+International Conference on Machine Learning.
+PMLR, 2790–2799.
+
+- Hu
+et al. (2018)
+
+Ziniu Hu, Weiqing Liu,
+Jiang Bian, Xuanzhe Liu, and
+Tie-Yan Liu. 2018.
+
+Listening to chaotic whispers: A deep learning
+framework for news-oriented stock trend prediction. In
+Proceedings of the eleventh ACM international
+conference on web search and data mining. 261–269.
+
+- Hua
+et al. (2019)
+
+Weizhe Hua, Yuan Zhou,
+Christopher M De Sa, Zhiru Zhang, and
+G. Edward Suh. 2019.
+
+Channel Gating Neural Networks. In
+Advances in Neural Information Processing
+Systems, H. Wallach,
+H. Larochelle, A. Beygelzimer,
+F. d'Alché-Buc,
+E. Fox, and R. Garnett (Eds.),
+Vol. 32. Curran Associates, Inc.,
+1886–1896.
+
+- Jang
+et al. (2016)
+
+Eric Jang, Shixiang Gu,
+and Ben Poole. 2016.
+
+Categorical reparameterization with
+gumbel-softmax.
+
+arXiv preprint arXiv:1611.01144
+(2016).
+
+- Jegadeesh (1990)
+
+Narasimhan Jegadeesh.
+1990.
+
+Evidence of predictable behavior of security
+returns.
+
+The Journal of finance
+45, 3 (1990),
+881–898.
+
+- Joshi
+et al. (2012)
+
+Mahesh Joshi, Mark
+Dredze, William Cohen, and Carolyn
+Rose. 2012.
+
+Multi-domain learning: when do domains matter?. In
+Proceedings of the 2012 Joint Conference on
+Empirical Methods in Natural Language Processing and Computational Natural
+Language Learning. 1302–1312.
+
+- Ke et al. (2017)
+
+Guolin Ke, Qi Meng,
+Thomas Finley, Taifeng Wang,
+Wei Chen, Weidong Ma,
+Qiwei Ye, and Tie-Yan Liu.
+2017.
+
+Lightgbm: A highly efficient gradient boosting
+decision tree.
+
+Advances in neural information processing
+systems 30 (2017),
+3146–3154.
+
+- Nelson
+et al. (2017)
+
+David MQ Nelson,
+Adriano CM Pereira, and Renato A de
+Oliveira. 2017.
+
+Stock market’s price movement prediction with LSTM
+neural networks. In 2017 International joint
+conference on neural networks (IJCNN). IEEE, 1419–1426.
+
+- Poterba and
+Summers (1988)
+
+James M Poterba and
+Lawrence H Summers. 1988.
+
+Mean reversion in stock prices: Evidence and
+implications.
+
+Journal of financial economics
+22, 1 (1988),
+27–59.
+
+- Qin et al. (2017)
+
+Yao Qin, Dongjin Song,
+Haifeng Chen, Wei Cheng,
+Guofei Jiang, and Garrison Cottrell.
+2017.
+
+A dual-stage attention-based recurrent neural
+network for time series prediction.
+
+arXiv preprint arXiv:1704.02971
+(2017).
+
+- Rebuffi
+et al. (2017)
+
+Sylvestre-Alvise Rebuffi,
+Hakan Bilen, and Andrea Vedaldi.
+2017.
+
+Learning multiple visual domains with residual
+adapters. In Proceedings of the 31st International
+Conference on Neural Information Processing Systems.
+506–516.
+
+- Rebuffi
+et al. (2018)
+
+Sylvestre-Alvise Rebuffi,
+Hakan Bilen, and Andrea Vedaldi.
+2018.
+
+Efficient parametrization of multi-domain deep
+neural networks. In Proceedings of the IEEE
+Conference on Computer Vision and Pattern Recognition.
+8119–8127.
+
+- Ritter (2003)
+
+Jay R Ritter.
+2003.
+
+Behavioral finance.
+
+Pacific-Basin finance journal
+11, 4 (2003),
+429–437.
+
+- Shazeer et al. (2017)
+
+Noam Shazeer, Azalia
+Mirhoseini, Krzysztof Maziarz, Andy
+Davis, Quoc Le, Geoffrey Hinton, and
+Jeff Dean. 2017.
+
+Outrageously large neural networks: The
+sparsely-gated mixture-of-experts layer.
+
+arXiv preprint arXiv:1701.06538
+(2017).
+
+- Vaswani et al. (2017)
+
+Ashish Vaswani, Noam
+Shazeer, Niki Parmar, Jakob Uszkoreit,
+Llion Jones, Aidan N Gomez,
+Lukasz Kaiser, and Illia Polosukhin.
+2017.
+
+Attention is all you need.
+
+arXiv preprint arXiv:1706.03762
+(2017).
+
+- Villani (2008)
+
+Cédric Villani.
+2008.
+
+Optimal transport: old and new.
+Vol. 338.
+
+Springer Science & Business Media.
+
+- Wang
+et al. (2020)
+
+Heyuan Wang, Tengjiao
+Wang, and Yi Li. 2020.
+
+Incorporating Expert-Based Investment Opinion
+Signals in Stock Prediction: A Deep Learning Framework.
+
+Proceedings of the AAAI Conference on
+Artificial Intelligence 34 (2020).
+
+- Xu and Cohen (2018)
+
+Yumo Xu and Shay B
+Cohen. 2018.
+
+Stock movement prediction from tweets and
+historical prices. In Proceedings of the 56th
+Annual Meeting of the Association for Computational Linguistics (Volume 1:
+Long Papers). 1970–1979.
+
+- Zhang
+et al. (2017)
+
+Liheng Zhang, Charu
+Aggarwal, and Guo-Jun Qi.
+2017.
+
+Stock price prediction via discovering
+multi-frequency trading patterns. In Proceedings
+of the 23rd ACM SIGKDD international conference on knowledge discovery and
+data mining. 2141–2149.
+
+## Appendix A Portfolio Metrics
+
+In this paper we consider constructing a long-short portfolio to evaluate the predicted stock ranks from different models. Denote the selected stocks for the target portfolio on day dd as Λd+\Lambda_{d}^{+} and Λd−\Lambda_{d}^{-} for the long side and short side respectively, and denote the realized return for stock ss at day dd as rs,dr_{s,d}, where rs,d=0r_{s,d}=0 if dd is not a trade day (e.g., weekends). After carrying out trading simulations day by day, we will have a sequence of portfolio returns 𝐑=[R1,R2,…,RD]\mathbf{R}=[R_{1},R_{2},...,R_{D}] for DD days in the evaluation period, with each day’s portfolio return RdR_{d} calculated by
+
+| | | | |
+| --- | --- | --- | --- |
+| (9) | | Rd=1\|Λd+\|∑s∈Λd+rs,d−1\|Λd−\|∑s∈Λd−rs,d,∀d=1,2,…,D.R_{d}=\frac{1}{\|\Lambda_{d}^{+}\|}\sum_{s\in\Lambda_{d}^{+}}r_{s,d}-\frac{1}{\|\Lambda_{d}^{-}\|}\sum_{s\in\Lambda_{d}^{-}}r_{s,d},\quad\forall d=1,2,...,D. | |
+
+Based on the portfolio returns sequence 𝐑\mathbf{R}, there are quite a few metrics concerning different dimensions for how well this dynamic portfolio behaves. Among them, four metrics are used in this paper to evaluate the portfolio performance
+
+- •
+
+Annualized Return, AR. Annualized Return measures the total profits generated by following the model predictions for investment on a yearly basis. It’s calculated by scaling daily average portfolio return to the total number of calendar days in one year
+
+| | | | |
+| --- | --- | --- | --- |
+| (10) | | AR=m​e​a​n​(𝐑)×365×100%.\mathrm{AR}=mean(\mathbf{R})\times 365\times 100\%. | |
+
+- •
+
+Annualized Volatility, AV. Annualized Volatility measures the risk of the portfolio on a yearly basis. It’s calculated by first calculating the standard deviation of daily portfolio returns, then scaling the deviation by the square root of the total number of calendar days in one year
+
+| | | | |
+| --- | --- | --- | --- |
+| (11) | | AV=s​t​d​(𝐑)×365×100%.\mathrm{AV}=std(\mathbf{R})\times\sqrt{365}\times 100\%. | |
+
+- •
+
+Sharpe Ratio, SR. Sharpe Ratio is a measure of risk-adjusted return. It describes how much excess return we can get for the volatility risk we bear. SR can be calculated as the ratio of AR and AV
+
+| | | | |
+| --- | --- | --- | --- |
+| (12) | | SR=A​RA​V.\mathrm{SR}=\frac{AR}{AV}. | |
+
+- •
+
+Maximum Drawdown, MDD. Maximum drawdown measures the worst performance of the portfolio in a given period. It is calculated as the maximum observed loss from a peak to a trough of a portfolio
+
+| | | | |
+| --- | --- | --- | --- |
+| (13) | | MDD=maxd∈[1,D]⁡{max⁡∑≤tt∈[1,d]⁡Rt−∑≤dRd}\mathrm{MDD}=\max_{d\in[1,D]}\big\{\max_{t\in[1,d]}\sum_{\leq t}R_{t}-\sum_{\leq d}R_{d}\big\} | |
+
+## Appendix B Model Architecture and Hyper-parameters
+
+Here are the detailed search space for model architecture and hyper-parameters:
+
+- •
+
+LightGBM:
+
+- –
+
+number of estimators: 500500
+
+- –
+
+number of leaves: [32,64,128,256][32,64,128,256]
+
+- –
+
+learning rate: [0.1,0.05,0.01][0.1,0.05,0.01]
+
+- •
+
+MLP/SFM/ALSTM:
+
+- –
+
+number of layers: [1,2,4][1,2,4]
+
+- –
+
+hidden size: [32,64,128][32,64,128]
+
+- –
+
+dropout: [0.0,0.1,0.2,0.5][0.0,0.1,0.2,0.5]
+
+- –
+
+learning rate: [0.001,0.0005,0.0002,0.0001][0.001,0.0005,0.0002,0.0001]
+
+- –
+
+batch size: [512,1024,4096][512,1024,4096]
+
+- •
+
+Transformer:
+
+- –
+
+number of attention heads: [2,4,8][2,4,8]
+
+- –
+
+other parameters are the same as MLP etc.
+
+=== END SOURCE TEXT ===

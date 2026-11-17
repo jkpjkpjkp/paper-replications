@@ -1,0 +1,352 @@
+Skip to content
+
+## Navigation Menu
+
+Sign in
+
+-
+
+Products
+
+-
+
+Platform
+
+- GitHubRepository hosting, code review, and collaboration
+
+- CopilotAI coding agent for tasks, projects, and automated work
+
+-
+
+Build & Ship
+
+- ActionsCI/CD and automation
+
+- Code QualityQuality analysis, fixes, and enforcement
+
+- CodespacesCloud development environments
+
+-
+
+Secure
+
+- Code SecurityVulnerability detection and remediation
+
+- Secret ProtectionSecret scanning and leak prevention
+
+All Features
+
+-
+
+Developers
+
+-
+
+Learn
+
+- Documentation
+
+- Training
+
+- Certifications
+
+-
+
+Build
+
+- Build with Copilot
+
+- Customize Copilot
+
+- Integrations
+
+-
+
+Explore
+
+- Trending repos
+
+- GitHub Sponsors
+
+- Developer articles
+
+-
+
+Changelog
+
+- ChangelogYour source for the latest features, improvements, and fixes across GitHub products, all in one place.
+
+-
+
+Businesses
+
+-
+
+By Stage
+
+- Enterprises
+
+- Team
+
+- Startups
+
+- Nonprofits
+
+-
+
+By Industry
+
+- Healthcare
+
+- Financial services
+
+- Manufacturing
+
+- Government
+
+- See all industries
+
+-
+
+Evaluate GitHub
+
+- Why GitHub
+
+- Customer Stories
+
+- Business insights
+
+- Trust Center
+
+-
+
+Add-ons
+
+- GitHub Advanced SecurityEnterprise-grade code security
+
+- Copilot for businessEnterprise-grade AI features
+
+- Premium SupportEnterprise-grade 24/7 support
+
+-
+
+Resources
+
+-
+
+Learn & Connect
+
+- Documentation
+
+- Resource center
+
+- Blog
+
+- Events & webinars
+
+- Community Forum
+
+- Customer Stories
+
+- Integrations
+
+-
+
+Support
+
+- Customer support
+
+- Training
+
+- GitHub Status
+
+-
+
+Company
+
+- About
+
+- Partners
+
+- Changelog
+
+-
+
+GitHub Universe
+
+- GitHub UniverseThe event for developers, by developers — talks, workshops, and what’s next for GitHub.
+
+- Pricing
+
+Search/
+
+Sign in
+
+Sign up
+
+Appearance settings
+
+You signed in with another tab or window. Reload to refresh your session.
+You signed out in another tab or window. Reload to refresh your session.
+You switched accounts on another tab or window. Reload to refresh your session.
+
+Dismiss alert
+
+{{ message }}
+
+- microsoft
+
+- qlib
+
+## Repository navigation
+
+-
+
+- Code
+
+- Issues313 (313)
+
+- Pull requests199 (199)
+
+- Actions
+
+- Projects
+
+- Security and quality
+
+- Insights
+
+More items
+
+-
+
+Issues
+
+-
+
+Assigned to me
+
+-
+
+Created by me
+
+-
+
+Mentioned
+
+-
+
+Recent activity
+
+- Views
+
+- Projects
+
+- Milestones
+
+- Labels
+
+- FeedbackPreview
+
+- Collapse sidebar
+
+#
+
+Issues
+
+Change the issues type filter
+
+#
+
+Issues
+
+New issue
+
+Search issues
+
+is:issue TRA reproduce
+
+is:issue TRA reproduce
+
+Clear filter
+
+Search
+
+## Issues
+
+## 2 results
+
+Author
+
+Labels
+
+Projects
+
+Milestones
+
+Assignees
+
+Types
+
+Newest
+
+- Comfortable display density
+
+- Compact display density
+
+-
+
+### qrun TRA model error
+
+bug
+
+microsoft/qlib#1062 · by Filter by author stockcoder was closed on Sep 15, 2022
+
+5
+
+-
+
+### 您好，TRA模型的数据怎么下载呢？feature、label、ret三个文件，好像都是从qlib里面下载的，有官方提示吗？
+
+questionstale
+
+microsoft/qlib#934 · by Filter by author junyaoChengoo was closed on Jun 25, 2022
+
+7
+
+## Footer
+
+&copy 2026 GitHub, Inc.
+
+### Footer navigation
+
+-
+Terms
+
+-
+Privacy
+
+-
+Security
+
+-
+Status
+
+-
+Community
+
+-
+Docs
+
+-
+Contact
+
+-
+
+Manage cookies
+
+-
+
+Do not share my personal information
+
+You can’t perform that action at this time.

@@ -1,0 +1,9 @@
+Learning Multiple Stock Trading Patterns with Temporal Routing Adaptor and Optimal Transport
+
+Condensed abstract
+
+Adds multiple predictors and a learned router to existing stock-forecasting models so
+they can represent distinct trading patterns. Optimal transport supplies sample-to-
+predictor assignments that guide router training without explicit pattern labels. Stock-
+ranking experiments report improved information coefficients over attention-LSTM and
+transformer baselines.

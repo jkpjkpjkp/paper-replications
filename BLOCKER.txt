@@ -1,0 +1,36 @@
+PRIMARY BLOCKER: COMPUTE / UNFINISHED TRAINING — LOCAL CPU STARTED
+Assessed: 2026-11-17 (Asia/Shanghai)
+
+DATA: NO: all three released files present and hash-checked
+COMPUTE: YES: representative pinned-runtime fit unfinished; now running
+SPECIFICATION / PAPER TARGET: SECONDARY: documented five-versus-six-seed/release discrepancies
+
+The released feature.pkl, label.pkl and ret.pkl are available (about 221 MiB).
+Their protocol hashes and the pinned source hashes passed in the running stage.
+The existing Python 3.8 / Torch 1.7.0 / Qlib 0.7.1 environment works. The old
+runtime attempt has no completed representative main stage. Earlier approximate
+IC 0.055628 and calendar-corrected IC 0.043943 versus paper 0.059 remain preserved.
+
+Action / next requirement:
+STARTED fresh seed 1000 initialization then ALSTM+TRA on local CPU, original
+batch sizes, up to 500 epochs/stage with early stopping 20 and 100 updates/epoch.
+Unit: replication-tra-20261117.service.
+Run directory: .replication-local/runs/blocked-20261117/tra/
+Target: Table 1 ALSTM+TRA IC 0.059, plus all seven other reported metrics.
+The native final predictions are independently checked against the released
+notebook; results/comparison.csv will be created after completion. One seed has
+no measured seed uncertainty. Paper five-seed averages and the released six-seed
+launcher remain an explicit limitation. CPU may take days; no rental purchased.
+The configured Ascend SSH hosts failed to connect on 2026-11-17. Porting this
+old pinned runtime to torch_npu would be a declared runtime adaptation, not an
+unchanged execution. Current local GPU has insufficient free capacity.
+
+Evidence (paths relative to /home/jkp/data):
+- tra/protocol.json
+- tra/results/aggregate.json
+- .replication-local/artifacts/ordered-reproductions/data/TRA/kdd21
+- .replication-local/runs/blocked-20261117/tra/launch-plan.json
+- .replication-local/runs/blocked-20261117/tra/run-status.json
+
+Numerical replication status remains 0 until a representative comparison is
+completed and assessed. Starting a job or matching a smoke-test cell is not a match.

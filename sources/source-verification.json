@@ -1,0 +1,22 @@
+{
+  "tag": "v0.7.1",
+  "all_tra_files_match_tag": true,
+  "files": {
+    "examples/benchmarks/TRA/README.md": "cb1743a8b83e98ed21c8259f3a9ba1c1b06fded569e2ad1a52e368aaca1865c6",
+    "examples/benchmarks/TRA/Reports.ipynb": "0b72b056bfdc2338fc307dc8cae783dd0ef55aaa2b242eb0559c4e4c48665c3e",
+    "examples/benchmarks/TRA/configs/config_alstm.yaml": "51022d8dae7c4b9f2f3eba6c884ac9de7d50716059342669af58c3d1ed6ab180",
+    "examples/benchmarks/TRA/configs/config_alstm_tra.yaml": "7a152b93307312433dcb3032e78d62fb2ca955d37da3ca8f6a66bbeee13eb817",
+    "examples/benchmarks/TRA/configs/config_alstm_tra_init.yaml": "bfa16194b1c50fb5b0a0383722561bca382002762f7e9a1b6dfd745fba1c0aa7",
+    "examples/benchmarks/TRA/configs/config_transformer.yaml": "65f809300c4a3129da3d006c2b948f8d92e4a1f005c42015c462e70063f42b7d",
+    "examples/benchmarks/TRA/configs/config_transformer_tra.yaml": "a4f3799cd2644646610ad973e518633fd178f58e1a9135429f108ae74a455b89",
+    "examples/benchmarks/TRA/configs/config_transformer_tra_init.yaml": "47c92c0cc08eeeea299adc59bb84012ef395d2abaa638dda08182578a68ee926",
+    "examples/benchmarks/TRA/data/README.md": "3df09901aa9fca50b442f61e65d5a60c3c0c871eb7c82d2da504b6153f8735ac",
+    "examples/benchmarks/TRA/example.py": "4e949433def9b9aaca3a6017495551b42ad62e48c73cb04b817e9806f9c2c744",
+    "examples/benchmarks/TRA/run.sh": "d1e18146a2ce6c581d9abdcc9e577dbdb9535073cb4e148b71f3633b814e5954",
+    "examples/benchmarks/TRA/src/dataset.py": "a402e90475aa2207028ae74a9f8a22b7d69c7af25e77afbe3a5bd2a585d62eeb",
+    "examples/benchmarks/TRA/src/model.py": "629352b6e919605800101d4f0319ca476c18ecc6fcfa4518367dbdca23dbcf1e",
+    "examples/benchmarks/TRA/workflow_config_tra_Alpha158.yaml": "def2a1a041e482f5e72471b83310271694b6ca9fcb2e684a70aa59852962378b",
+    "examples/benchmarks/TRA/workflow_config_tra_Alpha158_full.yaml": "25196fbefb17dd4b06a1a0166fb1accda145170871e7a5f17668a1f2bf9c1bca",
+    "examples/benchmarks/TRA/workflow_config_tra_Alpha360.yaml": "3d7dbec1534214b01660511e66aa4c3823eb8a28ba58625489eeb4883ead2958"
+  }
+}

@@ -1,0 +1,33 @@
+0: blocked
+Assessment date: 2026-11-17
+
+
+
+Scope: Faithful paper-runtime suite unfinished; earlier approximate runs do not close the fidelity gate.
+
+Evidence and explanation:
+The current aggregate records 0/6 completed main-stage seeds. Earlier archived modern-
+runtime attempts have measured results, but fidelity review remained pending: a
+boundary-corrected run has IC 0.055628 versus 0.059, while the later calendar-corrected
+run has 0.043943 (-25.5%). MSE proximity alone does not validate the routing/evaluation
+protocol. A status file saying running is not proof of a live process or a completed
+representative experiment.
+
+Limits / next requirement:
+Finish and independently reconcile the released-data, pinned-runtime suite; recover the
+paper's actual five-seed subset (the launcher lists six) and resolve the documented
+sequence-builder/protocol inconsistencies. The earlier assessment launched no training; a fresh CPU attempt is now running as noted below.
+
+Evidence paths (relative to this STATUS.txt):
+- results/report.txt
+- results/aggregate.json
+- ../.replication-local/artifacts/ordered-reproductions/results/tra-boundary-corrected/summary.json
+- ../.replication-local/artifacts/ordered-reproductions/results/gap-resolution-20261113/tra-calendar-corrected/summary.json
+
+
+Blocker triage and new work — 2026-11-17:
+Primary blocker: COMPUTE / UNFINISHED TRAINING — LOCAL CPU STARTED. See BLOCKER.txt for data/compute flags,
+current actions, remaining requirements and evidence. Grade remains 0.
+Fresh local CPU attempt: ../.replication-local/runs/blocked-20261117/tra/
+Live service and progress were checked at launch; run-status.json is a dated receipt,
+not permanent proof of liveness. No completed comparison is claimed for this attempt.
