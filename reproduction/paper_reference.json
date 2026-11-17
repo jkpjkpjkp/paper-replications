@@ -1,0 +1,56 @@
+{
+  "LSTM": {
+    "standard": {
+      "ic": 0.0314,
+      "icir": 0.302,
+      "rank_ic": 0.0149,
+      "rank_icir": 0.139,
+      "top_return": 0.00141,
+      "sharpe": 1.443
+    },
+    "selected": {
+      "ic": 0.0459,
+      "icir": 0.441,
+      "rank_ic": 0.0219,
+      "rank_icir": 0.206,
+      "top_return": 0.00159,
+      "sharpe": 1.6
+    }
+  },
+  "GRU": {
+    "standard": {
+      "ic": 0.0346,
+      "icir": 0.333,
+      "rank_ic": 0.0181,
+      "rank_icir": 0.181,
+      "top_return": 0.00164,
+      "sharpe": 1.56
+    },
+    "selected": {
+      "ic": 0.0399,
+      "icir": 0.351,
+      "rank_ic": 0.0202,
+      "rank_icir": 0.184,
+      "top_return": 0.00157,
+      "sharpe": 1.618
+    }
+  },
+  "TCN": {
+    "standard": {
+      "ic": 0.0423,
+      "icir": 0.388,
+      "rank_ic": 0.02,
+      "rank_icir": 0.21,
+      "top_return": 0.00164,
+      "sharpe": 1.677
+    },
+    "selected": {
+      "ic": 0.054,
+      "icir": 0.515,
+      "rank_ic": 0.025,
+      "rank_icir": 0.227,
+      "top_return": 0.00168,
+      "sharpe": 1.686
+    }
+  }
+}

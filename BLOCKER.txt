@@ -1,0 +1,30 @@
+PRIMARY BLOCKER: DATA/SPECIFICATION; SECONDARY UNFINISHED RECONSTRUCTION
+Assessed: 2026-11-17 (Asia/Shanghai)
+
+DATA: YES for original CSI minute/features; US minute raw bars already exist
+COMPUTE: SECONDARY: newer US equation-reading run unfinished
+SPECIFICATION / PAPER TARGET: YES: private features/cleaning and optimizer/backbone settings
+
+Original minute feature definitions and private preprocessing remain unavailable;
+daily CSI runs are adaptations. Preserve archived US-v1 five-seed LSTM and GRU
+completed comparisons and their poor agreement, plus the TCN cuDNN failure.
+The newer US-v2 66-feature equation-reading attempt is a separate unfinished run;
+its incomplete status does not erase the completed US-v1 failures. This task did
+not retrain those archived results. The public author release is a daily demo.
+
+Action / next requirement:
+No claim that hardware solves original-input fidelity. Recover the minute feature
+generator and complete original protocol before an original-number launch.
+The existing US raw data support declared reconstructions only; prior failures
+and the newer incomplete attempt remain separately documented.
+
+Evidence (paths relative to /home/jkp/data):
+- .replication-local/artifacts/song26l/archive/us-v1/results/summary.json
+- .replication-local/artifacts/song26l/archive/us-v1/results/backbones/gru/summary.json
+- .replication-local/artifacts/song26l/archive/us-v1/results/backbones/tcn/status.json
+- .replication-local/artifacts/song26l/methodology_audit_20261111/REPORT.md
+- song26l/reproduction/protocol.json
+- .replication-local/runs/blocked-20261117/song26l-release.txt
+
+Numerical replication status remains 0 until a representative comparison is
+completed and assessed. Starting a job or matching a smoke-test cell is not a match.

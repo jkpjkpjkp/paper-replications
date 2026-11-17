@@ -1,0 +1,44 @@
+0: blocked
+Assessment date: 2026-11-17
+
+
+
+Scope: Blocked original minute-frequency label-horizon experiment.
+
+Evidence and explanation:
+Daily CSI adaptations and engineering checks exist, but they are different from the
+paper's minute-frequency experiment. The saved coverage/status does not establish a
+completed original minute result; the newer US-v2 independent LSTM remains incomplete in the
+audited status. Archived US-v1 LSTM/GRU five-seed runs are complete and disagree
+with paper levels/gains; they use substituted features and different optimization. Therefore no original-paper numerical match, mismatch or seed error bar
+can be credited.
+
+Limits / next requirement:
+Original minute features/private cleaning and several backbone/ablation settings remain
+unavailable. Downloads, partial fits and old running markers are not completed
+experiments. Check actual outputs before updating the level.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/song26l/STATUS.json
+- ../.replication-local/artifacts/song26l/PUBLISHED_RESULT_AUDIT.md
+- ../.replication-local/artifacts/song26l/paper_coverage.json
+
+
+Blocker triage and new work — 2026-11-17:
+Primary blocker: DATA/SPECIFICATION; SECONDARY UNFINISHED RECONSTRUCTION. See BLOCKER.txt for data/compute flags,
+current actions, remaining requirements and evidence. Grade remains 0.
+Preserved earlier failures: ../.replication-local/artifacts/song26l/archive/us-v1/results/summary.json
+and ../.replication-local/artifacts/song26l/archive/us-v1/results/backbones/gru/summary.json;
+methodology audit: ../.replication-local/artifacts/song26l/methodology_audit_20261111/REPORT.md.
+
+Resolution attempt -- 2026-11-17:
+Live author-source check again confirms that the public repository is a daily
+Alpha158 demo and explicitly excludes the original experimental features.
+Fresh artifact inventory finds 10/15 completed US-v2 LSTM fit files; five fits
+and the final summary are absent. The last seed-3 selection state is from
+2026-11-12; old live/running fields are not current process evidence. Files
+were hashed without altering or continuing the archived experiment. Original
+minute-input fidelity is still missing; grade remains 0. No new original-paper
+metric or tolerance can be reported. Earlier US-v1 failures remain above.
+Evidence: ../.replication-local/status-resolution-20261117/remaining-evidence.json
+Source: https://github.com/Chenhui-Song/label-horizon-paradox

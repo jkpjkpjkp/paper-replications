@@ -1,0 +1,1510 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "song26l",
+  "title": "The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/song26l/archive/us-v1/reference/song26l.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/song26l/archive/us-v1/reference/song26l.pdf",
+    "sha256": "144985d895bce1057beb6bf916177c95b1996572f32df00be968e32053785ce9",
+    "bytes": 729253,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 30,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 95
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 96,
+      "line_end": 202
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 203,
+      "line_end": 309
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 310,
+      "line_end": 483
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 484,
+      "line_end": 625
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 626,
+      "line_end": 788
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 789,
+      "line_end": 1305
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 1306,
+      "line_end": 1474
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1475,
+      "line_end": 1584
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1585,
+      "line_end": 1684
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1685,
+      "line_end": 1783
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1784,
+      "line_end": 1829
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1830,
+      "line_end": 1881
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1882,
+      "line_end": 1893
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1894,
+      "line_end": 1935
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1936,
+      "line_end": 1950
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1951,
+      "line_end": 2016
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 2017,
+      "line_end": 2112
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 2113,
+      "line_end": 2200
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 2201,
+      "line_end": 2293
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 2294,
+      "line_end": 2397
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 2398,
+      "line_end": 2420
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 2421,
+      "line_end": 2484
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 2485,
+      "line_end": 2581
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 2582,
+      "line_end": 2629
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 2630,
+      "line_end": 3126
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 3127,
+      "line_end": 3622
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 3623,
+      "line_end": 3969
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 3970,
+      "line_end": 4296
+    },
+    {
+      "page": 30,
+      "segment": 30,
+      "line_start": 4297,
+      "line_end": 4373
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 80
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 81,
+      "line_end": 153
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 154,
+      "line_end": 218
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 219,
+      "line_end": 295
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 296,
+      "line_end": 363
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 364,
+      "line_end": 433
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 434,
+      "line_end": 518
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 519,
+      "line_end": 605
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 606,
+      "line_end": 670
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 671,
+      "line_end": 733
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 734,
+      "line_end": 796
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 797,
+      "line_end": 852
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 853,
+      "line_end": 907
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 908,
+      "line_end": 923
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 924,
+      "line_end": 981
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 982,
+      "line_end": 999
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1000,
+      "line_end": 1058
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1059,
+      "line_end": 1125
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1126,
+      "line_end": 1191
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1192,
+      "line_end": 1265
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1266,
+      "line_end": 1329
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 1330,
+      "line_end": 1357
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 1358,
+      "line_end": 1415
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 1416,
+      "line_end": 1471
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 1472,
+      "line_end": 1525
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 1526,
+      "line_end": 1594
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 1595,
+      "line_end": 1661
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 1662,
+      "line_end": 1727
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 1728,
+      "line_end": 1782
+    },
+    {
+      "page": 30,
+      "segment": 30,
+      "line_start": 1783,
+      "line_end": 1839
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 20,
+      "text": "Abstract"
+    },
+    {
+      "line": 62,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 99,
+      "text": "2. Preliminaries"
+    },
+    {
+      "line": 115,
+      "text": "2.1. Stock Cross-Sectional Prediction"
+    },
+    {
+      "line": 141,
+      "text": "2.2. Optimization Objective"
+    },
+    {
+      "line": 168,
+      "text": "2. Methodological Innovation: Motivated by our theoretical insights, we propose a novel, end-to-end adaptive"
+    },
+    {
+      "line": 181,
+      "text": "2.3. Deep Learning Framework"
+    },
+    {
+      "line": 183,
+      "text": "3. Empirical Validation: We extensively evaluate our"
+    },
+    {
+      "line": 235,
+      "text": "P Typically,"
+    },
+    {
+      "line": 287,
+      "text": "3. The Label Horizon Paradox"
+    },
+    {
+      "line": 293,
+      "text": "3.1. Empirical Observation"
+    },
+    {
+      "line": 438,
+      "text": "3.2. Theoretical Framework"
+    },
+    {
+      "line": 448,
+      "text": "1. Information Gain reflects the growth of valid signal in"
+    },
+    {
+      "line": 471,
+      "text": "3.3. Generalization to Deep Learning"
+    },
+    {
+      "line": 566,
+      "text": "3.4. Mechanism Analysis"
+    },
+    {
+      "line": 619,
+      "text": "4. Adaptive Horizon Learning via Bi-Level"
+    },
+    {
+      "line": 636,
+      "text": "4.1. Bi-Level Optimization Framework"
+    },
+    {
+      "line": 667,
+      "text": "1. Inner Loop (Proxy Learning on Bin ). The model"
+    },
+    {
+      "line": 695,
+      "text": "1. Inner Loop Update. We simulate the learning trajectory"
+    },
+    {
+      "line": 701,
+      "text": "2. Outer Loop (Target Validation on Bout ). The quality"
+    },
+    {
+      "line": 758,
+      "text": "2. Outer Loop Update. We evaluate θM on Bout against"
+    },
+    {
+      "line": 772,
+      "text": "4.2. Optimization Procedure"
+    },
+    {
+      "line": 777,
+      "text": "5. Experiments"
+    },
+    {
+      "line": 793,
+      "text": "R ANK IC (×10)"
+    },
+    {
+      "line": 795,
+      "text": "R ANK ICIR"
+    },
+    {
+      "line": 797,
+      "text": "T OP R ET (%)"
+    },
+    {
+      "line": 801,
+      "text": "M ODEL"
+    },
+    {
+      "line": 803,
+      "text": "S TD ."
+    },
+    {
+      "line": 806,
+      "text": "O URS"
+    },
+    {
+      "line": 808,
+      "text": "S TD ."
+    },
+    {
+      "line": 811,
+      "text": "O URS"
+    },
+    {
+      "line": 813,
+      "text": "S TD ."
+    },
+    {
+      "line": 815,
+      "text": "O URS"
+    },
+    {
+      "line": 817,
+      "text": "S TD ."
+    },
+    {
+      "line": 819,
+      "text": "O URS"
+    },
+    {
+      "line": 821,
+      "text": "S TD ."
+    },
+    {
+      "line": 823,
+      "text": "O URS"
+    },
+    {
+      "line": 825,
+      "text": "S TD ."
+    },
+    {
+      "line": 827,
+      "text": "O URS"
+    },
+    {
+      "line": 837,
+      "text": "M AMBA"
+    },
+    {
+      "line": 839,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 982,
+      "text": "M AMBA"
+    },
+    {
+      "line": 984,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 1127,
+      "text": "M AMBA"
+    },
+    {
+      "line": 1129,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 1264,
+      "text": "5.1. Experimental Setup"
+    },
+    {
+      "line": 1266,
+      "text": "S HARPE R ATIO"
+    },
+    {
+      "line": 1302,
+      "text": "5.2. Baselines and Metrics"
+    },
+    {
+      "line": 1314,
+      "text": "5.3. Main Results"
+    },
+    {
+      "line": 1331,
+      "text": "C ONFIGURATION"
+    },
+    {
+      "line": 1337,
+      "text": "R ANK IC(×10)"
+    },
+    {
+      "line": 1339,
+      "text": "R ANK ICIR"
+    },
+    {
+      "line": 1341,
+      "text": "S CENARIO 1∗"
+    },
+    {
+      "line": 1342,
+      "text": "S CENARIO 1†"
+    },
+    {
+      "line": 1343,
+      "text": "S CENARIO 1‡"
+    },
+    {
+      "line": 1361,
+      "text": "S CENARIO 2∗"
+    },
+    {
+      "line": 1362,
+      "text": "S CENARIO 2†"
+    },
+    {
+      "line": 1363,
+      "text": "S CENARIO 2‡"
+    },
+    {
+      "line": 1381,
+      "text": "S CENARIO 3∗"
+    },
+    {
+      "line": 1382,
+      "text": "S CENARIO 3†"
+    },
+    {
+      "line": 1383,
+      "text": "S CENARIO 3‡"
+    },
+    {
+      "line": 1401,
+      "text": "6. Further Analysis"
+    },
+    {
+      "line": 1404,
+      "text": "6.1. Necessity of Bi-level Optimization"
+    },
+    {
+      "line": 1417,
+      "text": "1. Naive Averaging: The model is trained on a single fixed"
+    },
+    {
+      "line": 1427,
+      "text": "2. Equal-Weight MTL: The model predicts all candidate"
+    },
+    {
+      "line": 1465,
+      "text": "6.2. Alignment of Learned Weights with the Optima"
+    },
+    {
+      "line": 1500,
+      "text": "7. Related Works"
+    },
+    {
+      "line": 1540,
+      "text": "6.3. Impact of Warm-up Phase"
+    },
+    {
+      "line": 1564,
+      "text": "8. Conclusion"
+    },
+    {
+      "line": 1610,
+      "text": "References"
+    },
+    {
+      "line": 1722,
+      "text": "2019 IEEE/ACIS 18th International Conference on Computer and Information Science (ICIS), pp. 300–305. IEEE,"
+    },
+    {
+      "line": 2308,
+      "text": "1. Early Phase: The rapid signal uptake ensures αα > 2(δ+δ"
+    },
+    {
+      "line": 2314,
+      "text": "2. Late Phase: As signal growth slows, αα drops below the threshold 2(δ+δ"
+    },
+    {
+      "line": 2503,
+      "text": "2. Deriving the Standard Formula."
+    },
+    {
+      "line": 2564,
+      "text": "3. Rearranging for the Decomposition Formula. We solve Eq. (58) for the total correlation ρX,Y :"
+    },
+    {
+      "line": 2634,
+      "text": "R ANK IC (×10)"
+    },
+    {
+      "line": 2636,
+      "text": "R ANK ICIR"
+    },
+    {
+      "line": 2638,
+      "text": "T OP R ET (%)"
+    },
+    {
+      "line": 2642,
+      "text": "M ODEL"
+    },
+    {
+      "line": 2644,
+      "text": "S TD ."
+    },
+    {
+      "line": 2647,
+      "text": "O URS"
+    },
+    {
+      "line": 2649,
+      "text": "S TD ."
+    },
+    {
+      "line": 2652,
+      "text": "O URS"
+    },
+    {
+      "line": 2654,
+      "text": "S TD ."
+    },
+    {
+      "line": 2656,
+      "text": "O URS"
+    },
+    {
+      "line": 2658,
+      "text": "S TD ."
+    },
+    {
+      "line": 2660,
+      "text": "O URS"
+    },
+    {
+      "line": 2662,
+      "text": "S TD ."
+    },
+    {
+      "line": 2664,
+      "text": "O URS"
+    },
+    {
+      "line": 2666,
+      "text": "S HARPE R ATIO"
+    },
+    {
+      "line": 2667,
+      "text": "S TD ."
+    },
+    {
+      "line": 2669,
+      "text": "O URS"
+    },
+    {
+      "line": 2679,
+      "text": "M AMBA"
+    },
+    {
+      "line": 2681,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 2824,
+      "text": "M AMBA"
+    },
+    {
+      "line": 2826,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 2969,
+      "text": "M AMBA"
+    },
+    {
+      "line": 2971,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 3110,
+      "text": "2. An Equal-Weight MTL variant (∗ ‡): train a model using only these top-5 horizons with equal weights in the"
+    },
+    {
+      "line": 3131,
+      "text": "R ANK IC (×10)"
+    },
+    {
+      "line": 3133,
+      "text": "R ANK ICIR"
+    },
+    {
+      "line": 3135,
+      "text": "T OP R ET (%)"
+    },
+    {
+      "line": 3139,
+      "text": "M ODEL"
+    },
+    {
+      "line": 3141,
+      "text": "S TD ."
+    },
+    {
+      "line": 3144,
+      "text": "O URS"
+    },
+    {
+      "line": 3146,
+      "text": "S TD ."
+    },
+    {
+      "line": 3149,
+      "text": "O URS"
+    },
+    {
+      "line": 3151,
+      "text": "S TD ."
+    },
+    {
+      "line": 3153,
+      "text": "O URS"
+    },
+    {
+      "line": 3155,
+      "text": "S TD ."
+    },
+    {
+      "line": 3157,
+      "text": "O URS"
+    },
+    {
+      "line": 3159,
+      "text": "S TD ."
+    },
+    {
+      "line": 3161,
+      "text": "O URS"
+    },
+    {
+      "line": 3163,
+      "text": "S HARPE R ATIO"
+    },
+    {
+      "line": 3164,
+      "text": "S TD ."
+    },
+    {
+      "line": 3166,
+      "text": "O URS"
+    },
+    {
+      "line": 3176,
+      "text": "M AMBA"
+    },
+    {
+      "line": 3178,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 3321,
+      "text": "M AMBA"
+    },
+    {
+      "line": 3323,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 3466,
+      "text": "M AMBA"
+    },
+    {
+      "line": 3468,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 3629,
+      "text": "C ONFIGURATION"
+    },
+    {
+      "line": 3635,
+      "text": "R ANK IC(×10)"
+    },
+    {
+      "line": 3637,
+      "text": "R ANK ICIR"
+    },
+    {
+      "line": 3639,
+      "text": "T OP R ET (%)"
+    },
+    {
+      "line": 3641,
+      "text": "S HARPE R ATIO"
+    },
+    {
+      "line": 3645,
+      "text": "S CENARIO 1"
+    },
+    {
+      "line": 3646,
+      "text": "S CENARIO 1†"
+    },
+    {
+      "line": 3647,
+      "text": "S CENARIO 1∗†"
+    },
+    {
+      "line": 3648,
+      "text": "S CENARIO 1‡"
+    },
+    {
+      "line": 3649,
+      "text": "S CENARIO 1∗‡"
+    },
+    {
+      "line": 3687,
+      "text": "S CENARIO 2∗"
+    },
+    {
+      "line": 3688,
+      "text": "S CENARIO 2†"
+    },
+    {
+      "line": 3689,
+      "text": "S CENARIO 2∗†"
+    },
+    {
+      "line": 3690,
+      "text": "S CENARIO 2‡"
+    },
+    {
+      "line": 3691,
+      "text": "S CENARIO 2∗‡"
+    },
+    {
+      "line": 3729,
+      "text": "S CENARIO 3∗"
+    },
+    {
+      "line": 3730,
+      "text": "S CENARIO 3†"
+    },
+    {
+      "line": 3731,
+      "text": "S CENARIO 3∗†"
+    },
+    {
+      "line": 3732,
+      "text": "S CENARIO 3‡"
+    },
+    {
+      "line": 3733,
+      "text": "S CENARIO 3∗‡"
+    },
+    {
+      "line": 3773,
+      "text": "R ANK IC (×10)"
+    },
+    {
+      "line": 3775,
+      "text": "R ANK ICIR"
+    },
+    {
+      "line": 3777,
+      "text": "T OP R ET (%)"
+    },
+    {
+      "line": 3781,
+      "text": "M ODEL"
+    },
+    {
+      "line": 3783,
+      "text": "S TD ."
+    },
+    {
+      "line": 3786,
+      "text": "O URS"
+    },
+    {
+      "line": 3788,
+      "text": "S TD ."
+    },
+    {
+      "line": 3791,
+      "text": "O URS"
+    },
+    {
+      "line": 3793,
+      "text": "S TD ."
+    },
+    {
+      "line": 3795,
+      "text": "O URS"
+    },
+    {
+      "line": 3797,
+      "text": "S TD ."
+    },
+    {
+      "line": 3799,
+      "text": "O URS"
+    },
+    {
+      "line": 3801,
+      "text": "S TD ."
+    },
+    {
+      "line": 3803,
+      "text": "O URS"
+    },
+    {
+      "line": 3805,
+      "text": "S HARPE R ATIO"
+    },
+    {
+      "line": 3806,
+      "text": "S TD ."
+    },
+    {
+      "line": 3808,
+      "text": "O URS"
+    },
+    {
+      "line": 3818,
+      "text": "M AMBA"
+    },
+    {
+      "line": 3820,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 3974,
+      "text": "R ANK IC (×10)"
+    },
+    {
+      "line": 3976,
+      "text": "R ANK ICIR"
+    },
+    {
+      "line": 3978,
+      "text": "T OP R ET (%)"
+    },
+    {
+      "line": 3982,
+      "text": "M ODEL"
+    },
+    {
+      "line": 3984,
+      "text": "S TD ."
+    },
+    {
+      "line": 3987,
+      "text": "O URS"
+    },
+    {
+      "line": 3989,
+      "text": "S TD ."
+    },
+    {
+      "line": 3992,
+      "text": "O URS"
+    },
+    {
+      "line": 3994,
+      "text": "S TD ."
+    },
+    {
+      "line": 3996,
+      "text": "O URS"
+    },
+    {
+      "line": 3998,
+      "text": "S TD ."
+    },
+    {
+      "line": 4000,
+      "text": "O URS"
+    },
+    {
+      "line": 4002,
+      "text": "S TD ."
+    },
+    {
+      "line": 4004,
+      "text": "O URS"
+    },
+    {
+      "line": 4006,
+      "text": "S HARPE R ATIO"
+    },
+    {
+      "line": 4007,
+      "text": "S TD ."
+    },
+    {
+      "line": 4009,
+      "text": "O URS"
+    },
+    {
+      "line": 4019,
+      "text": "M AMBA"
+    },
+    {
+      "line": 4021,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 4166,
+      "text": "A NN . R ET (%)"
+    },
+    {
+      "line": 4168,
+      "text": "A NN . VOL (%)"
+    },
+    {
+      "line": 4170,
+      "text": "S HARPE R ATIO"
+    },
+    {
+      "line": 4176,
+      "text": "M ODEL"
+    },
+    {
+      "line": 4178,
+      "text": "S TD ."
+    },
+    {
+      "line": 4180,
+      "text": "O URS"
+    },
+    {
+      "line": 4182,
+      "text": "S TD ."
+    },
+    {
+      "line": 4184,
+      "text": "O URS"
+    },
+    {
+      "line": 4186,
+      "text": "S TD ."
+    },
+    {
+      "line": 4188,
+      "text": "O URS"
+    },
+    {
+      "line": 4190,
+      "text": "S TD ."
+    },
+    {
+      "line": 4192,
+      "text": "O URS"
+    },
+    {
+      "line": 4202,
+      "text": "M AMBA"
+    },
+    {
+      "line": 4204,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 4309,
+      "text": "1. Standard training: conventional supervised learning without bi-level optimization."
+    },
+    {
+      "line": 4310,
+      "text": "2. Bi-level training: our proposed method with a single-step inner loop update."
+    },
+    {
+      "line": 4334,
+      "text": "M ODEL"
+    },
+    {
+      "line": 4341,
+      "text": "M AMBA"
+    },
+    {
+      "line": 4343,
+      "text": "M ODERN TCN"
+    },
+    {
+      "line": 4346,
+      "text": "S TANDARD T RAINING ( S / EPOCH )"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2757
+    },
+    {
+      "id": 39,
+      "line_start": 2750,
+      "line_end": 2829
+    },
+    {
+      "id": 40,
+      "line_start": 2822,
+      "line_end": 2901
+    },
+    {
+      "id": 41,
+      "line_start": 2894,
+      "line_end": 2973
+    },
+    {
+      "id": 42,
+      "line_start": 2966,
+      "line_end": 3045
+    },
+    {
+      "id": 43,
+      "line_start": 3038,
+      "line_end": 3117
+    },
+    {
+      "id": 44,
+      "line_start": 3110,
+      "line_end": 3189
+    },
+    {
+      "id": 45,
+      "line_start": 3182,
+      "line_end": 3261
+    },
+    {
+      "id": 46,
+      "line_start": 3254,
+      "line_end": 3333
+    },
+    {
+      "id": 47,
+      "line_start": 3326,
+      "line_end": 3405
+    },
+    {
+      "id": 48,
+      "line_start": 3398,
+      "line_end": 3477
+    },
+    {
+      "id": 49,
+      "line_start": 3470,
+      "line_end": 3549
+    },
+    {
+      "id": 50,
+      "line_start": 3542,
+      "line_end": 3621
+    },
+    {
+      "id": 51,
+      "line_start": 3614,
+      "line_end": 3693
+    },
+    {
+      "id": 52,
+      "line_start": 3686,
+      "line_end": 3765
+    },
+    {
+      "id": 53,
+      "line_start": 3758,
+      "line_end": 3837
+    },
+    {
+      "id": 54,
+      "line_start": 3830,
+      "line_end": 3909
+    },
+    {
+      "id": 55,
+      "line_start": 3902,
+      "line_end": 3981
+    },
+    {
+      "id": 56,
+      "line_start": 3974,
+      "line_end": 4053
+    },
+    {
+      "id": 57,
+      "line_start": 4046,
+      "line_end": 4125
+    },
+    {
+      "id": 58,
+      "line_start": 4118,
+      "line_end": 4197
+    },
+    {
+      "id": 59,
+      "line_start": 4190,
+      "line_end": 4269
+    },
+    {
+      "id": 60,
+      "line_start": 4262,
+      "line_end": 4341
+    },
+    {
+      "id": 61,
+      "line_start": 4334,
+      "line_end": 4374
+    }
+  ],
+  "line_count": 4374,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "eb7ebd2a3d03039ed6b975cfab08ed71b425a299245841f94898a5b85336cdc0",
+      "bytes": 115443
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "e22ffc30995275a91e7de78248919140a5714cd5aeda83cb0b1cf6d444369570",
+      "bytes": 159226
+    }
+  }
+}

@@ -1,0 +1,1840 @@
+The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/artifacts/song26l/archive/us-v1/reference/song26l.pdf
+Source SHA-256: 144985d895bce1057beb6bf916177c95b1996572f32df00be968e32053785ce9
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Layout extraction: spacing retains approximate PDF columns and tables.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+    The Label Horizon Paradox: Rethinking Supervision Targets in Financial
+                                Forecasting
+
+
+                                    Chen-Hui Song 1 Shuoling Liu 1 † Liyuan Chen 1 †
+
+
+                         Abstract                                    dynamics. To tackle these intrinsic challenges, the research
+                                                                     community has traditionally divided its efforts into two
+     While deep learning has revolutionized financial
+                                                                     main streams: Data-centric approaches (Shi et al., 2025;
+     forecasting through sophisticated architectures,
+                                                                     Yu et al., 2023; Sawhney et al., 2020), which focus on engi-
+     the design of the supervision signal itself is rarely
+                                                                     neering expressive alpha factors from limit order books and
+     scrutinized. We challenge the canonical assump-
+                                                                     alternative data; and Model-centric approaches (Liu et al.,
+     tion that training labels must strictly mirror in-
+                                                                     2024a; Wang et al., 2025; Liu et al., 2025; Chen & Wang,
+     ference targets, uncovering the Label Horizon
+                                                                     2025), which design sophisticated architectures—ranging
+     Paradox: the optimal supervision signal often
+                                                                     from RNNs to Transformers—to capture complex temporal
+     deviates from the prediction goal, shifting across
+                                                                     dependencies.
+     intermediate horizons governed by market dynam-
+     ics. We theoretically ground this phenomenon in                 However, this extensive focus on input representations and
+     a dynamic signal-noise trade-off, demonstrating                 model architectures has left a critical component largely
+     that generalization hinges on the competition be-               unexamined: the prediction target (or label) itself. In the
+     tween marginal signal realization and noise ac-                 standard paradigm, the training label is strictly aligned with
+     cumulation. To operationalize this insight, we                  the inference goal. For instance, in a daily prediction task
+     propose a bi-level optimization framework that                  (where predictions are made at time t for the horizon t + ∆,
+     autonomously identifies the optimal proxy label                 with ∆ = 1 day), it is typically taken for granted that the
+     within a single training run. Extensive experi-                 model must be trained on realized next-day returns. This
+     ments on large-scale financial datasets demon-                  convention implicitly assumes that bringing the supervision
+     strate consistent improvements over conventional                signal closer to the evaluation target is always beneficial,
+     baselines, thereby opening new avenues for label-               rarely questioning the optimality of the label’s time horizon.
+     centric research in financial forecasting.
+                                                                     This raises a fundamental question: Is the “correct” infer-
+                                                                     ence target necessarily the best training signal? In this
+                                                                     paper, we answer this in the negative. Through extensive
+1. Introduction                                                      experiments, we uncover a counter-intuitive phenomenon
+Deep learning has fundamentally transformed the land-                we term the Label Horizon Paradox:
+scape of quantitative finance, serving as a critical tool for        Minimizing training error on the canonical target horizon
+high-noise time-series forecasting, particularly in short-term       t + ∆ does not guarantee optimal generalization on t + ∆.
+stock prediction (Al-Khasawneh et al., 2025; Chen et al.,            Contrary to intuition, the most effective supervision signal
+2025; Sonkavde et al., 2023; Shah et al., 2022). The primary         is often misaligned with the inference target, residing at
+objective in this domain is to forecast the relative returns         an intermediate horizon t + δ (where δ ̸= ∆) that better
+of assets to construct profitable portfolios. Unlike typical         balances signal realization against noise.
+tasks in computer vision or natural language processing, fi-
+nancial prediction operates in an environment characterized          Underlying this paradox is a fundamental trade-off gov-
+by extremely low signal-to-noise ratios and non-stationary           erned by the temporal evolution of market information. We
+                                                                     conceptualize generalization performance not as a static
+   †
+     Project Lead 1 E Fund Management Co., Ltd., Guangzhou,          property, but as the outcome of a dynamic interplay between
+Guangdong, China. Correspondence to: Chen-Hui Song                   two competing rates:
+<songchenhui@efunds.com.cn>, Shuoling Liu <liushuol-
+ing@efunds.com.cn>, Liyuan Chen <chenly@efunds.com.cn>.              1. Marginal Signal Realization (Information Gain): In-
+                                                                     formation (Alpha) requires time to be absorbed by the mar-
+Proceedings of the 43 rd International Conference on Machine         ket and fully priced in (Hong & Stein, 1999; Shleifer, 2000).
+Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026
+by the author(s).
+
+                                                                 1
+
+=== PDF PAGE 2 ===
+                     The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+2. Marginal Noise Accumulation (Noise Penalty): Simul-                   2. Preliminaries
+taneously, as the time window expands, the market accu-
+mulates idiosyncratic volatility and stochastic shocks (Ang              In this section, we formalize the short-term stock cross-
+et al., 2006; Jiang et al., 2009) unrelated to the initial signal.       sectional prediction task (Linnainmaa & Roberts, 2018) and
+                                                                         outline the deep learning framework employed.
+The generalization behavior is therefore governed by the in-
+terplay between these two rates. Extending the label horizon             2.1. Stock Cross-Sectional Prediction
+is beneficial only when marginal signal realization outpaces
+noise accumulation. Conversely, once the signal is largely               Consider a universe of N stocks at a decision time t. Our
+priced in, the diminishing information gain is overwhelmed               goal is to forecast the relative performance of these assets
+by compounding noise, rendering further extension detri-                 over a subsequent fixed period, denoted as the target hori-
+mental. The optimal horizon δ ∗ therefore emerges at the                 zon ∆ (where ∆ represents the number of time steps in
+precise equilibrium where marginal information gain equals               minutes). Let pi,t denote the price of stock i at time t.
+the marginal noise penalty.                                              The target variable, the target realized return, is defined as
+                                                                          ∆
+                                                                         ri,t = pi,t+∆ /pi,t − 1.
+Crucially, since the underlying rates of signal realization and
+noise accumulation are unknown and dynamic, the optimal                  We denote the simultaneous returns of the entire market as
+                                                                                                                        ∆ ⊤
+horizon δ ∗ cannot be hard-coded a priori. To operationalize             a cross-sectional vector r∆     ∆                       N
+                                                                                                   t = [r1,t , . . . , rN,t ] ∈ R .
+this insight, we apply a Bi-level Optimization Framework
+(Chen et al., 2022; Franceschi et al., 2018) for adaptive hori-          2.2. Optimization Objective
+zon learning. Instead of manually selecting a fixed proxy,
+                                                                         In quantitative investment, the primary goal is to construct
+our method treats the label horizon as a learnable param-
+                                                                         a portfolio that maximizes risk-adjusted returns. This ob-
+eter. By formulating the problem as a bi-level objective,
+                                                                         jective is theoretically grounded in the Fundamental Law
+the model automatically learns to weight different horizons,
+                                                                         of Active Management (Grinold & Kahn, 2000), which re-
+dynamically discovering the sweet spot where this trade-off
+                                                                         lates the expected Information Ratio (IR) of a strategy to its
+is maximized for the specific dataset and model architecture.
+                                                                         predictive power:
+In this work, we focus on short-term stock forecasting and                                              √
+make the following primary contributions:                                                   E[IR] ≈ IC · Breadth.                  (1)
+
+1. Theoretical Unification: Grounded in Arbitrage Pric-                  Intuitively, this law asserts that performance is driven by
+ing Theory, we provide a rigorous derivation using a linear              the quality of predictions and the number of independent
+factor model to quantify the temporal dynamics of signal                 trading opportunities. Specifically, Breadth represents the
+realization and noise accumulation. This theoretical founda-             number of independent bets (proportional to the universe
+tion unifies previously fragmented empirical observations,               size N ), and IC (Information Coefficient) is the Pearson
+formally establishing the signal-noise trade-off as the pri-             correlation coefficient ρ between the predicted scores and
+mary driver of model generalization in financial forecasting.            the realized return vector r∆
+                                                                                                     t .
+
+2. Methodological Innovation: Motivated by our theo-                     Since market breadth is generally fixed for a given strat-
+retical insights, we propose a novel, end-to-end adaptive                egy, maximizing portfolio performance is mathematically
+framework. By formulating temporal-horizon selection as a                equivalent to maximizing the IC. Consequently, our learning
+dynamic optimization problem, our method automatically                   objective is to train a model that produces scores maximally
+identifies the optimal supervision signal in a single training           correlated with the target return r∆ t . In the sequel, we use
+run, eliminating the need for the computationally prohibitive            IC and ρ interchangeably to denote this correlation.
+brute-force search required by traditional methods.
+                                                                         2.3. Deep Learning Framework
+3. Empirical Validation: We extensively evaluate our
+framework across ten diverse architectures. Our approach                 Modern deep learning approaches capture market dynamics
+consistently yields significant predictive improvements in               by modeling stock features as time series. For each stock i
+the emerging A-share market (CSI 300, 500, and 1000)                     at time t, the input is a sequence of historical feature vectors
+and demonstrates robust cross-market generalizability in                 xi,t ∈ RL×D , spanning a lookback window of size L with
+the highly efficient US equity market (S&P 500). Further-                D feature channels. Aggregating across the universe, the in-
+more, downstream backtesting and severe macroeconomic                    put at time t forms a 3-dimensional tensor Xt ∈ RN ×L×D .
+stress testing (e.g., on the 2024 market crash) confirm its
+exceptional resilience and practical profitability.                      A deep neural network fθ (e.g., LSTM, GRU, or Trans-
+                                                                         former) encodes this history into a predictive score:
+
+                                                                                             ŷt = fθ (Xt ) ∈ RN .                   (2)
+
+                                                                     2
+
+=== PDF PAGE 3 ===
+                       The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+                                                                                     𝑡𝑟𝑎𝑖𝑛
+
+
+                                 𝑖𝑛𝑝𝑢𝑡                                                                    …               …
+                                                                                                         …            …
+                                                                                                𝑟𝑡1           𝑟𝑡𝛿           𝑟𝑡∆
+             𝑋𝑡                                         𝑓𝜃𝛿                          𝑖𝑛𝑓𝑒𝑟
+
+Figure 1. Training and Inference Pipeline. The leftmost panel shows historical input features Xt , which are processed by a neural
+network model fθδ . The right panel illustrates unfolding future price paths with different time horizons (rt1 , rtδ , rt∆ ). The arrows highlight
+a central premise of this study: during training (top arrow), the model may be optimized against an intermediate proxy label rtδ ; however,
+during inference (bottom arrow), the model’s performance is strictly evaluated on its ability to forecast the final target return (rt∆ ). Our
+goal is not to change the evaluation target, but to question and improve the choice of training label that best serves this fixed objective.
+
+
+Standard financial forecasting paradigms rigidly align the                  goal remains fixed—forecasting stocks based on the realized
+supervision label with the final inference goal.    P Typically,            return r∆ at the target horizon—we vary the supervision
+models are trained to minimize a loss L(θ) = t ℓ(ŷt , yt )                 signal used during training. Specifically, we train a set of
+where the label yt is set strictly to the target return r∆
+                                                         t . This
+                                                                                                                (δ)
+                                                                            identical deep neural networks {fθ }δ , where each model
+convention implicitly assumes that the target horizon pro-                  is supervised by the cumulative return rδt at a specific inter-
+vides the most effective learning signal, thereby defaulting                mediate horizon δ ∈ {1, . . . , ∆}. For clarity, we instantiate
+to the label horizon that conceptually matches the evaluation               this analysis using an LSTM backbone on the CSI 500 uni-
+metric.                                                                     verse, as this mid-cap index offers a representative balance
+However, relying solely on the terminal snapshot at t + ∆                   between liquidity and cross-sectional breadth, and LSTMs
+ignores the continuous price discovery process leading up to                remain a strong and widely used baseline in short-term stock
+that point. To investigate whether the trajectory offers better             forecasting. Detailed experimental settings are provided in
+supervision, we introduce a granular notation for interme-                  the Appendix A.
+diate dynamics. Let δ ∈ {1, . . . , ∆} denote the discretized               We examine this phenomenon across three distinct market
+time index within the prediction window. We define pi,t+δ                   scenarios, which represent different prediction horizons in
+as the price of stock i at step δ. Consequently, the cumula-                quantitative finance:
+tive return from decision time t to this intermediate horizon
+                   δ
+is formulated as ri,t = pi,t+δ /pi,t − 1.                                   Scenario 1: Interday (Standard) Prediction. The decision
+                                                                            time t is the market close on day D, and the prediction target
+Aggregating these across the universe yields the interme-                   r∆t is the return from the close of day D to the close of day
+diate return vector rδt ∈ RN . In this work, we challenge                   D + 1. Intermediate horizons correspond to cross-sectional
+the dogma that the optimal supervision signal must mir-                     returns at each minute of the next day. This setup follows
+ror the inference target (i.e., δ = ∆). Instead, we explore                 the standard convention in stock forecasting studies.
+how utilizing these proxy vectors rδt as training labels can
+effectively enhance generalization on the final target r∆                   Scenario 2: Intraday (30-minute) Prediction. The de-
+                                                        t .
+                                                                            cision time t is set to the exact midpoint of the daily trad-
+                                                                            ing session. The target horizon is a short-term interval of
+3. The Label Horizon Paradox                                                ∆ = 30 minutes immediately following this timestamp. The
+Contrary to the standard practice of strictly aligning training             objective is to predict the return realized exclusively within
+labels with prediction targets, the aforementioned Label                    this 30-minute window.
+Horizon Paradox reveals the limitations of this convention.                 Scenario 3: Intraday (90-minute) Prediction. Similarly,
+This section presents empirical evidence of this phenomenon                 the decision time t is fixed at the midpoint of the trading
+and introduces a theoretical mechanism to explain it.                       session. The target horizon extends to ∆ = 90 minutes. The
+                                                                            model aims to forecast the cumulative return realized over
+3.1. Empirical Observation                                                  this longer intraday interval within the same session.
+To systematically evaluate the impact of label horizon on                   We define the optimal training horizon as δ ∗ =
+forecasting performance, we conducted a control experi-                     argmaxδ ρ(ŷtδ , r∆
+                                                                                              t ). As shown in Figure 2, the performance
+ment as illustrated in Figure 1. While our ultimate inference               curves exhibit distinct patterns across these scenarios:
+
+
+                                                                        3
+
+=== PDF PAGE 4 ===
+                        The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+                                                   0.150
+0.105
+                                                   0.148                                                0.110
+0.100
+                                                   0.145
+0.095                                                                                                   0.105
+                                                   0.143
+0.090
+                                                   0.140                                                0.100
+0.085
+                                                   0.138
+0.080                                                                                                   0.095
+                                                   0.135
+0.075                                              0.133
+                                                                                                        0.090
+        0       50    100   150       200                  0           10            20        30                0     20        40         60   80
+
+            (a) Scenario 1: δ ∗ ≪ ∆                            (b) Scenario 2: δ ∗ ≈ ∆                           (c) Scenario 3: 0 < δ ∗ < ∆
+Figure 2. Performance Curves across Different Scenarios. The x-axis is the training horizon δ, and the y-axis is the out-of-sample IC
+on the fixed final target r∆ . The curves are obtained by training LSTM models on the CSI 500 dataset, with 5 independent models per
+horizon. The blue line shows the raw results, and the red line shows the Gaussian-smoothed trend.
+
+
+In Scenario 1, we observe a Monotonic Decrease. Perfor-                         been priced in by horizon δ), and σ 2 denotes the rate of
+mance peaks at a very early horizon (δ ∗ ≪ ∆) and degrades                      unpredictable noise accumulation.
+significantly as δ approaches ∆. This strictly violates the
+closer-is-better intuition.                                                     Under this generative process, a model trained on the proxy
+                                                                                horizon δ yields an estimator ŵδ corrupted by the specific
+In Scenario 2, we observe a Monotonic Increase. Here,                           noise variance at that horizon. We define the generalization
+training on the target itself is optimal (δ ∗ ≈ ∆). The signal                  performance J(δ) := ρ2 (ŷtδ , r∆
+                                                                                                                t ) as the squared predictive
+realization dominates the noise accumulation, meaning the                       correlation with the fixed target r∆t . By decomposing the
+information gain continues until the target time. Conse-                        log-performance, we reveal the structural trade-off driving
+quently, training on the target itself is optimal.                              the paradox:
+In Scenario 3, the curve is typically Hump-Shaped. The                          Theorem 3.2. The expected performance is determined by
+optimal horizon lies at an intermediate point (0 < δ ∗ < ∆).                    the net balance of two competing accumulation processes
+This reflects an intraday trade-off: the model benefits from                    (ignoring a constant term):
+alpha realization but suffers when forced to fit unpredictable
+                                                                                   ln J(δ) = 2 ln α(δ) − ln α(δ)2 + K(δ + δ0 )
+                                                                                                                                
+late-session noise.                                                                                                                 (4)
+                                                                                               | {z }       |        {z          }
+                                                                                              Information Gain              Noise Penalty
+These observations collectively confirm the Label Horizon
+Paradox: Supervising the model with the exact target might                      where K is a constant related to the model’s estimation
+yield suboptimal generalization                                                 variance.
+
+3.2. Theoretical Framework                                                      Equation (4) quantifies the fundamental tension in labeling:
+To provide a rigorous mechanism for the observations above,                     1. Information Gain reflects the growth of valid signal in
+we analyze the problem through a Linear Factor Model                            the label. It increases as δ extends, but naturally saturates
+grounded in Arbitrage Pricing Theory (Reinganum, 1981),                         as α(δ) → const (when information is fully priced).
+hereafter referred to as APT. The details of our theoretical
+                                                                                2. Noise Penalty reflects the growth of prediction uncer-
+analysis are provided in Appendix C.
+                                                                                tainty. Since the idiosyncratic variance K(δ + δ0 ) follows a
+We begin by modeling the intrinsic dynamics of market                           random walk, this penalty grows strictly with time δ.
+returns.
+                                                                                Consequently, the optimal horizon δ ∗ defines the tipping
+Assumption 3.1. We extend the static APT framework to                           point where the marginal accumulation of noise begins to
+                                        δ
+model the short-term cumulative return ri,t using observable                    outpace the marginal accumulation of information.
+                         d
+factor exposures si,t ∈ R :
+                                                                                3.3. Generalization to Deep Learning
+  δ
+ ri,t = α(δ)w∗⊤ si,t + ϵδi,t ,        ϵδi,t ∼ N (0, σ 2 (δ + δ0 )) (3)
+                                                                                While Theorem 3.2 is derived for a linear estimator, its im-
+Here, w∗ denotes the factor risk premia vector (i.e., the                       plications can be intuitively related to deep neural networks.
+ground-truth weight vector that linearly maps factor expo-                      From a representation-learning viewpoint, a deep model is
+sures to expected returns), α(δ) represents the signal re-                      often viewed as a non-linear feature extractor followed by
+alization process (i.e., how much of the information has                        a simple linear readout layer (Bengio et al., 2013; Alain
+
+                                                                            4
+
+=== PDF PAGE 5 ===
+                       The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+                                                                                                     0.145
+                                                   0.110
+0.070
+                                                   0.105                                             0.140
+
+                                                   0.100
+0.065                                                                                                0.135
+                                                   0.095
+
+                                                   0.090                                             0.130
+0.060
+
+                                                   0.085
+                                                                                                     0.125
+0.055                                              0.080
+                                                                                                     0.120
+        0     50     100    150    200                     0     50      100     150    200                  0      50   100    150     200
+
+            (a) Dataset CSI 300                                (b) Dataset CSI 500                               (c) Dataset CSI 1000
+Figure 3. Decomposition Validation. The x-axis represents the training horizon δ, and the y-axis represents the Out-of-Sample IC on
+the fixed final target r∆ . We performed a dense experimental sweep to rigorously verify the theoretical decomposition, training distinct
+LSTM models for every minute-level horizon across 5 random seeds. The red lines depict the empirical Test IC on the inference target
+(∆), while the blue lines illustrate the theoretical values derived from the product term in Corollary 3.3. For both metrics, lighter shades
+correspond to raw measurements from individual trials, while solid darker curves indicate the Gaussian-smoothed trends.
+
+
+& Bengio, 2016). The latent representation learned by the                      tive derivation in Appendix D, which further corroborates
+network can be thought of as playing the same role as the                      the robustness of our theory.
+signal si,t in our framework, and the final linear layer then
+fits this signal under label noise, in line with standard lin-                 3.4. Mechanism Analysis
+ear or kernel-based generalization analyses (Belkin et al.,
+2019; Jacot et al., 2018). Under this perspective, a simi-                     Leveraging the signal-noise decomposition, we can now
+lar trade-off is expected to influence deep models as well:                    interpret the distinct performance patterns observed across
+regardless of the complexity of the feature extractor, gener-                  the three scenarios:
+alization is shaped by the balance between realized signal                     Scenario 1 (Interday): Interday signals typically saturate
+and accumulated noise in the supervision.                                      early (e.g., at the market open). Extending δ beyond this
+To empirically validate this theoretical connection, we                        point yields vanishing information gain (α′ ≈ 0) while the
+specifically examine Scenario 1. Given the interday na-                        noise penalty continues to grow linearly. Thus, the gradient
+ture of this task, the market has ample time to absorb the                     is strictly negative, driving the optimal horizon to be much
+prior day’s information, causing the signal embedded in the                    smaller than the target (δ ∗ ≪ ∆).
+input features to be priced in immediately upon the market                     Scenario 2 (30-min): In short, high-momentum windows,
+open. Consequently, the signal realization saturates almost                    the market is in a state of active price discovery. The sig-
+immediately (α(δ) ≈ const). This leads to the following                        nal realization rate remains high enough to suppress the
+approximation:                                                                 accumulation of noise. Consequently, the gradient remains
+Corollary 3.3. Under the condition where signal evolution                      positive, making the full horizon optimal (δ ∗ ≈ ∆).
+is static relative to noise accumulation, the final predic-                    Scenario 3 (90-min): Here, the signal’s effective lifespan
+tive correlation can be approximated as the product of two                     is shorter than the target window. Initially, rapid informa-
+observable terms:                                                              tion gain improves performance; however, once the signal
+              ρ(ŷtδ , r∆         δ δ           δ ∆                            saturates, the persistent noise penalty eventually dominates,
+                        t ) ≈ ρ(ŷt , rt ) × ρ(rt , rt )           (5)
+                                                                               resulting in a peak at an intermediate horizon (0 < δ ∗ < ∆).
+The detailed proof is provided in Appendix C.6.                                A detailed mathematical discussion, categorizing these
+We substantiate this corollary through large-scale experi-                     regimes based on the sign of the derivative d ln J(δ)/dδ,
+ments, as shown in Figure 3. Notably, the theoretical curve,                   is provided in Appendix C.5.
+calculated solely from the product on the right-hand side of
+Eq. (5), closely matches the actual performance with high                      4. Adaptive Horizon Learning via Bi-Level
+precision across all datasets. This strong alignment con-                         Optimization
+firms that the proposed signal-noise mechanism is indeed
+the driving force in deep learning models.                                     Since the theoretically optimal horizon is dynamic and a
+Remark 3.4. This decomposition can also be understood                          brute-force search is expensive, we propose an automated
+from a purely statistical perspective via the Partial Correla-                 Bi-level Optimization (BLO) framework. This method au-
+tion Formula (Kenett et al., 2015). We discuss this alterna-                   tonomously learns the ideal supervision during training,
+
+                                                                         5
+
+=== PDF PAGE 6 ===
+                     The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+stabilized by a warm-up phase and entropy regularization.                     To address this, we employ a warm-up phase using stan-
+                                                                              dard supervised learning. We construct a robust supervision
+4.1. Bi-Level Optimization Framework                                          signal by aggregating information across all horizons. How-
+                                                                              ever, since raw returns exhibit varying volatilities (scales),
+Our objective is to train a model fθ using a set of candidate                 we first apply cross-sectional standardization to narrow the
+labels such that it generalizes best on the ultimate target                   distributional gaps between different labels:
+horizon ∆. We introduce a learnable weight vector λ ∈
+  ∆                                                                                                          rδt − µδt
+P (obtained by applying a softmax to learnable logits, so
+R                                                                                                    zδt =                              (11)
+   λδ = 1) to govern the importance of each candidate                                                            σtδ
+horizon δ. We treat λ as learnable parameters and optimize                    For the first Nwarm epochs, the model is trained to minimize
+them via an intra-batch splitting strategy. In each iteration,                a single loss function ℓ against the arithmetic mean of these
+a mini-batch B is split into a support set Bin and a query set                standardized candidates:
+Bout .                                                                                                          ∆
+                                                                                                             1 X δ
+1. Inner Loop (Proxy Learning on Bin ). The model                                                    ȳt =      zt                      (12)
+                                                                                                             ∆
+parameters θ are updated on Bin with loss function ℓ. The                                                      δ=1
+final objective Linner is a weighted combination of losses                    This mean-field initialization efficiently establishes a foun-
+                                           (δ)
+against the candidate return labels Rt = {rt }δ :                             dational representation, ensuring a stable starting point for
+                                    ∆                                         the subsequent bi-level adaptation.
+                         X          X
+   Linner (θ, λ) =                        λδ · ℓ(fθ (Xt ), rδt )    (6)       Phase 2: Bi-Level Update. After warm-up, we enable the
+                     (Xt ,Rt )∈Bin δ=1                                        adaptive weighting scheme. Given a batch split (Bin , Bout ):
+Here, the model is guided by the composite signal empha-                      1. Inner Loop Update. We simulate the learning trajectory
+sized by λ.                                                                   by performing M steps of gradient descent on Bin . Start-
+2. Outer Loop (Target Validation on Bout ). The quality                       ing from the current parameters θ, the model is updated
+of the learned weights λ is verified on Bout . Crucially, the                 sequentially (m = 1, . . . , M ):
+outer loss consists of the validation error against the target                         θm (λ) ← θm−1 − η∇θ Linner (θm−1 , λ)            (13)
+Horizon r∆ t and an entropy regularization term:
+                                                                              By retaining the computational graph of these updates, we
+      min Louter (θ∗ (λ), Bout ) − γH(λ)                            (7)
+       λ                                                                      derive the look-ahead state θM (λ), which is functionally
+       s.t.   θ∗ (λ) = arg min Linner (θ, λ, Bin )                  (8)       dependent on λ.
+                            θ
+                         X                                                    Crucially, since the model has already acquired a robust
+    where     H(λ) = −       λδ log λδ                              (9)
+                                                                              representation during the warm-up phase, a single gradient
+                            δ
+                                X                                             step (M = 1) is typically sufficient to capture the sensitivity
+              Louter =                    ℓ(fθ∗ (Xt ), r∆
+                                                        t )        (10)       of the parameters to the weights. This makes the process
+                         (Xt ,r∆
+                               t )∈Bout                                       highly computationally efficient.
+The added entropy term H(λ) acts as a safeguard against                       2. Outer Loop Update. We evaluate θM on Bout against
+noise disturbance. It prevents the weight distribution from                   the target r∆t . We compute the gradient of the validation
+collapsing onto a single horizon—a scenario where tran-                       loss w.r.t. λ, add the entropy gradient, and update λ:
+sient noise artifacts could disproportionately dominate the
+gradient and lead to training instability. Instead, it maintains                      λ ← λ − β∇λ (Louter (θM , λ) − γH(λ))             (14)
+a smoother distribution, encouraging the model to leverage                    By iterating these steps, λ converges to a robust distribution
+complementary information from multiple horizons.                             that emphasizes the most effective horizons for supervision
+                                                                              signal extraction, with δ ∗ = argmaxδ λδ . Based on the
+4.2. Optimization Procedure                                                   selected optimal horizon, we then retrain the forecasting
+                                                                              model using this horizon as the supervision target.
+Solving the bi-level objective requires differentiating
+through the optimization path. We employ a two-phase
+strategy to ensure stability.                                                 5. Experiments
+Phase 1: Warm-up with Standardized Mean-Field. Ini-                           In this section, we validate our proposed bi-level method
+tiating the bi-level optimization directly from scratch is                    through extensive experiments on real-world market data. A
+suboptimal, as the model parameters θ initially lack effec-                   demo based on the open-source Alpha158 factors is also pro-
+tive feature representations, making the meta-optimization                    vided at https://github.com/Chenhui-Song/
+landscape highly volatile and prone to training collapse.                     label-horizon-paradox.
+
+                                                                          6
+
+=== PDF PAGE 7 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Table 1. Main Results. Comprehensive performance comparison between standard training (Std.) and our Bi-level framework (Ours)
+across three market indices. All results are averaged over 5 random seeds. Bold indicates the better performance.
+
+                                 IC (×10)            ICIR        R ANK IC (×10)     R ANK ICIR     T OP R ET (%)    S HARPE R ATIO
+   DATASET    M ODEL           S TD .   O URS   S TD .   O URS   S TD .   O URS   S TD .   O URS   S TD .   O URS   S TD .   O URS
+              LSTM             0.637    0.720   0.443    0.562   0.669    0.727   0.520    0.556   0.231    0.240   2.332    2.390
+              GRU              0.586    0.730   0.445    0.560   0.566    0.662   0.436    0.542   0.209    0.256   1.940    2.612
+              DL INEAR         0.537    0.684   0.403    0.405   0.568    0.683   0.425    0.516   0.207    0.221   2.007    2.456
+              RL INEAR         0.565    0.716   0.424    0.532   0.625    0.662   0.461    0.534   0.211    0.273   2.139    2.781
+              PATCH TST        0.568    0.673   0.411    0.459   0.525    0.653   0.411    0.464   0.213    0.236   2.078    2.381
+   CSI 300
+              I T RANSFORMER   0.540    0.644   0.413    0.421   0.560    0.650   0.428    0.496   0.216    0.230   2.196    2.518
+              M AMBA           0.641    0.719   0.457    0.539   0.646    0.673   0.462    0.514   0.238    0.273   2.271    2.570
+              B I -M AMBA +    0.661    0.717   0.485    0.486   0.631    0.704   0.524    0.543   0.245    0.267   2.698    2.956
+              M ODERN TCN      0.565    0.686   0.394    0.423   0.571    0.694   0.448    0.548   0.218    0.227   2.390    2.498
+              TCN              0.604    0.691   0.459    0.498   0.632    0.702   0.503    0.520   0.216    0.230   2.102    2.240
+              LSTM             0.845    1.029   0.724    0.861   0.792    0.859   0.861    0.895   0.382    0.383   3.534    3.660
+              GRU              0.862    1.079   0.752    0.886   0.812    0.883   0.846    0.939   0.359    0.382   3.398    3.458
+              DL INEAR         0.839    0.986   0.632    0.706   0.787    0.871   0.816    0.790   0.320    0.363   3.219    3.495
+              RL INEAR         0.799    0.961   0.682    0.750   0.731    0.839   0.799    0.815   0.341    0.366   3.104    3.349
+              PATCH TST        0.941    1.070   0.805    0.873   0.785    0.861   0.840    0.855   0.360    0.395   3.104    3.519
+   CSI 500
+              I T RANSFORMER   0.890    1.004   0.717    0.810   0.745    0.858   0.820    0.877   0.371    0.377   3.346    3.541
+              M AMBA           0.917    1.141   0.855    0.908   0.792    1.006   0.834    0.933   0.384    0.405   3.452    3.854
+              B I -M AMBA +    0.975    1.081   0.813    0.876   0.850    0.928   0.926    0.943   0.393    0.426   3.744    3.967
+              M ODERN TCN      0.882    1.028   0.793    0.811   0.640    0.858   0.783    0.886   0.354    0.381   3.096    3.554
+              TCN              0.835    1.014   0.790    0.829   0.794    0.907   0.791    0.872   0.372    0.383   3.352    3.525
+              LSTM             1.275    1.372   1.311    1.325   0.807    0.893   0.842    0.883   0.494    0.502   3.888    4.050
+              GRU              1.321    1.410   1.283    1.397   0.862    0.889   0.836    0.971   0.498    0.525   4.192    4.272
+              DL INEAR         1.107    1.204   1.021    1.223   0.635    0.796   0.620    0.938   0.446    0.477   3.450    4.067
+              RL INEAR         1.091    1.207   1.067    1.183   0.730    0.827   0.827    0.921   0.445    0.480   3.423    3.872
+              PATCH TST        1.290    1.389   1.310    1.349   0.796    0.871   0.851    0.926   0.469    0.502   3.685    4.016
+   CSI 1000
+              I T RANSFORMER   1.216    1.296   1.253    1.352   0.692    0.875   0.737    0.995   0.451    0.474   3.481    3.955
+              M AMBA           1.328    1.376   1.292    1.331   0.866    0.873   0.906    0.907   0.492    0.510   3.966    4.134
+              B I -M AMBA +    1.337    1.377   1.227    1.284   0.723    0.927   0.709    0.968   0.468    0.510   3.622    4.409
+              M ODERN TCN      1.213    1.311   1.192    1.225   0.654    0.951   0.723    0.861   0.477    0.488   3.955    4.143
+              TCN              1.072    1.219   0.953    1.127   0.837    0.902   0.903    0.909   0.491    0.511   4.148    4.407
+
+
+
+5.1. Experimental Setup                                              state-of-the-art models. Specifically, we select ten represen-
+                                                                     tative baselines spanning five distinct deep forecasting fami-
+Data and Splitting. We evaluate our method on large-scale
+                                                                     lies to cover a wide range of temporal modeling paradigms.
+real-world market data covering three major stock indices:
+                                                                     These include Linear-based models (DLinear (Zeng et al.,
+CSI 300 (Large-cap), CSI 500 (Mid-cap), and CSI 1000
+                                                                     2023) and RLinear (Li et al., 2023)), which utilize sim-
+(Small-cap). This selection ensures the evaluation covers
+                                                                     ple yet effective linear mappings; RNN-based networks
+diverse market dynamics across different market capitaliza-
+                                                                     (GRU (Dey & Salem, 2017) and LSTM (Hochreiter &
+tions. The dataset spans from January 2019 to July 2025.
+                                                                     Schmidhuber, 1997)), representing classical sequential mod-
+To strictly prevent look-ahead bias, we employ a chronolog-
+                                                                     eling approaches; CNN-based architectures (TCN (Liu
+ical split: Training (Jan 2019 – July 2023), Validation (July
+                                                                     et al., 2019) and ModernTCN (Luo & Wang, 2024)), which
+2023 – July 2024), and Testing (July 2024 – July 2025).
+                                                                     capture local temporal dependencies through convolutions;
+Additional datasets for evaluation on the US S&P 500 and
+                                                                     Transformer-based models (PatchTST (Nie et al., 2022)
+historical stress-test periods are detailed in Appendix A.1.
+                                                                     and iTransformer (Liu et al., 2024b)), representing attention-
+Implementation. Input features are constructed from                  based forecasting paradigms; and SSM-based models
+minute-level multivariate data. Models map the feature se-           (Mamba (Gu & Dao, 2024) and Bi-Mamba+ (Liang et al.,
+quence to realized returns and are optimized using AdamW.            2024)), representing the latest advancements in structured
+During training, the supervision signal is dynamically de-           state space models.
+termined by our bi-level optimization framework, which
+                                                                     Metrics. Performance is assessed across two dimensions:
+learns the optimal label horizon. Comprehensive details are
+                                                                     Predictive Signal Quality, measured by the Pearson corre-
+provided in Appendix A.5.
+                                                                     lation (IC) and Spearman rank correlation (RankIC), along
+                                                                     with their stability ratios (ICIR, RankICIR); and Investment
+5.2. Baselines and Metrics                                           Potential, evaluated by the average daily return of the top
+Baselines. To ensure a comprehensive and rigorous evalu-             10% stocks, reporting the Daily Return and Sharpe Ratio.
+ation, we benchmark our approach against a diverse set of
+
+                                                                 7
+
+=== PDF PAGE 8 ===
+                     The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Detailed descriptions of these baselines and metric calcula-          Table 2. Performance Comparison. Experiments are conducted
+                                                                      using an LSTM backbone across Scenarios 1, 2, and 3 on CSI 500.
+tions are provided in Appendix B.                                     We compare our proposed method (*) against two baselines: Naive
+                                                                      Averaging (†) and Equal-Weight Multi-Task Learning (‡).
+5.3. Main Results
+                                                                         C ONFIGURATION   IC(×10)   ICIR    R ANK IC(×10)   R ANK ICIR
+To align with standard benchmarks in the literature, we focus
+                                                                         S CENARIO 1∗      1.029    0.861      0.859          0.895
+our primary evaluation in the main text on the Daily Close-              S CENARIO 1†      0.969    0.778      0.821          0.817
+to-Close setting (Scenario 1), comparing our framework                   S CENARIO 1‡      0.932    0.803      0.814          0.837
+against the conventional baseline trained strictly on the final          S CENARIO 2∗      1.491    1.396      1.943          2.062
+target horizon r∆ t . As shown in Table 1, our bi-level method           S CENARIO 2†      1.453    1.471      1.857          2.021
+                                                                         S CENARIO 2‡      1.435    1.456      1.849          1.998
+consistently outperforms the standard paradigm across all
+                                                                         S CENARIO 3∗      1.082    1.095      1.399          1.609
+ten diverse architectures—ranging from classical RNNs and
+                                                                         S CENARIO 3†      1.050    1.125      1.359          1.538
+linear models to state-of-the-art Transformers and SSMs—                 S CENARIO 3‡      1.071    1.118      1.367          1.596
+and across all three market capitalization indices (CSI 300,
+500, and 1000). Notably, our method not only enhances raw
+predictive accuracy (IC and RankIC) but also yields substan-
+tial improvements in signal stability (ICIR and RankICIR)             6. Further Analysis
+and portfolio simulation metrics (Top Return and Sharpe               In this section, we conduct a series of in-depth analyses to
+Ratio). This universal improvement validates that relaxing            dissect the internal mechanisms of our framework.
+the strict label-target alignment can fundamentally enhance
+representation learning in noisy financial environments.
+                                                                      6.1. Necessity of Bi-level Optimization
+Beyond standard interday predictions, we extend our eval-
+                                                                      A natural question arises: can we achieve similar benefits
+uation to different temporal granularities. As detailed in
+                                                                      by simply averaging potential labels or treating them as
+Appendix E.1, the results under intraday scenarios per-
+                                                                      equal multi-task targets? To investigate this, we compare
+fectly align with our theoretical expectations. In the highly
+                                                                      our method against two baselines:
+momentum-driven 30-minute window (Scenario 2), our
+method automatically recovers the canonical target, per-              1. Naive Averaging: The model is trained on a single fixed
+forming on par with the baseline. In the longer 90-minute             label ȳt , constructed as the
+                                                                                                1
+                                                                                                   Parithmetic
+                                                                                                        δ
+                                                                                                               mean of all candidate
+window (Scenario 3), our adaptive horizon selection success-          proxy horizons (ȳt = ∆         z
+                                                                                                     δ t  ).
+fully captures the intermediate optimal signal, delivering
+                                                                      2. Equal-Weight MTL: The model predicts all candidate
+notable gains in signal stability.
+                                                                      horizons simultaneously using a multi-task
+                                                                                                            P learning        objec-
+To ensure our findings are not artifacts of a specific market                                             1              δ
+                                                                      tive with fixed, equal weights (L = ∆   δ ℓ(ŷt , rt )).
+or historical period, we conduct extensive cross-market and
+                                                                      As shown in Table 2, our Bi-level approach still outperforms
+out-of-distribution validations. Specifically, our framework
+                                                                      both methods. Naive Averaging tends to dilute the predictive
+maintains consistent performance improvements on the US
+                                                                      signal, as it indiscriminately mixes high-quality intermedi-
+S&P 500 index (Appendix E.3), confirming that the Label
+                                                                      ate horizons with noisy ones. Similarly, Equal-Weight MTL
+Horizon Paradox holds even in highly efficient markets.
+                                                                      fails to prioritize, forcing the model to allocate capacity to
+Furthermore, stress tests conducted during the severe market
+                                                                      horizons that may contain little learnable information. In
+crash and continuous downtrend of 2024 (Appendix E.4)
+                                                                      contrast, our BLO framework dynamically up-weights the
+demonstrate that dynamic label selection provides crucial
+                                                                      most effective horizons based on validation feedback, prov-
+risk resilience under extreme macroeconomic shocks.
+                                                                      ing that adaptive selection is superior to blind aggregation.
+Finally, while statistical metrics are informative, real-world        More detailed experiments and discussions are provided in
+quantitative trading is constrained by market frictions. In           the Appendix E.2.
+Appendix E.5, we present a simple downstream portfo-
+lio backtest incorporating transaction costs, slippage, and           6.2. Alignment of Learned Weights with the Optima
+TWAP execution. Our method consistently generates higher
+annualized returns while effectively reducing maximum                 A central claim of our work is that the proposed method acts
+drawdowns (MDD) across backbones. Crucially, as ana-                  as an automatic signal-to-noise ratio detector. To verify this,
+lyzed in Appendix F, these comprehensive performance and              we visualize the final distribution of the learned horizon
+economic gains are achieved with only marginal computa-               weights λ and compare them against the empirical paradox
+tional overhead, thanks to the efficiency of our single-step          curve (the actual test IC of models trained on fixed horizons,
+inner-loop design.                                                    as observed in Section 3).
+                                                                      Figure 4 reveals a striking alignment. The peak of the
+
+                                                                  8
+
+=== PDF PAGE 9 ===
+                      The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+                                                         0.005          7. Related Works
+                                                         0.004
+  0    24 48 72 96 120 144 168 192 216                                  Our work addresses the inherent challenges of financial
+                                                                        forecasting by rethinking the definition and optimization of
+                                                         0.035
+                                                         0.030          supervision signals. Prior research primarily mitigates noise
+   0    3    6    9   12 15 18 21 24 27                                 through robust feature extraction (Feng et al., 2019) or by
+                                                         0.013          applying noisy-label learning techniques (Zhang & Sabuncu,
+                                                         0.010          2018; Reed et al., 2014) to construct cleaner training data
+  0    9    18 27 36 45 54 63 72 81                                     (Zeng et al., 2024), yet these methods typically operate
+                                                         0.020
+                                                                        under a fixed prediction horizon. Consequently, they neglect
+                                                         0.010          the dynamic trade-off between signal realization and noise
+  0    9    18 27 36 45 54 63 72 81                                     accumulation inherent in the label’s temporal evolution.
+Figure 4. Visualization of Learned Horizon Weights (λ). We              It is also important to distinguish our approach from stan-
+illustrate the final distribution of λ learned by an LSTM model         dard label smoothing techniques (Müller et al., 2019). While
+on the CSI500 dataset. The panels correspond to Scenario 1 (top),
+                                                                        traditional label smoothing acts as a regularizer by softening
+Scenario 2 (second), Scenario 3 (third), and Scenario 3 without
+warm-up (bottom).                                                       the numerical distribution of a fixed target (e.g., convert-
+                                                                        ing hard one-hot labels to soft probabilities), our method
+                                                                        operates orthogonally along the time axis. We do not al-
+                                                                        ter the inherent cross-sectional distribution of the return
+learned weight distribution λ coincides closely with the                labels; rather, we dynamically search for the optimal tempo-
+horizon that achieved the highest test IC in our brute-force            ral horizon to serve as the supervision signal. Furthermore,
+grid search. This indicates that the outer-loop gradient suc-           while one might intuitively attempt to “smooth” labels by
+cessfully senses the signal-noise trade-off, navigating the             averaging targets across multiple horizons, our analysis in
+optimization focus toward the sweet spot of supervision.                Section 6.1 demonstrates that our adaptive horizon selection
+                                                                        is fundamentally distinct from, and strictly superior to, such
+6.3. Impact of Warm-up Phase                                            naive temporal mixing.
+
+As visualized in the bottom row of Figure 4, omitting the               To exploit this unexamined temporal dimension, we adopt a
+warm-up phase leads to a degenerate behavior in the label               bi-level optimization framework. While such frameworks
+distribution: the learned weights λ skew disproportionately             have been widely employed for sample re-weighting (Ren
+toward the earliest horizons, effectively discarding the infor-         et al., 2018; Shu et al., 2019; Jiang et al., 2018) to filter noisy
+mation embedded in longer timeframes.                                   training data, we diverge by extending this paradigm from
+                                                                        sample selection to label selection. Instead of cleaning input
+From an optimization perspective, this phenomenon closely               samples, our approach utilizes it to dynamically search for
+mirrors the concept of shortcut learning (Geirhos et al.,               the optimal supervision horizon, effectively navigating the
+2020). Because short-horizon labels are temporally closer               evolving signal-noise trade-off.
+to the input features, they naturally exhibit stronger correla-
+tions. Consequently, they offer an “easy” path for rapid loss
+reduction. When the bi-level optimization begins from a                 8. Conclusion
+completely untrained state, the single-step inner loop greed-           This study identifies the Label Horizon Paradox, challenging
+ily exploits these highly correlated but ultimately myopic              the conventional wisdom that training labels must strictly
+targets to minimize the immediate training objective.                   align with inference targets. We reveal that optimal gen-
+However, while this greedy exploitation enables very fast               eralization requires decoupling the two to balance signal
+initial convergence, it fundamentally limits the model’s                emergence against market noise. By employing a bi-level
+predictive capacity. By fixating solely on the easiest-to-              framework to autonomously learn the optimal supervision
+predict short-term dynamics, the network fails to capture               horizon, our approach consistently enhances the perfor-
+the broader, more robust market trends, thereby imposing a              mance of diverse existing architectures. Ultimately, this
+strictly low performance ceiling.                                       work establishes a new paradigm for dynamic, label-centric
+                                                                        optimization in highly stochastic forecasting environments.
+Therefore, the warm-up phase serves as a necessary struc-
+tural prior. This ensures that when the dynamic weight
+optimization is finally engaged, the model evaluates the
+utility of different horizons based on meaningful feature rep-
+resentations, effectively preventing the bi-level optimization
+from getting trapped in trivial local minima.
+
+                                                                    9
+
+=== PDF PAGE 10 ===
+                     The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Impact Statement                                                        Feng, F., Chen, H., He, X., Ding, J., Sun, M., and Chua,
+                                                                          T.-S. Enhancing stock movement prediction with ad-
+This research is intended solely for academic purposes. The               versarial training. In Proceedings of the Twenty-Eighth
+methodologies, models, and empirical results presented                    International Joint Conference on Artificial Intelligence,
+herein do not constitute financial, legal, or investment ad-              pp. 5843–5849, 2019.
+vice, and the authors assume no responsibility for any fi-
+nancial losses or adverse consequences arising from their               Franceschi, L., Frasconi, P., Salzo, S., Grazzi, R., and Pontil,
+application in real-world trading environments. Further-                  M. Bilevel programming for hyperparameter optimiza-
+more, from an ethical data perspective, all experiments were              tion and meta-learning. In International Conference on
+conducted using strictly publicly available market data (e.g.,            Machine Learning, pp. 1568–1577. PMLR, 2018.
+CSI 300, 500, 1000, and the US S&P 500). No private,
+sensitive, or personally identifiable information (PII) of indi-        Geirhos, R., Jacobsen, J.-H., Michaelis, C., Zemel, R., Bren-
+vidual investors was utilized, ensuring full compliance with              del, W., Bethge, M., and Wichmann, F. A. Shortcut learn-
+data privacy standards.                                                   ing in deep neural networks. Nature Machine Intelligence,
+                                                                          2(11):665–673, 2020.
+References                                                              Grinold, R. C. and Kahn, R. N. Active portfolio management.
+Al-Khasawneh, M. A., Raza, A., Khan, S. U. R., and Khan,                  McGraw-Hill, 2000.
+  Z. Stock market trend prediction using deep learning
+  approach. Computational Economics, 66(1):453–484,                     Gu, A. and Dao, T. Mamba: Linear-time sequence model-
+  2025.                                                                   ing with selective state spaces. In First Conference on
+                                                                         Language Modeling, 2024.
+Alain, G. and Bengio, Y. Understanding intermediate
+  layers using linear classifier probes. arXiv preprint                 Hochreiter, S. and Schmidhuber, J. Long short-term memory.
+  arXiv:1610.01644, 2016.                                                 Neural Computation, 9(8):1735–1780, 1997.
+
+Ang, A., Hodrick, R. J., Xing, Y., and Zhang, X. The cross-             Hong, H. and Stein, J. C. A unified theory of underreaction,
+  section of volatility and expected returns. The Journal of              momentum trading, and overreaction in asset markets.
+ Finance, 61(1):259–299, 2006.                                           The Journal of Finance, 54(6):2143–2184, 1999.
+Belkin, M., Hsu, D., Ma, S., and Mandal, S. Reconciling                 Jacot, A., Gabriel, F., and Hongler, C. Neural tangent ker-
+  modern machine-learning practice and the classical bias–                nel: Convergence and generalization in neural networks.
+  variance trade-off. Proceedings of the National Academy                 In Advances in Neural Information Processing Systems,
+  of Sciences, 116(32):15849–15854, 2019.                                 volume 31, 2018.
+Bengio, Y., Courville, A., and Vincent, P. Representation               Jiang, G. J., Xu, D., and Yao, T. The information con-
+  learning: A review and new perspectives. IEEE Transac-                   tent of idiosyncratic volatility. Journal of Financial and
+  tions on Pattern Analysis and Machine Intelligence, 35                   Quantitative Analysis, 44(1):1–28, 2009.
+  (8):1798–1828, 2013.
+                                                                        Jiang, L., Zhou, Z., Leung, T., Li, L.-J., and Fei-Fei, L.
+Chen, C., Chen, X., Ma, C., Liu, Z., and Liu, X. Gradient-
+                                                                           MentorNet: Learning data-driven curriculum for very
+  based bi-level optimization for deep learning: A survey.
+                                                                           deep neural networks on corrupted labels. In Interna-
+  arXiv preprint arXiv:2207.11719, 2022.
+                                                                           tional Conference on Machine Learning, pp. 2304–2313.
+Chen, L., Liu, S., Yan, J., Wang, X., Liu, H., Li, C., Jiao,               PMLR, 2018.
+  K., Ying, J., Liu, Y. V., Yang, Q., et al. Advancing
+  financial engineering with foundation models: progress,               Kenett, D. Y., Huang, X., Vodenska, I., Havlin, S., and
+  applications, and challenges. Engineering, 2025.                        Stanley, H. E. Partial correlation analysis: Applications
+                                                                          for financial markets. Quantitative Finance, 15(4):569–
+Chen, W. and Wang, Y. DHMoE: Diffusion generated hier-                    578, 2015.
+  archical multi-granular expertise for stock prediction. In
+  Proceedings of the AAAI Conference on Artificial Intelli-             Li, Z., Qi, S., Li, Y., and Xu, Z. Revisiting long-term time
+  gence, volume 39, pp. 11490–11499, 2025.                                series forecasting: An investigation on linear mapping.
+                                                                          arXiv preprint arXiv:2305.10721, 2023.
+Dey, R. and Salem, F. M. Gate-variants of gated recurrent
+  unit (GRU) neural networks. In 2017 IEEE 60th Inter-                  Liang, A., Jiang, X., Sun, Y., Shi, X., and Li, K. Bi-Mamba+:
+  national Midwest Symposium on Circuits and Systems                      Bidirectional mamba for time series forecasting. arXiv
+ (MWSCAS), pp. 1597–1600. IEEE, 2017.                                     preprint arXiv:2404.15772, 2024.
+
+                                                                   10
+
+=== PDF PAGE 11 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Linnainmaa, J. T. and Roberts, M. R. The history of the                of the 2020 Conference on Empirical Methods in Natural
+  cross-section of stock returns. The Review of Financial              Language Processing (EMNLP), pp. 8415–8426, 2020.
+  Studies, 31(7):2606–2649, 2018.
+                                                                     Shah, J., Vaidya, D., and Shah, M. A comprehensive review
+Liu, M., Zhu, M., Wang, X., Ma, G., Yin, J., and Zheng,                on multiple hybrid deep learning approaches for stock
+  X. Echo-gl: Earnings calls-driven heterogeneous graph                prediction. Intelligent Systems with Applications, 16:
+  learning for stock movement prediction. In Proceedings               200111, 2022.
+  of the AAAI Conference on Artificial Intelligence, vol-
+  ume 38, pp. 13972–13980, 2024a.                                    Shi, H., Song, W., Zhang, X., Shi, J., Luo, C., Ao, X.,
+                                                                       Arian, H., and Seco, L. A. Alphaforge: A framework
+Liu, S., Yan, J., Wang, X., Jiang, Y., Chen, L., Fan, T.,              to mine and dynamically combine formulaic alpha fac-
+  Chen, K., and Yang, Q. Federated financial reasoning                 tors. In Proceedings of the AAAI Conference on Artificial
+  distillation: Training a small financial expert by learning          Intelligence, volume 39, pp. 12524–12532, 2025.
+  from multiple teachers. In Proceedings of the 6th ACM
+  International Conference on AI in Finance, pp. 623–631,            Shleifer, A. Inefficient markets: An introduction to be-
+  2025.                                                                havioural finance. OUP Oxford, 2000.
+
+Liu, Y., Dong, H., Wang, X., and Han, S. Time series                 Shu, J., Xie, Q., Yi, L., Zhao, Q., Zhou, S., Xu, Z., and
+  prediction based on temporal convolutional network. In               Meng, D. Meta-Weight-Net: Learning an explicit map-
+  2019 IEEE/ACIS 18th International Conference on Com-                 ping for sample weighting. In Advances in Neural Infor-
+  puter and Information Science (ICIS), pp. 300–305. IEEE,             mation Processing Systems, volume 32, 2019.
+  2019.                                                              Sonkavde, G., Dharrao, D. S., Bongale, A. M., Deokate,
+Liu, Y., Hu, T., Zhang, H., Wu, H., Wang, S., Ma, L., and              S. T., Doreswamy, D., and Bhat, S. K. Forecasting stock
+  Long, M. iTransformer: Inverted transformers are effec-              market prices using machine learning and deep learn-
+  tive for time series forecasting. In The Twelfth Interna-            ing models: A systematic review, performance analysis
+  tional Conference on Learning Representations, 2024b.                and discussion of implications. International Journal of
+                                                                       Financial Studies, 11(3):94, 2023.
+Luo, D. and Wang, X. ModernTCN: A modern pure convo-
+  lution structure for general time series analysis. In The          Wang, M., Ma, T., and Cohen, S. B. Pre-training time series
+  Twelfth International Conference on Learning Represen-              models with stock data customization. In Proceedings
+  tations, 2024.                                                      of the 31st ACM SIGKDD Conference on Knowledge
+                                                                      Discovery and Data Mining, pp. 3019–3030, 2025.
+Müller, R., Kornblith, S., and Hinton, G. E. When does
+ label smoothing help? Advances in Neural Information                Yu, S., Xue, H., Ao, X., Pan, F., He, J., Tu, D., and He,
+ Processing Systems, 32, 2019.                                         Q. Generating synergistic formulaic alpha collections via
+                                                                       reinforcement learning. In Proceedings of the 29th ACM
+Nie, Y., Nguyen, N. H., Sinthong, P., and Kalagnanam, J. A             SIGKDD Conference on Knowledge Discovery and Data
+  time series is worth 64 words: Long-term forecasting with            Mining, pp. 5476–5486, 2023.
+  transformers. arXiv preprint arXiv:2211.14730, 2022.
+                                                                     Zeng, A., Chen, M., Zhang, L., and Xu, Q. Are transform-
+Reed, S., Lee, H., Anguelov, D., Szegedy, C., Erhan, D., and           ers effective for time series forecasting? In Proceedings
+  Rabinovich, A. Training deep neural networks on noisy la-            of the AAAI Conference on Artificial Intelligence, vol-
+  bels with bootstrapping. arXiv preprint arXiv:1412.6596,             ume 37, pp. 11121–11128, 2023.
+  2014.
+                                                                     Zeng, L., Wang, L., Niu, H., Zhang, R., Wang, L., and
+Reinganum, M. R. The arbitrage pricing theory: Some                    Li, J. Trade when opportunity comes: price movement
+  empirical results. The Journal of Finance, 36(2):313–                forecasting via locality-aware attention and iterative re-
+  321, 1981.                                                           finement labeling. In Proceedings of the Thirty-Third
+                                                                       International Joint Conference on Artificial Intelligence,
+Ren, M., Zeng, W., Yang, B., and Urtasun, R. Learning to               pp. 6134–6142, 2024.
+  reweight examples for robust deep learning. In Interna-
+  tional Conference on Machine Learning, pp. 4334–4343.              Zhang, Z. and Sabuncu, M. R. Generalized cross entropy
+  PMLR, 2018.                                                          loss for training deep neural networks with noisy labels.
+                                                                       In Advances in Neural Information Processing Systems,
+Sawhney, R., Agarwal, S., Wadhwa, A., and Shah, R. Deep                volume 31, 2018.
+  attentive learning for stock movement prediction from so-
+  cial media text and company correlations. In Proceedings
+
+                                                                11
+
+=== PDF PAGE 12 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+A. Experimental Setup
+A.1. Data and Universe
+Our empirical study is comprehensively evaluated across diverse market environments, including the Chinese A-share
+market and the US equity market. For our primary evaluation, we focus on three widely recognized A-share indices: CSI
+300, CSI 500, and CSI 1000, which correspond to large-, medium-, and small-cap stocks, respectively, thereby ensuring that
+our dataset is highly representative of the broader market.
+To ensure a robust evaluation and prevent look-ahead bias, we employ strict chronological splits. The data spans from
+January 2018 to July 2025, partitioned into three distinct settings based on the experimental scenarios:
+
+
+   • Standard Setting (CSI 300/500/1000 & S&P 500): Used for the main results and the US market generalization
+     experiment.
+
+       – Training Set: January 2019 – July 2023.
+       – Validation Set: July 2023 – July 2024.
+       – Test Set: July 2024 – July 2025.
+
+   • Stress Test Setting (CSI 500): Shifted to cover a severe and continuous macroeconomic downtrend, culminating in
+     the February 2024 market crash.
+
+       – Training Set: January 2018 – July 2022.
+       – Validation Set: July 2022 – July 2023.
+       – Test Set: July 2023 – July 2024.
+
+
+A.2. Raw Data
+For each stock i on day t, the raw data is an intraday multivariate time series consisting of 7 variables: Open Price, High
+Price, Low Price, Close Price, Amount, Volume, and Transaction Count. These variables are sampled at 1-minute intervals.
+Depending on the market, the length of the daily sequence varies to match the respective trading hours:
+
+   • A-share Market: The sequence covers the 240 minutes of a standard trading day (9:30 AM to 11:30 AM and 1:00 PM
+     to 3:00 PM, totaling 4 hours), denoted as Vi,t ∈ R240×7 .
+
+   • US Market: The sequence is extended to cover the longer daily trading session (9:30 AM to 4:00 PM, totaling 6.5
+     hours), denoted as Vi,t ∈ R390×7 .
+
+A.3. Feature Engineering
+To maintain computational tractability while preserving microstructure information, we divide the raw sequence into
+non-overlapping patches. Each patch contains 15 minutes of trading data, from which we extract statistical descriptors to
+form the model input. Within each patch, we extract a diverse set of statistical descriptors to characterize the local market
+state from multiple dimensions. Specifically, for each of the raw variables, we compute a broad spectrum of univariate
+descriptors, including momentum and scale measures such as the arithmetic mean, the change rate, and the normalized range.
+To capture the distribution shape and potential fat-tail characteristics within the window, we further incorporate higher-order
+moments, exemplified by the standard deviation, skewness, and kurtosis. Beyond univariate analysis, we employ a wide
+variety of bivariate interaction descriptors to model the dynamic coupling between different market facets. These descriptors
+encompass linear coupling measures—for instance, the Pearson correlation coefficient for key pairs like price-volume—as
+well as relative intensity ratios, such as volume per transaction and other scale-invariant metrics. Due to the extensive nature
+of the feature set, we refrain from enumerating every specific indicator and focus here on these representative categories. All
+extracted features are concatenated into a consolidated tensor with D dimensions, providing a high-fidelity representation of
+the microstructure for subsequent model input.
+
+                                                              12
+
+=== PDF PAGE 13 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+A.4. Scenario-Specific Configuration
+To strictly align with the three market scenarios defined in the main text, we construct specific input tensors based on the
+decision time t. Let D denote the feature dimension per patch. The input configurations are defined as follows (Scenario
+1 is evaluated on both the A-share and the US S&P 500 markets, whereas Scenarios 2 and 3 are considered only for the
+A-share market):
+Scenario 1: Interday (Standard) Prediction. The decision time t corresponds to the market close. The input xi,t
+aggregates the entire trading day’s microstructure information. For the A-share market, this consists of 16 patches (covering
+the full 240-minute trading session), resulting in an input tensor shape of xi,t ∈ R16×D . For the US S&P 500 market,
+this consists of 26 patches (covering the 390-minute session), resulting in xi,t ∈ R26×D . The objective is to predict the
+return of the next trading day (∆ = 1 day), calculated based on the last price of the continuous session to preserve temporal
+continuity.
+Scenario 2: Intraday (30-minute) Prediction. The decision time t is set at the midpoint of the trading session (11:30,
+Morning Close), leveraging the market’s distinct morning/afternoon session structure. To prevent look-ahead bias, the
+input utilizes only the morning session data (09:30–11:30), resulting in a sequence of 8 patches. The input tensor shape is
+xi,t ∈ R8×D . The objective is to predict the return over the subsequent 30-minute interval (∆ = 30 min).
+Scenario 3: Intraday (90-minute) Prediction. The decision time t is also set at the midpoint of the trading session (11:30).
+Similar to Scenario 2, the input is derived exclusively from the morning session, maintaining an identical input tensor shape
+of xi,t ∈ R8×D . However, the forecasting objective here is to predict the return over the subsequent 90-minute interval
+(∆ = 90 min), capturing a longer intraday trend than Scenario 2.
+
+A.5. Implementation Details
+A.5.1. P REDICTIVE M ODEL T RAINING
+Input features are constructed from minute-level multivariate market data. The predictive model maps this feature sequence
+to the designated label (i.e., the return at the specific horizon determined by the experimental setting).
+Training Configuration. We set the batch to cover 20 trading days, i.e., one batch contains data from a 20-day window. All
+models are optimized using the AdamW optimizer with MSE loss. Importantly, we standardize both the model outputs and
+the labels cross-sectionally (zero mean and unit variance). Under this normalization, minimizing the MSE is equivalent to
+maximizing the Pearson correlation (IC) between predictions and labels, since for standardized variables
+
+                                       MSE(ŷ, y) = E[(ŷ − y)2 ] = 2 − 2 Corr(ŷ, y),                                    (15)
+
+so both objectives are aligned up to an affine transformation.
+Early Stopping Strategy. We employ an early stopping mechanism to prevent overfitting. During training, the loss on
+the validation set is monitored at the end of every epoch. The training process is terminated if the validation loss does not
+improve for 5 consecutive epochs (patience = 5). Upon termination, the model parameters corresponding to the lowest
+validation loss are restored as the final model.
+
+A.5.2. B I -L EVEL O PTIMIZATION T RAINING .
+The training of our Label-Horizon-based bi-level framework proceeds in two stages: a warm-up stage and a bi-level iteration
+stage.
+Warm-up Stage. Before initiating the alternating optimization of the model parameters and the horizon parameter, we
+perform a warm-up phase to stabilize the model weights. The warm-up lasts for Nwarm = 3 epochs. During this phase, the
+training configuration (learning rate, batch construction) is identical to the standard predictive model training described
+above.
+Bi-level Iteration Stage. Following the warm-up, we proceed with the bi-level updates. To strictly separate the data used
+for the inner loop (model update) and the outer loop (horizon update), we employ a date-based random splitting strategy:
+
+   • Data Splitting: For each batch containing 20 trading days, the days are randomly divided into two equal subsets (10
+     days each). The first subset serves as the support set (for the inner loop), and the second subset serves as the query set
+
+                                                              13
+
+=== PDF PAGE 14 ===
+                 The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+  for the outer loop.
+
+• Inner Loop (Model Update): The model parameters are updated using the support set. The weights λ are obtained by
+  normalizing a set of learnable parameters via a softmax transformation. Since the model has been pre-trained during
+  the warmup phase, we use a reduced learning rate 1 × 10−6 for fine-tuning.
+• Outer Loop (Horizon Update): The horizon parameter is updated using the query set. The learning rate for the outer
+  loop is set to 1 × 10−3 and the weight of the entropy term is set to 1 × 10−3 .
+
+
+
+
+                                                        14
+
+=== PDF PAGE 15 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+B. Baselines and Metrics
+B.1. Baseline Models
+To ensure the robustness of our findings and position our method within the broader landscape of deep time-series forecasting,
+we benchmark across five distinct architectural families. These baselines range from classical sequence models to the latest
+state-of-the-art foundation models:
+
+   • RNN-based Methods: We include GRU and LSTM. These recurrent architectures serve as the traditional workhorses
+     for financial sequence modeling, processing data sequentially to capture temporal dependencies, though often struggling
+     with long-term memory retention.
+
+   • Linear/MLP-based Methods: Despite the rise of complex architectures, simple linear models have shown surprising
+     effectiveness in noisy time-series tasks. We compare against DLinear, which employs a trend-seasonal decomposition
+     combined with linear layers, and RLinear, which focuses on reversible normalization to handle distribution shifts.
+
+   • CNN-based Methods: To evaluate convolutional approaches, we select TCN, which utilizes dilated causal convolutions
+     to model long-range history with a receptive field that grows exponentially. We also include ModernTCN, a recent
+     adaptation that incorporates large-kernel convolutions and parameter-efficient designs.
+
+   • Transformer-based Methods: we employ PatchTST and iTransformer. PatchTST segments time series into patches
+     and applies channel-independent attention to capture local semantic patterns, while iTransformer inverts the attention
+     mechanism to model the correlation between multivariate variates directly, making it particularly relevant for capturing
+     cross-stock interactions.
+
+   • SSM-based Methods: We assess the emerging class of Selective State Space Models (SSMs) via Mamba and Bi-
+     Mamba+. These models utilize a hardware-efficient selection mechanism to achieve linear computational complexity
+     relative to sequence length, theoretically allowing for superior modeling of long contexts without the quadratic cost of
+     Transformers.
+
+B.2. Evaluation Metrics
+We evaluate model performance using a comprehensive set of metrics that assess both the statistical predictive power and
+the practical economic value of the generated signals.
+
+Predictive Accuracy Metrics. These metrics measure the correlation between the model’s output signal and the ground-
+truth future returns, focusing on the signal’s information content.
+
+   • IC (Information Coefficient): Defined as the Pearson correlation coefficient between the predicted scores and the
+     realized returns across the cross-section of stocks at each time step. We report the time-series mean of the daily IC.
+
+   • ICIR (Information Ratio): A measure of prediction stability, calculated as the ratio of the mean IC to the standard
+     deviation of the IC (Mean(IC)/Std(IC)). A higher ICIR indicates a more consistent signal performance.
+
+   • RankIC & RankICIR: Given that financial returns often contain outliers, we also report the Spearman rank correlation
+     (RankIC) and its corresponding stability ratio (RankICIR). Rank-based metrics are robust to extreme values and more
+     accurately reflect the sorting capability required for portfolio construction.
+
+Portfolio Simulation Metrics. To gauge the model’s predictive power, we focus on the performance of the top-ranked
+stocks. Specifically, at each decision time, we calculate the equal-weighted average daily return of the top 10% of stocks
+with the highest predicted scores.
+
+   • Top Returns: The average daily return of the top 10% of stocks ranked by predicted values, where, for all three
+     forecasting scenarios, we generate predictions once per day and compute this metric using the corresponding horizon-
+     specific realized returns.
+
+                                                             15
+
+=== PDF PAGE 16 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+   • Sharpe Ratio: The risk-adjusted return, calculated as the mean of the daily returns divided by the standard deviation
+     of these daily returns. This metric indicates the daily return generated
+                                                                       √      per unit of risk. In our experiments, we report
+     the annualized Sharpe Ratio by multiplying the daily Sharpe by 252.
+
+While our primary evaluation focuses on the predictive quality and stability of the learned signals to cleanly elucidate the
+Label Horizon Paradox, we also recognize the importance of practical economic value. Therefore, in addition to the Top
+Returns and Sharpe Ratio metrics evaluated directly on the signals, we conduct a simple downstream portfolio backtesting
+simulation—incorporating transaction costs, slippage, and TWAP execution—detailed in Appendix E.5.
+
+
+
+
+                                                             16
+
+=== PDF PAGE 17 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+C. Theoretical Analysis with a Linear Factor Model
+In this section, we provide a rigorous theoretical justification for the Label Horizon Paradox. We construct a theoretical
+framework grounded in the Arbitrage Pricing Theory (APT). We begin with the standard static APT model and extend it
+into a continuous-time setting to explicitly capture the dynamics of signal realization and noise accumulation.
+Our goal is to derive the generalization performance (Information Coefficient) of a linear estimator trained on a proxy
+horizon return rδ and evaluated on the final target horizon return r∆ . For notational brevity, we omit the decision time
+subscript t and the stock index i in the subsequent analysis.
+
+C.1. Data Generating Process: A Time-Varying APT Extension
+We consider a universe of stocks where returns are driven by observable factors.
+
+C.1.1. T HE S TANDARD S TATIC APT
+In the classical APT framework, the return of a stock over a fixed period is decomposed into a systematic component driven
+by common factors s and an idiosyncratic component. Using our notation:
+
+                                                       r∆ = w∗⊤ s + ϵ∆ ,                                                (16)
+
+where s represents factor exposures, w∗ represents factor risk premia, and ϵ∆ is the idiosyncratic noise. This model is
+typically static—it describes the return over a single, undefined period where information is assumed to be fully reflected.
+
+C.1.2. T EMPORAL E XTENSION
+We extend the standard APT by introducing a continuous time parameter δ ∈ (0, ∆] to model the trajectory of returns.
+First, we formally define the signal and weight components with the following assumptions:
+
+   • Factor Exposure s: Let s ∈ Rd be the vector of factor exposures (predictive signals) for a stock at the decision time t.
+     We assume factors are whitened such that E[ss⊤ ] = Id .
+   • True Factor Loadings w∗ : Let w∗ ∈ Rd represent the latent, ground-truth linear relationship between factors and
+     returns. We assume ∥w∗ ∥2 = 1 for identifiability (a normalization that fixes the scale between α(δ) and w∗ and
+     simplifies the derivations).
+
+For any cumulative return rδ from the decision time t to t + δ, we propose the following time-varying specification:
+
+                                        rδ =        α(δ)            w∗⊤ s +         ϵδ
+                                                                                   |{z}           .                     (17)
+                                                    |{z}
+                                               Signal Realization             Accumulated Noise
+
+
+
+This formulation can be interpreted as a snapshot of the APT model at a specific horizon δ. Compared to the standard
+baseline, we introduce two critical time-dependent modifications:
+
+ 1. Signal Realization Process (α(δ)): Unlike the standard APT, which assumes equilibrium (i.e., information is fully
+    priced), we acknowledge that information incorporation takes time. Let α : (0, ∆] → (0, A] be a monotonically
+    increasing function representing the degree of price discovery, where A > 0 is a finite upper bound determined by the
+    overall scale of the latent signal.
+        • α(δ) < A implies partial underreaction or gradual diffusion of information.
+        • α(δ) ≈ A implies the signal is (effectively) fully realized at that horizon.
+ 2. Noise Accumulation Process (ϵδ ): We explicitly model the idiosyncratic term ϵδ as a dynamic process rather than a
+    static error. Consistent with the Random Walk Hypothesis (Brownian motion) for efficient markets, we assume the
+    noise is jointly defined across horizons as a microstructure-shifted Brownian motion:
+
+                         ϵδ = η0 + σWδ ,         η0 ∼ N (0, σ 2 δ0 ), Wδ is a standard Brownian motion,                 (18)
+
+                                                                    17
+
+=== PDF PAGE 18 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+     where σ 2 is the accumulation rate of idiosyncratic volatility, and δ0 > 0 represents intrinsic microstructure noise that
+     exists even as δ → 0. This implies the marginal distribution
+                                                    ϵδ ∼ N 0, σ 2 (δ + δ0 ) ,
+                                                                            
+                                                                                                                          (19)
+     and for any 0 < δ ≤ ∆, the nested random-walk property
+                                               Cov(ϵδ , ϵ∆ ) = Var(ϵδ ) = σ 2 (δ + δ0 ).                                   (20)
+     While this assumption is generally reasonable at short horizons such as intraday (minute-level) and daily intervals,
+     it may become less accurate over much longer horizons where structural breaks and slow-moving factors dominate.
+     Since our study focuses on short-term stock forecasting at minute and daily frequencies, the random-walk-based noise
+     model is well aligned with the forecasting regimes of interest.
+
+Relationship to Standard APT: For any fixed horizon δ, our model collapses to a standard linear factor model with effective
+signal strength α(δ)w∗ and noise variance σ 2 (δ + δ0 ). Structurally, this formulation assumes a horizon-invariant signal
+direction: the latent predictive relationship w∗ remains constant, while the temporal dynamics are entirely captured by
+the scalar realization function α(δ). While real-world factor exposures might exhibit rotations across different forecasting
+horizons, this deliberate simplification serves a crucial theoretical purpose. By fixing the signal direction, we mathematically
+isolate the fundamental temporal trade-off without the confounding effects of factor shifting. Consequently, the core of
+the Label Horizon Paradox naturally emerges purely from the dynamic interplay between the derivative of α(δ) (signal
+accumulation) and the derivative of the noise variance (noise accumulation). Extending this framework to accommodate
+more complex dynamics, such as horizon-dependent factor rotations, remains a valuable direction for future research.
+
+C.2. The Learning Setup: Finite-Sample OLS
+Consider a training dataset D = {(sj , rjδ )}N
+                                             j=1 of size N , where the labels are realized returns at the proxy horizon δ. We
+employ Ordinary Least Squares (OLS) to estimate the factor loadings.
+The estimated weight vector ŵδ is given by:
+                                    ŵδ = (S⊤ S)−1 S⊤ rδ = α(δ)w∗ + (S⊤ S)−1 S⊤ ϵδ .                                       (21)
+Assuming N is sufficiently large such that S⊤ S ≈ N Id (due to the whitening assumption), the estimator decomposes into:
+                                                                         σ 2 (δ + δ0 )
+                                                                                        
+                                            ∗
+                               ŵδ = α(δ)w + zδ , where zδ ∼ N 0,                      Id .                        (22)
+                                                                               N
+The variance of the estimation error zδ grows linearly with δ, reflecting the difficulty of learning from long-horizon labels
+dominated by accumulated random-walk noise.
+
+C.3. Derivation of Generalization Performance (Final IC)
+We define the Information Coefficient (IC) as the Pearson correlation between the model’s prediction ŷ = ŵδ⊤ s and the final
+target return r∆ , evaluated on an independent test set.
+First, we derive the necessary variance and covariance terms:
+
+   • Covariance: Recall that                                          ⊤
+                                        ŷ δ = ŵδ⊤ s = α(δ)w∗ + zδ        s = α(δ)w∗⊤ s + z⊤
+                                                                                            δ s,
+     and the target can be written as
+                                                      r∆ = α(∆)w∗⊤ s + ϵ∆ .
+     By construction, the estimation noise zδ is independent of the test-time features s and the test noise ϵ∆ , and has zero
+     mean. Using these facts and the whitening assumption E[ss⊤ ] = Id , together with ∥w∗ ∥2 = 1, we have
+             Cov(ŷ δ , r∆ ) = Cov α(δ)w∗⊤ s + z⊤             ∗⊤
+                                                                 s + ϵ∆
+                                                                         
+                                                   δ s, α(∆)w                                                            (23)
+                            = α(δ)α(∆) Var(w∗⊤ s) + Cov(z⊤
+                                                         δ s, w
+                                                                ∗⊤
+                                                                   s) + Cov(α(δ)w∗⊤ s, ϵ∆ ) + Cov(z⊤     ∆
+                                                                                                   δ s, ϵ )                (24)
+                                                    |     {z        } |        {z        } |       {z     }
+                                                                    =0                     =0                =0
+                            = α(δ)α(∆) · 1 = α(δ)α(∆).                                                                     (25)
+
+                                                               18
+
+=== PDF PAGE 19 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+     Therefore, only the systematic signal component contributes to the covariance:
+
+                                   Cov(ŷ δ , r∆ ) = Cov(α(δ)w∗⊤ s, α(∆)w∗⊤ s) = α(δ)α(∆).                             (26)
+
+  • Prediction Variance (Vest ):
+                                                                                d 2
+                                         Vest (δ) = Var(ŵδ⊤ s) = α(δ)2 +         σ (δ + δ0 ).                         (27)
+                                                                                N
+  • Target Variance (Vtarget ):
+                                           Vtarget = Var(r∆ ) = α(∆)2 + σ 2 (∆ + δ0 ).                                 (28)
+
+Combining these, the expected squared IC on the final target is:
+
+                                                    Cov(ŷ δ , r∆ )2          α(δ)2 α(∆)2
+                            J(δ) ≜ IC2final (δ) =                    =                                ,                (29)
+                                                    Vest (δ)Vtarget    [α(δ)2 + K(δ + δ0 )] · Vtarget
+
+where K = Nd σ 2 is a constant.
+
+C.4. Proof of the Paradox
+To determine the optimal training horizon δ ∗ , we analyze the behavior of the expected squared IC, J(δ). Since the target
+variance Vtarget and α(∆) are constant scalars
+                                                             the training horizon δ, maximizing J(δ) is equivalent to
+                                                 independent of
+maximizing the log-objective of α(δ)2 / α(δ)2 + K(δ + δ0 ) .
+
+C.4.1. I NTUITIVE P ROOF : S IGNAL VS . N OISE ACCUMULATION
+We analyze the log-performance, which allows for an additive decomposition of the trade-off. Ignoring constant terms, the
+objective function is:
+                                ln J(δ) = 2 ln α(δ) − ln α(δ)2 + K(δ + δ0 ) +C.
+                                                                               
+                                                                                                                    (30)
+                                           | {z }         |        {z           }
+                                              Information Gain          Noise Penalty
+
+
+This decomposition reveals the structural mechanism behind the Label Horizon Paradox:
+
+ 1. Information Gain: This term represents the logarithmic accumulation of the realized signal. It increases monotonically
+    as δ grows.
+
+ 2. Noise Penalty: This term represents the penalty from the total prediction variance. Since the idiosyncratic noise
+    K(δ + δ0 ) follows a random walk, this term grows strictly and indefinitely.
+
+The Paradox Mechanism: At short horizons, the rapid realization of the signal dominates the noise, leading to performance
+gains. However, as the horizon extends, signal growth naturally decelerates (diminishing returns), while noise accumulation
+remains constant and linear. Therefore, a tipping point δ ∗ is eventually reached where the steady accumulation of noise
+overwhelms the benefit of the slowing signal, causing the final performance to decline.
+
+C.4.2. M ATHEMATICAL D ERIVATIVE A NALYSIS
+To determine the location of the optimal horizon δ ∗ , we examine the first derivative of the log-performance function J(δ).
+Differentiating Eq. (30) with respect to δ yields the gradient:
+
+                                        d            2α′ (δ)    2α(δ)α′ (δ) + K
+                                           ln J(δ) =         −                    .                                    (31)
+                                        dδ            α(δ)     α(δ)2 + K(δ + δ0 )
+
+                                                                                                       d
+To understand the sign of this derivative, we analyze the condition for performance improvement, i.e., dδ ln J(δ) > 0.
+Substituting Eq. (31) into this inequality gives:
+
+                                                                 19
+
+=== PDF PAGE 20 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+
+                                               2α′ (δ)    2α(δ)α′ (δ) + K
+                                                       >                    .                                              (32)
+                                                α(δ)     α(δ)2 + K(δ + δ0 )
+
+Assuming α(δ) > 0 and K > 0, we can cross-multiply by the denominators without changing the inequality sign:
+
+                            2α′ (δ) α(δ)2 + K(δ + δ0 ) > α(δ) [2α(δ)α′ (δ) + K] .
+                                                       
+                                                                                                                           (33)
+
+Expanding both sides reveals a common term:
+
+                                2α′ (δ)α(δ)2 + 2α′ (δ)K(δ + δ0 ) > 2α(δ)2 α′ (δ) + α(δ)K.                                  (34)
+
+Subtracting the common term 2α′ (δ)α(δ)2 from both sides, the inequality simplifies significantly:
+
+                                                 2α′ (δ)K(δ + δ0 ) > α(δ)K.                                                (35)
+
+Finally, dividing by K and rearranging the terms to separate the signal dynamics from the time horizon, we obtain the
+necessary and sufficient condition for the derivative to be positive:
+
+                                                      α′ (δ)       1
+                                                             >            .                                                (36)
+                                                      α(δ)     2(δ + δ0 )
+
+                                                                        ′
+This inequality compares the relative growth rate of the signal ( αα ) with the hyperbolic decay rate of the noise horizon
+     1
+( 2(δ+δ 0)
+           ).
+
+C.5. Detailed Mechanism Analysis of Different Horizon Scenarios
+In this section, we apply the rigorous derivative analysis derived above to interpret the empirical results presented in Section
+3.1. As established in Eq. (36), the shape of the performance curve J(δ) is determined entirely by the competition between
+the relative signal growth rate and the inverse time horizon. The sign of the gradient depends on the condition:
+
+                                                  α′ (δ)                   1
+                                                                  ≷               .                                        (37)
+                                                   α(δ)                2(δ + δ0 )
+                                                  | {z }               | {z }
+                                             Signal Growth Rate        Noise Threshold
+
+
+Scenario 1: Interday Prediction (Monotonic Decrease). In the standard daily prediction setting (predicting close-to-close
+returns), empirical results consistently favor the shortest proxy (close-to-open). Theoretically, this implies that the relevant
+information is priced in almost immediately at the market open.
+
+   • Mathematical Regime: Since the signal saturates early, α(δ) ≈ const and α′ (δ) ≈ 0 for almost all δ > 0.
+   • Inequality Analysis: The Signal Growth Rate vanishes (≈ 0) while the Noise Threshold remains positive. Thus,
+     α′      1
+      α < 2(δ+δ0 ) holds for the entire duration.
+
+   • Conclusion: The derivative is strictly negative, rendering the shortest horizon optimal (δ ∗ → 0).
+
+Scenario 2: Intraday 30-minute Prediction (Monotonic Increase). For short-term 30-minute windows, the market
+undergoes active price discovery driven by momentum that persists throughout the interval.
+
+   • Mathematical Regime: The signal α(δ) grows robustly across the short window, maintaining a high marginal gain
+     α′ (δ).
+                                                                            1
+   • Inequality Analysis: The short duration keeps the Noise Threshold ( 2(δ+δ 0)
+                                                                                  ) comparable to the signal growth. Because
+                                                                            ′
+     the interval is too short for the signal to saturate, the inequality αα > 2(δ+δ
+                                                                                  1
+                                                                                     0)
+                                                                                        remains true up to δ = ∆.
+
+                                                                  20
+
+=== PDF PAGE 21 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+   • Conclusion: The derivative remains positive, suggesting that the model benefits from extending the proxy horizon to
+     the full target length (δ ∗ = ∆).
+
+Scenario 3: Intraday 90-minute Prediction (Hump-Shaped). When the target window extends to 90 minutes, we observe
+the characteristic Label Horizon Paradox. This scenario represents the transition between active information diffusion and
+signal saturation.
+
+   • Mathematical Regime: Initially, information flows rapidly (α′ is large). However, as δ increases, the predictive
+     validity of the signal at time t naturally decays or is fully incorporated into the price (α′ → 0).
+   • Inequality Analysis:
+                                                                    ′
+       1. Early Phase: The rapid signal uptake ensures αα > 2(δ+δ
+                                                               1
+                                                                  0)
+                                                                     , driving performance up.
+                                                        ′
+       2. Late Phase: As signal growth slows, αα drops below the threshold 2(δ+δ
+                                                                              1
+                                                                                 0)
+                                                                                    , meaning the marginal noise cost
+          exceeds the marginal information value.
+   • Conclusion: The gradient crosses from positive to negative at an intermediate point. The optimal horizon δ ∗ is
+     precisely the instant where the relative signal growth equals the inverse time horizon.
+
+C.6. Decomposition under Interday Prediction Scenario
+We now apply the theoretical framework to Scenario 1 (Standard Daily Close-to-Close Prediction). In this setting, the input
+features are historical data available at the close of day t. Given the overnight information processing period, the predictive
+signal derived from these features is typically incorporated into prices immediately at the market open of day t + 1.
+Mathematically, this corresponds to the regime of rapid price discovery. The signal realization function satisfies α(δ) ≈ const
+and α′ (δ) ≈ 0 for any horizon δ extending beyond the market open, and in particular α(δ) ≈ α(∆) across the relevant
+horizons.
+Under the general model rδ = α(δ)w∗⊤ s + ϵδ and r∆ = α(∆)w∗⊤ s + ϵ∆ , and recalling that the idiosyncratic noise
+follows a nested random-walk structure such that Cov(ϵδ , ϵ∆ ) = Var(ϵδ ), the covariance between the proxy label rδ and the
+target r∆ is
+                    Cov(rδ , r∆ ) = α(δ)α(∆) Var(w∗⊤ s) + Cov(ϵδ , ϵ∆ ) = α(δ)α(∆) + σ 2 (δ + δ0 ).                     (38)
+The proxy and target variances are given by
+                                          Vproxy (δ) = Var(rδ ) = α(δ)2 + σ 2 (δ + δ0 ),                                  (39)
+                                           Vtarget = Var(r∆ ) = α(∆)2 + σ 2 (∆ + δ0 ).                                    (40)
+The corresponding correlations are
+                                                         Cov(ŷ δ , rδ )     α(δ)2
+                                         ρ(ŷ δ , rδ ) = √ p             =√ p          ,                                  (41)
+                                                          Vest Vproxy      Vest Vproxy
+
+                                                Cov(rδ , r∆ )    α(δ)α(∆) + σ 2 (δ + δ0 )
+                                 ρ(rδ , r∆ ) = p      p        =    p       p             ,                               (42)
+                                                Vproxy Vtarget        Vproxy Vtarget
+and
+                                                               Cov(ŷ δ , r∆ )   α(δ)α(∆)
+                                 ICfinal (δ) = ρ(ŷ δ , r∆ ) = √ p             =√ p           .                           (43)
+                                                                Vest Vtarget     Vest Vtarget
+Combining these, the final Information Coefficient admits the following general multiplicative form:
+                                                                        α(δ)α(∆)         Vproxy (δ)
+                          ICfinal (δ) = ρ(ŷ δ , rδ ) ρ(rδ , r∆ )                ·                          .             (44)
+                                                                          α(δ)2    α(δ)α(∆) + σ 2 (δ + δ0 )
+
+In the interday rapid price discovery regime, we have α(δ) ≈ α(∆) for all relevant proxy horizons. Substituting this into the
+general expressions, the covariance between the proxy label and the target simplifies to
+                       Cov(rδ , r∆ ) = α(δ)α(∆) + σ 2 (δ + δ0 ) ≈ α(δ)2 + σ 2 (δ + δ0 ) = Vproxy (δ).                     (45)
+
+                                                                         21
+
+=== PDF PAGE 22 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Under this approximation, the proxy effectively behaves as a noisy but nearly unbiased version of the target at the same
+signal realization level, and the final IC is numerically close to the product of the model’s fit to the proxy and the proxy’s
+correlation with the target:
+                                              ICfinal (δ) ≈ ρ(ŷ δ , rδ ) × ρ(rδ , r∆ ).                                  (46)
+where:
+
+   • ρ(ŷ δ , rδ ): Represents the Proxy IC (how well the model learns the specific label rδ ).
+
+   • ρ(rδ , r∆ ): Represents the Label Alignment (how well the proxy rδ correlates with the ultimate target r∆ ).
+
+To rigorously validate this theoretical decomposition, we conducted an extensive empirical study. We trained independent
+LSTM models across the full spectrum of intraday horizons at minute-level granularity. To ensure statistical robustness and
+mitigate initialization noise, each horizon-specific model was trained using multiple random seeds. This evaluation was
+performed across three major indices (CSI300, CSI500, and CSI1000).
+For each model, we computed the actual test IC (ICfinal ) and compared it against the product of the empirically measured
+components ρ(ŷ δ , rδ ) and ρ(rδ , r∆ ). As illustrated in Figure 3, the empirical results demonstrate a near-perfect alignment
+between the theoretical decomposition and the actual performance. This validates that in the interday regime, the performance
+dynamics are indeed governed by the fundamental trade-off between signal saturation and random walk noise accumulation,
+as predicted by our modified APT framework.
+
+
+
+
+                                                              22
+
+=== PDF PAGE 23 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+D. Alternative Derivation via Partial Correlation Formula
+In the main text, we derived the performance decomposition identity using a structural Linear Factor Model. In this appendix,
+we provide an alternative derivation based purely on the statistical properties of correlation. Specifically, we show that the
+decomposition can be rigorously understood as a special case of the Partial Correlation Formula where the residual term
+vanishes due to the specific signal dynamics of the market. This shows that the multiplicative decomposition of the final IC
+is not an artifact of the specific factor-model setup, but a direct consequence of the vanishing partial correlation between
+the model prediction and the residual return beyond the proxy horizon. For notational brevity, we omit the decision time
+subscript t and the stock index i in the subsequent analysis.
+
+D.1. The Decomposition and the Vanishing Residual
+From a statistical perspective, the relationship between the model prediction ŷ δ , the proxy label rδ , and the final target r∆
+can, under the standard linear/Gaussian framework, be expressed via the following correlation decomposition:
+                                                                              q                    q
+                               ρŷδ ,r∆ = ρŷδ ,rδ · ρrδ ,r∆ + ρŷδ ,r∆ ·rδ       1 − ρŷ2 δ ,rδ       1 − ρ2rδ ,r∆ .       (47)
+                                          |       {z       } |                        {z                          }
+                                             Mediated Path                         Residual Term
+
+
+Here, the notation is rigorously defined as follows:
+
+   • ρA,B denotes the standard Pearson correlation coefficient between variables A and B, consistent with the definition of
+     IC used throughout the paper.
+
+   • ρA,B·C denotes the partial correlation coefficient between A and B given a control variable C. As formally derived
+     in the subsequent section, this is defined as the Pearson correlation between the residuals of A and B after the linear
+     effect of C has been regressed out (i.e., ρ(eA|C , eB|C )).
+
+The physical interpretation of this formula in our context provides deep insight into the Label Horizon Paradox:
+
+   • The Mediated Path represents the efficacy of the prediction insofar as it captures information already contained in the
+     proxy horizon δ.
+
+   • The Residual Term is controlled by the partial correlation ρŷδ ,r∆ ·rδ . This term measures the correlation between the
+     model’s prediction and the final target after the influence of the proxy rδ has been removed. Effectively, it asks: Can
+     the model predict the return evolution from δ to ∆ that is orthogonal to the return up to δ?
+
+Application to Scenario 1 (Interday Prediction): In Scenario 1, the input features are derived from history prior to the
+market open. Due to the high efficiency of the market, the predictive signal contained in these historical features is typically
+priced in almost immediately upon the open.
+Consequently, the subsequent price movement from the intermediate horizon δ to the final target ∆ is dominated by
+new, idiosyncratic information and noise that was not available at the decision time. Since this future noise is strictly
+unforecastable based on the input features, the model’s predictive power for this residual component is negligible.
+Mathematically, this implies ρŷδ ,r∆ ·rδ ≈ 0. Substituting this into Eq. (47), the entire residual term vanishes, and we recover
+the multiplicative decomposition presented in the main text:
+
+                                                      ρŷδ ,r∆ ≈ ρŷδ ,rδ · ρrδ ,r∆ .                                       (48)
+
+D.2. Proof of the Partial Correlation Formula
+For completeness, we provide the step-by-step algebraic proof of the general formula used above.
+
+1. Definition via Residuals. The partial correlation ρX,Y ·Z between two random variables X and Y given a controlling
+variable Z is defined as the Pearson correlation between their residuals after linearly regressing out Z.
+
+                                                                    23
+
+=== PDF PAGE 24 ===
+                   The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Without loss of generality, assume that X, Y , and Z are standardized variables with zero mean and unit variance (i.e.,
+E[X] = 0, E[X 2 ] = 1). The linear regression of X on Z and Y on Z can be expressed as:
+
+                                     X̂ = ρX,Z Z,    eX|Z = X − X̂ = X − ρX,Z Z                                       (49)
+                                     Ŷ = ρY,Z Z,    eY |Z = Y − Ŷ = Y − ρY,Z Z                                      (50)
+
+where ρX,Z and ρY,Z correspond to the regression coefficients (slopes) in the standardized case.
+
+2. Deriving the Standard Formula.      The partial correlation is the correlation of the residuals eX|Z and eY |Z :
+
+                                                        E[eX|Z eY |Z ]
+                                            ρX,Y ·Z = q         q           .                                         (51)
+                                                       E[e2X|Z ] E[e2Y |Z ]
+
+
+Step 2.1: The Numerator (Covariance of Residuals).
+
+                        E[eX|Z eY |Z ] = E[(X − ρX,Z Z)(Y − ρY,Z Z)]                                                  (52)
+                                                                                            2
+                                      = E[XY − XρY,Z Z − Y ρX,Z Z + ρX,Z ρY,Z Z ]                                     (53)
+                                                                                                    2
+                                      = E[XY ] −ρY,Z E[XZ] −ρX,Z E[Y Z] +ρX,Z ρY,Z E[Z ]                              (54)
+                                        | {z }       | {z }      | {z }            | {z }
+                                          ρX,Y            ρX,Z              ρY,Z                1
+
+                                      = ρX,Y − ρX,Z ρY,Z − ρX,Z ρY,Z + ρX,Z ρY,Z                                      (55)
+                                      = ρX,Y − ρX,Z ρY,Z .                                                            (56)
+
+Step 2.2: The Denominator (Variance of Residuals). Since the residual variance is 1 − R2 :
+
+                                      E[e2X|Z ] = 1 − ρ2X,Z ,    E[e2Y |Z ] = 1 − ρ2Y,Z .                             (57)
+
+Combining these, we recover the standard recursive formula:
+                                                         ρX,Y − ρX,Z ρY,Z
+                                           ρX,Y ·Z = q            q          .                                        (58)
+                                                         1 − ρ2X,Z 1 − ρ2Y,Z
+
+
+3. Rearranging for the Decomposition Formula. We solve Eq. (58) for the total correlation ρX,Y :
+                           q         q
+                    ρX,Y ·Z 1 − ρ2X,Z 1 − ρ2Y,Z = ρX,Y − ρX,Z ρY,Z                                                    (59)
+                                                                     q            q
+                                         ρX,Y = ρX,Z ρY,Z + ρX,Y ·Z 1 − ρ2X,Z 1 − ρ2Y,Z .                             (60)
+
+
+4. Application to the Label Horizon Problem. Finally, we substitute the variables from our main context (X ← ŷ δ ,
+Y ← r∆ , Z ← rδ ) to obtain the formula in Eq. (47).
+
+
+
+
+                                                            24
+
+=== PDF PAGE 25 ===
+                     The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+E. Supplementary Results
+E.1. Results of Intraday Scenario
+In the main text, we primarily focused on the standard interday prediction task (Scenario 1), which corresponds to the widely
+used close-to-close setting in academic studies. To further assess the generality of our framework under different temporal
+granularities, we report here the detailed experimental results for the two intraday scenarios defined in Section 3.1:
+
+   • Scenario 2: Intraday prediction with a 30-minute horizon (∆ = 30 minutes).
+   • Scenario 3: Intraday prediction with a 90-minute horizon (∆ = 90 minutes).
+
+The experimental setup (data, feature construction, train/validation/test splits), the set of ten backbone architectures, and the
+six evaluation metrics are kept identical to those used in Scenario 1 to ensure a fair comparison.
+Tables 3 and 4 summarize the results for Scenario 2 and Scenario 3, respectively.
+
+E.1.1. S CENARIO 2 (30- MINUTE HORIZON )
+From Table 3, we observe that our bi-level framework and the standard training baseline achieve very similar performance
+across all three indices and all ten backbones. On most metrics, the two methods are within a narrow margin of each other,
+and the winner alternates depending on the specific model–dataset combination.
+This outcome is fully consistent with the empirical pattern observed in Figure 2. In Scenario 2, the performance curve as a
+function of the training horizon is monotonically increasing, and the empirically optimal horizon δ ∗ is essentially aligned
+with the final target horizon ∆. Our bi-level procedure therefore learns to concentrate its weight near the target horizon,
+effectively recovering the canonical choice. As a consequence, adaptively selecting the supervision horizon offers little
+additional benefit over directly training on the final target, and the two approaches perform on par, with model-specific
+fluctuations.
+
+E.1.2. S CENARIO 3 (90- MINUTE HORIZON )
+For the longer intraday horizon in Scenario 3, Table 4 reveals a different picture. On many configurations, our method
+achieves higher IC, RankIC, and Top Return than the standard baseline, indicating that adaptively shifting the supervision
+away from the final horizon can indeed enhance the raw predictive signal. At the same time, there are a few exceptions
+where the baseline slightly outperforms our method on these point-estimate metrics.
+This mixed pattern is again aligned with the empirical phenomenon in Figure 2. In Scenario 3, the performance curve is
+hump-shaped: the optimal horizon δ ∗ lies somewhere between 0 and ∆, but the advantage of this intermediate horizon over
+the final horizon is modest, and becomes visible mainly after Gaussian smoothing of the noisy empirical curve. In a realistic
+high-noise financial environment, such a weak edge can be partially obscured by stochastic variability, so it is natural to see
+some configurations where training directly on the final target remains competitive.
+However, a more consistent advantage of our method emerges when we examine the stability metrics: ICIR, RankICIR, and
+Sharpe Ratio. Across all three indices and most backbones in Scenario 3, our bi-level framework yields higher ICIR and
+RankICIR than the standard baseline, and also improves the Sharpe Ratio in a largely uniform manner. This suggests that
+even when the average IC gain is modest, adaptively selecting the supervision horizon helps the model produce signals that
+are more stable over time and more robust to noise, which is crucial for practical portfolio construction.
+
+E.2. Extended Analysis on the Necessity of Bi-level Optimization
+In the main text, Section 6.1, we evaluate the necessity of bi-level optimization by comparing our method (training with
+the selected best single label) against two label aggregation baselines: Naive Averaging (†) and Equal-Weight Multi-Task
+Learning (‡). While our approach achieves the best overall performance, we observe that in Scenario 2 and Scenario 3, the
+ICIR obtained from a single selected label is slightly lower than that of models trained on aggregated labels.
+However, this comparison is inherently conservative with respect to our method, because training on a single horizon label
+is naturally more volatile and statistically less stable than training on aggregated or multi-task targets that effectively average
+out noise across multiple horizons. To provide a more fair comparison, we further leverage the information contained in the
+
+                                                                25
+
+=== PDF PAGE 26 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Table 3. Results of Scenario 2. Comprehensive performance comparison between standard training (Std.) and our Bi-level framework
+(Ours) across three market indices. All results are averaged over 5 random seeds. Bold indicates the better performance.
+
+                                  IC (×10)            ICIR        R ANK IC (×10)    R ANK ICIR      T OP R ET (%)    S HARPE R ATIO
+   DATASET    M ODEL            S TD .   O URS   S TD .   O URS   S TD .   O URS   S TD .   O URS   S TD .   O URS   S TD .   O URS
+              LSTM             1.223     1.243   0.745    0.716   1.558    1.604   1.210    1.184   0.074    0.074   3.512    3.715
+              GRU              1.195     1.225   0.723    0.690   1.666    1.693   1.144    1.107   0.078    0.080   3.900    4.106
+              DL INEAR         1.208     1.183   0.689    0.722   1.612    1.592   1.197    1.258   0.072    0.075   3.951    3.799
+              RL INEAR         1.194     1.193   0.819    0.786   1.519    1.536   1.218    1.158   0.071    0.074   3.547    3.739
+              PATCH TST        1.176     1.281   0.835    0.855   1.434    1.630   1.202    1.311   0.070    0.078   3.832    3.995
+   CSI 300
+              I T RANSFORMER   1.279     1.239   0.811    0.855   1.641    1.571   1.346    1.323   0.076    0.078   3.910    3.936
+              M AMBA           1.268     1.259   0.823    0.844   1.616    1.658   1.297    1.328   0.079    0.084   3.812    4.552
+              B I -M AMBA +    1.242     1.220   0.851    0.855   1.591    1.536   1.303    1.299   0.082    0.072   4.332    3.623
+              M ODERN TCN      1.251     1.234   0.716    0.707   1.583    1.521   1.256    1.235   0.076    0.072   3.995    3.950
+              TCN              1.229     1.240   0.729    0.691   1.597    1.605   1.254    1.238   0.079    0.084   4.110    4.123
+              LSTM             1.474     1.491   1.372    1.396   1.922    1.943   1.931    2.062   0.121    0.122   5.172    5.076
+              GRU              1.508     1.515   1.334    1.347   1.978    1.946   2.041    2.094   0.127    0.126   5.290    5.325
+              DL INEAR         1.514     1.504   1.417    1.394   1.915    1.933   2.111    1.925   0.127    0.121   5.350    5.122
+              RL INEAR         1.468     1.496   1.381    1.345   1.881    1.932   2.024    2.096   0.127    0.126   5.278    5.163
+              PATCH TST        1.498     1.470   1.471    1.308   1.956    1.925   2.180    1.970   0.127    0.128   5.301    5.391
+   CSI 500
+              I T RANSFORMER   1.472     1.480   1.246    1.372   1.950    1.947   1.940    2.032   0.118    0.120   5.188    5.051
+              M AMBA           1.514     1.512   1.394    1.346   1.947    1.956   2.034    2.007   0.126    0.124   5.317    5.260
+              B I -M AMBA +    1.526     1.477   1.305    1.372   2.014    1.892   1.973    2.064   0.131    0.123   5.646    5.005
+              M ODERN TCN      1.481     1.472   1.339    1.359   1.905    1.933   1.930    1.978   0.124    0.126   5.173    5.228
+              TCN              1.533     1.516   1.394    1.367   1.954    1.920   2.102    2.021   0.128    0.131   5.310    5.373
+              LSTM             1.161     1.156   1.100    1.066   1.910    1.852   1.889    1.873   0.115    0.114   4.418    3.908
+              GRU              1.166     1.160   1.141    1.052   1.839    1.898   1.983    1.935   0.108    0.114   4.042    4.481
+              DL INEAR         1.167     1.189   1.138    1.112   1.804    1.888   1.828    1.840   0.108    0.114   4.070    4.317
+              RL INEAR         1.181     1.165   1.170    1.066   1.863    1.933   1.941    1.881   0.109    0.114   4.140    4.464
+              PATCH TST        1.144     1.146   1.107    1.113   1.781    1.873   1.755    1.912   0.109    0.115   3.813    4.496
+   CSI 1000
+              I T RANSFORMER   1.203     1.170   1.111    1.143   1.914    1.827   1.865    1.856   0.113    0.114   4.465    4.251
+              M AMBA           1.182     1.188   1.039    1.085   1.961    1.945   1.809    1.932   0.110    0.115   4.301    4.427
+              B I -M AMBA +    1.187     1.187   1.073    1.145   1.958    1.855   1.822    1.978   0.114    0.110   4.488    4.098
+              M ODERN TCN      1.147     1.178   1.127    1.098   1.694    1.844   1.851    1.956   0.107    0.112   3.960    4.187
+              TCN              1.210     1.225   1.059    1.232   1.947    1.825   1.831    1.998   0.115    0.111   4.468    4.153
+
+
+
+learned horizon weights λ:
+
+   • We first identify the top-5 horizons with the largest weights in λ.
+   • Using only these top-5 selected horizons, we then construct:
+       1. A Naive Averaging variant (∗ †): train a model on the arithmetic mean of these top-5 labels.
+       2. An Equal-Weight MTL variant (∗ ‡): train a model using only these top-5 horizons with equal weights in the
+          multi-task loss.
+
+In other words, we retain our bi-level optimization to select informative horizons, but then train baselines that aggregate or
+jointly model only these selected labels, instead of all candidates. This design removes the unfair advantage of aggregating
+over many noisy horizons, while still allowing label smoothing through averaging or multi-task learning.
+Table 5 reports the performance of these additional configurations, again using an LSTM backbone on CSI 500 under
+Scenarios 1, 2, and 3. The results show that, once we restrict baselines to the top-5 horizons identified by our bi-level
+procedure, the resulting models consistently outperform their counterparts trained on all horizons.
+
+E.3. Generalization to US Markets (S&P 500)
+To confirm that our proposed framework represents a general supervision principle rather than an artifact of a specific
+market, we extend our evaluation to the US equity market. Specifically, we conduct new experiments on the S&P 500 index.
+This evaluation strictly follows the Scenario 1 (daily prediction) protocol from the main paper, including data structure,
+feature engineering, and label construction. The dataset is chronologically split into January 2019–July 2023 (Train), July
+2023–July 2024 (Validation), and July 2024–July 2025 (Test). The only adjustment made is a longer input sequence to
+accommodate the longer daily trading session characteristic of the US market.
+
+                                                                  26
+
+=== PDF PAGE 27 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Table 4. Results of Scenario 3. Comprehensive performance comparison between standard training (Std.) and our Bi-level framework
+(Ours) across three market indices. All results are averaged over 5 random seeds. Bold indicates the better performance.
+
+                                  IC (×10)            ICIR        R ANK IC (×10)    R ANK ICIR      T OP R ET (%)    S HARPE R ATIO
+   DATASET    M ODEL            S TD .   O URS   S TD .   O URS   S TD .   O URS   S TD .   O URS   S TD .   O URS   S TD .   O URS
+              LSTM             0.937     0.947   0.530    0.666   1.245    1.136   0.886    1.010   0.039    0.046   1.114    1.240
+              GRU              0.928     0.934   0.560    0.578   1.228    1.241   0.891    0.936   0.029    0.049   0.843    1.421
+              DL INEAR         0.865     0.834   0.511    0.669   1.144    1.087   0.933    1.002   0.027    0.055   0.760    1.635
+              RL INEAR         0.877     0.904   0.632    0.655   1.117    1.191   0.959    1.020   0.038    0.041   1.016    1.137
+              PATCH TST        0.867     0.976   0.636    0.671   1.002    1.216   0.852    1.007   0.033    0.044   0.953    1.287
+   CSI 300
+              I T RANSFORMER   0.891     0.950   0.593    0.639   1.162    1.175   1.003    1.046   0.042    0.061   1.167    1.785
+              M AMBA           0.949     1.043   0.634    0.669   1.144    1.308   0.967    1.081   0.043    0.059   1.216    1.769
+              B I -M AMBA +    0.966     1.058   0.605    0.655   1.225    1.283   0.970    0.980   0.047    0.061   1.317    1.823
+              M ODERN TCN      0.950     1.059   0.517    0.543   1.210    1.407   0.809    0.862   0.033    0.055   1.031    1.790
+              TCN              0.856     1.002   0.625    0.556   1.002    1.317   0.966    0.933   0.031    0.053   0.883    1.630
+              LSTM             1.069     1.082   1.019    1.095   1.407    1.399   1.563    1.609   0.083    0.080   2.096    1.809
+              GRU              1.052     1.080   1.016    1.221   1.414    1.435   1.499    1.694   0.074    0.081   1.661    1.923
+              DL INEAR         1.038     0.991   1.022    1.064   1.277    1.241   1.525    1.458   0.072    0.078   1.658    1.889
+              RL INEAR         0.935     1.023   1.099    1.228   1.153    1.283   1.459    1.590   0.068    0.079   1.494    1.772
+              PATCH TST        1.047     1.036   0.975    1.232   1.397    1.306   1.442    1.657   0.086    0.091   1.975    1.999
+   CSI 500
+              I T RANSFORMER   1.072     1.039   1.119    1.233   1.387    1.344   1.639    1.733   0.085    0.092   2.044    2.069
+              M AMBA           1.083     1.108   1.056    1.209   1.397    1.405   1.554    1.670   0.081    0.086   1.877    1.952
+              B I -M AMBA +    1.075     1.100   1.053    1.222   1.331    1.431   1.548    1.646   0.078    0.089   1.725    2.103
+              M ODERN TCN      0.996     1.027   0.986    1.024   1.176    1.407   1.537    1.659   0.074    0.080   1.918    2.069
+              TCN              1.081     1.105   1.047    1.178   1.328    1.381   1.516    1.657   0.078    0.092   1.765    2.141
+              LSTM             0.884     0.928   0.850    1.012   1.244    1.447   1.550    1.553   0.076    0.076   1.514    1.631
+              GRU              0.903     0.907   0.888    1.069   1.389    1.333   1.605    1.651   0.068    0.080   1.404    1.675
+              DL INEAR         0.924     0.891   0.873    1.136   1.385    1.310   1.477    1.635   0.075    0.067   1.647    1.609
+              RL INEAR         0.861     0.906   0.975    0.998   1.225    1.321   1.494    1.574   0.062    0.074   1.257    1.537
+              PATCH TST        0.899     0.924   0.995    0.967   1.236    1.366   1.590    1.599   0.065    0.083   1.310    1.737
+   CSI 1000
+              I T RANSFORMER   0.948     0.942   0.929    1.029   1.318    1.311   1.550    1.620   0.074    0.077   1.557    1.627
+              M AMBA           0.894     0.908   0.909    1.058   1.309    1.333   1.577    1.765   0.070    0.078   1.469    1.610
+              B I -M AMBA +    0.955     0.931   0.898    0.962   1.440    1.346   1.657    1.596   0.085    0.083   1.877    1.719
+              M ODERN TCN      0.916     0.941   0.872    0.979   1.311    1.374   1.515    1.529   0.074    0.078   1.503    1.718
+              TCN              0.932     0.951   0.960    1.048   1.304    1.327   1.569    1.630   0.074    0.083   1.539    1.711
+
+
+
+
+The US market is widely recognized as highly efficient, meaning that information is absorbed into prices much faster than in
+emerging markets. According to our theoretical framework (Section 3.2), a faster signal realization rate (α′ (δ) → 0 earlier)
+implies a more rapid dominance of the noise penalty, leading to a faster performance decay over the prediction horizon.
+As shown in Table 6, our bi-level framework consistently outperforms the standard paradigm across all ten backbone
+architectures. This confirms that the Label Horizon Paradox exists even in highly efficient markets, and our adaptive horizon
+learning effectively navigates the rapid signal-noise trade-off inherent in the US market.
+
+E.4. Stress Tests During Market Crashes
+To further evaluate the risk resilience and temporal generalizability of our framework, we conducted a stress test focusing on
+a period of extreme market volatility. Specifically, we evaluate our models on the CSI 500 index with a shifted timeframe
+to capture a period of severe and continuous macroeconomic downtrend, culminating in the well-known market crash in
+February 2024.
+Similar to the US market evaluation, this stress test strictly follows the Scenario 1 protocol regarding data structure, feature
+engineering, and label construction. The dataset is chronologically split into January 2018–July 2022 (Train), July 2022–July
+2023 (Validation), and July 2023–July 2024 (Test, which covers the aforementioned market crash).
+As shown in Table 7, despite the extreme market stress and distribution shifts, models trained with our bi-level optimization
+framework consistently maintain their performance improvements over the standard baselines. This robust performance
+demonstrates that dynamic label selection not only enhances signal quality in normal market conditions but also provides
+crucial stability when the market undergoes severe structural shocks.
+
+                                                                  27
+
+=== PDF PAGE 28 ===
+                      The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Table 5. Impact of Horizon Selection on Aggregation and MTL Performance. Experiments are conducted using an LSTM backbone
+across Scenarios 1, 2, and 3 on CSI 500. We compare: (i) training with all candidate horizons (Naive Averaging: †; Equal-Weight MTL:
+‡), and (ii) training with only the top-5 horizons selected by the learned horizon weights λ (Naive Averaging on top-5: ∗†; Equal-Weight
+MTL on top-5: ∗‡). The results show that using the bi-level-selected top-5 horizons consistently improves over using all horizons.
+
+           C ONFIGURATION       IC(×10)        ICIR     R ANK IC(×10)           R ANK ICIR         T OP R ET (%)       S HARPE R ATIO
+                        ∗
+           S CENARIO 1            1.029        0.861           0.859              0.895               0.383                3.660
+           S CENARIO 1†           0.969        0.778           0.821              0.817               0.374                3.516
+           S CENARIO 1∗†          1.066        0.865           0.902              0.921               0.398                3.682
+           S CENARIO 1‡           0.932        0.803           0.814              0.837               0.380                3.377
+           S CENARIO 1∗‡          0.973        0.821           0.860              0.842               0.377                3.420
+           S CENARIO 2∗           1.491        1.396           1.943              2.062               0.122                5.076
+           S CENARIO 2†           1.453        1.471           1.857              2.021               0.121                4.933
+           S CENARIO 2∗†          1.486        1.613           1.892              2.104               0.126                5.089
+           S CENARIO 2‡           1.435        1.456           1.849              1.998               0.123                4.931
+           S CENARIO 2∗‡          1.483        1.479           1.935              2.097               0.124                5.095
+           S CENARIO 3∗           1.082        1.095           1.399              1.609               0.080                1.809
+           S CENARIO 3†           1.050        1.125           1.359              1.538               0.082                1.935
+           S CENARIO 3∗†          1.086        1.247           1.464              1.642               0.087                2.073
+           S CENARIO 3‡           1.071        1.118           1.367              1.596               0.085                1.965
+           S CENARIO 3∗‡          1.083        1.181           1.448              1.669               0.085                1.975
+
+
+Table 6. Results on the US Market (S&P 500). Comprehensive performance comparison under the daily prediction setting. All results
+are averaged over 5 random seeds. Bold indicates the better performance.
+
+                                    IC (×10)            ICIR           R ANK IC (×10)        R ANK ICIR       T OP R ET (%)        S HARPE R ATIO
+   DATASET     M ODEL            S TD .   O URS    S TD .   O URS      S TD .    O URS    S TD .      O URS   S TD .     O URS     S TD .   O URS
+               LSTM              0.314    0.459   0.302     0.441      0.149     0.219    0.139       0.206   0.141      0.159     1.443    1.600
+               GRU               0.346    0.399   0.333     0.351      0.181     0.202    0.181       0.184   0.164      0.157     1.560    1.618
+               DL INEAR          0.326    0.506   0.332     0.472      0.139     0.213    0.159       0.215   0.125      0.166     1.368    1.733
+               RL INEAR          0.352    0.461   0.335     0.452      0.170     0.199    0.171       0.214   0.155      0.159     1.544    1.614
+               PATCH TST         0.309    0.489   0.347     0.421      0.180     0.178    0.169       0.216   0.137      0.148     1.330    1.570
+   S&P 500
+               I T RANSFORMER    0.397    0.499   0.402     0.435      0.215     0.228    0.187       0.232   0.177      0.175     1.712    2.097
+               M AMBA            0.429    0.527   0.406     0.539      0.192     0.241    0.180       0.245   0.160      0.175     1.640    1.875
+               B I -M AMBA +     0.315    0.473   0.236     0.417      0.177     0.225    0.124       0.182   0.149      0.164     1.409    1.653
+               M ODERN TCN       0.306    0.455   0.247     0.383      0.141     0.198    0.111       0.171   0.136      0.155     1.231    1.486
+               TCN               0.423    0.540   0.388     0.515      0.200     0.250    0.210       0.227   0.164      0.168     1.677    1.686
+
+
+
+
+E.5. Downstream Portfolio Backtesting
+To further demonstrate the practical application value of our framework, we extend our evaluation beyond statistical
+predictive metrics by conducting a simple downstream portfolio backtesting experiment. This simulation incorporates
+realistic trading constraints to assess the actual economic value generated by the predictive signals.
+Experimental Setup. Following standard quantitative investment paradigms, we construct a daily rebalanced, equal-weight
+portfolio. The detailed settings are as follows:
+
+   • Stock Universe & Period: The backtest is conducted on the constituents of the CSI 500 index over the test period
+     from July 2024 to July 2025.
+
+   • Execution Strategy: To prevent look-ahead bias and simulate realistic execution, the models generate predictions 15
+     minutes before the market close. We then use the Time-Weighted Average Price (TWAP) of the subsequent 10 minutes
+     as the execution price for all trades.
+
+   • Portfolio Construction: On each trading day, we select the top 20% of stocks with the highest predicted scores and
+     assign them equal weights in the portfolio.
+
+                                                                       28
+
+=== PDF PAGE 29 ===
+                    The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Table 7. Stress Test Results on CSI 500 (Jul 2023 – Jul 2024). Performance comparison during a severe market downtrend and crash.
+All results are averaged over 5 random seeds. Bold indicates the better performance.
+
+                                  IC (×10)              ICIR        R ANK IC (×10)      R ANK ICIR        T OP R ET (%)      S HARPE R ATIO
+   DATASET    M ODEL           S TD .   O URS      S TD .   O URS    S TD .   O URS    S TD .   O URS    S TD .   O URS      S TD .     O URS
+              LSTM             0.874    0.909      0.927    0.916   0.817     0.932    1.013    1.104    0.129    0.131      1.411      1.454
+              GRU              0.883    0.890      0.887    0.928   0.843     0.926    1.016    1.053    0.123    0.129      1.414      1.341
+              DL INEAR         0.746    0.817      0.801    0.817   0.749     0.865    0.914    1.015    0.103    0.125      1.164      1.362
+              RL INEAR         0.879    0.884      0.921    0.979   0.897     0.924    1.117    1.086    0.130    0.126      1.367      1.458
+              PATCH TST        0.884    0.931      0.857    0.861   0.862     0.974    0.928    1.005    0.128    0.136      1.387      1.469
+   CSI 500
+              I T RANSFORMER   0.846    0.910      0.828    0.868   0.871     0.946    0.985    1.032    0.106    0.129      1.176      1.438
+              M AMBA           0.922    0.965      0.927    0.982   0.915     1.011    1.055    1.083    0.126    0.139      1.402      1.511
+              B I -M AMBA +    0.953    0.957      0.930    0.906   0.896     0.990    0.977    1.069    0.138    0.141      1.495      1.542
+              M ODERN TCN      0.740    0.847      0.744    0.823   0.698     0.868    0.762    0.929    0.089    0.119      0.981      1.319
+              TCN              0.935    0.951      0.940    0.978   0.929     0.964    1.049    1.097    0.129    0.134      1.397      1.451
+
+
+
+
+   • Real-world Constraints: Transaction costs (commissions and stamp duties) and execution slippage are strictly
+     incorporated into the backtesting framework to accurately reflect real-world trading frictions.
+
+As shown in Table 8, applying our bi-level optimization method consistently improves downstream trading performance
+across almost all backbone architectures. Notably, our framework not only enhances the Annualized Return (Ann. Ret) but
+also effectively reduces the Maximum Drawdown (MDD) and Annualized Volatility (Ann. Vol) in most cases. Consequently,
+the risk-adjusted returns, measured by the Sharpe Ratio, exhibit substantial and consistent improvements over the standard
+training paradigm.
+
+Table 8. Downstream Portfolio Backtesting Results on CSI 500. Performance comparison incorporating real-world constraints such as
+transaction costs and TWAP execution. Bold indicates the better performance.
+
+
+                                         A NN . R ET (%)            A NN . VOL (%)         S HARPE R ATIO                 MDD (%)
+    DATASET       M ODEL                  S TD .        O URS       S TD .     O URS       S TD .       O URS       S TD .            O URS
+                  LSTM                   42.18          42.27       25.89      24.53       1.63         1.72       -13.96         -11.25
+                  GRU                    36.15          40.90       25.01      24.68       1.45         1.66       -13.55         -12.17
+                  DL INEAR               34.41          41.65       25.11      24.80       1.37         1.68       -12.84         -12.01
+                  RL INEAR               33.97          41.04       23.87      24.95       1.42         1.64       -12.56         -11.85
+                  PATCH TST              38.59          45.80       25.69      24.76       1.50         1.85       -13.37         -12.48
+    CSI 500
+                  I T RANSFORMER         34.95          37.68       24.47      24.82       1.43         1.52       -12.70         -11.56
+                  M AMBA                 38.19          46.46       24.72      24.65       1.55         1.88       -12.17         -12.10
+                  B I -M AMBA +          39.40          39.17       25.96      24.13       1.52         1.62       -12.28         -11.88
+                  M ODERN TCN            29.56          33.88       24.73      24.21       1.20         1.40       -13.24         -12.67
+                  TCN                    33.14          40.22       24.85      24.85       1.33         1.62       -13.88         -11.67
+
+
+
+
+                                                                    29
+
+=== PDF PAGE 30 ===
+                      The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+F. Efficiency Analysis
+In this section, we provide an empirical efficiency analysis of the proposed bi-level optimization framework. Following
+the main experimental setup, we benchmark the per-epoch training time of a standard predictive model against its bi-level
+counterpart under Scenario 1 on the CSI 1000 universe, using a single NVIDIA H20 GPU.
+We choose CSI 1000 for this analysis because it is the largest universe considered in our experiments, thus presenting the
+heaviest computational load. Consequently, any additional overhead introduced by the bi-level procedure would be most
+evident in this setting.
+We report results for a diverse set of sequence and time-series architectures. For each model, we measure the time required
+to complete a single training epoch under:
+
+  1. Standard training: conventional supervised learning without bi-level optimization.
+  2. Bi-level training: our proposed method with a single-step inner loop update.
+
+The measured per-epoch training times on the CSI 1000 dataset are summarized in Table 9. The results show that, with a
+single inner-loop step, the bi-level method adds a moderate amount of computational overhead compared with standard
+training, and remains practically implementable across all tested architectures. This is particularly natural in quantitative
+finance, where the signal-to-noise ratio is typically low and models tend to use relatively modest parameter sizes to control
+overfitting. Under such model sizes, the extra computation required by the inner update is contained, and the overall training
+cost stays in a comparable range to that of standard supervised training.
+We note that in other application domains with substantially larger models or more complex architectures, the relative
+overhead of bi-level optimization could be higher. However, within our forecasting task and model configurations, the
+impact on efficiency is not significant. At the same time, the bi-level approach effectively avoids the need for extensive
+repeated training runs for horizon selection, which would otherwise involve training tens or hundreds of separate models,
+leading to much higher total computational cost.
+It is also important to emphasize that the absolute per-epoch times across different models in Table 9 are not meant to be
+directly compared as indicators of model quality or efficiency. The models have different architectures and parameter counts:
+for instance, Transformer-based models are, in principle, more computationally intensive than RNN-based models. Yet in
+practice, Transformer models in financial forecasting often need to be kept relatively small to mitigate overfitting, which can
+narrow the gap in actual runtime compared with lighter architectures. Therefore, the primary takeaway from this analysis is
+the relative overhead of bi-level training versus standard training for each given model, rather than cross-model runtime
+comparisons.
+
+Table 9. Comparison of Running Time. Per-epoch training time (in seconds) on CSI 1000 under Scenario 1 using a single NVIDIA
+H20 GPU. Standard Training denotes conventional supervised training without bi-level optimization, while Bi-level Training denotes
+our method with a single inner-loop update per outer iteration. CSI 1000 is chosen as it corresponds to the largest universe and thus the
+heaviest computational load.
+
+                M ODEL                 S TANDARD T RAINING ( S / EPOCH )          B I - LEVEL T RAINING ( S / EPOCH )
+                LSTM                                  21.739                                    22.137
+                GRU                                   21.825                                    22.536
+                DL INEAR                              21.568                                    22.672
+                RL INEAR                              21.357                                    22.912
+                PATCH TST                             21.653                                    23.357
+                I T RANSFORMER                        21.153                                    23.540
+                M AMBA                                21.912                                    25.688
+                B I -M AMBA +                         21.401                                    27.765
+                M ODERN TCN                           21.317                                    26.583
+                TCN                                   21.484                                    23.284
+
+
+
+
+                                                                   30
+
+=== END SOURCE TEXT ===

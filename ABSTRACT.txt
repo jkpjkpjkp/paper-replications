@@ -1,0 +1,8 @@
+The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting
+
+Condensed abstract
+
+Shows that the best training-label horizon need not match the final forecasting horizon.
+A signal-noise trade-off explains why intermediate targets can generalize better, and a
+bi-level optimization framework selects proxy labels within one training run. Financial-
+data experiments report improvements over conventional supervision choices.

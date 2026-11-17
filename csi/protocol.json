@@ -1,0 +1,93 @@
+{
+  "protocol_version": "csi-daily-alpha158-v1",
+  "scope": "Independent daily CSI adaptation of Song et al. (2026); original minute-level CSI results are not reconstructed",
+  "universes": [
+    "csi300",
+    "csi500",
+    "csi1000"
+  ],
+  "source": "/home/jkp/data/csi/qlib/cn_data",
+  "source_revision": "ee0fa6b2299cb5e927d2df491888c84f6c9c027a",
+  "features": "Official Qlib Alpha158 expressions, applied to adjusted daily prices and observed share volume",
+  "price_adjustment": "raw price multiplied by positive finite vendor cumulative adjustment factor",
+  "candidate_horizons": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "target_horizon": 10,
+  "label": "adjusted_VWAP[t+1+h]/adjusted_VWAP[t+1]-1",
+  "train": [
+    "2019-01-01",
+    "2023-06-30"
+  ],
+  "validation": [
+    "2023-07-01",
+    "2024-06-30"
+  ],
+  "test": [
+    "2024-07-01",
+    "2025-07-31"
+  ],
+  "purge": "remove train/validation decision dates whose final 10-session label exit crosses the split; keep test decision dates through July31 with later exits only for label completion",
+  "membership": "historical constituent on decision date",
+  "missing_features": "training-only finite mean imputation, standard deviation scaling, clip to [-10,10]",
+  "missing_labels": "finite final-horizon common stock set, mask missing intermediate horizons",
+  "minimum_stocks": 50,
+  "model": {
+    "name": "AlphaMLP",
+    "hidden": [
+      256,
+      128
+    ],
+    "dropout": 0.2
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "batch_days": 20,
+  "warmup_epochs": 3,
+  "maximum_epochs": 50,
+  "patience": 5,
+  "adamw_learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "inner_learning_rate": 1e-06,
+  "outer_learning_rate": 0.001,
+  "entropy_weight": 0.001,
+  "loss": "population cross-sectional standardized MSE separately per date and per available horizon mask; equal date weight",
+  "horizon_selection": "random equal support/query dates inside a 20-date batch, one differentiable SGD look-ahead with student writeback; Adam logits, entropy regularization; validation final-horizon checkpoint; retrain argmax",
+  "sweep": "all10 horizons times5 seeds; all fitting and BLO selection finish before any held-out metrics",
+  "test_selection_policy": "best test horizon and correlation of test-IC ranks with weights are descriptive only; never choose or tune the selected model using test data",
+  "statistics": "daily cross-sectional IC and RankIC against a fixed10-session return, descriptive ICIR/RankICIR, top-decile10-session return; no naive annualized Sharpe",
+  "bootstrap": {
+    "block_sessions": 20,
+    "replicates": 10000,
+    "seed": 2026
+  },
+  "differences_from_public_demo": [
+    "CSI constituent-specific fits instead of all A shares",
+    "paper month ranges rather than2020-2026 demo ranges",
+    "5 seeds rather than15 search seeds",
+    "training-only mean/std imputation instead of classified tanh/full-row deletion",
+    "no training-threshold trimming of held-out returns",
+    "paper-style standardized MSE, date batches and mean-level warm-up instead of demo SGD minibatches/difference-label warm-up/ensembled trajectories"
+  ],
+  "limitations": [
+    "daily source cannot supply original minute patches, transaction counts or intraday targets",
+    "community snapshot values and historical membership are not independently vendor-certified",
+    "cumulative adjustment-factor semantics are inferred from source-provider documentation and checked corporate actions",
+    "gross horizon returns omit tradability constraints, costs, ladder accounting and cashflow attribution",
+    "Disjoint support/query decision dates can have overlapping future return windows; meta-query dependence remains within training batches"
+  ]
+}
