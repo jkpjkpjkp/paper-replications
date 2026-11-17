@@ -1,0 +1,36 @@
+Verified mathematical limitation — assessed 2026-11-17
+
+The camera-ready paper says on PDF page 4 that soft neural inference preserves
+hard symbolic ranking (to five decimal places), and uses this to motivate
+lossless decompilation. This cannot hold universally for the finite-temperature
+computation in Eqs. 1, 3–6 with Appendix Algorithm 1.
+
+Counterexample: use two stumps on different features, each with threshold 0,
+left leaf 0 and right leaf 1. Use the paper's tau1=100 and tau2=10. For one
+stump, the soft right-leaf probability is
+  sigmoid(2 * tau2 * tanh(tau1 * x)).
+For inputs A=(1e-7, 1e-7) and B=(1, -1e-7), hard ensemble outputs are A=2 and
+B=1. Soft outputs are A=1.0001000000 and B=1.4999499979. The ranking reverses.
+An independent closed-form calculation and the local Algorithm 1 implementation
+agree within 2e-7. Neither input lies exactly on a threshold. This is a concrete
+counterexample to a universal ranking guarantee; it does not establish why the
+paper's measured benchmark AUCs differ from the local reconstruction.
+
+The earlier sign/depth specification conflict also remains: Equation 2 on PDF
+page 4 assigns positive left / negative right signs and leaf-depth weights;
+Appendix Algorithm 1 on page 12 assigns negative left / positive right signs
+and ancestor-order weights. The local implementation follows Algorithm 1.
+Both pages were visually checked against the original PDF on 2026-11-17.
+
+Evidence:
+- .agent/PAPER_TEXT.txt lines 492–498, 1455–1508; PAPER_INDEX.json source mapping.
+- ../.replication-local/artifacts/arboreal/sources/paper-camera-ready.pdf
+  SHA256 f1628581fc83f79a4c32d4013299e56f2cf3693eb50821cb355b8c2c5926cd65
+- /mnt/data/home/jkp/replications/arboreal-resolve-20261117/check_fidelity.py
+- /mnt/data/home/jkp/replications/arboreal-resolve-20261117/fidelity_counterexample.json
+- /mnt/data/home/jkp/replications/arboreal-resolve-20261117/table1.png
+- /mnt/data/home/jkp/replications/arboreal-resolve-20261117/algorithm1.png
+
+Exact author code, selected initial trees and public-task training/split seeds
+remain unavailable to this investigation. This record makes no allegation
+about fabricated results, data leakage or author intent.

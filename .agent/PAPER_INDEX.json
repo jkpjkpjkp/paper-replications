@@ -1,0 +1,388 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "arboreal",
+  "title": "Arboreal Neural Network",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/arboreal/sources/paper-camera-ready.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/arboreal/sources/paper-camera-ready.pdf",
+    "sha256": "f1628581fc83f79a4c32d4013299e56f2cf3693eb50821cb355b8c2c5926cd65",
+    "bytes": 2756816,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 13,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 88
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 89,
+      "line_end": 169
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 170,
+      "line_end": 237
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 238,
+      "line_end": 569
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 570,
+      "line_end": 864
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 865,
+      "line_end": 954
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 955,
+      "line_end": 1088
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 1089,
+      "line_end": 1236
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1237,
+      "line_end": 1301
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1302,
+      "line_end": 1402
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1403,
+      "line_end": 1454
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1455,
+      "line_end": 1509
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1510,
+      "line_end": 1634
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 73
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 74,
+      "line_end": 138
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 139,
+      "line_end": 196
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 197,
+      "line_end": 281
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 282,
+      "line_end": 347
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 348,
+      "line_end": 408
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 409,
+      "line_end": 479
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 480,
+      "line_end": 541
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 542,
+      "line_end": 613
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 614,
+      "line_end": 684
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 685,
+      "line_end": 737
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 738,
+      "line_end": 794
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 795,
+      "line_end": 850
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 18,
+      "text": "Abstract"
+    },
+    {
+      "line": 49,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 131,
+      "text": "2. Related Work"
+    },
+    {
+      "line": 132,
+      "text": "2.1. Traditional Tree-based Models"
+    },
+    {
+      "line": 161,
+      "text": "2.2. Differentiable Neural Architectures"
+    },
+    {
+      "line": 230,
+      "text": "2.3. Hybrid Neural-Tree Architectures"
+    },
+    {
+      "line": 504,
+      "text": "3. Method"
+    },
+    {
+      "line": 528,
+      "text": "3.1. Arboreal Neural Network"
+    },
+    {
+      "line": 562,
+      "text": "3.2. Sparse Neural Tree: ArborCell"
+    },
+    {
+      "line": 801,
+      "text": "3.3. Feed Forward Computation in ArborCell"
+    },
+    {
+      "line": 848,
+      "text": "3.4. Structural Homomorphism to Self-Attention"
+    },
+    {
+      "line": 910,
+      "text": "4. Experiments"
+    },
+    {
+      "line": 915,
+      "text": "4.1. Experimental Setup"
+    },
+    {
+      "line": 1062,
+      "text": "0.02. The learning rate followed a two-phase schedule: a"
+    },
+    {
+      "line": 1069,
+      "text": "4.2. SOTA Performance on Results"
+    },
+    {
+      "line": 1198,
+      "text": "4.3. Ablation and Interpretability Analysis"
+    },
+    {
+      "line": 1256,
+      "text": "5. Conclusion and Discussion"
+    },
+    {
+      "line": 1334,
+      "text": "References"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1635
+    }
+  ],
+  "line_count": 1635,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "a303bd812def15301bba53b3000ada0a570b914fbc30097c53a7e858940eb5d7",
+      "bytes": 57887
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "2d88985d7f79e8092db3ec2561a49900e39836560b5d159efd9291e9444ee9ae",
+      "bytes": 78995
+    }
+  }
+}

@@ -1,0 +1,41 @@
+1: ArbNN MagicTelescope, Frame split seed 42 and expanded validation grid (training seed 0), AUC: rerun 0.944804; paper 0.974 +/- 0.001 seed SD.
+
+Assessment date: 2026-11-17.
+Scope: fresh independent MagicTelescope training under two documented protocol
+variants; historical 55 fits across 11 tasks remain archived. No author-code or
+released-checkpoint inference; no whole-paper replication.
+
+Completed resolution attempt:
+The public Frame 80/10/10 split with seed 42 raises seed 0 ArbNN AUC from the
+historical 0.924025 to 0.945496 with the original 3-candidate search. Expanding to
+12 validation-only candidates gives 0.944804; absolute paper error 0.029196
+(2.997% relative). This exceeds paper seed SD 0.001 and
+rounding tolerance 0.0005. One fresh seed has no measured seed uncertainty.
+Both comparisons and full configurations are reported; no test-based selection.
+All saved AUCs were independently re-scored and checkpoints replayed.
+
+Historical failures preserved:
+Five-seed MagicTelescope AUC 0.924230 +/- 0.000572 seed SD versus 0.974 (gap 0.049770).
+Houses standardized RMSE 0.418967 +/- 0.001499 versus 0.359 (16.7% high).
+The original 11-task ArbNN summaries differ from the paper. Rechecking original
+MagicTelescope/houses saved predictions confirms those historical results.
+
+Limits / next requirement:
+The current PyTorch Frame split/search specification improves on earlier
+assumptions but does not recover exact author settings. Original code, initial
+trees, training/search seeds, full epoch budget and TabCredit remain missing.
+The 12-candidate grid is not the cited framework's 20-trial Optuna procedure. Equation 2 and
+Algorithm 1 disagree; this implementation follows Algorithm 1. WRONG.txt records
+a verified finite-temperature rank-reversal counterexample, not an inferred
+explanation for the measured numerical mismatch. Grade remains 1.
+
+Evidence:
+- .agent/RESOLUTION_ATTEMPT_20261117.txt
+- WRONG.txt
+- /mnt/data/home/jkp/replications/arboreal-resolve-20261117/verification.json
+- /mnt/data/home/jkp/replications/arboreal-resolve-20261117/split_only/seed0/result.json
+- /mnt/data/home/jkp/replications/arboreal-resolve-20261117/split_and_search/seed0/result.json
+- /mnt/data/home/jkp/replications/arboreal-resolve-20261117/archive_recheck.json
+- ../.replication-local/artifacts/arboreal/artifacts/benchmark/summary.csv
+- ../.replication-local/artifacts/arboreal/README.md
+- ../.replication-local/artifacts/paper-claim-validation/results/native_claim_comparison.csv

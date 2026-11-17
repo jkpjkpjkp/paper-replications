@@ -1,0 +1,9 @@
+Arboreal Neural Network
+
+Condensed abstract
+
+Connects symbolic decision trees with differentiable neural computation through depth-
+aware routing and topology-informed aggregation. Models can be initialized from boosted
+trees, optimized with gradients, and converted back into explicit decision rules.
+Tabular benchmarks and industrial credit-risk experiments assess predictive accuracy,
+interpretability, and robustness to temporal distribution shifts.

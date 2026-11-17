@@ -1,0 +1,851 @@
+Arboreal Neural Network
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/artifacts/arboreal/sources/paper-camera-ready.pdf
+Source SHA-256: f1628581fc83f79a4c32d4013299e56f2cf3693eb50821cb355b8c2c5926cd65
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Layout extraction: spacing retains approximate PDF columns and tables.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+                                             Arboreal Neural Network
+
+
+        Wubin Yan 1 2 Wei Ma 2 Shixiang Wan 1 Dongchen Li 1 Shaoshun Kang 1 Qing Yang 1 Dongliang Xu 1
+
+
+                           Abstract                                      support realistic evaluation, we additionally con-
+                                                                         struct TabCredit, a feature-rich, temporally parti-
+        Connectionist models and symbolic models have                    tioned dataset built from millions of real-world
+        long embodied two divergent paradigms: the for-                  loan applications. Together, these results demon-
+        mer excel at differentiable representation learn-                strate that ArbNN forms a unified, reversible, and
+        ing yet struggle with transparency, while the                    practically deployable bridge between symbolic
+        latter deliver explicit rule-based reasoning but                 reasoning and neural computation for high-stakes
+        resist gradient-based optimization. We intro-                    tabular domains.
+        duce Arboreal Neural Networks (ArbNN), a
+        neural-symbolic framework that unifies these
+        paradigms both computationally and conceptu-
+                                                                    1. Introduction
+        ally. At the design level, ArbNN departs fun-
+        damentally from prior neuralized-tree models                A prevailing challenge in unifying symbolic (Chen &
+        through a depth-aware routing mechanism and                 Guestrin, 2016; Ke et al., 2017; Prokhorenkova et al., 2018)
+        a topology-informed softmax aggregation, which              and neural paradigms (Lecun et al., 1998; Krizhevsky et al.,
+        together enable one-shot full-path gradient propa-          2012; He et al., 2016; Vaswani et al., 2017; Radford et al.,
+        gation and consequently achieving rapid and well-           2018; Devlin et al., 2019) lies not merely in hybridizing tree-
+        conditioned optimization dynamics. At the con-              like components with neural modules, but in determining
+        ceptual level, ArbNN reveals that decision-tree             whether they share a common conditional computation prim-
+        branching and self-attention routing are two re-            itive. Prior neural-symbolic approaches often soften discrete
+        alizations of the same conditional computation              decision boundaries, approximate symbolic operators with
+        primitive. We prove a structural isomorphism                differentiable surrogates, or impose post-hoc explanations
+        between a decision tree and a single-query at-              on neural networks. While such techniques yield practi-
+        tention head, enabling a differentiable architec-           cal utility, they do not bridge the core conceptual divide:
+        ture that faithfully preserves symbolic decision            the lack of a principled and invertible correspondence be-
+        logic. The defining property of ArbNN is Bidi-              tween discrete symbolic structures and continuous neural
+        rectional Fidelity, ensuring that the neural mod-           representations. Recent work in modular and interpretable
+        ule can be compiled from—and losslessly de-                 neural systems further highlights this difficulty. Typical
+        compiled back into—a symbolic tree, yielding                studies on Weight-Sparse Transformers (Gao et al., 2026)
+        both ordering consistency in ranking behavior               and Modular Manifolds (Bernstein, 2025) demonstrate that
+        and explicit, auditable interpretability via recon-         learning sparse, modular, or symbolic structure from scratch
+        structed if-else rules. ArbNN further supports              remains intrinsically challenging. Neural activations tend
+        GBDT-based initialization, allowing it to inherit           to remain entangled and polysemantic, even under strong
+        strong inductive biases and integrate seamlessly            regularization, and enforcing routing, modularity, or dis-
+        with existing production workflows. Empirically,            creteness during training is often unstable and hardly yields
+        ArbNN achieves state-of-the-art performance on              audit-grade interpretability.
+        various public tabular benchmarks and delivers
+        consistent gains under temporal distribution shift          We introduce Arboreal Neural Networks (ArbNN), a neural
+        in large-scale industrial credit-risk systems. To           architecture that provides a bidirectional correspondence
+                                                                    between decision trees and self-attention. A decision tree
+    1
+    Du Xiaoman Technology (Beijing) Co., Ltd., Beijing, China       can be compiled into a differentiable module that is struc-
+2
+ Beijing University of Technology, Beijing, China. Correspon-       turally homomorphic to a single-query attention head, and
+dence to: Wei Ma <mawei@bjut.edu.cn>.                               the resulting module can be decompiled back into an equiv-
+Proceedings of the 43 rd International Conference on Machine        alent symbolic tree with no loss of interpretability. This
+Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026        establishes attention-based routing and symbolic branching
+by the author(s).                                                   as two forms of the same conditional computation primitive,
+
+                                                                1
+
+=== PDF PAGE 2 ===
+                                                   Arboreal Neural Network
+
+enabling ArbNN to combine global, auditably symbolic                       neural models. In addition, it has been successfully
+reasoning with end-to-end trainability and competitive func-               deployed in real-world commercial risk control scenar-
+tion approximation. ArbNN employs a more principled                        ios involving large-scale credit flow, demonstrating its
+and informative initialization that uses a pretrained GBDTs                practical efficacy.
+as a structural sparsity template, rather than relying on a              • We introduce TabCredit, a large-scale and feature-rich
+purely random sparse topology as in weight-sparse Trans-                   dataset for credit risk assessment, constructed from
+former regimes (Gao et al., 2026). This design provides                    real-world loan applications. The dataset comprises
+a meaningful and domain-aligned structural prior, follow-                  2 million samples with 100 anonymized, engineered
+ing the broader shift toward fixed-structure models with                   features and adheres to strict in-time and Out-of-Time
+differentiable parameter refinement. More realistically for                (OOT) splits.
+real-world deployments, it also inherits the most widely
+used tree models, avoiding migration cost or performance
+risk and providing a stable foundation for fine-tuning.               Conflict of Interest Disclosure. The authors are employed
+                                                                      by Du Xiaoman Technology (Beijing) Co., Ltd., which pro-
+We also construct an industrial dataset. As is well-known,            vided the computational resources and proprietary dataset
+most academic tabular benchmarks adopt random splits to               (TabCredit) for this research. Additionally, the proposed
+construct their datasets, with the aim of evaluating general-         ArbNN architecture is currently deployed within the com-
+ization under the assumption of Independent and Identically           pany’s live commercial systems.
+Distributed (I.I.D.) data. However, these benchmarks often
+overlook the temporal drift and strong time dependencies
+inherent in real-world applications. Additionally, industrial
+                                                                      2. Related Work
+datasets are typically created through complex acquisition            2.1. Traditional Tree-based Models
+processes and extensive feature engineering, leading to nu-
+merous informative variables. Despite their value, such               Traditional tree-based models, including XGBoost (Chen
+datasets are rarely publicly available (Rubachev et al., 2025).       & Guestrin, 2016), LightGBM (Ke et al., 2017), and Cat-
+In this paper, we present TabCredit, a large-scale, feature-          Boost (Prokhorenkova et al., 2018), remain the foundational
+rich credit risk dataset derived from real-world loan applica-        paradigm for tabular data modeling. By constructing hier-
+tions and organized with temporal splits. TabCredit enables           archical feature routing systems based on split points deter-
+benchmarking under realistic conditions of temporal drift             mined from statistical criteria (e.g., information gain), they
+and complex feature engineering—two critical aspects that             naturally align with the localized dependencies and additive
+are largely absent from existing public datasets.                     interactions common in such data. Furthermore, recent em-
+                                                                      pirical studies, such as the comprehensive benchmarking
+Our main contributions are summarized as follows:                     by (Holzmüller et al., 2024), emphasize that these GBDT
+                                                                      frameworks can achieve highly competitive performance
+   • We present Arboreal Neural Networks (ArbNN),
+                                                                      across diverse tabular tasks simply through the application
+     a neural–symbolic framework built around bidirec-
+                                                                      of robust, carefully pre-tuned hyperparameter configura-
+     tional fidelity: the model can be compiled from and
+                                                                      tions.
+     decompiled back into a symbolic tree while preserv-
+     ing ordering-consistent ranking behavior and explicit,           Despite their empirical success, traditional GBDTs are fun-
+     auditable interpretability. ArbNN further unifies sym-           damentally limited by their greedy optimization based on
+     bolic decision-tree reasoning with connectionist rep-            global statistical aggregates, which frequently causes them
+     resentation learning in a single differentiable architec-        to underfit rare or challenging minority instances. To ad-
+     ture.                                                            dress this, ArbNN renders the tree architecture fully end-
+   • We introduce ArborCell, the differentiable computa-              to-end differentiable. By freezing the physical topology
+     tion unit of ArbNN. ArborCell employs a depth-aware              and employing batch-wise gradient descent to globally co-
+     routing mechanism together with a topology-informed              optimize all split thresholds and leaf values, ArbNN ef-
+     softmax aggregation, enabling one-shot full-path com-            fectively captures these underrepresented patterns, directly
+     putation for efficient training. We additionally prove           yielding superior performance.
+     that ArborCell is structurally homomorphic to a single-
+     query self-attention head, establishing the formal cor-          2.2. Differentiable Neural Architectures
+     respondence between symbolic branching and neural                End-to-end differentiable architectures have been widely
+     routing.                                                         explored for tabular data. TabTransformer (Huang et al.,
+   • Our model achieves State-of-the-Art (SOTA) perfor-               2020) is an early work of applying self-attention to embed-
+     mance across various tabular prediction datasets, out-           dings of categorical features within tabular data, enabling
+     performing both traditional ensemble trees and existing          context-aware feature encoding. FT-Transformer (Gorish-
+
+                                                                  2
+
+=== PDF PAGE 3 ===
+                                                       Arboreal Neural Network
+
+
+
+
+Figure 1. Arboreal Neural Network transforms a decision tree T into an ArborCell, enabling end-to-end differentiability while retaining
+the symbolic structure for interpretability. The left-green panel illustrates the compilation of tree T (via the Algorithm in Appendix
+A into its ArborCell representation. Matrix W encodes feature–node assignments, and matrix P encodes the tree topology. Together
+with the bias vector f (split thresholds), these define the hyperplane projections that relate input X to the internal decision nodes. After
+training, the ArborCell can be decompiled back into a refined tree T′ , where (W, P) remain fixed and only (f, v) are fine-tuned, thereby
+improving predictive performance while preserving the original tree structure.
+
+
+niy et al., 2021) expanded on TabTransformer by jointly                  soft gating (sigmoid or softmax) and compute predictions as
+processing numerical and categorical features through a                  mixtures over leaves via path probabilities. Representative
+unified Transformer block. TFWT (Zhang et al., 2024) in-                 examples include Neural Decision Forests (Kontschieder
+troduced dynamic feature weighting within Transformer                    et al., 2015) and Soft Decision Trees (Frosst & Hinton,
+layers to highlight context-dependent variable importance.               2017), which use per-node binary soft splits (sigmoid-based
+SwitchTab (Wu et al., 2024) employed an asymmetric                       left/right routing); Neural Random Forests (Biau et al.,
+encoder-decoder structure to enhance feature representa-                 2019) implement a depth-agnostic routing mechanism in
+tions and interpretability. Trompt (Chen et al., 2024b) uti-             which each internal node computes a signed matrix product
+lized prompt-based learning to separate global schema infor-             over input features, producing a single-leaf activation that
+mation from instance-specific noise. TabM (Gorishniy et al.,             differentiably mimics the hard path selection of classical
+2025) achieved ensemble benefits for tabular deep learning               decision trees. NODE (Popov et al., 2020), which per-
+by combining a shared MLP backbone with lightweight                      forms layerwise oblivious soft splits and GRANDE (Marton
+adapters for parameter-efficient diversity. TabPFNv2 (Holl-              et al., 2024), combines softmax-based feature selection with
+mann et al., 2025) is a pre-trained tabular foundation model             sigmoid-based thresholding to stabilize gradient flow in
+that, by learning to perform Bayesian-style inference from               deep tree ensembles. Another direction embeds tree-based
+diverse synthetic priors, produces accurate zero-shot predic-            reasoning within neural networks as specialized modules,
+tions on small-to-medium tabular datasets while delivering               such as the Adaptive Neural Trees (Tanno et al., 2019),
+orders-of-magnitude faster inference than tuned AutoML                   which insert learnable neural Transformers along paths
+baselines.                                                               and dynamically grow or prune the tree to enable adaptive
+                                                                         structure learning; Tree Ensemble Layer (TEL) (Hazimeh
+Despite their adaptability in handling diverse tabular
+                                                                         et al., 2020), which integrates differentiable tree ensem-
+data, differentiable neural tabular models often struggle
+                                                                         bles as conditional-computation layers; Adaptive Neural
+to consistently outperform tree ensembles across many
+                                                                         Trees (Tanno et al., 2019), which insert learnable neural
+tasks—particularly in scenarios with limited data or heav-
+                                                                         Transformers along paths and dynamically grow or prune the
+ily engineered features (Rubachev et al., 2025). Moreover,
+                                                                         tree to enable adaptive structure learning; Net-DNF (Katzir
+these models lack the intuitive interpretability inherent to
+                                                                         et al., 2021), which encodes symbolic decision logic in dis-
+tree-based models.
+                                                                         junctive normal form as neural layers, preserving rule-based
+                                                                         reasoning; and NCART (Luo & Xu, 2024), which incorpo-
+2.3. Hybrid Neural-Tree Architectures                                    rates differentiable oblivious trees into residual networks
+Hybrid neural-tree architectures differ mainly in how                    to improve both efficiency and interpretability. ArbNN
+decision-tree logic is integrated with neural computation.               overcomes the optimization instability and semantic opac-
+Early approaches implement independent soft trees, where                 ity of prior soft-tree models by replacing recursive gating
+the predictive model itself is structured as a differentiable            with a structurally grounded, one-shot matrix formulation.
+ensemble. These methods replace hard if-else splits with                 By integrating depth-aware routing with topology-informed
+
+                                                                     3
+
+=== PDF PAGE 4 ===
+                                                                  Arboreal Neural Network
+
+                                                                             Classification ↑                                                Regression ↓
+ Model
+                                                  MA        H16         CR           JA         DI         MI         CA         YP         HO         CH         ME
+ MLP (Haykin, 1994)                             0.938(1)   0.940(2)   0.830(2)     0.869(1)   0.650(3)   0.978(1)   0.953(2)   0.881(2)   0.435(1)   0.467(2)   0.140(1)
+ ResNet (He et al., 2016)                       0.938(2)   0.946(1)   0.828(3)     0.871(2)   0.649(2)   0.983(1)   0.960(2)   0.875(1)   0.434(2)   0.468(1)   0.147(2)
+ FTTransformerBucket (Gorishniy et al., 2021)   0.939(5)   0.950(4)   0.857(6)     0.866(5)   0.649(7)   0.986(4)   0.960(5)   0.885(4)   0.441(6)   0.468(5)   0.147(4)
+ FTTransformer (Gorishniy et al., 2021)         0.936(2)   0.949(1)   0.828(2)     0.871(1)   0.652(2)   0.981(2)   0.959(1)   0.896(2)   0.445(1)   0.461(2)   0.141(1)
+ TabNet (Arik & Pfister, 2021)                  0.937(3)   0.936(2)   0.828(2)     0.862(3)   0.650(1)   0.977(2)   0.944(3)   0.885(2)   0.451(3)   0.544(2)   0.140(1)
+ TabTransformer (Huang et al., 2020)            0.918(2)   0.937(3)   0.816(1)     0.867(2)   0.642(2)   0.980(1)   0.928(2)   0.886(1)   0.539(2)   0.545(3)   0.141(1)
+ Trompt (Chen et al., 2024b)                    0.942(1)   0.952(1)   0.829(2)     0.882(1)   0.652(1)   0.982(2)   0.964(1)   0.874(2)   0.418(1)   0.424(2)   0.140(1)
+ GRANDE (Marton et al., 2024)                   0.939(2)   0.945(2)   0.833(1)     0.871(2)   0.653(1)   0.982(1)   0.959(2)   0.883(1)   0.432(2)   0.460(1)   0.141(2)
+ ExcelFormer (Chen et al., 2024a)               0.939(1)   0.950(1)   0.833(1)     0.879(2)   0.651(2)   0.982(1)   0.969(1)   0.890(2)   0.411(1)   0.431(2)   0.142(1)
+ SwitchTab (Wu et al., 2024)                    0.939(2)   0.948(2)   0.828(2)     0.872(1)   0.651(1)   0.981(1)   0.961(2)   0.880(1)   0.430(2)   0.452(1)   0.144(2)
+ TabPFNv2 (Hollmann et al., 2025)               0.939(1)   0.946(1)   0.854(2)     0.873(1)   0.638(2)   0.980(2)   0.967(1)   0.888(1)   0.400(1)   0.452(2)   0.143(1)
+ TabM (Gorishniy et al., 2025)                  0.943(1)   0.947(2)   0.843(1)     0.875(2)   0.651(1)   0.982(1)   0.963(2)   0.877(2)   0.396(1)   0.435(1)   0.142(1)
+ CatBoost (Prokhorenkova et al., 2018)          0.924(2)   0.948(1)   0.861(2)     0.863(1)   0.649(2)   0.986(1)   0.963(1)   0.876(1)   0.443(2)   0.439(1)   0.145(1)
+ LightGBM (Ke et al., 2017)                     0.943(1)   0.951(1)   0.862(2)     0.881(2)   0.652(1)   0.986(0)   0.972(1)   0.863(2)   0.384(1)   0.395(1)   0.141(1)
+ XGBoost (Chen & Guestrin, 2016)                0.947(1)   0.951(0)   0.862(1)     0.868(1)   0.653(2)   0.986(1)   0.966(1)   0.857(1)   0.401(2)   0.418(1)   0.140(0)
+ ArbNN                                          0.974(1)   0.987(1)   0.884(1)     0.923(2)   0.657(1)   0.992(0)   0.986(1)   0.832(1)   0.359(1)   0.406(1)   0.130(1)
+Table 1. Comparisons on public datasets, with the highest performance highlighted in bold. Values are reported as mean(std × 103 ),
+where the parentheses denote the standard deviation corresponding to the last significant digit(s) over five independent runs. The evaluation
+metrics are AUC-ROC for classification and RMSE for regression.
+
+
+
+softmax, it achieves stable end-to-end training. Crucially,                               indicates feature-node relationships, a bias vector f that rep-
+ArbNN guarantees Bidirectional Fidelity, where soft neural                                resents split points, a tree-structure matrix P that reflects the
+inference is ranking-equivalent to the hard symbolic deci-                                hierarchical subspace organization, and leaf node weights
+sions (matching up to the 5th decimal place). This property                               v.
+allows for lossless decompilation, effectively unifying con-
+                                                                                        Weight Matrix W ∈ Rni ×t is a sparse one-hot matrix,
+nectionist representation learning with symbolic reasoning
+                                                                                        where each row corresponds to an internal node, and the
+under a shared primitive.
+                                                                                        non-zero entry in row i indicates the index of the feature
+                                                                                        selected by the i-th internal node from a set of t candidate
+3. Method                                                                               features. ni is the total number of inner nodes.
+3.1. Arboreal Neural Network                                                              Tree-structure Matrix P ∈ Rni ×nj captures the tree’s
+                                                                                          structure. Each entry pij indicates whether the leaf node j
+Arboreal Neural Network is a wide, shallow and differen-
+                                                                                          is reachable from the internal node i and on which side of
+tiable neural architecture that reinterprets the discrete logic
+                                                                                          the hyperplane the leaf lies. Specifically, for each pair of
+of tree-based models. Each component, called an Arbor-
+                                                                                          nodes, the value of pij is defined as:
+Cell, functions similarly to a tree in tree-based models. The                                           depj −1
+overall prediction of the ArbNN model is obtained by ag-                                                  1
+                                                                                                        2 
+                                                                                                                    ,     if node j ∈ DescL (i)
+gregating the logits from its individual ArborCells:                                             pij = − 2   1  depj −1
+                                                                                                                                                   (2)
+                                                                                                                        , if node j ∈ DescR (i)
+                                         C
+                                                                                                       
+                                                                                                         0,                if node j ∈
+                                                                                                                                     / Desc(i)
+                                         X                                                             
+                            ŷArbNN =           ŷc                          (1)
+                                         c=1                                              where depj represents the number of edges from the root
+                                                                                          to leaf node j and DescL (i) and DescR (i) denote the sets of
+where C denotes the total number of ArborCells in the
+                                                                                          leaf nodes that lie on the left or right subtrees of node i, re-
+ArbNN model. The ArbNN model is initially configured
+                                                                                          spectively. The sign indicates whether a leaf is on the left or
+using a pretrained decision tree ensemble (e.g., XGBoost),
+                                                                                          right of the hyperplane (+1 for left and −1 for right) defined
+which provides critical elements, including split conditions,                                                                                  dep −1
+leaf node weights, and structural topology.                                               by node i, and the magnitude is weighted by (1/2) j . A
+                                                                                          value of 0 indicates that the leaf is not reachable from node
+                                                                                          i. We adopt an exponentially decaying weighting design for
+3.2. Sparse Neural Tree: ArborCell
+                                                                                          the matrix P, specifically utilizing a base of 1/2. This spe-
+As illustrated in Figure 1, each ArborCell processes a sam-                               cific base is derived directly from the topological prior of a
+ple X ∈ Rt and produces a prediction ŷc . This process                                   binary tree: in a perfectly balanced structure, the prior prob-
+emulates tree prediction logic through a series of neural                                 ability of a sample routing to either the left or right subtree
+computations, including matrix multiplication and activa-                                 halves at each depth level. By embedding this 1/2 decay
+tion functions. The necessary matrices are derived from a                                 into the matrix forward pass, we faithfully emulate this hier-
+decision tree, denoted as T, using Algorithm in Appendix                                  archical subspace selection in a fully end-to-end learnable
+A. Specifically, we extract the sparse weight matrix W that                               manner, while simultaneously mitigating the gradient van-
+
+                                                                                    4
+
+=== PDF PAGE 5 ===
+                                                           Arboreal Neural Network
+
+ Model                                          MOB2    MOB3    MOB4     MOB5    MOB6     MOB7    MOB8    MOB9    MOB10   MOB11    MOB12
+ MLP (Haykin, 1994)                             54.73   52.19   50.35    48.92    47.24   45.68   43.91   42.49   41.26    39.99    38.82
+ ResNet (He et al., 2016)                       55.39   52.89   50.94    49.39    47.57   45.90   44.06   42.70   41.48    40.20    38.96
+ FTTransformer (Gorishniy et al., 2021)         55.77   53.36   51.32    49.57    47.70   46.03   44.12   42.67   41.38    40.04    38.80
+ TabTransformer (Huang et al., 2020)            51.25   48.78   47.11    45.40    43.67   42.11   40.51   39.22   38.08    36.91    35.74
+ FTTransformerBucket (Gorishniy et al., 2021)   55.80   53.42   51.35    49.61    47.75   46.09   44.16   42.71   41.43    40.07    38.85
+ Trompt (Chen et al., 2024b)                    55.54   52.88   50.99    49.22    47.34   45.68   43.85   42.37   41.05    39.72    38.46
+ GRANDE (Marton et al., 2024)                   55.49   52.80   50.91    49.13    47.24   45.59   43.72   42.22   40.89    39.64    38.38
+ ExcelFormer (Chen et al., 2024a)               53.80   51.69   49.74    48.36    46.77   45.34   43.71   42.40   41.22    40.01    38.79
+ SwitchTab (Wu et al., 2024)                    55.57   53.12   51.11    49.46    47.61   45.91   44.02   42.53   41.21    39.85    38.67
+ TabPFNv2 (Hollmann et al., 2025)               28.42   29.20   29.46    29.83    29.66   29.71   28.88   30.11   31.17    29.85    30.61
+ TabM (Gorishniy et al., 2025)                  55.84   53.47   51.43    49.57    47.84   46.19   44.26   42.75   41.49    40.13    39.01
+ XGBoost (Chen & Guestrin, 2016)                56.52   53.92   51.90    50.13    48.19   46.40   44.50   43.03   41.72    40.40    39.13
+ LightGBM (Ke et al., 2017)                     56.31   53.72   51.65    49.90    48.01   46.18   44.35   42.78   41.55    40.21    38.95
+ ArbNN                                          57.14   54.13   52.08    50.33    48.43   46.65   44.76   43.28   41.95    40.60    39.32
+Table 2. KS (%) across M2+@MOBN in vintage analysis on the TabCredit Dataset for tracking delinquency trends (M2+: delinquency
+beyond 31 days; MOBN: months-on-book). The best values are in bold.
+
+
+
+ishing and exploding issues inherent to deeply skewed tree                   where nj denotes the number of leaf nodes. Each element
+structures during backpropagation.                                           Mj reflects the aggregated directional alignment of the input
+                                                                             with respect to the internal nodes along the path to leaf node
+3.3. Feed Forward Computation in ArborCell                                   j, incorporating both routing consistency and hierarchical
+                                                                             depth weighting. This process can be viewed as a soft
+Hyperplane Projection H: Each internal node defines a                        generalization of decision path traversal in conventional
+hyperplane in the feature space, represented by a weight-                    trees.
+bias pair (Wi , fi ). To quantify the relationship of X to this
+hyperplane, we define the hyperplane projection:                             To obtain a normalized distribution over leaf subspaces, the
+                                                                             subspace affinity vector M is passed through a softmax
+                         Hi = Wi X − fi                            (3)       function: α = Softmax(τ2 · M), where the temperature pa-
+                                                                             rameter τ2 > 0 controls the peakedness of the distribution.
+Here, Hi represents the signed distances of X to the hyper-                  The resulting vector α ∈ Rnj encodes a probabilistic allo-
+plane. By evaluating X against ni learned hyperplanes and                    cation of the input across all leaf regions, enabling smooth,
+form H ∈ Rni ×1 .                                                            differentiable transitions between them.
+Decision Vector d: The hyperplane projections are passed                     ArborCell Prediction ŷc : Let v ∈ Rnj denote the predic-
+through a scaled hyperbolic tangent function to obtain the                   tion values associated with leaf nodes. The final output of
+decision vector d ∈ Rni :                                                    the ArborCell is given by the expectation over leaf predic-
+                                                                             tions:
+                                                                                                          nj
+                        di = tanh(τ1 · Hi )                        (4)                                   X
+                                                                                                   ŷc =     αj vj                   (6)
+where τ1 > 0 is a temperature parameter that modulates the                                                j=1
+
+sharpness of the activation function. A higher τ1 pushes di                  This output represents a soft aggregation of all leaf values,
+closer to the extremal values −1 and +1, thereby approxi-                    weighted by how consistently the input aligns with the de-
+mating the hard binary decisions of traditional trees.                       cision paths encoded by the internal node activations and
+In this way, each element di reflects the direction and confi-               their hierarchical routing.
+dence of the input sample with respect to the i-th decision
+boundary: di ≈ +1 indicates a confident right-child traver-                  3.4. Structural Homomorphism to Self-Attention
+sal, di ≈ −1 indicates a left-child preference, and interme-                 We show that the computation of an ArborCell—the differ-
+diate values arise when τ1 is small or the input lies near the               entiable counterpart of a decision tree unit—is structurally
+hyperplane. As a whole, the vector d serves as a differen-                   homomorphic to a single-query self-attention head. We
+tiable analogue of the discrete split routing in decision trees,             retain the notation from the Tree Parsing Algorithm (Ap-
+encoding soft decisions over internal nodes.                                 pendix 1).
+Subspace Affinity Vector M: The decision vector d ∈ Rni                      Theorem. An ArborCell is structurally homomorphic to a
+is linearly transformed by the tree-structure matrix P ∈                     single-query self-attention head in the following sense.
+Rni ×nj to obtain the subspace affinity vector:
+                                                                             (1) Each internal node i ∈ {1, . . . , ni } contributes one co-
+                         M = P⊤ d ∈ Rnj                            (5)       ordinate to the decision vector d ∈ Rni , i.e., one axis of
+
+                                                                         5
+
+=== PDF PAGE 6 ===
+                                                     Arboreal Neural Network
+
+
+
+
+          (a) Vintage curves on the OOT test set.                                   (b) TreeSHAP interpretability on TabCredit.
+                                   Figure 2. Performance and interpretability analysis of ArbNN.
+
+
+the query embedding space. Hence the number of internal                  (3) Aggregation. The ArborCell prediction aggregates leaf
+nodes ni equals the attention embedding dimension.                       values under these routing weights:
+                                                                           ŷc = α⊤ v = softmax τ2 K(tokens) Q⊤
+                                                                                                                     
+(2) Each leaf ℓ ∈ {1, . . . , nj } is associated with (a) a path                                               (CLS) V(tokens)
+encoding given by the ℓ-th column of the tree-structure                                                                       (11)
+matrix P ∈ Rni ×nj and (b) a scalar leaf value vℓ from
+                                                                         Boundary Clarification. We emphasize that the estab-
+v ∈ Rnj . Thus the number of leaves nj equals the sequence
+                                                                         lished isomorphism serves as a theoretical bridge to inter-
+length (number of tokens).
+                                                                         pret sparse self-attention mechanisms from a tree-based
+Under the identification                                                 perspective. While current research often prioritizes empir-
+                                                                         ical outcomes over model weight distributions, we argue
+                  Q(CLS) = d⊤ ∈ R1×ni ,                                  both are equally crucial for interpretability. Nevertheless,
+                K(tokens) = P⊤ ∈ Rnj ×ni ,                   (7)         this mapping remains strictly structural. It provides no
+                 V(tokens) = v ∈ R    nj ×1                              practical contribution to ArbNN’s empirical performance,
+                                                                         demonstrating topological alignment rather than functional
+The ArborCell output matches the single-query attention                  equivalence to broader Transformer usage or learned struc-
+form:                                                                    tures.
+
+
+                                                                        4. Experiments
+ ArborCell(d, P, v) = Attention Q(CLS) , K(tokens) , V(tokens)
+                                                             (8)         4.1. Experimental Setup
+
+Proof.                                                                   Datasets: We evaluated ArbNN using both public bench-
+                                                                         marks and a self-constructed industrial dataset. The public
+(1) Subspace affinity. By the ArborCell definition (Sec. 3.2),           datasets, obtained from the PyTorch Frame project (Hu
+the subspace affinity vector is M = P⊤ d ∈ Rnj . Using the               et al., 2024), include Magic Gamma Telescope (MA), Cali-
+above identification, this is equivalently                               fornia Housing (CH), House 16H (H16), Jannis (JA), Dia-
+           M = K(tokens) Q⊤        nj ×1                                 betes130US (DI), MiniBooNE (MI), YProp 4.1 (YP), Cal-
+                          (CLS) ∈ R                          (9)
+                                                                         ifornia (CA), Medical Charges (ME), Houses (HO), and
+which is precisely the key-query affinity in self-attention.             Credit (CR). We used the official splits provided by PyTorch
+                                                                         Frame. For datasets lacking standard splits, we randomly
+(2) Normalization. Routing weights over leaves are obtained
+                                                                         partitioned the data into training, validation, and testing
+by normalizing the affinities:
+                                                                         sets, ensuring these identical splits were consistently ap-
+    α = softmax τ2 K(tokens) Q⊤
+                                           nj                           plied across all model experiments for a fair comparison.
+                               (CLS) ∈ R               (10)
+                                                                         These benchmarks typically contain tens of thousands of
+                                                       √
+mirroring attention-weight normalization. Standard 1/ ni                 samples but have limited representation of negative classes.
+scaling can be incorporated into τ2 without affecting the                Additionally, their relatively small test sets constrain the
+argument.                                                                statistical reliability of model performance comparisons.
+
+                                                                     6
+
+=== PDF PAGE 7 ===
+                                                  Arboreal Neural Network
+
+To address the limitations of existing small-scale and static        We empirically validated this setting through ablation ex-
+academic datasets, we introduce TabCredit, a large-scale             periments over τ1 , τ2 ∈ {5, 10, 50, 100, 200} and observed
+commercial credit dataset comprising roughly 1 million loan          that τ1 = 100 and τ2 = 10 offered the optimal trade-off
+application records per month, each with 100 anonymized              between accuracy and smoothness.
+and carefully engineered features. TabCredit is temporally
+                                                                     Evaluation Metrics: To evaluate the performance of
+partitioned into a training set (September 2023) and an
+                                                                     the proposed ArbNN, we used AUC-ROC for classifi-
+OOT test set (November 2023), enabling rigorous eval-
+                                                                     cation tasks and RMSE for regression tasks on public
+uation under temporal drift. Each record includes fu-
+                                                                     datasets, reflecting discriminative power and predictive
+ture risk outcomes from two to twelve months-on-book
+                                                                     accuracy, respectively. For our large-scale commercial
+(MOB2–MOB12), with default rates that naturally evolve
+                                                                     credit-risk dataset, we conducted a vintage analysis using
+over time, offering a realistic benchmark for risk model-
+                                                                     the Kolmogorov-Smirnov (KS) statistic on M2+@MOB2
+ing. Unlike many curated academic datasets, TabCredit pre-
+                                                                     through M2+@MOB12, where M2+ denotes delinquency
+serves its native distribution, thereby reflecting real-world
+                                                                     beyond 31 days and MOBN represents months-on-book.
+challenges of scale, drift, and heterogeneity. The dataset
+                                                                     We also report Lift to assess the model’s ranking quality.
+will be released upon publication to support further research.
+                                                                     Furthermore, given the highly imbalanced nature of credit
+More details about TabCredit are provided in Appendix B.
+                                                                     risk evaluation, we additionally compute the Area Under the
+Data preprocessing: To ensure each modeling paradigm                 Precision-Recall Curve (AUPRC) as a cost-sensitive rank-
+is evaluated under its respective optimal conditions, we ap-         ing metric, alongside Brier Score and Expected Calibration
+plied paradigm-specific preprocessing. For GBDTs and                 Error (ECE) to rigorously assess probability calibration.
+ArbNN, we retained the native scale of the datasets, as
+their split-routing mechanisms are inherently scale-invariant.                Metric       Opt.    XGB     ArbNN       Impr.
+Conversely, all other neural network baselines were trained                   AUC-ROC        ↑    0.8188    0.8194    +0.07%
+on normalized inputs to ensure effective optimization. Re-                    Lift           ↑    1.8440    1.8442    +0.01%
+garding feature processing, missing numerical values were                     AUPRC          ↑    0.1166    0.1168    +0.17%
+imputed using the minimum observed value per feature.                         Brier          ↓    0.0246    0.0241    +2.03%
+Categorical features were processed via standard one-hot                      ECE            ↓    0.0138    0.0011    +92.0%
+encoding; for ArbNN, this explicitly inherits XGBoost’s              Table 3. Comprehensive performance comparison on the TabCredit
+default approach, translating categorical splits into binary         OOT test set. AUC-ROC, Lift, and AUPRC evaluate ranking
+decisions to structurally support the formulation of our dif-        quality, while Brier Score and ECE assess probability calibration.
+ferentiable routing matrices.
+Implementation and Training Details: To ensure fair-                 4.2. SOTA Performance on Results
+ness in all comparative experiments, we applied consistent
+hyperparameter tuning procedures across all methods. In              Comparison on Public Benchmarks: We compared
+particular, tree-based baselines such as XGBoost, as well as         ArbNN with mainstream neural models, tree models and
+all neural network baselines, were optimized using Optuna            hybrid models on the public datasets. Results are presented
+with identical search space constraints, consistent with the         in Table 1. As shown, ArbNN achieves SOTA results on
+PyTorch Frame benchmark framework (Hu et al., 2024). For             nearly all benchmark datasets, consistently outperforming
+the proposed ArbNN, model parameters were initialized us-            other models, including XGBoost and LightGBM. The key
+ing pretrained XGBoost models from the same comparison               to this superior performance is two-fold: effective initial-
+group. For classification tasks, the final prediction was com-       ization and end-to-end optimization. During initialization,
+puted by summing the logits produced by all tree neurons             ArbNN inherits the predictive power of pre-trained ensem-
+and applying a sigmoid activation. For regression tasks, the         ble decision trees, positioning it at least on par with the tree
+logits were directly summed and a constant bias of 0.5 was           models. Crucially, it then benefits from global, end-to-end
+added to improve initial convergence. We used the AdamW              fine-tuning, surpassing the local and greedy optimization
+optimizer (Loshchilov & Hutter, 2017) with a learning rate           typical of ensemble methods. This optimization enables it
+of 1 × 10−4 , a batch size of 2048, and a weight decay of            to refine split thresholds, structural weights, and leaf values
+0.02. The learning rate followed a two-phase schedule: a             holistically.
+linear warmup over the first two epochs, followed by linear          Comparison on TabCredit: Given that TabPFNv2 (Holl-
+decay. All experiments were conducted using Python 3.8               mann et al., 2025) is primarily intended for inference on
+and PyTorch on NVIDIA Tesla A100 GPUs. To emulate de-                small to medium sized datasets, we evaluate it on TabCredit
+terministic tree behavior while preserving differentiability,        using a stratified subsample of 10,000 instances as the in-
+we used a fixed temperature parameter τ1 and τ2 to ensure            ference context, ensuring a proportional class distribution
+that ArborCell units effectively approximate hard-split logic.       consistent with the full dataset. It can be seen from Table
+
+                                                                 7
+
+=== PDF PAGE 8 ===
+                                                     Arboreal Neural Network
+
+     Trainable parameters         M2+@MOB3            M2+@MOB6             M2+@MOB12           AUC-ROC        Interpretability
+     None (Decompiled)                 53.92               48.19                39.13             81.88          Preserved
+     All parameters                    53.69               48.09                39.04             81.82             Lost
+     Tree-structure matrix P           53.94               48.18                39.12             81.88         Partially lost
+     Leaf values v                     54.10               48.38                39.30             81.91          Preserved
+     Bias f                            54.08               48.37                39.25             81.90          Preserved
+     f +v+P                            54.11               48.40                39.28             81.93         Partially lost
+     f + v (Randomly Init)             53.95               48.20                39.17             81.90           Preserved
+     f + v (Decompiled Init)           54.13               48.43                39.32             81.94           Preserved
+              Table 4. Study on the effect of fine-tuning different parameter subsets in ArbNN on the TabCredit dataset.
+
+
+
+2 that ArbNN consistently achieves the highest KS val-                 credit portfolio balance in the tens of billions of dollars), a
+ues across all MOB points, outperforming the suboptimal                1% relative increase in the KS statistic roughly translates to
+baseline by margins of around 0.5% or more at each stage.              a 0.5% to 0.6% reduction in overall annualized risk. Fur-
+This underscores ArbNN’s stronger ability to discriminate              thermore, ArbNN is already successfully deployed in this
+between potential defaulters and non-defaulters over time,             real-time commercial trading environment. It comfortably
+especially in a large-scale and highly heterogeneous credit-           satisfies strict production constraints, operating with under
+risk environment.                                                      100ms latency, a memory footprint of less than 20MB, and
+                                                                       reliably handling normal peak loads of 20–40 QPS. These
+While KS, AUC-ROC, and Lift are standard metrics for
+                                                                       results confirm ArbNN’s superiority over traditional GBDTs
+tracking discrimination decay in vintage analysis, evaluating
+                                                                       in both predictive robustness and system efficiency.
+highly imbalanced credit datasets necessitates cost-sensitive
+and calibration-aware metrics. As summarized in Table 3,
+we evaluate ArbNN against the strongest GBDT baseline,                 4.3. Ablation and Interpretability Analysis
+XGBoost, across five key dimensions on the TabCredit OOT               Bidirectional Fidelity and Training Dynamics: We first
+test set. Regarding ranking quality, ArbNN consistently                verify the bidirectional fidelity of ArbNN by evaluating the
+outperforms XGBoost in AUC-ROC (0.8194 vs. 0.8188),                    None (Decompiled) configuration in Table 4, which tests the
+Lift (1.8442 vs. 1.8440), and AUPRC (0.1168 vs. 0.1166).               decompiled symbolic tree without any additional trainable
+Although these numerical gains are marginal, they indi-                parameters. Fundamentally, a traditional decision tree em-
+cate a robust ability to prioritize high-risk borrowers. More          ploys hard routing, deterministically assigning a sample to
+significantly, ArbNN demonstrates superior probability cali-           exactly one leaf. Conversely, ArbNN utilizes soft routing via
+bration, achieving a 2.03% reduction in Brier Score and a              softmax, where every leaf receives a continuous activation
+substantial 92.03% improvement in Expected Calibration                 weight, although the target leaf commands an exponentially
+Error (ECE). These results confirm that ArbNN provides                 dominant share. While this architectural distinction causes
+not only accurate risk rankings but also highly reliable prob-         their absolute output values to naturally differ, the soft neu-
+ability estimates, which are essential for real-world financial        ral inference and the hard symbolic inference are nearly
+decision-making.                                                       perfectly aligned in their ranking behavior on large-scale
+Comparison on Our Private Commercial Dataset: To                       datasets. Specifically, both KS and AUC metrics agree up
+rigorously evaluate OOT generalization, we conducted a                 to 4–5 decimal places. This rigorous alignment confirms
+vintage analysis spanning January to October 2024. Results             that extracting a discrete, interpretable tree from the neural
+are given in Figure 2. Despite significant temporal drift              architecture preserves predictive fidelity, proving that inter-
+(10-month shift) and target heterogeneity (MOB2–MOB6)                  pretability and performance are aligned rather than traded
+relative to the training set (Dec 2023), ArbNN consistently            off.
+outperformed XGBoost. It achieved stable gains with an                 To further assess the optimization dynamics, we examined
+average relative improvement of ≈1.2% and an absolute                  the f +v (Random Init) setting, where split thresholds f and
+KS increase of ≈0.6. These results confirm ArbNN’s supe-               leaf values v are randomly initialized while the tree topol-
+rior robustness and adaptability to evolving real-world data           ogy is kept fixed. Even under this uninformed initialization,
+distributions compared to traditional GBDTs.                           ArbNN reliably converges and achieves performance that
+To contextualize the practical significance of these numeri-           exceeds the XGBoost baseline. This demonstrates that on
+cal gains, within our highly active premium customer seg-              top of a fixed tree topology, the differentiable ArborCell for-
+ment (comprising approximately 3 million users with a                  mulation is able to optimize toward a strictly better solution,
+
+
+                                                                   8
+
+=== PDF PAGE 9 ===
+                                                      Arboreal Neural Network
+
+
+
+
+Figure 3. Training loss comparison under randomly initialized f and v. ArbNN converges faster and to a lower loss than prior neuralized–
+tree models (NRF and SDT), illustrating the stability and efficiency of its one-shot full-path routing formulation.
+
+
+revealing that our continuous relaxation not only preserves            the Decompilation step maps the fine-tuned ArborCell back
+the tree structure but also yields a more expressive and train-        to a refined tree T′ , thereby ensuring interpretability reten-
+able refinement of it. The loss-curve analysis in Figure 3             tion. Crucially, this allows us to apply TreeSHAP—the tree-
+further corroborates this result: with randomly initialized f          specific variant of SHapley Additive exPlanations (SHAP)
+and v, ArbNN converges faster and more stably than prior               (Lundberg et al., 2019)—which leverages the symbolic tree
+neuralized–tree models such as NRF (Biau et al., 2019)                 structure for exact and efficient feature attribution.
+and SDT (Frosst & Hinton, 2017), highlighting the advan-
+tages of its one-shot full-path routing and well-conditioned           5. Conclusion and Discussion
+optimization geometry.
+                                                                       The central contribution of ArbNN lies in conceptually de-
+Parameters Fine-Tuned Study: While all parameters
+                                                                       coupling tabular learning into two distinct phases: structure
+within the ArborCell architecture are fully differentiable, we
+                                                                       learning and parameter learning. In its current instantiation,
+conducted ablation studies on the TabCredit dataset to iden-
+                                                                       ArbNN extracts the physical topology from strong ensemble
+tify the optimal fine-tuning strategy (Table 4). Our results
+                                                                       decision trees (e.g., XGBoost) and maps it into a fully end-
+demonstrate that fine-tuning only the split thresholds and
+                                                                       to-end differentiable neural architecture. By freezing this
+leaf values—denoted as f + v (Decompiled Init)—achieves
+                                                                       high-capacity structural prior, ArbNN leverages continuous
+the best overall performance, yielding the highest KS and
+                                                                       gradient descent to globally co-optimize split thresholds and
+AUC-ROC, while strictly preserving the original decision-
+                                                                       leaf weights. This paradigm successfully marries the robust
+path logic and full model interpretability. Conversely, un-
+                                                                       inductive bias of tree-based models with the optimization
+freezing all parameters degrades performance and com-
+                                                                       advantages of neural networks, culminating in a framework
+pletely eliminates interpretability by destroying the tree-
+                                                                       that delivers state-of-the-art predictive performance while
+aligned sparse structure. Similarly, updating the tree-
+                                                                       strictly preserving interpretability.
+structure matrix alters subspace allocation and weakens
+semantic alignment, resulting in only partial interpretabil-           While relying on a pre-established topology ensures sta-
+ity. These findings underscore a critical architectural in-            bility, a natural objective for future work is the fully dif-
+sight: the physical routing topology fundamentally dic-                ferentiable, from-scratch learning of both structure and
+tates the model’s representational boundaries. This depen-             parameters. However, our preliminary explorations indi-
+dency directly explains our design rationale for deliberately          cate that this is highly non-trivial. Attempting to learn the
+bootstrapping from strong GBDTs. By embedding a high-                  tree-structure matrix (P) from scratch via gradient descent
+capacity structural prior into the initial topology, we provide        currently yields suboptimal results. Without the strict topo-
+a sufficiently expressive routing framework. This allows the           logical constraints imposed by the tree prior, the routing
+network to effectively co-optimize thresholds and values via           matrix rapidly degenerates into a dense, unconstrained at-
+gradient descent, maximizing empirical performance while               tention mapping. This structural collapse not only induces
+strictly maintaining interpretability.                                 severe over-parameterization and optimization instability on
+                                                                       tabular datasets but also completely obliterates the model’s
+Axis-Aligned Decision Tree Perspective Interpretability:
+                                                                       structural interpretability. Consequently, natively learning
+To show the retained axis-aligned decision tree level inter-
+                                                                       discrete, symbolic tree structures from scratch via contin-
+pretability of ArbNN, we first emphasized that ArborCell
+                                                                       uous optimization remains a profound open challenge in
+naturally supports a bidirectional mapping: the Compilation
+                                                                       the field, marking the primary frontier for our subsequent
+step converts a decision tree T into a differentiable Arbor-
+                                                                       research.
+Cell representation, enabling end-to-end training, while
+
+
+                                                                   9
+
+=== PDF PAGE 10 ===
+                                                  Arboreal Neural Network
+
+Impact Statement                                                        Interpretable Circuits. In International Conference on
+                                                                        Machine Learning, 2026.
+This paper presents a neural-symbolic learning framework
+aimed at improving the accuracy, stability, and interpretabil-        Gorishniy, Y., Rubachev, I., Khrulkov, V., and Babenko,
+ity of models for tabular data. While our experiments in-              A. Revisiting Deep Learning Models for Tabular data.
+clude credit risk prediction as a representative application,          Advances in Neural Information Processing Systems, 34:
+the proposed ArbNN is a general machine learning method                18932–18943, 2021.
+rather than a decision-making system. As with other predic-
+tive models deployed in high-stakes domains, potential risks          Gorishniy, Y., Kotelnikov, A., and Babenko, A. TabM: Ad-
+include misuse, over-reliance on automated predictions, and             vancing Tabular Deep Learning with Parameter-Efficient
+biases introduced by data or deployment practices. We em-               Ensembling. In the Thirteenth International Conference
+phasize that ArbNN is designed to improve transparency                  on Learning Representations, 2025.
+and auditability compared to black-box models, and its re-
+                                                                      Haykin, S. Neural Networks: a Comprehensive Foundation.
+sponsible use requires appropriate human oversight and
+                                                                        Prentice Hall PTR, 1994.
+domain-specific regulatory compliance. We do not foresee
+ethical concerns beyond those commonly associated with                Hazimeh, H., Ponomareva, N., Mol, P., Tan, Z., and
+applied machine learning models.                                        Mazumder, R. The Tree Ensemble Layer: Differentia-
+                                                                        bility Meets Conditional Computation. In International
+References                                                              Conference on Machine Learning, pp. 4138–4148, 2020.
+
+Arik, S. Ö. and Pfister, T. TabNet: Attentive Interpretable          He, K., Zhang, X., Ren, S., and Sun, J. Deep Residual Learn-
+  Tabular Learning. In the AAAI Conference on Artificial                ing for Image Recognition. In Proceedings of the IEEE
+  Intelligence, volume 35, pp. 6679–6687, 2021.                         Conference on Computer Vision and Pattern Recognition,
+                                                                        pp. 770–778, 2016.
+Bernstein, J. Modular Manifolds. Thinking Machines Lab:
+  Connectionism, 2025.                                                Hollmann, N., Müller, S., Purucker, L., Krishnakumar, A.,
+                                                                        Körfer, M., Hoo, S. B., Schirrmeister, R. T., and Hutter,
+Biau, G., Scornet, E., and Welbl, J. Neural Random Forests.
+                                                                        F. Accurate Predictions on Small Data with a Tabular
+  Sankhya A: The Indian Journal of Statistics, pp. 347–386,
+                                                                        Foundation Model. Nature, 2025.
+  2019.
+                                                                      Holzmüller, D., Grinsztajn, L., and Steinwart, I. Better by
+Chen, J., Yan, J., Chen, Q., Chen, D. Z., Wu, J., and Sun, J.
+                                                                        Default: Strong Pre-tuned MLPs and Boosted Trees on
+  ExcelFormer: A Neural Network Surpassing GBDTs on
+                                                                       Tabular Data. In the 38th Annual Conference on Neural
+  Tabular Data. arXiv preprint arXiv:2301.02819, 2024a.
+                                                                       Information Processing Systems, 2024.
+Chen, K.-Y., Chiang, P.-H., Chou, H.-R., Chen, T.-W., and
+  Chang, D. T.-H. Trompt: Towards a Better Deep Neural                Hu, W., Yuan, Y., Zhang, Z., Nitta, A., Cao, K., Kocijan,
+  Network for Tabular Data. In International Conference                V., Leskovec, J., and Fey, M. PyTorch Frame: A mod-
+  on Machine Learning, 2024b.                                           ular framework for multi-modal tabular learning. arXiv
+                                                                        preprint arXiv:2404.00776, 2024.
+Chen, T. and Guestrin, C. XGBoost: A Scalable Tree Boost-
+  ing System. In Proceedings of the 22nd ACM SIGKDD                   Huang, X., Khetan, A., Cvitkovic, M., and Karnin, Z. Tab-
+  International Conference on Knowledge Discovery and                  Transformer: Tabular Data Modeling using Contextual
+  Data Mining, pp. 785–794, 2016.                                       Embeddings. Advances in Neural Information Processing
+                                                                       Systems, 33:8472–8483, 2020.
+Devlin, J., Chang, M.-W., Lee, K., and Toutanova, K. BERT:
+  Pre-training of Deep Bidirectional Transformers for Lan-            Katzir, L., Elidan, G., and El-Yaniv, R. Net-DNF: Effec-
+  guage Understanding. In Conference of the North Amer-                 tive Deep Modeling of Tabular Data. In International
+  ican Chapter of the Association for Computational Lin-                Conference on Learning Representations, 2021.
+  guistics: Human Language Technologies, pp. 4171–4186,
+                                                                      Ke, G., Meng, Q., Finley, T., et al. LightGBM: A Highly
+  2019.
+                                                                        Efficient Gradient Boosting Decision Tree. In Advances
+Frosst, N. and Hinton, G. E. Distilling a Neural Network into           in Neural Information Processing Systems, volume 30,
+  a Soft Decision Tree. arXiv preprint arXiv:1711.09784,                pp. 3149–3157, 2017.
+  2017.
+                                                                      Kontschieder, P., Fiterau, M., Criminisi, A., and Bulo, S. R.
+Gao, L., Rajaram, A., Coxon, J., Govande, S. V., Baker,                 Deep Neural Decision Forests. In IEEE International
+  B., and Mossing, D. Weight-Sparse Transformers Have                   Conference on Computer Vision, pp. 1467–1475, 2015.
+
+                                                                 10
+
+=== PDF PAGE 11 ===
+                                                 Arboreal Neural Network
+
+Krizhevsky, A., Sutskever, I., and Hinton, G. E. ImageNet           Zhang, X., Wang, Z., Jiang, L., Gao, W., Wang, P., and Liu,
+  Classification with Deep Convolutional Neural Networks.             K. TFWT: Tabular Feature Weighting with Transformer.
+  In Advances in Neural Information Processing Systems,               In the 33rd International Joint Conference on Artificial
+  volume 25, pp. 1097–1105, 2012.                                     Intelligence, pp. 1–21, 2024.
+Lecun, Y., Bottou, L., Bengio, Y., and Haffner, P. Gradient-
+  Based Learning Applied to Document Recognition. Pro-
+  ceedings of the IEEE, 86:2278–2324, 1998.
+Loshchilov, I. and Hutter, F. Decoupled Weight Decay
+  Regularization. arXiv preprint arXiv:1711.05101, 2017.
+Lundberg, S. M., Erion, G. G., and Lee, S.-I. Consistent
+  Individualized Feature Attribution for Tree Ensembles.
+  arXiv preprint arXiv:1802.03888, 2019.
+Luo, J. and Xu, S. NCART: Neural Classification and
+  Regression Tree for Tabular Data. Pattern Recognition,
+  154:110578, 2024.
+Marton, S., Lüdtke, S., Bartelt, C., and Stuckenschmidt,
+ H. GRANDE: Gradient-Based Decision Tree Ensem-
+ bles. In the 12th International Conference on Learning
+ Representations, 2024.
+Popov, S., Morozov, S., and Babenko, A. Neural Oblivious
+  Decision Ensembles for Deep Learning on Tabular Data.
+  International Conference on Learning Representations,
+  pp. 1–8, 2020.
+Prokhorenkova, L., Gusev, G., Vorobev, A., Dorogush, A. V.,
+  and Gulin, A. CatBoost: Unbiased Boosting with Cat-
+  egorical Features. In Advances in Neural Information
+  Processing Systems, volume 31, 2018.
+Radford, A., Narasimhan, K., Salimans, T., and Sutskever,
+  I. Improving Language Understanding by Generative
+  Pre-training. Technical report, OpenAI Technical Report,
+  2018.
+Rubachev, I., Kartashev, N., Gorishniy, Y., and Babenko, A.
+  TabReD: Analyzing Pitfalls and Filling the Gaps in Tabu-
+  lar Deep Learning Benchmarks. In the 13th International
+  Conference on Learning Representations, 2025.
+Tanno, R., Arulkumaran, K., Alexander, D., Criminisi, A.,
+  and Nori, A. Adaptive Neural Trees. In International
+  Conference on Machine Learning, pp. 6166–6175, 2019.
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones,
+  L., Gomez, A. N., Kaiser, L., and Polosukhin, I. Attention
+  Is All You Need. In Advances in Neural Information
+  Processing Systems, volume 30, pp. 5998–6008, 2017.
+Wu, J., Chen, S., Zhao, Q., Sergazinov, R., Li, C., Liu,
+ S., Zhao, C., Xie, T., Guo, H., Ji, C., et al. Switchtab:
+ Switched Autoencoders Are Effective Tabular Learners.
+ In the AAAI Conference on Artificial Intelligence, vol-
+ ume 38, pp. 15924–15933, 2024.
+
+                                                               11
+
+=== PDF PAGE 12 ===
+                                                          Arboreal Neural Network
+
+A. Tree Parsing Algorithm
+To bridge gradient-boosted decision trees (GBDTs) and the proposed Arboreal Neural Network (ANN), we designed a tree
+parsing algorithm that systematically converts each tree in a GBDT ensemble into a differentiable ArborCell representation.
+The procedure ensures that the original inductive bias and structure of the tree are faithfully preserved, while making the
+resulting model fully trainable under end-to-end optimization. The algorithm consists of the following key steps:
+
+Algorithm 1 Tree Parsing Algorithm
+Input: Decision tree T ; input dimension t
+Output: Number of inner nodes ni , leaf nodes nj ; structure matrix P, weight matrix W, splits vector f , leaf values v, leaf node set L
+Initialize: leaf values v, leaf node set L, internal node set I, split features s, split thresholds f , path record P, direction record D;
+ counters l ← 0, i ← 0
+Define recursive function DFS(n, P, D): begin
+    if n is a leaf then
+         if n.id ∈
+                 / L then
+              v[n.id] ← n.leaf value; L[n.id] ← l; l++
+         P[n.id] ← P + [n.id]; D[n.id] ← D
+    else
+         if n.id ∈
+                 / I then
+              I[n.id] ← i; s[n.id] ← n.feature index; f [n.id] ← n.split threshold; i++
+         foreach child n′ in n.children do
+              D′ ← D + [δ(n′ , n)]; DFS(n′ , P + [n.id], D′ )
+                      (
+               ′       1      if n′ .id = n.right child
+Function δ(n , n) =
+                       −1 otherwise
+Main Procedure: begin
+   DFS(T , [], []); ni ← |I|, nj ← |L|
+   Initialize W ∈ Rni ×t , f ∈ Rni with zeros
+   foreach (n.id, idx) ∈ I do
+        Widx,s[n.id] ← 1; fidx ← c[n.id]
+    Initialize P ∈ Rnj ×ni with zeros
+    foreach (n.id, l′ ) ∈ L do
+         p ← P[n.id]; d ← D[n.id]
+         foreach (nid, di ) ∈ (p, d) do
+              if nid ∈ I then
+                   Pl′ ,I[nid] ← di
+
+   P ← ApplyWeights(P); reorder v based on L
+   return ni , nj , P, W, f , v, L
+Function ApplyWeights(P): begin
+   k ← max number of non-zeros per row in P; wj ← (1/2)j for j = 0, . . . , k − 1
+   foreach row i in P do
+       Inz ← indices of non-zero elements in Pi
+       foreach (j, idx) ∈ enumerate(Inz ) do
+           Pi,idx ← Pi,idx · wj
+    return P
+
+
+
+
+                                                                    12
+
+=== PDF PAGE 13 ===
+                                                                                   Arboreal Neural Network
+
+B. TabCredit Dataset
+To overcome the limitations of existing small-scale academic benchmarks, we introduce TabCredit, a proprietary commercial
+credit dataset covering a two-month period, comprising approximately 1 million unique user loan application records per
+month, totaling around 2 million records. Each record has 100 anonymized and extensively engineered features.
+TabCredit is partitioned into two parts: a training set consisting of users with successful loan applications from September
+2023, and an out-of-time (OOT) test set containing users from November 2023. This temporal split enables strict in-time and
+OOT evaluation, ensuring rigorous assessment of model generalization. For each record, TabCredit provides future risk
+outcomes for both training and OOT sets, including monthly delinquency indicators from two to twelve months-on-book
+(MOB2–MOB12). Here, MOB refers to the number of months after loan origination, and delinquency is measured using the
+industry-standard M2+ definition, which denotes accounts with payments overdue by 31 days or more. Accordingly, the
+reported rates correspond to the cumulative proportion of users who have ever entered the M2+ state by each MOB horizon.
+Table 5 illustrates representative cumulative M2+ delinquency rates across two cohorts. As expected, delinquency starts
+at relatively low levels (around 0.2–0.3% at MOB2), but grows monotonically with MOB, reaching approximately 5–6%
+by MOB12. This steady increase reflects the temporal dynamics of credit portfolios and provides a realistic setting for
+developing and evaluating risk forecasting models.
+
+     Cohort           MOB2             MOB3               MOB4           MOB5         MOB6            MOB7            MOB8             MOB9             MOB10               MOB11               MOB12
+      202309 0.26%         0.67%      1.35%     2.05%     2.66%    3.40%      4.04%   4.62%       5.16%      5.64%       6.16%
+      202311 0.20%         0.67%      1.26%     1.82%     2.57%    3.22%      3.80%   4.33%       4.86%      5.40%       5.92%
+Table 5. Example cumulative M2+ delinquency rates (defined as 31+ days past due) across different months-on-book (MOB2–MOB12)
+for two representative cohorts in TabCredit. Delinquency accumulates steadily with MOB, highlighting the temporal progression of credit
+risk.
+
+
+In addition to overall dataset statistics, we provide representative examples of feature characteristics from TabCredit in
+Table 6. The dataset contains heterogeneous attributes drawn from both credit bureau records and behavioral signals. For
+instance, Credit Bureau Main Cardholder Score (99% coverage) captures a user’s repayment history, while Credit Bureau
+Loan Record Last Update Date (99%) reflects the freshness of a borrower’s bureau file. Utilization-related indicators,
+such as the Max Credit Utilization Ratio (Past 3 Months, 100% coverage) and the Current Fixed Credit Limit (100%),
+characterize users’ recent borrowing behavior and credit capacity. Finally, the Number of Inquiry Institutions in the Past
+6 Months (coverage ∼87%) measures the intensity of recent credit-seeking behavior, often serving as an early warning
+indicator of potential default risk. Together, these features illustrate the diversity, realism, and predictive richness of
+TabCredit.
+    Feature                                                       Type             Coverage     Range / Example Values                                           Description
+    Credit Bureau Main Cardholder Score                    Numerical (ordinal)       99%         300–900 (e.g., 650, 720)                    Bureau-based credit score for existing cardholders
+    Credit Bureau Loan Record Last Update Date              Date / Timestamp         99%             e.g., 2023-07-15                         Last update date of loan record in credit bureau
+    Max Credit Utilization Ratio (Past 3 Months)            Numerical (ratio)       100%           0–1 (e.g., 0.25, 0.83)                Maximum utilization ratio of credit line in past 3 months
+    Current Fixed Credit Limit                            Numerical (continuous)    100%      0–300k (e.g., 50,000; 120,000)                     Current fixed credit line granted to the user
+    Number of Inquiry Institutions in the Past 6 Months     Numerical (count)        87%             0–15 (e.g., 2, 6)         Count of distinct institutions inquiring about user’s credit in the past 6 months
+
+Table 6. Representative feature characteristics from the TabCredit dataset. Coverage denotes the proportion of users with non-missing
+values for each feature. Notably, frequent inquiries (last row) often serve as strong risk indicators in real-world credit scoring.
+
+
+In summary, TabCredit combines scale, feature richness, temporal partitioning, and longitudinal outcomes. It provides a
+realistic and challenging benchmark for evaluating not only predictive accuracy, but also interpretability and stability of
+tabular learning methods in credit risk modeling.
+
+
+
+
+                                                                                                   13
+
+=== END SOURCE TEXT ===

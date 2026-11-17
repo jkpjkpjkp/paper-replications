@@ -1,0 +1,76 @@
+Arboreal resolution attempt — 2026-11-17
+
+Grade remains 1. Two completed fresh MagicTelescope seed 0 comparisons narrow
+but do not close the paper gap. This is independent reconstructed training,
+not author-code execution or released-checkpoint inference.
+
+Experiment                                 XGBoost AUC   ArbNN soft AUC
+Historical seed 0, 60/20/20 stratified seed 0   0.924274010   0.924025440
+Frame 80/10/10 seed 42; original 3 candidates 0.945469312   0.945496086
+Frame 80/10/10 seed 42; 12-candidate grid     0.946285934   0.944804412
+Paper Table 1                                0.947         0.974
+Paper reported seed SD                      0.001         0.001
+
+The new split-only run's ArbNN absolute AUC error is 0.028503914
+(relative 2.9265%). The broadened-search run's error is
+0.029195588 (relative 2.9975%). These are larger
+than both the paper's 0.001 seed SD and 0.0005 three-decimal rounding tolerance.
+One fresh seed supplies no measured seed uncertainty. The expanded XGBoost
+baseline falls within the paper's 0.001 seed SD, but one near-matching baseline
+cell does not establish a representative replication or justify grade 2. The archived five-seed
+MagicTelescope mean remains 0.924229658 +/- 0.000572134 sample seed SD,
+an absolute gap 0.049770342; archived houses RMSE remains 0.418967406 +/-
+0.001498553 vs paper 0.359. Historical mismatches are not erased by this probe.
+
+What changed:
+The earlier reconstruction's split was an explicit 60/20/20 stratified choice.
+The public PyTorch Frame DataFrameBenchmark source provides 80/10/10 seed 42
+unstratified splits; its MagicTelescope XGBoost table value matches the paper's
+0.947 baseline. The fresh probe calls the upstream split function directly.
+The archived 3-candidate initialization search is much smaller than Frame's
+20-trial Optuna search. A second fixed 12-candidate diagnostic grid covered
+depth 3/4/6, 200/500 trees, learning rate 0.05/0.1 and chose by validation AUC only.
+This is not the paper's unreleased exact search. Both planned test comparisons
+are reported. No configuration or checkpoint was selected using test metrics.
+
+Both use 30-epoch maximum training, patience 8, AdamW 1e-4 / weight decay 0.02,
+batch 2048, tau1=100/tau2=10, Algorithm 1 signs/depth weights, CPU one thread.
+Selected broadened model: depth 6, 500 trees, boosting rate 0.1; best epoch
+28 of 30. Hard compilation agrees with its XGBoost margins
+within 9.53674316e-06. Trained soft/hard mean absolute
+margin gap is 2.663503647; finite-temperature
+soft inference is not guaranteed to reproduce hard symbolic inference.
+
+Verification completed:
+- All split row IDs match upstream function; splits disjoint and exhaustive.
+- Saved dataset hash and held-out labels/IDs checked.
+- All four AUCs per new run recomputed by independent rank-sum formula.
+- Saved ArbNN and XGBoost checkpoints replayed against saved predictions.
+- Historical MagicTelescope/houses predictions independently re-scored.
+- Paper Table 1/Equation 2 and Algorithm 1 visually checked against PDF pages 4/12.
+- Two-stump rank-reversal counterexample independently checked in closed form;
+  see WRONG.txt. It limits the universal fidelity claim, not an explanation of
+  the empirical AUC gap or evidence of misconduct.
+
+Remaining blockers:
+Exact author code, initial trees, split/training/search seeds and ArbNN epoch
+budget are not recovered. The public Frame split is supported by the cited
+benchmark; its exact use for the author's ArbNN runs is not independently
+confirmed. Eq. 2 and Algorithm 1 still conflict. TabCredit/private deployment and
+all author ablations remain unavailable. Wider search alone cannot resolve
+these specification gaps. No representative main-method match is established.
+
+Reproducible evidence directory:
+/mnt/data/home/jkp/replications/arboreal-resolve-20261117
+  plan.json; run_probe.py; probe.log; MagicTelescope-frame42.npz
+  split_only/tuning.json and seed0/{result,config,history}.json,
+    predictions.npz,arbnn.pt,xgboost.json,rules.json
+  split_and_search/ (same files)
+  verify_probe.py; verification.json; recheck_archive.py; archive_recheck.json
+  check_fidelity.py; fidelity_counterexample.json; SOURCE_AUDIT.txt
+  pytorch-frame/ (commit 3ed76b132242be6ce5f63851052e114e57aaec5d)
+  table1.png; algorithm1.png
+
+Original evidence remains under:
+../.replication-local/artifacts/arboreal/artifacts/benchmark/
+Original paper source/hash is recorded in .agent/PAPER_INDEX.json.
