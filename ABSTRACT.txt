@@ -1,0 +1,9 @@
+AlphaQCM: Alpha Discovery in Finance with Distributional Reinforcement Learning
+
+Condensed abstract
+
+Treats the discovery of complementary formulaic alphas as a nonstationary, sparse-reward
+decision process. A distributional reinforcement-learning method estimates expected
+values and return quantiles, then uses quantiled conditional moments to estimate
+variance and guide exploration. Financial experiments report stronger alpha discovery
+than competing methods, particularly across large stock universes.

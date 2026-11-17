@@ -1,0 +1,480 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "alphaqcm",
+  "title": "AlphaQCM: Alpha Discovery in Finance with Distributional Reinforcement Learning",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/alphaqcm/sources/paper.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/alphaqcm/sources/paper.pdf",
+    "sha256": "35c73160d59ac72b9dae2adde0989d7952ec1ac5b209951e83e2544565b76c42",
+    "bytes": 589557,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 17,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 91
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 92,
+      "line_end": 199
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 200,
+      "line_end": 319
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 320,
+      "line_end": 395
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 396,
+      "line_end": 512
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 513,
+      "line_end": 640
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 641,
+      "line_end": 707
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 708,
+      "line_end": 904
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 905,
+      "line_end": 1118
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1119,
+      "line_end": 1217
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1218,
+      "line_end": 1233
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1234,
+      "line_end": 1329
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1330,
+      "line_end": 1457
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1458,
+      "line_end": 1572
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1573,
+      "line_end": 1653
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1654,
+      "line_end": 1706
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1707,
+      "line_end": 1937
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 72
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 73,
+      "line_end": 141
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 142,
+      "line_end": 211
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 212,
+      "line_end": 271
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 272,
+      "line_end": 346
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 347,
+      "line_end": 432
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 433,
+      "line_end": 484
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 485,
+      "line_end": 553
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 554,
+      "line_end": 626
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 627,
+      "line_end": 689
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 690,
+      "line_end": 709
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 710,
+      "line_end": 775
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 776,
+      "line_end": 869
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 870,
+      "line_end": 951
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 952,
+      "line_end": 1010
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1011,
+      "line_end": 1066
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1067,
+      "line_end": 1122
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 20,
+      "text": "Abstract"
+    },
+    {
+      "line": 65,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 137,
+      "text": "2.2. Distributional Reinforcement Learning"
+    },
+    {
+      "line": 160,
+      "text": "2. Background and Related Work"
+    },
+    {
+      "line": 164,
+      "text": "2.1. Formulaic Alpha"
+    },
+    {
+      "line": 225,
+      "text": "3. Methodology"
+    },
+    {
+      "line": 297,
+      "text": "3.1. Representation of Formulaic Alpha"
+    },
+    {
+      "line": 376,
+      "text": "3.2. Specification of MDP"
+    },
+    {
+      "line": 403,
+      "text": "# Calculate alpha values and normalize them"
+    },
+    {
+      "line": 408,
+      "text": "# Fit a linear model based on the extended alpha pool"
+    },
+    {
+      "line": 414,
+      "text": "# Obtain the updated alpha pool and meta-alpha"
+    },
+    {
+      "line": 425,
+      "text": "# Calculate IC based on F ∗ and reward rt"
+    },
+    {
+      "line": 430,
+      "text": "3.3. AlphaQCM"
+    },
+    {
+      "line": 438,
+      "text": "3.3.1. QCM"
+    },
+    {
+      "line": 597,
+      "text": "4. Experiments"
+    },
+    {
+      "line": 614,
+      "text": "3.3.2. DRL BACKBONE"
+    },
+    {
+      "line": 697,
+      "text": "4.1. Impact of Methods"
+    },
+    {
+      "line": 704,
+      "text": "4.2. Impact of QCM Method and DRL Backbones"
+    },
+    {
+      "line": 833,
+      "text": "4.3. Impact of Domain Knowledge"
+    },
+    {
+      "line": 844,
+      "text": "1. No variance: Fix λ = 0 in (5) to remove the impact"
+    },
+    {
+      "line": 847,
+      "text": "2. Vanilla variance: Replace b"
+    },
+    {
+      "line": 883,
+      "text": "4.4. Impact of Stock Market"
+    },
+    {
+      "line": 1094,
+      "text": "References"
+    },
+    {
+      "line": 1102,
+      "text": "5. Conclusion"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1938
+    }
+  ],
+  "line_count": 1938,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "8e8133f381921e563356cbddca6385b3a9d66e29c7526c92d21126a614638e64",
+      "bytes": 65209
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "005c881dc46dfc01f185e4e62de477e897115d382cf5404801d7d0889ec983e8",
+      "bytes": 97043
+    }
+  }
+}

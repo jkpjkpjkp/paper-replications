@@ -1,0 +1,23 @@
+1: AlphaQCM IQN CSI300 (seed 0, 50,000 steps), IC: rerun 0.062207; paper 0.0849 +/- 0.0103 seed SD.
+
+
+
+Scope: Completed corrected-release IQN CSI300 pilot; one seed and 50,000 steps.
+
+Evidence and explanation:
+Validation-selected paired-mask IC is 0.062207 versus paper Table 1 IQN 0.0849 +/-
+0.0103 across ten seeds: -0.022693 (-26.7%), about 2.20 published seed SDs below the
+mean. The released-evaluator IC is 0.060835. Local RankIC is 0.071557 and ICIR 0.504125.
+Saved formulas reproduce the test metrics, but one local seed provides no local seed
+uncertainty. The higher final-pool IC 0.073424 is a separate diagnostic, not the
+selected result.
+
+Limits / next requirement:
+The run uses only 20% of the paper P=10 budget and substitute data. Reward/network/pool-
+fitting differences remain. Full budgets, tuning, ten seeds, other markets, backbones,
+baselines and ablations are missing.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/alphaqcm/README.txt
+- ../.replication-local/artifacts/alphaqcm/results/csi300-iqn-seed0-50000/results.json
+

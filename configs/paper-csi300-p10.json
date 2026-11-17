@@ -1,0 +1,26 @@
+{
+  "scope": "paper-budget corrected-code experiment on substituted data",
+  "provider": "../csi/qlib/cn_data",
+  "universe": "csi300",
+  "device": "cuda",
+  "threads": 2,
+  "seed": 0,
+  "pool": 10,
+  "lambda": 1.0,
+  "steps": 250000,
+  "eval_interval": 1000,
+  "splits": {
+    "train": [
+      "2010-01-01",
+      "2019-12-31"
+    ],
+    "valid": [
+      "2020-01-01",
+      "2020-12-31"
+    ],
+    "test": [
+      "2021-01-01",
+      "2022-12-31"
+    ]
+  }
+}

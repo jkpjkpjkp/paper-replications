@@ -1,0 +1,10 @@
+# Python 3.11. GPU: install torch from https://download.pytorch.org/whl/cu121
+torch==2.4.1
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.16.3
+pyqlib==0.9.7
+gymnasium==0.29.1
+tensorboard==2.20.0
+PyYAML==6.0.3
+pytest==8.4.2

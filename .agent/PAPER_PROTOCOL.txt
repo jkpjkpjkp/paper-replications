@@ -1,0 +1,85 @@
+Paper-stated AlphaQCM CSI300 IQN check -- 2026-11-17
+
+Purpose
+Run the smallest full-budget setting in Table E.6: P=10, 250,000 interactions,
+seed 0, lambda=1. All settings are fixed before viewing the new test metrics.
+The reference is Table 1 CSI300 IQN IC 0.0849 +/- 0.0103 (ten-seed SD).
+That reference tunes P on validation; no P=10-specific value is published.
+One fixed-setting seed therefore cannot reproduce the ten-seed tuned mean or
+establish local seed uncertainty, even if its IC is numerically close.
+
+Explicit paper-method changes (separate from unchanged upstream/)
+- Algorithm 1: normalize each factor cross-sectionally; fit unpenalized pooled
+  least squares against RAW 20-day returns, drop the smallest absolute fitted
+  coefficient if capacity is exceeded, keep the other fitted coefficients.
+  Reward is current pool IC minus preceding pool IC, not total IC or improvement
+  over the historical best. No release-only mutual-correlation acceptance filter.
+- Appendix A: ordinary daily cross-sectional Pearson IC, averaged across days.
+  No scale-dependent small-standard-deviation cutoff; no absolute IC transform.
+- Table B.5: include Sign, cross-sectional Rank, and TsRank; exclude Mad and Delta
+  which are present only in the released action set. Sign is 1 for positive values,
+  0 otherwise. Rolling intervals literally include t through t-d (d+1 observations);
+  Ref remains the value at t-d. All six fields, fourteen constants and five delays
+  match the table. Maximum token count retains the released limit of 20.
+- Appendix E.1: target actions for the quantile Bellman update come from the
+  separate target Q network. Use the stated summed quantile-Huber and squared
+  TD losses. PER priorities are the summed quantile-Huber loss to power 0.5,
+  without the release's [0,1] clipping or TD-error surrogate. The displayed paper
+  losses have no importance-sampling factors; this mode follows those equations.
+- Appendix E.2: two LSTM layers, width 128, dropout 0.1; both fully connected
+  heads have TWO hidden layers of width 64. Target networks mirror online nets.
+- Table E.6: 10,000 random warmup interactions, replay capacity 100,000,
+  batch 128, Adam lr=5e-5, online updates each step, both targets every 5,000,
+  N=N_dash=64, kappa=1, fixed epsilon=0.01 after warmup, gamma=1. QCM acting
+  also uses 64 quantiles. Stable least squares and abs(slope) implement its bonus.
+- Nominal paper date endpoints are used WITHOUT the previous adapter's split
+  purging. Consequently 20-day training/validation labels cross calendar split
+  boundaries. This follows the stated dates and does not certify leak-free design.
+
+Conventions the paper does not fully specify
+- Original Baostock data snapshot is absent. Use the verified community snapshot
+  attributed to Tushare, with its distributed historical membership. Pre-2010
+  history is unavailable and is padded with NaNs, not future or fabricated values.
+- Missing inputs: normalize using finite observations, retain an explicit mask,
+  and fit/evaluate only stock-day pairs where ALL current factors and the target
+  are finite. Undefined correlation days are excluded. A constant factor becomes
+  zero after centering; fewer than three observations cannot define reported IC.
+  This missing-data rule is an explicit local convention, not an author claim.
+- Ranks are one-based ascending average-tie ranks; the paper does not specify
+  direction, normalization, or tie handling. Other rolling statistics and WMA/EMA
+  weights retain the released definitions. Grammar and 100-day available lookback
+  are retained. Out-of-range expressions follow the released zero-reward handling.
+- The paper calls tau embeddings 64-dimensional, while the release uses a
+  64-cosine basis projected to width 128 to multiply with the 128-dimensional
+  LSTM state. Retain that compatible IQN embedding construction; this textual
+  ambiguity is unresolved, not silently claimed to match.
+- Adam uses its standard eps=1e-8 and betas=(0.9,0.999), unspecified in the paper.
+  A 1e-12 priority floor avoids unsampleable zero-loss transitions; newly appended
+  transitions receive the maximum priority seen so far (standard PER convention).
+- Pool OLS uses float64 QR reduction and an SVD least-squares solve;
+  deterministic tests compare against a direct design-matrix solve, including
+  nearly collinear candidates. Normal equations are avoided because they square
+  the condition number. Singular
+  designs receive the minimum-norm solution, not a penalty. Exact duplicate
+  expressions are no-ops because Algorithm 1 describes a set of factors.
+- Evaluate validation every 1,000 steps, retaining its highest signed finite-pair
+  IC including warmup. Freeze selected formulas before looking at test metrics.
+  Final-step metrics are diagnostics only. No test-based seed or sign selection.
+- Modern local environment: Python 3.11, Torch 2.4.1 rather than authors' 3.8/1.13.1.
+- Internal paper inconsistency: its stated 572,000 trainable parameters exactly
+  match the released one-hidden-layer heads with 48 actions. Literal two-hidden-
+  layer heads and Table B.5's 49 actions yield 580,706 here. Follow the prose and
+  operator table for this run; both cannot simultaneously match the stated count.
+
+Correctness repairs from the existing adapter remain: token replay decoding,
+immutable observations, distinct padding, per-sequence LSTM pooling, grammar
+masks in Bellman updates, target refreshes, dropout disabled at inference, and
+bounded calendar indexing. They do not establish that the historical author
+execution used the same choices.
+
+Evidence policy
+Keep the old 50,000-step fresh-training failure. Keep the interrupted corrected-
+release full-budget attempt marked incomplete, with no test evaluation. Verify
+new saved formulas independently, record both primary and released-evaluator IC,
+resource peaks and all deviations. A close one-seed value alone is not an exact
+replication of Table 1 and does not justify whole-paper status 3.
