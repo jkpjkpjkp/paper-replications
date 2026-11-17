@@ -1,0 +1,72 @@
+AGENT-READABLE PAPER TEXT INDEX
+Generated: 2026-11-17
+
+Each listed folder has PAPER_TEXT.txt and PAPER_INDEX.json.
+PDF sources also have PAPER_LAYOUT.txt for table/column inspection.
+Top-level projects keep these files in .agent/; nested projects retain their existing locations.
+Extract source paths and index path_relative_to_project are relative to the project root.
+Indexes record source hashes, relative paths, pages, line chunks and heading candidates.
+Coverage describes the source representation, not scientific replication success.
+Use STATUS.txt for replication evidence. Figures/equations still require the original.
+
+Search: rg -n "search phrase" --glob PAPER_TEXT.txt --glob "!.replication-local/**" --hidden --no-ignore .
+Rebuild: python _replication/prepare_paper_texts.py [--project NAME]
+
+FOLDER | COVERAGE | PDF PAGES | TEXT LINES
+DRO/.agent | pdf_text | 33 | 5072
+Kronos/.agent | linked_paper_guide | - | 39
+Lookahead/.agent | pdf_text | 11 | 1283
+MDP Pricing/.agent | pdf_text | 16 | 2926
+PDE/.agent | pdf_text | 38 | 3372
+LLM/Portfolio Pilot | pdf_text | 3 | 246
+LLM/RADAR | html_text | - | 1320
+SIT/.agent | pdf_text | 24 | 3092
+Set Sequence/.agent | pdf_text | 29 | 3835
+LLM/alphaprobe | html_text | - | 1007
+alphaqcm/.agent | pdf_text | 17 | 1938
+alphasage/.agent | pdf_text | 28 | 2663
+arboreal/.agent | pdf_text | 13 | 1635
+archetypetrader/.agent | pdf_text | 8 | 1515
+CRYPTO/cex-dex-hmm | pdf_text | 12 | 3220
+LLM/climate-disclosure-source-shift | pdf_text | 15 | 2243
+corporate-graph-anomalies/.agent | no_single_paper | - | 26
+diffusion-dfl/.agent | html_text | - | 1113
+doubleadapt/.agent | html_text | - | 1304
+earnings-timing/.agent | pdf_text | 47 | 3551
+LLM/financial-bias-triggers | pdf_text | 26 | 3925
+LLM/financial-emoji-transfer | pdf_text | 18 | 2171
+fraudgnam/.agent | pdf_text | 31 | 4021
+graph-risk-placement/.agent | pdf_text | 5 | 611
+healthcare-insurance-fraud/.agent | pdf_text | 17 | 1608
+hermes/.agent | html_text | - | 1056
+hga-mt/.agent | pdf_text | 17 | 2721
+ijcai-paper/.agent | pdf_text | 6 | 1110
+Lookahead/reproduction | pdf_text | 11 | 1284
+limt/.agent | html_text | - | 941
+limt/extensions/us | html_text | - | 942
+liu26y/.agent | pdf_text | 62 | 8868
+monthly-coforecast/.agent | pdf_text | 11 | 1239
+multihorizon-forecast/.agent | no_single_paper | - | 26
+pdu/.agent | pdf_text_from_archive | 13 | 1090
+prism-vq/.agent | html_text | - | 1634
+LLM/prophets-profit | pdf_text | 30 | 3013
+proximal-portfolio/.agent | pdf_text | 24 | 3240
+rise/.agent | pdf_text | 10 | 3533
+risk-aware-utility-reranking/.agent | pdf_text | 5 | 719
+song26l/.agent | pdf_text | 30 | 4374
+sparse-tangent/.agent | pdf_text | 18 | 1708
+stable/.agent | pdf_text | 26 | 2359
+stable-alpha/.agent | abstract_only | - | 21
+CRYPTO/temg-tta | html_text | - | 1020
+tra/.agent | html_text | - | 1019
+transalpha/.agent | pdf_text | 9 | 1518
+vision-to-value-evaluation/.agent | pdf_text | 30 | 3430
+
+Coverage counts: {"abstract_only": 1, "html_text": 10, "linked_paper_guide": 1, "no_single_paper": 2, "pdf_text": 33, "pdf_text_from_archive": 1}
+
+Known gaps:
+- stable-alpha: only the official abstract is available.
+- Kronos: linked paper guide; full paper text is not duplicated here.
+- corporate-graph-anomalies, multihorizon-forecast: independent studies without one target paper.
+- monthly-coforecast: full NGBoost paper available for a scoped component benchmark; the CRSP study remains independent.
+- alphaprobe: archived HTML has an empty final appendix table; see PAPER_INDEX.json.

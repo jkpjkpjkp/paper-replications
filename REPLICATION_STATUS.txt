@@ -1,0 +1,217 @@
+REPLICATION STATUS — 2026-11-17
+
+Grades below assess completed saved evidence. On 2026-11-17, new finite CPU
+attempts were started for TRA and PDU; neither is a completed comparison yet.
+Read each project's STATUS.txt and BLOCKER.txt for scope, limitations and paths.
+
+0 = blocked / no verified representative comparison yet
+1 = wildly different (material documented mismatch; see actual magnitude)
+2 = at least one representative result approximately matches
+3 = all main experiments run and match
+
+Counts: 0: 16, 1: 11, 2: 19, 3: 0 (46 status files).
+Includes two nested extensions of existing papers; these are not independent papers.
+The multihorizon study has no fixed paper target and is marked 0.
+Monthly-coforecast has a scoped NGBoost component benchmark; its CRSP study remains independent.
+
+Grades concern numerical replication, not software quality, leak-free design or
+profitability. Level 2 may be scoped to inference/analysis of released artifacts;
+read the scope before treating it as fresh training. No whole-paper level 3 is
+supported by the inspected evidence. Archived running markers are historical.
+
+LiMT input correction (2026-11-17): all six author-share processed files are
+available locally, with sizes/hashes and 2008-start training indexes checked.
+See limt/.agent/AUTHOR_DATA_INVENTORY.json. The archived download blocker is
+stale; existing results still use the 2010-start community snapshot. A new
+released-data run started at 20:29 Asia/Shanghai on 2026-11-17 (216 validation
+search fits; original date splits and released code). Live artifacts are at
+/mnt/data/home/jkp/replications/limt-author-2008-20261117/experiment/.
+The numerical grade remains 1 pending completed author-data results.
+
+AlphaSAGE input/evaluation corrections (2026-11-17): adjusted prices/volume,
+formation-date membership with full label endpoints, and missingness handling
+are implemented and regression-tested. A 64-episode integration run passed;
+full 10,000-episode seeds 0/1/2 and baseline comparisons are running in
+.replication-local/runs/alphasage-corrected-20261117/alphasage/. XGBoost is complete.
+The AlphaSAGE grade and first-line comparison retain the historical failed run
+until completed corrected representative evidence is assessed. See alphasage/STATUS.txt.
+
+Lookahead access recheck (2026-11-17): standard Compustat annual/quarterly,
+filing-date and short-interest SELECTs succeed; annual/quarterly data are local.
+Full Snapshot annual/quarterly PIT queries, including compsnap aliases, still
+return permission denied for schema comp_snapshot (SQLSTATE 42501); comp_pit
+also denies access. Only Snapshot sample queries succeed. Both Lookahead status
+files remain grade 0; no representative financial comparison has run. Evidence:
+Lookahead/reproduction/evidence/wrds-compustat-access-20261117.json.
+
+LEVEL  PROJECT / STATUS PATH
+  0    CRYPTO/archetypetrader/STATUS.txt
+  0    CRYPTO/temg-tta/STATUS.txt
+  0    Kronos/STATUS.txt — Pretrained CSI300 Table 10 reconstruction running (66,338 windows, seeds 0/1/2); no completed AER/IR yet.
+  0    limt/extensions/us/STATUS.txt
+  0    LLM/Portfolio Pilot/STATUS.txt
+  0    LLM/RADAR/STATUS.txt
+  0    Lookahead/reproduction/STATUS.txt
+  0    Lookahead/STATUS.txt
+  0    multihorizon-forecast/STATUS.txt
+  0    NIPS26/stable-alpha/STATUS.txt
+  0    NODATA/hga-mt/STATUS.txt
+  0    pdu/STATUS.txt
+  0    Set Sequence/STATUS.txt
+  0    song26l/STATUS.txt
+  0    tra/STATUS.txt
+  0    transalpha/STATUS.txt — CZ202 US monthly adaptation: six fits complete; TransAlpha IC 0.014600, net Sharpe -0.212746; original private intraday comparison remains unavailable.
+  1    alphaqcm/STATUS.txt — AlphaQCM IQN CSI300 (seed 0, 50,000 steps), IC: rerun 0.062207; paper 0.0849 +/- 0.0103 seed SD.
+  1    alphasage/STATUS.txt — AlphaSAGE CSI300 adaptive 50-alpha pool (seed 0), IC: rerun 0.049129; paper 0.079.
+  1    arboreal/STATUS.txt — ArbNN MagicTelescope, Frame split seed 42 and expanded validation grid (training seed 0), AUC: rerun 0.944804; paper 0.974 +/- 0.001 seed SD.
+  1    hermes/STATUS.txt — HERMES S&P500 Figure 3 reconstruction (three seeds), IC: rerun -0.001003 +/- 0.000480 seed SD; paper 0.050.
+  1    limt/STATUS.txt — LiMT CSI300 Alpha158 adaptation (three seeds), IC: rerun 0.043949 +/- 0.001060 seed SD; paper 0.0575.
+  1    LLM/alphaprobe/STATUS.txt — AlphaPROBE CSI300 reduced 0.6B run (seed 0), IC: rerun 0.03860; paper 0.0584.
+  1    LLM/financial-emoji-transfer/STATUS.txt — TF-IDF text+emoji English-to-Japanese transfer, accuracy gap: rerun 0.075679; paper 0.158.
+  1    NODATA/sparse-tangent/STATUS.txt — Sparse Tangent Euro50 DFL, 10% cardinality, daily Sharpe: rerun 0.081413 +/- 0.032546 seed SD; paper 0.955 +/- 0.014 seed SD.
+  1    PDE/STATUS.txt — F-SPDENO Phi4 fixed initial condition, reconstructed M2, relative L2 error: rerun 0.81138 +/- 0.27401 seed SD; paper Table 1 0.012.
+  1    rise/STATUS.txt — RISE TFB NASDAQ/NYSE, horizons 24/36/48/60, official-block layout, average MSE: rerun 0.788789; paper 0.657.
+  1    stable/STATUS.txt — STABLE US revised paper-settings reconstruction (two seeds), mean annualized Sharpe: rerun 0.501 +/- 0.052 seed SD; paper 1.85.
+  2    corporate-graph-anomalies/STATUS.txt — Parent-paper LOF Elliptic AUROC: archived local fit independently re-evaluated, 45.0857028871% vs arXiv v1 Table 1 45.1%; four AUROC/AUPRC cells match rounding. EB-GAD and corporate extension remain unverified.
+  2    CRYPTO/cex-dex-hmm/STATUS.txt
+  2    diffusion-dfl/STATUS.txt — Fresh one-seed synthetic score loss 0.343821317 vs 0.362 (5.022% error); paired baseline 0.405261308 vs 0.393 (3.120%). User-accepted approximate match; protocol differences, absent seed uncertainty and prior portfolio mismatch retained.
+  2    doubleadapt/STATUS.txt
+  2    DRO/STATUS.txt
+  2    fraudgnam/STATUS.txt
+  2    graph-risk-placement/STATUS.txt
+  2    healthcare-insurance-fraud/STATUS.txt
+  2    liu26y/STATUS.txt
+  2    LLM/climate-disclosure-source-shift/STATUS.txt
+  2    LLM/financial-bias-triggers/STATUS.txt
+  2    LLM/prophets-profit/STATUS.txt
+  2    MDP Pricing/STATUS.txt
+  2    monthly-coforecast/STATUS.txt — Fresh NGBoost Yacht (20 splits): NLL 0.411059 vs 0.20 +/- 0.26; RMSE 0.622483 vs 0.50 +/- 0.20. Scoped approximate published-band match; MSE-selection diagnostic fails (NLL 1.951417).
+  2    prism-vq/STATUS.txt
+  2    proximal-portfolio/STATUS.txt — BCRP MSCI baseline, 0/0.25/0.5% transaction costs, fresh final wealth 1.505692888/1.494099969/1.482605155; paper Table 5 1.51/1.49/1.48 (all within 0.005 rounding).
+  2    risk-aware-utility-reranking/STATUS.txt
+  2    SIT/STATUS.txt — Vanilla CVaR S&P100 30/40/50 assets: fresh optimization matches 12/12 cells within 0.00005 rounding tolerance. Fresh SIT training remains mismatched (40-asset Sharpe 0.505967 vs paper 0.6717).
+  2    vision-to-value-evaluation/STATUS.txt
+
+Corporate graph parent-paper baseline (2026-11-17): traced paper29 to public
+arXiv:2609.38424v1 and independently re-evaluated complete archived local LOF
+scores. Elliptic AUROC is 45.0857028871% vs 45.1% (error 0.0142971129 pp);
+Elliptic/Elliptic++ AUROC and AUPRC all match 0.05 pp rounding tolerance.
+Raw source hashes, transaction/label alignment and independent metric formulas
+passed. This is archived-fit re-evaluation, not fresh fitting today or replay of
+author predictions. Fresh fit preflight was deferred by an occupied compute
+cgroup; free disk is also below the guard reserve. Grade changes 0 -> 2 only
+for this parent-paper baseline. Original EB-GAD was interrupted with no completed
+spectral result, and the corporate extension still has no anomaly/return result.
+See corporate-graph-anomalies/REPRESENTATIVE_NUMBER.txt and STATUS.txt.
+
+Evidence inventory: .replication-local/status-audit-20261117.json
+SIT protocol clarification (2026-11-17): historical runs used released launcher
+settings with a different PyTorch runtime, not the paper's five-seed/grid-search
+protocol. Appendix D and the full 288-configuration SIT grid per pool are checked
+and recorded in SIT/reproduction/PAPER_PROTOCOL_AUDIT.txt. No new training or
+grade change; exact original seed/search and runtime provenance remain unresolved.
+Replication assessment skill: /home/jkp/.codex/skills/replication-status/SKILL.md
+SIT vanilla CVaR baseline (2026-11-17): fresh S&P100 30/40/50-asset optimization
+matches all 12 Table 5/Table 1 cells at four decimals (absolute tolerance 0.00005).
+40/50-asset Sharpe: 0.153113424229/0.216456256762 vs 0.1531/0.2165.
+All 186 allocations independently verified with HiGHS. See
+SIT/VANILLA_CVAR_REPRODUCTION.txt. Project grade changes from 1 to 2, scoped to
+this representative traditional baseline; the fresh SIT training mismatch
+remains unresolved and is preserved in SIT/STATUS.txt. Aggregate counts updated.
+Scope: source projects registered in _replication/projects.json (including the
+LLM/ group), plus SIT, stable, tra, vision-to-value-evaluation
+and the relocated NODATA/NIPS26 projects shown in the inventory.
+Shared input datasets, manuscript directories,
+vendored upstream copies and archived duplicate workspaces are not new replicas.
+
+Blocked-project triage — 2026-11-17:
+All 13 user-named projects now have explicit data/compute/specification blockers.
+See .replication-local/blocked-triage-20261117.txt and
+.replication-local/runs/blocked-20261117/triage.json. TRA released-data seed 1000
+and PDU reconstructed NASDAQ seed 42 are running on local CPU. Their original
+grade remains 0 pending completed comparisons; PDU fidelity limitations remain.
+Song26l older completed US-v1 mismatches and TCN failure are preserved separately
+from the newer unfinished equation-reading attempt. No rental was purchased.
+
+Monthly-coforecast component benchmark (2026-11-17): fresh Gaussian NGBoost
+training on all 20 UCI Yacht splits approximately matches Duan et al. (2020),
+Tables 1 and 3, using the paper's validation-NLL rule. NLL 0.411059344 (split
+SD 0.262116781) vs 0.20 +/- 0.26; RMSE 0.622482934 (split SD 0.196061022) vs
+0.50 +/- 0.20. Absolute errors 0.211059344 / 0.122482934 meet the predeclared
+published-band tolerances 0.26 / 0.20; both local means are worse, and this
+is not exact replication or statistical equivalence. The original error-bar
+type is ambiguous (caption says standard errors, current code prints SD).
+The predeclared MSE-selection diagnostic fails NLL: 1.951416781 vs 0.20.
+Grade 0 -> 2 is restricted to this fresh NGBoost component benchmark; no
+validation of the independent monthly CRSP study or SHARV/CMK/neural models
+is implied. Full evidence: monthly-coforecast/NGBOOST_YACHT_REPRODUCTION.txt.
+
+Kronos-base pretrained attempt (2026-11-17):
+A full CSI300 Table 10 reconstruction is running: 66,338 windows, 317 historical
+constituents, 225 signal dates, seeds 0/1/2. Paper targets: AER 0.1911 and IR
+1.3782. Released checkpoints are pinned; cached float32 inference and Qlib
+trading/cost checks passed. Community data, the demo-derived 2025-06-05 end
+and remaining execution assumptions are documented. Initial GPU-memory failures
+are retained; initial shards used CPU transfers, then resumed fully on GPU.
+Artifacts: /mnt/data/home/jkp/replications/kronos-base-20261117/. Grade remains
+0 pending completed model backtests and assessment. No aggregate count change.
+
+Diffusion-DFL GPUShare synthetic pilot (2026-11-17):
+Completed one fresh seed plus paired two-stage baseline. Score test loss
+0.343821317 vs paper Table 1 0.362 (-5.022%); baseline 0.405261308 vs
+0.393 (+3.120%). Run time 15.759 minutes on RTX 3090; peak allocated tensor
+memory 0.542732 GiB. One seed has no seed SEM, and released data defaults
+conflict with the paper. Exact population cost of saved decisions is worse
+for DFL than baseline despite lower empirical test cost. Status changed 1 -> 2
+at the user's request, scoped to approximate agreement of the synthetic losses.
+The observed 5.022% / 3.120% errors were accepted after the run; no tolerance was
+predeclared. Prior portfolio failure retained; aggregate counts updated. Report:
+diffusion-dfl/reproduction/GPU_SYNTHETIC_REPORT.txt. Artifacts retrieved and
+GPUShare shutdown verified (21:16:28 Asia/Shanghai).
+
+Unowned-project resolution sweep -- 2026-11-17:
+Seven of the 20 initially grade-0/1 direct-folder projects were investigated;
+13 were excluded for existing Codex/session/run ownership. Monthly-coforecast
+and TransAlpha were left to their concurrent workers. Full disposition:
+.replication-local/status-resolution-20261117/RESOLUTION_REPORT.txt.
+
+Proximal Portfolio changes 1 -> 2 only for fresh BCRP MSCI optimization at all
+three Table 5 costs: wealth 1.505692888/1.494099969/1.482605155 vs
+1.51/1.49/1.48, all within 0.005 rounding. Independent solvers and accounting
+pass. Main STCO 0/24 failure and nine other BCRP mismatches remain unresolved.
+See proximal-portfolio/BENCHMARK_REPRODUCTION.txt.
+Arboreal remains 1: corrected Frame split seed42 gives AUC 0.945496; expanded
+validation grid gives 0.944804 vs paper 0.974 +/- 0.001. Both fresh seed0
+runs and the historical five-seed failure remain explicit.
+RISE remains 1: eight fresh locked L36 seed0 fits give MSE 0.859239508888 vs
+0.657, MAE 0.600819114231 vs 0.537. Inferred baseline protocol matches 32
+individual cells, but post-hoc choices and aggregate discrepancies preclude
+claiming an author-protocol reproduction. Historical failures are retained.
+PDE remains 1 after independent replay of all five saved Phi4 runs; exact
+feature/architecture protocol is unresolved. Set Sequence, Song26l and
+multihorizon remain 0 with refreshed specification/input/target evidence.
+Set Sequence and Arboreal WRONG.txt distinguish verified mathematical or
+printed-equation problems from unknown effects on the authors' results.
+
+PDE capacity diagnostic (2026-11-17): three fresh first-chaos Fourier regression
+fits on locally simulated fixed-IC Phi4 give relative L2 0.0000111115 +/-
+0.0000008461 seed SD. This diagnostic replaces FNO and is not a published
+baseline or F-SPDENO replication. Local temporal basis is full rank; retained
+noise is lossless to numerical precision. The historical F-SPDENO mismatch
+0.81138 versus 0.012 remains; grade 1, grouping and aggregate counts unchanged.
+Author feature/architecture specification and simulator fidelity remain open.
+Evidence: PDE/.agent/PHI4_CAPACITY_AUDIT_20261117.txt and diagnostics/.
+
+TransAlpha CZ202 adaptation (2026-11-17): completed and independently audited
+three seeds each for TransAlpha and a linear control, using 202 monthly CZ
+characteristics, the lagged NYSE20 screen and value-weighted D10-D1 portfolios.
+Test 2022-2025: TransAlpha IC 0.014600 +/- 0.004106 seed SD and net Sharpe
+-0.212746 +/- 0.508346; linear IC 0.019100 +/- 0.000926 and net Sharpe
+0.180632 +/- 0.349045. All three TransAlpha net FF5+UMD alpha 95% HAC intervals
+include zero. These are fresh US monthly adaptation results, not comparable
+to the paper's private 400-factor 15-minute CSI targets; paper error/tolerance
+is N/A. Grade stays 0, and grade grouping/counts are unchanged. Earlier 27
+daily CSI adaptations and the unresolved original-data/specification gaps
+remain explicitly recorded. Missing data and imputation are in transalpha/DATA.txt;
+the project blocker file was removed as requested. Full results and checks:
+transalpha/results/cz202/REPORT.txt and transalpha/results/cz202/audit.json.

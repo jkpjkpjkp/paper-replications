@@ -1,0 +1,270 @@
+{
+  "description": "Curated original-paper sources for agent-readable extracts. Archive sources are read only. Project folders resolve through projects.json; extras use folder.",
+  "projects": {
+    "DRO": {
+      "source": ".replication-local/artifacts/Bayesian/DRO/2411.16829v2.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "Kronos": {
+      "source": ".replication-local/paper-text-sources/kronos-arxiv-v1.txt",
+      "kind": "summary",
+      "coverage": "linked_paper_guide",
+      "url": "https://arxiv.org/html/2508.02739v1",
+      "note": "Concise navigation guide to the linked paper. This is not the full manuscript and has no PDF page mapping.",
+      "summary": "Kronos: A Foundation Model for the Language of Financial Markets\nPaper: https://arxiv.org/abs/2508.02739v1\nFull article: https://arxiv.org/html/2508.02739v1\n\nKronos models financial candlestick sequences with a discrete tokenizer and an\nautoregressive transformer. Its tokenizer compresses price and trading-activity\ninformation into hierarchical tokens, which the predictor models over time.\nThe paper evaluates forecasting, synthetic sequence generation, and investment\nsimulations, alongside architecture ablations and inference-sampling choices.\n\nNavigation for future work:\n- Section 3: tokenization, hierarchical modeling, pretraining and inference.\n- Section 4: experimental setup, main results and ablations.\n- Appendix B: datasets, cleaning and missing observations.\n- Appendix C: architecture, training and inference configurations.\n- Appendix D: evaluation tasks, baselines, metrics, portfolio rules and costs.\n- Appendices E-F: additional and full experimental results.\n\nMatch the paper version and model checkpoint before comparing results. The local\nfolder provides reduced pretrained inference; consult STATUS.txt and README.md\nfor its actual scope. The original article is the reference for equations,\nnumeric tables, figures and complete protocol details.\n"
+    },
+    "Lookahead": {
+      "source": ".replication-local/artifacts/lfm-quant/evidence/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "MDP Pricing": {
+      "source": ".replication-local/artifacts/MDP Pricing/sources/paper-v2.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "PDE": {
+      "source": ".replication-local/artifacts/PDE/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "Portfolio Pilot": {
+      "source": ".replication-local/artifacts/LLM/Portfolio Pilot/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "RADAR": {
+      "source": ".replication-local/artifacts/RADAR/sources/arxiv-html.txt",
+      "kind": "browser_text",
+      "coverage": "html_text"
+    },
+    "SIT": {
+      "source": "SIT/reproduction/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text",
+      "folder": "SIT"
+    },
+    "Set Sequence": {
+      "source": ".replication-local/artifacts/Set Sequence/sources/paper-v2.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "alphaprobe": {
+      "source": ".replication-local/artifacts/alphaprobe/sources/paper-v1-live.txt",
+      "kind": "browser_text",
+      "coverage": "html_text",
+      "note": "The archived HTML conversion includes an empty final appendix table (Table A.3). Its missing cells and graphical content are not reconstructed."
+    },
+    "alphaqcm": {
+      "source": ".replication-local/artifacts/alphaqcm/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "alphasage": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/099-alphasage/sources/paper-iclr2026.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "arboreal": {
+      "source": ".replication-local/artifacts/arboreal/sources/paper-camera-ready.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "archetypetrader": {
+      "source": ".replication-local/artifacts/archetypetrader/native-reference/AAAI26_ArchetypeTrader.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "cex-dex-hmm": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/362-cex-dex-hmm/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "climate-disclosure-source-shift": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/258/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "corporate-graph-anomalies": {
+      "source": "corporate-graph-anomalies/ABSTRACT.txt",
+      "kind": "study",
+      "coverage": "no_single_paper",
+      "note": "Independent research study with no single original paper target. This is the project overview, not an original paper or evidence of replication."
+    },
+    "diffusion-dfl": {
+      "source": ".replication-local/artifacts/diffusion-dfl/sources/paper.txt",
+      "kind": "browser_text",
+      "coverage": "html_text"
+    },
+    "doubleadapt": {
+      "source": ".replication-local/artifacts/ordered-reproductions/sources/doubleadapt-paper.txt",
+      "kind": "browser_text",
+      "coverage": "html_text"
+    },
+    "earnings-timing": {
+      "source": "earnings-timing/13699_paper_YrbKK6Zn.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text",
+      "folder": "earnings-timing",
+      "note": "November 2018 original local paper. The project also retains a separate redacted methods copy under crsp-daily; this extraction uses the complete local PDF."
+    },
+    "financial-bias-triggers": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/229-bias-before-the-model/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "financial-emoji-transfer": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/174-cross-cultural-emoji/sources/2026.findings-acl.1106.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "fraudgnam": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/429-fraudgnam/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "graph-risk-placement": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/412/sources/CIKM.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "healthcare-insurance-fraud": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/103-healthcare-insurance-fraud/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "hermes": {
+      "source": ".replication-local/artifacts/hermes/sources/paper-browser.txt",
+      "kind": "browser_text",
+      "coverage": "html_text"
+    },
+    "hga-mt": {
+      "source": ".replication-local/artifacts/hga-mt/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "ijcai-paper": {
+      "source": "ijcai-paper/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text",
+      "note": "Local research draft, not a published reference paper; extract corresponds to the saved PDF.",
+      "folder": "ijcai-paper"
+    },
+    "lfm-quant": {
+      "source": ".replication-local/artifacts/lfm-quant/evidence/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text",
+      "note": "Shares the Lookahead paper; this folder contains its reproduction adapter. Separate supplemental PDF remains in the original evidence directory.",
+      "title": "Uncertainty-Aware Lookahead Factor Models for Quantitative Investing"
+    },
+    "limt": {
+      "source": ".replication-local/artifacts/limt/sources/paper-browser.txt",
+      "kind": "browser_text",
+      "coverage": "html_text"
+    },
+    "limt-us": {
+      "source": ".replication-local/artifacts/limt/sources/paper-browser.txt",
+      "kind": "browser_text",
+      "coverage": "html_text",
+      "note": "Shares the LiMT paper; this folder is a US equity adaptation, not the original empirical protocol.",
+      "title": "Hierarchical Multi-Task Learning with Liquidity-Aware Signals for Stock Forecasting"
+    },
+    "liu26y": {
+      "source": ".replication-local/artifacts/liu26y/paper/source.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "monthly-coforecast": {
+      "source": ".replication-local/runs/monthly-ngboost-20261117/sources/duan20a.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text",
+      "title": "NGBoost: Natural Gradient Boosting for Probabilistic Prediction",
+      "url": "https://proceedings.mlr.press/v119/duan20a.html",
+      "note": "Scoped component benchmark selected on 2026-11-17: Gaussian NGBoost on UCI Yacht, Tables 1 and 3. The monthly CRSP study remains an independent model-family comparison, not a reproduction of this paper's full experiments or of the other cited papers."
+    },
+    "multihorizon-forecast": {
+      "source": "multihorizon-forecast/ABSTRACT.txt",
+      "kind": "study",
+      "coverage": "no_single_paper",
+      "note": "Independent research study with no single original paper target. This is the project overview, not an original paper or evidence of replication."
+    },
+    "pdu": {
+      "source": ".replication-local/artifacts/pdu/sources/paper.txt",
+      "kind": "layout_text",
+      "coverage": "pdf_text_from_archive"
+    },
+    "prism-vq": {
+      "source": ".replication-local/artifacts/prism-vq/sources/arxiv.txt",
+      "kind": "browser_text",
+      "coverage": "html_text"
+    },
+    "prophets-profit": {
+      "source": ".replication-local/artifacts/prophets-profit/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "proximal-portfolio": {
+      "source": ".replication-local/artifacts/proximal-portfolio/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "rise": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/405/sources/paper-viewer-export.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "risk-aware-utility-reranking": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "song26l": {
+      "source": ".replication-local/artifacts/song26l/archive/us-v1/reference/song26l.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text"
+    },
+    "sparse-tangent": {
+      "source": "sparse-tangent/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text",
+      "folder": "sparse-tangent"
+    },
+    "stable": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/105-stable/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text",
+      "folder": "stable"
+    },
+    "stable-alpha": {
+      "source": ".replication-local/artifacts/stable-alpha/sources/official-abstract.txt",
+      "kind": "abstract",
+      "coverage": "abstract_only",
+      "url": "https://openreview.net/forum?id=NZHuWIlAUx",
+      "note": "Full manuscript is absent locally. On 2026-11-17 the OpenReview API required challenge verification and the rendered forum reported no permission to read it. This contains only the archived official abstract."
+    },
+    "temg-tta": {
+      "source": ".replication-local/artifacts/paper-reproduction-audit/workspaces/152-temporal-motif-graph-tta/sources/arxiv-2605.29526v1.txt",
+      "kind": "browser_text",
+      "coverage": "html_text"
+    },
+    "tra": {
+      "source": "tra/sources/paper-web.txt",
+      "kind": "browser_text",
+      "coverage": "html_text",
+      "folder": "tra"
+    },
+    "transalpha": {
+      "source": "transalpha/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text",
+      "folder": "transalpha"
+    },
+    "vision-to-value-evaluation": {
+      "source": "vision-to-value-evaluation/sources/paper.pdf",
+      "kind": "pdf",
+      "coverage": "pdf_text",
+      "folder": "vision-to-value-evaluation"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+[Unit]
+Description=Track status numbers in direct data subfolders
+
+[Service]
+Type=simple
+WorkingDirectory=/home/jkp/data
+ExecStart=/usr/bin/python3 /home/jkp/data/utils/status_daemon.py --root /home/jkp/data --interval 5
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

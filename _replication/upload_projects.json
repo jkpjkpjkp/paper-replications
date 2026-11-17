@@ -1,0 +1,210 @@
+{
+  "repository": "jkpjkpjkp/paper-replications",
+  "main_paths": [
+    ".gitignore",
+    "README.md",
+    "UPLOAD.md",
+    "WORKSPACE.md",
+    "AGENTS.md",
+    "PAPER_TEXT_INDEX.txt",
+    "REPLICATION_STATUS.txt",
+    "_replication",
+    "utils"
+  ],
+  "excluded_roots": [
+    ".replication-local",
+    ".vscode",
+    "CRYPTO",
+    "Chen_Zimmermann_Factor_Zoo_2026_10",
+    "LLM",
+    "compustat",
+    "crsp-daily",
+    "crsp-monthly",
+    "csi",
+    "data",
+    "factors-daily",
+    "global-market-data",
+    "ibes",
+    "paper",
+    "ravenpack",
+    "song26l-us",
+    "sp500-earnings-transcripts",
+    "wrds-crsp-download"
+  ],
+  "projects": [
+    {
+      "path": "DRO",
+      "branch": "paper/dro"
+    },
+    {
+      "path": "Kronos",
+      "branch": "paper/kronos"
+    },
+    {
+      "path": "Lookahead",
+      "branch": "paper/lookahead"
+    },
+    {
+      "path": "MDP Pricing",
+      "branch": "paper/mdp-pricing"
+    },
+    {
+      "path": "NIPS26/stable-alpha",
+      "branch": "paper/stable-alpha"
+    },
+    {
+      "path": "NODATA/hga-mt",
+      "branch": "paper/hga-mt"
+    },
+    {
+      "path": "NODATA/sparse-tangent",
+      "branch": "paper/sparse-tangent",
+      "ignore": [
+        "/runtime/",
+        "/sources/fidelity_audit/fresh_download/data/"
+      ]
+    },
+    {
+      "path": "PDE",
+      "branch": "paper/pde"
+    },
+    {
+      "path": "SIT",
+      "branch": "paper/sit",
+      "ignore": [
+        "/reproduction/asset_data_audit_20261117/"
+      ]
+    },
+    {
+      "path": "Set Sequence",
+      "branch": "paper/set-sequence",
+      "source_files": [
+        "configs/equity_required_fits.csv"
+      ]
+    },
+    {
+      "path": "alphaqcm",
+      "branch": "paper/alphaqcm",
+      "source_data_dirs": [
+        "upstream/alphagen/data"
+      ]
+    },
+    {
+      "path": "alphasage",
+      "branch": "paper/alphasage",
+      "source_data_dirs": [
+        "upstream/src/alphagen/data",
+        "upstream/src/gan/dataset"
+      ]
+    },
+    {
+      "path": "arboreal",
+      "branch": "paper/arboreal"
+    },
+    {
+      "path": "corporate-graph-anomalies",
+      "branch": "paper/corporate-graph-anomalies"
+    },
+    {
+      "path": "diffusion-dfl",
+      "branch": "paper/diffusion-dfl"
+    },
+    {
+      "path": "doubleadapt",
+      "branch": "paper/doubleadapt"
+    },
+    {
+      "path": "earnings-timing",
+      "branch": "paper/earnings-timing"
+    },
+    {
+      "path": "fraudgnam",
+      "branch": "paper/fraudgnam"
+    },
+    {
+      "path": "graph-risk-placement",
+      "branch": "paper/graph-risk-placement"
+    },
+    {
+      "path": "healthcare-insurance-fraud",
+      "branch": "paper/healthcare-insurance-fraud"
+    },
+    {
+      "path": "hermes",
+      "branch": "paper/hermes"
+    },
+    {
+      "path": "ijcai-paper",
+      "branch": "paper/ijcai-paper",
+      "ignore": [
+        "/preview/"
+      ]
+    },
+    {
+      "path": "limt",
+      "branch": "paper/limt"
+    },
+    {
+      "path": "liu26y",
+      "branch": "paper/liu26y"
+    },
+    {
+      "path": "monthly-coforecast",
+      "branch": "paper/monthly-coforecast"
+    },
+    {
+      "path": "multihorizon-forecast",
+      "branch": "paper/multihorizon-forecast"
+    },
+    {
+      "path": "pdu",
+      "branch": "paper/pdu"
+    },
+    {
+      "path": "prism-vq",
+      "branch": "paper/prism-vq",
+      "source_data_dirs": [
+        "upstream/dataset"
+      ]
+    },
+    {
+      "path": "proximal-portfolio",
+      "branch": "paper/proximal-portfolio"
+    },
+    {
+      "path": "rise",
+      "branch": "paper/rise"
+    },
+    {
+      "path": "risk-aware-utility-reranking",
+      "branch": "paper/risk-aware-utility-reranking"
+    },
+    {
+      "path": "song26l",
+      "branch": "paper/song26l"
+    },
+    {
+      "path": "stable",
+      "branch": "paper/stable"
+    },
+    {
+      "path": "tra",
+      "branch": "paper/tra",
+      "source_data_dirs": [
+        "sources/qlib/data",
+        "sources/qlib/contrib/data"
+      ]
+    },
+    {
+      "path": "transalpha",
+      "branch": "paper/transalpha"
+    },
+    {
+      "path": "vision-to-value-evaluation",
+      "branch": "paper/vision-to-value-evaluation",
+      "ignore": [
+        "/upstream/sdf_analysis/tsne_data/"
+      ]
+    }
+  ]
+}

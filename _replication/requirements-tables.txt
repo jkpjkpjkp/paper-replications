@@ -1,0 +1,4 @@
+# Calendar-month export; independent of the model's historical training runtime.
+numpy>=1.26
+pandas>=2.1
+pyarrow>=14

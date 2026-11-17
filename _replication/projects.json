@@ -1,0 +1,205 @@
+{
+  "MDP Pricing": {
+    "source": "MDP Pricing",
+    "archive": "MDP Pricing"
+  },
+  "PDE": {
+    "source": "PDE",
+    "archive": "PDE"
+  },
+  "Set Sequence": {
+    "source": "Set Sequence",
+    "archive": "Set Sequence"
+  },
+  "DRO": {
+    "source": "DRO",
+    "archive": "Bayesian/DRO",
+    "aliases": [
+      "Bayesian/DRO"
+    ]
+  },
+  "Lookahead": {
+    "source": "Lookahead",
+    "archive": "Lookahead"
+  },
+  "alphaprobe": {
+    "source": "LLM/alphaprobe",
+    "archive": "alphaprobe"
+  },
+  "alphaqcm": {
+    "source": "alphaqcm",
+    "archive": "alphaqcm"
+  },
+  "alphasage": {
+    "source": "alphasage",
+    "archive": "alphasage"
+  },
+  "arboreal": {
+    "source": "arboreal",
+    "archive": "arboreal"
+  },
+  "archetypetrader": {
+    "source": "archetypetrader",
+    "archive": "archetypetrader"
+  },
+  "diffusion-dfl": {
+    "source": "diffusion-dfl",
+    "archive": "diffusion-dfl"
+  },
+  "hermes": {
+    "source": "hermes",
+    "archive": "hermes"
+  },
+  "hga-mt": {
+    "source": "hga-mt",
+    "archive": "hga-mt"
+  },
+  "limt": {
+    "source": "limt",
+    "archive": "limt"
+  },
+  "liu26y": {
+    "source": "liu26y",
+    "archive": "liu26y"
+  },
+  "pdu": {
+    "source": "pdu",
+    "archive": "pdu"
+  },
+  "prism-vq": {
+    "source": "prism-vq",
+    "archive": "prism-vq"
+  },
+  "prophets-profit": {
+    "source": "LLM/prophets-profit",
+    "archive": "prophets-profit"
+  },
+  "proximal-portfolio": {
+    "source": "proximal-portfolio",
+    "archive": "proximal-portfolio"
+  },
+  "song26l": {
+    "source": "song26l",
+    "archive": "song26l"
+  },
+  "stable-alpha": {
+    "source": "stable-alpha",
+    "archive": "stable-alpha"
+  },
+  "monthly-coforecast": {
+    "source": "monthly-coforecast",
+    "archive": "monthly-coforecast"
+  },
+  "multihorizon-forecast": {
+    "source": "multihorizon-forecast",
+    "archive": "multihorizon-forecast"
+  },
+  "RADAR": {
+    "source": "LLM/RADAR",
+    "archive": "RADAR"
+  },
+  "corporate-graph-anomalies": {
+    "source": "corporate-graph-anomalies",
+    "archive": "corporate-graph-anomalies"
+  },
+  "Portfolio Pilot": {
+    "source": "LLM/Portfolio Pilot",
+    "archive": "LLM/Portfolio Pilot",
+    "aliases": [
+      "LLM/Portfolio Pilot",
+      "portfoliopilot-reproduction"
+    ]
+  },
+  "Kronos": {
+    "source": "Kronos",
+    "archive": "LLM/alpha-research-reproduction",
+    "aliases": [
+      "LLM/alpha-research-reproduction",
+      "alpha-research-reproduction"
+    ]
+  },
+  "lfm-quant": {
+    "source": "Lookahead/reproduction",
+    "archive": "lfm-quant",
+    "extension_of": "Lookahead"
+  },
+  "limt-us": {
+    "source": "limt/extensions/us",
+    "archive": "limt-us",
+    "extension_of": "limt"
+  },
+  "doubleadapt": {
+    "source": "doubleadapt",
+    "archive": "ordered-reproductions"
+  },
+  "healthcare-insurance-fraud": {
+    "source": "healthcare-insurance-fraud",
+    "archive": "paper-reproduction-audit/workspaces/103-healthcare-insurance-fraud",
+    "aliases": [
+      "paper-reproduction-audit/workspaces/103-healthcare-insurance-fraud"
+    ]
+  },
+  "financial-emoji-transfer": {
+    "source": "LLM/financial-emoji-transfer",
+    "archive": "paper-reproduction-audit/workspaces/174-cross-cultural-emoji",
+    "aliases": [
+      "paper-reproduction-audit/workspaces/174-cross-cultural-emoji"
+    ]
+  },
+  "financial-bias-triggers": {
+    "source": "LLM/financial-bias-triggers",
+    "archive": "paper-reproduction-audit/workspaces/229-bias-before-the-model",
+    "aliases": [
+      "paper-reproduction-audit/workspaces/229-bias-before-the-model"
+    ]
+  },
+  "climate-disclosure-source-shift": {
+    "source": "LLM/climate-disclosure-source-shift",
+    "archive": "paper-reproduction-audit/workspaces/258",
+    "aliases": [
+      "paper-reproduction-audit/workspaces/258"
+    ]
+  },
+  "cex-dex-hmm": {
+    "source": "CRYPTO/cex-dex-hmm",
+    "archive": "paper-reproduction-audit/workspaces/362-cex-dex-hmm",
+    "aliases": [
+      "paper-reproduction-audit/workspaces/362-cex-dex-hmm"
+    ]
+  },
+  "risk-aware-utility-reranking": {
+    "source": "risk-aware-utility-reranking",
+    "archive": "paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking",
+    "aliases": [
+      "paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking"
+    ]
+  },
+  "rise": {
+    "source": "rise",
+    "archive": "paper-reproduction-audit/workspaces/405",
+    "aliases": [
+      "paper-reproduction-audit/workspaces/405"
+    ]
+  },
+  "graph-risk-placement": {
+    "source": "graph-risk-placement",
+    "archive": "paper-reproduction-audit/workspaces/412",
+    "aliases": [
+      "paper-reproduction-audit/workspaces/412"
+    ]
+  },
+  "temg-tta": {
+    "source": "CRYPTO/temg-tta",
+    "archive": "paper-reproduction-audit/workspaces/152-temporal-motif-graph-tta",
+    "aliases": [
+      "paper-reproduction-audit/workspaces/152-temporal-motif-graph-tta"
+    ]
+  },
+  "fraudgnam": {
+    "source": "fraudgnam",
+    "archive": "paper-reproduction-audit/workspaces/429-fraudgnam",
+    "aliases": [
+      "paper-reproduction-audit/workspaces/429-fraudgnam"
+    ]
+  }
+}

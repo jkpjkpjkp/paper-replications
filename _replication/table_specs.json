@@ -1,0 +1,494 @@
+{
+  "schema_version": 1,
+  "tables": [
+    {
+      "project": "alphaprobe",
+      "table": "cz-monthly",
+      "kind": "monthly",
+      "source": "ordered-reproductions/data/cz-monthly/panel.parquet",
+      "month": "return_month",
+      "month_encoding": "yyyymm",
+      "firm": "permno",
+      "formation_month": "feature_month",
+      "firm_identifier": "CRSP PERMNO security identifier, not PERMCO company identifier",
+      "definition": "Realized calendar-month CRSP CIZ total simple return for the saved monthly CZ202 evaluation sample.",
+      "source_review": "ordered-reproductions/scripts/build_cz_monthly.py joins CRSP mthret using return_month; each score file is already keyed by return_month and permno.",
+      "scores": {
+        "source": "protocol-six-20261116/results/AlphaPROBE/scores.csv",
+        "month": "return_month",
+        "firm": "permno",
+        "value": "score",
+        "sample": "predicted",
+        "meaning": "AlphaPROBE monthly CZ202 model score, not necessarily a calibrated return prediction"
+      },
+      "limitations": [
+        "Separate monthly CZ adaptation; does not describe the native daily CSI experiment.",
+        "Existing eligibility screens, vendor vintage and information-availability limitations carry through."
+      ],
+      "return": "target_return"
+    },
+    {
+      "project": "alphasage",
+      "table": "cz-monthly",
+      "kind": "monthly",
+      "source": "ordered-reproductions/data/cz-monthly/panel.parquet",
+      "month": "return_month",
+      "month_encoding": "yyyymm",
+      "firm": "permno",
+      "formation_month": "feature_month",
+      "firm_identifier": "CRSP PERMNO security identifier, not PERMCO company identifier",
+      "definition": "Realized calendar-month CRSP CIZ total simple return for the saved monthly CZ202 evaluation sample.",
+      "source_review": "ordered-reproductions/scripts/build_cz_monthly.py joins CRSP mthret using return_month; each score file is already keyed by return_month and permno.",
+      "scores": {
+        "source": "protocol-six-20261116/results/AlphaSAGE/scores.csv",
+        "month": "return_month",
+        "firm": "permno",
+        "value": "score",
+        "sample": "predicted",
+        "meaning": "AlphaSAGE monthly CZ202 model score, not necessarily a calibrated return prediction"
+      },
+      "limitations": [
+        "Separate monthly CZ adaptation; does not describe the native daily CSI experiment.",
+        "Existing eligibility screens, vendor vintage and information-availability limitations carry through."
+      ],
+      "return": "target_return"
+    },
+    {
+      "project": "doubleadapt",
+      "table": "cz-monthly",
+      "kind": "monthly",
+      "source": "ordered-reproductions/data/cz-monthly/panel.parquet",
+      "month": "return_month",
+      "month_encoding": "yyyymm",
+      "firm": "permno",
+      "formation_month": "feature_month",
+      "firm_identifier": "CRSP PERMNO security identifier, not PERMCO company identifier",
+      "definition": "Realized calendar-month CRSP CIZ total simple return for the saved monthly CZ202 evaluation sample.",
+      "source_review": "ordered-reproductions/scripts/build_cz_monthly.py joins CRSP mthret using return_month; each score file is already keyed by return_month and permno.",
+      "scores": {
+        "source": "ordered-reproductions/results/doubleadapt-cz/scores.csv",
+        "month": "return_month",
+        "firm": "permno",
+        "value": "score",
+        "sample": "predicted",
+        "meaning": "DoubleAdapt monthly CZ202 model score, not necessarily a calibrated return prediction"
+      },
+      "limitations": [
+        "Separate monthly CZ adaptation; does not describe the native daily CSI experiment.",
+        "Existing eligibility screens, vendor vintage and information-availability limitations carry through."
+      ],
+      "return": "target_return"
+    },
+    {
+      "project": "monthly-coforecast",
+      "table": "monthly-universe",
+      "kind": "monthly",
+      "source": "monthly-coforecast/data/panel.parquet",
+      "month": "target_month",
+      "month_encoding": "period_ordinal",
+      "firm": "permno",
+      "observed": "return_observed",
+      "formation_month": "month",
+      "firm_identifier": "CRSP PERMNO security identifier",
+      "definition": "Actual next calendar-month CRSP total simple return, keyed by realization month; noncontiguous or unavailable labels remain null.",
+      "source_review": "scripts/prepare.py uses pandas monthly Period ordinals and sets return_observed only if the shifted source month equals target_month.",
+      "limitations": [
+        "No one canonical prediction selected: results contain multiple competing forecasting models.",
+        "Input-universe return panel, not portfolio returns."
+      ],
+      "return": "yret"
+    },
+    {
+      "project": "arboreal",
+      "table": "finance-monthly",
+      "kind": "monthly",
+      "source": "arboreal/finance/data/panel.parquet",
+      "month": "month",
+      "month_encoding": "year_month_index",
+      "firm": "permno",
+      "formation_month": "formation_month",
+      "firm_identifier": "CRSP PERMNO security identifier",
+      "definition": "Monthly CRSP total return joined to held-out ArbNN ensemble scores.",
+      "source_review": "finance/data.py month_id is year*12 + month - 1; realized_return joins mthret on the outcome month. finance/train.py emits held-out predictions; predictions.parquet arbnn is the retained ensemble.",
+      "scores": {
+        "source": "arboreal/finance/results/predictions.parquet",
+        "month": "month",
+        "firm": "permno",
+        "value": "arbnn",
+        "sample": "predicted",
+        "meaning": "ArbNN monthly rank-target ensemble score, not a calibrated return forecast",
+        "return": "realized_return"
+      },
+      "limitations": [
+        "Finance adaptation is separate from the original tabular benchmark.",
+        "Score-file returns are independently checked against the prepared panel before export."
+      ],
+      "return": "realized_return"
+    },
+    {
+      "project": "hermes",
+      "table": "sp500",
+      "kind": "npz",
+      "source": "hermes/data/sp500.npz",
+      "dates": "dates",
+      "firms": "tickers",
+      "values": "returns",
+      "mask": "valid",
+      "value_kind": "daily_return",
+      "firm_identifier": "Source ticker; no company-identity consolidation",
+      "definition": "Compounded native close-to-close daily price returns on their realization dates.",
+      "source_review": "scripts/prepare_data.py and prepare_rsr.py set returns[t]=close[t]/close[t-1]-1 and zero-fill invalid entries; valid mask restores those entries to missing before export.",
+      "limitations": [
+        "Input-universe aggregation, not model portfolio performance.",
+        "Price-return adjustment convention is inherited; total dividends are not independently established."
+      ]
+    },
+    {
+      "project": "hermes",
+      "table": "nasdaq",
+      "kind": "npz",
+      "source": "hermes/data/nasdaq.npz",
+      "dates": "dates",
+      "firms": "tickers",
+      "values": "returns",
+      "mask": "valid",
+      "value_kind": "daily_return",
+      "firm_identifier": "Source ticker; no company-identity consolidation",
+      "definition": "Compounded native close-to-close daily price returns on their realization dates.",
+      "source_review": "scripts/prepare_data.py and prepare_rsr.py set returns[t]=close[t]/close[t-1]-1 and zero-fill invalid entries; valid mask restores those entries to missing before export.",
+      "limitations": [
+        "Input-universe aggregation, not model portfolio performance.",
+        "Price-return adjustment convention is inherited; total dividends are not independently established."
+      ]
+    },
+    {
+      "project": "hermes",
+      "table": "nyse",
+      "kind": "npz",
+      "source": "hermes/data/nyse.npz",
+      "dates": "dates",
+      "firms": "tickers",
+      "values": "returns",
+      "mask": "valid",
+      "value_kind": "daily_return",
+      "firm_identifier": "Source ticker; no company-identity consolidation",
+      "definition": "Compounded native close-to-close daily price returns on their realization dates.",
+      "source_review": "scripts/prepare_data.py and prepare_rsr.py set returns[t]=close[t]/close[t-1]-1 and zero-fill invalid entries; valid mask restores those entries to missing before export.",
+      "limitations": [
+        "Input-universe aggregation, not model portfolio performance.",
+        "Price-return adjustment convention is inherited; total dividends are not independently established."
+      ]
+    },
+    {
+      "project": "hga-mt",
+      "table": "price-only",
+      "kind": "npz",
+      "source": "hga-mt/data/price_only.npz",
+      "dates": "target_dates",
+      "firms": "symbols",
+      "values": "yret",
+      "value_kind": "daily_return",
+      "allowed_invalid_dates": [
+        "9999-12-31"
+      ],
+      "firm_identifier": "Source security symbol",
+      "definition": "Compounded one-session price returns aligned to target_dates in the price-only diagnostic.",
+      "source_review": "scripts/prepare.py computes yret=c.shift(-1)/c-1 and target_dates=dates[1:] plus an absent terminal sentinel. yret is used without the joint risk-label mask.",
+      "limitations": [
+        "Reduced price-only diagnostic, not original full HGA-MT data.",
+        "The final sentinel must have no observed returns and is excluded."
+      ]
+    },
+    {
+      "project": "diffusion-dfl",
+      "table": "crsp-substitute",
+      "kind": "npz",
+      "source": "diffusion-dfl/data/crsp_panel.npz",
+      "dates": "target_dates",
+      "firms": "permnos",
+      "values": "y",
+      "value_kind": "daily_return",
+      "firm_identifier": "CRSP PERMNO security identifier",
+      "definition": "Compounded one-session CRSP CIZ total simple returns aligned to target_dates.",
+      "source_review": "reproduction/prepare.py appends dlyret.shift(-1) to y and supplies the corresponding target_dates explicitly.",
+      "limitations": [
+        "Substitute prepared universe; does not establish paper snapshot equivalence.",
+        "No multi-day diffusion forecast is treated as a monthly score."
+      ]
+    },
+    {
+      "project": "pdu",
+      "table": "nasdaq",
+      "kind": "npz",
+      "source": "pdu/data/NASDAQ.npz",
+      "dates": "dates",
+      "firms": "tickers",
+      "values": "price",
+      "mask": "mask",
+      "transpose": true,
+      "value_kind": "price",
+      "firm_identifier": "Source ticker",
+      "definition": "Exact adjacent month-end source-price ratio; invalid source endpoints remain missing.",
+      "source_review": "prepare_reference.py stores normalized price as security x date and fills missing prices with 1; the source mask is required to remove those placeholders.",
+      "limitations": [
+        "The normalization constant cancels in price ratios.",
+        "Not the overnight label or a portfolio return; source price adjustment convention is inherited."
+      ]
+    },
+    {
+      "project": "pdu",
+      "table": "nyse",
+      "kind": "npz",
+      "source": "pdu/data/NYSE.npz",
+      "dates": "dates",
+      "firms": "tickers",
+      "values": "price",
+      "mask": "mask",
+      "transpose": true,
+      "value_kind": "price",
+      "firm_identifier": "Source ticker",
+      "definition": "Exact adjacent month-end source-price ratio; invalid source endpoints remain missing.",
+      "source_review": "prepare_reference.py stores normalized price as security x date and fills missing prices with 1; the source mask is required to remove those placeholders.",
+      "limitations": [
+        "The normalization constant cancels in price ratios.",
+        "Not the overnight label or a portfolio return; source price adjustment convention is inherited."
+      ]
+    },
+    {
+      "project": "limt",
+      "table": "csi300",
+      "kind": "npy",
+      "source": "limt/data/csi300",
+      "dates": "dates.npy",
+      "firms": "symbols.npy",
+      "values": "market.npy",
+      "channel": 0,
+      "transpose": true,
+      "membership": "member.npy",
+      "value_kind": "price",
+      "firm_identifier": "Source exchange-qualified security symbol",
+      "definition": "Exact adjacent month-end adjusted-close ratio, using market channel 0.",
+      "source_review": "scripts/build_data.py documents market channels as adjusted_close, raw_volume, factor, raw_close, raw_high, raw_low, raw_vwap; array axes are security x date x channel.",
+      "limitations": [
+        "Adjusted-price return, not independently verified dividend-inclusive total return.",
+        "eligible_at_formation records prior month-end membership; returns are retained for the full source security axis.",
+        "Model labels use a different forecast offset and are deliberately not exported as monthly predictions."
+      ]
+    },
+    {
+      "project": "limt",
+      "table": "csi500",
+      "kind": "npy",
+      "source": "limt/data/csi500",
+      "dates": "dates.npy",
+      "firms": "symbols.npy",
+      "values": "market.npy",
+      "channel": 0,
+      "transpose": true,
+      "membership": "member.npy",
+      "value_kind": "price",
+      "firm_identifier": "Source exchange-qualified security symbol",
+      "definition": "Exact adjacent month-end adjusted-close ratio, using market channel 0.",
+      "source_review": "scripts/build_data.py documents market channels as adjusted_close, raw_volume, factor, raw_close, raw_high, raw_low, raw_vwap; array axes are security x date x channel.",
+      "limitations": [
+        "Adjusted-price return, not independently verified dividend-inclusive total return.",
+        "eligible_at_formation records prior month-end membership; returns are retained for the full source security axis.",
+        "Model labels use a different forecast offset and are deliberately not exported as monthly predictions."
+      ]
+    },
+    {
+      "project": "limt-us",
+      "table": "us-total-return",
+      "kind": "npy",
+      "source": "limt-us/data",
+      "dates": "dates.npy",
+      "firms": "symbols.npy",
+      "values": "total_return.npy",
+      "transpose": true,
+      "membership": "member.npy",
+      "value_kind": "daily_return",
+      "firm_identifier": "P-prefixed CRSP PERMNO security identifier (P10078 means PERMNO 10078)",
+      "definition": "Compounded CRSP CIZ total daily returns on the native realization-date axis.",
+      "source_review": "usdata.py retains raw dlyret directly in total_return; labels separately shift dlyretx by two sessions and are not used here.",
+      "limitations": [
+        "Tradeability is not used to erase a valid delisting return.",
+        "No missing daily return is replaced by zero or cash after delisting.",
+        "eligible_at_formation records prior month-end membership; full source axis retained."
+      ]
+    },
+    {
+      "project": "prism-vq",
+      "table": "csi300",
+      "kind": "npy",
+      "source": "prism-vq/data/csi300",
+      "dates": "dates.npy",
+      "firms": "symbols.npy",
+      "values": "totalret.npy",
+      "transpose": true,
+      "membership": "member.npy",
+      "value_kind": "daily_return",
+      "firm_identifier": "Source exchange-qualified symbol",
+      "definition": "Compounded adjusted-close daily price returns.",
+      "source_review": "scripts/build_data.py: CSI totalret[:,1:] is close[:,1:]/close[:,:-1]-1; SP500 totalret copies the raw CRSP dlyret channel. Both are same-day realized returns, unlike the overlapping ranking label.",
+      "limitations": [
+        "Despite the filename totalret.npy, the CSI panel is an adjusted-price ratio; dividend-total-return equivalence is not independently asserted."
+      ]
+    },
+    {
+      "project": "prism-vq",
+      "table": "sp500",
+      "kind": "npy",
+      "source": "prism-vq/data/sp500",
+      "dates": "dates.npy",
+      "firms": "symbols.npy",
+      "values": "totalret.npy",
+      "transpose": true,
+      "membership": "member.npy",
+      "value_kind": "daily_return",
+      "firm_identifier": "P-prefixed CRSP PERMNO security identifier",
+      "definition": "Compounded CRSP CIZ daily total simple returns.",
+      "source_review": "scripts/build_data.py: CSI totalret[:,1:] is close[:,1:]/close[:,:-1]-1; SP500 totalret copies the raw CRSP dlyret channel. Both are same-day realized returns, unlike the overlapping ranking label.",
+      "limitations": [
+        "Tradeability is not used to erase valid delisting returns; missing source days make the monthly return null."
+      ]
+    },
+    {
+      "project": "alphaqcm",
+      "table": "csi300-price-inputs",
+      "kind": "qlib_prices",
+      "source": "csi/qlib/cn_data",
+      "universe": "csi300",
+      "sample_start": "2010-01-01",
+      "sample_end": "2022-12-31",
+      "firm_identifier": "Source exchange-qualified security symbol",
+      "definition": "Exact adjacent month-end native Qlib close ratio for securities whose CSI300 membership overlaps the declared 2010\u20132022 sample.",
+      "source_review": "run.py and implementation.py read native Qlib $close; this exporter reads the same shared close.day.bin fields and calendar offsets directly, then uses exact month-end ratios rather than overlapping 20-session targets.",
+      "limitations": [
+        "Input-universe price returns, not AlphaQCM strategy or monthly forecast performance.",
+        "No daily model score is relabeled as a monthly prediction.",
+        "Vendor adjustment convention is inherited; dividend-total-return equivalence is not independently asserted.",
+        "eligible_at_formation marks prior month-end CSI membership; all selected security rows are retained."
+      ]
+    },
+    {
+      "project": "archetypetrader",
+      "table": "monthly-equity",
+      "kind": "monthly",
+      "source": "archetypetrader/results/analysis/Archetype_full_cost0_positions.parquet",
+      "month": "yyyymm",
+      "month_encoding": "yyyymm",
+      "firm": "permno",
+      "return": "source_return",
+      "firm_identifier": "CRSP PERMNO security identifier",
+      "definition": "Actual calendar-month total simple return preserved in the monthly equity adaptation position ledger, including unheld eligible securities.",
+      "source_review": "portfolio.py backtest copies z[total_return] unchanged to source_return; used_return is separately zero-filled and is deliberately not exported. analyze.py verifies source_return against the original panel and averages seed scores by yyyymm/permno.",
+      "scores": {
+        "source": "archetypetrader/results/analysis/ensemble_predictions.parquet",
+        "month": "yyyymm",
+        "firm": "permno",
+        "value": "prediction",
+        "meaning": "Prespecified mean monthly Archetype full policy score across saved seeds; not a calibrated return forecast",
+        "sample": "predicted"
+      },
+      "limitations": [
+        "Original financial-graph input cache is unavailable; realized returns are taken from the retained source_return field, not independently reloaded from that missing cache.",
+        "Monthly US equity adaptation, not original high-frequency crypto experiment."
+      ]
+    },
+    {
+      "project": "prophets-profit",
+      "table": "equity-monthly",
+      "kind": "monthly",
+      "source": "prophets-profit/equity/data/panel.parquet",
+      "month": "date",
+      "month_encoding": "date",
+      "firm": "permno",
+      "return": "target_return",
+      "observed": "label_available",
+      "firm_identifier": "CRSP PERMNO security identifier; distinct from company PERMCO",
+      "definition": "Actual CRSP holding-calendar-month total simple return in the equity extension, paired with same-month outperformance probability.",
+      "source_review": "equity/build_panel.py exact-joins r.ym=u.ym+1, r.ret=CRSP mthret; date is that holding month end. No shift across missing months. run_equity.py fits a logistic model and saves p for the holding-month target.",
+      "scores": {
+        "source": "prophets-profit/equity/data/predictions.parquet",
+        "month": "date",
+        "firm": "permno",
+        "value": "p",
+        "return": "target_return",
+        "meaning": "Probability the security holding-month total return exceeds broad market total return; not expected return",
+        "sample": "predicted"
+      },
+      "limitations": [
+        "Equity extension, not the original binary-event-contract theorem.",
+        "Missing target returns remain null; portfolio missing-return substitutions are not used."
+      ]
+    },
+    {
+      "project": "multihorizon-forecast",
+      "table": "daily-input-monthly",
+      "kind": "daily_partitions",
+      "sources": [
+        "multihorizon-forecast/data/panel-1990.parquet",
+        "multihorizon-forecast/data/panel-1991.parquet",
+        "multihorizon-forecast/data/panel-1992.parquet",
+        "multihorizon-forecast/data/panel-1993.parquet",
+        "multihorizon-forecast/data/panel-1994.parquet",
+        "multihorizon-forecast/data/panel-1995.parquet",
+        "multihorizon-forecast/data/panel-1996.parquet",
+        "multihorizon-forecast/data/panel-1997.parquet",
+        "multihorizon-forecast/data/panel-1998.parquet",
+        "multihorizon-forecast/data/panel-1999.parquet",
+        "multihorizon-forecast/data/panel-2000.parquet",
+        "multihorizon-forecast/data/panel-2001.parquet",
+        "multihorizon-forecast/data/panel-2002.parquet",
+        "multihorizon-forecast/data/panel-2003.parquet",
+        "multihorizon-forecast/data/panel-2004.parquet",
+        "multihorizon-forecast/data/panel-2005.parquet",
+        "multihorizon-forecast/data/panel-2006.parquet",
+        "multihorizon-forecast/data/panel-2007.parquet",
+        "multihorizon-forecast/data/panel-2008.parquet",
+        "multihorizon-forecast/data/panel-2009.parquet",
+        "multihorizon-forecast/data/panel-2010.parquet",
+        "multihorizon-forecast/data/panel-2011.parquet",
+        "multihorizon-forecast/data/panel-2012.parquet",
+        "multihorizon-forecast/data/panel-2013.parquet",
+        "multihorizon-forecast/data/panel-2014.parquet",
+        "multihorizon-forecast/data/panel-2015.parquet",
+        "multihorizon-forecast/data/panel-2016.parquet",
+        "multihorizon-forecast/data/panel-2017.parquet",
+        "multihorizon-forecast/data/panel-2018.parquet",
+        "multihorizon-forecast/data/panel-2019.parquet",
+        "multihorizon-forecast/data/panel-2020.parquet",
+        "multihorizon-forecast/data/panel-2021.parquet",
+        "multihorizon-forecast/data/panel-2022.parquet",
+        "multihorizon-forecast/data/panel-2023.parquet",
+        "multihorizon-forecast/data/panel-2024.parquet",
+        "multihorizon-forecast/data/panel-2025.parquet"
+      ],
+      "calendar": "multihorizon-forecast/data/calendar.parquet",
+      "date": "date",
+      "firm": "permno",
+      "return": "ret_1",
+      "firm_identifier": "CRSP PERMNO security identifier",
+      "definition": "Calendar-month compound of actual single-session CRSP total simple returns present in the prepared eligible security panel. Incomplete security-months remain unavailable.",
+      "source_review": "scripts/prepare.py assigns ret_1=d.ret, directly from dated CRSP dlyret. It is a contemporaneous one-day input. yret_1/yret_5/yret_21 are forward labels and never used here. Eligibility is prior-month; source history_ok filters may remove dates, which this exporter treats as missing.",
+      "limitations": [
+        "Only firm-month keys appearing in the prepared panel are included; universe/history filters are inherited.",
+        "Every source calendar session must have a finite security return; delisted/incompletely observed months remain null rather than silently treated as cash.",
+        "First and last panel months excluded conservatively. No multi-session model prediction is relabeled as monthly."
+      ]
+    }
+  ],
+  "references": [
+    {
+      "project": "RADAR",
+      "table": "shared-sp500-inputs",
+      "references": "prism-vq/sp500",
+      "definition": "RADAR CZ adaptation reads the exact PRISM-VQ SP500 dates.npy, symbols.npy and totalret.npy arrays; reuse that existing month-return table.",
+      "evidence": "prism-vq/experiments/cz_vw/build.py shares base arrays; archived data/{dates,symbols,totalret}.npy symlinks target prism-vq-reproduction/data/sp500. RADAR protocol-pr/experiments/cz_vw/data.py consumes --shared_data.",
+      "limitations": [
+        "Reference covers the shared input return universe, not only RADAR prediction rows or its altered member screen.",
+        "Daily RADAR prediction scores are not monthly forecasts."
+      ]
+    }
+  ]
+}
