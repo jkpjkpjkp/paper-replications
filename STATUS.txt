@@ -1,0 +1,24 @@
+2: at least one representative experiment matches the paper's claim
+
+
+
+Scope: Independent rerun of the original-data portfolio experiment.
+
+Evidence and explanation:
+All 109 rolling windows, 16 radii and three methods ran (5,232 portfolios). Across the
+nine authors' saved cumulative-return endpoints the maximum relative discrepancy is
+0.287%; deterministic DRO-BASPE differs by at most about 0.002%. For example, BASPE at
+radius 1e-5 gives 8.996753 versus 8.996575. These are sums of weekly returns, not wealth
+multiples. Optimization checks passed; the percentage differences are numerical
+tolerances, not statistical confidence intervals.
+
+Limits / next requirement:
+Only the finance section was reproduced. Other paper experiments and original
+solver/hardware timings are not established, so this is level 2 rather than whole-paper
+level 3.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/Bayesian/DRO/README.md
+- ../.replication-local/artifacts/Bayesian/DRO/results/full/authors_endpoints_comparison.csv
+- ../.replication-local/artifacts/Bayesian/DRO/results/full/validation.json
+

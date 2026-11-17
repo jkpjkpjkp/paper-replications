@@ -1,0 +1,898 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "DRO",
+  "title": "Decision Making under the Exponential Family: Distributionally Robust Optimisation with Bayesian Ambiguity Sets",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/Bayesian/DRO/2411.16829v2.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/Bayesian/DRO/2411.16829v2.pdf",
+    "sha256": "09a81456feed9bdad5157f6f4229bf0e29b1e1f1364cceb9bd4631ed58abc901",
+    "bytes": 1344174,
+    "urls": [
+      "https://arxiv.org/abs/2411.16829v2"
+    ]
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 33,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 124
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 125,
+      "line_end": 243
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 244,
+      "line_end": 378
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 379,
+      "line_end": 517
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 518,
+      "line_end": 678
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 679,
+      "line_end": 825
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 826,
+      "line_end": 1146
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 1147,
+      "line_end": 1267
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1268,
+      "line_end": 1369
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1370,
+      "line_end": 1474
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1475,
+      "line_end": 1518
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1519,
+      "line_end": 1654
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1655,
+      "line_end": 2005
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 2006,
+      "line_end": 2188
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 2189,
+      "line_end": 2393
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 2394,
+      "line_end": 2518
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 2519,
+      "line_end": 2753
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 2754,
+      "line_end": 2979
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 2980,
+      "line_end": 3161
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 3162,
+      "line_end": 3351
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 3352,
+      "line_end": 3460
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 3461,
+      "line_end": 3649
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 3650,
+      "line_end": 3805
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 3806,
+      "line_end": 3902
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 3903,
+      "line_end": 4026
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 4027,
+      "line_end": 4092
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 4093,
+      "line_end": 4305
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 4306,
+      "line_end": 4465
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 4466,
+      "line_end": 4578
+    },
+    {
+      "page": 30,
+      "segment": 30,
+      "line_start": 4579,
+      "line_end": 4693
+    },
+    {
+      "page": 31,
+      "segment": 31,
+      "line_start": 4694,
+      "line_end": 4764
+    },
+    {
+      "page": 32,
+      "segment": 32,
+      "line_start": 4765,
+      "line_end": 4993
+    },
+    {
+      "page": 33,
+      "segment": 33,
+      "line_start": 4994,
+      "line_end": 5071
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 87
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 88,
+      "line_end": 153
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 154,
+      "line_end": 221
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 222,
+      "line_end": 307
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 308,
+      "line_end": 392
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 393,
+      "line_end": 472
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 473,
+      "line_end": 588
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 589,
+      "line_end": 663
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 664,
+      "line_end": 726
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 727,
+      "line_end": 790
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 791,
+      "line_end": 843
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 844,
+      "line_end": 917
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 918,
+      "line_end": 1032
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1033,
+      "line_end": 1124
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1125,
+      "line_end": 1211
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1212,
+      "line_end": 1293
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1294,
+      "line_end": 1386
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1387,
+      "line_end": 1477
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1478,
+      "line_end": 1575
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1576,
+      "line_end": 1656
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1657,
+      "line_end": 1724
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 1725,
+      "line_end": 1813
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 1894,
+      "line_end": 1962
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 1963,
+      "line_end": 2042
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 2043,
+      "line_end": 2103
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 2104,
+      "line_end": 2199
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 2200,
+      "line_end": 2262
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 2263,
+      "line_end": 2333
+    },
+    {
+      "page": 30,
+      "segment": 30,
+      "line_start": 2334,
+      "line_end": 2400
+    },
+    {
+      "page": 31,
+      "segment": 31,
+      "line_start": 2401,
+      "line_end": 2472
+    },
+    {
+      "page": 32,
+      "segment": 32,
+      "line_start": 2473,
+      "line_end": 2554
+    },
+    {
+      "page": 33,
+      "segment": 33,
+      "line_start": 2555,
+      "line_end": 2595
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 20,
+      "text": "Abstract"
+    },
+    {
+      "line": 103,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 148,
+      "text": "2. Background"
+    },
+    {
+      "line": 184,
+      "text": "1. We define Bayesian Ambiguity Sets (BAS) which leverage posterior beliefs about the parameters of interest."
+    },
+    {
+      "line": 188,
+      "text": "2. We show that DRO-BASPP attains a dual formulation"
+    },
+    {
+      "line": 320,
+      "text": "3. Bayesian Ambiguity Sets"
+    },
+    {
+      "line": 371,
+      "text": "3.1. BAS via Posterior Predictive (BASPP )"
+    },
+    {
+      "line": 429,
+      "text": "3.2. BAS via Posterior Expectation (BASPE )"
+    },
+    {
+      "line": 433,
+      "text": "3.3. DRO-BASPE for the Exponential Family"
+    },
+    {
+      "line": 603,
+      "text": "3.4. Let η̂ ≜ EΠ(η|⌢τ ,⌢ν ) [η] and define G : T → R as:"
+    },
+    {
+      "line": 643,
+      "text": "3.4. Tolerance Level Selection"
+    },
+    {
+      "line": 738,
+      "text": "3.6. Worst-case BAS Distribution"
+    },
+    {
+      "line": 761,
+      "text": "3.5. Computation"
+    },
+    {
+      "line": 1061,
+      "text": "1.0 BDRO"
+    },
+    {
+      "line": 1138,
+      "text": "4. Experiments"
+    },
+    {
+      "line": 1168,
+      "text": "4.1. DRO-BAS on the Newsvendor Problem"
+    },
+    {
+      "line": 1216,
+      "text": "4.2. DRO-BAS on the Real-world Portfolio Problem"
+    },
+    {
+      "line": 1284,
+      "text": "A LGORITHM"
+    },
+    {
+      "line": 1286,
+      "text": "S OLVE TIME"
+    },
+    {
+      "line": 1288,
+      "text": "S AMPLE (×104 )"
+    },
+    {
+      "line": 1347,
+      "text": "5. Discussion"
+    },
+    {
+      "line": 1407,
+      "text": "References"
+    },
+    {
+      "line": 3866,
+      "text": "1. For each x = 0, 1, . . . , 50, evaluate (37). Let x⋆ be the minimum attained."
+    },
+    {
+      "line": 3867,
+      "text": "2. For each x from x⋆ − 1 to x⋆ + 1 in increments of 0.01, evaluate (37) and return the minimum attained."
+    },
+    {
+      "line": 4276,
+      "text": "1 XX"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2757
+    },
+    {
+      "id": 39,
+      "line_start": 2750,
+      "line_end": 2829
+    },
+    {
+      "id": 40,
+      "line_start": 2822,
+      "line_end": 2901
+    },
+    {
+      "id": 41,
+      "line_start": 2894,
+      "line_end": 2973
+    },
+    {
+      "id": 42,
+      "line_start": 2966,
+      "line_end": 3045
+    },
+    {
+      "id": 43,
+      "line_start": 3038,
+      "line_end": 3117
+    },
+    {
+      "id": 44,
+      "line_start": 3110,
+      "line_end": 3189
+    },
+    {
+      "id": 45,
+      "line_start": 3182,
+      "line_end": 3261
+    },
+    {
+      "id": 46,
+      "line_start": 3254,
+      "line_end": 3333
+    },
+    {
+      "id": 47,
+      "line_start": 3326,
+      "line_end": 3405
+    },
+    {
+      "id": 48,
+      "line_start": 3398,
+      "line_end": 3477
+    },
+    {
+      "id": 49,
+      "line_start": 3470,
+      "line_end": 3549
+    },
+    {
+      "id": 50,
+      "line_start": 3542,
+      "line_end": 3621
+    },
+    {
+      "id": 51,
+      "line_start": 3614,
+      "line_end": 3693
+    },
+    {
+      "id": 52,
+      "line_start": 3686,
+      "line_end": 3765
+    },
+    {
+      "id": 53,
+      "line_start": 3758,
+      "line_end": 3837
+    },
+    {
+      "id": 54,
+      "line_start": 3830,
+      "line_end": 3909
+    },
+    {
+      "id": 55,
+      "line_start": 3902,
+      "line_end": 3981
+    },
+    {
+      "id": 56,
+      "line_start": 3974,
+      "line_end": 4053
+    },
+    {
+      "id": 57,
+      "line_start": 4046,
+      "line_end": 4125
+    },
+    {
+      "id": 58,
+      "line_start": 4118,
+      "line_end": 4197
+    },
+    {
+      "id": 59,
+      "line_start": 4190,
+      "line_end": 4269
+    },
+    {
+      "id": 60,
+      "line_start": 4262,
+      "line_end": 4341
+    },
+    {
+      "id": 61,
+      "line_start": 4334,
+      "line_end": 4413
+    },
+    {
+      "id": 62,
+      "line_start": 4406,
+      "line_end": 4485
+    },
+    {
+      "id": 63,
+      "line_start": 4478,
+      "line_end": 4557
+    },
+    {
+      "id": 64,
+      "line_start": 4550,
+      "line_end": 4629
+    },
+    {
+      "id": 65,
+      "line_start": 4622,
+      "line_end": 4701
+    },
+    {
+      "id": 66,
+      "line_start": 4694,
+      "line_end": 4773
+    },
+    {
+      "id": 67,
+      "line_start": 4766,
+      "line_end": 4845
+    },
+    {
+      "id": 68,
+      "line_start": 4838,
+      "line_end": 4917
+    },
+    {
+      "id": 69,
+      "line_start": 4910,
+      "line_end": 4989
+    },
+    {
+      "id": 70,
+      "line_start": 4982,
+      "line_end": 5061
+    },
+    {
+      "id": 71,
+      "line_start": 5054,
+      "line_end": 5072
+    }
+  ],
+  "line_count": 5072,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "8c95d7fb9bbf842bc63ade4e0e5215ef257c975599813e940119f77470d7aef4",
+      "bytes": 110187
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "594ffa5d43d76c93f7c1fab89e8d85a424004a0a4e7d1eaf0b32bcf5f89dadac",
+      "bytes": 219140
+    }
+  }
+}

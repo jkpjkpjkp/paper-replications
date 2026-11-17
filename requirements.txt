@@ -1,0 +1,8 @@
+numpy>=1.26
+scipy>=1.11
+pandas>=2.1
+matplotlib>=3.8
+cvxpy>=1.5
+clarabel>=0.9
+ecos>=2.0.14
+pytest>=8

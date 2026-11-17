@@ -1,0 +1,10 @@
+Decision Making under the Exponential Family: Distributionally Robust Optimisation with Bayesian Ambiguity Sets
+
+Condensed abstract
+
+Introduces distributionally robust optimization using ambiguity sets derived from
+Bayesian posterior expectations or posterior predictive distributions. Under stated
+conditions, dual formulations turn worst-case decision problems into tractable
+stochastic programs. Newsvendor and portfolio experiments demonstrate improved
+robustness or faster computation relative to existing Bayesian robust optimization
+methods.
