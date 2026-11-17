@@ -1,0 +1,70 @@
+2: NGBoost UCI Yacht, fresh 20-split component benchmark: NLL 0.411059 vs paper 0.20 +/- 0.26; RMSE 0.622483 vs 0.50 +/- 0.20. Approximate published-band agreement only.
+Assessment date: 2026-11-17 (Asia/Shanghai)
+
+Scope: Fresh training of the existing Gaussian NGBoost component using the
+explicit paper configuration and Section 4 validation-NLL selection rule from
+Duan et al. (2020), Tables 1 and 3. This is NOT a replication of the monthly
+CRSP study, of SHARV/CMK/neural models, or of all NGBoost paper experiments.
+Both local means are worse; exact numerical reproduction is unproven.
+
+Primary comparison:
+- NLL (nats/example): local 0.411059344, split SD 0.262116781, split SEM
+  0.058611094; paper 0.20 +/- 0.26. Absolute error 0.211059344, arithmetic
+  relative error 105.529672%; frozen descriptive tolerance 0.26.
+- RMSE (Yacht target units): local 0.622482934, split SD 0.196061022,
+  split SEM 0.043840577; paper 0.50 +/- 0.20. Absolute error 0.122482934,
+  relative error 24.496587%; frozen descriptive tolerance 0.20.
+- All 20 splits completed. Primary selected stages 353-487, none at the
+  2,000-stage cap. 277 development / 31 test rows per split; 221/56 inner split.
+
+Tolerance / uncertainty limits:
+Both primary means fall within the corresponding published +/- bands, the
+comparison rule frozen before fitting. This supports a scoped approximate
+level 2, not rounding agreement or statistical equivalence. Table 1 calls
+error bars standard errors, while the current author script prints np.std.
+The original error-bar type is unresolved; local SD (ddof=1) and SEM are
+reported separately. Split reuse also prevents treating the SEM as independent
+population-level uncertainty. If the original bars are SD, a precision-based
+comparison of means would be stricter than this descriptive band criterion.
+
+PRESERVED FAILED DIAGNOSTIC / PROTOCOL DISCREPANCY:
+The current author script selects stages by validation MSE; the paper says
+validation log-likelihood. The predeclared MSE-selection diagnostic on the same
+fits yields NLL 1.951416781 +/- 2.361532336 split SD versus 0.20 +/- 0.26,
+absolute gap 1.751416781 (875.708391% arithmetic relative error), failing the
+0.26 tolerance. Its RMSE is 0.611005447 +/- 0.225330579 split SD. Nine diagnostic
+selections hit the cap. This discrepancy is not resolved by the primary result.
+It is not an exact replay of the original code/runtime or proof of paper error.
+
+Verification:
+Independent rescoring of all 620 test predictions matches saved split and
+aggregate metrics within 1.33227e-15. Data hash, author outer-split rule,
+within-split partition disjointness, target alignment and validation-only
+selection checked. The shared wrapper's monthly-default predictions remain
+bitwise identical in a deterministic pre/post check. Archived CRSP results
+were not overwritten or retrained.
+
+Remaining gaps:
+Modern NGBoost 0.5.11 / sklearn 1.9.1 runtime and locally fixed inner/tree seeds
+differ from unrecovered original-run provenance. Resolve uncertainty labels
+and the author-code selection discrepancy for stronger numerical claims.
+The whole monthly CRSP study still lacks an original-paper empirical target.
+No main-method claim for the other cited papers follows from this benchmark.
+
+History:
+Earlier 2026-11-17 grade 0 recorded no selected original-paper target, despite
+completed independent CRSP forecasts and implementation checks. The current
+task resolves that gate only for a scoped NGBoost component experiment.
+
+Evidence paths (relative to this STATUS.txt):
+- NGBOOST_YACHT_REPRODUCTION.txt: full protocol, caveats and rerun command
+- scripts/reproduce_ngboost_yacht.py and scripts/models.py
+- .agent/PAPER_INDEX.json, PAPER_TEXT.txt and PAPER_LAYOUT.txt: full paper
+- ../.replication-local/runs/monthly-ngboost-20261117/experiment/protocol.json
+- ../.replication-local/runs/monthly-ngboost-20261117/experiment/summary.json
+- ../.replication-local/runs/monthly-ngboost-20261117/experiment/all_splits.json
+- ../.replication-local/runs/monthly-ngboost-20261117/audit.json
+- ../.replication-local/runs/monthly-ngboost-20261117/defaults-check.json
+- ../.replication-local/runs/monthly-ngboost-20261117/provenance.json
+- ../.replication-local/artifacts/monthly-coforecast/README.txt
+- ../.replication-local/artifacts/monthly-coforecast/results/verification.json

@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "monthly-coforecast",
+  "title": "NGBoost: Natural Gradient Boosting for Probabilistic Prediction",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/runs/monthly-ngboost-20261117/sources/duan20a.pdf",
+    "path_relative_to_collection": ".replication-local/runs/monthly-ngboost-20261117/sources/duan20a.pdf",
+    "sha256": "ba05d460d20c43e5eba6538a6a9b01ad5ac72a8d9e0178a48ed29274fc0888be",
+    "bytes": 643689,
+    "urls": [
+      "https://proceedings.mlr.press/v119/duan20a.html"
+    ]
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "Scoped component benchmark selected on 2026-11-17: Gaussian NGBoost on UCI Yacht, Tables 1 and 3. The monthly CRSP study remains an independent model-family comparison, not a reproduction of this paper's full experiments or of the other cited papers.",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 11,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 86
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 87,
+      "line_end": 174
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 175,
+      "line_end": 316
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 317,
+      "line_end": 484
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 485,
+      "line_end": 621
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 622,
+      "line_end": 690
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 691,
+      "line_end": 889
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 890,
+      "line_end": 1054
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1055,
+      "line_end": 1137
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1138,
+      "line_end": 1217
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1218,
+      "line_end": 1238
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 16,
+      "line_end": 74
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 75,
+      "line_end": 142
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 143,
+      "line_end": 212
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 213,
+      "line_end": 285
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 286,
+      "line_end": 368
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 369,
+      "line_end": 420
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 421,
+      "line_end": 492
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 493,
+      "line_end": 561
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 562,
+      "line_end": 633
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 634,
+      "line_end": 696
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 697,
+      "line_end": 726
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 21,
+      "text": "Abstract"
+    },
+    {
+      "line": 23,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 144,
+      "text": "2. Summary of Contributions"
+    },
+    {
+      "line": 159,
+      "text": "3. Natural Gradient Boosting"
+    },
+    {
+      "line": 166,
+      "text": "3.1. Proper Scoring Rules"
+    },
+    {
+      "line": 231,
+      "text": "3.2. The Generalized Natural Gradient"
+    },
+    {
+      "line": 451,
+      "text": "3.3. Gradient Boosting"
+    },
+    {
+      "line": 476,
+      "text": "3.4. NGBoost: Natural Gradient Boosting"
+    },
+    {
+      "line": 612,
+      "text": "3.5. Analysis and Discussion"
+    },
+    {
+      "line": 684,
+      "text": "4. Experiments"
+    },
+    {
+      "line": 870,
+      "text": "4.1. Probabilistic Regression."
+    },
+    {
+      "line": 1025,
+      "text": "4.2. Ablation"
+    },
+    {
+      "line": 1047,
+      "text": "4.3. Point estimation"
+    },
+    {
+      "line": 1064,
+      "text": "0.01. All other parameters were left to their default values."
+    },
+    {
+      "line": 1072,
+      "text": "5. Conclusions"
+    },
+    {
+      "line": 1141,
+      "text": "References"
+    },
+    {
+      "line": 1169,
+      "text": "A Gradient Boosting Machine. The Annals of Statistics,"
+    },
+    {
+      "line": 1193,
+      "text": "1869. JMLR.org."
+    },
+    {
+      "line": 1200,
+      "text": "3154. Curran Associates, Inc."
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 15,
+      "line_end": 94
+    },
+    {
+      "id": 2,
+      "line_start": 87,
+      "line_end": 166
+    },
+    {
+      "id": 3,
+      "line_start": 159,
+      "line_end": 238
+    },
+    {
+      "id": 4,
+      "line_start": 231,
+      "line_end": 310
+    },
+    {
+      "id": 5,
+      "line_start": 303,
+      "line_end": 382
+    },
+    {
+      "id": 6,
+      "line_start": 375,
+      "line_end": 454
+    },
+    {
+      "id": 7,
+      "line_start": 447,
+      "line_end": 526
+    },
+    {
+      "id": 8,
+      "line_start": 519,
+      "line_end": 598
+    },
+    {
+      "id": 9,
+      "line_start": 591,
+      "line_end": 670
+    },
+    {
+      "id": 10,
+      "line_start": 663,
+      "line_end": 742
+    },
+    {
+      "id": 11,
+      "line_start": 735,
+      "line_end": 814
+    },
+    {
+      "id": 12,
+      "line_start": 807,
+      "line_end": 886
+    },
+    {
+      "id": 13,
+      "line_start": 879,
+      "line_end": 958
+    },
+    {
+      "id": 14,
+      "line_start": 951,
+      "line_end": 1030
+    },
+    {
+      "id": 15,
+      "line_start": 1023,
+      "line_end": 1102
+    },
+    {
+      "id": 16,
+      "line_start": 1095,
+      "line_end": 1174
+    },
+    {
+      "id": 17,
+      "line_start": 1167,
+      "line_end": 1239
+    },
+    {
+      "id": 18,
+      "line_start": 1239,
+      "line_end": 1239
+    }
+  ],
+  "line_count": 1239,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "ce5c3af24fa34df0389ea24ccfbd35ca6f3c5b3bcdd51bd822435e2ef0ef0a61",
+      "bytes": 48330
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "76f8effee9a466ebcaa8eac675aadf8ae0a1b07eb25ad952b16f58e624323cd1",
+      "bytes": 65564
+    }
+  }
+}

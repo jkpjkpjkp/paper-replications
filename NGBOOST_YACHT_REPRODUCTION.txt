@@ -1,0 +1,102 @@
+NGBOOST YACHT: FRESH COMPONENT BENCHMARK
+Assessment date: 2026-11-17 (Asia/Shanghai)
+
+Result: approximate agreement under a predeclared published-error-band
+tolerance; exact numerical reproduction is NOT established. Both local means
+are worse than the paper's means. This only checks the Gaussian NGBoost
+component with paper settings, not the monthly CRSP study or the other models.
+
+Paper: Duan et al. (2020), NGBoost: Natural Gradient Boosting for Probabilistic
+Prediction, ICML / PMLR 119:2690-2700.
+https://proceedings.mlr.press/v119/duan20a.html
+Original PDF pages 6-8 visually checked; Table 1 (PDF p. 7) and Table 3 (p. 8).
+
+PRIMARY EXPERIMENT: SECTION 4 VALIDATION-NLL SELECTION
+Metric              Paper          Local mean   Local split SD   Local split SEM
+NLL (nats/example)  0.20 +/- 0.26   0.411059344  0.262116781      0.058611094
+RMSE (target units) 0.50 +/- 0.20   0.622482934  0.196061022      0.043840577
+
+NLL absolute error: 0.211059344; arithmetic relative error: 105.529672%.
+RMSE absolute error: 0.122482934; relative error: 24.496587%.
+Frozen tolerance: both means must be within the corresponding published
+plus/minus band (0.26 NLL and 0.20 RMSE). Both pass this descriptive criterion.
+This is not rounding agreement or a formal statistical equivalence test.
+Relative changes in NLL are not invariant to target units; the absolute NLL
+gap and the explicit tolerance are more useful than its relative percentage.
+
+Uncertainty caveat: Table 1's caption calls the error bars standard errors,
+but the current author script reports np.std with ddof=0. The original bars'
+type is unresolved. We do not silently relabel them as SD or CI. Local SD uses
+ddof=1; SEM is SD/sqrt(20). The splits reuse the same 308 observations, so the
+SEM is descriptive and is not population-level independent-sample uncertainty.
+If the published bars are SD rather than SEM, a comparison of mean precision
+would be stricter than the tolerance used here; a precise match is unproven.
+
+PROTOCOL AND IMPLEMENTATION
+UCI Yacht: 308 rows, six features, final-column residuary resistance target.
+20 outer splits from RandomState(1), using the author script's permutation
+rule: 277 development rows, 31 held-out test rows per split. Each development
+set is split into 221 training and 56 validation rows. Select the number of
+stages by minimum validation NLL, then refit on all 277 development rows.
+Gaussian NGBoost, log score, natural gradient, depth-3 regression trees,
+minimum leaf size 1, learning rate 0.01, full minibatches, 2,000-stage cap.
+Raw features and target units; no monthly-return scaling, clipping or row cap.
+Primary chosen stages range from 353 to 487; no primary fit hits the cap.
+Inner split seeds: 10000+split; tuning seeds: 20000+split; refit: 30000+split.
+These seeds are local explicit choices, not recovered paper-run seeds.
+
+Training calls scripts/models.py:NGB.paper_benchmark and its shared fit/predict
+methods. The 2,000-stage ceiling comes from the current author Yacht launcher;
+the paper does not specify the ceiling. The installed runtime is modern:
+Python 3.11.16, NGBoost 0.5.11, scikit-learn 1.9.1, NumPy 2.4.6, SciPy 1.17.1.
+This is fresh training, not replay of published predictions. The monthly
+defaults retain their original depth-2/minimum-leaf-100/learning-rate-0.03
+configuration, target scaling and variance clipping.
+
+PRESERVED PROTOCOL DISCREPANCY / FAILED DIAGNOSTIC
+The checked author script selects stages with argmin(val_rmse), although
+Section 4 specifies validation log-likelihood. Before fitting, we declared
+an MSE-selection diagnostic on exactly the same trained paths and test sets.
+Its NLL is 1.951416781 +/- 2.361532336 split SD versus paper 0.20 +/- 0.26:
+absolute gap 1.751416781, outside the frozen 0.26 tolerance. RMSE is
+0.611005447 +/- 0.225330579 split SD versus 0.50 +/- 0.20. Nine of these
+diagnostic selections hit 2,000 stages. This diagnostic is not an exact replay
+of the original runtime or proof of a flaw in the paper; it demonstrates that
+the documented selection difference materially affects this local result.
+Neither the mismatch nor the primary mean gaps should be hidden by grade 2.
+
+CHECKS
+All 620 held-out prediction rows were independently rescored using SciPy.
+Maximum discrepancy from saved split/aggregate metrics: 1.33227e-15.
+Verified data hash, exact outer partitions, disjoint train/validation/test
+indices within each split, test-label alignment, validation-only selection,
+positive finite variances, and stage-count indexing. A deterministic check
+against the pre-edit NGB wrapper found bitwise identical monthly-default
+predictions. Existing CRSP forecasts and archived results were not retrained.
+
+EVIDENCE (relative to project root)
+Run root: ../.replication-local/runs/monthly-ngboost-20261117/
+- experiment/protocol.json: targets and tolerance written before fitting
+- experiment/summary.json and all_splits.json: complete metrics
+- experiment/split-00/ through split-19/: partitions, validation curves,
+  predictions and metrics; every split retained
+- audit.json and defaults-check.json: independent checks
+- run.log: completed 20-split training output
+- sources/duan20a.pdf, paper-layout.txt, page-06/07/08.png: original paper
+- sources/yacht_hydrodynamics.data: frozen public input
+- provenance.json: source URLs, upstream commit and SHA-256 hashes
+- upstream/examples/experiments/regression_exp.py: author protocol discrepancy
+- source/: exact local runner and model snapshot used for training
+
+RERUN (new output directory required)
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  ../.replication-local/artifacts/monthly-coforecast/.venv/bin/python \
+  scripts/reproduce_ngboost_yacht.py \
+  --data-file ../.replication-local/runs/monthly-ngboost-20261117/sources/yacht_hydrodynamics.data \
+  --run-dir ../.replication-local/runs/monthly-ngboost-yacht-rerun --jobs 2
+
+Assessment: scoped level 2, approximate fresh NGBoost component benchmark
+only. The independent monthly coforecasting study has no paper-matched CRSP
+target. SHARV, CMK, neural models and the other main paper experiments are not
+validated by this result. Earlier level 0 meant no original-paper target had
+been selected; this task resolves that gate only for the NGBoost component.

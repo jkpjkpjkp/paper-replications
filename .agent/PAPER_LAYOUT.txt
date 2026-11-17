@@ -1,0 +1,727 @@
+NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/runs/monthly-ngboost-20261117/sources/duan20a.pdf
+Source SHA-256: ba05d460d20c43e5eba6538a6a9b01ad5ac72a8d9e0178a48ed29274fc0888be
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Note: Scoped component benchmark selected on 2026-11-17: Gaussian NGBoost on UCI Yacht, Tables 1 and 3. The monthly CRSP study remains an independent model-family comparison, not a reproduction of this paper's full experiments or of the other cited papers.
+Layout extraction: spacing retains approximate PDF columns and tables.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+            NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+
+           Tony Duan * 1 Anand Avati * 1 Daisy Yi Ding 1 Khanh K. Thai 2 Sanjay Basu 3 Andrew Ng 1
+                                              Alejandro Schuler 2
+
+
+                          Abstract
+                                                                         Predicted mean
+      We present Natural Gradient Boosting (NG-                          95% prediction interval
+
+      Boost), an algorithm for generic probabilistic
+      prediction via gradient boosting. Typical regres-         y
+      sion models return a point estimate, conditional
+      on covariates, but probabilistic regression mod-
+      els output a full probability distribution over the
+      outcome space, conditional on the covariates.
+                                                                                                   x
+      This allows for predictive uncertainty estima-
+      tion — crucial in applications like healthcare and
+      weather forecasting. NGBoost generalizes gradi-          Figure 1. Prediction intervals for a toy 1-dimensional probabilis-
+      ent boosting to probabilistic regression by treat-       tic regression problem, fit via NGBoost. The dots represent data
+      ing the parameters of the conditional distribu-          points. The thick black line is the predicted mean after fitting
+      tion as targets for a multiparameter boosting al-        the model. The thin gray lines are the upper and lower quantiles
+      gorithm. Furthermore, we show how the Natural            covering 95% of the prediction distribution.
+      Gradient is required to correct the training dy-
+      namics of our multiparameter boosting approach.
+      NGBoost can be used with any base learner, any           on structured medical records of the patient (Avati et al.,
+      family of distributions with continuous parame-          2018)) are important examples.
+      ters, and any scoring rule. NGBoost matches or           Most machine learning methods tackle this problem with
+      exceeds the performance of existing methods for          point prediction, returning a single “best guess” prediction
+      probabilistic prediction while offering additional       (e.g. the temperature tomorrow will be 16◦ C). However,
+      benefits in flexibility, scalability, and usability.     in these fields it is often important to be able to quantify
+      An open-source implementation is available at            uncertainty in the prediction or be able to answer multiple
+      github.com/stanfordmlgroup/ngboost.                      questions on the fly (e.g. what’s the probability it will be
+                                                               between 18◦ C and 20◦ C? What about <15◦ C?) (Kruchten,
+                                                               2016).
+1. Introduction
+                                                               In order to answer arbitrary questions about the probability
+Many important supervised machine learning problems are        of events conditional on covariates, we must estimate the
+regression problems. Weather forecasting (predicting tem-      conditional probability distribution P (y|x) for each value
+perature of the next day based on today’s atmospheric vari-    of x instead of producing a point estimate like E[y|x]. This
+ables (Gneiting and Katzfuss, 2014)) and clinical predic-      is called probabilistic regression. Probabilistic regression
+tion (predicting time to mortality with survival prediction    is increasingly being used in fields like meteorology and
+  *
+                                                               healthcare (Gneiting and Raftery, 2007; Avati et al., 2019).
+    Equal contribution 1 Stanford University, Stanford, Cal-
+ifornia, United States 2 Unlearn.ai, San Francisco, Cal-       Probabilistic estimation is already the norm in classifica-
+ifornia, United States 3 Harvard Medical School, Cam-          tion problems. Although some classifiers (e.g. standard
+bridge, Massachusetts, United States.        Correspondence    support vector machines) only return a predicted class la-
+to:    Anand Avati <avati@cs.stanford.edu>, Tony Duan
+<tonyduan@cs.stanford.edu>, Alejandro Schuler <alejan-         bel, most are capable of returning estimated probabilities
+dro.schuler@gmail.com>.                                        for each class; effectively, a conditional probability mass
+                                                               function.
+Proceedings of the 37 th International Conference on Machine
+Learning, Online, PMLR 119, 2020. Copyright 2020 by the au-    However, existing methods for probabilistic regression are
+thor(s).                                                       either inflexible, slow, or inaccessible to non-experts. Any
+
+=== PDF PAGE 2 ===
+                               NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+                                        M              θ                                                                     y
+     x                                                       Distribution Pθ (y|x)          Scoring Rule S(Pθ , y)
+                             
+                Base Learners f (m) (x) m=1
+
+
+                                                                           ˜θ
+                                                      Fit Natural Gradient ∇
+
+                 Figure 2. NGBoost is modular with respect to choice of base learner, distribution, and scoring rule.
+
+
+mean-estimating regression method can be made prob-                  certainty of the predictions, as illustrated in Figure 1. It is
+abilistic by assuming homoscedasticity and estimating                precisely this problem of simultaneous boosting of multiple
+an unconditional noise model, but homoscedasticity is a              parameters from the base learners which makes probabilis-
+strong assumption and the process requires some statistical          tic forecasting with GBMs a challenge, and NGBoost ad-
+know-how. Generalized Additive Models for Shape, Scale,              dresses this with a multiparameter boosting approach and
+and Location (GAMLSS) allow heteroscedasticity but are               the use of natural gradients (Amari, 1998).
+restricted to a pre-specified model form (Stasinopoulos
+et al., 2007). Bayesian methods naturally generate predic-           2. Summary of Contributions
+tive uncertainty estimates by integrating predictions over
+the posterior, but exact solutions to Bayesian models are              i. We present Natural Gradient Boosting, a modular
+limited to simple models, and calculating the posterior dis-              algorithm for probabilistic regression (section 3.4)
+tribution of more powerful models such as Neural Net-                     which uses multiparameter boosting and natural gra-
+works (NN) (Neal, 1996) and Bayesian Additive Regres-                     dients to integrate any choice of:
+sion Trees (BART) (Chipman et al., 2010) is difficult. In-                   • Base learner (e.g. Regression Tree),
+ference in these models requires computationally expen-                      • Parametric probability distribution (Normal,
+sive approximation via, for example, MCMC sampling.                            Laplace, etc.), and
+Moreover, sampling-based inference requires some statis-                     • Scoring rule (MLE, CRPS, etc.).
+tical expertise and thus limits the ease-of-use of Bayesian
+methods. Bayesian approaches often also scale poorly to               ii. We present a generalization of the natural gradient to
+large datasets (Rasmussen and Williams, 2005). Bayesian                   other scoring rules such as CRPS (section 3.2).
+Deep Learning is gaining popularity (Graves, 2011; Blun-              iii. We demonstrate empirically that NGBoost performs
+dell et al., 2015; Hernández-Lobato and Adams, 2015)                      competitively relative to other models in its predictive
+but, while neural networks have empirically excelled at                    uncertainty estimates, as well as in its point estimates
+perception tasks (such as with visual and audio input),                    (section 4).
+they usually perform only on par with traditional methods
+when data are limited in size or tabular. Extensive hyper-           3. Natural Gradient Boosting
+parameter tuning and informative prior specification are
+also challenges for Bayesian Deep Learning which make                In standard prediction settings, the object of interest is an
+it difficult to use out-of-the-box.                                  estimate of a scalar function like E[y|x], where x is a vector
+                                                                     of observed features and y is the prediction target. In our
+Meanwhile, Gradient Boosting Machines (GBMs) (Fried-
+                                                                     setting we are interested in producing a probability distri-
+man, 2001; Chen and Guestrin, 2016) are a set of highly-
+                                                                     bution Pθ (y|x) (with CDF Fθ ). Our approach is to assume
+modular methods that work out-of-the-box and perform
+                                                                     Pθ (y|x) is of a specified parametric form, then estimate the
+well on structured input data, even with relatively small
+                                                                     p parameters θ ∈ Rp of the distribution as functions of x.
+datasets. This can be seen in their empirical success on
+Kaggle and other data science competitions (Chen and
+                                                                     3.1. Proper Scoring Rules
+Guestrin, 2016). In classification tasks, their predictions
+are probabilistic by default (by use of the sigmoid or soft-         To begin, we need a learning objective. In point prediction,
+max link function). But in regression tasks, they output             the predictions are compared to the observed data with a
+only a scalar value. Under a squared-error loss these scalars        loss function. The analogue in probabilistic regression is
+can be interpreted as the mean of a conditional Gaussian             a scoring rule, which compares the estimated probability
+distribution with some (unknown) constant variance. How-             distribution to the observed data.
+ever, such probabilistic interpretations have little use if the
+variance is assumed constant. The predicted distributions            A proper scoring rule S takes as input a forecasted proba-
+need to have at least two degrees of freedom (two parame-            bility distribution P and one observation y (outcome), and
+ters) to effectively convey both the magnitude and the un-           assigns a score S(P, y) to the forecast such that the true dis-
+                                                                     tribution of the outcomes gets the best score in expectation
+
+=== PDF PAGE 3 ===
+                               NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+(Gneiting and Raftery, 2007). In mathematical notation, a        Divergences. Every proper scoring rule induces a diver-
+scoring rule S is a proper scoring rule if and only if it sat-   gence that can serve as local distance metric in the space of
+isfies                                                           distributions. A proper scoring rule by definition satisfies
+                                                                 the inequality of Eqn 1. The excess score of the right hand
+   Ey∼Q [S(Q, y)]      ≤     Ey∼Q [S(P, y)]    ∀P, Q,     (1)    side over the left is the divergence induced by that scoring
+                                                                 rule (Dawid and Musio, 2014):
+where Q represents the true distribution of outcomes y, and
+P is any other distribution (such as the probabilistic fore-        DS (QkP ) = Ey∼Q [S(P, y)] − Ey∼Q [S(Q, y)],             (5)
+cast from a model). Since we are working with parametric
+distributions, we can identify each distribution with its pa-    which is necessarily non-negative, and can be interpreted as
+rameters and write the score as S(θ, y).                         a measure of difference from one distribution Q to another
+                                                                 P . The MLE scoring rule induces the Kullback-Leibler
+The most commonly used proper scoring rule is the loga-          divergence (KL divergence, or DKL ), while CRPS induces
+rithmic score L, which, when minimized, gives the MLE:           the L2 divergence (Dawid, 2007; Machete, 2013).
+                  L(θ, y) = − log Pθ (y).                 (2)    The divergences DKL and DL2 are invariant to how Q and
+                                                                 P are parameterized. Though divergences in general are
+Another example is CRPS, which is generally considered a         not symmetric, for small changes of the parameters they
+robust alternative to MLE (Gebetsberger et al., 2018). The       are almost symmetric and can serve as a local distance met-
+CRPS (denoted C) is defined as                                   ric. When used as such, a divergence induces a statistical
+              Z y                Z ∞                             manifold where each point in the manifold corresponds to
+   C(θ, y) =        Fθ (z)2 dz +     (1 − Fθ (z))2 dz. (3)       a probability distribution (Dawid and Musio, 2014).
+               −∞                 y
+
+                                                                 Natural Gradient. The generalized natural gradient is
+3.2. The Generalized Natural Gradient                            the direction of steepest ascent in Riemannian space, which
+                                                                 is invariant to parametrization, and is defined as:
+We take a standard gradient descent approach to find the
+parameters that minimize the scoring rule by descending                ˜
+                                                                       ∇S(θ, y) ∝ lim         arg max        S(θ + d, y).    (6)
+along the negative gradient of the score relative to the pa-                        →0 d:D (P ||P
+                                                                                           S  θ    θ+d )=
+rameters at each point x. The (ordinary) gradient of a scor-
+ing rule S over a parameterized probability distribution Pθ      If we solve the corresponding optimization problem, we
+with parameter θ and outcome y with respect to the param-        obtain the natural gradient of the form
+eters is denoted ∇S(θ, y). It is the direction of steepest
+ascent, such that moving the parameters an infinitesimally                  ˜
+                                                                            ∇S(θ, y)     ∝       IS (θ)−1 ∇S(θ, y)           (7)
+small amount in that direction of the gradient (as opposed
+to any other direction) will increase the scoring rule the       where IS (θ) is the Riemannian metric of the statistical
+most. That is,                                                   manifold at θ, which is induced by the scoring rule S.
+                                                                 While the natural gradient was originally defined for the
+          ∇S(θ, y) ∝ lim arg maxS(θ + d, y).              (4)    statistical manifold with the distance measure induced by
+                        →0 d:kdk=
+                                                                 DKL (Martens, 2014), we provide a more general treat-
+                                                                 ment here that applies to any divergence that corresponds
+This gradient is not invariant to reparameterization. Con-
+                                                                 to some proper scoring rule.
+sider reparameterizing Pθ to Pz(θ) (y) so Pθ (y ∈ A) =
+Pψ (y ∈ A) for all events A when ψ = z(θ). If the gradient       By choosing S = L (i.e. MLE) and solving the above
+is calculated relative to θ and an infinitesimal step is taken   optimization problem, we get:
+in that direction, say from θ to θ + dθ the resulting distri-
+bution will be different than if the gradient had been calcu-               ˜
+                                                                            ∇L(θ, y)     ∝       IL (θ)−1 ∇L(θ, y)           (8)
+lated relative to ψ and a step was taken from ψ to ψ + dψ.
+In other words, Pθ+dθ (y ∈ A) 6= Pψ+dψ (y ∈ A). Thus             where IL (θ) is the Fisher Information carried by an obser-
+the choice of parameterization can drastically impact the        vation about Pθ , which is defined as:
+training dynamics, even though the minima are unchanged.
+                                                                          IL (θ) = Ey∼Pθ ∇θ L(θ, y)∇θ L(θ, y)T
+                                                                                                                 
+                                                                                                                         (9)
+The problem is that “distance” between two parameter val-
+ues does not correspond to an appropriate “distance” be-         Similarly, by choosing S = C (i.e. CRPS) and solving the
+tween the distributions that those parameters identify. This     above optimization problem, we get:
+motivates the natural gradient (denoted ˜ ∇), which origi-
+nated in information geometry (Amari, 1998).                                 ˜
+                                                                             ∇C(θ, y)     ∝      IC (θ)−1 ∇C(θ, y)          (10)
+
+=== PDF PAGE 4 ===
+                                      NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+                                             MLE: gradients                                 MLE: natural gradients
+                               2.0                                              2.0
+
+                               1.5                                              1.5
+
+                               1.0                                              1.0
+                      log σ                                            log σ
+                               0.5                                              0.5
+
+                               0.0                                              0.0
+
+                              −0.5                                             −0.5
+                                 −3   −2    −1     0      1   2    3              −3   −2      −1     0      1        2   3
+                                                   µ                                                  µ
+
+
+                                            CRPS: gradients                                 CRPS: natural gradients
+                               2.0                                              2.0
+
+                               1.5                                              1.5
+
+                               1.0                                              1.0
+                      log σ                                            log σ
+                               0.5                                              0.5
+
+                               0.0                                              0.0
+
+                              −0.5                                             −0.5
+                                 −3   −2    −1     0      1   2    3              −3   −2      −1     0      1        2   3
+                                                   µ                                                  µ
+
+
+
+Figure 3. Proper scoring rules and corresponding gradients for fitting a Normal distribution on samples ∼ N (0, 1). For each scoring
+rule, the landscape of the score (colors and contours) is identical, but the gradient fields (arrows) are markedly different depending on
+which kind of gradient is used.
+
+
+where IC (θ) is the Riemannian metric of the statistical                   When fitting a decision tree to the gradient, the algorithm
+manifold that uses DL2 as the local distance measure, given                partitions the data into axis-aligned slices. Each slice of
+by (Dawid, 2007):                                                          the partition is associated with a leaf node of the tree, and
+                    Z ∞                                                    is made as homogeneous in its response variable (the gra-
+         IC (θ) = 2      ∇θ Fθ (z)∇θ Fθ (z)T dz.       (11)                dients at that set of data points) as possible. The criterion
+                              −∞
+                                                                           of homogeneity is typically the sample variance. The pre-
+Using the natural gradient for learning the parameters                     diction value of the leaf node (which is common to all the
+makes the optimization problem invariant to parametriza-                   examples ending up in the leaf node) is then set to be the
+tion and leads to more efficient and stable learning dynam-                additive component to the predictions that minimizes the
+ics (Amari, 1998). Figure 3 shows the vector field of gra-                 loss the most. This is equivalent to doing a “line search”
+dients and natural gradients for L and C on the parameter                  in the functional optimization problem for each leaf node,
+space of a Normal distribution parameterized by µ (mean)                   and, for some losses, closed form solutions are available.
+and log σ (logarithm of the standard deviation).                           For example, for squared error, the response variables are
+                                                                           residuals, and the result of the line search will yield the
+                                                                           sample mean of the response variables in the leaf.
+3.3. Gradient Boosting
+                                                                           We now consider adapting gradient boosting for prediction
+Gradient boosting (Friedman, 2001) is a supervised learn-
+                                                                           of parameters θ in the probabilistic regression context.
+ing technique where several weak learners (or base learn-
+ers) are combined in an additive ensemble. The model is
+                                                                           3.4. NGBoost: Natural Gradient Boosting
+learnt sequentially, where the next base learner is fit against
+the training objective residual of the current ensemble. The               The NGBoost algorithm is a supervised learning method
+output of the fitted base learner is then scaled by a learning             for probabilistic prediction that uses boosting to estimate
+rate and added into the ensemble.                                          the parameters of a conditional probability distribution
+The boosting framework can be generalized to any choice                    P (y|x) as functions of x. Here y could be one of several
+of base learner but most popular implementations use shal-                 types ({±1}, R, {1, . . . , K}, R+ , N, etc.) and x is a vector
+low decision trees because they work well in practice (Chen                in Rd . In our experiments we focus on real valued outputs,
+and Guestrin, 2016; Ke et al., 2017).                                      though all of our methods are applicable to other modalities
+
+=== PDF PAGE 5 ===
+                                NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+such as classification and survival prediction.                   ρ(m) per stage. The learning algorithm starts by first esti-
+                                                                  mating a common θ(0) such that it minimizes the sum of the
+The algorithm has three modular components, which are
+                                                                  scoring rule S over the response variables from all training
+chosen upfront as a configuration:
+                                                                  examples, essentially fitting the marginal distribution of y.
+  • Base learner (f ),                                            This becomes the initial predicted parameter θ(0) for all ex-
+  • Parametric probability distribution (Pθ ), and                amples.
+  • Proper scoring rule (S).                                      In each iteration m, the algorithm calculates, for each ex-
+                                                                                                     (m)
+                                                                  ample i, the natural gradients gi of the scoring rule S
+Algorithm 1 NGBoost for probabilistic prediction                  with respect to the predicted parameters of that example up
+                                                                                   (m−1)              (m)
+Data: Dataset D = {xi , yi }ni=1 .                                to that stage, θi      . Note that gi has the same dimen-
+Input: Boosting iterations M , Learning rate η, Probability       sion as θ. A set of base learners for that iteration f (m) are
+         distribution with parameter θ, Proper scoring rule       fit to predict the corresponding components of the natural
+                                                                              (m)
+         S, Base learner f .                                      gradients gi of each example xi .
+Output: Scalings and base learners {ρ(m) , f (m) }M  m=1 .
+ (0)
+                     Pn                                           The output of the fitted base learner is the projection of the
+θ ← arg minθ i=1 S(θ, yi ) {initialize to marginal}
+                                                                  natural gradient on to the range of the base learner class.
+for m ← 1, . . . , M do
+                                                                  This projected gradient is then scaled by a scaling factor
+     for i ← 1, . . . , n do
+                                −1                            ρ(m) since local approximations might not hold true very
+           (m)             (m−1)            (m−1)
+         gi ← IS θi                  ∇ θ S θi     , yi            far away from the current parameter position. The scaling
+    end                                                           factor is chosen to minimize the overall true scoring rule
+              n
+                      (m)
+                          on                                     loss along the direction of the projected gradient in the form
+    f (m) ← fit xi , gi                                           of a line search. In practice, we found that implementing
+                     Pn i=1 (m−1)                       
+                                                                  this line search by successive halving of ρ (starting with
+    ρ(m) ← arg minρ i=1 S θi       − ρ · f (m) (xi ), yi
+                                                                  ρ = 1) until the scaled gradient update results in a lower
+   for i ← 1, . . . , n do                                        overall loss relative to the previous iteration works reason-
+         (m)       (m−1)                         
+       θi ← θi             − η ρ(m) · f (m) (xi )                 ably well and is easy to implement.
+   end
+                                                                  Once the scaling factor ρ(m) is determined, the predicted
+end                                                                                                             (m)
+                                                                  per-example parameters are updated to θi by adding to
+                                                                          (m−1)
+A prediction y|x on a new input x is made in the form of          each θi         the negative scaled projected gradient for i,
+                                                                    (m)
+a conditional distribution Pθ , whose parameters θ are ob-        ρ     · f (m) (xi ) which is further scaled by a small learning
+tained by an additive combination of M base learner out-          rate η (typically 0.1 or 0.01).
+puts (corresponding to the M gradient boosting stages) and        The pseudo-code is presented in Algorithm 1. For very
+an initial θ(0) . Note that θ can be a vector of parameters       large datasets computational performance can be easily
+(not limited to be scalar valued), and they completely deter-     improved by simply randomly sub-sampling mini-batches
+mine the probabilistic prediction y|x. For example, when          within the fit() operation.
+using the Normal distribution, θ = (µ, log σ) in our ex-
+periments. To obtain the predicted parameter θ for some           3.5. Analysis and Discussion
+x, each of the base learners f (m) take x as their input.
+Here f (m) collectively refers to the set of base learners,       Boosting for Probabilistic Prediction. Our boosting ap-
+one per parameter, of stage m. For example, for a Nor-            proach generalizes gradient boosting to predict conditional
+mal distribution with parameters µ and log σ, there will be       distributions. For instance, if the user specifies the condi-
+                      (m)        (m)
+two base learners, fµ and flog σ per stage, collectively          tional distribution to be a Normal distribution with a fixed
+                      
+                         (m)   (m)
+                                                                 variance and uses the logarithmic scoring rule, our ap-
+denoted as f (m) = fµ , flog σ . The predicted outputs            proach recovers the standard boosting algorithm with MSE
+are scaled with stage-specific scaling factors ρ(m) , and a       loss (modulo the per-leaf line search). The advantage of
+common learning rate η:                                           NGBoost is that users are also free to specify any other
+                                                                  family of distributions identified by a set of real-valued pa-
+                                        M
+                                        X                         rameters and allow all of those parameters to vary over the
+   y|x ∼ Pθ (x),         θ = θ(0) − η         ρ(m) · f (m) (x).
+                                                                  covariates, not just the mean. NGBoost thus trivially ex-
+                                        m=1
+                                                                  tends to a variety of use cases, such as negative binomial
+                       (m)
+Each scaling factor ρ      is a single scalar, even if the dis-   boosting (for counts), Gamma or Weibull boosting (for sur-
+tribution has multiple parameters. The model is learnt se-        vival prediction, with or without right-censored data), etc.
+quentially, a set of base learners f (m) and a scaling factor
+
+=== PDF PAGE 6 ===
+                                 NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+             (a) 0% fit                      (b) 33% fit                       (c) 67% fit                     (d) 100% fit
+
+
+
+
+Figure 4. Contrasting the learning dynamics between using the ordinary gradient (top row) vs. the natural gradient (bottom row) for the
+purpose of gradient boosting the parameters of a Normal distribution on a toy data set. With ordinary gradients, we observe that “lucky”
+examples that are accidentally close to the initial predicted mean dominate the learning. This is because, under the ordinary gradient,
+the variances of those examples that have the correct mean get adjusted much more aggressively than the wrong means of the “unlucky”
+examples. This results in simultaneous overfitting of the “lucky” examples in the middle and underfitting of the “unlucky” examples at
+the ends. Under the natural gradient, all the updates are better balanced.
+
+
+Multiparameter Boosting. These wide-ranging exten-                    natural gradients are invariant to parameterization this does
+sions of gradient boosting are made possible by turning the           not pose a problem, whereas the Newton-Raphson method
+distributional prediction problem into a problem of jointly           would fail as the problem is no longer convex in this pa-
+estimating p functions of x, one per parameter, according             rameterization.
+to the scoring rule objective. In this setting, an overall line
+search for the stage multiplier (as opposed to per-leaf line          Computational Complexity. There are two computa-
+search) is an inevitable consequence. However, our use of             tional differences between our algorithm and a standard
+natural gradient makes this less of a problem as the gra-             boosting algorithm which contribute to complexity. The
+dients of all the examples come “optimally pre-scaled” (in            first is that a series of learners must be fit for each param-
+both the relative magnitude between parameters, and across            eter in NGBoost, whereas standard boosting fits only one
+examples) due to the inverse Fisher Information factor. The           series of learners. The relative increase in computational
+use of ordinary gradients instead would be sub-optimal, as            cost is thus linear in the number of distributional parame-
+shown in Figure 4. With the natural gradient the parameters           ters (p). The other difference is that we must compute the
+converge at approximately the same rate despite different             natural gradient per observation, which requires as many
+conditional means, variances, and “distances” from the ini-           inversions of a p × p matrix IS as there are observations
+tial marginal distribution, even while being subjected to a           (N ). The cost of doing so scales with p3 , and linearly with
+common scaling factor ρ(m) in each iteration. We attribute            N . In practice, both costs are minimal because most com-
+this stability to the “optimal pre-scaling” property of the           monly used distributions have only one or two parameters
+natural gradient.                                                     and distributions with more than five are exceedingly rare.
+                                                                      Scaling in terms of p is therefore not a significant concern.
+Parameterization. When the probability distribution is                However, even though these costs are otherwise linear in
+in the exponential family and the choice of parameteriza-             N , it may be prudent to avoid inverting a large number
+tion is the natural parameters of that family, then a Newton-         of small matrices by sub-sampling mini-batches of data in
+Raphson step is equivalent to a natural gradient descent              each boosting iteration. This is done in most implemen-
+step. However, in other parameterizations and distribu-               tations of boosting algorithms. All in all, NGBoost scales
+tions, the equivalence need not hold. This is especially im-          exactly like other boosting algorithms in terms of N but
+portant in the boosting context because, depending on the             with larger “constants” that depend on p ≈ 100 .
+inductive biases of the base learners, certain parameteriza-
+tion choices may result in more suitable model spaces than            4. Experiments
+others. For example, one setting we are particularly inter-
+ested in is the two-parameter Normal distribution. Though             Our experiments use datasets from the UCI Machine
+it is in the exponential family, we use a mean (µ) and                Learning Repository, and follow the protocol first proposed
+log-scale (log σ) parameterization for both ease of imple-            in Hernández-Lobato and Adams (2015). For all datasets,
+mentation and modeling convenience (to disentangle mag-               we hold out a random 10% of the examples as a test set.
+nitude of predictions from uncertainty estimates). Since              From the other 90% we initially hold out 20% as a valida-
+
+=== PDF PAGE 7 ===
+                                NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+
+Table 1. Comparison of probabilistic regression performance on regression benchmark UCI datasets as measured by NLL. Results for
+MC dropout, Deep Ensembles, and Concrete Dropout are reported from Gal and Ghahramani (2016); Lakshminarayanan et al. (2017);
+Gal et al. (2017) respectively. NGBoost offers competitive performance in terms of NLL, especially on smaller datasets. The best
+method for each dataset is bolded, as are those with standard errors that overlap with the best method.
+
+Dataset        N       NGBoost      MC dropout Deep Ensembles Concrete Dropout Gaussian Process          GAMLSS        DistForest
+Boston      506  2.43 ± 0.15 2.46 ± 0.25              2.41 ± 0.25      2.72 ± 0.01       2.37 ± 0.24    2.73 ± 0.56 2.67 ± 0.08
+Concrete   1030 3.04 ± 0.17 3.04 ± 0.09               3.06 ± 0.18      3.51 ± 0.00       3.03 ± 0.11    3.24 ± 0.08 3.38 ± 0.05
+Energy      768  0.60 ± 0.45 1.99 ± 0.09              1.38 ± 0.22     2.30 ± 0.00        0.66 ± 0.17    1.24 ± 0.86 1.53 ± 0.14
+Kin8nm     8192 -0.49 ± 0.02 -0.95 ± 0.03            -1.20 ± 0.02     -0.65 ± 0.00      -1.11 ± 0.03    -0.26 ± 0.02 -0.40 ± 0.01
+Naval     11934 -5.34± 0.04 -3.80 ± 0.05             -5.63 ± 0.05     -5.87 ± 0.05      -4.98 ± 0.02    -5.56 ± 0.07 -4.84 ± 0.01
+Power      9568 2.79 ± 0.11 2.80 ± 0.05               2.79 ± 0.04     2.75 ± 0.01       2.81 ± 0.05     2.86 ± 0.04 2.68 ± 0.05
+Protein   45730 2.81 ± 0.03 2.89 ± 0.01               2.83 ± 0.02     2.81 ± 0.00       2.89 ± 0.02     3.00 ± 0.01 2.59 ± 0.04
+Wine      1588 0.91 ± 0.06 0.93 ± 0.06                0.94 ± 0.12      1.70 ± 0.00       0.95 ± 0.06    0.97 ± 0.09 1.05 ± 0.15
+Yacht      308   0.20 ± 0.26 1.55 ± 0.12              1.18 ± 0.21     1.75 ± 0.00        0.10 ± 0.26    0.80 ± 0.56 2.94 ± 0.09
+Year MSD 515345 3.43 ± NA 3.59 ± NA                   3.35 ± NA         NA± NA            NA ± NA        NA ± NA      NA ± NA
+
+
+Table 2. Comparison of probabilistic regression performance on regression benchmark UCI datasets as measured by NLL while ablating
+key components of NGBoost. Multiparameter boosting must be used in tandem with the natural gradient to increase performance.
+Bolding is as in Table 1.
+
+                     Dataset          N         NGBoost        2nd-Order     Multiparameter   Homoscedastic
+                     Boston           506     2.43 ± 0.15      3.57 ± 0.20     3.17 ± 0.13      2.79 ± 0.42
+                     Concrete        1030     3.04 ± 0.17      4.21 ± 0.05     3.94 ± 0.09      3.22 ± 0.29
+                     Energy           768     0.60 ± 0.45      3.64 ± 0.06     3.24 ± 0.09      0.68 ± 0.25
+                     Kin8nm          8192     -0.49 ± 0.02     0.10 ± 0.07    -0.52 ± 0.03     -0.37 ± 0.05
+                     Naval          11934     -5.34± 0.04     -2.80 ± 0.01    -3.46 ± 0.00     -4.35 ± 0.07
+                     Power           9568     2.79 ± 0.11     4.11 ± 0.03      3.79 ± 0.13      2.66 ± 0.11
+                     Protein        45730     2.81 ± 0.03      3.23 ± 0.00     3.04 ± 0.02     2.86 ± 0.01
+                     Wine           1588      0.91 ± 0.06      1.21 ± 0.09     0.93 ± 0.07      1.34 ± 0.67
+                     Yacht           308      0.20 ± 0.26      4.11 ± 0.17     3.29 ± 0.20     2.02 ± 0.21
+                     Year MSD      515345      3.43 ± NA       3.80 ± 0.00     3.60 ± NA        3.63 ± NA
+
+
+tion set to select M (the number of boosting stages) that            Our comparison in this task is against other probabilistic
+gives the best log-likelihood, and then retrain on the en-           prediction methods. Namely:
+tire 90% using the chosen M . The retrained model is then
+                                                                     MC dropout fits a neural network to the dataset and inter-
+made to predict on the held-out 10% test set. This entire
+                                                                     prets Bernoulli dropout as a variational approximation for
+process is repeated 20 times for all datasets except Protein
+                                                                     Bayesian inference, obtaining predictive uncertainty by in-
+and Year MSD, for which it is repeated 5 times and 1 time
+                                                                     tegrating over Monte Carlo samples (Gal and Ghahramani,
+respectively.
+                                                                     2016). We use the results from Gal and Ghahramani (2016)
+For all experiments, NGBoost was configured with the                 as our benchmark.
+Normal distribution, decision tree base learner with a max-
+                                                                     Deep Ensembles fit an ensemble of neural networks to the
+imum depth of three levels, and log scoring rule. The Year
+                                                                     dataset and obtain predictive uncertainty by making an ap-
+MSD dataset, being extremely large relative to the rest, was
+                                                                     proximation to the Gaussian mixture arising out of the en-
+fit using a learning rate η of 0.1 while the rest of the datasets
+                                                                     semble (Lakshminarayanan et al., 2017). We use the results
+were fit with a learning rate of 0.01. In general we recom-
+                                                                     from Lakshminarayanan et al. (2017) as our benchmark.
+mend small learning rates, subject to computational feasi-
+bility. For the Year MSD dataset we use a mini-batch size            Concrete Dropout improves upon MC dropout by employ-
+of 10%, for all other datasets we use 100%.                          ing a continuous relaxation of the Bernoulli distribution
+                                                                     to automatically tune the dropout probability (Gal et al.,
+4.1. Probabilistic Regression.                                       2017). We use the results from Gal et al. (2017) as our
+                                                                     benchmark.
+The quality of predictive uncertainty is captured in the av-
+erage negative log-likelihood (NLL) (i.e. log Pˆθ (y|x)) as          Gaussian Processes are a nonparametric Bayesian method
+measured on the test set.                                            where the response is interpreted as a multivariate Gaussian
+
+=== PDF PAGE 8 ===
+                               NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+
+Table 3. Comparison of point-estimation performance on regression benchmark UCI datasets as measured by RMSE. Although not
+optimized for point estimation, NGBoost still offers competitive performance. Bolding is as in Table 1.
+
+ Dataset         N        NGBoost       Elastic Net    Random Forest   Gradient Boosting    GAMLSS        Distributional Forest
+ Boston           506    2.94 ± 0.53    4.08 ± 0.16     2.97 ± 0.30       2.46 ± 0.32       4.32 ± 1.40       3.99 ± 1.13
+ Concrete        1030    5.06 ± 0.61    12.1 ± 0.05     5.29 ± 0.16       4.46 ± 0.29       6.72 ± 0.59       6.61 ± 0.83
+ Energy           768    0.46 ± 0.06    2.75 ± 0.03     0.52 ± 0.09       0.39 ± 0.02       1.43 ± 0.32       1.11 ± 0.27
+ Kin8nm          8192    0.16 ± 0.00    0.20 ± 0.00     0.15 ± 0.00       0.14 ± 0.00       0.20 ± 0.01       0.16 ± 0.00
+ Naval          11934    0.00 ± 0.00    0.00 ± 0.00     0.00 ± 0.00       0.00 ± 0.00       0.00 ± 0.00       0.00 ± 0.00
+ Power           9568    3.79 ± 0.18    4.42 ± 0.00     3.26 ± 0.03       3.01 ± 0.10       4.25 ± 0.19       3.64 ± 0.24
+ Protein        45730    4.33 ± 0.03    5.20 ± 0.00     3.60 ± 0.00       3.95 ± 0.00       5.04 ± 0.04       3.89 ± 0.04
+ Wine            1588    0.63 ± 0.04    0.58 ± 0.00     0.50 ± 0.01       0.53 ± 0.02       0.64 ± 0.04       0.67 ± 0.05
+ Yacht           308     0.50 ± 0.20    7.65 ± 0.21     0.61 ± 0.08       0.42 ± 0.09       8.29 ± 2.56       4.19± 0.92
+ Year MSD      515345    8.94 ± NA      9.49 ± NA       9.05 ± NA         8.73 ± NA          NA ± NA           NA ± NA
+
+
+
+distribution with covariance given by some kernel between         4.2. Ablation
+covariates (Rasmussen and Williams, 2005). Our experi-
+                                                                  We compare the NLL of our full NGBoost algorithm on
+ments used an automatic relevance detection kernel fit via
+                                                                  these data versus that of the following comparators, each
+gradient-based optimization of the marginal log-likelihood.
+                                                                  tuned in the same fashion:
+Datasets with N > 2000 employed 1000 inducing in-
+puts randomly chosen from the training set, with induc-           2nd-Order boosting is NGBoost using 2nd-order gradi-
+ing points fit with variational inference as in Titsias (2009).   ent descent instead of the natural gradient. This tests the
+All features and labels were standardized to zero-mean and        added benefit of using the natural gradient vis-a-vis 2nd-
+unit variance for pre-processing. The standardized noise          order methods. Recent work has argued that the natural
+level was tuned via grid search for each dataset, with val-       gradient improves training dynamics by approximating the
+ues ranging between 0.01 and 0.1.                                 Hessian used in 2nd-order methods (Martens, 2014). We
+                                                                  use the “saddle-free” Newton-Raphson method of Dauphin
+GAMLSS uses generalized (parametric) linear models
+                                                                  et al. (2014) in our implementation of 2nd-order multipa-
+to fit each distributional parameter instead of boosting
+                                                                  rameter boosting to provide a strong baseline.
+(Stasinopoulos et al., 2007). Responses were parameter-
+ized as Normal distributions N (µ, σ 2 ). The mean µ and          Multiparameter boosting is NGBoost using the ordinary
+log-std log σ were independently modeled as linear com-           gradient. This tests the added benefit of using the natural
+binations of natural cubic splines of the covariates. No          gradient vis-a-vis the standard gradient, but still allows for
+interaction terms were included. All features and labels          all of the parameters of the distribution to vary across x.
+were standardized to zero-mean and unit variance for pre-
+                                                                  Homoscedastic boosting is NGBoost assuming a ho-
+processing.
+                                                                  moscedastic variance σ 2 (x) = σ 2 = Var[r]
+                                                                                                          \ where r are
+Distributional Forests use trees to estimate distributional       the training set residuals from a single-parameter (mean)
+parameters in each leaf, which are then averaged across the       boosting model. This tests the added benefit of allowing
+model (Schlosser et al., 2019). Responses were parameter-         parameters other than the conditional mean to vary across
+ized as Normal distributions N (µ, σ 2 ). The mean µ and          x. Note that the natural gradient plays no meaningful role
+log-std log σ were independently modeled using forests  √         when there is only a single parameter estimated with NG-
+consisting of 200 trees and default hyper-parameters ( d          Boost.
+covariates sampled per split, minimum 20 examples for a
+split node, minimum 7 examples in a terminal node). All           Our ablation results are summarized in Table 2.
+features and labels were standardized to zero-mean and unit
+variance for pre-processing.                                      4.3. Point estimation
+Our probabilistic regression results are summarized in Ta-        Although NGBoost is not specifically designed for point
+ble 1. Results for the Year MSD dataset are unavail-              estimation, it is easy to extract point estimates of expecta-
+able either because they were not reported or because the         tions Ê[y|x] from the estimated distributions P̂θ (y|x). We
+necessary computations for gradient-based optimization of         use this approach in a third evaluation to compare the same
+hyper-parameters did not fit in memory.                           NGBoost models as above to the Scikit-Learn implemen-
+                                                                  tations of random forests, standard gradient boosting, and
+                                                                  elastic net regression (Pedregosa et al., 2011). Predictive
+                                                                  performance in this evaluation is captured by the root mean
+
+=== PDF PAGE 9 ===
+                               NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+squared-error (RMSE) of the predictions on the test set.         gradient to correct the training dynamics of multiparameter
+We performed hyperparameter tuning for each of the com-          boosting. The superiority to 2nd-order methods demon-
+parator methods using the same validation procedure as de-       strates that this is due to exploiting the curvature of the
+scribed above, although optimizing for RMSE instead of           score in distributional space, not the curvature of the score
+NLL for all methods except NGBoost. We compare to:               in parameter space. The result is performance that is almost
+                                                                 always better than assuming homoscedasticity, sometimes
+Elastic Net: We used the Scikit-Learn implementation of
+                                                                 by a large margin.
+elastic net regularized linear models. We tuned over lasso-
+ridge mixture parameters of 0.01, 0.7, and 0.99 and over         Furthermore, the advantages of probabilistic regression
+a range of regularization parameters between 0.00005 and         come almost “for free”. On point estimation tasks NG-
+0.01. All other parameters were left to their default values.    Boost performs better than elastic net, about on par with
+                                                                 random forests, and within striking distance of gradient
+Random Forest: We used the Scikit-Learn implementa-
+                                                                 boosting. This is despite the fact that the NGBoost mod-
+tion of random forests. We set the number of trees to 500
+                                                                 els were (a) optimized for NLL, not to minimize RMSE
+and left all other parameters at their default values.
+                                                                 and (b) less aggressively tuned. Thus, although point pre-
+Gradient Boosting: We used the Scikit-Learn implemen-            diction will always be best with a dedicated model for that
+tation of gradient boosted trees. We tuned over learning         purpose, the loss in RMSE is not substantial if NGBoost is
+rates of 0.01, 0.05, and 0.1, tree depths of 3 and 4, and num-   used in order to support probabilistic regression instead.
+ber of boosting iterations between 0 and 1000. All other
+                                                                 There are many avenues for future work. This paper is fo-
+parameters were left to their default values.
+                                                                 cused on regression problems for clarity of exposition, but
+Our point prediction results are summarized in Table 3.          NGBoost is also applicable to classification and to survival
+                                                                 problems with right-censored data (using the censored like-
+5. Conclusions                                                   lihood as a scoring rule). NGBoost could also be used for
+                                                                 joint prediction: by modeling two outcomes z and y with
+NGBoost is a method for probabilistic prediction with            a jointly parameterized conditional distribution Pθ (z, y|x),
+competitive state-of-the-art performance on a variety of         a single NGBoost model could answer any question like
+datasets. NGBoost combines a multiparameter boosting             “what is the probability that it rains more than 4 inches and
+algorithm with the natural gradient to efficiently estimate      the temperature is greater than 17◦ C tomorrow?”.
+how parameters of the presumed outcome distribution vary
+                                                                 Some further technical innovations are also worth explor-
+with the observed features.
+                                                                 ing. The natural gradient loses its invariance property with
+NGBoost performs as well as existing methods for proba-          finite step sizes, which we can address with differential
+bilistic regression but retains major advantages: NGBoost        equation solvers for higher-order invariance (Song et al.,
+is flexible, scalable, and easy-to-use. We have not rigor-       2018). Better tree-based base learners and regularization
+ously quantified these advantages in this paper (since they      (e.g. Chen and Guestrin (2016); Ke et al. (2017)) are also
+would be largely irrelevant without first establishing per-      likely to improve performance, especially in terms of scal-
+formance), but many of the benefits are self-evident. Un-        ing to large datasets.
+like problem-specific approaches, NGBoost handles clas-
+                                                                 Although we have shown empirically that NGBoost is
+sification, regression, survival problems, etc. using the
+                                                                 useful for probabilistic prediction, it remains to be seen
+same software package and interface. NGBoost scales to
+                                                                 whether it is useful for inference problems and under what
+large numbers of features or observations with the same fa-
+                                                                 assumptions. For instance, if we assume that y|x ∼
+vorable complexity of traditional boosting algorithms. No
+                                                                 D(θ(x)) for some distribution D with parameters θ and we
+expert knowledge of deep learning, Bayesian statistics, or
+                                                                 estimate θ̂ngb (x) using NGBoost, under what conditions do
+Monte Carlo methods is required to use NGBoost. It works
+out of the box.                                                  we have that θ̂ngb (x) → θ(x) as sample size increases? Are
+                                                                 there conditions where the convergence is uniform in x? If
+Our ablation experiments demonstrate that multiparameter         the model is misspecified (i.e. D is not correct), are there
+boosting and the natural gradient work together to improve       conditions under which moment estimates from the model
+performance. Assuming a uniform variance across all co-          are still consistent? Addressing these questions and others
+variates works reasonably well for some datasets, as would       like them would be of significant value.
+be expected, but this is not always the case. However, us-
+ing multiparameter boosting to relax the homoscedasticity        Acknowledgements
+assumption most often results in worse performance, likely
+due to poor training dynamics. 2nd-order methods result          This work was funded in part by the National Institutes of
+in even worse performance. NGBoost employs the natural           Health. We thank anonymous reviewers for feedback.
+
+=== PDF PAGE 10 ===
+                              NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+References                                                      Gebetsberger, M., Messner, J. W., Mayr, G. J., and
+                                                                  Zeileis, A. (2018). Estimation Methods for Nonho-
+Amari, S.-i. (1998). Natural Gradient Works Efficiently in
+                                                                  mogeneous Regression Models: Minimum Continuous
+ Learning. Neural Computation, page 29.
+                                                                  Ranked Probability Score versus Maximum Likelihood.
+Avati, A., Duan, T., Jung, K., Shah, N. H., and Ng, A.            Monthly Weather Review, 146(12):4323–4338.
+  (2019). Countdown Regression: Sharp and Calibrated
+  Survival Predictions. In Uncertainty in Artificial Intelli-   Gneiting, T. and Katzfuss, M. (2014). Probabilistic Fore-
+  gence. arXiv: 1806.08324.                                       casting. Annual Review of Statistics and Its Application,
+                                                                  1(1):125–151.
+Avati, A., Jung, K., Harman, S., Downing, L., Ng, A., and
+  Shah, N. H. (2018). Improving palliative care with deep       Gneiting, T. and Raftery, A. E. (2007). Strictly Proper Scor-
+  learning. BMC Medical Informatics and Decision Mak-             ing Rules, Prediction, and Estimation. Journal of the
+  ing, 18(4):122.                                                 American Statistical Association, 102(477):359–378.
+Blundell, C., Cornebise, J., Kavukcuoglu, K., and Wierstra,     Graves, A. (2011). Practical Variational Inference for Neu-
+  D. (2015). Weight Uncertainty in Neural Network. In             ral Networks. In Shawe-Taylor, J., Zemel, R. S., Bartlett,
+  International Conference on Machine Learning, pages             P. L., Pereira, F., and Weinberger, K. Q., editors, Ad-
+  1613–1622.                                                      vances in Neural Information Processing Systems 24,
+Chen, T. and Guestrin, C. (2016). XGBoost: A Scal-                pages 2348–2356. Curran Associates, Inc.
+  able Tree Boosting System. In Proceedings of the 22nd         Hernández-Lobato, J. M. and Adams, R. P. (2015).
+  ACM SIGKDD International Conference on Knowledge                Probabilistic Backpropagation for Scalable Learning of
+  Discovery and Data Mining, KDD ’16, pages 785–794,              Bayesian Neural Networks. In International Confer-
+  New York, NY, USA. ACM.                                         ence on Machine Learning, ICML’15, pages 1861–
+Chipman, H. A., George, E. I., and McCulloch, R. E.               1869. JMLR.org.
+  (2010). BART: Bayesian additive regression trees. The
+  Annals of Applied Statistics, 4(1):266–298.                   Ke, G., Meng, Q., Finley, T., Wang, T., Chen, W., Ma, W.,
+                                                                  Ye, Q., and Liu, T.-Y. (2017). LightGBM: A Highly
+Dauphin, Y. N., Pascanu, R., Gulcehre, C., Cho, K., Gan-          Efficient Gradient Boosting Decision Tree. In Guyon,
+  guli, S., and Bengio, Y. (2014). Identifying and attack-        I., Luxburg, U. V., Bengio, S., Wallach, H., Fergus, R.,
+  ing the saddle point problem in high-dimensional non-           Vishwanathan, S., and Garnett, R., editors, Advances in
+  convex optimization. In Ghahramani, Z., Welling, M.,            Neural Information Processing Systems 30, pages 3146–
+  Cortes, C., Lawrence, N. D., and Weinberger, K. Q., ed-         3154. Curran Associates, Inc.
+  itors, Advances in Neural Information Processing Sys-
+  tems 27, pages 2933–2941. Curran Associates, Inc.             Kruchten, N. (2016). Machine learning meets economics.
+
+Dawid, A. P. (2007). The geometry of proper scoring             Lakshminarayanan, B., Pritzel, A., and Blundell, C. (2017).
+  rules. Annals of the Institute of Statistical Mathematics,      Simple and Scalable Predictive Uncertainty Estimation
+  59(1):77–93.                                                    using Deep Ensembles. In Guyon, I., Luxburg, U. V.,
+                                                                  Bengio, S., Wallach, H., Fergus, R., Vishwanathan, S.,
+Dawid, A. P. and Musio, M. (2014). Theory and Appli-
+                                                                  and Garnett, R., editors, Advances in Neural Informa-
+  cations of Proper Scoring Rules. METRON, 72(2):169–
+                                                                  tion Processing Systems 30, pages 6402–6413. Curran
+  183. arXiv: 1401.0398.
+                                                                  Associates, Inc.
+Friedman, J. H. (2001). Greedy Function Approximation:
+  A Gradient Boosting Machine. The Annals of Statistics,        Machete, R. L. (2013). Contrasting probabilistic scoring
+  29(5):1189–1232.                                               rules. Journal of Statistical Planning and Inference,
+                                                                 143(10):1781–1790.
+Gal, Y. and Ghahramani, Z. (2016). Dropout As a Bayesian
+  Approximation: Representing Model Uncertainty in              Martens, J. (2014). New insights and perspectives on
+  Deep Learning. In International Conference on Machine          the natural gradient method. Technical report. arXiv:
+  Learning, ICML’16, pages 1050–1059. JMLR.org.                  1412.1193.
+Gal, Y., Hron, J., and Kendall, A. (2017). Concrete             Neal, R. M. (1996). Bayesian Learning for Neural Net-
+  Dropout. In Guyon, I., Luxburg, U. V., Bengio, S., Wal-         works. Springer-Verlag, Berlin, Heidelberg.
+  lach, H., Fergus, R., Vishwanathan, S., and Garnett, R.,
+  editors, Advances in Neural Information Processing Sys-       Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V.,
+  tems 30, pages 3581–3590. Curran Associates, Inc.               Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P.,
+
+=== PDF PAGE 11 ===
+                              NGBoost: Natural Gradient Boosting for Probabilistic Prediction
+
+  Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cour-
+  napeau, D., Brucher, M., Perrot, M., and Duchesnay, E.
+  (2011). Scikit-learn: Machine Learning in Python. Jour-
+  nal of Machine Learning Research, 12:2825–2830.
+Rasmussen, C. E. and Williams, C. K. I. (2005). Gaussian
+  Processes for Machine Learning (Adaptive Computation
+  and Machine Learning). The MIT Press.
+Schlosser, L., Hothorn, T., Stauffer, R., and Zeileis, A.
+  (2019). Distributional regression forests for probabilistic
+  precipitation forecasting in complex terrain. The Annals
+  of Applied Statistics, 13(3):1564–1589. Publisher: Insti-
+  tute of Mathematical Statistics.
+
+Song, Y., Song, J., and Ermon, S. (2018). Accelerating
+  Natural Gradient with Higher-Order Invariance. In Inter-
+  national Conference on Machine Learning, pages 4713–
+  4722.
+
+Stasinopoulos, D. M., Rigby, R. A., et al. (2007). Gen-
+  eralized additive models for location scale and shape
+  (gamlss) in r. Journal of Statistical Software, 23(7):1–
+  46.
+Titsias, M. (2009). Variational Learning of Inducing
+   Variables in Sparse Gaussian Processes. In Interna-
+   tional Conference on Artificial Intelligence and Statis-
+   tics, pages 567–574.
+
+=== END SOURCE TEXT ===

@@ -1,0 +1,25 @@
+COMPONENT PAPER-TARGET GATE RESOLVED; WHOLE-STUDY TARGET STILL ABSENT
+Assessed: 2026-11-17 (Asia/Shanghai)
+
+DATA: NO for the completed UCI Yacht benchmark and existing independent study
+COMPUTE: NO for the completed benchmark
+SPECIFICATION: NGBoost component target selected and run; whole-study CRSP
+paper target remains undefined.
+
+Fresh 20-split Gaussian NGBoost training approximately agrees with Duan et al.
+(2020) under a predeclared published-error-band tolerance: NLL 0.411059 versus
+0.20 +/- 0.26; RMSE 0.622483 versus 0.50 +/- 0.20. This supports scoped level 2
+only. Both local means are worse and exact reproduction is not established.
+
+Unresolved: current author-script MSE selection conflicts with the paper's
+NLL selection and yields NLL 1.951417 locally. Published error-bar type is also
+ambiguous (caption says standard errors; current script prints SD). Original
+inner/tree seeds and 2020 runtime are not recovered.
+
+The earlier no-paper-target blocker is retained as history in STATUS.txt.
+The existing CRSP study remains an independent comparison. Its completed
+forecasts were preserved. No result here validates all of SHARV, CMK, neural
+models or the other cited papers.
+
+Evidence: NGBOOST_YACHT_REPRODUCTION.txt and
+../.replication-local/runs/monthly-ngboost-20261117/experiment/summary.json.

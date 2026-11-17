@@ -1,0 +1,9 @@
+Monthly return and volatility coforecasting
+
+Concise study summary
+
+Compares model families for joint prediction of stock returns and volatility using
+chronological training, validation, and annual test refits. The target is the next
+calendar month’s CRSP total return, with missing or noncontiguous outcomes retained as
+unavailable. This is a local research comparison rather than replication of a single
+published paper.
