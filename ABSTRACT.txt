@@ -1,0 +1,9 @@
+Expanding the Chaos: Neural Operator for Stochastic (Partial) Differential Equations
+
+Condensed abstract
+
+Combines Wiener-chaos expansions with neural operators to learn solutions of stochastic
+differential and partial differential equations. Noise paths are projected onto Wick-
+Hermite features, while neural networks learn the corresponding deterministic
+coefficients. Experiments cover financial dynamics, stochastic PDEs, image generation,
+and other applications, including settings without observed training noise paths.

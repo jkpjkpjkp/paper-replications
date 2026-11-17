@@ -1,0 +1,18 @@
+{
+  "train_paths": 500,
+  "validation_paths": 100,
+  "test_paths": 200,
+  "steps": 100,
+  "dt": 0.01,
+  "train_steps": 75,
+  "epochs": 2000,
+  "learning_rate": 0.001,
+  "weight_decay": 0.01,
+  "width": 128,
+  "ou_modes": 32,
+  "ou_order": 1,
+  "heston_modes_per_driver": 12,
+  "heston_order": 2,
+  "ou": {"theta": 2.0, "mu": 1.0, "sigma": 0.3, "x0": 0.0},
+  "heston": {"mu": 0.05, "kappa": 2.0, "theta": 0.04, "zeta": 0.2, "rho": -0.7, "s0": 1.0, "v0": 0.04}
+}

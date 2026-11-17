@@ -1,0 +1,66 @@
+{
+  "scope": "Fresh supervised linear first-chaos capacity diagnostic; not F-SPDENO or a published baseline",
+  "train_paths": 1000,
+  "test_paths": 200,
+  "selection": "No validation or test tuning; fixed ridge 1e-8 times mean Gram diagonal",
+  "temporal_basis_rank": 50,
+  "seeds": [
+    {
+      "seed": 0,
+      "test_relative_l2": {
+        "mean": 1.1064722439218782e-05,
+        "path_sd": 4.4658637524995314e-06,
+        "path_se": 3.15784254324762e-07
+      },
+      "temporal_projection_relative_l2": {
+        "mean": 7.395780234090517e-16,
+        "path_sd": 2.8253213778303877e-17,
+        "path_se": 1.9978039052951867e-18
+      },
+      "noise_roundtrip_max_abs": 5.551115123125783e-17,
+      "train_noise_sha256": "04bf4f9a897631cd95ad7286e061516bfe873f87d8a1255b0d6da920e2c96b7f",
+      "test_noise_sha256": "e2d2160d28904ae9c94a2567cf3fbfcb45c8f1d1c0f5168b1f5980a8e8b2746c"
+    },
+    {
+      "seed": 1,
+      "test_relative_l2": {
+        "mean": 1.1980040780040554e-05,
+        "path_sd": 4.313262948947172e-06,
+        "path_se": 3.049937480241231e-07
+      },
+      "temporal_projection_relative_l2": {
+        "mean": 7.389069637351095e-16,
+        "path_sd": 2.7450762180749553e-17,
+        "path_se": 1.941062008674723e-18
+      },
+      "noise_roundtrip_max_abs": 5.551115123125783e-17,
+      "train_noise_sha256": "434757dea0b951464126f0fe26149ffbff7df0e546f08adfe6de0314a2a3f695",
+      "test_noise_sha256": "4308069b3c4e5821e0328b856a360c439d64c7081fa10e0a57ecba91d2918baa"
+    },
+    {
+      "seed": 2,
+      "test_relative_l2": {
+        "mean": 1.0289754338779357e-05,
+        "path_sd": 4.73949763580524e-06,
+        "path_se": 3.351330917695495e-07
+      },
+      "temporal_projection_relative_l2": {
+        "mean": 7.415426215535128e-16,
+        "path_sd": 2.9675718252661024e-17,
+        "path_se": 2.0983901613038014e-18
+      },
+      "noise_roundtrip_max_abs": 5.551115123125783e-17,
+      "train_noise_sha256": "8a0b06c98e61b57fcfd81b9920275fdf9b32731db57052dd5ebd5a0778e7ecc5",
+      "test_noise_sha256": "798d3d7bbcdcd368230bb09391a05ae49f3c0b3d048d95172291b0855cbf1d0d"
+    }
+  ],
+  "mean_relative_l2": 1.1111505852679564e-05,
+  "seed_sd": 8.461138098442446e-07,
+  "limitations": [
+    "Independent local simulator, not author data",
+    "Fixed zero initial condition only",
+    "Linear Fourier regression replaces FNO; cannot establish paper replication",
+    "Overparameterized frequency-wise linear map; not parameter-matched to paper"
+  ],
+  "script_sha256": "7f9363d4d82df1441580af472bdf97fe0463dfd622a33ec05b719f34b79c0daf"
+}

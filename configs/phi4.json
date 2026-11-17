@@ -1,0 +1,22 @@
+{
+  "train_paths": 1000,
+  "validation_paths": 100,
+  "test_paths": 200,
+  "nx": 128,
+  "steps": 50,
+  "dt": 0.001,
+  "sigma": 0.1,
+  "noise_modes": 50,
+  "hermite_order": 2,
+  "temporal_basis_count": 64,
+  "width": 24,
+  "fourier_modes": 12,
+  "layers": 6,
+  "batch_size": 64,
+  "epochs": 200,
+  "learning_rate": 0.001,
+  "scheduler_patience": 15,
+  "scheduler_factor": 0.1,
+  "random_initial_amplitude": 0.3,
+  "random_initial_decay": 2.0
+}

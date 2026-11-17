@@ -1,0 +1,844 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "PDE",
+  "title": "Expanding the Chaos: Neural Operator for Stochastic (Partial) Differential Equations",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/PDE/sources/paper.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/PDE/sources/paper.pdf",
+    "sha256": "d533ef4802d02725d7137828bfd378a4309834802a2fd52ee2693d78fd0f7e36",
+    "bytes": 18879494,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 38,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 87
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 88,
+      "line_end": 202
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 203,
+      "line_end": 308
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 309,
+      "line_end": 408
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 409,
+      "line_end": 577
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 578,
+      "line_end": 642
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 643,
+      "line_end": 749
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 750,
+      "line_end": 821
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 822,
+      "line_end": 935
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 936,
+      "line_end": 1035
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1036,
+      "line_end": 1135
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1136,
+      "line_end": 1224
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1225,
+      "line_end": 1277
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1278,
+      "line_end": 1379
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1380,
+      "line_end": 1441
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1442,
+      "line_end": 1543
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1544,
+      "line_end": 1624
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1625,
+      "line_end": 1822
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1823,
+      "line_end": 1916
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1917,
+      "line_end": 2032
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 2033,
+      "line_end": 2143
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 2144,
+      "line_end": 2215
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 2216,
+      "line_end": 2350
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 2351,
+      "line_end": 2433
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 2434,
+      "line_end": 2525
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 2526,
+      "line_end": 2626
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 2627,
+      "line_end": 2690
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 2691,
+      "line_end": 2760
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 2761,
+      "line_end": 2821
+    },
+    {
+      "page": 30,
+      "segment": 30,
+      "line_start": 2822,
+      "line_end": 2941
+    },
+    {
+      "page": 31,
+      "segment": 31,
+      "line_start": 2942,
+      "line_end": 3042
+    },
+    {
+      "page": 32,
+      "segment": 32,
+      "line_start": 3043,
+      "line_end": 3071
+    },
+    {
+      "page": 33,
+      "segment": 33,
+      "line_start": 3072,
+      "line_end": 3101
+    },
+    {
+      "page": 34,
+      "segment": 34,
+      "line_start": 3102,
+      "line_end": 3153
+    },
+    {
+      "page": 35,
+      "segment": 35,
+      "line_start": 3154,
+      "line_end": 3182
+    },
+    {
+      "page": 36,
+      "segment": 36,
+      "line_start": 3183,
+      "line_end": 3276
+    },
+    {
+      "page": 37,
+      "segment": 37,
+      "line_start": 3277,
+      "line_end": 3337
+    },
+    {
+      "page": 38,
+      "segment": 38,
+      "line_start": 3338,
+      "line_end": 3371
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 82
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 83,
+      "line_end": 169
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 170,
+      "line_end": 236
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 237,
+      "line_end": 301
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 302,
+      "line_end": 369
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 370,
+      "line_end": 416
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 417,
+      "line_end": 487
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 488,
+      "line_end": 542
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 543,
+      "line_end": 609
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 610,
+      "line_end": 674
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 675,
+      "line_end": 738
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 739,
+      "line_end": 796
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 797,
+      "line_end": 854
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 855,
+      "line_end": 921
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 922,
+      "line_end": 992
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 993,
+      "line_end": 1067
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1068,
+      "line_end": 1133
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1134,
+      "line_end": 1213
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1214,
+      "line_end": 1274
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1275,
+      "line_end": 1343
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1344,
+      "line_end": 1416
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 1417,
+      "line_end": 1481
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 1482,
+      "line_end": 1558
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 1559,
+      "line_end": 1625
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 1626,
+      "line_end": 1691
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 1692,
+      "line_end": 1760
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 1761,
+      "line_end": 1828
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 1829,
+      "line_end": 1886
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 1887,
+      "line_end": 1950
+    },
+    {
+      "page": 30,
+      "segment": 30,
+      "line_start": 1951,
+      "line_end": 2020
+    },
+    {
+      "page": 31,
+      "segment": 31,
+      "line_start": 2021,
+      "line_end": 2067
+    },
+    {
+      "page": 32,
+      "segment": 32,
+      "line_start": 2068,
+      "line_end": 2105
+    },
+    {
+      "page": 33,
+      "segment": 33,
+      "line_start": 2106,
+      "line_end": 2145
+    },
+    {
+      "page": 34,
+      "segment": 34,
+      "line_start": 2146,
+      "line_end": 2204
+    },
+    {
+      "page": 35,
+      "segment": 35,
+      "line_start": 2205,
+      "line_end": 2240
+    },
+    {
+      "page": 36,
+      "segment": 36,
+      "line_start": 2241,
+      "line_end": 2309
+    },
+    {
+      "page": 37,
+      "segment": 37,
+      "line_start": 2310,
+      "line_end": 2368
+    },
+    {
+      "page": 38,
+      "segment": 38,
+      "line_start": 2369,
+      "line_end": 2410
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 21,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 23,
+      "text": "Abstract"
+    },
+    {
+      "line": 162,
+      "text": "2. Mathematical Preliminaries"
+    },
+    {
+      "line": 231,
+      "text": "3. WCE of SPDEs and SDEs"
+    },
+    {
+      "line": 247,
+      "text": "3.1. Reconstruction of Brownian Motions"
+    },
+    {
+      "line": 252,
+      "text": "3.2. Chaos Expansion on SPDEs and SDEs"
+    },
+    {
+      "line": 373,
+      "text": "4. Model Architecture"
+    },
+    {
+      "line": 541,
+      "text": "5.1. Approximation of SPDE Solutions"
+    },
+    {
+      "line": 553,
+      "text": "5. Numerical Experiments"
+    },
+    {
+      "line": 672,
+      "text": "5.2. Approximation on SDE Solutions"
+    },
+    {
+      "line": 790,
+      "text": "5.3. Manifold SDEs"
+    },
+    {
+      "line": 828,
+      "text": "5.4. Law Matching"
+    },
+    {
+      "line": 872,
+      "text": "2. Simulation of auxiliary Brownian trajectories. In this"
+    },
+    {
+      "line": 881,
+      "text": "6. Conclusion"
+    },
+    {
+      "line": 921,
+      "text": "1. Number of auxiliary Brownian trajectories. In our current implementation, for a batch of size B, we sample"
+    },
+    {
+      "line": 931,
+      "text": "References"
+    },
+    {
+      "line": 1095,
+      "text": "2017. URL https://openreview.net/forum?"
+    },
+    {
+      "line": 1399,
+      "text": "5. The initial condition χ0 ∈ H is deterministic."
+    },
+    {
+      "line": 1680,
+      "text": "1. The Initial Condition Term Since x0"
+    },
+    {
+      "line": 2074,
+      "text": "E Xt ξα = E "
+    },
+    {
+      "line": 2084,
+      "text": "E Xt ξα ="
+    },
+    {
+      "line": 2100,
+      "text": "E Xt⋄p ξα ="
+    },
+    {
+      "line": 2288,
+      "text": "2. Drift Term We can split the drift term using the linearity of expectation:"
+    },
+    {
+      "line": 2453,
+      "text": "1. Additive or affine RDEs are captured exactly by truncation at first chaos."
+    },
+    {
+      "line": 2454,
+      "text": "2. For a Gaussian driver with Hurst parameter H, choose any p > 1/H and form a geometric p-rough path"
+    },
+    {
+      "line": 2573,
+      "text": "Z TZ"
+    },
+    {
+      "line": 3214,
+      "text": "1. Prediction Step: Each parameter candidate γ i ∈ Γt is passed through the frozen Meta-SDENO to produce a"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2757
+    },
+    {
+      "id": 39,
+      "line_start": 2750,
+      "line_end": 2829
+    },
+    {
+      "id": 40,
+      "line_start": 2822,
+      "line_end": 2901
+    },
+    {
+      "id": 41,
+      "line_start": 2894,
+      "line_end": 2973
+    },
+    {
+      "id": 42,
+      "line_start": 2966,
+      "line_end": 3045
+    },
+    {
+      "id": 43,
+      "line_start": 3038,
+      "line_end": 3117
+    },
+    {
+      "id": 44,
+      "line_start": 3110,
+      "line_end": 3189
+    },
+    {
+      "id": 45,
+      "line_start": 3182,
+      "line_end": 3261
+    },
+    {
+      "id": 46,
+      "line_start": 3254,
+      "line_end": 3333
+    },
+    {
+      "id": 47,
+      "line_start": 3326,
+      "line_end": 3372
+    }
+  ],
+  "line_count": 3372,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "8f6942a84cb333dfbcaf60c7d85c5229bd3021525e5c89926021bcc744f4bc7e",
+      "bytes": 141446
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "48c660744a88e2dfcd581f28e025b8834ef509d4a7ab55e6d38bcbb02a9dd3b7",
+      "bytes": 194591
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "tolerance": 1e-08,
+  "checks": [
+    {
+      "seed": 0,
+      "saved_prediction_relative_l2": 1.1064719202571503e-05,
+      "serialization_metric_difference": 3.236647278317961e-12
+    },
+    {
+      "seed": 1,
+      "saved_prediction_relative_l2": 1.1980013947628385e-05,
+      "serialization_metric_difference": 2.6832412168697355e-11
+    },
+    {
+      "seed": 2,
+      "saved_prediction_relative_l2": 1.02898076138105e-05,
+      "serialization_metric_difference": 5.3275031142250434e-11
+    }
+  ]
+}

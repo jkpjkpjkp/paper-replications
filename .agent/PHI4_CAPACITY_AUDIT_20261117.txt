@@ -1,0 +1,52 @@
+Fresh Phi4 capacity diagnostic -- 2026-11-17
+
+Outcome: paper replication remains unsuccessful, grade 1. The historical
+F-SPDENO reconstructed M2 result 0.8113849043 +/- 0.2740142900 seed SD versus
+Table 1's 0.012 remains the representative comparison (absolute gap 0.7993849043;
+rounding tolerance 0.0005). No new F-SPDENO training is claimed.
+
+Completed fresh experiment:
+Train a frequency-wise linear map from all 50 Haar noise coordinates to the
+50 output times, then reconstruct with the local 64-function temporal basis.
+Three seeds, 1000 training paths and 200 independent test paths each, zero
+initial field, original local simulator at nx=128, dt=.001, T=.05, sigma=.1.
+Regularization was fixed at 1e-8 times mean training Gram diagonal before
+seeing test results. There was no hyperparameter search, validation selection,
+or test fitting. Training labels only were used to solve the regression.
+Seed relative L2 means: 0.0000110647224392, 0.0000119800407800,
+0.0000102897543388. Mean 0.0000111115058527 +/- 0.0000008461138098 seed SD.
+The diagnostic is not F-SPDENO, not a paper baseline, and is not parameter
+matched. Its lower error does NOT establish replication of the published model.
+
+Numerical findings:
+- The 64-function sampled Haar matrix has rank 50, preserving all output times.
+  Orthogonal temporal projection relative error is below 7.5e-16.
+- All 50 first-order Haar coordinates reconstruct local noise increments with
+  maximum absolute error 5.56e-17. Higher chaos order is unnecessary for retaining
+  the input noise itself; it can still matter for representing nonlinear outputs.
+- Saved float32 predictions independently reproduce reported errors within
+  5.4e-11 (predeclared serialization comparison tolerance 1e-8).
+- These checks rule out a temporal projection ceiling and loss of noise from
+  first-order encoding in this diagnostic. They do not verify pointwise Wick
+  preprocessing/FNO optimization or identify a unique cause of the prior failure.
+
+Fidelity limits and next requirement:
+The simulation is locally reconstructed, not author-released data. Noise and
+initial-condition conventions and exact model channels remain uncertain.
+A nearly linear local benchmark does not prove that the original experiment
+used the same distribution. Appendix D treats chaos variables as scalar channels,
+whereas the local implementation constructs spatially varying features from
+pointwise standardized noise. Their equivalence is not established. An exact
+architecture/feature specification or author implementation is needed to settle
+this discrepancy; changing chaos order blindly is not a faithful correction.
+The prior audit records a README-only author repository. This task did not
+repeat that live web check. No methodological flaw in the paper is established.
+
+Evidence:
+- scripts/diagnose_phi4.py (reproduction command: use the archived .venv Python)
+- .agent/diagnostics/first_chaos.json (settings, hashes, metrics)
+- .agent/diagnostics/first_chaos_model_seed{0,1,2}.npz (fitted coefficients)
+- .agent/diagnostics/first_chaos_seed{0,1,2}.npz (test truth/predictions)
+- .agent/diagnostics/verification.json (independent saved-array metric checks)
+- .agent/PAPER_TEXT.txt Appendix D.2, Appendix F.1
+- Original Table 1 page image inspected: prior resolution audit pde-05.png

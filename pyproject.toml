@@ -1,0 +1,9 @@
+[project]
+name = "expanding-chaos-reproduction"
+version = "0.1.0"
+description = "Independent, evidence-bounded reproduction of Shi et al. (ICML 2026)"
+requires-python = ">=3.11"
+dependencies = ["torch==2.4.1", "numpy==2.2.6", "scipy==1.17.0", "matplotlib==3.10.8"]
+
+[project.optional-dependencies]
+test = ["pytest==9.2.0"]

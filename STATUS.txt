@@ -1,0 +1,56 @@
+1: F-SPDENO Phi4 fixed initial condition, reconstructed M2, relative L2 error: rerun 0.81138 +/- 0.27401 seed SD; paper Table 1 0.012.
+Assessment date: 2026-11-17
+
+
+
+Scope: Independent SDENO/F-SPDENO reconstruction; synthetic and Heston experiments.
+
+Evidence and explanation:
+Published accuracy is not recovered. Fixed-initial-condition Phi4, M2, has relative L2
+error 0.81138 +/- 0.27401 seed SD (two completed seeds), versus 0.012: about 67.6 times
+larger. The separate M1 run is 0.37214, also far above 0.012. Random-initial-condition
+M2 is 0.25613 versus 0.015 (17.1 times). Heston extrapolation runs exist, but the
+summary has no directly matched paper numerical target for their future RMSE.
+
+Limits / next requirement:
+No author experiment implementation was available at the recorded audit. Several
+training details are reconstructed. Navier-Stokes, image/fMRI tasks, the 10,000-path
+Phi4 setting and paper baselines are unexecuted. The gap describes this reconstruction,
+not a proven paper error.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/PDE/report/summary.csv
+- ../.replication-local/artifacts/PDE/README.md
+- ../.replication-local/artifacts/PDE/verification.json
+
+Resolution attempt -- 2026-11-17:
+Independently recalculated all five saved Phi4 runs from predictions; metrics
+agree within 1e-12. Fixed-M2 mean absolute gap is 0.7993849043 (6661.54%
+relative error), outside the paper's 0.0005 rounding tolerance. Grade remains 1.
+This is archived-prediction re-evaluation, not new training.
+
+Protocol ambiguity confirmed from the original PDF: Figure 8 highlights
+Hermite M=4, but p.7 says total chaos order K<=2 suffices. The main table does
+not resolve this K/M ambiguity; local completed runs use M1/M2. Table 1's
+108,629 parameters also differ from
+local M2's 122,800. Applying M4 to the local full mixed-feature implementation
+would materialize a 196.04 GiB feature tensor, and is not a verified faithful fix.
+The live author repository still contains only a README. The precise feature
+truncation/architecture remains missing. No original-paper methodological error
+is inferred from this reconstruction's failure.
+Full audit: .agent/RESOLUTION_AUDIT_20261117.txt
+Machine evidence: ../.replication-local/status-resolution-20261117/remaining-evidence.json
+
+
+Fresh capacity diagnostic -- 2026-11-17:
+Completed three supervised first-chaos Fourier regressions on independently
+simulated fixed-initial-condition Phi4 (1000 train/200 test each). Relative L2
+mean 0.0000111115 +/- 0.0000008461 seed SD. This replaces the FNO with a linear
+map and is NOT a published-model or published-baseline reproduction; grade 1
+and the original failed F-SPDENO comparison remain unchanged. The local Haar
+output basis has full temporal rank (50); projection error <7.5e-16, and full
+first-order coordinates retain noise to 5.56e-17. Missing exact author feature
+and architecture specifications remain unresolved. Saved prediction metrics
+independently verified within 5.4e-11. No new F-SPDENO training in this task.
+Report: .agent/PHI4_CAPACITY_AUDIT_20261117.txt
+Evidence: .agent/diagnostics/first_chaos.json and verification.json.

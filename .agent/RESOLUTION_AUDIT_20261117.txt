@@ -1,0 +1,43 @@
+PDE resolution attempt -- 2026-11-17
+
+Result: grade 1 retained. Independent NumPy replay of all five completed Phi4
+saved prediction files agrees with the recorded per-path relative L2 means to
+1e-12. Fixed-initial-condition M2 (two seeds): 0.8113849042658783 +/-
+0.27401429000954824 seed SD; Table 1 target 0.012. Absolute error
+0.7993849042658783, relative error 66.6154086888232 (6661.54%); paper rounding
+tolerance 0.0005. Seed SD is not a confidence interval. No fresh training here.
+
+Verified original PDF Table 1 (p.5), Appendix F.1 (p.29), Figure 8 (p.30).
+Table 1 reports 108,629 parameters, while the local M2 reconstruction has
+122,800 real parameters. Figure 8 highlights Hermite order M=4, while the main
+text on p.7 says total chaos order K<=2 suffices for Phi4/NS. This is an internal
+K/M protocol ambiguity; M4 is not an unambiguous specified main experiment.
+The completed local comparison uses order 2, and Table 1 does not name its
+order. The local run uses 1000/100/200 train/validation/test paths; the
+paper describes 1000/200 train/test and a validation scheduler without fully
+specifying how the validation subset is obtained.
+
+Changing the order is not a sufficient verified fix. With the local 50 Gaussian
+coordinates and complete mixed-degree features, M2 has 1326 Wick features and
+M4 has 316251. Materializing M4 exactly like the current pipeline needs about
+196.04 GiB for the feature array alone, before training activations. The paper
+does not give a complete implementable feature truncation/architecture matching
+the reported parameter count. Do not silently replace mixed chaos features by
+elementwise Hermites or tune widths against the test error to claim fidelity.
+
+Live author-source check: https://github.com/EEthanShi/SDENO still contains
+only README.md (two commits); the README says code transfer is forthcoming.
+This is a source/specification limitation, not evidence of a paper failure.
+No existing archived result was overwritten and no shared GPU run was started.
+
+Evidence:
+- ../../.replication-local/status-resolution-20261117/remaining-evidence.json
+- ../../.replication-local/status-resolution-20261117/audit_remaining.py
+- PAPER_INDEX.json (original source/hash/page mapping)
+- /mnt/data/home/jkp/replications/status-resolution-20261117/pdf/pde-05.png
+- /mnt/data/home/jkp/replications/status-resolution-20261117/pdf/pde-30.png
+
+Next meaningful experiment requires the author Wick-feature construction and
+FNO architecture, or an explicitly disclosed independent reconstruction with
+its own protocol. Existing OU/Heston runs have no matched numerical paper
+target; their successful execution cannot raise this numerical grade.
