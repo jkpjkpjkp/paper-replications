@@ -1,0 +1,9 @@
+Stable Alpha: Adversarial Invariant Representation Learning for Nonlinear Asset Pricing under Temporal Distribution Shifts
+
+Condensed abstract
+
+Introduces CASH, an asset-pricing framework that learns representations intended to
+remain useful across changing market regimes. An information-theoretic adversarial
+objective suppresses transient correlations, while a dynamic exposure network maps
+invariant features into conditional factor prices. Experiments across stock markets
+report improved out-of-sample forecasts and robustness to temporal shifts.

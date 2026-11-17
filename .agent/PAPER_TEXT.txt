@@ -1,0 +1,21 @@
+Stable Alpha: Adversarial Invariant Representation Learning for Nonlinear Asset Pricing under Temporal Distribution Shifts
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: abstract_only
+Original source: ../.replication-local/artifacts/stable-alpha/sources/official-abstract.txt
+Source SHA-256: 1dde315020f5800fdad0aac0830e7f4f1704627ba8bd20803df04d344280ee7b
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Note: Full manuscript is absent locally. On 2026-11-17 the OpenReview API required challenge verification and the rendered forum reported no permission to read it. This contains only the archived official abstract.
+
+=== BEGIN SOURCE TEXT ===
+
+=== TEXT SEGMENT 1 ===
+###
+Abstract
+
+Deep learning has emerged as a powerful paradigm for constructing nonlinear asset pricing factor models. However, temporal distribution shifts such as bull-bear transitions and industry rotations undermine the generalization of models trained under the i.i.d. assumption. As a result, existing models tend to exploit environment-specific correlations that are highly predictive in-sample but unstable across market regimes. To address this challenge, we propose $\textit{\textbf{CASH}}$, a causality-inspired asset pricing factor framework designed to learn invariant and minimally sufficient representations under temporal distribution shifts. CASH formulates an information-theoretic adversarial learning objective that systematically discards transient market noise by optimizing against an adversary designed to exploit spurious correlations, thereby distilling invariant factor-return relationships. The resulting invariant representation is then integrated into a conditional factor pricing model via a dynamic factor exposure network. Experiments on real-world stock datasets across multiple markets demonstrate that CASH consistently outperforms state-of-the-art baselines in out-of-sample return prediction and exhibits superior robustness under pronounced temporal regime shifts.
+
+=== END SOURCE TEXT ===

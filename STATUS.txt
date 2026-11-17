@@ -1,0 +1,27 @@
+0: blocked
+Assessment date: 2026-11-17
+
+
+
+Scope: Blocked original Stable Alpha experiment; synthetic engineering only.
+
+Evidence and explanation:
+The archived status records zero original-market training runs, no paper-comparable
+results, and one synthetic fixture passing eight checks. Full manuscript/input
+specification and original market inputs were not established in the saved evidence. A
+code checkout and synthetic pass cannot provide a paper-number comparison.
+
+Limits / next requirement:
+Resolve manuscript/specification access and construct the real experiment inputs, then
+execute a representative benchmark. This is the Stable Alpha project, distinct from the
+STABLE diffusion project in ../stable/.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/stable-alpha/STATUS.json
+- ../.replication-local/artifacts/stable-alpha/REPORT.txt
+- README.md
+
+
+Blocker triage and new work — 2026-11-17:
+Primary blocker: MANUSCRIPT/SPECIFICATION + DATA. See BLOCKER.txt for data/compute flags,
+current actions, remaining requirements and evidence. Grade remains 0.

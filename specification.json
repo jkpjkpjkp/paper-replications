@@ -1,0 +1,283 @@
+{
+  "paper_id": "NZHuWIlAUx",
+  "method": "CASH",
+  "source_level": "official_abstract_and_author_code; full manuscript unavailable",
+  "source": "https://neurips.cc/virtual/2026/poster/153143",
+  "verified_concepts": [
+    "Nonlinear asset pricing under temporal distribution shifts",
+    "Invariant and minimally sufficient representations",
+    "An information-theoretic adversarial learning objective",
+    "An adversary intended to exploit spurious correlations",
+    "A conditional factor pricing model with a dynamic factor exposure network",
+    "Experiments across multiple stock markets"
+  ],
+  "unknown_required_settings": {
+    "exact_objective_equations_and_signs": null,
+    "information_theoretic_estimators_and_bounds": null,
+    "adversary_inputs_outputs_and_training_targets": null,
+    "definition_and_observability_of_environments": null,
+    "representation_architecture_and_dimensions": null,
+    "factor_construction_and_factor_return_timing": null,
+    "dynamic_exposure_network": null,
+    "inference_protocol": null,
+    "optimizer_and_update_schedule": null,
+    "loss_coefficients_and_selection_procedure": null,
+    "data_vendors_markets_and_historical_universes": null,
+    "input_features_and_preprocessing": null,
+    "target_return_definition_and_horizon": null,
+    "train_validation_test_dates_and_rolling_scheme": null,
+    "regime_shift_experiment_definitions": null,
+    "baseline_implementations_and_search_budgets": null,
+    "metrics_and_aggregation": null,
+    "portfolio_construction_and_costs_if_applicable": null,
+    "reported_table_and_figure_values": null,
+    "seed_count_and_uncertainty": null,
+    "author_code_repository_and_commit": {
+      "repository": "https://github.com/ZiheLiu1007/Neurips2026-CASH",
+      "commit": "dc03215a699ff08073172098b3f1033a7c27f8c6"
+    },
+    "supplement": null
+  },
+  "implementation_started": true,
+  "reason": "Executable author code is available and engineering-verified. Mapping its settings and outputs to the unavailable paper/data remains unresolved.",
+  "implementation_strategy": "reuse unchanged author implementation",
+  "author_repository": "https://github.com/ZiheLiu1007/Neurips2026-CASH",
+  "author_commit": "dc03215a699ff08073172098b3f1033a7c27f8c6",
+  "paper_method_fidelity_verified": false,
+  "known_from_author_code": {
+    "input_contract": "finite aligned fixed-universe NTP or TNP arrays",
+    "temporal_indexing": "features t-window:t, target returns t",
+    "main_settings": {
+      "output_root": "../CASH_outputs/main_cash_window3",
+      "data": {
+        "features_path": "/path/to/features.npy",
+        "returns_path": "/path/to/returns.npy",
+        "timestamps_path": "/path/to/timestamps.npy",
+        "layout": "NTP",
+        "return_type": "excess",
+        "realized_returns_path": "/path/to/realized_returns.npy"
+      },
+      "train": {
+        "window": 3,
+        "z_dim": 32,
+        "factor_dim": 8,
+        "transformer_nhead": 4,
+        "transformer_layers_time": 2,
+        "transformer_layers_cross": 2,
+        "transformer_dropout": 0.1,
+        "vae_hidden_dim": 32,
+        "vae_beta": 1.0,
+        "beta_hidden_dim": 0,
+        "cari_noise_std": 0.1,
+        "d1_hidden_dim": 64,
+        "batch_size": 8,
+        "epochs": 200,
+        "patience": 50,
+        "train_ratio": 0.7,
+        "val_ratio": 0.1,
+        "val_metric": "mse",
+        "seed": 42,
+        "amp_mode": "auto"
+      },
+      "evaluation": {
+        "fbar_lookback": 3,
+        "calibrate_mode": "none"
+      },
+      "portfolio": {
+        "portfolio_size": 50,
+        "max_turnover": 10,
+        "transaction_cost": 0.003,
+        "init_method": "top_predictions"
+      }
+    },
+    "ablation_grid": [
+      {
+        "name": "full_cash",
+        "patch": {}
+      },
+      {
+        "name": "no_dcls",
+        "patch": {
+          "train": {
+            "lambda_d1": 0.0,
+            "lambda_g1": 0.0
+          }
+        }
+      },
+      {
+        "name": "no_dpred",
+        "patch": {
+          "train": {
+            "lambda_d2": 0.0,
+            "lambda_g2": 0.0
+          }
+        }
+      },
+      {
+        "name": "no_itransformer",
+        "patch": {
+          "train": {
+            "disable_itransformer": true
+          }
+        }
+      },
+      {
+        "name": "no_adversarial",
+        "patch": {
+          "train": {
+            "disable_adversarial": true
+          }
+        }
+      },
+      {
+        "name": "no_grl",
+        "patch": {
+          "train": {
+            "grl_d1": 0.0,
+            "grl_d2": 0.0
+          }
+        }
+      }
+    ],
+    "sensitivity_grid": [
+      {
+        "name": "lambda_cls_0_1",
+        "patch": {
+          "train": {
+            "lambda_d1": 0.1,
+            "lambda_g1": 0.1
+          }
+        }
+      },
+      {
+        "name": "lambda_cls_0_3",
+        "patch": {
+          "train": {
+            "lambda_d1": 0.3,
+            "lambda_g1": 0.3
+          }
+        }
+      },
+      {
+        "name": "lambda_cls_1",
+        "patch": {
+          "train": {
+            "lambda_d1": 1.0,
+            "lambda_g1": 1.0
+          }
+        }
+      },
+      {
+        "name": "lambda_cls_3",
+        "patch": {
+          "train": {
+            "lambda_d1": 3.0,
+            "lambda_g1": 3.0
+          }
+        }
+      },
+      {
+        "name": "lambda_cls_10",
+        "patch": {
+          "train": {
+            "lambda_d1": 10.0,
+            "lambda_g1": 10.0
+          }
+        }
+      },
+      {
+        "name": "lambda_pred_0_1",
+        "patch": {
+          "train": {
+            "lambda_d2": 0.1,
+            "lambda_g2": 0.1
+          }
+        }
+      },
+      {
+        "name": "lambda_pred_0_3",
+        "patch": {
+          "train": {
+            "lambda_d2": 0.3,
+            "lambda_g2": 0.3
+          }
+        }
+      },
+      {
+        "name": "lambda_pred_1",
+        "patch": {
+          "train": {
+            "lambda_d2": 1.0,
+            "lambda_g2": 1.0
+          }
+        }
+      },
+      {
+        "name": "lambda_pred_3",
+        "patch": {
+          "train": {
+            "lambda_d2": 3.0,
+            "lambda_g2": 3.0
+          }
+        }
+      },
+      {
+        "name": "lambda_pred_10",
+        "patch": {
+          "train": {
+            "lambda_d2": 10.0,
+            "lambda_g2": 10.0
+          }
+        }
+      },
+      {
+        "name": "b_0_01",
+        "patch": {
+          "train": {
+            "cari_noise_std": 0.01
+          }
+        }
+      },
+      {
+        "name": "b_0_05",
+        "patch": {
+          "train": {
+            "cari_noise_std": 0.05
+          }
+        }
+      },
+      {
+        "name": "b_0_1",
+        "patch": {
+          "train": {
+            "cari_noise_std": 0.1
+          }
+        }
+      },
+      {
+        "name": "b_0_2",
+        "patch": {
+          "train": {
+            "cari_noise_std": 0.2
+          }
+        }
+      },
+      {
+        "name": "b_0_3",
+        "patch": {
+          "train": {
+            "cari_noise_std": 0.3
+          }
+        }
+      }
+    ],
+    "inference": "beta(past features) times mean VAE factor estimates from prior returns",
+    "metrics": "predict.py pooled uncentered R2 percent; evaluate.py per-period uncentered R2 percent, Pearson IC, tied-average Spearman rank IC",
+    "source_files": [
+      "upstream/train.py",
+      "upstream/predict.py",
+      "upstream/evaluate.py",
+      "upstream/config.py"
+    ]
+  }
+}

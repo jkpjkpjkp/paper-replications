@@ -1,0 +1,26 @@
+PRIMARY BLOCKER: MANUSCRIPT/SPECIFICATION + DATA
+Assessed: 2026-11-17 (Asia/Shanghai)
+
+DATA: YES: empirical source/features unknown until full specification is accessible
+COMPUTE: NO: local synthetic native pipeline already executes
+SPECIFICATION / PAPER TARGET: YES: full manuscript and target table unavailable
+
+Author code exists and its synthetic check passes, but no original-market result
+exists. Today's saved signed-in OpenReview attempt was denied forum/PDF access.
+A live 2026-11-17 repository check still provides code and a short README, not
+the empirical panel or full feature definitions. Default feature_dim=318 is not
+a list of features. Author .npy files are optional if exact raw-data construction
+can be established; absence of arrays alone is not the blocker.
+
+Action / next requirement:
+No synthetic rerun or arbitrary CRSP substitution. Obtain an authorized full
+manuscript/supplement and experimental mapping; then construct real inputs from
+available raw data where possible. More accelerator capacity is not the gate.
+
+Evidence (paths relative to /home/jkp/data):
+- .replication-local/artifacts/stable-alpha/REPORT.txt
+- .replication-local/openreview-resume-20261117/019
+- .replication-local/runs/blocked-20261117/stable-alpha-release.txt
+
+Numerical replication status remains 0 until a representative comparison is
+completed and assessed. Starting a job or matching a smoke-test cell is not a match.

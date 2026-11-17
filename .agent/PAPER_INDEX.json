@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "stable-alpha",
+  "title": "Stable Alpha: Adversarial Invariant Representation Learning for Nonlinear Asset Pricing under Temporal Distribution Shifts",
+  "coverage": "abstract_only",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/stable-alpha/sources/official-abstract.txt",
+    "path_relative_to_collection": ".replication-local/artifacts/stable-alpha/sources/official-abstract.txt",
+    "sha256": "1dde315020f5800fdad0aac0830e7f4f1704627ba8bd20803df04d344280ee7b",
+    "bytes": 6076,
+    "urls": [
+      "https://openreview.net/forum?id=NZHuWIlAUx"
+    ]
+  },
+  "method": "Official abstract only",
+  "note": "Full manuscript is absent locally. On 2026-11-17 the OpenReview API required challenge verification and the rendered forum reported no permission to read it. This contains only the archived official abstract.",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": null,
+  "pages": [
+    {
+      "page": null,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 20
+    }
+  ],
+  "layout_file": null,
+  "layout_pages": null,
+  "heading_candidates": [
+    {
+      "line": 17,
+      "text": "Abstract"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 15,
+      "line_end": 21
+    }
+  ],
+  "line_count": 21,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "7939b53f9b113574a4083e15166972b42956db7ff089e3d011d61fe73c67e0f4",
+      "bytes": 2193
+    }
+  }
+}
