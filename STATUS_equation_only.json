@@ -1,0 +1,28 @@
+{
+  "paper": "STABLE: Shift-Tolerant Allocation via Black-Litterman Using Conditional Diffusion Estimates",
+  "updated_at": "2026-11-17T06:55:30.707003+00:00",
+  "status": "partial_equation_reproduction_with_counterexamples",
+  "empirical_status": "not_reproduced_missing_author_artifacts_and_specification",
+  "numerical_checks_passed": 14,
+  "published_metric_cells_reproduced": 0,
+  "training_runs": 0,
+  "market_backtests": 0,
+  "full_reproduction_blockers": [
+    "Advertised repository returns HTTP 404; no exact code/data/checkpoint located.",
+    "Exact stock universe, data, preprocessing and training configuration missing.",
+    "Published k=50 covariance inverse undefined for S=55 without an explicit repair.",
+    "Allocation denominator, joint sampling and chronology conventions need resolution."
+  ],
+  "implemented_corrections": [
+    "Explicit opt-in relative ridge covariance regularization.",
+    "Reject invalid/nonpositive Sharpe normalization instead of returning a false maximizer."
+  ],
+  "not_claimed": [
+    "Author implementation reproduced",
+    "Learned diffusion model validated",
+    "Paper financial results reproduced",
+    "Profitable corrected strategy"
+  ],
+  "report": "/home/jkp/data/stable-reproduction/REPORT.txt",
+  "verification": "/home/jkp/data/stable-reproduction/results/verification.json"
+}

@@ -1,0 +1,24 @@
+1: STABLE US portfolio reconstruction (three seeds), mean annualized Sharpe: rerun -0.004; paper 1.85.
+
+
+
+Scope: Independent STABLE empirical reconstruction, four markets x three seeds.
+
+Evidence and explanation:
+Twelve 200-epoch fits and held-out backtests completed. Mean annualized Sharpe: US
+-0.004 versus paper 1.85, Europe 0.346 versus 2.92, Korea -0.246 versus 1.61, China
+-0.606 versus -0.41. US seed range is [-0.446,0.681], Europe [-0.142,0.904]; ranges are
+not confidence intervals. No published metric cell is certified. Forecast MSE is worse
+than the zero-return baseline in all four markets, and 14/78 main allocations use equal-
+weight fallback.
+
+Limits / next requirement:
+Substitute universes/vendors, reconstructed architecture/training and portfolio repairs
+prevent a like-for-like paper rejection. Full competitors and regime/sector appendix
+experiments are missing. This STABLE project is distinct from stable-alpha.
+
+Evidence paths (relative to this STATUS.txt):
+- STATUS.json
+- REPORT.txt
+- results/best_effort/portfolio_metrics.csv
+

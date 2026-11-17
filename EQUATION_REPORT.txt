@@ -1,0 +1,140 @@
+STABLE: reproduction and correctness verification
+2026-11-17
+
+STABLE has not been empirically reproduced in this workspace. The previous
+105-stable project performed only source inspection. This follow-up implements
+and executes a minimum numerical reconstruction of the specified equations.
+It is sufficient to establish concrete mathematical defects and verify several
+components against independent references. It is not sufficient to verify the
+paper's reported financial performance or forecast accuracy.
+
+The source is Soun, Y., Lee, H., Park, S., and Kang, U., STABLE: Shift-Tolerant
+Allocation via Black-Litterman Using Conditional Diffusion Estimates, ICLR 2026.
+The inspected 26-page author-hosted manuscript was downloaded on 2026-11-08:
+https://datalab.snu.ac.kr/~ukang/papers/2026ICLR-stable.pdf
+SHA256: 5258ee07088e473cecadee492828672ccbe36ceea1a559f890813bb697906605
+Byte identity with the proceedings PDF remains unverified. Relevant equations
+on pages 6 and 14 were also rendered and visually inspected in this follow-up.
+
+Current release evidence remains insufficient. On 2026-11-17, the advertised
+https://github.com/iclr26stable/iclr26stable returned HTTP 404 and the account's
+public repository endpoint returned an empty list. A title/GitHub search and
+the rendered coauthor homepage https://hosunglee.com/ did not identify a release.
+OpenReview returned a browser verification page; that is an access limit, not
+evidence that no supplemental material exists. The previous audit contains
+additional lab-release searches. These observations do not prove that no private
+or undiscovered implementation exists.
+
+Fourteen deterministic checks passed under Python/NumPy versions recorded in
+results/verification.json. Several checks deliberately verify counterexamples;
+their PASS status must not be read as a correctness endorsement of STABLE.
+
+1. The covariance inverse is undefined at the published US/China dimensions.
+   Eq. (4) centers k cumulative-return samples. Therefore rank(Sigma_view) is
+   at most k-1. Table 12 selects k=50, while Table 2 has S=55 for both markets:
+   rank <=49 and nullity >=6, regardless of which learned generator is used.
+   The numerical fixtures reproduced rank 49 for both 55-asset matrices.
+   NumPy's raw inverse returned an infinity-norm identity residual of 109.07
+   in the US fixture and raised LinAlgError in the China fixture. Floating-point
+   inv() returning an array does not overcome the exact rank defect. Europe
+   (37 assets) and Korea (44) are not forced singular by these dimensions.
+
+   Explicit repair tested: C_ridge = C + lambda * trace(C)/S * I, with lambda
+   in {1e-6, 1e-4, 1e-2, 1e-1}. All four fixtures became positive definite;
+   solve residuals ranged from 1.20e-9 to 1.03e-14. This changes the estimator
+   and the weights. It is not an author-verified correction, and lambda has not
+   been selected using market performance. See results/ridge_sensitivity.csv.
+
+2. The Sharpe formula requires a positivity condition omitted from the result.
+   Write d = 1' Sigma_BL^-1 mu_BL. The normalized tangency direction is the
+   maximum-Sharpe portfolio under the paper's sole budget constraint when d>0.
+   When d<0, normalization reverses the direction and attains the lower
+   Cauchy-Schwarz bound, i.e. minimum Sharpe. At d=0 it is undefined.
+
+   A valid BL input pair produces posterior mean (-0.5,-1), covariance 0.5 I.
+   The paper formula gives weights (1/3,2/3) and Sharpe -1.5811388301.
+   Feasible weights (3,-2) sum to one and give Sharpe +0.1961161351.
+   This is a mathematical counterexample under the stated budget-only
+   constraints, not evidence that the authors actually encountered this case.
+   The checked implementation rejects nonpositive/near-zero denominators.
+   Choosing a constrained optimizer, cash asset or leverage cap would require
+   a separately specified strategy. The guard does not invent one.
+
+3. The Appendix A.3 equilibrium prior has a notable exact cancellation.
+   That appendix sets mu_prior = Sigma_prior * w_equal. Combining Eqs. (6)-(8):
+       w = normalize(w_equal + solve(Sigma_view, mu_view)).
+   Consequently the prior covariance cancels from the final allocation when
+   the view moments are held fixed, even though the posterior moments change.
+   Changing the positive-definite prior across scales .01, 1 and 100 changed
+   final weights by at most 8.33e-17. This limits an interpretation that the
+   rolling prior covariance directly diversifies final weights under A.3.
+   It is not an algebra error in the Gaussian update. A different prior-mean
+   convention, extra constraints or different predictive covariance changes
+   this conclusion and must be documented. Section 3.1's rolling-prior wording
+   and Appendix A.3's explicit equilibrium construction need reconciliation.
+
+4. Per-stock predictive distributions do not identify their joint covariance.
+   The sample index in Eq. (4) must have a defined cross-asset coupling. Two
+   fixtures with exactly the same marginal samples produce correlation +1
+   or -1 solely by changing their pairing. Shared conditioning is not itself
+   an explicit shared latent shock. Author code is needed to determine the
+   actual coupling; this check does not prove their implementation is wrong.
+
+5. Two other explanatory statements fail literal numerical checks.
+   With Section 3.4's guidance equation, z=.5 gives the midpoint of macro and
+   full-condition predictions, whereas z=1 gives the full-condition prediction.
+   Appendix A.7's claim that z=.5 reduces to the full-condition denoiser needs
+   clarification. Also, minimizing the noise MSE does not imply that predicted
+   noise itself is N(0,I), as asserted in Section 3.3. In a Gaussian example
+   with alpha_bar=.8, the population-optimal conditional-mean prediction has
+   variance .2; simulation gives .200922. This observation does not invalidate
+   standard DDIM training; it contradicts that particular justification.
+
+The components that could be verified numerically behaved correctly. BL moments
+match an independent whitened least-squares/SVD Gaussian reference with maximum
+mean error 4.22e-15 and covariance error 3.33e-15. The positive-denominator
+Sharpe solution agrees with an independent 200,001-point two-asset grid search.
+Log-to-simple horizon compounding and unbiased sample moments agree with direct
+reference calculations. Thirty deterministic DDIM steps recover an exact-noise
+50 x 20 x 55 fixture within 5.51e-15. The Kalman implementation agrees with batch
+Bayesian regression at Q=0, and changing future observations leaves past filtered
+estimates unchanged. The integration fixture explicitly overrides its view mean
+to test a known allocation solution; it is not a learned forecast experiment.
+
+Published headline arithmetic is also recorded, separately from reproduction.
+Against the strongest baseline in Table 3, the largest positive-baseline Sharpe
+gain is 105.63% (Europe: 2.92 versus MOM 1.42), rather than the abstract's 122.9%.
+The latter is approximately obtained against the weaker 1.31 baseline. Table 4
+gives a maximum MSE reduction of 14.88% (China: 3.89 versus AEC-GAN 4.57), rather
+than 15.7%. These comparisons use rounded published cells and concern those
+tables; they do not establish the origin of the abstract figures. They require
+author reconciliation, not replacement with claimed reproduced measurements.
+
+What is still needed for an empirical reproduction: the exact 191 stock IDs
+and price/macro panels with source and adjustment conventions; preprocessing
+and availability timestamps; UNet architecture and optimizer/batch/lr settings;
+diffusion schedule and return scaling; Kalman initialization/noise settings;
+numeric seed; validation/search/checkpoint history; joint path construction;
+covariance regularization; and executable portfolio constraints/accounting.
+Earlier COVID/ZIRP experiments also need their own chronological training cuts
+and label purging. The main split is train through 2024-09-30 and test from
+2024-10-01 through 2025-03-31. The paper's 2025-03-31 universe selection is
+retrospective and must be identified as such in any faithful replay.
+
+No learned denoiser was trained, no market panel was substituted, and no Sharpe,
+drawdown, volatility, forecast-error or profitability result was reproduced.
+The existing 536 paper-target metric cells remain unverified. Running an
+arbitrary substitute UNet or universe would not resolve those evidence gaps.
+This work establishes that a literal uncorrected replay of the stated method
+is not well-defined in the two 55-asset markets. It does not establish that the
+authors' unavailable implementation or reported measurements are false.
+
+Re-run instructions are in README.txt. The original source audit is preserved;
+only this new stable-reproduction directory was authored for the follow-up.
+
+Methods attribution: the scientific-critical-thinking skill informed the
+separation of numerical evidence, interpretations and unresolved empirical
+claims. Kassis, T., Agarwal, V., He, Y., Patel, D., and Brueckner, A. M. (2026).
+Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents.
+https://doi.org/10.48550/arXiv.2609.00065
+The live arXiv record was checked on 2026-11-17; metadata is saved in evidence/.

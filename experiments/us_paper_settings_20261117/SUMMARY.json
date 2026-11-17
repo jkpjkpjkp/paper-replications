@@ -1,0 +1,179 @@
+{
+  "updated_at": "2026-11-17T12:25:55.815108+00:00",
+  "seeds": [
+    20261120,
+    20261121
+  ],
+  "setup": "revised US reconstruction after paper-settings audit",
+  "exact_author_reproduction": false,
+  "training_runs": 2,
+  "mean_sharpe": 0.5013242817565284,
+  "sample_seed_sd": 0.05160200725088957,
+  "min_sharpe": 0.464836152506587,
+  "max_sharpe": 0.5378124110064698,
+  "equal_weight_sharpe": 0.9153503829215732,
+  "paper_sharpe": 1.85,
+  "paper_equal_weight_sharpe": 0.82,
+  "all_checks_passed": true,
+  "ledgers_independently_verified": 22,
+  "primary_fallbacks": 6,
+  "primary_gross_caps": 7,
+  "primary_rebalances": 14,
+  "original_three_seed_results_pooled": false,
+  "checks": [
+    {
+      "seed": 20261120,
+      "method": "STABLE_repaired",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 1.0880185641326534e-14
+    },
+    {
+      "seed": 20261120,
+      "method": "STABLE_repaired",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 9.769962616701378e-15
+    },
+    {
+      "seed": 20261120,
+      "method": "CRP",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 3.26405569239796e-14
+    },
+    {
+      "seed": 20261120,
+      "method": "CRP",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 3.3306690738754696e-14
+    },
+    {
+      "seed": 20261120,
+      "method": "MOM",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 2.886579864025407e-15
+    },
+    {
+      "seed": 20261120,
+      "method": "MOM",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 2.220446049250313e-15
+    },
+    {
+      "seed": 20261120,
+      "method": "MVO",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 1.1102230246251565e-14
+    },
+    {
+      "seed": 20261120,
+      "method": "MVO",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 9.547918011776346e-15
+    },
+    {
+      "seed": 20261120,
+      "method": "STABLE_ridge_0.0001",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 1.3322676295501878e-14
+    },
+    {
+      "seed": 20261120,
+      "method": "STABLE_ridge_0.0001",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 1.3100631690576847e-14
+    },
+    {
+      "seed": 20261120,
+      "method": "STABLE_ridge_0.1",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 9.547918011776346e-15
+    },
+    {
+      "seed": 20261120,
+      "method": "STABLE_ridge_0.1",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 1.0658141036401503e-14
+    },
+    {
+      "seed": 20261120,
+      "method": "STABLE_correlated_shocks",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 1.509903313490213e-14
+    },
+    {
+      "seed": 20261120,
+      "method": "STABLE_correlated_shocks",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 1.454392162258955e-14
+    },
+    {
+      "seed": 20261121,
+      "method": "STABLE_repaired",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 2.531308496145357e-14
+    },
+    {
+      "seed": 20261121,
+      "method": "STABLE_repaired",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 2.55351295663786e-14
+    },
+    {
+      "seed": 20261121,
+      "method": "CRP",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 3.26405569239796e-14
+    },
+    {
+      "seed": 20261121,
+      "method": "CRP",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 3.3306690738754696e-14
+    },
+    {
+      "seed": 20261121,
+      "method": "MOM",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 2.886579864025407e-15
+    },
+    {
+      "seed": 20261121,
+      "method": "MOM",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 2.220446049250313e-15
+    },
+    {
+      "seed": 20261121,
+      "method": "MVO",
+      "cost_bps": 0,
+      "passed": true,
+      "independent_price_ledger_max_error": 1.1102230246251565e-14
+    },
+    {
+      "seed": 20261121,
+      "method": "MVO",
+      "cost_bps": 10,
+      "passed": true,
+      "independent_price_ledger_max_error": 9.547918011776346e-15
+    }
+  ]
+}

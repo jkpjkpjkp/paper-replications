@@ -1,0 +1,718 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "stable",
+  "title": "STABLE: Shift-Tolerant Allocation via Black-Litterman Using Conditional Diffusion Estimates",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/paper-reproduction-audit/workspaces/105-stable/sources/paper.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/paper-reproduction-audit/workspaces/105-stable/sources/paper.pdf",
+    "sha256": "5258ee07088e473cecadee492828672ccbe36ceea1a559f890813bb697906605",
+    "bytes": 5900119,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 26,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 58
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 59,
+      "line_end": 101
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 102,
+      "line_end": 167
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 168,
+      "line_end": 199
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 200,
+      "line_end": 296
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 297,
+      "line_end": 437
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 438,
+      "line_end": 524
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 525,
+      "line_end": 708
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 709,
+      "line_end": 851
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 852,
+      "line_end": 895
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 896,
+      "line_end": 940
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 941,
+      "line_end": 978
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 979,
+      "line_end": 1070
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1071,
+      "line_end": 1161
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1162,
+      "line_end": 1347
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1348,
+      "line_end": 1527
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1528,
+      "line_end": 1712
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1713,
+      "line_end": 2028
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 2029,
+      "line_end": 2074
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 2075,
+      "line_end": 2090
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 2091,
+      "line_end": 2105
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 2106,
+      "line_end": 2122
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 2123,
+      "line_end": 2157
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 2158,
+      "line_end": 2202
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 2203,
+      "line_end": 2291
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 2292,
+      "line_end": 2358
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 74
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 75,
+      "line_end": 124
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 125,
+      "line_end": 186
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 187,
+      "line_end": 228
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 229,
+      "line_end": 302
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 303,
+      "line_end": 389
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 390,
+      "line_end": 454
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 455,
+      "line_end": 515
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 516,
+      "line_end": 575
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 576,
+      "line_end": 628
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 629,
+      "line_end": 679
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 680,
+      "line_end": 743
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 744,
+      "line_end": 811
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 812,
+      "line_end": 882
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 883,
+      "line_end": 943
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 944,
+      "line_end": 1004
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1005,
+      "line_end": 1066
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1067,
+      "line_end": 1127
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1128,
+      "line_end": 1186
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1187,
+      "line_end": 1213
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1214,
+      "line_end": 1239
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 1240,
+      "line_end": 1269
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 1270,
+      "line_end": 1314
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 1315,
+      "line_end": 1369
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 1370,
+      "line_end": 1411
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 1412,
+      "line_end": 1443
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 16,
+      "text": "B LACK –L ITTERMAN USING C ONDITIONAL D IFFU SION E STIMATES"
+    },
+    {
+      "line": 23,
+      "text": "A BSTRACT"
+    },
+    {
+      "line": 46,
+      "text": "I NTRODUCTION"
+    },
+    {
+      "line": 95,
+      "text": "R ELATED W ORK"
+    },
+    {
+      "line": 129,
+      "text": "P ROPOSED M ETHOD"
+    },
+    {
+      "line": 133,
+      "text": "P ROBLEM D EFINITION"
+    },
+    {
+      "line": 189,
+      "text": "C ONDITIONAL D IFFUSION G ENERATOR (CDG)"
+    },
+    {
+      "line": 291,
+      "text": "M ULTI -L EVEL G UIDANCE (MLG)"
+    },
+    {
+      "line": 381,
+      "text": "B LACK –L ITTERMAN –BASED M EAN –VARIANCE O PTIMIZER (BL–MVO)"
+    },
+    {
+      "line": 491,
+      "text": "E XPERIMENT RESULTS"
+    },
+    {
+      "line": 502,
+      "text": "E XPERIMENTAL S ETTINGS"
+    },
+    {
+      "line": 552,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 626,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 695,
+      "text": "P ORTFOLIO M ANAGEMENT P ERFORMANCE (Q1)"
+    },
+    {
+      "line": 727,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 820,
+      "text": "T IME –S ERIES P REDICTION ACCURACY (Q2)"
+    },
+    {
+      "line": 838,
+      "text": "S TOCK E MBEDDING Q UALITY (Q3)"
+    },
+    {
+      "line": 855,
+      "text": "C ONCLUSION"
+    },
+    {
+      "line": 869,
+      "text": "R EFERENCES"
+    },
+    {
+      "line": 888,
+      "text": "20. IEEE, 2019."
+    },
+    {
+      "line": 970,
+      "text": "A PPENDIX"
+    },
+    {
+      "line": 974,
+      "text": "S YMBOLS"
+    },
+    {
+      "line": 1031,
+      "text": "D ENOISING D IFFUSION I MPLICIT M ODELS U SING G UIDANCE M ODELING"
+    },
+    {
+      "line": 1062,
+      "text": "B LACK –L ITTERMAN –BASED O PTIMIZATION"
+    },
+    {
+      "line": 1146,
+      "text": "P ORTFOLIO M ANAGEMENT P ERFORMANCES OVER M ULTIPLE M ARKET R EGIMES"
+    },
+    {
+      "line": 1189,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 1263,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 1328,
+      "text": "I NDEPENDENT T EST OF C OVARIANCE E STIMATION P ERFORMANCE"
+    },
+    {
+      "line": 1375,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 1449,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 1505,
+      "text": "2. LSTM–Cholesky (Nelson et al., 2017). A vanilla LSTM uses the macro sequence in Table 1"
+    },
+    {
+      "line": 1508,
+      "text": "3. LightGBM–Cholesky (Ke et al., 2017). We train one gradient-boosted tree regressor per entry"
+    },
+    {
+      "line": 1559,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 1633,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 1694,
+      "text": "S TABLE improves the ASR by 9.8% (from 2.66 to 2.92) and reduces RMDD by 14.1% (from 4.47%"
+    },
+    {
+      "line": 1703,
+      "text": "S TYLIZED FACTS A NALYSIS AND G OODNESS - OF -F IT T ESTS"
+    },
+    {
+      "line": 1741,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 1815,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 1893,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 1967,
+      "text": "S TABLE (proposed)"
+    },
+    {
+      "line": 2093,
+      "text": "S TABLE successfully captures the kurtosis within confidence intervals in most markets."
+    },
+    {
+      "line": 2129,
+      "text": "S TABLE again provides the best fit in all four markets."
+    },
+    {
+      "line": 2175,
+      "text": "A BLATION S TUDY"
+    },
+    {
+      "line": 2224,
+      "text": "# DDIM reverse steps"
+    },
+    {
+      "line": 2226,
+      "text": "# forward diffusion steps"
+    },
+    {
+      "line": 2272,
+      "text": "H YPERPARAMETER A NALYSIS"
+    },
+    {
+      "line": 2283,
+      "text": "C OMPUTATIONAL T RANSPARENCY AND R EPRODUCIBILITY"
+    },
+    {
+      "line": 2343,
+      "text": "503 GiB"
+    },
+    {
+      "line": 2344,
+      "text": "33 TiB root volume (PERC H730P RAID)"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2359
+    }
+  ],
+  "line_count": 2359,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "029726666dea514597cc3eb3af31541c65a5095accc1d7b58faeb1aa60ef86ad",
+      "bytes": 80472
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "572e4eaffdc70bc1843f0a824fd0d35b089aa1687a6fae28552010b1750782c5",
+      "bytes": 97315
+    }
+  }
+}

@@ -1,0 +1,35 @@
+1: STABLE US revised paper-settings reconstruction (two seeds), mean annualized Sharpe: rerun 0.501 +/- 0.052 seed SD; paper 1.85.
+
+Updated: 2026-11-17T12:25:55.815108+00:00
+Scope: completed US follow-up after a paper-settings audit; original four-market,
+three-seed reconstruction preserved separately. Fourteen total 200-epoch fits.
+
+Latest evidence:
+Seeds 20261120 and 20261121 completed 200 epochs with full fitting through
+2024-09-30, March 2025 universe selection, revised features and literal displayed
+noise/L2 objective. Mean ASR 0.501324, sample seed SD 0.051602, range
+[0.464836, 0.537812]. Seed SD is not a confidence interval.
+Equal-weight ASR 0.915350 versus paper 0.82. No exact metric cell certified.
+22 follow-up ledgers independently reconstructed from prices/holdings.
+Main equal-weight fallbacks: 6/14; gross caps: 7.
+
+Historical evidence retained:
+Original US mean ASR -0.004 from [-0.446, 0.681, -0.247], with equal weight 0.124.
+Original Europe/Korea/China means remain 0.346/-0.246/-0.606. Do not pool the two
+new US seeds with the original three: the protocols and selected universes differ.
+
+Limits:
+Author repository remains unavailable; exact IDs, historical GICS, UNet,
+optimizer/sampling specifications and numeric seed are unresolved. Covariance
+ridge, gross cap and fallback remain explicit repairs. End-of-test universe
+selection is retrospective. This is closer to documented settings, not an exact
+author-code replication or a clean rejection of the paper. Full competitors and
+regime experiments remain outside scope. Distinct from stable-alpha.
+
+Evidence:
+- PAPER_SETTINGS_AUDIT.txt
+- experiments/us_paper_settings_20261117/REPORT.txt
+- experiments/us_paper_settings_20261117/SUMMARY.json
+- experiments/us_paper_settings_20261117/results/best_effort/portfolio_metrics.csv
+- evidence/openreview-complete-20261117.txt
+- evidence/before_paper_settings_STATUS.json (original assessment)

@@ -1,0 +1,33 @@
+STABLE specification concerns — reviewed 2026-11-17
+
+These concern the displayed method, not a claim that the unavailable author
+implementation used an incorrect numerical procedure. The reconstruction's
+poor Sharpe alone is not evidence of a flaw in the original experiment.
+
+Verified rank deficiency: Equation (4), p.6, estimates covariance from k centered
+sample vectors. Rank is at most k-1. Tables 2 and 12 specify S=55 and k=50 for
+US/China, hence rank <=49 and the ordinary view-covariance inverse in Appendix
+A.3 does not exist. Ridge/pseudoinverse/joint-sampling resolution is not specified
+in the inspected paper or public replies. See EQUATION_REPORT.txt, results/
+covariance_rank.csv and evidence/paper-page-06.png.
+
+Missing positivity condition: Appendix A.3's budget-normalized tangency formula
+maximizes Sharpe only if 1' Sigma_BL^-1 mu_BL > 0. Negative normalization flips
+the maximizing direction; zero normalization is undefined. Existing numerical
+counterexample and independent checks are recorded in EQUATION_REPORT.txt.
+Whether the author's data encountered such cases is unknown.
+
+Unspecified joint sampling: stock-wise conditional distributions alone do not
+determine cross-stock covariance. A shared conditioning vector does not specify
+shared random shocks. The inspected description leaves sample pairing/coupling
+unresolved; this is a reproducibility gap, not proof of incorrect author code.
+
+Retrospective universe: Section 4.1 selects using 2025-03-31 GICS/capitalization
+and full-history availability, although the test starts 2024-10-01. This uses
+end-of-test universe information. It prevents interpreting this universe choice
+as a point-in-time strategy. The magnitude/direction of any selection effect
+on the author's result is not established. The follow-up explicitly follows
+the reported date while labelling this limitation.
+
+Source: https://datalab.snu.ac.kr/~ukang/papers/2026ICLR-stable.pdf
+Full source mapping and matching limits: PAPER_SETTINGS_AUDIT.txt.

@@ -1,0 +1,135 @@
+Hosung Lee
+
+ExperienceProjectsPublicationsStackContact
+
+Financial AI · Data Mining · ML Systems
+
+# Hosung Lee
+
+ML Researcher · Backend Engineer
+
+I build research systems and production backends for AI-driven portfolio management. My work sits between risk-aware reinforcement learning, data mining, and the infrastructure needed to move financial AI models from experiments into real products.
+
+Email GitHub LinkedIn Slackle
+
+Financial AI, portfolio reinforcement learning, and scalable ML systems
+
+Seoul, South Korea
+
+KDD 2026 first-author paper accepted for RiskBound
+
+ICLR 2026 co-author paper on shift-tolerant allocation
+
+Production portfolio backend supporting about KRW 400M AUM
+
+Ranked 4th by Sharpe ratio among about 1,300 RATB benchmark models
+
+## Experience
+
+### Deeptrade Technowledges
+
+ML Researcher / Backend Engineer
+
+2024 - Present
+
+- Built backend systems for serving machine learning-based portfolio models in production.
+
+- Researched and developed reinforcement learning-based portfolio management models.
+
+- Developed integrated research systems for managing, running, and analyzing AI model experiments.
+
+### Seoul National University
+
+M.S. in Artificial Intelligence
+
+Sep 2024 - Aug 2026 (Expected)
+
+Financial AI / Data Mining · Advisor: Prof. U Kang · GPA: 3.68 / 4.3
+
+### University of Florida
+
+B.S. Computer Science, Minor in Mathematics
+
+Aug 2017 - Dec 2021
+
+GPA: 3.52 / 4.0
+
+## Selected Projects
+
+### RiskBound
+
+Research
+
+Risk-aware action-space reshaping framework for reinforcement learning-based portfolio optimization, accepted to KDD 2026 as first author.
+
+### Dangyeon Backend
+
+Production
+
+Retirement investment service backend that converts model-generated portfolio weights into executable rebalancing orders, including valuation, settlement logic, order generation, and operational logging.
+
+Visit
+
+### Integrated AI Experiment Management System
+
+Platform
+
+Internal research platform for registering, running, tracking, and comparing AI model experiments with APIs and schemas for configs, logs, metadata, and results.
+
+### Slackle
+
+Open Tooling
+
+A modular Slack framework powered by FastAPI, designed for rapid prototyping and flexible automation workflows.
+
+Visit
+
+## Publications
+
+RiskBound: Risk-Aware Boundary-Guided Portfolio Optimization via Action Space Reshaping
+
+Hosung Lee, U Kang
+
+KDD 2026 (Accepted)
+
+STABLE: Shift-Tolerant Allocation via Black-Litterman Using Conditional Diffusion Estimates
+
+Yejun Soun, Hosung Lee, Suyoung Park, U Kang
+
+ICLR 2026
+
+## Technical Stack
+
+### Programming
+
+PythonPyTorchSQLJavaC++JavaScript
+
+### Backend
+
+FastAPIDjangoPostgreSQLMySQLSQLAlchemy
+
+### Infrastructure
+
+DockerGitHub ActionsGitLinux
+
+### ML / Research
+
+Reinforcement LearningDeep LearningPortfolio OptimizationTime-Series ModelingPandasNumPyMatplotlibLaTeX
+
+## Contact
+
+I am open to conversations around financial AI research, backend systems for ML products, and collaboration on portfolio optimization.
+
+hlee24@snu.ac.kr+82 10-2556-6756Seoul, South Korea
+
+© 2026 Hosung Lee. All rights reserved.
+
+React + Tailwind CSS
+
+## Links
+
+- [Email](mailto:hlee24@snu.ac.kr)
+- [GitHub](https://github.com/hlee-ai)
+- [LinkedIn](https://www.linkedin.com/in/hosung-lee-ai/)
+- [Slackle](https://slackle.dev/)
+- [Visit](https://dangyeon.deeptrade.co/)

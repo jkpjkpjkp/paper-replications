@@ -1,0 +1,31 @@
+STABLE US: two additional seeds after paper-settings audit
+2026-11-17T12:25:55.815108+00:00
+
+This experiment changes setup; do not pool it with the original three seeds.
+All changes and unresolved author settings are in ../../PAPER_SETTINGS_AUDIT.txt.
+Both seeds completed 200 epochs. Final epoch selected; no test selection.
+Train labels end 2024-09-30. Test: 2024-10-01 to 2025-03-31 (124 sessions).
+
+Main reconstructed STABLE results (no costs, zero risk-free rate):
+Seed          Sharpe     Total return %    Annual vol %    Max drawdown %
+20261120     0.537812         3.4027         14.6261          8.1591
+20261121     0.464836         2.4394         12.1032          9.1884
+
+Mean ASR 0.501324; sample seed SD 0.051602 (not a confidence interval).
+Equal-weight ASR 0.915350; paper equal weight 0.82; paper STABLE 1.85.
+Equal-weight fallbacks 6/14; gross caps 7.
+
+Forecast mean squared error (x1e4):
+20261120 STABLE          5.062501
+20261120 trailing_mean   3.364762
+20261120 zero            3.339811
+20261121 STABLE          5.108805
+20261121 trailing_mean   3.364762
+20261121 zero            3.339811
+
+Verification: all 22 daily ledgers rebuilt independently from price ratios and fixed shares;
+source/data fingerprints unchanged, both checkpoints complete, metrics and weights verified.
+These seeds vary training and sampling RNG jointly, not training RNG alone.
+Limitations: substitute vendor/GICS/security identities; unverified network and optimizer;
+sampling/covariance/leverage repairs remain assumptions; end-of-test universe is retrospective.
+No author implementation or exact paper metric cell is certified.

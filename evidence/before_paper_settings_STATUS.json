@@ -1,0 +1,38 @@
+{
+  "paper": "STABLE",
+  "updated_at": "2026-11-17T07:37:25.151664+00:00",
+  "status": "best_effort_empirical_reconstruction_completed",
+  "empirical_status": "trained_and_backtested_on_substitute_data_with_explicit_repairs",
+  "training_runs": 12,
+  "epochs_per_run": 200,
+  "markets": [
+    "US",
+    "China",
+    "Europe",
+    "Korea"
+  ],
+  "seeds": [
+    20261117,
+    20261118,
+    20261119
+  ],
+  "primary_market_backtests": 12,
+  "portfolio_ledgers_including_baselines_costs_sensitivities": 120,
+  "published_metric_cells_reproduced": 0,
+  "exact_author_reproduction": false,
+  "numerical_checks_passed": 14,
+  "empirical_unit_checks_passed": 8,
+  "completed_runs_independently_checked": 12,
+  "fallback_decisions": 14,
+  "total_primary_rebalances": 78,
+  "report": "/home/jkp/data/stable-reproduction/REPORT.txt",
+  "metrics": "/home/jkp/data/stable-reproduction/results/best_effort/portfolio_metrics.csv",
+  "remaining_exact_reproduction_gaps": [
+    "Substitute universes, data vendors, architecture and optimization settings",
+    "Global regional universes are not verified index constituents",
+    "GICS classification uses the downloaded vendor snapshot",
+    "Main training uses nonoverlapping origins and reserves 2024 for validation",
+    "No test-dependent model, seed, ridge, or universe selection",
+    "No full reproduction of RL/generative competitor implementations or regime/sector appendix experiments"
+  ]
+}

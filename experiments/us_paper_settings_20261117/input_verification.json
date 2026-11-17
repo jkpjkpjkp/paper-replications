@@ -1,0 +1,25 @@
+{
+  "training_origins": 147,
+  "training_examples": 8085,
+  "first_label": "2013-01-31",
+  "last_label": "2024-09-30",
+  "test_days": 124,
+  "checks": [
+    "all targets finite",
+    "train/test separation",
+    "future changes preserve past features and fitted scales",
+    "55 stocks with full history and five per sector",
+    "last training label exactly September 30 2024",
+    "chunked inference agrees with whole-batch forward"
+  ],
+  "equal_weight_metrics": {
+    "ASR": 0.9153503829215732,
+    "RMDD_percent": 6.4213963700380905,
+    "AVol_percent": 11.302334460150805,
+    "total_return_percent": 4.893252730120223,
+    "test_days": 124,
+    "total_turnover": 1.316513598019751,
+    "max_gross_exposure_including_drift": 1.0000000000000004
+  },
+  "chunk_max_abs_error": 7.82310962677002e-07
+}

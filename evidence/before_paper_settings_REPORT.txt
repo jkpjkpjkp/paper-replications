@@ -1,0 +1,147 @@
+STABLE best-effort empirical reconstruction
+2026-11-17T07:37:25.151664+00:00
+
+Completed: 12 learned-model training runs (four markets x three seeds),
+200 epochs each, with held-out backtests and forecast evaluation.
+This is an independent reconstruction using substitute data and explicit
+repairs. It does not reproduce the author implementation or certify any
+of the paper's 536 published metric cells. The main Q1/Q2 pipeline runs;
+the full appendix and all competitor implementations are outside this run.
+
+Test period: 2024-10-01 through 2025-03-31, local trading sessions.
+Fit: 2013-01-01 through 2023-12-31. Validation: 2024-01 through 2024-09.
+Each target is 20 sessions; targets crossing split boundaries are removed.
+Checkpoint selection uses validation noise MSE only. All three fixed seeds
+are reported; there is no test-based seed or parameter selection.
+
+Outcome: this reconstruction does not recover the claimed broad advantage.
+Mean Sharpe is below equal weight in three of four markets. Mean forecast
+MSE is worse than a zero-return forecast in all four. These observations
+describe this substitute setup; they do not establish that the unavailable
+author implementation or its measurements are false.
+
+Annualized Sharpe ratios (zero risk-free rate; no transaction costs)
+Market      STABLE mean [seed minimum, maximum]    Equal weight    Paper STABLE
+US           -0.004 [ -0.446,   0.681]         0.124          1.85
+China        -0.606 [ -1.165,  -0.119]        -0.534         -0.41
+Europe        0.346 [ -0.142,   0.904]         0.904          2.92
+Korea        -0.246 [ -0.562,   0.032]        -0.260          1.61
+
+The paper values above are context, not like-for-like benchmarks: the
+stock IDs, vendor data, architecture and portfolio repairs differ.
+Three seeds measure training/sampling variation on one fixed historical
+test period; they are not independent market samples or confidence intervals.
+
+Main reconstructed STABLE metrics (mean across all three seeds)
+Market     Cost bps      ASR     Max drawdown %    Annual vol %    Total return %
+US              0     -0.004           8.671          13.064           -0.229
+US             10     -0.240           9.026          13.081           -1.721
+China           0     -0.606          16.771          22.476           -7.565
+China          10     -0.697          17.191          22.380           -8.407
+Europe          0      0.346           6.650          12.523            1.630
+Europe         10      0.208           6.939          12.574            0.714
+Korea           0     -0.246          13.933          22.213           -3.711
+Korea          10     -0.353          14.311          22.254           -4.795
+
+Forecast error on complete 20-session test horizons
+Market        STABLE MSE x1e4    Zero forecast MSE x1e4    STABLE DTW x1e3
+US                     3.8207                    3.3802               21.9454
+China                  7.4256                    6.1359               32.1927
+Europe                 3.1703                    2.4462               27.8070
+Korea                  9.2171                    8.4165               32.5080
+
+MSE uses the mean of 50 generated daily log-return paths. STABLE DTW
+averages L1 dynamic-time-warping distance over the 50 paths and stocks,
+divided by the 20-day horizon. The L1 cost/normalizer is an explicit
+implementation choice because the paper does not fully specify it.
+Partial final holding blocks are included in portfolio returns but are
+excluded from full-horizon forecast scoring.
+
+Allocation repairs and their observed use
+Market seed          Equal-weight fallbacks / rebalances     Gross caps
+US      20261117                   0 / 7                   0
+US      20261118                   1 / 7                   6
+US      20261119                   0 / 7                   2
+China   20261117                   6 / 6                   0
+China   20261118                   0 / 6                   1
+China   20261119                   0 / 6                   4
+Europe  20261117                   0 / 7                   1
+Europe  20261118                   7 / 7                   0
+Europe  20261119                   0 / 7                   2
+Korea   20261117                   0 / 6                   2
+Korea   20261118                   0 / 6                   0
+Korea   20261119                   0 / 6                   3
+
+Fallbacks occurred in 14/78 main-model allocation decisions.
+A fallback uses equal weights, so that observation is not evidence of a
+successful learned allocation. The raw covariance remains singular for
+55 assets with 50 samples; ridge makes the specified solve executable.
+A nonpositive normalization denominator triggers equal weights. Valid
+directions exceeding 2x gross exposure are shrunk toward equal weights.
+The gross limit is enforced at rebalance; holdings may drift beyond it.
+
+Data and substitutions
+US: 55 S&P500 members at the training cutoff; CRSP daily total returns.
+China/Europe/Korea: 55/37/44 regional primary ordinary-share proxies from
+Compustat Global, selected by capitalization within GICS sectors. These
+are not verified CSI300/EUROSTOXX/KOSPI200 constituent sets. Selection
+uses 2024-09-30 capitalization and training-history coverage, whereas the
+paper selects at 2025-03-31. Company classifications and primary issue
+flags come from vendor snapshots and can contain retrospective changes.
+The selected training universe is retrospective; this is not a historical
+point-in-time universe simulation. No test return enters stock selection.
+Global adjusted price = prccd / qunit / ajexdi * trfd. Local currencies
+are retained, without FX conversion. Holidays use regional activity.
+No selected test prices needed missing-value filling; training suspensions
+and isolated gaps are forward-filled and counted in data/*_data_audit.json.
+
+Macro inputs: selected-universe equal-weight market proxy, FRED broad
+dollar index DTWEXBGS, FRED 10y-minus-3m spread T10Y3M, CBOE VIX, and
+CRSP GLD close as the gold proxy. Global observations are aligned to a
+strictly earlier calendar date. These are revised source snapshots, not
+vintage release feeds. Spread changes use differences, not logs of
+potentially negative values. All fitted scalers use the fit period only.
+
+Model and execution
+Shared 1D convolutional U-Net, 16-dimensional macro/stock embeddings,
+learned gate in [0,2], causal Kalman coefficients, 200 forward steps,
+30 DDIM steps and 50 generated paths. A cosine schedule, width 32,
+Adam lr .001, L2 beta .001, batch 256 and normalized-clean clipping at
+[-8,8] are explicit choices. Clipping frequency is saved per rebalance.
+The compact architecture and nonoverlapping 20-session training origins
+use substantially fewer examples/operations than an unspecified larger
+author model; 200 epochs is not a claim of equivalent compute budget.
+Trailing covariance is scaled to a 20-day horizon; ridge is .01 times
+mean diagonal variance. Equilibrium prior mean follows Appendix A.3.
+Main sampling aligns independently generated per-stock paths. The first
+seed also tests correlated initial shocks and ridge values .0001/.1.
+These sensitivities are reported, never used to pick the main result.
+
+Features use close t; execution is close t+1; first earned return ends
+t+2. Signed positions buy and hold for 20 sessions with daily weight
+drift. Returns include distributions. The 10-bps case charges .001 per
+unit of absolute weight turnover, including entry. Financing and borrow
+fees are omitted and the risk-free rate is zero. This is a retrospective
+research backtest, not evidence of executable net profitability.
+
+Verification and artifacts
+14 earlier numerical checks and eight new model/chronology/accounting
+checks passed. Each completed checkpoint and every daily ledger were
+checked for epoch completion, validation selection, metric arithmetic,
+full test-date coverage, budget and rebalance exposure constraints.
+protocol.json fixes assumptions. data/ contains frozen panels, source
+file metadata, data hashes and exact substitute stock lists. checkpoints/
+contains all trained weights. results/best_effort/ contains every seed,
+daily ledger, weight vector, generated path, training history and metric.
+The original equation audit is preserved in EQUATION_REPORT.txt.
+
+Sources
+Paper: https://datalab.snu.ac.kr/~ukang/papers/2026ICLR-stable.pdf
+Dollar: https://fred.stlouisfed.org/series/DTWEXBGS
+Spread: https://fred.stlouisfed.org/series/T10Y3M
+Prices/macros: local checksum-verified WRDS archives listed in data/source_files.json.
+The scientific-critical-thinking skill informed evidence separation.
+Methods attribution, verified earlier today and preserved with source
+metadata: Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M.
+(2026). Scientific Agent Skills: A Library of Procedural Knowledge for
+Research Agents. https://doi.org/10.48550/arXiv.2609.00065

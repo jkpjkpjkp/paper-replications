@@ -1,0 +1,100 @@
+{
+  "experiment": "STABLE US paper-settings audit and two additional seeds",
+  "author_implementation": false,
+  "protocol_fixed_before_test_evaluation": false,
+  "markets": [
+    "US"
+  ],
+  "seeds": [
+    20261120,
+    20261121
+  ],
+  "train_start": "2013-01-01",
+  "fit_end": "2024-09-30",
+  "validation_start": null,
+  "validation_end": null,
+  "test_start": "2024-10-01",
+  "test_end": "2025-03-31",
+  "horizon": 20,
+  "train_origin_stride": 20,
+  "embedding_dim": 16,
+  "unet_width": 32,
+  "epochs": 200,
+  "batch_size": 256,
+  "optimizer": "Adam",
+  "learning_rate": 0.001,
+  "l2_beta": 0.001,
+  "adam_weight_decay": 0,
+  "gradient_clip_norm": 1.0,
+  "forward_steps": 200,
+  "forward_schedule": "cosine, offset 0.008, beta capped at 0.999",
+  "ddim_steps": 30,
+  "ddim_eta": {
+    "US": 0,
+    "China": 0,
+    "Europe": 0,
+    "Korea": 0.01
+  },
+  "sample_paths": 50,
+  "gate_cap": 2,
+  "prior_window": 120,
+  "relative_ridge": 0.01,
+  "ridge_sensitivity": [
+    0.0001,
+    0.01,
+    0.1
+  ],
+  "maximum_gross_exposure": 2.0,
+  "invalid_tangency_fallback": "equal weights when normalization denominator is nonpositive or nonfinite",
+  "gross_cap_method": "shrink normalized tangency weights toward equal weights until gross exposure <= 2",
+  "main_joint_sampling": "independent Gaussian initial shocks; align path index across stocks",
+  "sensitivity_joint_sampling": "initial shocks correlated by trailing 120-session return correlation with 0.1 diagonal shrinkage",
+  "price_timing": "features at close t; rebalance at close t+1; first earned return ends t+2",
+  "macro_timing": "strictly earlier calendar date; forward fill only; no backfill",
+  "target_purging": "every 20-session target must end inside its assigned fit or validation split",
+  "checkpoint_selection": "final epoch 200, no test or validation selection; author checkpoint rule undisclosed",
+  "return_scaling": "per-stock mean and standard deviation fitted only through 2023-12-31",
+  "sampler_clean_clip": [
+    -8,
+    8
+  ],
+  "kalman_Q": 1e-05,
+  "kalman_R": 1.0,
+  "kalman_initial_mean": 0,
+  "kalman_initial_covariance": "identity",
+  "portfolio_accounting": "buy and hold between 20-session rebalances; signed weights drift daily; zero risk-free rate",
+  "transaction_cost_bps_per_unit_turnover": [
+    0,
+    10
+  ],
+  "comparators": [
+    "equal weight",
+    "120-session momentum top quintile",
+    "historical-mean MVO with identical repairs",
+    "zero-return forecast",
+    "trailing-mean forecast"
+  ],
+  "known_limits": [
+    "Author code/data repository returns 404; exact security IDs and historical 2025-03-31 GICS snapshot unavailable",
+    "End-of-test universe selection follows paper and is retrospective, not an investable point-in-time experiment",
+    "Top five eligible companies per sector is an explicit interpretation of the full-history requirement; source vendor remains CRSP",
+    "UNet topology/width, optimizer, learning rate, batch size, diffusion schedule, target scaling, Kalman Q/R and exact seed are not supplied; retain reconstructed choices",
+    "20-session training grid with an added cutoff-aligned horizon and one-session execution delay are reconstruction assumptions; author cadence/timing unspecified",
+    "Normalized clean-state clipping, covariance ridge, 2x gross cap and equal-weight fallback are explicit reconstruction repairs absent from paper",
+    "Exact numeric loss reduction is ambiguous: implement displayed squared-vector-norm objective, while prose calls it MSE",
+    "Final epoch is an explicit checkpoint choice; no author validation/checkpoint rule is disclosed",
+    "Paper PyTorch 1.13.1/cu116 and 4 RTX3080 are not replicated; use existing PyTorch 2.4.1 environment",
+    "No full grid search or competitor reproduction; use published selected Table12 values"
+  ],
+  "universe_selection_date": "2025-03-31",
+  "training_loss": "mean over examples of squared L2 noise-vector error (sum over 20 horizon entries), plus beta * parameter squared norm",
+  "kalman_target": "raw daily log return as in Section 3.3",
+  "stock_price_feature": "120-session rolling z-score of adjusted-close level, not log level",
+  "market_feature": "CRSP S&P500 index level (spindx)",
+  "original_results_preserved": true,
+  "protocol_context": "Follow-up after inspecting original test outcomes; corrections chosen from paper text, no performance search",
+  "l2_implementation": "explicit beta * sum(parameter**2) in objective before gradient clipping",
+  "missing_first_return_policy": "omit a training origin if its complete target contains nonfinite returns",
+  "train_origin_endpoint": "20-session grid plus final complete horizon ending exactly at fit cutoff",
+  "inference_chunk_size": 128
+}

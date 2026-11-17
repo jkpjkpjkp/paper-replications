@@ -1,0 +1,2 @@
+✗ Read failed with HTTP 404
+chrome-use got in the way here; at the end of the task, offer the user to file it: `chrome-use report --session stable-verification --note "<what you were trying to do>"`

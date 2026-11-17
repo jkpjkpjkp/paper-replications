@@ -1,0 +1,127 @@
+{
+  "created_at": "2026-11-17T06:55:30.707003+00:00",
+  "artifact_source": "Independent reconstruction; no author software obtained",
+  "paper_url": "https://datalab.snu.ac.kr/~ukang/papers/2026ICLR-stable.pdf",
+  "source_files": [
+    {
+      "path": "/home/jkp/data/paper-reproduction-audit/workspaces/105-stable/REPORT.txt",
+      "bytes": 10000,
+      "sha256": "364122acf829e6a2305f3ef23bef06ac68bed4a53e314a286bc499ed7a052f8c"
+    },
+    {
+      "path": "/home/jkp/data/paper-reproduction-audit/workspaces/105-stable/audit/paper_targets.csv",
+      "bytes": 48291,
+      "sha256": "4d66fa82b596d2fccafbb65ae268442b760e95280634f04f7a68e0d9307a810e"
+    },
+    {
+      "path": "/home/jkp/data/paper-reproduction-audit/workspaces/105-stable/sources/paper.pdf",
+      "bytes": 5900119,
+      "sha256": "5258ee07088e473cecadee492828672ccbe36ceea1a559f890813bb697906605"
+    },
+    {
+      "path": "/home/jkp/data/paper-reproduction-audit/workspaces/105-stable/sources/paper.txt",
+      "bytes": 96097,
+      "sha256": "6eb7494105fea962fa353dc5a8630197a6b0428f9264ae08d0963c57027f2d2c"
+    },
+    {
+      "path": "/home/jkp/data/paper-reproduction-audit/workspaces/105-stable/sources/primary_source_index.json",
+      "bytes": 4902,
+      "sha256": "f4924826568748aa9daa204c51a8e644fd6147e33c9b2c1064fd3c52c1ccaede"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/README.txt",
+      "bytes": 1872,
+      "sha256": "29005a87d15760b413bfea4895e26c9744260276ae5c247eeb09db29abec6b53"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/REPORT.txt",
+      "bytes": 9289,
+      "sha256": "f07318278b5c7208d5eba14487153482e7e03e7abc6a50334a08eac31bd5d159"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/STATUS.json",
+      "bytes": 1340,
+      "sha256": "302786b9a8bd3a707dadedaf086f5a1bfbedbf29ab4d8372cf40883b3ec3eb09"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/evidence/author-page-rendered.txt",
+      "bytes": 3286,
+      "sha256": "170349f056c0a84a4b0fe3df28af2fa5b4d50be2dc6b84cc10d87c160c5771ff"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/evidence/author-page.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/evidence/official-repo-check.txt",
+      "bytes": 201,
+      "sha256": "e55c33b6e3c5c2837570ecf69a069eccca08bccc3a51bc776df6f9a89767cf13"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/evidence/openreview.txt",
+      "bytes": 395,
+      "sha256": "8a92ec5dad9afdfdee6ca225707b98283a43073cc7b47695a2a9ae19b95b64c7"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/evidence/paper-page-06.png",
+      "bytes": 415268,
+      "sha256": "93d8b1adaec481f9c50a80f62d22784e7eb9df5a3cf232f833b5b9d0ebf8b7fd"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/evidence/paper-page-14.png",
+      "bytes": 386166,
+      "sha256": "04d11e02acc0307a386c47bbbcc632b2105d348f30ee867ebc952599b232a871"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/evidence/release-search.json",
+      "bytes": 4158,
+      "sha256": "93907a761f7ea04391b9e4c4877fe8ca89c0925ed74a9f90865a0872b7b9c3ae"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/evidence/repo-list.txt",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/evidence/scientific-agent-skills-metadata.txt",
+      "bytes": 5209,
+      "sha256": "d9517135c6093568133a9e6386c7c9cfd3ea81ad5a369025b88f1073336ec7fc"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/requirements.txt",
+      "bytes": 13,
+      "sha256": "a23aaf94250a9f53031a592980142245a848e2372b6c6c3093e8260b129265b8"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/results/covariance_rank.csv",
+      "bytes": 471,
+      "sha256": "fc71557abd96ec711321fcbb21862e237627864d10eb9b7d24798574716bd39e"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/results/headline_arithmetic.csv",
+      "bytes": 706,
+      "sha256": "612e5b7df5743a806ebb91f4ac427bfc1b4cfee552b93f3830b7bd0b77bd529c"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/results/ridge_sensitivity.csv",
+      "bytes": 504,
+      "sha256": "c95cedb555ab5ae16e2f3f6f0c24cfbb203af7bb327d6e5c745ad86c8b301d45"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/results/verification.json",
+      "bytes": 10225,
+      "sha256": "ee19c4ca98dd4d6bd18e22bd375b19456301dc033d403a2e67a486969ca6a5c0"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/stable_core.py",
+      "bytes": 6165,
+      "sha256": "855320472bdb11ec76786659d0e1821a5a10f19c4ee0aeaf6183fdc73a88f95f"
+    },
+    {
+      "path": "/home/jkp/data/stable-reproduction/verify.py",
+      "bytes": 15917,
+      "sha256": "4fa3339e2b17dea105ab2d932382f46fd5d14aef080a86a455211fedcb909e12"
+    }
+  ]
+}

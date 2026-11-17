@@ -1,0 +1,122 @@
+STABLE US paper-settings audit — 2026-11-17
+
+Question: Does the paper establish seed stability, and how closely does the
+existing -0.004 US Sharpe reconstruction match its settings?
+
+Sources checked
+- Full 26-page manuscript indexed by .agent/PAPER_INDEX.json; SHA256
+  5258ee07088e473cecadee492828672ccbe36ceea1a559f890813bb697906605.
+- Paper: https://datalab.snu.ac.kr/~ukang/papers/2026ICLR-stable.pdf
+- Original PDF tables on pages 7, 8, 25 and 26 visually checked. Equations on
+  pages 6 and 14 are preserved in evidence/paper-page-06.png and -14.png.
+- Public reviews and author replies, read live in the browser on 2026-11-17:
+  https://openreview.net/forum?id=VltZQpfarw
+  Saved in evidence/openreview-complete-20261117.txt. The direct API returned
+  a challenge error; the public browser thread was accessible.
+- Advertised https://github.com/iclr26stable/iclr26stable still returns 404.
+  A title/code search found no author implementation. This does not establish
+  that no private or undiscovered implementation exists.
+
+What the paper says about variability
+Section 4.1, page 8, explicitly reports a fixed global seed. Its numeric value
+is not provided. Table 3 reports single ASR values, without seed SD/SEM or a
+multi-seed Sharpe distribution. The public replies do not add such a study.
+
+Related issues were discussed. Reviewer zHmG asked about sensitivity to path
+count and crisis regimes. Reviewer b8bB requested an isolated covariance test.
+Reviewer FycL raised the six-month test window, tuning/reproducibility and
+distributional realism. The authors added regime comparisons (A.4), covariance
+substitutions (A.5), generated-distribution checks (A.6), ablations (A.7), and
+path-count/L2 sensitivity (A.8). The rebuttal specifies M=1000 for distribution
+bootstraps, resolving a detail omitted from the local manuscript. Those
+intervals concern generated distribution statistics, not retrained-model ASR.
+No documented ridge/pseudoinverse or cross-stock latent coupling was found.
+
+Settings comparison and actions
+
+1. Published selected hyperparameters — already matched.
+   Table 12, p.25: horizon 20; embedding dim 16; DDIM reverse steps 30;
+   paths 50; forward steps 200; US eta 0; gate cap 2; prior window 120;
+   L2 coefficient .001. Table 13, p.26: 200 training epochs.
+
+2. Fit dates — material mismatch corrected in a separate experiment.
+   Table 2 and conference slides: 2013-01 through 2024-09-30.
+   Original: fit only through 2023-12-31, with 2024 held out for validation.
+   Follow-up: include fitting data through 2024-09-30; final epoch 200 is
+   used without test selection. The author validation/checkpoint rule is
+   undisclosed, so final-epoch selection is explicitly our assumption.
+   Keep the 20-session origin grid and include a final complete target ending
+   at the cutoff; omit targets with an unavailable inception-day return.
+   The author's exact training stride is unknown.
+
+3. Universe date and first-day eligibility — material differences corrected.
+   Section 4.1, p.7: March 31, 2025 sector/capitalization selection and
+   full-window history. Original used September 30, 2024.
+   Follow-up uses March 31, 2025 S&P500 membership and capitalization, five
+   full-history-eligible companies per sector. Eligibility uses observed
+   closes and usable returns after inception; a new listing's first close
+   is valid even when its preceding daily return is absent. This changes
+   nine of 55 stocks. The exact author IDs and historical GICS snapshot
+   remain unavailable. Choosing eligible stocks before the top-five ranking
+   and using the primary listed security's capitalization are assumptions.
+   Following the end-of-test selection rule is retrospective and must not
+   be described as a point-in-time investable universe.
+
+   Independent sanity check with the revised universe: equal-weight ASR
+   0.915350, versus original 0.124451 and paper 0.82; annual vol 11.302%,
+   versus paper 14.44%. This is closer in ASR but does not verify the data.
+   No stock was chosen based on portfolio performance.
+
+4. Features — correct explicit mismatches in Section 3.3/Table 1, p.5.
+   Replace the selected-universe equal-weight market proxy with the actual
+   CRSP S&P500 index level. Replace the rolling normalized log-price feature
+   with a rolling normalized adjusted-close level. Estimate Kalman coefficients
+   using raw daily log returns, as the stated regression specifies, instead
+   of standardized returns. Downstream fitted feature scaling remains an
+   explicit reconstruction choice. Dollar/gold proxies, revised macro data,
+   lag conventions and handling of negative term spreads remain unresolved.
+
+5. Noise objective — literal-equation interpretation, not author verified.
+   Equations (1)-(2) display an expected squared vector norm plus beta times
+   the squared parameter norm. Original F.mse_loss averages over the 20
+   horizon entries, while Adam adds weight_decay=.002 after gradient clipping.
+   Follow-up sums squared errors over horizon entries, averages over examples,
+   and adds beta*sum(theta**2) explicitly before clipping. Relative loss/L2
+   scaling changes by a factor of 20 before clipping. The prose calls this
+   MSE and code is unavailable, so the author's reduction is still ambiguous.
+
+6. Network and compute — unresolved, no invented architecture expansion.
+   Paper describes a convolutional UNet but not widths, depth, normalization,
+   optimizer, batch size or learning rate. Original is a compact 176194-
+   parameter network. Paper US training is 2h01m on four RTX3080 GPUs; original
+   training took about 27s on one RTX4060. Matching epoch counts does not
+   establish equivalent training. Retain reconstructed topology and optimizer
+   as explicit assumptions, not as recovered author settings.
+
+7. Sampler and allocator — unresolved execution choices retained and labelled.
+   Cosine schedule, target standardization, clean clipping at +/-8, independent
+   initial shocks, ridge=.01, 2x gross cap and equal-weight fallback are not
+   author-verified. Equation (4) gives a singular 55x55 covariance from 50
+   centered samples. Removing ridge cannot produce a literal valid inverse.
+   Higher path counts/shared shocks would change the published configuration;
+   do not call them paper-matching corrections. The main follow-up retains
+   the existing explicit repairs. Existing first-seed sensitivities are
+   descriptive; they are not used to select a result.
+
+8. Seed and timing — unresolved or already matched.
+   Zero risk-free rate and daily annualized metrics match Section 4.1.
+   Exact author seed, execution timing, rebalance calendar and price/dividend
+   convention are unavailable. Retain conservative close-t signal,
+   close-(t+1) execution, first return ending t+2, and signed buy-and-hold
+   accounting. PyTorch 2.4.1 differs from the paper's 1.13.1/cu116 runtime.
+
+Follow-up experiment
+experiments/us_paper_settings_20261117/ contains isolated source, protocol,
+prepared data, source metadata and hashes. Seeds 20261120 and 20261121 are
+the next two consecutive seeds, fixed before evaluating their model outputs.
+Original checkpoints, protocol and all three original US results are retained.
+The revised runs must not be pooled with the original three into a five-seed
+estimate, because their setup differs. No claim of exact author reproduction
+is warranted. Test outcomes from the original setup were already inspected;
+this is a retrospective follow-up with paper-driven changes, not a pristine
+pre-registered experiment. Final results will be in the experiment's REPORT.txt.

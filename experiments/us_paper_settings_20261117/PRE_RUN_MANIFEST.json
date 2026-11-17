@@ -1,0 +1,9 @@
+{
+  "protocol.json": "b9838a4c56e8d7a5241e421627977893e68f68f5dae97d06b44b2668425e3dbc",
+  "prepare_us.py": "37b9b16e12f2e9856de92c5f5f2456402f3a43c7f8112572c1a6162fe607f9a0",
+  "run_empirical.py": "f3884662f5bca85d2fd156ff41394be6b76f900e74dd28406b9435db3cdebbe4",
+  "diffusion_model.py": "ca03dc5b3fa70ea30064605e4beb4fb7366bfd7f533db2b2cd598d5279ff6bd5",
+  "stable_core.py": "37fa7fbc3265f97ceba49c08656cf95e6e6fca815907a74b51bc22869564587e",
+  "data/US_prices.parquet": "1017f81da8736f9f5d9c868353bb53e9e19fc2667aa9f67c61ebb7a11cd2ffb5",
+  "data/global_macro.parquet": "ad0558657f6db968bd4450b24d2a5c783e9adb4afd15b5368d2c8f38e2d1614b"
+}

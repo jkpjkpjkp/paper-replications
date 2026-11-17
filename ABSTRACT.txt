@@ -1,0 +1,9 @@
+STABLE: Shift-Tolerant Allocation via Black-Litterman Using Conditional Diffusion Estimates
+
+Condensed abstract
+
+Uses macroeconomic context and stock-specific signals to generate regime-aware return
+distributions with a conditional diffusion model. These forecasts and their covariance
+structure become investor views in a Black-Litterman portfolio optimizer. Experiments
+across equity markets report improved risk-adjusted returns, lower drawdowns, and better
+return estimation under changing regimes.
