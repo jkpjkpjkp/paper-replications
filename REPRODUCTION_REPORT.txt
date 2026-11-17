@@ -1,0 +1,172 @@
+Signature-Informed Transformer for Asset Allocation (SIT)
+Reproduction report — 2026-11-11
+AI execution/inspection; no human scientific verification recorded.
+
+CURRENT RESULT
+All six fresh local training runs completed: three per asset pool.
+Printed-precision agreement: 0 of 16 Table 1 mean/SD cells.
+This is a fresh reproduction of the released configuration with disclosed
+environment differences. It is NOT an exact whole-paper reproduction.
+
+The published headline results were not completely matched.
+
+Asset pool 40: three runs, mean +/- sample standard deviation
+Metric           Paper                    Fresh local
+Sharpe              0.6717 +/- 0.0628       0.505967 +/- 0.132620
+Sortino             0.8232 +/- 0.0792       0.627320 +/- 0.143395
+MaxDrawdown         0.3611 +/- 0.0037       0.347909 +/- 0.024346
+FinalWealthFactor   1.7903 +/- 0.1023       1.512583 +/- 0.196139
+Execution: 147 seconds, epochs per run [5, 4, 4].
+
+Asset pool 50: three runs, mean +/- sample standard deviation
+Metric           Paper                    Fresh local
+Sharpe              0.7715 +/- 0.0627       0.573517 +/- 0.184025
+Sortino             0.9743 +/- 0.0998       0.711148 +/- 0.228680
+MaxDrawdown         0.3271 +/- 0.0094       0.324849 +/- 0.013667
+FinalWealthFactor   1.9215 +/- 0.1792       1.593881 +/- 0.257800
+Execution: 4538 seconds, epochs per run [7, 4, 8].
+
+Lower maximum drawdown is better. A mismatch does not necessarily mean
+worse performance on that metric. These small sets of training runs do not
+establish statistical equivalence or identify the cause of discrepancies.
+Evidence: reproduction/fresh_local_comparison/table1_comparison.csv,
+reproduction/fresh_local/per_run_metrics.csv and the fresh checkpoints/logs.
+
+WHAT WAS EXECUTED
+Source: author repository, commit 34e9c5a939ffcfcdf535baf71427518bb1eec741.
+Tracked author code remains unchanged. run.py was executed with the released
+40-asset configuration: W=60, H=20, d_model=8, heads=4, layers=2,
+hidden_c=8, ff_dim=32, temperature=1.3, zero costs, Adam lr=0.001,
+batch size 64, 30 maximum epochs, patience 3, and three sequential runs.
+The script seeds once at 2023. Local 40-asset execution lasted from
+17:03:05 to 17:05:32 Asia/Shanghai (147 seconds, excluding preparation).
+Commands, fresh checkpoints, positions, equity plots and logs are preserved.
+Its three repetitions used 5, 4 and 4 epochs before validation stopping.
+The author's per-iteration speed/ETA printout accumulates time across epochs;
+use the separately printed epoch durations and wall-clock timestamps for ETA.
+
+The 50-asset run uses the released heads=8, hidden_c=64, ff_dim=8 configuration,
+with the same batch size and other general settings. Its memory allocator
+uses CUDA managed memory to page data between local GPU memory and RAM.
+It does not change the model, dtype, loss, batch size, seed or optimizer.
+Before training, all 87 parameter tensors after four Adam steps on a small
+real-input batch were bitwise equal between native and managed allocators.
+This finite engineering check is not a proof of equivalence for every run.
+Evidence: reproduction/allocator_equivalence.json and the two probe logs.
+
+DATA AND CACHE
+Author-released asset_data/full_dataset.csv, SHA-256:
+f4c56431b8da07962a551d41e3e11beb22c160f4a9e225706649e5870004859b
+The code selects the first 40/50 asset columns. Training is 2000-2016,
+validation 2017-2019, and test 2020-2024. Test outputs label the beginning
+of each forward return interval; interpret dates accordingly.
+The signature cache was computed with an equivalent vectorized routine.
+It fits the same training-only StandardScaler and preserves the author's
+array layout. Seven sampled indices per split per pool were checked against
+the original Dataset_Sig, before and after scaling, with zero array error.
+Caches were rebuilt and rechecked with NumPy 1.26.4 before fresh training.
+No feature, split, asset selection or target was changed to improve results.
+
+ENVIRONMENT AND PROTOCOL LIMITS
+Local GPU: NVIDIA RTX 4060, 8GB. Python 3.11.16, PyTorch 2.4.1+cu121,
+NumPy 1.26.4, pandas 2.2.2, scipy 1.14.1, sklearn 1.5.2,
+matplotlib 3.10.0. See reproduction/fresh_local/environment_manifest.json
+for actual imports, data hash and deviations. PyTorch is read from an
+existing environment without modifying that environment; the numerical
+packages above are installed in a task-specific environment.
+The author's requirements name NVIDIA PyTorch 2.6.0a0+ecf3bae40a.nv25.1.
+That exact runtime was not reproduced. An attempted public PyTorch 2.6.0
+installation was stopped after repeated slow download attempts; it was not
+used to produce any result. The effect of the runtime difference is unknown.
+
+The paper's Appendix D specifies five independent seeds, 100 maximum epochs,
+patience 10 and validation grid search. The release specifies three runs,
+30 epochs and patience 3, and seeds only once. Our primary numerical rerun
+follows the released launcher. Missing original seed/search logs and this
+protocol conflict prevent an exact published-protocol claim even if its
+headline numbers were to match. Additional data universes, all learned
+baselines, ablations and transaction-cost grids have not been freshly rerun.
+There is also a reproducibility consequence of seeding only once: a change in
+the stopping epoch can change the random-number state used by later runs,
+through the intervening data-loader/shuffling draws. This is an inference
+from the released execution order, not a demonstrated cause of the observed
+performance gap. We did not replace the launcher with independently reseeded
+runs or choose alternate seeds after seeing the test results.
+
+SEPARATE CHECKS — DO NOT CONFUSE WITH FRESH SIT TRAINING
+1. Shipped-artifact replay: all eight means and seven of eight SDs match the
+paper at four decimals. The 50-asset wealth SD is 0.179528 (rounds 0.1795),
+versus published 0.1792. Fifteen of sixteen matching cells only establish
+internal arithmetic consistency of saved predictions, not reproducibility
+from training. Daily-return replay error is at most 7.45e-9.
+2. Fresh official equal-weight baseline: all eight headline values match.
+   Update 2026-11-17: fresh vanilla CVaR optimization also matches all 12
+   published S&P100 cells for 30/40/50 assets, at four decimals. All 186 ECOS
+   allocations passed independent HiGHS and return/metric replay checks.
+   See VANILLA_CVAR_REPRODUCTION.txt and reproduction/vanilla_cvar_20261117/.
+3. Date alignment: traditional EW evaluates 1237 return days, versus SIT's
+1255. Restricting shipped SIT to common economic return dates modestly lowers
+its Sharpe and wealth, without reversing its advantage over EW. This uses
+shipped SIT positions. See LOOKAHEAD_BIAS_AUDIT.txt for the exact figures.
+4. Fresh 40-asset SIT on those same 1237 economic return dates has mean Sharpe
+0.514768 versus fresh EW 0.575871, and final wealth 1.519204 versus 1.643885.
+Its mean maximum drawdown is lower: 0.345236 versus 0.368811. Thus date alignment
+does not recover the published Sharpe/wealth advantage in this local rerun.
+Evidence: reproduction/fresh_local_common_dates/date_alignment_sensitivity_means.csv.
+
+FOCUSED 40-ASSET DISCREPANCY INVESTIGATION
+Seven additional local diagnostic training runs are recorded separately.
+Repeating the three primary 40-asset runs gives bitwise-identical checkpoints,
+weights and metrics. Increasing first-run patience from 3 to 10 (max epochs
+100) still selects the identical epoch-2 checkpoint, after stopping at epoch
+12. Enabling matrix TF32 produces mean Sharpe 0.506198 and wealth 1.513423,
+still below the published 0.6717 and 1.7903; 0/8 cells match in that sensitivity.
+The original loader and all three frozen checkpoints reproduce all 63 fresh
+allocation decisions, with maximum metric error below 8.61e-8. No source/data
+drift was found in the public repository history. These checks rule out several
+practical mistakes but do not uniquely identify the training-level cause.
+Original GPU/runtime random streams and unreleased seed/search provenance
+remain unresolved. See DISCREPANCY_40_ASSETS.txt for evidence and limitations.
+
+BIAS ASSESSMENT
+No direct future-price leak has been established in the inspected SIT code.
+The principal unresolved issue is the point-in-time asset universe and
+possible survivorship selection. Evaluation-date differences are confirmed;
+net-cost claims need an additional holdings/turnover audit. Current evidence
+does not justify excluding SIT for severe lookahead bias. The detailed audit
+records observations, severity, uncertainty, evidence and proposed remedies.
+
+FAILED ATTEMPTS AND CLOUD STATUS
+The first local training launch used NumPy 2 and failed at np.Inf before any
+training step. A separate compatible NumPy environment resolved this without
+editing author code. Native batch-64 and activation-offload-only GPU probes
+for 50 assets failed with CUDA out-of-memory. Managed allocation passed the
+full-batch timing probe (approximately 6391 MiB peak live managed tensors).
+These failed engineering attempts are preserved and are not result runs.
+Source/data bundles were uploaded through AutoDL file storage before any GPU
+rental. Multiple AutoDL creation attempts failed. GPUFree registration and
+user-completed identity verification succeeded; a 15 CNY Alipay top-up order
+was initiated, but agent-confirmed payment and GPU rental did not occur.
+The user then requested local GPU first. No cloud instance was created by
+this agent, and browser checkout tabs were closed. Phone control was released.
+
+REVIEWABLE ARTIFACTS
+PAPER.txt: exact title, authors and source references.
+DISCREPANCY_40_ASSETS.txt: focused diagnosis of the fresh 40-asset shortfall.
+LOOKAHEAD_BIAS_AUDIT.txt: bias severity and limitations.
+reproduction/logs/fresh_local_dp40.log and fresh_local_dp50.log: training logs.
+reproduction/fresh_local/: fresh outputs, checkpoints and execution records.
+reproduction/fresh_local_comparison/: independent replay and table comparison.
+reproduction/author_shipped_arithmetic_only/: separate shipped-result audit.
+../paper/.agent/PAPER_SCREENING_CRITERIA.txt: reusable screening criteria for all papers.
+
+References
+Paper: https://proceedings.mlr.press/v306/hwang26j.html
+Code: https://github.com/Yoontae6719/Signature-Informed-Transformer-For-Asset-Allocation
+Memory API: https://docs.pytorch.org/docs/2.15/notes/cuda.html#using-custom-memory-allocators-for-cuda
+CUDA paging: https://docs.nvidia.com/cuda/cuda-programming-guide/04-special-topics/unified-memory.html
+The allocator ABI was also checked against the installed PyTorch 2.4.1 headers.
+Procedural guidance: Kassis, Timothy; Agarwal, Vinayak; He, Yuhuan; Patel,
+Darshil; Brueckner, Aubrey M. (2026). Scientific Agent Skills: A Library of
+Procedural Knowledge for Research Agents. https://doi.org/10.48550/arXiv.2609.00065
+Workflow citation only; it is not evidence for the numerical finance findings.

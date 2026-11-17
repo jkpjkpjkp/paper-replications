@@ -1,0 +1,708 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "SIT",
+  "title": "Signature-Informed Transformer for Asset Allocation",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "reproduction/paper.pdf",
+    "path_relative_to_collection": "SIT/reproduction/paper.pdf",
+    "sha256": "8d2f3facbebb899b6d5fbf14c406480bc9b93f615ed07209c43c59a9c2bb673c",
+    "bytes": 944173,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 24,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 111
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 112,
+      "line_end": 243
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 244,
+      "line_end": 371
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 372,
+      "line_end": 539
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 540,
+      "line_end": 659
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 660,
+      "line_end": 918
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 919,
+      "line_end": 1099
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 1100,
+      "line_end": 1450
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1451,
+      "line_end": 1543
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1544,
+      "line_end": 1651
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1652,
+      "line_end": 1675
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1676,
+      "line_end": 1730
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1731,
+      "line_end": 1792
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1793,
+      "line_end": 1937
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1938,
+      "line_end": 2096
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 2097,
+      "line_end": 2178
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 2179,
+      "line_end": 2265
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 2266,
+      "line_end": 2358
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 2359,
+      "line_end": 2435
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 2436,
+      "line_end": 2670
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 2671,
+      "line_end": 2827
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 2828,
+      "line_end": 2855
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 2856,
+      "line_end": 3033
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 3034,
+      "line_end": 3091
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 76
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 77,
+      "line_end": 161
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 162,
+      "line_end": 236
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 237,
+      "line_end": 328
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 329,
+      "line_end": 410
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 411,
+      "line_end": 484
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 485,
+      "line_end": 597
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 598,
+      "line_end": 695
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 696,
+      "line_end": 765
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 766,
+      "line_end": 830
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 831,
+      "line_end": 863
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 864,
+      "line_end": 922
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 923,
+      "line_end": 979
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 980,
+      "line_end": 1046
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1047,
+      "line_end": 1129
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1130,
+      "line_end": 1184
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1185,
+      "line_end": 1244
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1245,
+      "line_end": 1308
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1309,
+      "line_end": 1370
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1371,
+      "line_end": 1433
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1434,
+      "line_end": 1479
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 1480,
+      "line_end": 1512
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 1513,
+      "line_end": 1573
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 1574,
+      "line_end": 1601
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 19,
+      "text": "Abstract"
+    },
+    {
+      "line": 85,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 115,
+      "text": "1. Path-wise Feature Representation: To better capture"
+    },
+    {
+      "line": 121,
+      "text": "2. Signature-Augmented Attention: For modeling dependencies between assets, the model introduces a"
+    },
+    {
+      "line": 126,
+      "text": "3. Decision Alignment: To align the training process"
+    },
+    {
+      "line": 165,
+      "text": "2. Methodology"
+    },
+    {
+      "line": 192,
+      "text": "2.1. Preliminaries"
+    },
+    {
+      "line": 324,
+      "text": "2.2. Signature-Informed Transformer (SIT)"
+    },
+    {
+      "line": 620,
+      "text": "3.2. Can SIT deliver superior risk-adjusted"
+    },
+    {
+      "line": 635,
+      "text": "3. Experiment"
+    },
+    {
+      "line": 636,
+      "text": "3.1. Implementation details"
+    },
+    {
+      "line": 837,
+      "text": "3.3. Module-Level Contribution Experiments"
+    },
+    {
+      "line": 996,
+      "text": "3.4. Are signatures effective at driving attention?"
+    },
+    {
+      "line": 1329,
+      "text": "3.5. Why PFL approach fail financial objectives?"
+    },
+    {
+      "line": 1432,
+      "text": "3.6. Sensitivity Analysis"
+    },
+    {
+      "line": 1485,
+      "text": "4. Conclusion"
+    },
+    {
+      "line": 1533,
+      "text": "References"
+    },
+    {
+      "line": 2194,
+      "text": "D MODELS"
+    },
+    {
+      "line": 2196,
+      "text": "D FFS"
+    },
+    {
+      "line": 2198,
+      "text": "E LAYERS LIST"
+    },
+    {
+      "line": 2200,
+      "text": "N HEADS LIST"
+    },
+    {
+      "line": 2205,
+      "text": "D MODELS"
+    },
+    {
+      "line": 2207,
+      "text": "D FFS"
+    },
+    {
+      "line": 2209,
+      "text": "E LAYERS LIST"
+    },
+    {
+      "line": 2211,
+      "text": "N HEADS LIST"
+    },
+    {
+      "line": 2213,
+      "text": "P HIDDEN"
+    },
+    {
+      "line": 2215,
+      "text": "P LAYER"
+    },
+    {
+      "line": 2219,
+      "text": "D MODELS"
+    },
+    {
+      "line": 2220,
+      "text": "D FFS"
+    },
+    {
+      "line": 2221,
+      "text": "E LAYERS LIST"
+    },
+    {
+      "line": 2222,
+      "text": "N HEADS LIST"
+    },
+    {
+      "line": 2235,
+      "text": "E LAYERS LIST"
+    },
+    {
+      "line": 2236,
+      "text": "N HEADS LIST"
+    },
+    {
+      "line": 2248,
+      "text": "D MODELS"
+    },
+    {
+      "line": 2250,
+      "text": "D FFS"
+    },
+    {
+      "line": 2252,
+      "text": "E LAYERS LIST"
+    },
+    {
+      "line": 2254,
+      "text": "N HEADS LIST"
+    },
+    {
+      "line": 2270,
+      "text": "1. Model and Definitions"
+    },
+    {
+      "line": 2370,
+      "text": "1. Monotonicity: If Z1 ≤ Z2 state-wise, then CVaRα (Z1 ) ≤ CVaRα (Z2 )."
+    },
+    {
+      "line": 2371,
+      "text": "2. Translation Equivariance: For any constant c ∈ R, CVaRα (Z − c) = CVaRα (Z) − c."
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2757
+    },
+    {
+      "id": 39,
+      "line_start": 2750,
+      "line_end": 2829
+    },
+    {
+      "id": 40,
+      "line_start": 2822,
+      "line_end": 2901
+    },
+    {
+      "id": 41,
+      "line_start": 2894,
+      "line_end": 2973
+    },
+    {
+      "id": 42,
+      "line_start": 2966,
+      "line_end": 3045
+    },
+    {
+      "id": 43,
+      "line_start": 3038,
+      "line_end": 3092
+    }
+  ],
+  "line_count": 3092,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "66a93b5eaaf8b51d27bd64d9a9da718098e39f0f83a72fcf389acc01c2f67a1a",
+      "bytes": 90511
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "ac57a95fcd28316ee47e8b7ba2899a963dcffb7eea6d82df4aeaec2c33ff5bc6",
+      "bytes": 145721
+    }
+  }
+}

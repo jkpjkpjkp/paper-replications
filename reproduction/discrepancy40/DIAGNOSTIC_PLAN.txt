@@ -1,0 +1,42 @@
+40-asset discrepancy investigation — recorded before diagnostic training
+2026-11-11, AI execution/inspection; no human verification recorded.
+
+The original three fresh local 40-asset runs are frozen as the primary result.
+No diagnostic run replaces them, regardless of its test performance.
+
+First, replay all 63 allocation decisions from each frozen checkpoint using
+the original Dataset_Sig on CPU. Compare its input arrays to the cache and its
+weights/metrics to the original GPU outputs. This tests evaluation/cache
+mistakes without retraining or consuming the occupied local GPU.
+
+After the primary 50-asset job frees the GPU, run these limited 40-asset checks:
+1. Repeat the released three-run configuration in the same local environment.
+   Check repeatability of training losses, best checkpoints and results.
+2. For the first run only (same seed 2023), change maximum epochs to 100 and
+   patience to 10 as specified by the paper. Keep everything else unchanged,
+   including the released learning-rate scheduler. Compare its training
+   prefix to the primary first run and determine whether validation selects
+   a different checkpoint. Do not select based on test performance.
+
+These are mechanism checks, not a search for better test numbers. They do not
+recreate the unknown five author seeds or validation grid-search history.
+The NVIDIA PyTorch 2.6.0a0 runtime is not available locally; runtime effects
+remain unresolved unless an independently recorded controlled check is added.
+
+Added before diagnostic training: a third, three-run check changes only
+torch.backends.cuda.matmul.allow_tf32 from False to True. NVIDIA's 22.06
+release notes document TF32 as enabled by default in their container builds,
+while our recorded local run has matrix TF32 disabled. The 25.01 release notes
+confirm the author's exact PyTorch build maps to that NVIDIA container, but
+do not explicitly restate its TF32 setting. This is a plausible runtime
+difference to test, not a verified claim about the author's active flags.
+Reference: https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel_22-06.html
+Reference: https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-25-01.html
+This sensitivity result will be retained whether it improves or worsens the
+match; it will not silently replace the primary FP32 result.
+
+Additional checks while GPU training continues: audit the released notebook's
+aggregation and evidence for test-based configuration selection; distinguish
+a sorting operation from proof of historical selection. Inspect vendor
+documentation for precision defaults, rather than assuming all runtimes
+execute the same matrix arithmetic.

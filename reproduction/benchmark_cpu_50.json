@@ -1,0 +1,19 @@
+{
+  "device": "cpu",
+  "pool": 50,
+  "batch": 8,
+  "torch": "2.4.1+cu121",
+  "cpu_threads": 4,
+  "sample_build_seconds": 0.589950408997538,
+  "train_step_seconds": [
+    1.158934611001314,
+    1.2569502190017374,
+    1.767663698999968,
+    2.059827723001945
+  ],
+  "median_warm_train_step_seconds": 1.767663698999968,
+  "peak_rss_mib": 1543.44921875,
+  "prefix_causality_max_error": 0.0,
+  "train_samples": 4197,
+  "note": "Untrained real-input timing/engineering check. Four steps are not a financial replication; no performance is claimed."
+}

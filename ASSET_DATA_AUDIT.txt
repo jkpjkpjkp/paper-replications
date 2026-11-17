@@ -1,0 +1,179 @@
+SIT asset_data audit against the local parent-directory data
+Audit date: 2026-11-17
+
+VERDICT
+The released asset_data/full_dataset.csv is structurally sound but is NOT a
+fully correct CRSP-equivalent daily return input. Most observations agree
+closely. There are material price discrepancies, stale observations, and
+inconsistent treatment of corporate distributions. These affect stocks in
+the first 30/40/50 columns actually used by SIT, as well as other columns.
+
+Scope: all 6,289 dates and all 76 stock columns, 1999-12-31 to 2024-12-30.
+The original CSV and training code were not changed. No model was retrained.
+
+REFERENCE DATA AND METHOD
+Primary: ../crsp-daily/parquet/{1999,...,2024}.parquet, from the locally
+validated WRDS crsp_a_stock.dsf_v2 download (CIZ).
+Cross-check: ../global-market-data/bulk/wrds/crsp_a_stock/dsf/ (legacy CRSP),
+plus dsedist, stkdistributions and stocknames in the same directory.
+
+Map the 76 tickers at 2024-12-30 to unique CRSP PERMNOs and follow those
+security histories backwards, retaining historical ticker changes. CMCSA
+needs the earlier PERMNO 25022 through 2002-11-18 and 89525 thereafter.
+Do not join by today's ticker on every historical date: ticker reuse and
+predecessors would create false discrepancies. USB requires an additional
+lineage sensitivity, explained below.
+
+Compare SIT P[t]/P[t-1]-1 with CRSP daily total return dlyret, by economic
+return END date. That is the relevant check because data_provider/data_loader.py
+lines 98-103 derives investment returns from adjacent prices. Comparing
+raw dollar levels would incorrectly flag ordinary retrospective adjustments.
+CRSP price return dlyretx, prices, dates, and distribution factors are also
+preserved for diagnosis. No missing CRSP returns were replaced by zero.
+
+1 basis point (bp) = 0.0001 decimal return = 0.01 percentage point.
+Thresholds describe discrepancies, not automatic findings of bad data.
+Both six-decimal CRSP rounding and adjusted-price float precision are visible
+below 0.01 bp. Ordinary dividend reinvestment conventions can differ above
+that precision without indicating a corrupted closing price.
+
+STRUCTURAL CHECKS
+- 477,964 price cells; no missing, nonfinite, zero or negative prices.
+- Dates sorted and unique; no duplicate column headers.
+- No missing or extra CRSP trading dates between the actual file endpoints.
+- All 477,964 stock/date rows map to reference security records.
+- CRSP supplies 477,958 nonmissing prices and 477,881 comparable returns
+  out of 477,888 possible SIT return intervals.
+- Six absent CRSP prices/returns are BIIB on 2006-03-07, 2006-03-08 and
+  2020-11-06, and GILD on 2001-10-02, 2001-10-03 and 2002-08-06. SIT carries
+  the last price on these dates. The subsequent four reopening intervals
+  match CRSP's multi-day return within 0.006 bp. These are not treated as
+  confirmed erroneous stale prices.
+- The seventh unpaired return is CMCSA's security transition on 2002-11-19.
+  Its cross-security return was not verified by a single-security CRSP return.
+- The file ends 2024-12-30, not 2024-12-31 as the README's full-year range
+  implies. It also extends one trading session beyond the paper's stated
+  2024-12-27 endpoint. These are endpoint/documentation differences, not
+  missing dates inside the observed range.
+
+NUMERICAL COVERAGE
+The direct PERMNO comparison finds 7,792 discrepancies above 1 bp and 889
+above 100 bp. It is intentionally retained in summary.json/by_asset.csv.
+
+USB follows Firstar (PERMNO 36127) before the February 2001 merger rather
+than the historical USB PERMNO 66157. For 290 pre-merger return observations,
+using Firstar reduces mean absolute error from 168.43 bp to 5.42 bp and
+the number above 100 bp from 143 to 2. Local stocknames and distribution
+records confirm the relationship. The 2001-02-27 SIT return also matches
+a one-for-one bridge from Firstar's previous close of 23.34 to the new
+USB close of 23.45. This is an explicitly reconstructed lineage sensitivity;
+the released CSV does not document its merger methodology.
+
+After allowing that USB lineage, among 477,881 paired returns:
+  Within 1 bp:                  470,359 (98.43%)
+  Absolute difference >1 bp:     7,522
+  Absolute difference >10 bp:    3,431
+  Absolute difference >100 bp:     748, across 66 stocks
+  Of the >100 bp observations:     662 occur in 2000
+
+Legacy CRSP ret and CIZ dlyret agree within 0.010001 bp on all 477,881
+paired observations. Thus the large findings are not explained by using
+the current CIZ release instead of legacy CRSP.
+
+CONFIRMED MATERIAL EXAMPLES
+Stock Date         SIT return   CRSP total return   Difference (percentage points)
+DHR   2016-07-05   +61.2184%       +2.3260%          +58.8924
+RTX   2020-04-03    -7.7564%       +5.2320%          -12.9884
+BIIB  2017-02-02    -6.1983%       +1.7857%           -7.9840
+ABT   2000-09-15    +9.0909%       -1.4205%          +10.5114
+BIIB  2023-06-09     0.0000%       +2.5965%           -2.5965
+
+The three distribution-event returns can be independently reconstructed
+from raw CRSP prices and the dollar distributions in dsedist:
+  DHR:  (80.40 + 24.30) / 102.32 - 1 = 0.02326036.
+  RTX:  (49.93 + 16.92 + 23.66) / 86.01 - 1 = 0.05231950.
+  BIIB: (264.23 + 22.49) / 281.69 - 1 = 0.01785651.
+Each agrees with the recorded CRSP return to its six-decimal precision.
+For BIIB the CSV uses the unadjusted 281.69 -> 264.23 price drop and omits
+the received distribution's value. DHR and RTX have incompatible adjustment
+changes. Their precise original data-generation mistakes are not established.
+
+ABT on 2000-09-15 is an example without a distribution or split factor
+change. CRSP's close falls 44.00 -> 43.375, while SIT rises 10.419452 ->
+11.366675. Using the previous day's adjustment scale would imply a raw
+close near 48.00, above CRSP's recorded daily high of 44.125. The next
+SIT observation reverses the distortion. Many early discrepancies have
+this offsetting two-day pattern, affecting daily risk even when cumulative
+growth nearly cancels. The original vendor cannot be identified from this
+numeric audit alone.
+
+BIIB on 2023-06-09 repeats 2023-06-08's 308.880005, although CRSP records
+316.90 and a +2.5965% return. On 2023-06-12 both sources return to 313.41:
+SIT shows +1.4666%, versus CRSP -1.1013%. This is a confirmed stale-price
+and catch-up pair in the test period, distinct from CRSP's absent-price
+dates listed above. There are 109 zero-SIT-return/nonzero-reference-return
+candidates above 1 bp in total; only investigated examples are called
+confirmed stale observations.
+
+NOT EVERY SMALL DISCREPANCY IS AN ERROR
+Of 1,614 ordinary-dividend observations differing from CRSP by >1 bp,
+1,285 match a backward-dividend-adjustment convention within 0.02 bp:
+  (1 + CRSP price return) / (1 - dividend / previous raw price) - 1.
+This differs from CRSP's arithmetic total-return convention. It explains
+many small differences but not the major no-dividend price errors, stale
+BIIB observation, or the large distribution inconsistencies above.
+
+EXPOSURE OF THE RELEASED EXPERIMENTS
+Counts below use the USB-lineage sensitivity. USB is column 51, so that
+sensitivity has no effect on the first 30/40/50 asset pools.
+
+Pool   Train >100 bp   Validation >100 bp   Test >100 bp
+ 30         241                  1                  5
+ 40         348                  1                  5
+ 50         412                  1                  5
+ 76         741                  1                  6
+
+DHR is column 73 and does not enter the released first-50-asset experiments.
+BIIB is column 1 and RTX column 28, so their errors enter every listed pool.
+The five test-period discrepancies above 1 percentage point in the first
+50 assets are RTX 2020-04-03, T 2022-04-11, BIIB 2023-06-09/12, and MMM
+2024-04-01. PFE 2020-11-05 is the sixth in the full panel (column 57).
+
+These defects alter input paths and realized returns. This audit does not
+measure the resulting change in trained SIT performance. Since shipped and
+fresh local runs used the same CSV, these findings alone do not explain
+their existing performance gap, and no replication grade is changed.
+
+RECOMMENDED USE
+Keep this exact file for reproducing the released implementation. Before
+treating the backtest as a validated market-data result, build a separate
+CRSP-based total-return panel with explicit security lineage, merger and
+distribution rules, and missing-price handling. Regenerate features and
+rerun training/evaluation on that separately named panel. A wholesale raw-
+price replacement would omit dividends and splits and would not fix this.
+Historical index membership and point-in-time universe selection remain
+outside this data-value audit.
+
+REPRODUCIBLE EVIDENCE
+Directory: reproduction/asset_data_audit_20261117/
+- source_manifest.json and secondary_manifest.json: source paths and SHA-256.
+- extract_crsp.py, extract_secondary.py, compare.py, analyze_findings.py:
+  the extraction and analysis used here; inputs are opened read-only.
+- mapping.csv, stocknames.csv and usb_predecessor_comparison.csv: identities.
+- summary.json: direct PERMNO results; findings.json: lineage/convention checks.
+- comparison.csv.gz: every original stock/date comparison and source fields.
+- discrepancies_over_1bp.csv: direct PERMNO discrepancies.
+- lineage_discrepancies_over_1bp.csv: discrepancies after the USB sensitivity.
+- by_asset.csv, by_asset_split.csv: direct PERMNO stock summaries.
+- pool_split_counts.csv and year_counts.csv: lineage-sensitive coverage.
+- dsedist.csv, stkdistributions.csv: local distribution evidence.
+- stale_price_candidates.csv, ordinary_dividend_checks.csv: diagnostic detail.
+
+Run extraction with /home/jkp/data/wrds-crsp-download/.venv/bin/python
+(DuckDB); run compare.py then analyze_findings.py with the bundled
+/home/jkp/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python
+(pandas/NumPy). Extraction hashes the relevant parent-directory sources.
+
+The audited CSV SHA-256 is:
+f4c56431b8da07962a551d41e3e11beb22c160f4a9e225706649e5870004859b
+It matches both the current file and git HEAD:asset_data/full_dataset.csv.

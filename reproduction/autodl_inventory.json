@@ -1,0 +1,788 @@
+[
+  {
+    "regions": [
+      "west-B",
+      "west-C",
+      "west-D",
+      "west-E"
+    ],
+    "code": "Success",
+    "total": 1493,
+    "rows_checked": 100,
+    "available": [
+      {
+        "machine_id": "86e24f8ec8",
+        "machine_alias": "585机",
+        "region_sign": "west-B",
+        "gpu_name": "CPU-close-HT",
+        "gpu_memory": 1073741824,
+        "gpu_idle_num": 2,
+        "payg_price": 1640,
+        "highest_cuda_version": "99"
+      },
+      {
+        "machine_id": "13704d9e22",
+        "machine_alias": "661机",
+        "region_sign": "west-C",
+        "gpu_name": "RTX 5090",
+        "gpu_memory": 34359738368,
+        "gpu_idle_num": 8,
+        "payg_price": 2930,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "dd9f46bdad",
+        "machine_alias": "227机",
+        "region_sign": "west-B",
+        "gpu_name": "RTX 4090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 2,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "9e0b48b25a",
+        "machine_alias": "622机",
+        "region_sign": "west-C",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "12.6"
+      }
+    ]
+  },
+  {
+    "regions": [
+      "bj-B1",
+      "bj-B2",
+      "bj-B3"
+    ],
+    "code": "Success",
+    "total": 708,
+    "rows_checked": 100,
+    "available": [
+      {
+        "machine_id": "648hamjlx8",
+        "machine_alias": "994机",
+        "region_sign": "bj-B1",
+        "gpu_name": "vGPU-32GB",
+        "gpu_memory": 34359738368,
+        "gpu_idle_num": 3,
+        "payg_price": 1660,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "2bd14bacf3",
+        "machine_alias": "761机",
+        "region_sign": "bj-B2",
+        "gpu_name": "RTX 5090",
+        "gpu_memory": 34359738368,
+        "gpu_idle_num": 7,
+        "payg_price": 3030,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "b14e45b04b",
+        "machine_alias": "759机",
+        "region_sign": "bj-B2",
+        "gpu_name": "RTX 5090",
+        "gpu_memory": 34359738368,
+        "gpu_idle_num": 7,
+        "payg_price": 3030,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "8a5c458a91",
+        "machine_alias": "571机",
+        "region_sign": "bj-B2",
+        "gpu_name": "RTX 5090",
+        "gpu_memory": 34359738368,
+        "gpu_idle_num": 6,
+        "payg_price": 3030,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "26e74d9870",
+        "machine_alias": "565机",
+        "region_sign": "bj-B2",
+        "gpu_name": "RTX 5090",
+        "gpu_memory": 34359738368,
+        "gpu_idle_num": 8,
+        "payg_price": 3030,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "7d0a41b9c4",
+        "machine_alias": "180机",
+        "region_sign": "bj-B1",
+        "gpu_name": "RTX 4090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 2290,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "7bf24c9d78",
+        "machine_alias": "179机",
+        "region_sign": "bj-B1",
+        "gpu_name": "RTX 4090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 2,
+        "payg_price": 2290,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "85ea4180b7",
+        "machine_alias": "168机",
+        "region_sign": "bj-B1",
+        "gpu_name": "RTX 4090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 2290,
+        "highest_cuda_version": "12.6"
+      },
+      {
+        "machine_id": "318f4aa447",
+        "machine_alias": "573机",
+        "region_sign": "bj-B2",
+        "gpu_name": "RTX 5090",
+        "gpu_memory": 34359738368,
+        "gpu_idle_num": 7,
+        "payg_price": 3030,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "1ccf4698ba",
+        "machine_alias": "257机",
+        "region_sign": "bj-B1",
+        "gpu_name": "RTX 4090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 3,
+        "payg_price": 2290,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "stz1h5y5jx",
+        "machine_alias": "942机",
+        "region_sign": "bj-B1",
+        "gpu_name": "A800-80GB-NVLink",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 1,
+        "payg_price": 8400,
+        "highest_cuda_version": "13.0"
+      }
+    ]
+  },
+  {
+    "regions": [
+      "cq-A1"
+    ],
+    "code": "Success",
+    "total": 272,
+    "rows_checked": 100,
+    "available": [
+      {
+        "machine_id": "87d64b8994",
+        "machine_alias": "006机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "d2a449935d",
+        "machine_alias": "041机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "12.4"
+      },
+      {
+        "machine_id": "70fe4d878e",
+        "machine_alias": "008机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "da9843af01",
+        "machine_alias": "039机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "653f4687b1",
+        "machine_alias": "036机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 4,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "3916478324",
+        "machine_alias": "012机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "80d0408bc2",
+        "machine_alias": "027机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 10,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "681b42b64c",
+        "machine_alias": "143机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 12,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "317042b6f6",
+        "machine_alias": "161机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "508440a921",
+        "machine_alias": "026机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "04e248b3d6",
+        "machine_alias": "138机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "42a44688ad",
+        "machine_alias": "001机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "c8744bb216",
+        "machine_alias": "002机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "12.4"
+      },
+      {
+        "machine_id": "bb8c4f8e12",
+        "machine_alias": "003机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "12.8"
+      },
+      {
+        "machine_id": "794b4db9d1",
+        "machine_alias": "040机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 2,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "c0b042a675",
+        "machine_alias": "030机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 2,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "b52c468700",
+        "machine_alias": "029机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 2,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "98e944be4b",
+        "machine_alias": "004机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "b60c4997bc",
+        "machine_alias": "043机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1980,
+        "highest_cuda_version": "12.8"
+      },
+      {
+        "machine_id": "3bd24aaa12",
+        "machine_alias": "162机",
+        "region_sign": "cq-A1",
+        "gpu_name": "RTX 4090D",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 8,
+        "payg_price": 1980,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "2dee449d7f",
+        "machine_alias": "147机",
+        "region_sign": "cq-A1",
+        "gpu_name": "CPU",
+        "gpu_memory": 0,
+        "gpu_idle_num": 3,
+        "payg_price": 930,
+        "highest_cuda_version": "99"
+      }
+    ]
+  },
+  {
+    "regions": [
+      "nm-B1",
+      "nm-B2"
+    ],
+    "code": "Success",
+    "total": 590,
+    "rows_checked": 100,
+    "available": [
+      {
+        "machine_id": "8qe7dt8675",
+        "machine_alias": "572机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3080 Ti",
+        "gpu_memory": 12884901888,
+        "gpu_idle_num": 7,
+        "payg_price": 1140,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "lkuwxxj064",
+        "machine_alias": "575机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3080 Ti",
+        "gpu_memory": 12884901888,
+        "gpu_idle_num": 1,
+        "payg_price": 1140,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "x9rmqv8ahx",
+        "machine_alias": "588机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3080 Ti",
+        "gpu_memory": 12884901888,
+        "gpu_idle_num": 8,
+        "payg_price": 1140,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "d8m2jxl1fd",
+        "machine_alias": "570机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3080 Ti",
+        "gpu_memory": 12884901888,
+        "gpu_idle_num": 5,
+        "payg_price": 1140,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "lt51sn8zzd",
+        "machine_alias": "583机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3080 Ti",
+        "gpu_memory": 12884901888,
+        "gpu_idle_num": 5,
+        "payg_price": 1140,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "9fce4eaed9",
+        "machine_alias": "307机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 3,
+        "payg_price": 1560,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "4d2b46b116",
+        "machine_alias": "301机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1560,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "adaa4cbf47",
+        "machine_alias": "318机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 2,
+        "payg_price": 1560,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "de1c48aa98",
+        "machine_alias": "192机",
+        "region_sign": "nm-B1",
+        "gpu_name": "RTX 4090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 8,
+        "payg_price": 2290,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "5e1a40abb0",
+        "machine_alias": "302机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 4,
+        "payg_price": 1560,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "c2d74383d9",
+        "machine_alias": "209机",
+        "region_sign": "nm-B1",
+        "gpu_name": "RTX 4090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 2290,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "90264f8b69",
+        "machine_alias": "314机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 1560,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "e4ac4db755",
+        "machine_alias": "196机",
+        "region_sign": "nm-B1",
+        "gpu_name": "RTX 4090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 8,
+        "payg_price": 2290,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "247f44a202",
+        "machine_alias": "068机",
+        "region_sign": "nm-B1",
+        "gpu_name": "RTX 4090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 7,
+        "payg_price": 2290,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "0510428056",
+        "machine_alias": "299机",
+        "region_sign": "nm-B2",
+        "gpu_name": "RTX 3090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 4,
+        "payg_price": 1560,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "cb6a4f850d",
+        "machine_alias": "254机",
+        "region_sign": "nm-B1",
+        "gpu_name": "RTX 4090",
+        "gpu_memory": 25769803776,
+        "gpu_idle_num": 1,
+        "payg_price": 2080,
+        "highest_cuda_version": "13.0"
+      }
+    ]
+  },
+  {
+    "regions": [
+      "nm-A1"
+    ],
+    "code": "Success",
+    "total": 58,
+    "rows_checked": 58,
+    "available": [
+      {
+        "machine_id": "84724297e8",
+        "machine_alias": "035机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 3,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "97ae44a5df",
+        "machine_alias": "016机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 1,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "fcb5429244",
+        "machine_alias": "025机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 6,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "8da74ab132",
+        "machine_alias": "010机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 1,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.1"
+      },
+      {
+        "machine_id": "c75a498ab8",
+        "machine_alias": "023机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 4,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "67ab41afff",
+        "machine_alias": "007机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 3,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.1"
+      },
+      {
+        "machine_id": "1c3542b085",
+        "machine_alias": "014机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 1,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "f2444e96db",
+        "machine_alias": "055机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 1,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "98b24ebe42",
+        "machine_alias": "026机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 2,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "66714bb469",
+        "machine_alias": "038机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 1,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.1"
+      },
+      {
+        "machine_id": "119b47bef5",
+        "machine_alias": "040机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 2,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "541a43b8b6",
+        "machine_alias": "047机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 3,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "27b944a7b2",
+        "machine_alias": "012机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 1,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "cb894da57f",
+        "machine_alias": "008机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 3,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "c912489c17",
+        "machine_alias": "037机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 2,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "fa744fb3e5",
+        "machine_alias": "006机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 1,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "85bd408359",
+        "machine_alias": "032机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 1,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.2"
+      },
+      {
+        "machine_id": "2eb7489931",
+        "machine_alias": "036机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 2,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "ae2d4d944b",
+        "machine_alias": "021机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 2,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.1"
+      },
+      {
+        "machine_id": "f4734f9840",
+        "machine_alias": "029机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 3,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.0"
+      },
+      {
+        "machine_id": "c06446817c",
+        "machine_alias": "061机",
+        "region_sign": "nm-A1",
+        "gpu_name": "A800-80GB",
+        "gpu_memory": 85899345920,
+        "gpu_idle_num": 1,
+        "payg_price": 5880,
+        "highest_cuda_version": "13.1"
+      }
+    ]
+  }
+]

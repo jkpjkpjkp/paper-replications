@@ -1,0 +1,97 @@
+SIT paper-versus-public-code protocol audit
+Assessment date: 2026-11-17
+Scope: Table 1 SIT 40/50-asset experiments; preparation, no new training.
+
+ANSWER TO THE PUBLIC-CODE QUESTION
+Yes. The completed primary runs executed the author's run.py, model, training
+loss and evaluation code at commit 34e9c5a939ffcfcdf535baf71427518bb1eec741,
+using the released 40/50-asset launcher configurations. Their fresh outputs
+differ from the paper. The historical source manifest records an empty tracked
+diff at execution. This is not evidence of an exact paper/runtime reproduction:
+the local PyTorch build differed, the signature-cache builder was separately
+implemented and checked, and the 50-asset run used a managed-memory allocator.
+The existing working tree now has edits; historical source claims refer to the
+recorded run, not the current working tree. Future runs should use an isolated
+snapshot of the pinned source. Do not revert the user's working-tree edits.
+
+PRIMARY EVIDENCE
+- reproduction/fresh_local/source_input_manifest.json
+- reproduction/fresh_local/environment_manifest.json
+- reproduction/fresh_local/pool40_command.txt
+- reproduction/fresh_local/pool50_command.txt
+- reproduction/logs/fresh_local_dp40.log
+- reproduction/logs/fresh_local_dp50.log
+- reproduction/fresh_local_comparison/table1_comparison.csv
+
+PAPER REQUIREMENTS VERIFIED AGAINST THE ORIGINAL PDF
+Source: reproduction/paper.pdf, printed page 17, Appendix D and Table 4 Panel E.
+The complete page was rendered and visually inspected on 2026-11-17.
+PDF SHA-256: 8d2f3facbebb899b6d5fbf14c406480bc9b93f615ed07209c43c59a9c2bb673c
+
+Requirement                 Paper                       Completed local run
+Optimizer                   Adam                        Adam
+Learning rate               0.001                       Initial 0.001
+Batch size                  64                          64
+Dropout                     0.1                         0.1
+Maximum epochs              100                         30
+Early stopping patience     10                          3
+Repetitions                 5 independent seeds         3; seed 2023 once
+Hyperparameter selection    Full grid; validation       Released configuration
+Original runtime            Not specified in Appendix D Different from requirements
+
+Table 4 Panel E, transcribed values:
+D_MODELS:       8, 16, 32, 64
+D_FFS:          8, 16, 32, 64
+E_LAYERS_LIST:  1, 2
+N_HEADS_LIST:   2, 4, 8
+Sig Level:     2
+HIDDEN_C:       8, 16, 32
+
+This gives 288 configurations per asset pool, 576 across 40 and 50 assets.
+The released 40-asset configuration is inside this grid. The released
+50-asset configuration has hidden_c=64 and is outside it. Changing only
+--train_epochs and --patience would not reproduce the stated full protocol.
+
+WORD-FOR-WORD CLAIM LIMITS / UNSPECIFIED CHOICES
+1. The paper states five different seeds but does not name their values.
+   Predeclaring five new distinct seeds would implement the stated independent-
+   run design; it would not recover the authors' exact original random streams.
+2. The paper says best validation performance without naming its metric,
+   direction, tie handling, or whether selection is across seed-averaged
+   validation scores or independently per seed. The released training uses
+   validation CVaR for checkpoint selection; that does not establish the
+   authors' original hyperparameter-selection rule.
+3. The release halves the learning rate with lradj=type1. Appendix D states
+   learning rate 0.001 but does not specify a schedule or explicitly say it
+   remains constant. Neither interpretation can be labeled uniquely exact.
+4. The exact runtime in requirements.txt is
+   torch==2.6.0a0+ecf3bae40a.nv25.1. The completed runs used 2.4.1+cu121.
+   The exact author GPU, precision flags, checkpoint and RNG states are absent.
+5. Other implementation details supplied by public code must retain that
+   provenance; they must not be described as explicit paper wording.
+
+PREPARED NEXT EXPERIMENT
+paper_protocol_grid.json contains the complete transcribed Table 4 SIT grid,
+fixed Appendix D parameters, and unresolved fields left null. It is a protocol
+manifest, not an executed experiment or a claim of exact reproducibility.
+For Table 1, use the released data, preserve original date splits, run all
+declared validation candidates, freeze selection before final test evaluation,
+and report all five independent final runs. Preserve previous results.
+If the original seed/selection details cannot be recovered, document choices
+before execution and call the experiment a paper-specified protocol with
+declared choices, not a word-for-word reconstruction of the original run.
+
+EXECUTION STATE
+No new training was started by this audit. The specified NVIDIA PyTorch build
+is not installed in the task environment or available among local Docker
+images. At inspection the local RTX 4060 had roughly 7.35/8.19 GB in use,
+including another project's training, and /home had about 13 GB available.
+Do not interrupt unrelated jobs or remove files to make space implicitly.
+These resource observations are time-specific; recheck before a new launch.
+
+WHAT THE MISMATCH DOES AND DOES NOT ESTABLISH
+The public-code training result differs materially on this local runtime.
+The source of the training divergence is unresolved. The existing checks
+exclude large replay-arithmetic errors and show bitwise local repeatability.
+The paper/code conflicts and runtime mismatch are confirmed differences;
+none has been demonstrated to account for the full observed numerical gap.

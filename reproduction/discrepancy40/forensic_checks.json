@@ -1,0 +1,61 @@
+{
+  "scope": "40 assets only; no extra training or selection",
+  "inference_checks": [
+    {
+      "run": 0,
+      "decisions": 63,
+      "original_vs_cached_max_error": {
+        "x_sigs": 0.0,
+        "cross_sigs": 0.0,
+        "date_feats": 0.0,
+        "future_return_unscaled": 0.0
+      },
+      "cpu_original_input_vs_saved_gpu_weight_max_error": 1.5646219260478933e-07,
+      "original_loader_checkpoint_replayed_metrics": {
+        "Sharpe": 0.6357704954218939,
+        "Sortino": 0.7713678730271372,
+        "MaxDrawdown": 0.3722572258177314,
+        "FinalWealthFactor": 1.7073704220445718
+      },
+      "metric_max_error": 2.799059051206143e-08
+    },
+    {
+      "run": 1,
+      "decisions": 63,
+      "original_vs_cached_max_error": {
+        "x_sigs": 0.0,
+        "cross_sigs": 0.0,
+        "date_feats": 0.0,
+        "future_return_unscaled": 0.0
+      },
+      "cpu_original_input_vs_saved_gpu_weight_max_error": 7.450580605250501e-08,
+      "original_loader_checkpoint_replayed_metrics": {
+        "Sharpe": 0.3706994740669695,
+        "Sortino": 0.48458638785075037,
+        "MaxDrawdown": 0.3235650612927866,
+        "FinalWealthFactor": 1.3151196023215608
+      },
+      "metric_max_error": 2.7943989178158546e-08
+    },
+    {
+      "run": 2,
+      "decisions": 63,
+      "original_vs_cached_max_error": {
+        "x_sigs": 0.0,
+        "cross_sigs": 0.0,
+        "date_feats": 0.0,
+        "future_return_unscaled": 0.0
+      },
+      "cpu_original_input_vs_saved_gpu_weight_max_error": 5.5879354449173135e-08,
+      "original_loader_checkpoint_replayed_metrics": {
+        "Sharpe": 0.5114311667944043,
+        "Sortino": 0.6260063577458708,
+        "MaxDrawdown": 0.3479050562210114,
+        "FinalWealthFactor": 1.5152582848189822
+      },
+      "metric_max_error": 8.609106560975022e-08
+    }
+  ],
+  "seconds": 27.615167968000605,
+  "attribution_note": "Post hoc descriptive accounting, not a causal explanation of training differences. Economic return end dates used for years; identical 1255-day spans."
+}

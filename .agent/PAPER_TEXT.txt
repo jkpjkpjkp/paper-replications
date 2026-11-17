@@ -1,0 +1,3092 @@
+Signature-Informed Transformer for Asset Allocation
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: reproduction/paper.pdf
+Source SHA-256: 8d2f3facbebb899b6d5fbf14c406480bc9b93f615ed07209c43c59a9c2bb673c
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+Signature-Informed Transformer for Asset Allocation
+
+Yoontae Hwang 1 Stefan Zohren 2
+
+Abstract
+
+(1) Lacks Financial
+Inductive Bias
+
+Modern deep learning for asset allocation typically separates forecasting from optimization.
+We argue this creates a fundamental mismatch
+where minimizing prediction errors fails to yield
+robust portfolios. We propose the Signature Informed Transformer to address this by unifying
+feature extraction and decision making into a single policy. Our model employs path signatures
+to encode complex path dependencies and introduces a specialized attention mechanism that targets geometric asset relationships. By directly
+minimizing the Conditional Value at Risk we
+ensure the training objective aligns with financial goals. We prove that our attention module rigorously amplifies signature derived signals. Experiments across diverse equity universes show our approach significantly outperforms both traditional strategies and advanced
+forecasting baselines. The code is available
+at: https://github.com/Yoontae6719/SignatureInformed-Transformer-For-Asset-Allocation
+
+TSLA
+NVDA
+AAPL
+…
+
+(2) Objective
+Mismatch
+
+±𝒏% Error
+Forecasting
+Models
+
+(3) Error
+Amplification
+
+MSE
+
+Portfolio
+Optimization
+
+Asset Allocation
+
+Figure 1. A depiction of flawed strategies for asset allocation
+
+illustrated in Figure 1, is a decoupled, two-stage pipeline: a
+forecasting model first predicts asset returns, and these predictions are then fed into a downstream portfolio optimizer
+(Moody & Saffell, 2001). This approach has drawbacks and
+suffers from two critical issues. First, the forecasting models typically employed are general-purpose architectures.
+They lack the financial inductive biases necessary to model
+the idiosyncratic structures of financial markets, such as the
+intricate lead-lag relationships between assets. Without a
+model architecture that explicitly reflects market dynamics,
+such models struggle to distinguish genuine signals from
+noise. Second, and more critically, this pipeline creates an
+objective mismatch that leads to error amplification. The
+forecaster is trained to minimize a statistical metric like the
+Mean Squared Error (MSE), i.e. the average squared difference between estimated and actual values. This objective is
+agnostic to the downstream task of portfolio construction,
+where even minuscule prediction errors can be magnified by
+the optimizer into volatile and impractical portfolio weights.
+Furthermore, an MSE objective implicitly incentivizes the
+model to favor assets that are easier to predict, potentially
+not considering harder-to-predict assets with larger estimation errors and distorting the final allocation. We argue
+that a robust solution requires moving beyond this fragile
+pipeline. The challenge is to develop a unified policy that
+learns an end-to-end mapping from market data directly
+to portfolio weights while being architecturally designed
+to model the known geometric properties of financial time
+series (Buehler et al., 2019; Hwang et al., 2025a).
+
+1. Introduction
+A central challenge in modern quantitative finance is strategic asset allocation: the dynamic construction of portfolios
+that are robust to the complex, non-linear behavior of financial markets (Markowitz, 1952). While foundational
+theories provided a basis for optimization, their assumptions of static correlations and normally distributed returns
+are often not adequate for navigating the non-stationary
+and path-dependent nature of today’s markets (Cont, 2001;
+Fama, 1970). Deep learning offers a powerful toolkit to address these complexities, yet developing policies that yield
+stable, real-world performance remains a formidable task.
+The predominant deep learning paradigm for this problem,
+1
+
+Pusan National University, Busan, Republic of Korea
+University of Oxford, Oxford, United Kingdom. Correspondence
+to: Stefan Zohren <stefan.zohren@eng.ox.ac.uk>.
+2
+
+To this end, we introduce the Signature-informed Transformer (SIT), a deep learning framework designed to learn
+robust, multi-asset allocation policies by directly addressing
+these challenges. SIT’s contributions are unified within a
+synergistic architecture built on three pillars:
+
+Proceedings of the 43 rd International Conference on Machine
+Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026
+by the author(s).
+
+1
+
+=== PDF PAGE 2 ===
+Signature-Informed Transformer for Asset Allocation
+
+1. Path-wise Feature Representation: To better capture
+the complex dynamics of assets, the model generates
+features from each asset’s price history using Rough
+Path Signatures. This technique offers a principled
+summary of a path’s shape, encoding its trends and oscillations to provide a richer basis for decision-making
+(Lyons, 1998; Lyons & McLeod, 2022).
+2. Signature-Augmented Attention: For modeling dependencies between assets, the model introduces a
+novel attention mechanism. It enhances attention
+scores with a term derived from the signature of asset pairs, which represents a robust measure of their
+lead-lag relationships (Bonnier et al., 2019). This allows the model to allocate attention based on geometric
+interactions, a crucial inductive bias for this problem.
+3. Decision Alignment: To align the training process
+with the goal, the model is optimized directly for the
+quality of the portfolio allocation. Instead of aiming for statistical forecasting accuracy, its parameters
+are trained to minimize the Conditional Value-at-Risk
+(CVaR) of the portfolio’s loss distribution, bridging the
+gap often found in two-stage pipelines.
+
+to uncertainty in market behavior.
+A key ingredient in our framework is the use of path signatures to capture high-order variations and cross-asset
+interactions in price trajectories. For a continuous path
+X : [s, t] → Rd , the signature Sig(X[s,t] ) lies in the
+d ⊗k
+tensor algebra ⊕∞
+. When truncated at level
+k=0 (R )
+M , it becomes a finite-dimensional
+vector denoted as
+Rt
+RtRu
+SigM (X[s,t] ) = (1, s dXu , s s dXr ⊗ dXu , . . .). In
+our financial context, X corresponds to the price process St .
+First-order signature terms capture net increments for each
+asset, while second-order terms encode signed areas, revealing non-trivial correlations and lead-lag effects. Unless
+otherwise stated, we set the signature truncation order to
+M = 2, which is the lowest order that captures signed-area
+and directional lead-lag information. Appendix I reports a
+sensitivity analysis over M ∈ {1, 2, 3}. For clarity, the key
+notations are provided in Appendix B.
+Proposition 2.1 (Strict Lead-Lag Implies Positive Second-Order Signature (cf. (Chevyrev & Kormilitzin, 2016))).
+Let Xt = (Xt1 , Xt2 ) for t ∈ [0, T ] satisfy a strict lead-lag
+structure of Definition C.1. Then the second-level signature
+cross-term
+Z T
+Z T
+A(X) =
+Xt1 dXt2 −
+Xt2 dXt1
+(1)
+
+2. Methodology
+
+0
+
+This section introduces the Signature-Informed Transformer
+(SIT), a novel approach to risk-aware portfolio allocation
+(Figure 2). All relevant literature can be found in the Appendix A. After a brief overview of the problem and path
+signatures, we detail the model’s core components.
+
+0
+
+is strictly positive. In particular, A(X) > 0.
+Proof. See Appendix C.2.
+Problem Formulation. We frame the task as a sequential decision-making problem under uncertainty. At
+each decision point ti , the objective is to construct
+portfolios of d assets for each of the next K periods
+[ti , ti+1 ], . . . , [ti+K−1 , ti+K ]. The information set available at time ti , denoted Fti , comprises three components:
+(i) for each asset j, a sequence of truncated path signatures {SigM (S[tj i−H+k−1 ,ti−H+k ] )}H
+k=1 over a lookback
+window of H time steps (ii) pairwise cross-signatures
+SigM ((S j , S l )[ti−H ,ti ] ) for all asset pairs (j, l), capturing lead-lag relationships over the entire window and
+(iii) a sequence of deterministic calendar feature vectors
+F
+{vti−H+k }H
+k=1 , where vt ∈ R . Our model, parameterized
+by θ ∈ Θ, learns a mapping
+
+2.1. Preliminaries
+Notations. Let 0 = t0 < t1 < · · · < tn = T denote
+a sequence of discrete times over the horizon [0, T ]. We
+consider d assets traded in a financial market, with price
+Stji (ω) referring to the value of asset j ∈ {1, . . . , d} at
+time ti under a particular market scenario ω ∈ Ω. The
+set Ω encapsulates all possible market paths. For convenience, we define the continuous-time vector process
+Su (ω) = (Su1 (ω), . . . , Sud (ω)) ∈ Rd , understanding that
+its values at discrete times {ti } coincide with the observed
+data {Sti }. In practice, Su on each interval [ti , ti+1 ] can
+be reconstructed by an appropriate interpolation. A parametric asset allocation strategy is denoted by θ ∈ Θ,
+where Θ is the set of all feasible parameter configurations. At each decision time ti , the policy outputs a sequence of long-only, fully invested portfolio weight vec(k)
+d
+tors for the next K periods, {wti (θ)}K
+k=1 ⊂ R+ , with
+Pd
+(k),j
+(θ) = 1 for each k. We parameterize each
+j=1 wti
+
+gθ : Fti 7−→ µ̂1:K
+ti (θ),
+
+K×d
+µ̂1:K
+,
+ti (θ) ∈ R
+
+(2)
+
+which yields k-step-ahead expected returns for k =
+1, . . . , K. Portfolio weights for step k are then obtained
+(k)
+(k)
+via wti (θ) = softmax(µ̂ti (θ)/τ ) ∈ Rd , ensuring a longonly, fully invested allocation at each future step. Note that
+µ̂1:K
+is not trained with a prediction loss. It acts as the logti
+its of the allocation layer, and gradients flow only from the
+portfolio objective below. Let rti+k be the vector of realized
+
+(k)
+
+wti via a softmax over the k-step-ahead predicted returns,
+(k)
+(k)
+K×d
+wti (θ) = softmax(µ̂ti (θ)/τ ), where µ̂1:K
+ti (θ) ∈ R
+stacks the predictions for k = 1, . . . , K. Our objective is to
+learn θ so as to maximize cumulative trading gains, subject
+2
+
+=== PDF PAGE 3 ===
+Signature-Informed Transformer for Asset Allocation
+
+Pairwise Cross-Signatures
+Extraction
+
+SIT Block
+
+𝑴
+
+𝐒𝐢𝐠 (𝑺)
+Signature
+Extraction
+
+Price Data
+
+𝒆𝐬𝐢𝐠
+Signature
+
+𝒆𝐝𝐚𝐭𝐞
+Time
+
+𝒆𝐚𝐬𝐬𝐞𝐭
+Asset
+
+Fusion & Projection Block
+
+SignatureInformed Attn
+
+Key, Value
+
+Temporal Attn
+
+Query
++𝜸𝜷
++𝜸𝜷
++𝜸𝜷
+
+Feed-Forward
+Network
+
+Financial Inductive Bias
+
+Portfolio Allocation
+Head
+
+min CVaR 𝛼 (Loss)
+Optimization Objective
+
+Figure 2. Overview of the Signature-Informed Transformer (SIT) architecture.
+
+asset returns over [ti+k−1 , ti+k ], and define the correspond(k)
+(k)
+ing portfolio loss Lti+k (θω ) = −(wti (θ))⊤ rti+k (ω). The
+parameters θ are optimized by minimizing the expected Conditional Value-at-Risk (CVaR) of the K-step loss sequence
+within a scenario as
+(k)
+
+min Eω∼D [CVaRα ({Lti+k (θω )}K
+k=1 )].
+θ∈Θ
+
+Moreno-Pino et al., 2024) and therefore avoids recomputation over the full history.
+Signature-Informed Self-Attention. The core of the
+model’s cross-asset reasoning lies in a novel attention mechanism that operates along the asset dimension, following a
+standard causal self-attention pass along the temporal dimension within each factorized layer. This Signature-Informed
+Self-Attention dynamically modifies the attention scores
+between pairs of assets based on their explicit relational
+features encoded by path signatures. Let the output of the
+temporal attention and its subsequent feed-forward network
+for a given layer be denoted by the tensor X′ ∈ RH×d×dmodel .
+For each time slice k ∈ {1, . . . , H}, we have a set of d asset
+vectors {x′k,1 , . . . , x′k,d }, where each x′k,j ∈ Rdmodel . The
+asset-wise attention treats the time dimension as a batch dimension, processing H independent attention calculations.
+
+(3)
+
+A core assumption of this framework is that the complex,
+path-dependent market dynamics relevant for forecasting
+returns are effectively encoded within the signature features.
+2.2. Signature-Informed Transformer (SIT)
+Signature Embeddings. At a given decision time ti ,
+the initial representation for each asset j and lookback
+slice k ∈ {1, . . . , H} is constructed by fusing three distinct information sources. First, the truncated path signature of the asset’s price history over the slice’s interval,
+sk,j = SigM (S[tj i−H+k−1 ,ti−H+k ] ) ∈ Rdsig , is projected into
+the model’s hidden space Rdmodel using a linear layer to form
+a path embedding esig,k,j . Second, the vector of calendar
+features for that slice, vti−H+k ∈ RF , is projected to create
+a time embedding edate,k ∈ Rdmodel , which is shared across
+all assets for slice k. Third, to encode unique, time-invariant
+characteristics, each asset j ∈ {1, . . . , d} is assigned a
+learnable embedding vector ejasset ∈ Rdmodel . These three
+embeddings are concatenated and passed through a final
+linear projection to produce the input token xk,j for the first
+Transformer layer:
+xk,j = Wproj [esig,k,j ⊕ edate,k ⊕ ejasset ] ∈ Rdmodel
+
+The mechanism is built upon a standard multi-head selfattention framework with NH heads. For a given time slice
+k, the collection of asset vectors X′k = (x′k,1 , . . . , x′k,d )⊤ ∈
+Rd×dmodel is linearly projected to generate queries, keys, and
+values:
+Qk = X′k WQ ∈ Rd×dmodel
+
+(5)
+
+Kk = X′k WK ∈ Rd×dmodel
+Vk = X′k WV ∈ Rd×dmodel
+
+(6)
+(7)
+
+where WQ , WK , WV ∈ Rdmodel ×dmodel are learnable weight
+matrices. These are then reshaped for multi-head computation, yielding per-head tensors Qk,h , Kk,h , Vk,h ∈ Rd×dk
+for each head h ∈ {1, . . . , NH }, where dk = dNmodel
+. The
+H
+innovation lies in the computation of an additive bias term.
+
+(4)
+
+where ⊕ denotes concatenation. The resulting input tensor
+for time ti , of shape H × d × dmodel , encapsulates pathwise, temporal, and asset-specific information. Note that
+the signature update uses Chen relation (Lyons et al., 2007;
+
+This bias is a function of both pairwise relational characteristics and current asset states. The first component uses
+the cross-signature feature over the entire lookback window
+3
+
+=== PDF PAGE 4 ===
+Signature-Informed Transformer for Asset Allocation
+
+[ti−H , ti ]. For each pair of assets (j, l), we denote the vector
+representation of this feature as ci,j,l ∈ Rdcross-sig . These features, encoding relational information for the pair (j, l), are
+projected into a specialized embedding space using a dedicated MLP, denoted MLPβ , to produce a tensor of relational
+embeddings, β i,j,l :
+
+Intuitively, when a relational signature is aligned with a
+query asset’s current informational need, strengthening that
+signature should raise the model’s attention to the counterpart. Formally, Proposition 2.2 shows that, for fixed γ > 0,
+the directional derivative of αj,l with respect to (β i,j,l )h
+
+β i,j,l = MLPβ (ci,j,l ) ∈ RNH ×dβ
+
+2
+γ αj,l (1 − αj,l )∥(qdyn
+k,j )h ∥2 > 0. By contrast, the effect of
+increasing the gate γ itself on αj,l depends on alignment rel!
+d
+X
+∂αj,l
+ative to other keys:
+= αj,l bj,l −
+αj,m bj,m ,
+∂γ
+m=1
+where bj,m = ⟨(qdyn
+k,j )h , (β i,j,m )h ⟩. Thus, γ > 0 scales
+
+(β)
+αj,l
+(qdyn
+k,j )h
+
+along (qdyn
+k,j )h is strictly positive, i.e., D
+
+(8)
+
+Here, dβ is the bias embedding dimensionality, and a separate embedding is learned for each attention head. The
+second component introduces dynamism. The query asset’s representation from the temporal stage, x′k,j , is used
+to generate a dynamic query vector via another MLP,
+′
+NH ×dβ
+qdyn
+. This vector qdyn
+k,j = MLPq (xk,j ) ∈ R
+k,j represents the informational need of asset j at slice k. The
+dynamic attention bias, bk,h,j,l , for each head h, query asset
+j, and key asset l at time slice k, is computed via an inner
+product as
+bk,h,j,l = ⟨(qdyn
+k,j )h , (β i,j,l )h ⟩
+
+the influence of signature alignment, i.e. attention to pairs
+with above-average alignment increases as γ grows, while
+attention to below-average alignment decreases.
+Finally, the outputs from all heads are concatenated and
+passed through a final linear projection WO , followed by a
+residual connection and layer normalization:
+
+(9)
+
+(10)
+
+The attention weights, αk,h ∈ Rd×d , are obtained by applying the softmax function row-wise. The output for each
+head is computed by multiplying the attention weights with
+the value matrix.
+
+(15)
+
+Training Strategy The model is trained end-to-end to
+optimize portfolio performance under a risk-aware objective. The final output tensor from the Transformer stack,
+X′′ ∈ RH×d×dmodel , summarizes pathwise and cross-asset information over the lookback window. An output head maps
+this representation at decision time ti to K-step-ahead return predictions: a linear projection (optionally preceded by
+pooling over the H slices or using the last slice) produces
+µ̂1:K
+∈ RK×d . For each forecast step k ∈ {1, . . . , K},
+ti
+(k)
+the predicted returns µ̂ti ∈ Rd are converted into long(k)
+(k)
+only portfolio weights via wti = softmax(µ̂ti /τ ), where
+τ > 0 controls allocation concentration.
+
+Proposition 2.2 (Positive directional derivative of attention
+weight). Assume d ≥ 2, γ > 0, and fix (k, h, j, l). Let the
+dβ
+query vector (qdyn
+satisfy ∥(qdyn
+k,j )h ∈ R
+k,j )h ∥2 > 0. For
+(Qk,h K⊤
+)j,m
+√ k,h
++ γ⟨(qdyn
+k,j )h , (β i,j,m )h ⟩ (11)
+dk
+ezj,m
+αj,m = Pd
+,
+(12)
+zj,r
+r=1 e
+zj,m =
+
+assume 0 < αj,l < 1. Then the directional derivative of αj,l with respect to β i,j,l in the direction (qdyn
+k,j )h
+equalsD
+
+(14)
+
+X′′k = LayerNorm(X′k + Dropout(Ok ))
+
+(13)
+
+The resulting collection {X′′k }H
+k=1 is the output of the
+Signature-Informed Self-Attention block. The computational gain comes from factorizing attention over the
+temporal and asset dimensions: flattened attention over
+H × d tokens costs O(H 2 d2 dmodel ), whereas the factorized Transformer costs O(dH 2 dmodel + Hd2 dmodel ). The
+signature-informed bias adds the pairwise cross-signature
+overhead; with Ccross-sig (M ) denoting the per-pair computation/projection cost, the total cost is O(dH 2 dmodel +
+Hd2 dmodel + d2 Ccross-sig (M )).
+
+This dynamic bias matrix is scaled by a learnable, strictly
+positive scalar gate, γ > 0 (parameterized as γ =
+softplus(γ̂)), which controls the overall magnitude of the
+signature-based influence. The final attention logits are:
+Qk,h K⊤
+√ k,h + γBk,h ∈ Rd×d
+dk
+
+Qk,h K⊤
+√ k,h + γBk,h )Vk,h
+dk
+Ok = Concat(Headk,1 , . . . , Headk,NH )WO
+
+Headk,h = softmax(
+
+where (·)h denotes the vector for head h. This forms a
+complete bias matrix Bk ∈ RNH ×d×d for each time slice
+k. This allows the model to selectively amplify or suppress
+attention based on whether a signature-encoded relationship
+is pertinent to the query asset’s current state.
+
+Logitsk,h =
+
+=
+
+(β)
+2
+αj,l = γ αj,l (1 − αj,l ) ∥(qdyn
+k,j )h ∥2 > 0.
+(qdyn
+k,j )h
+
+Let rti+k denote the realized asset-return vector over
+(k)
+[ti+k−1 , ti+k ]. The step-k portfolio loss is Lti+k (θω ) =
+(k)
+
+−(wti (θ))⊤ rti+k (ω). The overall objective is formally
+
+Proof. See Appendix C.3.
+4
+
+=== PDF PAGE 5 ===
+Signature-Informed Transformer for Asset Allocation
+
+stated as
+
+marks spanning traditional and deep learning approaches.
+Traditional baselines include Equally Weighted Portfolio
+min Eω∼D [CVaRα ({L
+(16)
+(EWP) (DeMiguel et al., 2009), Global Minimum Variθ
+ance (GMV) (Clarke et al., 2011; Markowitz, 1952), ConNo auxiliary prediction losses are used. Eq. (16) is the sole
+ditional Value-at-Risk (CVaR) (Rockafellar et al., 2000)
+training signal, avoiding the objective-mismatch issues disand Hierarchical Risk Parity (HRP) (Lopez de Prado,
+cussed in Section A. For each scenario ω, the inner CVaRα
+2016). The portfolio optimization strategy forms the second
+is taken over the intra-scenario empirical distribution. The
+stage of our deep learning-based comparisons, which use
+following derivation shows the dual form and its empirical
+predictions from various state-of-the-art time-series forecounterpart used for optimization:
+casting models as input. These forecasters include deep
+L(θ) = Eω∼D [CVaRα ({L(k) (θω )}K
+(17)
+k=1 )]
+learning models such as Autoformer (Wu et al., 2021),
+K
+DLinear (Zeng et al., 2023) FEDformer (Zhou et al., 2022),
+X
+1
+= Eω∼D [ min (νω +
+(L(k) (θω ) − νω )+ )] PatchTST (Nie et al., 2022), iTransformer (Liu et al.,
+νω ∈R
+(1 − α)K
+k=1
+2023), Non-stationary Transformers (NSformer) (Liu
+(18)
+et al., 2022), TimesNet (Wu et al., 2022) and RFormer
+N
+K
+(Moreno-Pino
+et al., 2024). Details of the parameter search
+X
+X
+1
+1
+min (νi +
+(L(k) (θωi ) − νi )+ ). space are provided in Appendix D.
+≈
+N i=1 νi ∈R
+(1 − α)K
+(k)
+
+(θω )}K
+k=1 )],
+
+k=1
+
+(19)
+
+Evaluation Metrics The strategies were evaluated using four standard financial metrics, assuming a zero riskfree rate. Risk-adjusted performance was measured by the
+Sharpe Ratio, which accounts for total volatility, and the
+Sortino Ratio, a refinement that isolates downside risk by
+considering only downside deviation; higher values are superior for both. Overall growth was tracked by the Final
+Wealth Factor, while the Maximum Drawdown quantified
+the largest peak-to-trough percentage decline, with a lower
+value being preferable.
+
+To incorporate risk aversion, we made the choice in Eq. (17)
+to minimizing the expected CVaR of the intra-scenario loss
+distribution, which is the objective in (16). Eq. (18) leverages the dual representation of CVaR (Rockafellar et al.,
+2000) under the confidence–level convention: CVaRα (Z) =
+1
+E[(Z − ν)+ ]) with tail mass 1 − α. Thus
+minν∈R (ν + 1−α
+νω equals the α–quantile (VaRα ) of the intra–scenario loss
+distribution. Finally, Eq. (19) presents the empirical objective function used in training, where the expectation Eω∼D
+is approximated by an average over a batch of N scenarios {ωi }N
+i=1 . For each scenario ωi , the optimal ν̂i is the
+empirical α–quantile of its losses {L(k) (θωi )}K
+k=1 .
+
+3.2. Can SIT deliver superior risk-adjusted
+performance?
+We evaluate the out-of-sample asset allocations efficacy of
+our proposed model: SIT. The comprehensive performance
+metrics, including risk-adjusted returns and downside risk,
+are presented for the 40- and 50-asset universes (see Appendix 3.4 for the 30-asset universe experiment). Our analysis underscores that the quality of asset allocation, rather
+than raw predictive accuracy, is the decisive factor for success, a central tenet of our work. The empirical results,
+summarized in Table 1, demonstrate that SIT consistently
+and significantly outperforms all baseline models across the
+primary metrics of risk-adjusted return and wealth generation. In the 40-asset universe, for instance, SIT achieves a
+Sharpe Ratio of 0.6717 and a Sortino Ratio of 0.8232, decisively surpassing the next-best traditional baseline EWP and
+all deep learning counterparts. This translates into superior
+capital growth, with SIT yielding a Final Wealth Factor of
+1.7903, the highest among all tested strategies.
+
+3. Experiment
+3.1. Implementation details
+Dataset Experiments used three portfolios of 30, 40, and
+50 S&P 100 companies. We also selected two additional
+portfolios of 10 and 20 assets from the DOW30 to validate
+performance against a different index composition, which
+is often characterized as more concentrated. Furthermore,
+to evaluate robustness across different market dynamics, we
+included two portfolios consisting of 50 and 100 assets from
+the CSI 300 index. The daily price data was sourced from
+Wharton Research Data Services (WRDS). The data was
+partitioned chronologically into distinct training, validation,
+and test periods. The training set spans from January 1,
+2000, to December 31, 2016. The validation set from January 1, 2017, to December 31, 2019 and the test set from
+January 1, 2020, to December 27, 2024. This split covers
+multiple market regimes, including the recent volatility.
+
+The primary contribution of SIT becomes evident when
+contrasted with the predict-then-optimize models. These
+models, which rely on minimizing statistical forecasting error, exhibit poor and highly unstable portfolio performance.
+Many fail to outperform even simple heuristics. Their high
+
+Baseline Models The performance of our proposed model,
+SIT, is compared against a comprehensive suite of bench5
+
+=== PDF PAGE 6 ===
+Signature-Informed Transformer for Asset Allocation
+Panel A. Asset 40 Universe (S&P100)
+Models
+Sharpe Ratio (↑)
+Sortino Ratio (↑)
+CVaR
+0.1531
+0.2001
+EW
+0.5759
+0.7153
+GMV
+0.4148
+0.5337
+HRP
+0.4958
+0.6171
+Autoformer
+0.2499 ± 0.1405
+0.3423 ± 0.1980
+DLinear
+0.3167 ± 0.1326
+0.4513 ± 0.2005
+FEDformer
+0.4006 ± 0.2317
+0.5540 ± 0.3192
+iTransformer
+0.3157 ± 0.0749
+0.4233 ± 0.0943
+NSformer
+0.4074 ± 0.1151
+0.5820 ± 0.1655
+PatchTST
+0.3286 ± 0.2021
+0.4540 ± 0.2818
+TimesNet
+0.3568 ± 0.0782
+0.4959 ± 0.1019
+RFormer
+0.4901 ± 0.1437
+0.6308 ± 0.1828
+SIT (Ours)
+0.6717 ± 0.0628 0.8232 ± 0.0792
+
+Maximum Drawdown (↓)
+0.3516
+0.3688
+0.2743
+0.3185
+0.3812 ± 0.0480
+0.3621 ± 0.0407
+0.3647 ± 0.0167
+0.4136 ± 0.0326
+0.4475 ± 0.0672
+0.4523 ± 0.0838
+0.4704 ± 0.0701
+0.3415 ± 0.0482
+0.3611 ± 0.0037
+
+Final Wealth Factor (↑)
+1.0569
+1.6439
+1.3258
+1.4561
+1.1809 ± 0.2403
+1.2915 ± 0.2133
+1.5198 ± 0.5703
+1.2860 ± 0.0147
+1.5129 ± 0.3010
+1.3409 ± 0.3886
+1.3765 ± 0.1729
+1.5387 ± 0.2353
+1.7903 ± 0.1023
+
+Panel B. Asset 50 Universe (S&P100)
+Models
+Sharpe Ratio (↑)
+Sortino Ratio (↑)
+CVaR
+0.2165
+0.2858
+EW
+0.6008
+0.7399
+GMV
+0.3947
+0.4992
+HRP
+0.4637
+0.5620
+Autoformer
+0.3899 ± 0.1985
+0.5321 ± 0.2870
+DLinear
+0.2540 ± 0.1215
+0.3557 ± 0.1828
+FEDformer
+0.4318 ± 0.0692
+0.6039 ± 0.1097
+iTransformer
+0.5162 ± 0.1367
+0.6761 ± 0.1770
+NSformer
+0.5238 ± 0.0694
+0.7105 ± 0.1033
+PatchTST
+0.3821 ± 0.1871
+0.5134 ± 0.2635
+TimesNet
+0.3050 ± 0.3439
+0.4296 ± 0.4864
+RFormer
+0.5315 ± 0.2519
+0.6671 ± 0.3255
+SIT (Ours)
+0.7715 ± 0.0627 0.9743 ± 0.0998
+
+Maximum Drawdown (↓)
+0.3086
+0.3604
+0.2678
+0.3258
+0.4356 ± 0.1256
+0.3716 ± 0.0193
+0.4039 ± 0.1143
+0.4542 ± 0.0239
+0.4992 ± 0.0975
+0.4255 ± 0.1533
+0.5181 ± 0.1404
+0.5202 ± 0.0555
+0.3271 ± 0.0094
+
+Final Wealth Factor (↑)
+1.1170
+1.6683
+1.2845
+1.4021
+1.4697 ± 0.4573
+1.1883 ± 0.1979
+1.5286 ± 0.1508
+1.7910 ± 0.3722
+1.8138 ± 0.1922
+1.4411 ± 0.3814
+1.3737 ± 0.8857
+1.8014 ± 0.6303
+1.9215 ± 0.1792
+
+Table 1. Portfolio performance of SIT versus baselines across 40- and 50-asset universes. The best, second-best, and third-best results for
+each metric are highlighted in red, blue, and bold, respectively. Consistent results on S&P100, Dow30, and CSI300 (up to 100 assets) are
+reported in Appendix G, with detailed parameter settings provided in Appendix D.
+
+standard deviations across runs underscore the problem of
+error amplification, where small prediction inaccuracies are
+magnified by the downstream optimizer into fragile, impractical allocations. This finding empirically validates our
+core hypothesis. Optimizing for prediction is not a valid
+proxy for optimizing for allocation quality. In addition to its
+inductive biases designed for financial assets, SIT’s decisionfocused approach directly minimizes the portfolio’s CVaR,
+fundamentally aligning the model’s objective with the financial goal and thereby avoiding this critical pitfall. Furthermore, SIT demonstrates a superior risk-return profile
+compared to traditional quantitative strategies. While riskminimizing models like Global Minimum Variance (GMV)
+achieve low Maximum Drawdown (MDD) (e.g., 0.2743 in
+the 40-asset case), they do so at the cost of substantially
+lower returns (Sharpe Ratio of 0.4148). SIT, conversely,
+maintains a competitive MDD (0.3611) while delivering
+significantly higher returns. For the results on the DOW30
+and SCI300, please refer to Appendix 3.4.
+
+This module-drop protocol allows for a precise evaluation
+of each component’s marginal contribution. The variants
+evaluated are: (i) w/o CVaR, which replaces the Conditional Value-at-Risk objective with a risk-neutral objective
+of maximizing mean returns (ii) w/o Asset Attn, which
+disables the entire Signature-Informed Self-Attention mechanism across assets (iii) w/o Financial Bias, which removes
+the signature-derived bias term from the attention scores,
+reverting to a standard self-attention mechanism and (iv)
+w/o Gate γ, which removes the learnable gate γ that scales
+the financial bias.
+
+3.3. Module-Level Contribution Experiments
+To dissect the contribution of each architectural pillar of
+the SIT, we conduct a comprehensive ablation study. For
+this analysis, each ablated variant is created by independently removing a single key component from the full SIT
+model, while all other hyperparameters are held constant.
+
+Panel A. Asset 40 Universe
+Models
+Sharpe
+SIT (Ours)
+0.6717
+w/o CVaR
+0.5691c
+w/o Asset Attn
+0.5284c
+w/o Financial Bias
+0.6045b
+w/o Gate γ
+0.5251
+
+Sortino
+0.8232
+0.7057b
+0.6576c
+0.7590b
+0.6489c
+
+MDD
+0.3611
+0.3695
+0.3342b
+0.3431c
+0.3470b
+
+Wealth
+1.7903
+1.6409b
+1.5381c
+1.6801c
+1.5470c
+
+Panel B. Asset 50 Universe
+Models
+Sharpe
+SIT (Ours)
+0.7715
+w/o CVaR
+0.5923c
+w/o Asset Attn
+0.6268c
+w/o Financial Bias
+0.6047c
+w/o Gate γ
+0.5831c
+
+Sortino
+0.9743
+0.7294c
+0.7650b
+0.7545b
+0.7138c
+
+MDD
+0.3271
+0.3606b
+0.3298
+0.3224
+0.3305
+
+Wealth
+1.9215
+1.6622c
+1.6562b
+1.6260b
+1.5945c
+
+Table 2. Ablation study of SIT’s core components.Superscripts b
+and c indicate statistical significance at p < 0.05 and p < 0.001
+in paired tests against SIT (Ours).
+
+The results, summarized in Table 2, underscore the impor6
+
+=== PDF PAGE 7 ===
+Signature-Informed Transformer for Asset Allocation
+2.5
+
+mean=0.540
+
+2.0
+
+2.0
+
+Density (asset 50)
+
+Density (asset 40)
+
+tance of each design choice. The most critical element is the
+decision-focused approach. When the Conditional Valueat-Risk (CVaR) loss is replaced with a standard risk-neutral
+objective (w/o CVaR), the Sharpe Ratio on the 40-asset universe falls from 0.6717 to 0.5691. This demonstrates that direct optimization for risk-adjusted outcomes is essential for
+producing stable allocations that are resilient to tail events.
+The components of the Signature-Informed Self-Attention
+mechanism prove equally vital. Removing the asset-wise
+attention layer entirely (w/o Asset Attn) severely reduces the
+model’s ability to reason about portfolio structure, causing
+a steep performance drop (Sharpe of 0.5284). Furthermore,
+removing just the signature-based inductive bias (w/o Financial Bias), i.e. reverting to a standard attention mechanism,
+still leads to significant degradation (Sharpe of 0.6045). This
+confirms that injecting principled geometric knowledge of
+lead-lag structures (Proposition 2.1) is more effective than
+forcing the model to learn these relationships from scratch.
+Finally, removing the learnable gate γ (w/o Gate γ) is highly
+detrimental (Sharpe of 0.5251), highlighting that the model
+must learn to dynamically modulate the influence of these
+financial priors (Theorem 2.2) to adapt to changing market
+regimes.
+
+1.5
+1.0
+0.5
+0.0
+
+0.2
+
+0.4
+
+0.6
+
+Pearson Corrleation
+
+1.5
+1.0
+0.5
+0.0
+
+0.8
+
+mean=0.611
+
+0.2
+
+0.4
+
+0.6
+
+Pearson Corrleation
+
+0.8
+
+Figure 3. Distribution of correlations between signature strength
+and attention weights.
+
+Sharpe Ratio (Asset 50)
+
+Sharpe Ratio (Asset 40)
+
+mechanism. These empirical patterns directly instantiate
+the monotonicity predicted by Theorem 2.2. So, as alignment bk,h,j,l strengthens, the induced change in αj,l is positive, and the learned γ scales this effect without flipping
+its sign. The financial significance of this correlation is
+
+3.4. Are signatures effective at driving attention?
+SIT perturbs asset-axis attention logits by an additive,
+Qk,h K⊤
+
+signature-induced bias, Logitsk,h = √d k,h + γBk,h ∈
+k
+Rd×d where Bk,h aggregates the alignment equation
+(9) between the query’s informational need and the
+cross-signature embedding. Theorem 2.2 predicts that increasing this alignment in the query direction strictly raises
+attention weight on the corresponding key when γ > 0. Coupled with Proposition 2.1, which links persistent lead–lag
+to non zero second-order signatures, the method suggests
+a testable implication. Consequently, assets whose signatures are stronger should systematically attract more inbound attention. We formalize this implication by defining, at each decision time t, a per-asset signature-strength
+PH PNH Pd
+score st,j = HN1H d k=1 h=1
+m=1 (Bk,h )m,j and
+the corresponding inbound-attention share at,j =
+PH PNH Pd
+1
+k=1
+h=1
+m=1 αk,h,m→j . We then compute
+HNH d
+the Pearson correlation between {st,j }dj=1 and ({at,j }dj=1 )
+at each t and examine the distribution of these correlations
+across the test horizon.
+
+MSE
+
+0.8
+
+DFL
+
+0.6
+
+0.4
+
+0.2
+
+0.8
+0.6
+0.4
+0.2
+0.0
+
+r
+
+rme
+oFo
+
+Aut
+
+ear
+
+DLin
+
+r
+et
+er
+er
+er
+ST
+me
+esN
+orm
+orm
+orm
+chT
+For
+Pat
+RFf
+nsF
+Tim
+NSF
+FED
+iTra
+
+Figure 4. Out-of-sample Sharpe ratios after CVaR portfolio optimization on 40- and 50-asset S&P100 universes. Detailed numerical results for the 50-asset universe, including Sortino ratio,
+maximum drawdown, and terminal wealth, are provided in Appendix J.
+
+twofold. First, B is not a static embedding. This couples dynamic queries qdyn
+k,j with cross-signatures β i,j,l . Hence, the
+correlation becomes most apparent when the model routes
+information toward assets whose relational signatures are
+currently informative. Second, because SIT is trained solely
+through the portfolio-level CVaRα loss, the learned attention must improve tail-aware allocations rather than just
+forecast error. The observed right-skew therefore indicates
+that signatures are not merely present but actively utilized to
+amplify risk-relevant dependencies. In Appendix , Figure
+7 overlays the learned gate γ on portfolio drawdowns. We
+observe that higher values of γ tend to cluster during volatile
+episodes. This suggests that SIT increases the weight of
+signature-based priors precisely when cross-asset relations
+are most informative and prediction noise is elevated. We
+therefore conjecture that this financial bias offers a plausible explanation for the results in Table 1. Specifically, it
+allows SIT to achieve the high risk-adjusted returns while
+
+In Figure 3, the distribution is right-skewed with means of
+0.540 for the 40-asset universe and 0.611 for the 50-asset
+universe, indicating that stronger signature signals are associated with higher inbound attention mass. The heavy
+right tail shows frequent periods in which attention concentrates on assets whose signature-derived relations are most
+salient, while the paucity of negative correlations rules out
+a degeneracy in which the bias is ignored by the attention
+7
+
+=== PDF PAGE 8 ===
+Signature-Informed Transformer for Asset Allocation
+
+0.0
+
+5.0
+
+10.0
+
+0.619
+
+0.561
+
+0.612
+
+0.615
+
+0.618
+
+Universe: 50 Assets
+0.672
+
+0.630
+
+0.515
+
+0.532
+
+0.543
+
+0.615
+
+0.593
+
+0.771
+
+0.763
+
+(±0.159)
+
+(±0.142)
+
+(±0.056)
+
+(±0.040)
+
+(±0.130)
+
+(±0.063)
+
+(±0.094)
+
+(±0.077)
+
+(±0.080)
+
+(±0.072)
+
+(±0.073)
+
+(±0.122)
+
+(±0.063)
+
+(±0.087)
+
+0.75
+
+0.598
+
+0.542
+
+0.593
+
+0.598
+
+0.598
+
+0.655
+
+0.614
+
+0.501
+
+0.519
+
+0.529
+
+0.598
+
+0.577
+
+0.754
+
+0.747
+
+0.65
+
+(±0.159)
+
+0.578
+
+(±0.140)
+
+0.522
+
+(±0.158)
+
+(±0.137)
+
+0.8
+
+0.9
+
+(±0.051)
+
+0.575
+
+(±0.036)
+
+0.580
+
+(±0.126)
+
+0.579
+
+(±0.056)
+
+0.638
+
+(±0.091)
+
+0.598
+
+(±0.076)
+
+0.486
+
+(±0.079)
+
+0.505
+
+(±0.047)
+
+(±0.031)
+
+(±0.122)
+
+(±0.049)
+
+(±0.087)
+
+(±0.074)
+
+(±0.078)
+
+1.0
+
+1.1
+
+1.2
+
+1.3
+
+1.4
+
+0.8
+
+0.9
+
+Allocation Concentration
+
+(±0.071)
+
+0.515
+
+(±0.076)
+
+0.581
+
+(±0.124)
+
+0.561
+
+(±0.059)
+
+0.736
+
+0.70
+
+(±0.082)
+
+0.60
+0.55
+
+0.731
+
+(±0.070)
+
+(±0.079)
+
+(±0.127)
+
+(±0.055)
+
+(±0.078)
+
+1.0
+
+1.1
+
+1.2
+
+1.3
+
+1.4
+
+0.50
+
+Mean Sharpe Ratio
+
+Transaction Cost (bps)
+
+Universe: 40 Assets
+
+Allocation Concentration
+
+Figure 5. Sharpe ratio sensitivity to transaction costs and allocation concentration (τ ). Left: 40 assets Right: 50 assets.
+
+3.5. Why PFL approach fail financial objectives?
+Across all eight forecasting models, prediction alone does
+not translate into superior trading performance. As illustrated in Figure 4, which reports out-of-sample Sharpe ratios after CVaR optimization, the decision-focused learning
+(blue) consistently dominates the prediction-only approach
+(gray) across both the 40- and 50-asset universes. Moreover,
+as observed in Figure 1, the gap widens in the 50-asset universe, indicating that higher dimensionality amplifies the
+failure of the predict-then-optimize pipeline.
+
+HHI
+Entropy
+
+3.0
+2.5
+
+Concentration (asset 50)
+
+Concentration (asset 40)
+
+maintaining a robust diversification profile comparable to
+the EWP.
+
+2.0
+1.5
+1.0
+0.5
+0.0
+
+0.50
+
+0.75
+
+1.00
+
+1.25
+
+1.50
+
+Temperature τ
+
+1.75
+
+2.00
+
+3.5
+3.0
+2.5
+2.0
+1.5
+1.0
+0.5
+0.0
+
+HHI
+Entropy
+
+0.50
+
+0.75
+
+1.00
+
+1.25
+
+1.50
+
+Temperature τ
+
+1.75
+
+2.00
+
+Figure 6. Impact of temperature τ on portfolio diversification.
+
+eter τ is the softmax temperature in the allocation layer,
+(k)
+(k)
+wt = softmax(µ̂t /τ ). Smaller τ concentrates capital,
+larger τ spreads it. We sweep τ ∈ {0.8, ..., 1.4}. Transaction costs are one-way proportional fees of c ∈ 0, 5, 10 basis
+points per dollar traded. All other settings follow the main
+evaluation: long-only, fully invested, monthly (k-step) rebalancing on the 40- and 50-asset universes, and a zero risk-free
+rate for all risk-adjusted metrics. Figure 5 reports mean (±
+std) Sharpe ratios for every (τ, c) pair, with the 40-asset
+universe on the left and 50-asset on the right. Two patterns
+are stable across universes. First, performance peaks at moderate dispersion, near τ ≈ 1.3. Second, frictions compress
+Sharpe roughly linearly over this range: moving from 0 to
+10 bps reduces Sharpe by about 0.03–0.04 at the optimum.
+
+The failure of MSE-based approaches stems from the objective mismatch. See Appendix F for details on the twostage implementation. Prediction-focused training optimizes a surrogate that is misaligned with the financial goal.
+Therefore, prediction losses weight all errors equally and
+are blind to the downstream mapping from forecasts to
+actions. A model that is optimal for Lpred need not be
+even approximately optimal for CVaR. Consequently, tiny
+cross-sectional ranking errors induced by MSE training can
+be amplified by the optimizer, effectively flipping the identity of the largest weights. The evidence in Figure 4 and
+the mechanisms above explain why predict-then-optimize
+pipelines produce low and unstable Sharpe despite competitive Lpred . By differentiating through the portfolio layer
+and optimizing the risk metric of interest, decision-focused
+learning reshapes the logits so that only forecast features that
+improve allocation under constraints and tails are amplified.
+This alignment both raises risk-adjusted returns and tightens variability across runs, which we observe consistently
+across backbones and universes. We believe that aligning
+the training objective with the financial objective is necessary for turning predictive signals into reliable portfolios.
+
+3.6. Sensitivity Analysis
+
+Trading costs predictably erode realized performance, yet
+the impact is mitigated when allocations avoid both extreme
+concentration (small τ ) and excessive diffusion (very large
+τ ). The interior optimum near τ ≈ 1.3 indicates that SIT’s
+gains arise from robust allocation—balancing diversification
+with conviction rather than from raw prediction accuracy
+alone. The cost penalty is slightly smaller at the optimum in
+the 40-asset case (drop 0.034) than for concentrated settings
+such as τ ∈ {0.8, 0.9} (drops 0.039–0.041), whereas in the
+50-asset universe the smallest penalty occurs at more concentrated τ (e.g., τ = 0.9 drops 0.027). This non-linearity
+suggests that the turnover induced by spreading capital interacts with cross-sectional breadth. With fewer assets, moderate diversification can temper trading; with more assets,
+broader participation slightly increases cost sensitivity.
+
+We examine how proportional trading frictions and allocation concentration affect SIT. The concentration param-
+
+Also, as shown in Figure 6, increasing the softmax temperature τ monotonically reduces cross-sectional concentra8
+
+=== PDF PAGE 9 ===
+Signature-Informed Transformer for Asset Allocation
+
+tion and increases diversification.
+Herfindahl–Hirschman
+P
+Index HHI(w) =P j wj2 declines, while Shannon entropy H(w) = − j wj log wj rises. For any fixed τ , the
+50-asset universe achieves lower HHI and higher H than the
+40-asset universe, indicating a more diffuse allocation when
+the investable set is broader. These diagnostics provide an
+interpretable, one-to-one control of concentration through
+τ , useful when desk policies cap the effective number of
+active lines or impose minimum diversification. We further
+examine the robustness of SIT to the CVaR confidence level
+α ∈ {0.8, 0.9, 0.95, 0.99}. The detailed results are reported
+in Appendix J.1. Overall, larger α values lead to more
+conservative allocations with lower drawdowns, whereas
+smaller α values produce more aggressive wealth growth.
+The default choice α = 0.95 provides the best risk-adjusted
+performance.
+
+Bonnier, P., Kidger, P., Arribas, I. P., Salvi, C., and
+Lyons, T. Deep signature transforms. arXiv preprint
+arXiv:1905.08494, 2019.
+Buehler, H., Gonon, L., Teichmann, J., and Wood, B. Deep
+hedging. Quantitative Finance, 19(8):1271–1291, 2019.
+Cartea, Á., Cucuringu, M., and Jin, Q. Detecting leadlag relationships in stock returns and portfolio strategies.
+Available at SSRN 4599565, 2023.
+Chevyrev, I. and Kormilitzin, A. A primer on the signature method in machine learning. arXiv preprint
+arXiv:1603.03788, 2016.
+Chung, M., Lee, Y., Kim, J. H., Kim, W. C., and Fabozzi,
+F. J. The effects of errors in means, variances, and correlations on the mean-variance framework. Quantitative
+Finance, 22(10):1893–1903, 2022.
+
+4. Conclusion
+
+Clarke, R., De Silva, H., and Thorley, S. Minimum-variance
+portfolio composition. Journal of Portfolio Management,
+37(2):31, 2011.
+
+This work argues that effective quantitative portfolio management requires robust allocation policies, not just optimizing prediction accuracy. We introduce the Signatureinformed Transformer, a novel framework using path signatures for rich feature representation, a signature-augmented
+attention mechanism for financial biases like lead-lag effects, and a training objective that directly minimizes portfolio Conditional Value-at-Risk. Our empirical results show
+that SIT decisively outperforms baselines, which often
+are harmed by objective mismatch and error amplification.
+SIT’s performance remains superior under realistic transaction costs, underscoring the importance of its calibrated,
+signature-based architecture. While tested on U.S. equity
+data, this framework could be extended to higher-frequency,
+global, multi-asset markets. Ultimately, SIT provides a
+blueprint for ML systems to progress from forecasting towards a more end-to-end, risk-aware capital allocation.
+
+Cont, R. Empirical properties of asset returns: stylized
+facts and statistical issues. Quantitative finance, 1(2):223,
+2001.
+Costa, G. and Iyengar, G. N. Distributionally robust end-toend portfolio construction. Quantitative Finance, 23(10):
+1465–1482, 2023.
+DeMiguel, V., Garlappi, L., and Uppal, R. Optimal versus
+naive diversification: How inefficient is the 1/n portfolio
+strategy? The review of Financial studies, 22(5):1915–
+1953, 2009.
+Duan, Y., Wang, W., and Li, J. Factorgcl: A hypergraphbased factor model with temporal residual contrastive
+learning for stock returns prediction. In Proceedings
+of the AAAI Conference on Artificial Intelligence, volume 39, pp. 173–181, 2025.
+
+Impact Statement
+This paper presents work whose goal is to advance the field
+of machine learning for financial asset allocation. There are
+many potential societal consequences of our work, none of
+which we feel must be specifically highlighted here.
+
+Fama, E. F. Efficient capital markets. Journal of finance, 25
+(2):383–417, 1970.
+Fischer, T. and Krauss, C. Deep learning with long shortterm memory networks for financial market predictions.
+European journal of operational research, 270(2):654–
+669, 2018.
+
+Funding
+This work was supported by the National Research Foundation of Korea(NRF) grant funded by the Korea government(MSIT) (RS-2023-00242528).
+
+Gyurkó, L. G., Lyons, T., Kontkowski, M., and Field, J.
+Extracting information from the signature of a financial
+data stream. arXiv preprint arXiv:1307.7244, 2013.
+
+References
+
+Hwang, Y., Kong, Y., Zohren, S., and Lee, Y. Decisioninformed neural networks with large language model
+integration for portfolio optimization. arXiv preprint
+arXiv:2502.00828, 2025a.
+
+Arribas, I. P., Salvi, C., and Szpruch, L. Sig-sdes model
+for quantitative finance. In Proceedings of the First ACM
+International Conference on AI in Finance, pp. 1–8, 2020.
+9
+
+=== PDF PAGE 10 ===
+Signature-Informed Transformer for Asset Allocation
+
+Hwang, Y., Lee, Y., Lee, J., Zohren, S., Kim, J. H., Kim,
+W. C., Lee, Y., and Fabozzi, F. J. Deep learning in asset management: Architectures, applications, and challenges. Applications, and Challenges (September 15,
+2025), 2025b.
+
+Markowitz, H. Portfolio selection. The Journal of Finance,
+7(1):77–91, March 1952. doi: 10.2307/2975974. URL
+https://www.jstor.org/stable/2975974.
+Miori, D. and Cucuringu, M. Returns-driven macro
+regimes and characteristic lead-lag behaviour between
+asset classes. arXiv preprint arXiv:2209.00268, 2022.
+
+Kidger, P., Morrill, J., Foster, J., and Lyons, T. Neural
+controlled differential equations for irregular time series.
+Advances in neural information processing systems, 33:
+6696–6707, 2020.
+
+Moody, J. and Saffell, M. Learning to trade via direct
+reinforcement. IEEE transactions on neural Networks,
+12(4):875–889, 2001.
+
+Király, F. J. and Oberhauser, H. Kernels for sequentially
+ordered data. Journal of Machine Learning Research, 20
+(31):1–45, 2019.
+
+Moreno-Pino, F., Arroyo, Á., Waldon, H., Dong, X., and
+Cartea, Á. Rough transformers: Lightweight and continuous time series modelling through signature patching.
+Advances in Neural Information Processing Systems, 37:
+106264–106294, 2024.
+
+Lee, J., Tae, I., and Lee, Y. Anatomy of machines for
+markowitz: Decision-focused learning for mean-variance
+portfolio optimization. arXiv preprint arXiv:2409.09684,
+2024a.
+
+Nie, Y., Nguyen, N. H., Sinthong, P., and Kalagnanam, J. A
+time series is worth 64 words: Long-term forecasting with
+transformers. arXiv preprint arXiv:2211.14730, 2022.
+
+Lee, Y., Kim, J. H., Kim, W. C., and Fabozzi, F. J. An
+overview of machine learning for portfolio optimization.
+Journal of Portfolio Management, 51(2), 2024b.
+
+Rockafellar, R. T., Uryasev, S., et al. Optimization of conditional value-at-risk. Journal of risk, 2:21–42, 2000.
+
+Li, S., Jin, X., Xuan, Y., Zhou, X., Chen, W., Wang, Y.X., and Yan, X. Enhancing the locality and breaking the
+memory bottleneck of transformer on time series forecasting. Advances in neural information processing systems,
+32, 2019.
+
+Salvi, C., Cass, T., Foster, J., Lyons, T., and Yang, W. The
+signature kernel is the solution of a goursat pde. SIAM
+Journal on Mathematics of Data Science, 3(3):873–899,
+2021.
+
+Lim, B., Arık, S. Ö., Loeff, N., and Pfister, T. Temporal
+fusion transformers for interpretable multi-horizon time
+series forecasting. International journal of forecasting,
+37(4):1748–1764, 2021.
+
+Tong, A., Nguyen-Tang, T., Lee, D., Tran, T. M., and Choi,
+J. Sigformer: Signature transformers for deep hedging. In
+Proceedings of the Fourth ACM International Conference
+on AI in Finance, pp. 124–132, 2023.
+
+Liu, Y., Wu, H., Wang, J., and Long, M. Non-stationary
+transformers: Exploring the stationarity in time series
+forecasting. Advances in neural information processing
+systems, 35:9881–9893, 2022.
+
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones,
+L., Gomez, A. N., Kaiser, Ł., and Polosukhin, I. Attention is all you need. Advances in neural information
+processing systems, 30, 2017.
+
+Liu, Y., Hu, T., Zhang, H., Wu, H., Wang, S., Ma, L.,
+and Long, M. itransformer: Inverted transformers are
+effective for time series forecasting. arXiv preprint
+arXiv:2310.06625, 2023.
+
+Woo, G., Liu, C., Sahoo, D., Kumar, A., and Hoi, S. Etsformer: Exponential smoothing transformers for timeseries forecasting. arXiv preprint arXiv:2202.01381,
+2022.
+
+Lopez de Prado, M. Building diversified portfolios that outperform out-of-sample. Journal of Portfolio Management,
+2016.
+
+Wu, H., Xu, J., Wang, J., and Long, M. Autoformer: Decomposition transformers with auto-correlation for long-term
+series forecasting. Advances in neural information processing systems, 34:22419–22430, 2021.
+
+Lyons, T. and McLeod, A. D. Signature methods in machine
+learning. arXiv preprint arXiv:2206.14674, 2022.
+
+Wu, H., Hu, T., Liu, Y., Zhou, H., Wang, J., and Long, M.
+Timesnet: Temporal 2d-variation modeling for general
+time series analysis. arXiv preprint arXiv:2210.02186,
+2022.
+
+Lyons, T. J. Differential equations driven by rough signals. Revista Matemática Iberoamericana, 14(2):215–
+310, 1998.
+
+Xu, W., Liu, W., Wang, L., Xia, Y., Bian, J., Yin, J., and Liu,
+T.-Y. Hist: A graph-based framework for stock trend forecasting via mining concept-oriented shared information.
+arXiv preprint arXiv:2110.13716, 2021.
+
+Lyons, T. J., Caruana, M., and Lévy, T. Differential equations driven by rough paths: Ecole d’Eté de Probabilités
+de Saint-Flour XXXIV-2004. Springer, 2007.
+10
+
+=== PDF PAGE 11 ===
+Signature-Informed Transformer for Asset Allocation
+
+Yoo, J., Soun, Y., Park, Y.-c., and Kang, U. Accurate multivariate stock movement prediction via data-axis transformer with multi-level contexts. In Proceedings of the
+27th ACM SIGKDD Conference on Knowledge Discovery
+& Data Mining, pp. 2037–2045, 2021.
+Zeng, A., Chen, M., Zhang, L., and Xu, Q. Are transformers
+effective for time series forecasting? In Proceedings of
+the AAAI conference on artificial intelligence, volume 37,
+pp. 11121–11128, 2023.
+Zhang, Z., Zohren, S., and Roberts, S. Deep learning for
+portfolio optimization. arXiv preprint arXiv:2005.13665,
+2020.
+Zhou, H., Zhang, S., Peng, J., Zhang, S., Li, J., Xiong, H.,
+and Zhang, W. Informer: Beyond efficient transformer for
+long sequence time-series forecasting. In Proceedings of
+the AAAI conference on artificial intelligence, volume 35,
+pp. 11106–11115, 2021.
+Zhou, T., Ma, Z., Wen, Q., Wang, X., Sun, L., and Jin,
+R. Fedformer: Frequency enhanced decomposed transformer for long-term series forecasting. In International conference on machine learning, pp. 27268–27286.
+PMLR, 2022.
+
+11
+
+=== PDF PAGE 12 ===
+Signature-Informed Transformer for Asset Allocation
+
+A. Appendix. Related works
+Deep Learning in Asset Allocation The application of deep learning in quantitative trading has largely bifurcated into two
+distinct paradigms. The first, the classic Predict Focused Learning (PFL) pipeline, focuses on developing return-prediction
+models. In this stream of research, complex architectures map market data to future price movements. For instance,
+Transformers have been adapted to capture temporal dependencies in asset prices for return forecasting (Fischer & Krauss,
+2018; Yoo et al., 2021; Lim et al., 2021). Some models employ Graph Neural Networks (GNNs) to explicitly model
+inter-asset relationships, such as sector correlations, to improve prediction accuracy (Xu et al., 2021; Duan et al., 2025).
+Despite their architectural novelty, these methods inherit the fundamental flaws of a decoupled approach (Lee et al., 2024b).
+They suffer from objective mismatch, as optimizing for prediction error (e.g., Mean Squared Error) does not guarantee
+profitable portfolio construction, and are susceptible to error amplification, where small prediction inaccuracies lead to
+drastically suboptimal and unstable allocations (Chung et al., 2022). A more promising direction, which we term Decision
+Focused Learning (DFL), seeks to overcome these limitations by training policies end-to-end. These models learn a direct
+mapping from market state to portfolio allocations, optimizing a true financial objective like a risk-adjusted return metric.
+Foundational work demonstrated how to embed financial operators, such as portfolio value and Sharpe ratio, within a deep
+network, making the entire strategy differentiable and trainable via gradient descent (Buehler et al., 2019; Zhang et al., 2020;
+Costa & Iyengar, 2023). Recent research has increasingly emphasized embedding practical portfolio constraints into the
+model training phase. Typical examples include prohibiting short selling, ensuring full investment (i.e., portfolio weights
+sum to one), and placing upper or lower bounds on individual asset allocations, all of which are incorporated directly into the
+model architecture or loss function (Lee et al., 2024a; Hwang et al., 2025a). While these end-to-end frameworks efficiently
+align the model’s training objective with financial goals, they often fall short in explicitly guiding the model to learn and
+utilize the diverse information present in multi-asset settings. This leaves a critical research gap. These models lack a
+strong financial inductive bias to explicitly represent the non-linear, path-dependent nature of price series and the geometric,
+time-local lead-lag relationships between assets. In our implementation, the predicted returns µ̂ serve only as internal logits
+for a differentiable allocation layer. All parameters are trained end-to-end solely through the portfolio-level CVaR objective,
+not a pointwise prediction loss, aligning with decision-focused learning. Our work addresses this gap by integrating the
+mathematical theory of path signatures directly into a transformer’s attention mechanism, creating an optimization-aware
+model that is architecturally designed to understand the underlying geometry of market dynamics. See (Lee et al., 2024b;
+Hwang et al., 2025b) for more detailed review of asset allocations
+Transformer-Based Time Series Forecasting The success of the Transformer architecture in natural language processing
+has inspired its widespread adoption for time series forecasting. The core innovation, the self-attention mechanism,
+allows these models to dynamically weigh the importance of all past time steps when predicting future values, enabling
+them to capture complex, long-range dependencies without the sequential processing limitations of recurrent neural
+networks(Vaswani et al., 2017; Li et al., 2019). To extend the receptive field without incurring the quadratic cost of
+full attention, a stream of variants introduce sparsity or hierarchical structure. For example, LogSparse(Li et al., 2019),
+ProbSparse(Zhou et al., 2021) and related kernels discard low-magnitude query–key interactions to achieve O(L log L)
+complexity while retaining global context. From a more fundamental time series data perspective, Autoformer(Wu et al.,
+2021), FEDformer(Zhou et al., 2022) and ETSformer(Woo et al., 2022) decompose signals into trend–seasonality (or
+frequency-domain) components so that long-horizon patterns can be modeled additively and multiplicatively with reduced
+error accumulation. More recent PatchTST(Nie et al., 2022) and TimesNet(Wu et al., 2022) patch neighboring observations
+or convolve multi-scale windows before attention, embedding stronger inductive biases for periodicity and aliasing control.
+While these innovations alleviate the long-range dependency bottleneck, they remain largely data-agnostic. When applied
+to financial series they struggle with regime-dependent non-stationary, heavy-tailed noise, and asynchronous cross-asset
+lead–lag effects, causing attention scores to lock onto transient outliers and degrading out-of-sample robustness (Cartea
+et al., 2023; Cont, 2001; Miori & Cucuringu, 2022). Our approach departs from this paradigm by embedding each asset’s
+path in a Rough Path Signature space that is stable under time-reparameterization and robust to micro-structure noise, and by
+augmenting the attention logits with second-order cross-signature terms that encode the signed-area geometry underpinning
+lead–lag dynamics. Coupled with scenario-based optimization to hedge against structural breaks, SIT addresses both the
+generic long-range dependency problem and the finance-specific pathologies that limit existing Transformer forecasters.
+Path Signatures in Time Series and Finance The path signature, originating from Rough Path Theory, offers a nonparametric and faithful representation of streamed data by summarizing the geometry of a path as a sequence of iterated
+integrals (Lyons, 1998). A key property is its universality: any continuous function on the space of paths can be arbitrarily
+12
+
+=== PDF PAGE 13 ===
+Signature-Informed Transformer for Asset Allocation
+
+well-approximated by a linear function of the signature’s terms, making it a powerful basis for feature extraction (Chevyrev
+& Kormilitzin, 2016). In practice, the signature is truncated at a finite order M , yielding a vector SigM (X) that is robust
+to irregular sampling due to its invariance to time reparameterization. However, this truncation introduces a trade-off,
+as the feature dimension grows exponentially with the order M and polynomially with the path dimension d, posing a
+significant computational burden. This challenge has motivated alternatives like signature kernels, which compute inner
+products in the high-dimensional feature space implicitly, avoiding explicit feature construction (Király & Oberhauser,
+2019). In machine learning, signatures provide a potent inductive bias for modeling systems with path-dependent memory.
+The most direct application involves using truncated signatures as static input features for standard models (Gyurkó et al.,
+2013). More sophisticated integrations are found in continuous-time models like Neural Controlled Differential Equations
+(CDEs), which learn a vector field that is controlled by the input path, effectively modeling the system’s response to a
+driving signal (Kidger et al., 2020). For finance, a crucial insight arises from the signature’s geometry: the second-order
+terms of a joint signature over two asset paths precisely encode their signed area, a direct and robust measure of their
+temporal lead-lag relationship (Lyons & McLeod, 2022). This property has been successfully leveraged to build kernels for
+detecting asymmetric dependencies between financial instruments, offering a principled alternative to traditional correlation
+measures (Bonnier et al., 2019). Recent advancements extend this to attention mechanisms. the Rough Transformer
+(Moreno-Pino et al., 2024) introduces multi-view signature attention to operate directly on continuous-time representations.
+Also, applications to finance span volatility/return modeling, derivatives, and market microstructure. Early studies extracted
+signature coordinates to forecast realized volatility and to detect temporal asymmetries (Gyurkó et al., 2013). In options,
+signatures parameterize no-arbitrage dynamics and enable data-driven pricing/hedging (Arribas et al., 2020), including
+transformer-style encoders fed with log/signatures (Tong et al., 2023). A crucial geometric motif is the second-order signed
+area,
+Z
+Z
+A(X i , X j ) =
+
+X i dX j −
+
+X j dX i ,
+
+(20)
+
+which encodes temporal asymmetry and lead–lag; signature kernels exploit this to compare pairs or small baskets of assets
+(Chevyrev & Kormilitzin, 2016; Király & Oberhauser, 2019). Our architecture operationalization this motif at scale: SIT
+injects cross-asset signature information as a dynamic, query-conditioned bias inside attention, so that pairwise signed-area
+evidence modulates which assets attend to which others at each decision point (cf. proposition 2.1). While signatures
+mitigate non-stationarity and encode higher-order interactions, they incur truncation bias and can suffer from a curse
+of dimensionality as either degree M or the number of assets grows; kernelization trades feature savings for quadratic
+kernel costs (Salvi et al., 2021; Bonnier et al., 2019). Compared with state-space or transformer baselines, signatures
+offer complementary bias—geometric invariances and lead–lag structure—rather than longer receptive fields alone. Prior
+signature-based works typically (i) use signatures as fixed inputs or kernels outside the attention mechanism and (ii)
+optimize predictive losses, not portfolio objectives (Gyurkó et al., 2013; Tong et al., 2023; Bonnier et al., 2019). SIT differs
+by coupling signature-augmented, cross-asset attention with end-to-end CVaR optimization for long-only, fully-invested
+portfolios, aligning representation, interaction, and objective (Buehler et al., 2019).
+
+B. Appendix. Notation
+For clarity and ease of reference, Table 3 provides a comprehensive summary of the key notations used throughout this
+paper.
+
+C. Appendix. Mathematical Proofs
+Definition C.1. (Strict Lead-Lag Structure) Let Xt = (Xt1 , Xt2 ) be a continuous path of bounded variation on [0, T ]. We
+say it possesses a strict lead-lag structure if there exist an integer N ≥ 1 and a partition 0 = t0 < t1 < · · · < t2N = T of
+the interval [0, T ] such that the following conditions hold:
+(i) For each k ∈ {0, 1, . . . , N }, the coordinates coincide at the even-indexed partition points: Xt12k = Xt22k . Let this
+common value be denoted by Sk .
+(ii) For each k ∈ {1, 2, . . . , N }:
+• On [t2k−2 , t2k−1 ] (the k-th lead interval), Xt1 varies to satisfy Xt12k−1 = Sk , while Xt2 remains constant at Sk−1 .
+• On [t2k−1 , t2k ] (the k-th lag interval), Xt1 remains constant at Sk , while Xt2 varies to satisfy Xt22k = Sk .
+13
+
+=== PDF PAGE 14 ===
+Signature-Informed Transformer for Asset Allocation
+
+Symbol
+R
+E[·]
+0 = t0 < · · · < tn = T
+d
+Stji
+Su
+Ω
+θ∈Θ
+H
+K
+M
+SigM (X[s,t] )
+CVaRα (·)
+sk,j
+vt
+ejasset
+xk,j
+Q, K, V
+β i,j,l
+qdyn
+k,j
+γ
+(k)
+{wti }K
+k=1
+{rti+k }K
+k=1
+(k)
+{Lti+k }K
+k=1
+µ̂1:K
+ti
+τ
+
+Description
+Set of real numbers
+Expectation operator
+Discrete decision times
+Number of tradable assets
+Price of asset j at time ti
+Price vector (Su1 , . . . , Sud )
+Set of market scenarios (price paths)
+Trainable parameters / parameter space
+Look-back window length (time steps)
+Forecasting window length (time steps)
+Signature truncation level
+Truncated signature of path X up to level M
+Conditional Value-at-Risk at level α
+Signature vector for slice k, asset j
+Calendar/feature vector at time t
+Learnable embedding of asset j
+Input token for slice k, asset j
+Query, key, value matrices (per slice)
+Cross-signature embedding for pair (j, l)
+Dynamic query bias for asset j, slice k
+Positive gate for signature bias
+Future portfolio weights at ti (long-only)
+Realized returns for steps 1:K
+Portfolio losses for steps 1:K
+Predicted k-step-ahead returns for k = 1, . . . , K
+Softmax temperature (Allocation Concentration)
+
+Type / Dimension
+—
+—
+Scalars
+∈N
+Scalar
+∈ Rd
+Sample space
+Vector / set
+∈N
+∈N
+∈N
+∈ Rdsig
+Scalar
+∈ Rdsig
+∈ RF
+∈ Rdmodel
+∈ Rdmodel
+∈ Rd×dmodel
+∈ RNH ×dβ
+∈ RNH ×dβ
+∈ R>0
+P
+Each ∈ Rd , w = 1
+Each ∈ Rd
+Each scalar
+∈ RK per asset; stacked as ∈ RK×d
+∈ R>0
+
+Table 3. Summary of the principal notation used throughout the paper.
+
+(iii) For each k ∈ {1, 2, . . . , N }, the change between synchronization points is non-zero, i.e., Sk ̸= Sk−1 .
+Proposition C.2. (Strict Lead-Lag Implies Positive Second-Order Signature) Let Xt = (Xt1 , Xt2 ) for t ∈ [0, T ] satisfy the
+strict lead-lag structure of Definition C.1. Then the second-level signature cross-term
+Z T
+Z T
+1
+2
+A(X) =
+Xt dXt −
+Xt2 dXt1
+(21)
+0
+
+0
+
+is strictly positive. In particular, A(X) > 0.
+Proof. Let Xt = (Xt1 , Xt2 )t∈[0,T ] be a path of bounded variation with the strict lead-lag structure of Definition C.1. By this
+structure, there exists a partition 0 = t0 < t1 < · · · < t2N = T such that on each interval [t2k−2 , t2k−1 ] only X 1 varies
+(while X 2 remains constant), and on the following interval [t2k−1 , t2k ] only X 2 varies (while X 1 is constant). Moreover, at
+the synchronization times t2k both coordinates coincide, and no increment is zero.
+Recall from Definition C.1 the common values at the synchronization points:
+Sk−1 = Xt12k−2 = Xt22k−2
+
+and
+
+Sk = Xt12k = Xt22k .
+
+(22)
+
+Then Sk ̸= Sk−1 by strictness. Let ∆Sk := Sk − Sk−1 . By construction, on [t2k−2 , t2k−1 ] (the k-th lead step) X 1 varies
+from Sk−1 to Sk while X 2 stays at Sk−1 ; on [t2k−1 , t2k ] (the lag step) X 1 remains Sk while X 2 moves from Sk−1 to Sk .
+Now we compute the cross-integral:
+Z T
+A(X) =
+
+Xt1 dXt2 −
+
+0
+
+Z T
+0
+
+14
+
+Xt2 dXt1 .
+
+(23)
+
+=== PDF PAGE 15 ===
+Signature-Informed Transformer for Asset Allocation
+
+Using the piecewise structure, we have for each k:
+Z t2k
+Z t2k
+1
+2
+Xt dXt =
+Xt1 dXt2
+t2k−2
+
+(since dXt2 = 0 on [t2k−2 , t2k−1 ])
+
+(24)
+
+(since Xt1 = Sk is constant on [t2k−1 , t2k ])
+
+(25)
+
+t2k−1
+
+h
+i
+= Sk Xt22k − Xt22k−1
+= Sk ∆Sk .
+
+(26)
+
+Similarly,
+Z t2k
+t2k−2
+
+Xt2 dXt1 =
+
+Z t2k−1
+
+Xt2 dXt1
+
+(since dXt1 = 0 on [t2k−1 , t2k ])
+
+(27)
+
+(since Xt2 = Sk−1 is constant on [t2k−2 , t2k−1 ])
+
+(28)
+
+t2k−2
+
+h
+i
+= Sk−1 Xt12k−1 − Xt12k−2
+= Sk−1 ∆Sk .
+
+(29)
+
+Summing over k = 1 to N and subtracting:
+A(X) =
+
+N
+X
+
+(Sk ∆Sk − Sk−1 ∆Sk )
+
+(30)
+
+(Sk − Sk−1 )∆Sk
+
+(31)
+
+(∆Sk )2 .
+
+(32)
+
+k=1
+
+=
+
+N
+X
+k=1
+
+=
+
+N
+X
+k=1
+
+PN
+Thus A(X) = k=1 (∆Sk )2 . Since Sk ̸= Sk−1 for each k by condition (iii), we have ∆Sk ̸= 0, so each term (∆Sk )2 is
+strictly positive. Therefore, the sum A(X) is strictly positive.
+Proposition C.3 (Positive directional derivative of attention weight). Assume d ≥ 2, γ > 0, and fix (k, h, j, l). Let the
+dβ
+query vector (qdyn
+satisfy ∥(qdyn
+k,j )h ∈ R
+k,j )h ∥2 > 0. For
+zj,m =
+
+(Qk,h K⊤
+)j,m
+√ k,h
++ γ⟨(qdyn
+k,j )h , (β i,j,m )h ⟩,
+dk
+
+ezj,m
+αj,m = Pd
+,
+zj,r
+r=1 e
+
+assume 0 < αj,l < 1. Then the directional derivative of αj,l with respect to β i,j,l in the direction (qdyn
+k,j )h equals
+(β)
+αj,l = γ αj,l
+(qdyn
+k,j )h
+
+D
+
+1 − αj,l
+
+
+
+2
+
+(qdyn
+k,j )h 2 > 0.
+
+(33)
+
+Proof. For a fixed time slice k and head h, the attention weight αk,h,j→l is the l-th component of the softmax function
+applied to the j-th row of the logits matrix. Let zj,m be the logit for query asset j and key asset m ∈ {1, . . . , d}.
+zj,m =
+
+(Qk,h K⊤
+)j,m
+√ k,h
++ γbk,h,j,m
+dk
+
+(34)
+
+The bias term bk,h,j,l is given by the inner product bk,h,j,l = ⟨(qdyn
+k,j )h , (β i,j,l )h ⟩. The attention weight is:
+αk,h,j→l = Pd
+
+exp(zj,l )
+
+m=1 exp(zj,m )
+
+(35)
+
+We wish to compute the directional derivative of αk,h,j→l with respect to the vector (β i,j,l )h in the direction of u = (qdyn
+k,j )h ,
+which is defined as Du αk,h,j→l = ⟨∇(βi,j,l )h αk,h,j→l , u⟩.
+15
+
+=== PDF PAGE 16 ===
+Signature-Informed Transformer for Asset Allocation
+
+First, we find the gradient of αk,h,j→l . By the chain rule,
+∇(βi,j,l )h αk,h,j→l =
+
+d
+X
+
+∂αk,h,j→l
+∇(βi,j,l )h zj,m
+∂zj,m
+m=1
+
+(36)
+
+The relational embedding (β i,j,l )h only appears in the bias term bk,h,j,l , and thus only affects the logit zj,l . For any m ̸= l,
+∇(βi,j,l )h zj,m = 0. Therefore, the sum collapses to a single term:
+∇(βi,j,l )h αk,h,j→l =
+The derivative of the softmax function is
+(β i,j,l )h is:
+
+∂αk,h,j→l
+∇(βi,j,l )h zj,l
+∂zj,l
+
+(37)
+
+∂αk,h,j→l
+= αk,h,j→l (1 − αk,h,j→l ). The gradient of the logit zj,l with respect to
+∂zj,l
+
+∇(βi,j,l )h zj,l = ∇(βi,j,l )h
+
+(Qk,h K⊤
+)j,l
+√ k,h
++ γ⟨(qdyn
+k,j )h , (β i,j,l )h ⟩
+dk
+
+!
+= γ(qdyn
+k,j )h
+
+(38)
+
+Substituting these back, we get the gradient of the attention weight:
+∇(βi,j,l )h αk,h,j→l = γ · αk,h,j→l (1 − αk,h,j→l ) · (qdyn
+k,j )h
+
+(39)
+
+Now, we compute the directional derivative:
+dyn
+D(qdyn )h αk,h,j→l = ⟨γ · αk,h,j→l (1 − αk,h,j→l ) · (qdyn
+k,j )h , (qk,j )h ⟩
+
+(40)
+
+dyn
+= γ · αk,h,j→l (1 − αk,h,j→l ) · ⟨(qdyn
+k,j )h , (qk,j )h ⟩
+2
+= γ · αk,h,j→l (1 − αk,h,j→l ) · ∥(qdyn
+k,j )h ∥
+
+(41)
+
+k,j
+
+(42)
+
+By assumption, γ > 0. The attention weight satisfies 0 < αk,h,j→l < 1 (for any non-degenerate case with at least two
+dyn
+2
+assets), so the term αk,h,j→l (1 − αk,h,j→l ) is strictly positive. By assumption, (qdyn
+k,j )h ̸= 0, so its squared norm ∥(qk,j )h ∥
+is also strictly positive. The product of three strictly positive terms is strictly positive, which concludes the proof.
+
+16
+
+=== PDF PAGE 17 ===
+Signature-Informed Transformer for Asset Allocation
+
+D. Appendix. Implementation details
+To ensure a fair and robust comparison, we perform an extensive hyperparameter search for our proposed SIT model and all
+baseline models. For each model, we conduct a comprehensive grid search to identify the optimal set of hyperparameters
+from the search space defined in Table 4. The combination of parameters yielding the best performance on the validation set
+was selected for the final evaluation on the test set. To account for stochasticity, all experiments are conducted over five
+independent runs with different random seeds, and the average performance is reported. For all models and experiments, we
+maintain a consistent set of general training parameters: the Adam optimizer with a learning rate of 10−3 , a batch size of
+64, a dropout rate of 0.1. We train all models for a maximum of 100 epochs, utilizing an early stopping mechanism with a
+patience of 10 epochs to prevent overfitting.
+Panel A. General Time Series Forecasting Models
+Parameter
+Values
+D MODELS
+32, 64, 128, 256
+D FFS
+32, 64, 128, 256
+E LAYERS LIST
+1, 2
+N HEADS LIST
+2, 4, 8
+Panel B. Nonstationary Transformer (NSformer)
+Parameter
+Values
+D MODELS
+32, 64, 128, 256
+D FFS
+32, 64, 128, 256
+E LAYERS LIST
+1, 2
+N HEADS LIST
+2, 4, 8
+P HIDDEN
+64, 128, 256
+P LAYER
+1,2
+Panel C. TimesNet
+Parameter
+D MODELS
+D FFS
+E LAYERS LIST
+N HEADS LIST
+TOP K
+
+Values
+32, 64, 128, 256
+32, 64, 128, 256
+1, 2
+2, 4, 8
+3, 5, 7
+
+Panel D. RFormer
+Parameter
+Embedding Dim
+E LAYERS LIST
+N HEADS LIST
+Sig Level
+
+Values
+8, 16, 32
+1, 2
+2, 4, 8
+2, 3
+
+Panel E. SIT (Ours)
+Parameter
+Values
+D MODELS
+8, 16, 32, 64
+D FFS
+8, 16, 32, 64
+E LAYERS LIST
+1, 2
+N HEADS LIST
+2, 4, 8
+Sig Level
+2
+HIDDEN C
+8, 16, 32
+
+Table 4. The hyperparameter search space for the models used in this study. Each panel shows the parameters and their range of values
+assigned to a specific model or model group.
+
+17
+
+=== PDF PAGE 18 ===
+Signature-Informed Transformer for Asset Allocation
+
+E. Appendix. Why we choose CVaR?
+1. Model and Definitions
+Let S = {1, . . . , N } be a finite state space for an integer N ≥ 2. Let P be a probability measure on S assigning a
+PN
+probability ps = P({s}) > 0 to each state s ∈ S, with s=1 ps = 1. We designate state s = 1 as the unique crash state,
+with probability p1 = q ∈ (0, 1).
+We consider two portfolios, a primary portfolio (PF) and a hedged portfolio (HF), with associated losses given by the random
+variables X and Y , respectively. We denote their specific loss values in state s by Xs and Ys . We impose two structural
+assumptions on these portfolios:
+1. Crash State Exceptionalism: The loss of the PF portfolio in the crash state is strictly greater than its loss in any
+non-crash state. That is, X1 > Xs for all s ∈ {2, . . . , N }.
+2. Strict State-wise Dominance: The HF portfolio is strictly less risky than the PF portfolio in every state. That is,
+Ys < Xs for all s ∈ S.
+For a loss variable Z and a confidence level p ∈ (0, 1), the Value-at-Risk is the p–quantile
+VaRp (Z) = inf{z ∈ R | P(Z ≤ z) ≥ p}.
+
+(43)
+
+The Conditional Value-at-Risk (CVaR), also known as Expected Shortfall, at level α ∈ (0, 1) averages the upper tail of
+mass 1 − α:
+Z 1
+n
+
+o
+1
+1
+CVaRα (Z) =
+VaRp (Z) dp = min ν +
+E (Z − ν)+ .
+(44)
+ν∈R
+1−α α
+1−α
+We define the risk gap between the two portfolios at level α as
+∆α := CVaRα (X) − CVaRα (Y ).
+
+(45)
+
+Proposition E.1 (HF dominates PF in CVaR). Let α ∈ (0, 1) satisfy 1 − α < q (equivalently, α > 1 − q). For any
+portfolios PF and HF satisfying the assumptions above, the risk gap is strictly positive and bounded below by the minimum
+performance gap:
+∆α ≥ Lmin ,
+(46)
+where the minimum performance gap is defined as
+
+Lmin := min Xs − Ys .
+
+(47)
+
+s∈S
+
+Since Ys < Xs for all s in the finite set S, it follows that Lmin > 0, confirming that HF strictly dominates PF in terms of
+CVaR for this range of α.
+Proof. We proceed in three steps. First, we compute CVaRα (X) under the stated tail condition. Second, we upper-bound
+CVaRα (Y ). Finally, we combine these results.
+Exact value of CVaRα (X) for α > 1 − q. Let FX (z) = P(X ≤ z) be the cumulative distribution function of X. By Crash
+State Exceptionalism, X1 is the unique maximum of X. Hence, for any z < X1 ,
+FX (z) = P(X ≤ z) ≤
+
+N
+X
+
+ps = 1 − q.
+
+(48)
+
+s=2
+
+Therefore, for every p ∈ (1 − q, 1], the smallest z with FX (z) ≥ p is z = X1 , i.e., VaRp (X) = X1 . If α > 1 − q
+(equivalently, the tail mass 1 − α < q), then
+CVaRα (X) =
+
+1
+1−α
+
+Z 1
+VaRp (X) dp =
+α
+
+18
+
+1
+1−α
+
+Z 1
+X1 dp = X1 .
+α
+
+(49)
+
+=== PDF PAGE 19 ===
+Signature-Informed Transformer for Asset Allocation
+
+Upper bound for CVaRα (Y ). By definition of Lmin , we have Xs − Ys ≥ Lmin for all s ∈ S, equivalently
+Y ≤ X − Lmin
+
+(state-wise).
+
+(50)
+
+Two standard properties of CVaR at a fixed level α are:
+1. Monotonicity: If Z1 ≤ Z2 state-wise, then CVaRα (Z1 ) ≤ CVaRα (Z2 ).
+2. Translation Equivariance: For any constant c ∈ R, CVaRα (Z − c) = CVaRα (Z) − c.
+Applying these to Y ≤ X − Lmin yields
+CVaRα (Y ) ≤ CVaRα (X − Lmin ) = CVaRα (X) − Lmin = X1 − Lmin .
+
+(51)
+
+So, to get the risk gap, we combine the steps mentioned above.
+∆α = CVaRα (X) − CVaRα (Y ) ≥ X1 − (X1 − Lmin ) = Lmin > 0.
+
+(52)
+
+This completes the proof.
+
+F. Details of Predict-then-Optimize Baselines
+The deep learning baselines evaluated in our experiments operate under a two-stage predict-then-optimize approach. Unlike
+SIT, these baselines treat the two tasks as disjoint stages. This section details the mathematical formulation of this process.
+Stage 1: Return Prediction via MSE In the first stage, a forecasting model fθ is trained to minimize the statistical
+discrepancy between the predicted returns and the ground truth. Let Xt denote the lookback window of historical asset
+features at time t, and rt+1 ∈ Rd denote the realized returns at time t + 1. The model parameters θ are optimized using the
+Mean Squared Error (MSE) loss function:
+T
+
+LMSE (θ) =
+
+1X
+∥rt+1 − r̂t+1 ∥22
+T t=1
+
+(53)
+
+where r̂t+1 = fθ (Xt ) is the point forecast of the asset returns. The training process focuses solely on maximizing predictive
+accuracy (minimizing L2 distance) without considering the downstream portfolio risk metric or the covariance structure
+between assets.
+Stage 2: Portfolio Optimization via Mean-CVaR In the second stage, the trained forecasting model is frozen. Its output
+r̂t+1 is treated as the vector of expected returns to construct the portfolio. To ensure a fair comparison with our proposed
+method, we employ a CVaR optimization framework. The solver seeks a portfolio weight vector wt that minimizes the
+Conditional Value-at-Risk (CVaR) while satisfying a target return constraint derived from the prediction r̂t+1 .
+The optimization problem at time t is formulated as follows:
+S
+
+minimize
+
+X
++
+1
+ζ+
+−(w⊤ rs ) − ζ
+(1 − α)S s=1
+
+subject to
+
+w⊤ r̂t+1 ≥ µtarget ,
+
+w∈∆d ,ζ∈R
+
+(54)
+
+w∈W
+P
+Here, ∆d represents the simplex of valid portfolio weights (e.g., wi = 1, wi ≥ 0 for long-only strategies). The risk term
+CVaRα is approximated using S historical scenarios rs sampled from the immediate past, and ζ represents the Value-at-Risk
+(VaR) auxiliary variable.
+
+19
+
+=== PDF PAGE 20 ===
+Signature-Informed Transformer for Asset Allocation
+
+G. Appendix. Additional Experiments
+Panel A. Asset 30 Universe (S&P100)
+Model
+Sharpe
+Sortino
+CVaR
+0.2883
+0.3707
+EW
+0.5268
+0.6569
+GMV
+0.1690
+0.2177
+HRP
+0.4609
+0.5711
+Autoformer
+0.3228 ± 0.0549
+0.4500 ± 0.0840
+DLinear
+0.3929 ± 0.1294
+0.5399 ± 0.1758
+FEDformer
+0.1594 ± 0.1323
+0.2162 ± 0.1790
+iTransformer
+0.2948 ± 0.0721
+0.3853 ± 0.0942
+NSformer
+0.2227 ± 0.1535
+0.3070 ± 0.2126
+PatchTST
+0.2189 ± 0.1446
+0.2916 ± 0.1945
+TimesNet
+0.2192 ± 0.1520
+0.2999 ± 0.2103
+RFormer
+0.4631 ± 0.2771
+0.5854 ± 0.2094
+SIT (Ours)
+0.5496 ± 0.0552
+0.6797 ± 0.0792
+
+MDD
+0.3499
+0.3724
+0.2853
+0.3287
+0.3782 ± 0.0062
+0.3863 ± 0.0266
+0.4345 ± 0.0319
+0.4169 ± 0.0118
+0.4422 ± 0.0535
+0.5003 ± 0.0667
+0.4434 ± 0.0311
+0.4561 ± 0.0501
+0.3415 ± 0.0162
+
+Wealth
+1.1915
+1.5648
+1.0723
+1.4099
+1.2989 ±0.1028
+1.4235 ± 0.2587
+1.032 ± 0.2090
+1.2447 ± 0.1459
+1.1190 ± 0.2650
+1.1238 ± 0.2287
+1.1213 ± 0.2853
+1.5566 ± 0.2038
+1.5678 ± 0.0973
+
+Table 5. Portfolio performance of SIT versus baselines across 30-asset universes. The best, second-best, and third-best results for each
+metric are highlighted in red, blue, and bold, respectively. SIT consistently delivers superior risk-adjusted returns.
+
+Panel A. Asset 10 Universe (DOW30)
+Models
+Sharpe Ratio (↑)
+Sortino Ratio (↑)
+CVaR
+0.4584
+0.5617
+EW
+0.9123
+1.1714
+GMV
+1.0394
+1.3191
+HRP
+0.8407
+1.0332
+Autoformer
+0.6767 ± 0.3150
+0.9581 ± 0.4848
+DLinear
+0.8223 ± 0.1251
+0.9789 ± 0.1692
+FEDformer
+0.7664 ± 0.0867
+0.8245 ± 0.1460
+iTransformer
+0.9458 ± 0.1279
+1.1248 ± 0.2274
+NSformer
+0.8863 ± 0.2525
+0.9630 ± 0.4478
+PatchTST
+0.7815 ± 0.1745
+0.9712 ± 0.2462
+TimesNet
+0.4249 ± 0.2673
+0.5876 ± 0.3658
+RFormer
+0.8605 ± 0.1936
+1.1928 ± 0.2708
+SIT (Ours)
+1.0312 ± 0.0671
+1.3798 ± 0.1049
+
+Maximum Drawdown (↓)
+0.3053
+0.3191
+0.2467
+0.3104
+0.4655 ± 0.0265
+0.4240 ± 0.0414
+0.4948 ± 0.0116
+0.4230 ± 0.0532
+0.4733 ± 0.0825
+0.4133 ± 0.0224
+0.6326 ± 0.0967
+0.3615 ± 0.0407
+0.2766 ± 0.0413
+
+Final Wealth Factor (↑)
+1.4341
+2.4551
+2.3841
+2.0583
+2.2787 ± 1.3004
+2.4523 ± 0.6336
+2.0578 ± 0.7550
+2.4016 ± 1.7240
+2.1044 ± 1.1644
+2.1454 ± 0.8895
+1.6655 ± 0.6016
+2.1120 ± 0.5219
+2.8674 ± 0.2263
+
+Panel B. Asset 20 Universe (DOW30)
+Models
+Sharpe Ratio (↑)
+Sortino Ratio (↑)
+CVaR
+0.5453
+0.6871
+EW
+0.8603
+1.0472
+GMV
+0.8618
+1.0730
+HRP
+0.7500
+0.8917
+Autoformer
+0.5688 ± 0.2224
+0.8312 ± 0.3437
+DLinear
+0.7969 ± 0.1057
+0.9339 ± 0.1475
+FEDformer
+0.3341 ± 0.5907
+0.5471 ± 0.8805
+iTransformer
+0.4668 ± 0.2290
+0.6682 ± 0.3666
+NSformer
+0.6541 ± 0.4828
+0.9751 ± 0.7710
+PatchTST
+0.6828 ± 0.1866
+0.9499 ± 0.2417
+TimesNet
+0.2381 ± 0.2584
+0.3428 ± 0.3871
+RFormer
+0.7055 ± 0.1568
+0.8295 ± 0.1663
+SIT (Ours)
+0.8861 ± 0.1243
+1.0949 ± 0.1607
+
+Maximum Drawdown (↓)
+0.3249
+0.3503
+0.2853
+0.3253
+0.4642 ± 0.0244
+0.3276 ± 0.0415
+0.4671 ± 0.0763
+0.6001 ± 0.0208
+0.5620 ± 0.0778
+0.5109 ± 0.0395
+0.4919 ± 0.0511
+0.4514 ± 0.1046
+0.3151 ± 0.0181
+
+Final Wealth Factor (↑)
+1.5166
+2.2293
+1.9457
+1.8443
+1.8605 ± 0.9118
+2.1966 ± 0.4046
+1.8039 ± 1.1031
+1.8563 ± 0.9329
+2.1464 ± 1.0281
+2.0649 ± 0.4307
+1.2356 ± 0.5723
+2.0048 ± 0.6198
+2.2039 ± 0.2983
+
+Table 6. Portfolio performance of SIT versus baselines across 10 and 20-asset universes from DOW30. The best, second-best, and
+third-best results for each metric are highlighted in red, blue, and bold, respectively. SIT consistently delivers superior risk-adjusted
+returns.
+
+20
+
+=== PDF PAGE 21 ===
+Signature-Informed Transformer for Asset Allocation
+
+Panel A. Asset 50 Universe (CSI300)
+Models
+Sharpe Ratio (↑)
+Sortino Ratio (↑)
+CVaR
+0.8292
+1.0038
+EW
+1.1695
+1.3671
+GMV
+1.6717
+2.1255
+HRP
+1.7428
+2.0183
+Autoformer
+0.5834 ± 0.4666
+0.5923 ± 0.5446
+DLinear
+0.5122 ± 0.3699
+0.6819 ± 0.5769
+FEDformer
+0.3267 ± 0.7165
+0.4185 ± 0.8655
+iTransformer
+0.6161 ± 0.1936
+0.8566 ± 0.2296
+NSformer
+0.3010 ± 0.1859
+0.4132 ± 0.2395
+PatchTST
+0.2789 ± 0.1646
+0.3368 ± 0.2040
+TimesNet
+0.8213 ± 0.1636
+1.0533 ± 0.1929
+RFormer
+0.8867 ± 0.2363
+1.0921 ± 0.2451
+SIT (Ours)
+1.9373 ± 0.0091
+2.3399 ± 0.1711
+
+Maximum Drawdown (↓)
+0.1220
+0.1263
+0.0942
+0.1136
+0.2441 ± 0.0779
+0.2032 ± 0.0664
+0.2822 ± 0.0371
+0.2001 ± 0.0234
+0.2889 ± 0.0689
+0.1913 ± 0.0124
+0.2855 ± 0.0954
+0.2579 ± 0.0554
+0.0964 ± 0.0046
+
+Final Wealth Factor (↑)
+1.0971
+1.1413
+1.1766
+1.1825
+0.9079 ± 0.1257
+1.1252 ± 0.1615
+1.0383 ± 0.2970
+1.0204 ± 0.1806
+1.0775 ± 0.0704
+1.0394 ± 0.0442
+1.1700 ± 0.2386
+1.1665 ± 0.1245
+1.2804 ± 0.0105
+
+Panel B. Asset 100 Universe (CSI300)
+Models
+Sharpe Ratio (↑)
+Sortino Ratio (↑)
+CVaR
+1.5199
+2.0863
+EW
+1.1179
+1.2660
+GMV
+1.5365
+2.0612
+HRP
+1.2424
+1.6540
+Autoformer
+0.5681 ± 0.3129
+0.6014 ± 0.4024
+DLinear
+0.7382 ± 0.4826
+0.8309 ± 0.4303
+FEDformer
+0.4269 ± 0.4916
+0.5356 ± 0.6167
+iTransformer
+0.9865 ± 0.2055
+1.2495 ± 0.2386
+NSformer
+0.5470 ± 0.3975
+0.7586 ± 0.5326
+PatchTST
+0.4650 ± 0.1313
+0.5551 ± 0.1793
+TimesNet
+0.7353 ± 0.1357
+1.0598 ± 0.1992
+RFormer
+1.0267 ± 0.2152
+1.2359 ± 0.2599
+SIT (Ours)
+1.8772 ± 0.0918
+2.3637 ± 0.0936
+
+Maximum Drawdown (↓)
+0.1155
+0.1302
+0.1175
+0.1229
+0.2529 ± 0.0206
+0.2314 ± 0.0778
+0.2831 ± 0.0344
+0.2492 ± 0.0741
+0.2175 ± 0.0851
+0.2547 ± 0.5590
+0.2997 ± 0.0940
+0.2111 ± 0.0732
+0.1199 ± 0.0048
+
+Final Wealth Factor (↑)
+1.2905
+1.1252
+1.2724
+1.2097
+0.9725 ± 0.1396
+1.0934 ± 0.3219
+1.0846 ± 0.1694
+1.1169 ± 0.3491
+1.1560 ± 0.1387
+1.0809 ± 0.1104
+1.1610 ± 0.2039
+1.2321 ± 0.1094
+1.2777 ± 0.0214
+
+Table 7. Portfolio performance of SIT versus baselines across 10 and 20-asset universes from CSI300. The best, second-best, and
+third-best results for each metric are highlighted in red, blue, and bold, respectively. SIT consistently delivers superior risk-adjusted
+returns.
+
+21
+
+=== PDF PAGE 22 ===
+Signature-Informed Transformer for Asset Allocation
+
+H. Appendix. Drawdown with Gamma(γ)
+
+Figure 7. Visual analysis of the dynamic gate γ relative to portfolio drawdown over the test period (2020-2024). The plots display the
+drawdown curves for the 40-asset (top) and 50-asset (bottom) universes, where the line color intensity encodes the magnitude of the
+learnable scalar γ.
+
+I. Additional Analysis on Signature Order and Computational Overhead
+Choice of signature truncation order. We set the signature truncation order to M = 2 in the main experiments. This
+choice is motivated by both representation and efficiency. First-order signature terms summarize only the net increments of
+each path, whereas second-order terms are the lowest-order terms that encode signed-area geometry and directional lead-lag
+structure. These second-order interactions are important for the proposed Signature-Informed Transformer (SIT), since the
+model uses pairwise cross-signature features to bias asset-wise attention.
+Table 8 reports a sensitivity analysis over M ∈ {1, 2, 3}. Increasing the truncation order from M = 1 to M = 2 improves
+the main risk-adjusted performance metrics, including Sharpe, Sortino, and terminal wealth, with moderate additional
+runtime and memory cost. Although M = 1 has the lowest maximum drawdown and computational cost, it does not include
+second-order signed-area terms and therefore cannot explicitly capture the lead-lag information used by SIT. Increasing the
+order further to M = 3 increases runtime and peak memory without improving the main performance metrics. We therefore
+use M = 2 as the default setting, balancing expressiveness and computational efficiency.
+Computational overhead. SIT introduces additional computational cost from two sources: (i) per-asset signature
+embeddings and (ii) pairwise cross-signature features used to construct the signature-informed attention bias. The second
+component requires modeling asset-pair relations and therefore grows with the number of assets. Table 9 reports the
+empirical memory usage and runtime as the asset universe increases. The overhead is moderate at the asset scales used in
+the main experiments, but grows for larger asset universes, as expected from the pairwise relational structure. This cost is
+22
+
+=== PDF PAGE 23 ===
+Signature-Informed Transformer for Asset Allocation
+Table 8. Sensitivity analysis with respect to the signature truncation order M . ↑ indicates that higher is better and ↓ indicates that lower is
+better. Runtime and peak memory are normalized relative to M = 1.
+Sharpe ↑
+
+Sortino ↑
+
+MDD ↓
+
+Wealth ↑
+
+Runtime / epoch ↓
+
+Peak memory ↓
+
+0.617 ± 0.049
+0.672 ± 0.063
+0.660 ± 0.072
+
+0.776 ± 0.064
+0.823 ± 0.079
+0.810 ± 0.089
+
+0.348 ± 0.008
+0.361 ± 0.004
+0.365 ± 0.009
+
+1.699 ± 0.083
+1.790 ± 0.102
+1.768 ± 0.118
+
+1.00 ± 0.02
+1.18 ± 0.03
+1.53 ± 0.04
+
+1.00 ± 0.01
+1.21 ± 0.02
+1.58 ± 0.03
+
+Signature order
+M =1
+M =2
+M =3
+
+Table 9. Empirical computational overhead of SIT compared with a vanilla Transformer as the number of assets increases. A dash
+indicates that the corresponding SIT result was not reported under the same experimental setting.
+
+Assets
+
+SIT Mem. (GiB)
+
+Transformer Mem. (GiB)
+
+SIT Time (s)
+
+Transformer Time (s)
+
+50
+100
+200
+300
+400
+500
+
+1.81
+5.78
+21.67
+48.14
+85.21
+–
+
+1.174
+2.190
+6.255
+13.030
+22.515
+34.710
+
+3.91
+15.65
+62.60
+140.84
+250.38
+–
+
+3.050
+7.561
+21.391
+41.631
+68.281
+101.341
+
+the price of explicitly modeling cross-asset lead-lag information through signature-informed attention. In the component
+ablation, the signature-informed financial bias improves the Sharpe ratio from 0.6047 without the Financial Bias to 0.7715
+with it, indicating that the additional cost is accompanied by a meaningful performance gain.
+
+J. Additional Results for the 50-Asset Universe
+Table 10 reports the full out-of-sample portfolio evaluation results after CVaR portfolio optimization on the 50-asset S&P100
+universe. We report the Sharpe ratio, Sortino ratio, maximum drawdown (MDD), and terminal wealth. Higher values are
+better for Sharpe, Sortino, and Wealth, while lower values are better for MDD.
+Table 10. Out-of-sample portfolio evaluation results after CVaR portfolio optimization on the 50-asset S&P100 universe. The best
+performance for each metric is highlighted in bold.
+Model (Asset 50)
+
+Sharpe ↑
+
+Sortino ↑
+
+MDD ↓
+
+Wealth ↑
+
+Autoformer-DFL
+DLinear-DFL
+FEDformer-DFL
+iTransformer-DFL
+NSformer-DFL
+PatchTST-DFL
+TimesNet-DFL
+RFormer-DFL
+SIT (Ours)
+
+0.487 ± 0.067
+0.572 ± 0.009
+0.637 ± 0.067
+0.717 ± 0.012
+0.492 ± 0.031
+0.657 ± 0.023
+0.502 ± 0.113
+0.657 ± 0.229
+0.771 ± 0.062
+
+0.676 ± 0.095
+0.790 ± 0.019
+0.876 ± 0.101
+0.933 ± 0.040
+0.676 ± 0.047
+0.904 ± 0.053
+0.687 ± 0.151
+0.905 ± 0.255
+0.974 ± 0.099
+
+0.402 ± 0.061
+0.351 ± 0.012
+0.364 ± 0.028
+0.339 ± 0.016
+0.470 ± 0.041
+0.347 ± 0.023
+0.448 ± 0.066
+0.358 ± 0.074
+0.327 ± 0.009
+
+1.598 ± 0.173
+1.562 ± 0.070
+1.761 ± 0.128
+1.905 ± 0.094
+1.742 ± 0.086
+1.815 ± 0.104
+1.625 ± 0.244
+1.884 ± 0.246
+1.921 ± 0.179
+
+J.1. Sensitivity to the CVaR Confidence Level
+We conduct an additional sensitivity analysis to examine how the confidence level of the portfolio-level CVaRα objective
+affects the behavior of SIT. The confidence level α controls the severity of the tail events emphasized during training: larger
+values of α place more weight on extreme downside outcomes and therefore encourage more conservative allocations,
+whereas smaller values allow the model to pursue more aggressive return profiles. We sweep α ∈ {0.8, 0.9, 0.95, 0.99}
+while keeping all other experimental settings fixed, including the long-only fully-invested constraint, monthly rebalancing,
+and the same evaluation protocol used in the main experiments. Gross performance is computed before transaction costs,
+while net performance is computed under a proportional transaction cost of 10 bps.
+Table 11 shows a consistent risk–return trade-off across the tested confidence levels. Increasing α makes the learned policy
+more conservative, as reflected by the monotonic reduction in maximum drawdown from α = 0.8 to α = 0.99 in both
+gross and net evaluations. In contrast, smaller values of α allow the model to pursue higher terminal wealth, but at the
+cost of larger drawdowns. For example, α = 0.8 achieves the highest gross wealth, while α = 0.99 achieves the lowest
+gross and net MDD. The intermediate setting α = 0.95 provides the most favorable balance between risk control and return
+23
+
+=== PDF PAGE 24 ===
+Signature-Informed Transformer for Asset Allocation
+Table 11. Sensitivity of SIT to the CVaR confidence level α on the 40-asset S&P100 universe. Values are reported as mean ± standard
+deviation. ↑ indicates that higher is better, and ↓ indicates that lower is better. Bold values denote the best result in each column. Net
+results are computed with a transaction cost of 10 bps.
+α
+
+Gross Sharpe (↑) Gross Sortino (↑) Gross MDD (↓) Gross Wealth (↑) Net Sharpe (↑) Net Sortino (↑)
+
+0.80
+0.90
+0.95
+0.99
+
+0.638 ± 0.073
+0.661 ± 0.067
+0.672 ± 0.063
+0.649 ± 0.061
+
+0.781 ± 0.094
+0.809 ± 0.086
+0.823 ± 0.079
+0.804 ± 0.077
+
+0.398 ± 0.015
+0.378 ± 0.011
+0.361 ± 0.004
+0.333 ± 0.006
+
+1.826 ± 0.129
+1.811 ± 0.114
+1.790 ± 0.102
+1.711 ± 0.097
+
+0.586 ± 0.069
+0.620 ± 0.063
+0.638 ± 0.059
+0.621 ± 0.058
+
+Net MDD (↓)
+
+Net Wealth (↑)
+
+0.716 ± 0.088 0.409 ± 0.017 1.714 ± 0.118
+0.757 ± 0.081 0.387 ± 0.012 1.738 ± 0.107
+0.781 ± 0.075 0.369 ± 0.006 1.733 ± 0.098
+0.773 ± 0.073 0.340 ± 0.007 1.663 ± 0.093
+
+generation. It achieves the best gross Sharpe and Sortino ratios, as well as the best net Sharpe and Sortino ratios after
+transaction costs. This indicates that the main performance of SIT is not driven by a fragile choice of the CVaR confidence
+level. Rather, the model exhibits a stable and interpretable dependence on α: lower values favor wealth accumulation, higher
+values emphasize drawdown control, and α = 0.95 delivers the strongest risk-adjusted performance. We also repeated the
+same sweep on the 50-asset universe. The results exhibit the same qualitative pattern: larger α values reduce drawdowns,
+smaller α values increase terminal wealth, and the intermediate setting remains the most balanced in terms of risk-adjusted
+performance. We omit the full 50-asset table for conciseness.
+
+24
+
+=== END SOURCE TEXT ===

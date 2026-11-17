@@ -1,0 +1,90 @@
+{
+  "moved_at": "2026-11-17T15:20:09.193421+08:00",
+  "from": "/home/jkp/data/paper/reproduction_20261111/SIT",
+  "to": "/home/jkp/data/SIT",
+  "compatibility_symlink": "/home/jkp/data/paper/reproduction_20261111/SIT",
+  "verified_manifest_entries": 126,
+  "manifest_hash_failures": 0,
+  "runtime_path_repairs": [
+    {
+      "path": "reproduction/.venv/bin/activate",
+      "before_sha256": "7e36e1368364c620f3b27b61674051d8155c5ee211f2318ebf0a6fe7f84718e1",
+      "after_sha256": "438f3a88e9f6f9447c2f12242beedb2d505d5c56e9b9ceb541eaad08263c48e8"
+    },
+    {
+      "path": "reproduction/.venv/bin/activate.csh",
+      "before_sha256": "f28fd98174a22da0830ec5bb27da066024455606660c72ca7afeb553b64dde2f",
+      "after_sha256": "ee0204499308ea948c10a255ce935058a123f2f647d99589b288287780cbbfeb"
+    },
+    {
+      "path": "reproduction/.venv/bin/activate.fish",
+      "before_sha256": "87102ffcc8632d55263f847aaaf7d89eb4c0775eef633c85dbbc4e077ade9875",
+      "after_sha256": "b53b180648f79b275aed282e447beffd7650fab318077490181383f279b8fbe8"
+    },
+    {
+      "path": "reproduction/.venv/bin/activate.nu",
+      "before_sha256": "99f99b3b984ae73a77e2020ed34c8d4aa772a3489758228beae58a9bab5c4433",
+      "after_sha256": "dd9e61bfe2bfc4437386e88d7f9987ea88e05fcee88570e40e33b358d2c18cc6"
+    },
+    {
+      "path": "reproduction/.venv/bin/activate.bat",
+      "before_sha256": "d4d1cd3d5495e9759f717b293b37ac4ced8af44a95bfd5ca816b5fb77d0efc73",
+      "after_sha256": "5b0643d70142dfae0484a8053f98417ffb240b8c5bc3f839e445e29b50fa95ad"
+    },
+    {
+      "path": "reproduction/.venv/bin/tqdm",
+      "before_sha256": "66838e9b34c771f03d085ab0659d37b322e432250240a62aeaa7311bb3ff4007",
+      "after_sha256": "1a9660ce34d603612a30197e544f6d8b3ac24087e0296fe752cd797bee6b8f81"
+    },
+    {
+      "path": "reproduction/.venv/bin/pyftmerge",
+      "before_sha256": "de2a88e77b4ce6da5904dccc235f8a1dfda9120bc6943e62729378a62f5bab40",
+      "after_sha256": "a45ad2f322e1d19860e77cc56b2bda19d10aa0700d7ad7a7cf3b4973c003e2d7"
+    },
+    {
+      "path": "reproduction/.venv/bin/fonttools",
+      "before_sha256": "f8c893fea8d8cc1797ece14667d739637c7e01c1c3d00393944c50340e2d2b8b",
+      "after_sha256": "7440af344012b88733e64842c78182e7038a111e1545aa5ef443717345b754be"
+    },
+    {
+      "path": "reproduction/.venv/bin/pyftsubset",
+      "before_sha256": "962cbef02372e21c8680461fb750f9b1dbf637f3c7cc3ad04562369307f09124",
+      "after_sha256": "23f6a9db2c0b5903214e6071abe3b93ee1b0e81474d1b60bbef4a3e1d72abda5"
+    },
+    {
+      "path": "reproduction/.venv/bin/ttx",
+      "before_sha256": "fe96d7a7ca5bc8b3f57d14d2bc3538c90bcdeb74a0ec119647fc99c750bdcd34",
+      "after_sha256": "42a692ef77caa65a938d5b21ff6a51a6dd84545c1b848fa41ef76b521d5c3a2b"
+    },
+    {
+      "path": "reproduction/.venv/bin/f2py",
+      "before_sha256": "2cd64bc2c015ded1e68260ecfd3b09cc7a7e4ce4cab3c5b9905a02fd7b5cb57a",
+      "after_sha256": "886ef9295da09ade154634087b9f9812c673acfc48958d1b2f664d109dc73ca0"
+    },
+    {
+      "path": "reproduction/.venv/lib/python3.11/site-packages/zz_shared_torch_fallback.pth",
+      "before_sha256": "4e6db7cd35e4e9aa10983eb76b63186f061fd75b9c77568079d1fd2a2556f027",
+      "after_sha256": "ce8f851cd5507a13a2ac5fec4f3dd68f98fb699075a493a321aa77e9d341102b"
+    },
+    {
+      "path": "reproduction/LOCAL_RUN.txt",
+      "before_sha256": "0ad348092f5775e45d5bc781dbeb4b8db195b6ec70537e405c2916e0eee1b19b",
+      "after_sha256": "35c21c2b8091437719bc7e5c7848eba64b31e86cc67c409e5c78079ed511a8d6"
+    }
+  ],
+  "source_and_historical_results_modified": false,
+  "status": "completed_released_code_reproduction_with_numerical_discrepancies",
+  "new_training_performed": false,
+  "post_move_manifest_entries_verified": 126,
+  "tracked_author_source_unchanged": true,
+  "runtime_import_check": "passed: NumPy 1.26.4, pandas 2.2.2, PyTorch 2.4.1+cu121, SIT model, managed allocator library",
+  "saved_returns_replay": {
+    "label": "relocation_verification_20261117",
+    "runs_audited": 6,
+    "cells": 16,
+    "printed_matches": 0,
+    "max_daily_return_error": 2.2351741776893697e-08,
+    "note": "See training logs and environment deviations."
+  },
+  "replayed_csvs_identical_to_original_audit": true
+}

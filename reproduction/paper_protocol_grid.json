@@ -1,0 +1,2404 @@
+{
+  "assessment_date": "2026-11-17",
+  "status": "specification_prepared_no_training_started",
+  "paper": {
+    "path": "reproduction/paper.pdf",
+    "sha256": "8d2f3facbebb899b6d5fbf14c406480bc9b93f615ed07209c43c59a9c2bb673c",
+    "printed_page": 17,
+    "section": "Appendix D; Table 4 Panel E",
+    "visual_verification": true
+  },
+  "scope": "Table 1 SIT 40/50-asset rows; not all baselines or whole paper",
+  "asset_pools": [
+    40,
+    50
+  ],
+  "paper_fixed_training": {
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "dropout": 0.1,
+    "train_epochs": 100,
+    "patience": 10,
+    "independent_runs": 5,
+    "hyperparameter_selection_split": "validation"
+  },
+  "grid_axes": {
+    "d_model": [
+      8,
+      16,
+      32,
+      64
+    ],
+    "ff_dim": [
+      8,
+      16,
+      32,
+      64
+    ],
+    "num_layers": [
+      1,
+      2
+    ],
+    "n_heads": [
+      2,
+      4,
+      8
+    ],
+    "sig_input_dim": [
+      2
+    ],
+    "hidden_c": [
+      8,
+      16,
+      32
+    ]
+  },
+  "configurations_per_pool": 288,
+  "configurations_across_two_pools": 576,
+  "configurations": [
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 8,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 16,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 32,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 16,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 1,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 2,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 16
+    },
+    {
+      "d_model": 64,
+      "ff_dim": 64,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 32
+    }
+  ],
+  "unresolved": {
+    "original_seed_values": null,
+    "validation_selection_metric": null,
+    "validation_selection_direction": null,
+    "validation_seed_aggregation": null,
+    "validation_tie_rule": null,
+    "paper_learning_rate_schedule": null,
+    "author_gpu": null,
+    "author_rng_states": null,
+    "original_selected_configuration_per_pool": null
+  },
+  "public_code_evidence": {
+    "commit": "34e9c5a939ffcfcdf535baf71427518bb1eec741",
+    "requirements_torch": "2.6.0a0+ecf3bae40a.nv25.1",
+    "completed_local_torch": "2.4.1+cu121",
+    "release_seeds_once": 2023,
+    "release_repetitions": 3,
+    "release_train_epochs": 30,
+    "release_patience": 3,
+    "release_lradj": "type1",
+    "pool40_configuration": {
+      "d_model": 8,
+      "ff_dim": 32,
+      "num_layers": 2,
+      "n_heads": 4,
+      "sig_input_dim": 2,
+      "hidden_c": 8
+    },
+    "pool50_configuration": {
+      "d_model": 8,
+      "ff_dim": 8,
+      "num_layers": 2,
+      "n_heads": 8,
+      "sig_input_dim": 2,
+      "hidden_c": 64
+    }
+  },
+  "exact_original_training_reconstructible_from_available_evidence": false,
+  "audit": "reproduction/PAPER_PROTOCOL_AUDIT.txt"
+}

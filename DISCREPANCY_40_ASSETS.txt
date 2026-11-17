@@ -1,0 +1,236 @@
+SIT: investigation of the 40-asset discrepancy
+2026-11-11 — completed local investigation
+AI execution and source inspection; no human scientific verification recorded.
+
+QUESTION AND CURRENT CONCLUSION
+Why did fresh training yield mean Sharpe 0.505967 instead of 0.6717?
+Longer patience does not change the
+first run, and enabling matrix TF32 changes mean Sharpe only from 0.505967
+to 0.506198. 
+Its training-level cause has NOT been uniquely established. Our PyTorch runtime
+differs from the author's required runtime, so this is not an exact-environment
+refutation of the published result. The diagnostic experiments below are
+kept separate from the original three runs.
+
+FROZEN PRIMARY RESULT (40 ASSETS ONLY)
+Metric           Paper mean +/- SD        Fresh mean +/- sample SD
+Sharpe           0.6717 +/- 0.0628         0.505967 +/- 0.132620
+Sortino          0.8232 +/- 0.0792         0.627320 +/- 0.143395
+Maximum drawdown 0.3611 +/- 0.0037         0.347909 +/- 0.024346
+Final wealth     1.7903 +/- 0.1023         1.512583 +/- 0.196139
+The Sharpe mean is 24.7% lower and final wealth 15.5% lower. Drawdown is
+lower/better. No mean/SD cell matches at the paper's printed precision.
+This is not a statistical rejection based on three runs.
+
+Run index    Shipped Sharpe    Fresh Sharpe    Shipped wealth    Fresh wealth
+0            0.720117          0.635770        1.853147          1.707370
+1            0.694157          0.370699        1.845449          1.315120
+2            0.600696          0.511431        1.672269          1.515258
+Matching index labels do not prove identical initialization or random streams.
+The fresh best epochs were 2, 1 and 1; stopping epochs were 5, 4 and 4.
+Evidence: reproduction/discrepancy40/per_run_comparison.csv;
+reproduction/logs/fresh_local_dp40.log.
+
+WHAT HAS BEEN RULED OUT OR NARROWED
+1. Metric aggregation and daily-return arithmetic.
+   Replaying the three author-shipped 40-asset position files recovers all
+   eight published mean/SD cells. The notebook's aggregation uses the same
+   sample standard deviation. Fresh positions also independently reproduce
+   their saved daily returns. The paper numbers are not just the result of
+   using a different SD convention in our comparison.
+   Evidence: reproduction/author_shipped_arithmetic_only/table1_comparison.csv;
+   reproduction/fresh_local_comparison/daily_replay_audit.csv;
+   1_main_result.ipynb, cells 0-7 (zero-based).
+
+2. Wrong 40-asset architecture or changed batch size.
+   The actual training log agrees with runfile/test.sh: first 40 columns,
+   W=60, H=20, d_model=8, heads=4, layers=2, hidden_c=8, ff_dim=32,
+   dropout=0.1, temperature=1.3, batch=64, Adam lr=0.001, zero costs.
+   Tracked author source is unchanged. The 40-asset run used ordinary GPU
+   memory allocation; the managed-memory workaround for 50 assets cannot
+   explain the 40-asset mismatch. Its hyperparameters are inside Table 4's
+   stated grid. The 50-asset hidden-dimension mismatch is a separate issue.
+
+3. Evaluation-input cache or checkpoint reconstruction error.
+   For all 63 actual allocation decisions, original Dataset_Sig input arrays
+   match the cached arrays exactly. All three saved fresh checkpoints were
+   replayed on CPU using those original inputs. Maximum portfolio-weight
+   difference from the saved GPU outputs is 1.565e-7; maximum financial-metric
+   difference is 8.61e-8. This is far too small to explain the reported gap.
+   All 64 examples in the first shuffled training batch also match the
+   original loader exactly. Previous checks sampled seven examples in each
+   split, before and after scaling. This is not an exhaustive proof over
+   every training example, but no cache discrepancy has been detected.
+   Evidence: reproduction/discrepancy40/forensic_checks.json;
+   reproduction/discrepancy40/first_training_batch_check.json;
+   reproduction/cache_equivalence_40.json. Scripts are preserved alongside.
+
+4. Different evaluation span between fresh and shipped SIT.
+   Both SIT sets have the same 1255 return intervals. The separate EW
+   baseline has 1237 intervals. On common economic end dates, fresh SIT's
+   Sharpe is 0.514768 versus EW 0.575871, and wealth 1.519204 versus
+   EW 1.643885. Fixing the SIT/EW date alignment does not restore the
+   published Sharpe/wealth advantage in this rerun.
+   Evidence: reproduction/fresh_local_common_dates/date_alignment_sensitivity_means.csv.
+
+5. Public-code drift after the results were uploaded.
+   The complete history of the pinned Git branch has been inspected. Training entry,
+   launcher, model, loss/evaluation, data factory, cache builder, input CSV
+   and result notebook are byte-identical to their first upload (7ca8a9e,
+   2025-08-08). The loader's later edit only removes comments; its parsed
+   syntax tree is identical. All ten shipped CPython 3.12 bytecode files
+   also match current-source executable bytecode/constants (ignoring source
+   filenames and line metadata). No older alternative training implementation
+   or author training trace was found in this history. This does not recover
+   any private experiments preceding the public upload.
+   Evidence: reproduction/discrepancy40/repository_history.txt,
+   history_source_comparison.json, shipped_bytecode_comparison.json.
+
+CONFIRMED DIFFERENCES AND UNRESOLVED CAUSES
+A. Runtime mismatch — plausible contributor, not yet attributed.
+   Author requirements specify torch 2.6.0a0+ecf3bae40a.nv25.1; our local
+   runs used torch 2.4.1+cu121 on RTX 4060. NVIDIA's official 25.01 notes
+   map that exact author build to CUDA 12.8, distinct from our CUDA 12.1.
+   The author GPU, numerical flags, checkpoints and training traces are
+   not released here. Numerical/random-kernel differences remain possible.
+   Our matrix TF32 flag was False. NVIDIA's 22.06 release notes document
+   TF32 enabled by default in its containers, but the inspected 25.01 notes
+   do not restate that flag. The TF32-on sensitivity is now complete and does
+   not recover the published row. It cannot establish the author's actual
+   setting or recreate their build.
+   Evidence: requirements.txt; reproduction/fresh_local/environment_manifest.json;
+   NVIDIA release-note URLs in References.
+
+B. Paper versus released training protocol — definite provenance gap.
+   Appendix D says five independent seeds, up to 100 epochs, patience 10,
+   and a validation-selected hyperparameter grid. The released launcher
+   requests three repetitions; run.py sets seed 2023 only once, uses at most
+   30 epochs and patience 3. The three shipped 40-asset runs alone reproduce
+   every published mean/SD cell; the two additional claimed runs and the
+   search history are not present. This does not prove what the authors ran.
+   It means the complete protocol-to-table provenance cannot be verified.
+   Evidence: reproduction/paper.txt, Appendix D, printed p.17;
+   run.py lines 8-11, 63-65 and 98 onward; runfile/test.sh, 40-asset section.
+
+   A higher epoch cap alone cannot explain our early stop at epochs 5/4/4.
+   Longer patience was tested for the first run while retaining the released
+   learning-rate schedule. It selected the identical epoch-2 checkpoint after
+   stopping at epoch 12. Thus patience 3 did not truncate a later superior
+   validation checkpoint for this seed within that extended stopping window.
+   Because the launcher seeds only once, a changed stopping time also changes
+   the RNG state available to later model initializations/data shuffles.
+   This is a mechanism inferred from execution order, not a demonstrated
+   explanation of the author-versus-local gap. The first run also differs,
+   so later-run RNG coupling alone cannot explain the entire discrepancy.
+
+C. Potential test-based selection — concern, not established misconduct.
+   Notebook cell 6 reads test_metrics.csv aggregates, sorts by test Sharpe,
+   and displays the top 40-asset configuration. If multiple configurations
+   were chosen this way, that would be test-set model selection, conflicting
+   with Appendix D's validation-only selection claim. However, the released
+   results contain only ONE 40-asset configuration (three repetitions), so
+   sorting those available files cannot itself explain the gap. Earlier
+   search logs are absent. Do not assert that historical test selection or
+   cherry-picking occurred based solely on this notebook operation.
+
+D. Lookahead and universe bias — separate validity question.
+   No direct future-price leak has been established in the inspected code.
+   The point-in-time universe construction remains unresolved. A flaw shared
+   by both runs on the same released panel would not by itself explain why
+   their portfolio weights differ. See LOOKAHEAD_BIAS_AUDIT.txt.
+
+WHERE THE RETURN GAP APPEARS (DESCRIPTIVE, NOT CAUSAL)
+Average within-year wealth factors for the same economic return intervals:
+Year       Shipped      Fresh
+2020       1.077905     1.030689
+2021       1.238969     1.250809
+2022       1.027002     0.970820
+2023       1.128539     1.096291
+2024       1.159697     1.099617
+The gap spans several years, not one omitted evaluation date.
+
+The fresh runs' mean Walgreens (WBA) weight is 4.99%, versus 1.40% in
+the shipped runs. Their IBM weight is 0.74% versus 4.84%, and PepsiCo
+4.77% versus 7.58%. An exact additive log-growth accounting allocates the
+largest adverse contribution difference to WBA (-0.04928 log-wealth units),
+followed by IBM (-0.02472) and PEP (-0.02383). This describes how different
+portfolios produced different returns; it does NOT explain why training
+learned those weights or propose changes selected using test performance.
+Evidence: reproduction/discrepancy40/yearly_growth.csv and
+asset_log_growth_attribution.csv; accounting formula in investigate40.py.
+
+CONTROLLED DIAGNOSTICS — ALL COMPLETED
+The plan was recorded before these extra training runs. None replaces the
+primary results. Seven diagnostic runs took 429 seconds in total, excluding
+the queue, CPU forensics and report preparation; the original 40-asset three
+runs took 147 seconds. All used the local RTX 4060.
+
+1. Exact local repeat: three runs, 153 seconds.
+   All 87 state tensors in EACH of the three checkpoints are bitwise equal
+   to the corresponding original local checkpoint. Portfolio weights and
+   every reported metric are identical; training/validation/test loss logs
+   also match at their printed precision. The local shortfall is repeatable,
+   not a one-off numerical failure or accidental seed omission in our launch.
+
+2. Longer patience: first run only, 133 seconds.
+   Seed 2023, patience 10, maximum epochs 100; all else unchanged. Training
+   matches the first five original epochs, continues through epoch 12 and
+   reloads the SAME epoch-2 checkpoint bit for bit. Sharpe stays 0.635770 and
+   wealth stays 1.707370. This rules out the shorter patience as the cause
+   for this first run, under the released learning-rate schedule. It does
+   not test the complete five-independent-seed protocol or all later runs.
+
+3. Matrix TF32 enabled: three runs, 143 seconds.
+   Metric           Primary local     TF32 on           Published
+   Sharpe           0.505967          0.506198          0.6717
+   Sortino          0.627320          0.626932          0.8232
+   Maximum drawdown 0.347909          0.349494          0.3611
+   Final wealth     1.512583          1.513423          1.7903
+   These are three-run means. None of the eight TF32 mean/SD cells matches
+   at printed precision. Mean Sharpe changes by about +0.000231, versus the
+   +0.165733 needed to reach the paper. TF32 changed learned parameters and
+   portfolios slightly but does not explain the large aggregate shortfall.
+   Independent daily-return replay error is below 2.24e-8 for these outputs.
+
+Evidence: reproduction/discrepancy40/diagnostic_summary.json,
+diagnostic_metrics.csv, repeatability_check.json, and each diagnostic's
+training.log, command.txt, timestamps, checkpoints and result CSVs.
+The pre-execution plan hash is in pre_diagnostic_record.json.
+
+REMAINING EXPLANATIONS: PLAUSIBLE, NOT PROVEN
+GPU/runtime-dependent random streams remain a concrete possibility, beyond
+the TF32 flag tested above. The official PyTorch 2.4.1 Dropout.cu source
+computes its CUDA grid and Philox RNG counter increment from GPU device
+properties, including multiProcessorCount and maxThreadsPerMultiProcessor.
+Consequently, a fixed seed is not sufficient evidence of identical dropout
+streams on different GPUs. SIT uses dropout during training. The paper does
+not identify its GPU in the inspected text, and the original checkpoint/RNG
+states are absent. This source-based mechanism is NOT proof that it caused
+the measured finance gap; no alternate-GPU controlled run was performed.
+Evidence: reproduction/discrepancy40/pytorch241_dropout_source_read.txt;
+model/SIT.py dropout modules; official source URL in References.
+
+Unknown original seeds, run resets and search/stopping history remain another
+possibility. The public notebook's three-run figures are reproducible from
+its supplied predictions, but those predictions cannot be regenerated by
+our tested runtime/configuration. Neither this finding nor the small run
+count establishes fabrication, direct lookahead leakage, or that every
+correct implementation must underperform. No statistical rejection is claimed.
+
+WHAT WOULD RESOLVE REMAINING PROVENANCE UNCERTAINTY
+Original model checkpoints plus per-epoch train/validation logs; exact five
+seeds and their reset points; all validation grid scores and selection rule;
+the exact container digest, GPU and numerical precision/determinism flags;
+and the hash of the original cached inputs/data. No author has been contacted.
+
+References
+Paper: https://proceedings.mlr.press/v306/hwang26j.html
+Code: https://github.com/Yoontae6719/Signature-Informed-Transformer-For-Asset-Allocation
+Inspected code commit: 34e9c5a939ffcfcdf535baf71427518bb1eec741
+NVIDIA 25.01: https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-25-01.html
+NVIDIA TF32 default note: https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel_22-06.html
+PyTorch dropout source: https://github.com/pytorch/pytorch/blob/v2.4.1/aten/src/ATen/native/cuda/Dropout.cu
+Procedural guidance: Kassis, Timothy; Agarwal, Vinayak; He, Yuhuan; Patel,
+Darshil; Brueckner, Aubrey M. (2026). Scientific Agent Skills: A Library of
+Procedural Knowledge for Research Agents. https://doi.org/10.48550/arXiv.2609.00065
+Workflow citation only; not evidence for the finance results.

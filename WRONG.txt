@@ -1,0 +1,43 @@
+SIT: verified released-data defects and limits of inference
+Assessment date: 2026-11-17
+
+The released asset_data/full_dataset.csv is not a consistently correct
+CRSP-equivalent total-return price panel. This is a verified defect in the
+released experimental input and its use for investment-return calculations.
+It is not evidence of intentional manipulation, and the original vendor or
+the authors' private preprocessing history has not been recovered.
+
+Mechanism and evidence:
+- data_provider/data_loader.py, Dataset_Sig._build_sample, derives future
+  investment returns directly from adjacent raw_prices. Incorrect price
+  observations or distribution adjustments therefore enter both the price
+  paths and the return targets used by the released workflow.
+- RTX on 2020-04-03 implies -7.7564% in the CSV versus +5.2320% in both
+  local CRSP legacy and CIZ. CRSP prices and the two recorded distributions
+  independently reproduce +5.2320%. RTX is column 28 and enters all three
+  released 30/40/50-asset pools.
+- BIIB on 2017-02-02 implies -6.1983%, versus +1.7857% after its recorded
+  distribution. BIIB on 2023-06-09 incorrectly repeats the prior price,
+  giving 0% versus +2.5965%; the next session includes the catch-up move.
+  BIIB is column 1 and enters every released pool.
+- DHR's +61.2184% on 2016-07-05 versus CRSP +2.3260% is a major panel
+  anomaly, but column 73 is outside the released first-50-asset experiments.
+- Other large differences cluster in 2000. The USB predecessor splice and
+  ordinary cash-dividend adjustment conventions were checked separately;
+  they do not remove the material findings above.
+
+The paper's dataset paragraph (.agent/PAPER_TEXT.txt, lines 644-649) says
+prices were sourced from WRDS. The current audit uses local WRDS/CRSP files
+and preserved distribution records. It establishes inconsistency with those
+sources; it does not establish exactly how the authors constructed their
+private panel or whether they used a different distribution convention.
+
+These defects affect the economic interpretation of the released backtest.
+They do not by themselves explain the shipped-versus-fresh training gap on
+the same data. No new direct future-price leakage is established. Historical
+index membership and point-in-time universe selection were not audited here.
+
+Full scope, thresholds, source hashes, manual arithmetic checks and limitations:
+ASSET_DATA_AUDIT.txt
+Machine-readable evidence: reproduction/asset_data_audit_20261117/findings.json
+All stock/date comparisons: reproduction/asset_data_audit_20261117/comparison.csv.gz

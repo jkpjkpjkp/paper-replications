@@ -1,0 +1,8 @@
+{
+  "label": "author_shipped_arithmetic_only",
+  "runs_audited": 6,
+  "cells": 16,
+  "printed_matches": 15,
+  "max_daily_return_error": 7.450580610801616e-09,
+  "note": "Shipped-artifact arithmetic does not establish fresh training reproduction."
+}

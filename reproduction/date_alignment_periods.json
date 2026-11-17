@@ -1,0 +1,62 @@
+[
+  {
+    "pool": 40,
+    "run": "dp40_Signature_FULL_dp40_sl60_pl20_dm8_nh4_nl2_si2_sc1_hc8_mp5_ff32_deExp_tp1.3_cb0.0_0_test_positions.csv",
+    "sit_days": 1255,
+    "ew_days": 1237,
+    "common_days": 1237,
+    "sit_first_return_end": "2020-01-06",
+    "ew_first_return_end": "2020-01-31",
+    "common_last_return_end": "2024-12-30"
+  },
+  {
+    "pool": 40,
+    "run": "dp40_Signature_FULL_dp40_sl60_pl20_dm8_nh4_nl2_si2_sc1_hc8_mp5_ff32_deExp_tp1.3_cb0.0_1_test_positions.csv",
+    "sit_days": 1255,
+    "ew_days": 1237,
+    "common_days": 1237,
+    "sit_first_return_end": "2020-01-06",
+    "ew_first_return_end": "2020-01-31",
+    "common_last_return_end": "2024-12-30"
+  },
+  {
+    "pool": 40,
+    "run": "dp40_Signature_FULL_dp40_sl60_pl20_dm8_nh4_nl2_si2_sc1_hc8_mp5_ff32_deExp_tp1.3_cb0.0_2_test_positions.csv",
+    "sit_days": 1255,
+    "ew_days": 1237,
+    "common_days": 1237,
+    "sit_first_return_end": "2020-01-06",
+    "ew_first_return_end": "2020-01-31",
+    "common_last_return_end": "2024-12-30"
+  },
+  {
+    "pool": 50,
+    "run": "dp50_Signature_FULL_dp50_sl60_pl20_dm8_nh8_nl2_si2_sc1_hc64_mp5_ff8_deExp_tp1.3_cb0.0_0_test_positions.csv",
+    "sit_days": 1255,
+    "ew_days": 1237,
+    "common_days": 1237,
+    "sit_first_return_end": "2020-01-06",
+    "ew_first_return_end": "2020-01-31",
+    "common_last_return_end": "2024-12-30"
+  },
+  {
+    "pool": 50,
+    "run": "dp50_Signature_FULL_dp50_sl60_pl20_dm8_nh8_nl2_si2_sc1_hc64_mp5_ff8_deExp_tp1.3_cb0.0_1_test_positions.csv",
+    "sit_days": 1255,
+    "ew_days": 1237,
+    "common_days": 1237,
+    "sit_first_return_end": "2020-01-06",
+    "ew_first_return_end": "2020-01-31",
+    "common_last_return_end": "2024-12-30"
+  },
+  {
+    "pool": 50,
+    "run": "dp50_Signature_FULL_dp50_sl60_pl20_dm8_nh8_nl2_si2_sc1_hc64_mp5_ff8_deExp_tp1.3_cb0.0_2_test_positions.csv",
+    "sit_days": 1255,
+    "ew_days": 1237,
+    "common_days": 1237,
+    "sit_first_return_end": "2020-01-06",
+    "ew_first_return_end": "2020-01-31",
+    "common_last_return_end": "2024-12-30"
+  }
+]

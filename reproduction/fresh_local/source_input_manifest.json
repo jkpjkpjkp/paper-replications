@@ -1,0 +1,83 @@
+{
+  "recorded_at": "2026-11-11T17:16:37.746963+08:00",
+  "commit": "34e9c5a939ffcfcdf535baf71427518bb1eec741",
+  "tracked_diff_empty": true,
+  "scope": "Source/input/execution provenance; training outputs are still being produced. Final output hashes will be recorded after completion.",
+  "files": [
+    {
+      "path": "run.py",
+      "sha256": "448e5a5e7339935226438e4b6ec8385e8e8b02c8ab1bff2191ba1e9f93506e34",
+      "bytes": 6077
+    },
+    {
+      "path": "runfile/test.sh",
+      "sha256": "d288e7bb4cc59a37557e375cb6f724043c97dc10aec91c27962ead2d02a5f476",
+      "bytes": 1620
+    },
+    {
+      "path": "model/SIT.py",
+      "sha256": "e15fe3000c2b01aa73ae1f98ff62e39ef26417029b138a8fc03959ba5ba97bfc",
+      "bytes": 8368
+    },
+    {
+      "path": "data_provider/data_loader.py",
+      "sha256": "26c2194444157d0d9801dd2205227c6bdc3e77f1e6a715ede9624085b34090c7",
+      "bytes": 6477
+    },
+    {
+      "path": "data_provider/data_factory.py",
+      "sha256": "cf39d74db2958cd66da6a6a0cab2e4f2a8dfa2182103d47bd98e0c2f512f76f2",
+      "bytes": 2936
+    },
+    {
+      "path": "exp/exp_main.py",
+      "sha256": "189b5912b6b8030772aea31eeb3e62ea0ac92ad155a5ada149eb34a029a4ceb3",
+      "bytes": 12143
+    },
+    {
+      "path": "utils/tools.py",
+      "sha256": "0beca0c862392b5d58d19912daf287e1da9df16b4d5c30f1fcd681ac77befed2",
+      "bytes": 3396
+    },
+    {
+      "path": "0_get_sig_data_all.py",
+      "sha256": "2617a9ad1f5b19c50ed0287c437a9957f340bf7fad5dbcd70fd6b8e39a8f46ab",
+      "bytes": 3475
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "0381d0ad8db27df1cafd92c35f3d8dd53df0fdd0488651282399d42d98f868a6",
+      "bytes": 204
+    },
+    {
+      "path": "asset_data/full_dataset.csv",
+      "sha256": "f4c56431b8da07962a551d41e3e11beb22c160f4a9e225706649e5870004859b",
+      "bytes": 8773419
+    },
+    {
+      "path": "reproduction/prepare_cache.py",
+      "sha256": "0c9d0b308be49ec61193aabda8b1440e2023451797e23af92bf3503f791ce7c1",
+      "bytes": 5965
+    },
+    {
+      "path": "reproduction/run_local.sh",
+      "sha256": "298f52127597b0e33b46567432e5e33d07d368086c88df4e5cdbaf30c2b8c8dd",
+      "bytes": 1496
+    },
+    {
+      "path": "reproduction/managed_allocator.cpp",
+      "sha256": "e2296717845f6a23418b30b0e5043566d17a733179effb81b81d13ab5de2612a",
+      "bytes": 2295
+    },
+    {
+      "path": "reproduction/launch_managed.py",
+      "sha256": "e38f28b106bfa3e382a75cae370f813b16a24d4056a9279fb229210bc9bd2e75",
+      "bytes": 1243
+    },
+    {
+      "path": "reproduction/allocator_equivalence.json",
+      "sha256": "6653d0c3b7a76628cd163b96586d33cc4c59927d18ab1d591875e8ab10e950af",
+      "bytes": 296
+    }
+  ]
+}

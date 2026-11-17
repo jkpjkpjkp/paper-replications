@@ -1,0 +1,6 @@
+{
+  "tensors_compared": 87,
+  "all_bitwise_equal": true,
+  "max_abs_parameter_difference": 0.0,
+  "scope": "All model parameters after four Adam steps on repeated real-input batch of 4, dropout enabled, identical initial seed. Storage allocator changed only; not exhaustive across all batches."
+}

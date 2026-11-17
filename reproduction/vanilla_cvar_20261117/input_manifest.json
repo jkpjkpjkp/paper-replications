@@ -1,0 +1,26 @@
+{
+  "TS_Traditional/run_benchmark.ipynb": {
+    "sha256": "117d9eb6cb7a43bdf455deae7325c78515b3aac8aec64bfc673f663f6eb498f7",
+    "bytes": 357918
+  },
+  "TS_Traditional/dataset/full_dataset.csv": {
+    "sha256": "7665c6aa34ba1512027399490878ef5d35332427e0f7c2c8385a21cb946a8b33",
+    "bytes": 9272966
+  },
+  "asset_data/full_dataset.csv": {
+    "sha256": "f4c56431b8da07962a551d41e3e11beb22c160f4a9e225706649e5870004859b",
+    "bytes": 8773419
+  },
+  "reproduction/paper.pdf": {
+    "sha256": "8d2f3facbebb899b6d5fbf14c406480bc9b93f615ed07209c43c59a9c2bb673c",
+    "bytes": 944173
+  },
+  "reproduction/reproduce_vanilla_cvar.py": {
+    "sha256": "cf91c2185d7854d986b51d5b3ee1c358678a75992bba063ffd17ee84f0461a20",
+    "bytes": 12570
+  },
+  "reproduction/vanilla_cvar_20261117/executed_author_cell.py": {
+    "sha256": "1af29c68a6338f577b4a09d26524c28420b387154799fac85be915e848463ee0",
+    "bytes": 7778
+  }
+}

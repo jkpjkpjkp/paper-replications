@@ -1,0 +1,8 @@
+{
+  "label": "fresh_local_comparison",
+  "runs_audited": 6,
+  "cells": 16,
+  "printed_matches": 0,
+  "max_daily_return_error": 2.2351741776893697e-08,
+  "note": "See training logs and environment deviations."
+}

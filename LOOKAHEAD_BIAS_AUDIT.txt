@@ -1,0 +1,6 @@
+SIT: lookahead and evaluation audit
+Paper: Signature-Informed Transformer for Asset Allocation
+
+Assessment
+No direct future-price leakage has been established in the inspected SIT
+pipeline. 

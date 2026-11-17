@@ -1,0 +1,20 @@
+{
+  "device": "cuda",
+  "pool": 40,
+  "batch": 64,
+  "torch": "2.4.1+cu121",
+  "cpu_threads": 4,
+  "sample_build_seconds": 0.38229816499733715,
+  "train_step_seconds": [
+    0.43937694399937754,
+    0.09086547499828157,
+    0.09099934299956658,
+    0.09086948899857816
+  ],
+  "median_warm_train_step_seconds": 0.09086948899857816,
+  "peak_rss_mib": 1318.78125,
+  "prefix_causality_max_error": 0.0,
+  "train_samples": 4197,
+  "note": "Untrained real-input timing/engineering check. Four steps are not a financial replication; no performance is claimed.",
+  "peak_cuda_mib": 1968.20556640625
+}

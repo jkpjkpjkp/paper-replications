@@ -1,0 +1,83 @@
+Local SIT reproduction execution notes
+Working directory: /home/jkp/data/SIT
+
+1. Environment
+Task environment: reproduction/.venv (Python 3.11.16).
+Installed numerical packages:
+  numpy==1.26.4 pandas==2.2.2 scipy==1.14.1 scikit-learn==1.5.2
+  matplotlib==3.10.0 joblib==1.4.2 tqdm==4.67.1
+For this execution, PyTorch 2.4.1+cu121 and CUDA dependencies are reused
+read-only through zz_shared_torch_fallback.pth, which adds:
+  /home/jkp/data/limt/.venv/lib/python3.11/site-packages
+The task's pinned packages take precedence. The shared environment was not
+modified. Actual effective versions and import locations are recorded in
+fresh_local/environment_manifest.json and environment_effective.txt.
+The author's required NVIDIA PyTorch nightly was not available here; this is
+an explicit environment difference, not an exact environment reproduction.
+
+2. Prepare exact-format author-equivalent caches
+  OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=1 MPLBACKEND=Agg \
+    reproduction/.venv/bin/python reproduction/prepare_cache.py --pools 40 50
+This overwrites signature_cache_6020. Do not execute while training is reading
+those files. The cache checks must pass before the following commands.
+
+3. Run 40 assets using the native CUDA allocator
+  bash reproduction/run_local.sh 40 > reproduction/logs/fresh_local_dp40.log 2>&1
+The wrapper runs the unchanged author run.py with the release's settings.
+Outputs go into reproduction/fresh_local rather than the shipped results/.
+Do not rerun into an existing result directory without preserving its files.
+
+4. Build the memory-only fallback used for 50 assets
+CUDA headers packaged with this local runtime were incomplete, so the C++
+source contains the public runtime ABI declarations and enum values checked
+against cuda_runtime_api.h and driver_types.h. The ABI was checked against
+the installed PyTorch CUDAPluggableAllocator.h.
+The actual compilation command was:
+  g++ -O2 -shared -fPIC reproduction/managed_allocator.cpp \
+    -o reproduction/managed_allocator.so \
+    -L/home/jkp/data/limt/.venv/lib/python3.11/site-packages/nvidia/cuda_runtime/lib \
+    -Wl,-rpath,/home/jkp/data/limt/.venv/lib/python3.11/site-packages/nvidia/cuda_runtime/lib \
+    -l:libcudart.so.12
+On another machine use that environment's CUDA runtime library path.
+
+The allocator uses cudaMallocManaged/cudaFree and verifies concurrent managed
+memory support. The GPU performs the same FP32 model computations while the
+driver pages memory between GPU and RAM. It does not microbatch, change the
+loss, use mixed precision or change the optimizer. It has a 10 GiB live-tensor
+cap. There is no caching allocator to empty; launch_managed.py makes
+torch.cuda.empty_cache a no-op for this process only. Tensor deallocations
+already call cudaFree. This execution change is disclosed in the report.
+Native and managed allocators produced exactly the same 87 parameter tensors
+after four Adam steps in the small-batch engineering check; see
+allocator_equivalence.json. Full-batch timing and failed alternatives have
+separate logs. A finite comparison is not a proof for all possible inputs.
+
+5. Run 50 assets, original batch size 64
+  bash reproduction/run_local.sh 50 managed > reproduction/logs/fresh_local_dp50.log 2>&1
+This runs three sequential repetitions from the author's seed initialization.
+The default 30 epochs/patience 3 follow released code, not Appendix D's
+100 epochs/patience 10/five independent seeds. Never choose seeds or stopping
+times using test results to force agreement.
+
+6. Audit fresh outputs (after all runs have completed)
+  reproduction/.venv/bin/python reproduction/audit_results.py \
+    --results reproduction/fresh_local/results --label fresh_local_comparison
+  reproduction/.venv/bin/python reproduction/audit_date_alignment.py \
+    --sit-results reproduction/fresh_local/results --sit-label SIT_fresh \
+    --output reproduction/fresh_local_common_dates
+The first command compares all available 40/50-asset runs with Table 1.
+Verify that there are exactly three runs per pool before calling the primary
+six-run execution complete. The second aligns actual return END dates with
+the freshly executed official EW baseline.
+
+Do not count results/ (author-shipped predictions) as fresh training.
+Do not install packages into or kill jobs belonging to other reproductions.
+
+Completed 40-asset discrepancy investigation (2026-11-11):
+Report: ../DISCREPANCY_40_ASSETS.txt
+Forensic replay: .venv/bin/python investigate40.py (from reproduction/).
+First training batch: .venv/bin/python check_train_batch40.py.
+GPU controls: bash run_diagnostic40.sh (refuses an existing started run).
+Control summary: .venv/bin/python summarize_diagnostic40.py.
+Raw outputs and the pre-execution plan: discrepancy40/.
+All controls are separate from the primary fresh_local/ outputs.

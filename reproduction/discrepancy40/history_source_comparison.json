@@ -1,0 +1,44 @@
+[
+  {
+    "path": "run.py",
+    "byte_identical_since_first_upload": true,
+    "ast_identical": true
+  },
+  {
+    "path": "runfile/test.sh",
+    "byte_identical_since_first_upload": true
+  },
+  {
+    "path": "model/SIT.py",
+    "byte_identical_since_first_upload": true,
+    "ast_identical": true
+  },
+  {
+    "path": "exp/exp_main.py",
+    "byte_identical_since_first_upload": true,
+    "ast_identical": true
+  },
+  {
+    "path": "data_provider/data_loader.py",
+    "byte_identical_since_first_upload": false,
+    "ast_identical": true
+  },
+  {
+    "path": "data_provider/data_factory.py",
+    "byte_identical_since_first_upload": true,
+    "ast_identical": true
+  },
+  {
+    "path": "0_get_sig_data_all.py",
+    "byte_identical_since_first_upload": true,
+    "ast_identical": true
+  },
+  {
+    "path": "asset_data/full_dataset.csv",
+    "byte_identical_since_first_upload": true
+  },
+  {
+    "path": "1_main_result.ipynb",
+    "byte_identical_since_first_upload": true
+  }
+]

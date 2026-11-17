@@ -1,0 +1,9 @@
+Signature-Informed Transformer for Asset Allocation
+
+Authors: Yoontae Hwang; Stefan Zohren
+Workbook ID: P019 (Catalog row 24)
+Paper: https://proceedings.mlr.press/v306/hwang26j.html
+Official code: https://github.com/Yoontae6719/Signature-Informed-Transformer-For-Asset-Allocation
+Pinned commit: 34e9c5a939ffcfcdf535baf71427518bb1eec741
+Affiliations: Pusan National University (Yoontae Hwang); University of Oxford (Stefan Zohren), from paper first page.
+Status: Sole selected paper; six fresh local runs completed. 0/16 Table 1 mean/SD cells matched. Environment/protocol differences prevent an exact whole-paper reproduction claim. See REPRODUCTION_REPORT.txt.

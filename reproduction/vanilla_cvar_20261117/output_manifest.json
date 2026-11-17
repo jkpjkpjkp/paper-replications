@@ -1,0 +1,19 @@
+{
+  "executed_author_cell.py": "1af29c68a6338f577b4a09d26524c28420b387154799fac85be915e848463ee0",
+  "protocol.json": "5824c5b4d8787db347a538ada05ca94434390d1b24b9893c9b15b83c941a899a",
+  "paper_comparison.csv": "cba82611640da67195da671278435f73f1e761c4a730141f6a9ac701575997c0",
+  "solver_and_period_audit.csv": "9e36a1fcb12a68d020227c883dea99e71944b20ac73bd443352b2658d6782ae3",
+  "summary.json": "e1fe3cd4c7d6892b4b8b6ca03233c2f0c902c3102dbe678add8bccfb9fa8cdce",
+  "requirements.lock.txt": "6c7a38d2566407aeae6a23cb0de157541433a0e76da228a38ecf2f68200f3dfa",
+  "environment.json": "d84c41fc0a10909abedcff94fc41582629fdc80f535dd6bde666195c00ea57ff",
+  "input_manifest.json": "ac17d206096d2d777914488fcc81ae0f6d56a7c006eb5c5553c5dc2bcaa57b0e",
+  "results_trad/CVaR_30/test_positions.csv": "f3417f0f4f448468ad278d3d23fbe40863148e226581a91719ec59995ac2d69d",
+  "results_trad/CVaR_30/test_metrics.csv": "27c42cca23aeeb67799c8a8dc7990028c3e1f425f423ecb35c18b4a66a7ea485",
+  "results_trad/CVaR_30/test_equity_curve.png": "63d19c9ebc1eef2d317a79345ed8648a4a0815c3fa9e880851cf0b234f0aae87",
+  "results_trad/CVaR_40/test_positions.csv": "e92d05284885ca293c7bddbca7138468029674fbcb32a16e0d3afd45bc0da773",
+  "results_trad/CVaR_40/test_metrics.csv": "c1e13b91fb2a79aeb102782fe72a4ed4de169cc06a46d8afd1703b7fed2076d7",
+  "results_trad/CVaR_40/test_equity_curve.png": "88076b0ac84f12e5fa93268aabef7a1dde30db65c113621ecaa538399fdf5991",
+  "results_trad/CVaR_50/test_positions.csv": "03ffa592189464585b6544d760f1cc5868721589f167c2fe662f6201c390692a",
+  "results_trad/CVaR_50/test_metrics.csv": "8c1a9ae45e9fe1b84745a3c953bffd7cb5544f409934f34dee1d7319c57cfa2e",
+  "results_trad/CVaR_50/test_equity_curve.png": "f3ec4c7d2112637374bae768a3cf01765755c35fe9ca26882636495ac3762ae9"
+}

@@ -1,0 +1,119 @@
+Vanilla CVaR reproduction - assessed 2026-11-17
+
+RESULT
+Fresh optimization reproduces all 12 published S&P100 vanilla CVaR cells
+at four decimal places: Table 1 (40 and 50 assets) and Table 5 (30 assets).
+The four-decimal rounding tolerance is 0.00005 absolute per metric.
+No model training, seed search, test-set tuning, or released weights were used.
+The paper's baseline rows report point estimates without seed uncertainty.
+
+Pool  Metric              Paper       Fresh                 Absolute error
+30    Sharpe              0.2883      0.288275206483        0.000024793517
+30    Sortino             0.3707      0.370714166270        0.000014166270
+30    MaxDrawdown         0.3499      0.349872232954        0.000027767046
+30    FinalWealthFactor   1.1915      1.191472735267        0.000027264733
+40    Sharpe              0.1531      0.153113424229        0.000013424229
+40    Sortino             0.2001      0.200072074317        0.000027925683
+40    MaxDrawdown         0.3516      0.351590015706        0.000009984294
+40    FinalWealthFactor   1.0569      1.056948321515        0.000048321515
+50    Sharpe              0.2165      0.216456256762        0.000043743238
+50    Sortino             0.2858      0.285843693627        0.000043693627
+50    MaxDrawdown         0.3086      0.308630118655        0.000030118655
+50    FinalWealthFactor   1.1170      1.116985793970        0.000014206030
+
+The largest relative discrepancy from a printed value is 0.020205%, in the
+50-asset Sharpe. All discrepancies are within the printed rounding interval.
+Drawdown is a fraction of wealth; 0.3516 means 35.16%. Wealth is a multiplier.
+Targets were visually verified against PDF pages 6 and 20 of reproduction/paper.pdf.
+
+WHAT RAN
+The unmodified first code cell of TS_Traditional/run_benchmark.ipynb was loaded
+without executing its main block; run_one was then called for CVaR only, with
+asset_cnt 30, 40, 50 and lookback 60. Other methods were not launched.
+The exact executed source is saved alongside the results. A wrapper records
+the solver status and objective while passing through its original arguments.
+
+Inputs: TS_Traditional/dataset/full_dataset.csv contains daily decimal returns,
+not prices. Its columns and dates match the percentage changes derived from
+asset_data/full_dataset.csv, with maximum absolute error below 1e-12.
+The first N asset columns are used, in the released order; they are recorded
+as named weight columns in each test_positions.csv.
+
+At every valid listed rebalance, solve:
+  min zeta + sum(u) / ((1 - 0.95) * 60)
+  subject to sum(w) = 1, w >= 0, u >= 0, u >= -R w - zeta.
+R contains the preceding 60 daily return vectors. There is no forecast,
+return target, regularization term, shorting, or allocation cap.
+The primary solver is ECOS with abstol/reltol/feastol 1e-8, max_iters 10000.
+All 186 solves returned optimal with ECOS; no fallback solver or equal-weight
+fallback was used. This baseline is deterministic and does not need training
+seeds or the neural-model hyperparameter grid.
+
+The notebook slices input to 2019-10-09 through 2024-12-30 and uses a fixed list
+of rebalance dates. Its first scheduled date, 2020-01-03, has insufficient
+history after this slice and is excluded. Each pool therefore has 62 allocation
+decisions and 1237 evaluated daily returns, 2020-01-31 through 2024-12-30.
+Each allocation uses only returns dated before its rebalance date.
+
+For numerical fidelity, the same weight vector is applied to each daily return
+until the next listed rebalance. This is the released constant-weight return
+calculation; it does not model shares held unchanged with drifting weights.
+Costs and risk-free rate are zero. Sharpe uses sqrt(252) and population standard
+deviation. Sortino uses the standard deviation of negative daily returns, as in
+the released code. Initial wealth is included when computing maximum drawdown.
+
+INDEPENDENT VERIFICATION
+Every allocation LP was also solved using scipy.optimize.linprog with HiGHS.
+Maximum absolute CVaR objective difference: 3.252e-11, across all 186 decisions.
+Maximum weight-sum error: 2.554e-15. Minimum weight: -7.433e-14 (numerical noise).
+Daily portfolio returns were independently reconstructed from saved weights
+and released returns; maximum error was 3.470e-17. Independently recomputed
+headline metrics agreed within 4.194e-11. Every history ends before its decision,
+all evaluation dates are covered exactly once, and all expected solves exist.
+Run plus independent verification took 4.79 seconds locally, excluding setup.
+
+Python 3.11.16, NumPy 1.26.4, pandas 2.2.2, SciPy 1.14.1, CVXPY 1.6.5,
+ECOS 2.0.14, matplotlib 3.10.0. These are recorded local versions, not a claim
+to have recovered the authors' original CVXPY/ECOS environment.
+
+RERUN
+From /home/jkp/data/SIT, using the already-created isolated environment:
+  reproduction/vanilla_cvar_20261117/.venv/bin/python reproduction/reproduce_vanilla_cvar.py --output reproduction/vanilla_cvar_repeat
+Use a new output directory: the runner refuses to replace existing results.
+For a new environment, install requirements.lock.txt from the result directory
+under Python 3.11 and invoke the same runner.
+
+ARTIFACTS
+reproduction/reproduce_vanilla_cvar.py - execution and independent verification
+reproduction/vanilla_cvar_20261117/paper_comparison.csv - exact errors and matches
+reproduction/vanilla_cvar_20261117/summary.json - metrics and verification summary
+reproduction/vanilla_cvar_20261117/solver_and_period_audit.csv - all 186 decisions
+reproduction/vanilla_cvar_20261117/results_trad/CVaR_{30,40,50}/ - per-pool daily
+  weights, PnL, wealth, metrics and equity-curve PNGs
+reproduction/vanilla_cvar_20261117/protocol.json - settings and paper targets
+reproduction/vanilla_cvar_20261117/environment.json - runtime package versions
+reproduction/vanilla_cvar_20261117/requirements.lock.txt - frozen dependencies
+reproduction/vanilla_cvar_20261117/input_manifest.json - source and input hashes
+reproduction/vanilla_cvar_20261117/output_manifest.json - output hashes
+reproduction/vanilla_cvar_20261117/run.log and COMPLETED.json - execution evidence
+
+SCOPE AND LIMITATIONS
+This establishes numerical reproduction of the released S&P100 vanilla CVaR
+baseline. The effective dates differ from the paper prose (January 1, 2020 to
+December 27, 2024) and from the released SIT evaluation dates. They were retained
+to reproduce the published baseline numbers, not silently changed.
+
+The released data defects documented in ASSET_DATA_AUDIT.txt remain in the input.
+Matching the paper's arithmetic does not validate those observations economically.
+
+The DOW30 10/20-asset and CSI300 50/100-asset appendix results were not reproduced.
+The CSI notebook references dataset/full_dataset_csi2.csv, absent from this
+release and the searched local workspace/archive. The DOW notebook instead
+uses the S&P100 input and 30/40/50-asset loop, with duplicated S&P100 outputs;
+it does not identify the required DOW10/20 panel or asset order. Those published
+panels need their corresponding verified inputs and specifications.
+
+This successful traditional baseline does not resolve the previously recorded
+fresh SIT training discrepancy. The project assessment is level 2, scoped to
+the completed S&P100 vanilla CVaR numerical match. The main SIT training
+comparison remains mismatched, as recorded prominently in STATUS.txt.

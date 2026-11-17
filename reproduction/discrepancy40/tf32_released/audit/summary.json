@@ -1,0 +1,8 @@
+{
+  "label": "discrepancy40/tf32_released/audit",
+  "runs_audited": 3,
+  "cells": 8,
+  "printed_matches": 0,
+  "max_daily_return_error": 2.2351741790771484e-08,
+  "note": "See training logs and environment deviations."
+}

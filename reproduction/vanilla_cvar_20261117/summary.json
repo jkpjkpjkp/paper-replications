@@ -1,0 +1,96 @@
+{
+  "started_utc": "2026-11-17T12:09:59.400581+00:00",
+  "completed_utc": "2026-11-17T12:10:04.190592+00:00",
+  "wall_seconds": 4.790029444997344,
+  "matched_cells": 12,
+  "total_cells": 12,
+  "pools": [
+    {
+      "pool": 30,
+      "return_days": 1237,
+      "allocation_decisions": 62,
+      "first_return_date": "2020-01-31",
+      "last_return_date": "2024-12-30",
+      "min_weight": -7.43208369005358e-14,
+      "max_weight_sum_error": 1.4432899320127035e-15,
+      "max_daily_return_replay_error": 3.469446951953614e-17,
+      "max_independent_metric_error": 4.193645430916604e-11,
+      "max_highs_objective_gap_abs": 2.7828780946315135e-11,
+      "solver_counts": {
+        "ECOS": 62
+      },
+      "status_counts": {
+        "optimal": 62
+      },
+      "metrics": {
+        "Sharpe": 0.288275206482938,
+        "Sortino": 0.3707141662698483,
+        "MaxDrawdown": 0.3498722329540075,
+        "AnnualReturn": 0.0363340168438734,
+        "AnnualVol": 0.1804586395524066,
+        "FinalWealthFactor": 1.1914727352666892,
+        "WinRate": 0.5246564268391269
+      }
+    },
+    {
+      "pool": 40,
+      "return_days": 1237,
+      "allocation_decisions": 62,
+      "first_return_date": "2020-01-31",
+      "last_return_date": "2024-12-30",
+      "min_weight": 1.8075707431550474e-13,
+      "max_weight_sum_error": 2.55351295663786e-15,
+      "max_daily_return_replay_error": 3.469446951953614e-17,
+      "max_independent_metric_error": 2.2882334915763636e-11,
+      "max_highs_objective_gap_abs": 3.114068985315965e-11,
+      "solver_counts": {
+        "ECOS": 62
+      },
+      "status_counts": {
+        "optimal": 62
+      },
+      "metrics": {
+        "Sharpe": 0.1531134242292571,
+        "Sortino": 0.2000720743173592,
+        "MaxDrawdown": 0.3515900157057469,
+        "AnnualReturn": 0.0113470191391471,
+        "AnnualVol": 0.18137166375417,
+        "FinalWealthFactor": 1.0569483215150313,
+        "WinRate": 0.5189975747776879
+      }
+    },
+    {
+      "pool": 50,
+      "return_days": 1237,
+      "allocation_decisions": 62,
+      "first_return_date": "2020-01-31",
+      "last_return_date": "2024-12-30",
+      "min_weight": 1.7974446913239438e-13,
+      "max_weight_sum_error": 1.3322676295501878e-15,
+      "max_daily_return_replay_error": 2.7755575615628914e-17,
+      "max_independent_metric_error": 3.428490824575192e-11,
+      "max_highs_objective_gap_abs": 3.251670026988007e-11,
+      "solver_counts": {
+        "ECOS": 62
+      },
+      "status_counts": {
+        "optimal": 62
+      },
+      "metrics": {
+        "Sharpe": 0.2164562567621235,
+        "Sortino": 0.2858436936266322,
+        "MaxDrawdown": 0.3086301186549535,
+        "AnnualReturn": 0.0227940749658484,
+        "AnnualVol": 0.174776584493458,
+        "FinalWealthFactor": 1.116985793969989,
+        "WinRate": 0.5238480194017785
+      }
+    }
+  ],
+  "scope_limitations": [
+    "Reproduces released S&P100 protocol; effective dates differ from paper prose.",
+    "Released data defects documented in ASSET_DATA_AUDIT.txt are retained.",
+    "DOW30 10/20 and CSI300 50/100 pools not reproduced: corresponding verified inputs unavailable.",
+    "Matching this traditional baseline does not resolve fresh SIT training mismatches."
+  ]
+}

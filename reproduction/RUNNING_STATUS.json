@@ -1,0 +1,48 @@
+{
+  "status": "completed_with_disclosed_environment_differences",
+  "completed_at": "2026-11-11T18:24:24.273370+08:00",
+  "completed_runs": 6,
+  "printed_matches": 0,
+  "comparison_cells": 16,
+  "all_primary_printed_match": false,
+  "whole_paper_exact_reproduction": false,
+  "elapsed_seconds": {
+    "40": 147,
+    "50": 4538
+  },
+  "epochs_per_run": {
+    "40": [
+      5,
+      4,
+      4
+    ],
+    "50": [
+      7,
+      4,
+      8
+    ]
+  },
+  "max_daily_return_replay_error": 2.2351741776893697e-08,
+  "result_scope": "SIT Table 1 40/50-asset rows; other baselines, universes and ablations not all freshly rerun.",
+  "diagnostic40_status": "completed",
+  "diagnostic40_session_id": 93299,
+  "diagnostic40_report": "DISCREPANCY_40_ASSETS.txt",
+  "local_runtime_preference": "User confirmed continue locally and accept longer runtime",
+  "diagnostic40": {
+    "status": "completed",
+    "completed_at": "2026-11-11T18:36:36.942252+08:00",
+    "primary_pool": 40,
+    "primary_runs": 3,
+    "diagnostic_runs": 7,
+    "diagnostic_elapsed_seconds": 429.0,
+    "repeat_all_three_bitwise_identical": true,
+    "longer_patience_first_run_checkpoint_identical": true,
+    "tf32_mean_sharpe": 0.5061983597383036,
+    "tf32_mean_wealth": 1.513422760897475,
+    "tf32_printed_matches": 0,
+    "root_cause_uniquely_identified": false,
+    "report": "DISCREPANCY_40_ASSETS.txt",
+    "scope": "40-asset local discrepancy investigation; no primary results replaced and no test-selected hyperparameters."
+  },
+  "all_task_gpu_training_finished": true
+}

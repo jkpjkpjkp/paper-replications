@@ -1,0 +1,67 @@
+{
+  "recorded_at": "2026-11-11T18:15:53.366454+08:00",
+  "plan_sha256": "8e6f4b240c452070621533d508581811eb25ad0016faaa9d12abb0cde74b2def",
+  "source_input_checks": [
+    {
+      "path": "run.py",
+      "unchanged": true
+    },
+    {
+      "path": "runfile/test.sh",
+      "unchanged": true
+    },
+    {
+      "path": "model/SIT.py",
+      "unchanged": true
+    },
+    {
+      "path": "data_provider/data_loader.py",
+      "unchanged": true
+    },
+    {
+      "path": "data_provider/data_factory.py",
+      "unchanged": true
+    },
+    {
+      "path": "exp/exp_main.py",
+      "unchanged": true
+    },
+    {
+      "path": "utils/tools.py",
+      "unchanged": true
+    },
+    {
+      "path": "0_get_sig_data_all.py",
+      "unchanged": true
+    },
+    {
+      "path": "requirements.txt",
+      "unchanged": true
+    },
+    {
+      "path": "asset_data/full_dataset.csv",
+      "unchanged": true
+    },
+    {
+      "path": "reproduction/prepare_cache.py",
+      "unchanged": true
+    },
+    {
+      "path": "reproduction/run_local.sh",
+      "unchanged": true
+    },
+    {
+      "path": "reproduction/managed_allocator.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "reproduction/launch_managed.py",
+      "unchanged": true
+    },
+    {
+      "path": "reproduction/allocator_equivalence.json",
+      "unchanged": true
+    }
+  ],
+  "status": "GPU diagnostics queued until primary pool50 completion"
+}

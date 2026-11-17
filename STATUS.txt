@@ -1,0 +1,56 @@
+2: Vanilla CVaR, S&P100 30/40/50 assets: fresh optimization matches 12/12 published cells within 0.00005 absolute rounding tolerance; 40-asset Sharpe 0.153113424229 vs paper 0.1531 (absolute error 0.000013424229, relative error 0.008768%).
+
+Assessment date: 2026-11-17.
+Scope: Representative traditional-baseline reproduction (Tables 1 and 5).
+This grade reflects the completed vanilla CVaR experiment; it does not establish
+successful SIT training or whole-paper reproduction. Full baseline evidence,
+execution details and limitations appear below.
+
+Unresolved main-method mismatch (fresh SIT training, three runs per asset pool):
+Fresh 40-asset Sharpe is 0.505967 +/- 0.132620 sample run SD versus paper 0.6717 +/-
+0.0628 (-24.7% mean); final wealth 1.512583 +/- 0.196139 versus 1.7903 +/- 0.1023
+(-15.5%). For 50 assets, Sharpe 0.573517 +/- 0.184025 versus 0.7715 +/- 0.0627 (-25.7%).
+Fresh runs match 0/16 printed mean/SD cells. Shipped-position replay matches 15/16
+cells, but that arithmetic consistency does not override the contradictory fresh-
+training result. Three-run gaps are not formal statistical rejection.
+
+Limits / next requirement:
+Fresh repetitions, cache/replay checks, longer-patience and TF32 diagnostics do not
+remove the 40-asset shortfall. Original runtime/random-stream and seed/search provenance
+are unresolved; paper five-seed protocol conflicts with the three-run release. Other
+baselines, universes, ablations and costs remain incomplete.
+
+Evidence paths (relative to this STATUS.txt):
+- REPRODUCTION_REPORT.txt
+- DISCREPANCY_40_ASSETS.txt
+- reproduction/fresh_local_comparison/table1_comparison.csv
+
+Protocol clarification assessed 2026-11-17:
+The completed experiments used the public implementation and released launcher
+settings on a different PyTorch runtime. They were not exact Appendix D runs.
+Appendix D was visually checked against PDF page 17: five independent seeds,
+100 maximum epochs, patience 10, and validation grid search are required.
+The local three repetitions are sequential draws after one seed initialization;
+their SD is across runs, not across independently reset named seeds.
+The 288-configuration SIT grid per pool is transcribed and prepared separately.
+Exact original seeds, validation search rule, learning-rate schedule provenance
+and author runtime/hardware remain unresolved. No new training started in this
+audit; historical metrics and grade are unchanged.
+Evidence: reproduction/PAPER_PROTOCOL_AUDIT.txt and reproduction/paper_protocol_grid.json.
+
+Vanilla CVaR baseline assessed 2026-11-17:
+Fresh optimization on the released S&P100 return panel matches all 12 printed
+cells for 30/40/50 assets (Tables 5/1), within 0.00005 absolute rounding tolerance.
+Sharpe: 30 assets 0.288275206483 vs 0.2883; 40 assets 0.153113424229 vs 0.1531;
+50 assets 0.216456256762 vs 0.2165. Largest relative cell error is 0.020205%.
+All 186 ECOS solves are optimal; independent HiGHS objective checks agree within
+3.252e-11. This is fresh baseline optimization, not shipped-weight replay.
+Each pool uses 1237 daily returns, 2020-01-31 through 2024-12-30, preserving the
+released baseline's date convention and known input defects. DOW/CSI appendix
+panels lack corresponding verified local inputs and remain unreplicated.
+The project is now level 2 because this representative baseline matches. The
+fresh SIT training mismatch above remains unresolved and is preserved explicitly.
+Evidence: VANILLA_CVAR_REPRODUCTION.txt,
+reproduction/vanilla_cvar_20261117/paper_comparison.csv,
+reproduction/vanilla_cvar_20261117/summary.json.
+

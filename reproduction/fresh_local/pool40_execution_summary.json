@@ -1,0 +1,14 @@
+{
+  "pool": 40,
+  "completed_runs": 3,
+  "epochs_each_run": [
+    5,
+    4,
+    4
+  ],
+  "wall_time_seconds": 147,
+  "numeric_matches": 0,
+  "numeric_cells": 8,
+  "sharpe_relative_difference": -0.24673662716879718,
+  "wealth_relative_difference": -0.1551233238662758
+}

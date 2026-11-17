@@ -1,0 +1,17 @@
+[
+  {
+    "run": 0,
+    "all_parameters_bitwise_equal": true,
+    "metrics_identical": true
+  },
+  {
+    "run": 1,
+    "all_parameters_bitwise_equal": true,
+    "metrics_identical": true
+  },
+  {
+    "run": 2,
+    "all_parameters_bitwise_equal": true,
+    "metrics_identical": true
+  }
+]

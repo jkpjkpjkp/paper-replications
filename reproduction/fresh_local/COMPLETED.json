@@ -1,0 +1,27 @@
+{
+  "status": "completed_with_disclosed_environment_differences",
+  "completed_at": "2026-11-11T18:24:24.273370+08:00",
+  "completed_runs": 6,
+  "printed_matches": 0,
+  "comparison_cells": 16,
+  "all_primary_printed_match": false,
+  "whole_paper_exact_reproduction": false,
+  "elapsed_seconds": {
+    "40": 147,
+    "50": 4538
+  },
+  "epochs_per_run": {
+    "40": [
+      5,
+      4,
+      4
+    ],
+    "50": [
+      7,
+      4,
+      8
+    ]
+  },
+  "max_daily_return_replay_error": 2.2351741776893697e-08,
+  "result_scope": "SIT Table 1 40/50-asset rows; other baselines, universes and ablations not all freshly rerun."
+}

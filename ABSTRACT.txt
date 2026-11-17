@@ -1,0 +1,10 @@
+Signature-Informed Transformer for Asset Allocation
+
+Condensed abstract
+
+Unifies feature extraction and portfolio decisions using path signatures and an
+attention mechanism designed for geometric relationships among assets. Direct
+optimization of conditional value-at-risk aligns learning with portfolio risk
+objectives. Theoretical analysis and equity-market experiments assess how signature
+information improves allocation relative to traditional and forecasting-based
+strategies.
