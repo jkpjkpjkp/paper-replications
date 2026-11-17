@@ -34,7 +34,10 @@
   "projects": [
     {
       "path": "DRO",
-      "branch": "paper/dro"
+      "branch": "paper/dro",
+      "ignore": [
+        "!/upstream/"
+      ]
     },
     {
       "path": "Kronos",
@@ -66,7 +69,11 @@
     },
     {
       "path": "PDE",
-      "branch": "paper/pde"
+      "branch": "paper/pde",
+      "ignore": [
+        "!/upstream/",
+        "!/sources/torchspde/"
+      ]
     },
     {
       "path": "SIT",
@@ -131,7 +138,10 @@
     },
     {
       "path": "hermes",
-      "branch": "paper/hermes"
+      "branch": "paper/hermes",
+      "ignore": [
+        "!/upstream/"
+      ]
     },
     {
       "path": "ijcai-paper",
@@ -165,6 +175,9 @@
       "branch": "paper/prism-vq",
       "source_data_dirs": [
         "upstream/dataset"
+      ],
+      "ignore": [
+        "!/upstream/"
       ]
     },
     {
