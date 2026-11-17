@@ -77,3 +77,10 @@ Blocker triage and new work — 2026-11-17:
 Original blocker: BENCHMARK DATA + SPECIFICATION. A complete CSI300 reconstruction
 is now being attempted with documented substitutions. Exact data/specification
 gaps remain, and numerical results are pending. See BLOCKER.txt. Grade remains 0.
+
+Execution-timing audit — 2026-11-17:
+The released demo combines open execution with Qlib's scalar daily-change limit
+filter, which can use the execution day's closing price to reject an opening
+trade. Paper applicability is unresolved; see WRONG.txt. Primary reconstruction
+results must retain this caveat. A separate opening-price-limit sensitivity will
+reuse saved forecasts; it does not change the initially frozen inference run.

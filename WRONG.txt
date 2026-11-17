@@ -1,0 +1,40 @@
+Assessed: 2026-11-17
+
+Verified released-demo timing issue; applicability to the paper is unresolved.
+
+The released finetune/qlib_test.py configures deal_price="open" together with
+limit_threshold=0.095. Qlib 0.9.7's Exchange._update_limit (exchange.py:289-291)
+constructs those limit flags from the same day's $change. In the community-data
+reconstruction this field is the current close / previous close - 1. Therefore
+the primary demo-based backtest can use information from the day's close to
+decide whether an order fills at that day's open. This is a lookahead mechanism
+in the tradability filter, even though the prediction signal uses only the
+previous close's context. It can affect buy and sell execution in either direction.
+
+The paper's Appendix D, Investment Simulation Setup, states that simulations
+use Qlib, top-k/drop-n, a five-day minimum hold and 0.15% transaction costs.
+It does not establish these exact execution/limit settings. This finding does
+NOT prove that the published Table 10 used the same problematic combination.
+The released code explicitly describes itself as a simplified finetuning demo.
+Do not equate the reconstructed strategy's numerical match, if any, with a
+verified causal investment result.
+
+Evidence:
+- https://arxiv.org/html/2508.02739v1 (Appendix D; Eq. 13 and Table 10)
+- upstream/kronos/finetune/qlib_test.py (open execution and scalar limit threshold)
+- /home/jkp/data/.replication-local/artifacts/prism-vq/.venv/lib/python3.11/site-packages/qlib/backtest/exchange.py:273
+- scripts/reproduce_pretrained.py (adjusted close-to-close change field)
+- /mnt/data/home/jkp/replications/kronos-base-20261117/protocol.json
+
+Action: retain the initially specified demo-based reconstruction and report a
+separate opening-price-limit sensitivity on identical saved forecasts. The
+sensitivity uses current open / previous close - 1 for the same 9.5% limit
+proxy, so that this filter does not consult the execution day's closing price.
+It remains a proxy, not an exact exchange-limit/order-book reconstruction.
+Runner: scripts/backtest_open_limits.py. Outputs are isolated under
+/mnt/data/home/jkp/replications/kronos-base-20261117/open-limit-sensitivity/.
+
+Separate specification discrepancy (not proof of a paper flaw): the released
+demo forms its mean signal as a difference in normalized prices. Paper Eq. 13
+defines a percentage return in price units. The current inference reconstruction
+inverse-transforms forecasts and implements Eq. 13 explicitly.
