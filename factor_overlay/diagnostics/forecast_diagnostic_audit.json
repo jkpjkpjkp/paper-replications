@@ -1,0 +1,18 @@
+{
+  "created_utc": "2026-11-02T12:10:15.348939+00:00",
+  "status": "post-result explanation; no new fitted models or trading selection",
+  "model_source": "primary fits/2005.pkl..2025.pkl;2004 diagnostic reuses2005 model and is in-sample",
+  "one_day": "sampled signed next-day payoff",
+  "five_day": "same primary one-day predictions checked against exact signed5-session fixed-share payoff divided by5; not the separately trained horizon sensitivity",
+  "grouping": "Within each trading date and long/short leg, demean predictions and outcomes; equal stocks within leg, equal available legs within date",
+  "ic": "Spearman cross-sectional correlations require at least5 sampled names per date-leg; correlations averaged across available legs; other moments include smaller legs",
+  "significance": "HAC12 on weekly sampled date-level statistics; no stock-IID t statistics. Suffix_holm36 adjusts within36 factor/model comparisons for each period/horizon/diagnostic; other p-values unadjusted. These diagnostic tests are not a new claim of trading alpha.",
+  "calibration": "Joint centered projection y=beta_base*forecast_base + beta_increment*(forecast_cycle-forecast_base); sandwich covariance built from date-level moments with Bartlett HAC12",
+  "interpretation": "Incremental calibration1 means forecast changes correctly scaled conditional on baseline;0 means no added linear prediction;negative means wrong direction. These are predictive diagnostics, not causal mechanisms.",
+  "mse": "Positive cycle-minus-base MSE means adding cycle worsens forecast error; raw untrimmed outcomes used",
+  "gaussian_score": "Lower log(predicted variance)+residual_squared/predicted variance is better; for5-session average outcome, daily predicted variance divided by5 as approximation",
+  "variance_only_score": "Same scoring rule, but residuals from baseline mean prediction used for both baseline and cycle variances; isolates variance-forecast change",
+  "independence": "36 factor/model comparisons are correlated; aggregate counts and medians are descriptive",
+  "rows": 79020,
+  "summary_rows": 288
+}

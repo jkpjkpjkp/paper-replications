@@ -1,0 +1,7 @@
+{
+  "models.py": "273d8f10ec3f44c586adbcdc941db97673851fe19adb196135eea441b04bbfae",
+  "data.py": "a8b681b2a31d2cb2b6fc1b02810035ed1295bb9354231750a0e3a8a95c8c857d",
+  "design.json": "64cf66d8eb3ad6e75b61e353acf566ce1d57225114c1d63be44c9c8f59c8c5c2",
+  "train.npz": "c7ac84c855de7ba3980da2d5d2f78eed0a2b09d04d12f863df8465f78a2823e2",
+  "horizon": 1
+}

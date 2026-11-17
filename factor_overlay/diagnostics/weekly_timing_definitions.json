@@ -1,0 +1,16 @@
+{
+  "status": "Fixed diagnostic requested after primary results; no parameter/model selection",
+  "timing_rule": "Original clock: long[-5,-1],short[-40,-21],equalweight,minimum20each,otherwisecash",
+  "universe": "All existing eligible regular65/>=5analyst names; no factor availability restriction. This differs from each factor-specific finite universe.",
+  "schedule": "Target before return on market idx%5==0; same schedule and initial date as actual baseline backtests",
+  "accounting": "Shared audited Ledger; same full-panel marks, fixed-share drift, forced missing exits, terminal liquidation",
+  "costs": "5bp per dollar traded and1%annual short borrow; exact cost feedback",
+  "gross_definition": "Gross return is daily price/distribution P&L from5bp-scenario actual holdings; fee/borrow deductions excluded from that day numerator but affect holdings via prior NAV. Not the separate zero-cost portfolio.",
+  "comparators": "Actual factor_overlay/results/daily.npz plain model rows, cost5bp, exact identical calendar dates",
+  "support": "all_dates includes cash zeros; both_active retains only dates both actual portfolios held positions",
+  "statistical_uncertainty": "Descriptive95% delta-method Bartlett HAC60 correlation intervals in original trading-session distances; no multiplicity or causal claim",
+  "n_days": 5283,
+  "max_accounting_error": 0.0,
+  "bankrupt": false,
+  "terminal_holdings": 0
+}

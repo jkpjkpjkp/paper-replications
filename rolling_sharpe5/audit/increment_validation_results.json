@@ -1,0 +1,12 @@
+{
+  "known_beta_recovered": true,
+  "intercept_retained_in_oos_residual": true,
+  "k0_and_k2_equal_sleeve_accounting": true,
+  "target_year_changes_do_not_change_betas": true,
+  "independent_real_selection_matches_4_years": true,
+  "target_future_return_changes_do_not_change_selection": true,
+  "incomplete_prior_year_excluded": true,
+  "monthly_compounding_known_path": true,
+  "test_source": "/home/jkp/data/earnings-timing/rolling_sharpe5/analyze_increment.py",
+  "test_source_sha256": "a61e5affab07617171add5e393cd7a74cb2e9b655451391614ee912b47a6e9a5"
+}

@@ -1,0 +1,103 @@
+Independent statistical review of proposed rolling-year factor addition design
+2026-11-03
+
+1. Primary factor selection is well defined: two-sided p<0.05 and positive
+   mean in EACH prior calendar year, 12 valid monthly observations per year;
+   publication Year < target year; original paper direction retained. IID
+   annual tests are primary; HAC1 with finite-sample correction and t(11)
+   inference is robustness. Five prior years end Dec y-1. Never use current
+   returns, endpoint availability, or ex-post success to change selection.
+
+2. Annual Sharpe>0 is equivalent to mean>0 when volatility>0, so a test of
+   the mean is appropriate for the zero-Sharpe null. The reported Sharpe
+   itself should remain sqrt(12)*mean/sample_std; do not label the HAC t as
+   Sharpe. HAC t and IID annual Sharpe differ. A HAC test with n=12 is only
+   a small-sample sensitivity analysis, not proof of well-calibrated size.
+
+3. Pooled60 selection is a different economic question, not a robustness
+   substitute for requiring five individually significant years. Report it
+   separately if requested. Annual IID and annual HAC1 2026 pool counts are
+   0; pooled60 IID/HAC3 counts are 31/32 (two-sided p<0.05, positive mean).
+   Pooled unrestricted historical k can exceed 100. Even publication-filtered
+   k reaches 52/56 with only 60 training months: unconstrained spanning OLS
+   is unstable long before k reaches n. Use aggregate EW-pool regression
+   or label regularized residuals exploratory; do not call this full spanning.
+
+4. Empty selected pools must contribute baseline excess return 0 (cash) to
+   the primary sequence; do not drop those years. Their hedge residual is
+   simply the paper factor's return. Report number of empty/nonempty years
+   and nonempty-year results as descriptive diagnostics: otherwise an
+   apparent incremental-alpha test is mostly a standalone mean-return test.
+
+5. Define 'add factor' explicitly. Comparing paper return with the EW pool
+   is not itself the realized effect of adding it. If existing k factors
+   are each given equal weight and the paper factor gets one additional
+   equal sleeve, augmented=(k*baseline+paper)/(k+1); incremental
+   augmented-baseline=(paper-baseline)/(k+1), for k>0. If k=0, use baseline=0
+   and augmented=paper. A 50/50 blend answers a different question. State
+   capital/gross-exposure normalization, especially because conventional
+   zoo long-short factors are +1 long/-1 short.
+
+6. For rolling60-beta residuals, fit the training regression with intercept,
+   but apply out-of-sample h_t=paper_t-beta_hat'factor_t, WITHOUT subtracting
+   the fitted intercept. The mean of h tests remaining expected return.
+   Subtracting alpha_hat too gives forecast error and does not estimate
+   the usual factor-adjusted alpha. Do not fit betas on current-year data.
+   Audit n, rank, condition number, max absolute beta, and hedge exposure.
+
+7. Returns on beta hedges or factor combinations are only partially costed:
+   paper trades may have 5bp costs, but zoo returns are gross and no local
+   weights/turnover exist. Label each result precisely, e.g. 'paper factor
+   net of 5bp versus gross zoo controls'. Regression alpha is not proof of
+   net implementable factor-hedged P&L. Rebalancing across factor sleeves
+   and shorts' borrow/financing are also distinct from paper trade costs.
+   Never deduct a constant 5bp from every day or month unless that is the
+   specified turnover convention. Cost must follow actual trading notional.
+
+8. Aggregate the daily paper strategy consistently with its capital and
+   rebalancing convention; compare monthly dates by Period('M'), since last
+   calendar dates may differ from last trading dates. Ensure both series
+   use decimal or percent consistently. Last valid prior 60 months must be
+   calendar-complete; no row-count windows that jump across missing months.
+
+9. Primary inference should report annualized arithmetic mean/alpha,
+   monthly HAC CI, t, p, N, realized volatility/Sharpe. Annualization of the
+   mean and its CI uses x12, volatility sqrt(12); it does not turn the mean
+   into CAGR. Because adaptive rolling regressions overlap training windows,
+   HAC3 alone can understate longer dependence. Include HAC6/HAC12
+   sensitivity; a full-pipeline moving/block bootstrap would better address
+   estimated weights and selection if a formal robust inference claim is
+   desired. Do not choose bandwidth by which one makes p significant.
+
+10. If multiple paper factors/specifications are tested as discoveries,
+    distinguish the prespecified primary from exploration and report an
+    appropriate multiple-testing adjustment (e.g. Holm for a defined family).
+    The strict five-year intersection rule is not automatically a 212-factor
+    multiple-testing correction. The factor library itself embeds literature
+    discovery and revised-vintage selection; Year filters mitigate only
+    publication availability, not all discovery and revision biases.
+
+11. 'Out of sample' should mean specific choices are learned before the
+    holding year. It does not automatically mean the paper's newly proposed
+    factor is out of its original discovery sample or that revised 2026
+    factor series were available in real time. Clearly distinguish these.
+
+Extended audit files:
+- extended_selection_counts.csv: separate count rows (including empty pools).
+- extended_selection_members.csv: one row per included factor, no fake
+  placeholder entries for empty pools; join to counts to identify empties.
+- annual_hac1_audit.csv: annual stats, 1985-2025.
+- pooled60_stats.csv: all 60-month pre-year stats, target 1990-2026.
+- extend_selection_audit.py: reproducible source, HAC implementation checked
+  against statsmodels OLS HAC on three annual/60-month windows.
+
+Audit HAC convention: Bartlett kernel; correction n/(n-1); t(n-1) p-values.
+Primary count summaries (two-sided, target 1990-2026):
+- Annual IID published: 7 nonempty years, max k=3.
+- Annual HAC1 published: 6 nonempty years, max k=3.
+- Annual IID unrestricted: 15 nonempty years, max k=5.
+- Annual HAC1 unrestricted: 21 nonempty years, max k=5.
+- Pooled60 IID published: all 37 years nonempty, max k=52.
+- Pooled60 HAC3 published: all 37 years nonempty, max k=56.
+- Pooled60 IID unrestricted: all 37 years nonempty, max k=102.
+- Pooled60 HAC3 unrestricted: all 37 years nonempty, max k=100.

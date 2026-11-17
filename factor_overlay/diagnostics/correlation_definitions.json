@@ -1,0 +1,22 @@
+{
+  "status": "Post-result descriptive mechanism checks; no new fitted or selected strategy",
+  "source": "factor_overlay/data/YYYY.npz and data/train5.npz; existing audited feature/label lineage",
+  "score": "Original fixed timing score: +1 clock[-5,-1], -1 clock[-40,-21], else0",
+  "factor_score": "Signed source-month percentile rank across ALL finite factor names in eligible universe; RDIPO economic leg+1 raw0,-1 raw1",
+  "signal_correlation": "Pearson and Spearman within each date/factor; average dates equally, not stock rows pooled",
+  "return_correlation": "Daily reconstituted equal-weight gross factor spread and original timing spread on same finite-factor universe; both100%long/100%short; compare only shared active dates",
+  "minimum_names": "Factor >=20 each leg, except RDIPO>=5; timing>=20each; thresholds follow baseline/sparse diagnostic conventions",
+  "return_limit": "Diagnostic gross daily portfolios, not weekly holdings or executable net backtests; excludes transaction/borrow costs. Missing observed returns0 and counted. Common active support can differ by factor/period.",
+  "phase_bins": [
+    "pre1_5",
+    "pre6_20",
+    "pre21_40",
+    "post0_10",
+    "post11plus"
+  ],
+  "phase_outcome": "Five-session fixed-share gross underlying P&L divided5 from train5.npz, then raw or leg-signed; no fees/borrow; same original deterministic max30 per date/factor/leg sample",
+  "phase_weighting": "Each date/phase/leg cell equal weight across dates; factor spread uses same dates with both legs; phase interaction requires all four phase\u00d7leg cells on same date",
+  "interaction": "[raw long in phase - raw long in pre21_40] - [raw short in phase - raw short in pre21_40]; common shift is half the sum of those two leg shifts",
+  "uncertainty": "Bartlett HAC60 in original trading-session distances; missing cell scores0 with observed-cell count normalization. Return correlation uses delta-method influence function. All95% intervals and p values descriptive/unadjusted; no causal or multiple-testing claims.",
+  "source_definition": "factor_timing/research.py timing_only_LS; source methodology and limitations factor_overlay/sources.txt"
+}

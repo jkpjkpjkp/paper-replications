@@ -1,0 +1,195 @@
+{
+  "status": "Descriptive post-result calibration; user-specified regime split; no fitting/tuning",
+  "method": "Existing annual direct-five-day ridge fits_h5; prediction year uses preceding10years only",
+  "x": "(cycle signed forecast minus baseline signed forecast), centered within each date/leg using original weights, multiplied5*10000 to five-day bp",
+  "y": "(ACTUAL observed signed five-day fixed-share payoff/5 minus baseline forecast), centered within date/leg with same weights, multiplied5*10000",
+  "actual_outcomes": "data/train5.npz labels: sum of fixed shares times observed CRSP total returns, retx share marking, distributions retained cash; missing listing forces exit, no survivor filtering; no fees/borrow",
+  "bins": "Ten weighted quantile bins computed from x only separately within factor/period. Predictions determine bin membership; outcomes never do.",
+  "weights": "Original30/n weights: each sampled date/leg equal total mass30, regardless of name count. Bin means are pooled weighted ratio means.",
+  "confidence_intervals": "Pointwise normal95% intervals from date-clustered ratio-mean influences with BartlettHAC12 sampled-week lags. All stocks and both legs cluster jointly by date; absent-bin dates and purged year-end dates contribute zero scores on full idx%5 grid.",
+  "interpretation": "45-degree line indicates correctly calibrated incremental conditional mean; flat nearzero indicates no realized within-leg residual gradient. Residualization removes baseline forecast and common date/leg return, not all potential confounding. Intervals are not simultaneous or causal.",
+  "rows": 120,
+  "sample_records": 347417,
+  "bin_edges": [
+    {
+      "period": "2005-2017",
+      "factor": "MS",
+      "cutpoints_bps": [
+        -23.007583379624897,
+        -14.710838751456317,
+        -9.082148660160781,
+        -4.04245630771885,
+        0.9474413296431187,
+        5.26612052438752,
+        9.60542063291489,
+        14.63898239690731,
+        22.019985655963108
+      ]
+    },
+    {
+      "period": "2005-2017",
+      "factor": "CompEquIss",
+      "cutpoints_bps": [
+        -23.176511731435312,
+        -14.78184177055179,
+        -9.002975843941385,
+        -4.296879293027208,
+        0.0011894463606647299,
+        4.308138341381588,
+        9.160317979043006,
+        14.984406295752706,
+        22.785271353882308
+      ]
+    },
+    {
+      "period": "2005-2017",
+      "factor": "InvestPPEInv",
+      "cutpoints_bps": [
+        -24.032093045510315,
+        -14.984359475344416,
+        -9.645155394082394,
+        -5.166299811207864,
+        -0.7554097025301115,
+        3.718513835337945,
+        8.20782877781312,
+        14.41506781854211,
+        25.36314502359952
+      ]
+    },
+    {
+      "period": "2005-2017",
+      "factor": "Cash",
+      "cutpoints_bps": [
+        -31.44002289142615,
+        -17.36485087803885,
+        -9.708776704731767,
+        -3.943382936692312,
+        1.101138032026937,
+        6.057908770647676,
+        11.518820811033947,
+        18.570256809956238,
+        29.702853944399976
+      ]
+    },
+    {
+      "period": "2005-2017",
+      "factor": "RIO_Disp",
+      "cutpoints_bps": [
+        -32.68710722773942,
+        -22.038656296672343,
+        -14.581468177918092,
+        -7.435549707489979,
+        -0.1275774236830779,
+        7.025715441765593,
+        13.896532886974455,
+        21.684712887690694,
+        33.26738102903922
+      ]
+    },
+    {
+      "period": "2005-2017",
+      "factor": "RDIPO",
+      "cutpoints_bps": [
+        -24.018365577435997,
+        -15.266395167465001,
+        -9.531757265014456,
+        -4.391131487730822,
+        0.0,
+        4.012219497887483,
+        8.985955829377906,
+        15.179888425699618,
+        25.395637242883858
+      ]
+    },
+    {
+      "period": "2018-2025",
+      "factor": "MS",
+      "cutpoints_bps": [
+        -17.489167524521083,
+        -11.740381833078573,
+        -7.8755279901088215,
+        -4.4152698577211895,
+        -0.9210985149366026,
+        2.7694482438770747,
+        6.489855222374292,
+        10.910162127402145,
+        17.505005616840208
+      ]
+    },
+    {
+      "period": "2018-2025",
+      "factor": "CompEquIss",
+      "cutpoints_bps": [
+        -16.88392010237294,
+        -10.646965483829263,
+        -6.56921261528017,
+        -3.3362203616131105,
+        -0.3583701133417585,
+        2.7021806520603304,
+        6.362882581925078,
+        10.646391116703551,
+        17.33472858177265
+      ]
+    },
+    {
+      "period": "2018-2025",
+      "factor": "InvestPPEInv",
+      "cutpoints_bps": [
+        -17.767987603747315,
+        -11.317434809778131,
+        -6.924074322872304,
+        -3.416233369838058,
+        -0.33406319441079796,
+        2.7640847141204485,
+        6.268897606484339,
+        11.126707945550152,
+        18.85355947554975
+      ]
+    },
+    {
+      "period": "2018-2025",
+      "factor": "Cash",
+      "cutpoints_bps": [
+        -20.774678287125425,
+        -13.003020010273758,
+        -7.978350293645539,
+        -3.8351370396109514,
+        -0.1288358786647829,
+        3.4165915227883197,
+        7.642315531484201,
+        13.237981635635759,
+        22.14866952272132
+      ]
+    },
+    {
+      "period": "2018-2025",
+      "factor": "RIO_Disp",
+      "cutpoints_bps": [
+        -25.939653964996978,
+        -16.02479106111332,
+        -8.878207006167335,
+        -3.260861580732429,
+        0.7685827828633292,
+        4.024270344492228,
+        8.211835747905145,
+        14.18270324090069,
+        23.880879372579024
+      ]
+    },
+    {
+      "period": "2018-2025",
+      "factor": "RDIPO",
+      "cutpoints_bps": [
+        -28.90664063570444,
+        -17.804619484135348,
+        -10.57826204353609,
+        -4.764835879868448,
+        0.0,
+        2.7520810048418194,
+        9.231035913968663,
+        16.62148175696909,
+        31.358726727270483
+      ]
+    }
+  ]
+}

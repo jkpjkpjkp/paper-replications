@@ -1,0 +1,80 @@
+Independent factor library audit (2026-11-03)
+
+Only the Chen_Zimmermann_Factor_Zoo_2026_10 library documentation and data
+were inspected. No existing earnings-timing implementation was read.
+
+Source paths, relative to /home/jkp/data/earnings-timing:
+../Chen_Zimmermann_Factor_Zoo_2026_10/README.txt
+../Chen_Zimmermann_Factor_Zoo_2026_10/SOURCE_README.md
+../Chen_Zimmermann_Factor_Zoo_2026_10/Release Notes 2026.10.md
+../Chen_Zimmermann_Factor_Zoo_2026_10/SignalDoc.csv
+../Chen_Zimmermann_Factor_Zoo_2026_10/Portfolios/Full Sets OP/PredictorLSretWide.parquet
+
+Data:
+- 1,200 monthly observations, Jan 1926 to Dec 2025 inclusive, 212 predictors.
+- Percent units: divide by 100 for decimal returns.
+- These are signed original-paper long-short portfolio returns. Do not
+  multiply by Sign again. Do not subtract the risk-free rate from a
+  zero-investment long-short factor a second time.
+- Date is last trading day of RETURN month, not formation month.
+- Unique consecutive months; no infinities. 78,871 missing factor-months
+  are genuine coverage gaps and must not be replaced with zero.
+- Predictor metadata include publication Year, original sample dates,
+  portfolio construction, Sign, Stock Weight, and Detailed Definition.
+  All 212 predictors have publication Year (range 1973-2016).
+- Original-paper universe is 184 equally weighted and 28 value weighted.
+- Alternative decile value-weighted file has 179 predictors, not 212.
+- Locally available long-format tables have only signalname, port, date,
+  ret, signallag, Nlong, Nshort. There are no holding-level weights or
+  turnover series. Cannot compute 5bp multiplied by actual trading volume
+  from these return files. Do not treat signal updating period as turnover;
+  the release notes say EW/VW weights are enforced monthly.
+- Local package does not include daily factor returns or firm-level signals;
+  official SOURCE_README lists separate downloads for these.
+- Options signals end Dec 2022; governance in 2007; patent signals around
+  2006; ProbInformedTrading in 2012. Check individual nonmissing endpoints.
+
+Strict annual IID feasibility calculation:
+- Target year y uses exactly y-5, ..., y-1, with 12 observations in EACH.
+- Test H0 mean<=0 versus >0 using Student t with 11 df; annual Sharpe
+  equals t-stat when n=12 monthly returns. This tests Sharpe>0 under IID.
+- One-sided p<0.05 requires annual Sharpe>1.7959 every one of five years.
+- Conventional two-sided p<0.05 and mean>0 requires Sharpe>2.2010 each year.
+- No multiple-testing correction, no costs in this quick screening audit.
+- One-sided: all 96 target years 1931-2026, 46 nonempty years, 148 total
+  selected factor-years; max pool size 8. No selected factors in 2011-2026.
+- Two-sided: 32 nonempty years, 61 selected factor-years; max size 5.
+  Latest nonempty year is 2008; no selected factors in 2009-2026.
+- Requiring publication Year<target year reduces one-sided to 17 nonempty
+  years and 26 factor-years; two-sided to 11 years and 14 factor-years.
+  Latest published-factor nonempty year is 2008 under either test.
+- Therefore the 2026 pool from 2021-2025 is empty under both IID tests.
+- An empty factor pool must be reported as such, not silently converted
+  into a pooled 60-month test or a relaxed significance threshold.
+
+Inference cautions:
+- IID annual tests are feasibility diagnostics, not robust final inference.
+  HAC estimates with only 12 observations are sensitive to lag choice.
+- 212 predictors were historically selected from the literature and their
+  signs use original-paper findings. Rolling return selection alone does
+  not remove factor discovery/look-ahead bias. A publication restriction
+  should be an explicit robustness analysis or primary availability rule.
+- This is a revised 2026 vintage, not vintage-as-of-each-year input data.
+  Revision and survivorship effects remain even with lagged selection.
+- Annual testing has low power for moderate Sharpe ratios. Requiring five
+  consecutive significant years selects unusually strong historical runs.
+- Incremental mean/alpha tests of paper factors and portfolio combination
+  effects are distinct questions. Empty pool years provide no factor
+  spanning controls; standalone returns are not evidence of incremental
+  alpha conditional on a nonempty pool.
+
+Reproduce from project root:
+.venv/bin/python rolling_sharpe5/audit/audit_factor_library.py
+
+Outputs:
+annual_iid_stats.csv
+strict_annual_iid_pool_counts.csv
+
+Runtime: project .venv has pandas, scipy, numpy, duckdb, statsmodels.
+It lacks pyarrow; duckdb.read_parquet(...).df() reads the files without
+installing anything or changing the environment.

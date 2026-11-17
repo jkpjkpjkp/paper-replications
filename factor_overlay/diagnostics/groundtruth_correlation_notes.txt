@@ -1,0 +1,35 @@
+All-eligible groundtruth diagnostics, computed without refitting any model.
+
+The dataset contains1,251,064 five-session outcome labels on every fifth
+market session, with no factor-tail or training-sample restriction. All fields
+used as predictors retain their historical availability. Future prices enter
+only the return labels. Dates whose five-session horizon crosses a calendar
+boundary are purged consistently with the earlier direct-horizon study.
+
+Correlations are cross-sectional within each date, so shared market-return
+levels and time trends do not create the reported signal/return correlations.
+The period statistic is an equal-date average, with HAC12 on the weekly grid.
+A correlation of0.005 is one-half of one percent on the correlation scale;
+it is not a0.5% return, nor a directly investable return forecast.
+
+Fixed-clock Pearson correlation with five-day returns averages0.00457 before
+2018 and0.00215 afterward. Its Spearman correlation is nearly unchanged:
+0.00354 and0.00342. Thus Pearson weakening alone does not prove a regime
+break. MS is also approximately stable, CompEquIss strengthens, and
+InvestPPEInv/RIO_Disp turn negative. Broad claims that all signals became
+worse after2018 are not supported by this matrix.
+
+Each pair uses its own finite observations. MS and RIO_Disp have embedded
+source screens, while RDIPO is a very unbalanced binary indicator. The
+resulting pairwise matrix need not be positive semidefinite and should not
+be fed directly into a portfolio covariance optimizer. Intervals are
+unadjusted descriptive intervals across a post-result chosen cutoff.
+
+Checks:105 independently expressed fixed-share labels matched exactly;
+15,633 overlapping2015 stock-dates matched existing sampled train5 labels
+within float32 rounding (maximum8.13e-8); independent scipy Pearson and
+Spearman calculations matched a displayed MS/return5 date.
+
+Files:groundtruth_signal_correlations.csv (long-form summary),
+groundtruth_signal_correlations_daily.csv,groundtruth_label_audit.csv,
+groundtruth_correlation_definitions.json,groundtruth_correlation_validation.json.

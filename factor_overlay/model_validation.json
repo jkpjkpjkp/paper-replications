@@ -1,0 +1,133 @@
+{
+  "created_by": "independent data/model audit agent",
+  "all_numerical_checks_passed": true,
+  "model_source_sha256": "3e106f8b250454e5cb955308c7ee9da95103652e93d578afb51ba8e831666b23",
+  "checks": {
+    "ols_vs_statsmodels_wls": {
+      "max_abs_coefficient_error": 1.0842021724855044e-18,
+      "passed": true
+    },
+    "lasso_vs_scipy": {
+      "max_abs_coefficient_error": 3.0635555335232437e-09,
+      "max_kkt_violation": 9.590722669977538e-11,
+      "objective": "0.5*weighted_MSE + l1*sum(abs(slopes)) + 0.5*l2*sum(slopes^2)",
+      "l1": 0.0001,
+      "l2": 0,
+      "passed": true
+    },
+    "elastic_net_vs_scipy": {
+      "max_abs_coefficient_error": 8.159429535969714e-10,
+      "max_kkt_violation": 2.9250879222584257e-10,
+      "objective": "0.5*weighted_MSE + l1*sum(abs(slopes)) + 0.5*l2*sum(slopes^2)",
+      "l1": 5e-05,
+      "l2": 0.02,
+      "passed": true
+    },
+    "huber_vs_scipy": {
+      "max_abs_coefficient_error": 7.756671653586086e-10,
+      "fixed_delta": 0.018421580932754776,
+      "passed": true
+    },
+    "quadratic_baseline_nested_in_augmented": {
+      "base_parameters": 33,
+      "augmented_parameters": 177,
+      "shared_basis_error": 1.7763568394002505e-14,
+      "passed": true
+    },
+    "preprocessing_training_only": {
+      "imputer_matches_training_medians": true,
+      "future_predict_leaves_all_fitted_arrays_unchanged": true,
+      "caller_run_py_review": "fit_all uses year-10 <= training_year < prediction_year and asserts maximum training_year < prediction_year; fixed annual models loaded for evaluate",
+      "passed": true
+    },
+    "variance_formula_and_calibration": {
+      "calibration": 3.770734807756562,
+      "mean_before_shrink": 0.0001995503322841359,
+      "training_residual_mean_square": 0.0001995503322841359,
+      "prediction_variance_error": 2.168404344971009e-19,
+      "passed": true
+    },
+    "raw_tail_residual_guard": {
+      "mean_coefficients_unchanged_by_equivalent_clip": true,
+      "variance_beta_matches_raw_residuals_error": 6.938893903907228e-17,
+      "variance_calibration_matches_raw_residuals": true,
+      "raw_tail_mean_predicted_variance": 0.000512009570176891,
+      "capped_tail_mean_predicted_variance": 0.0004688229202984699,
+      "passed": true
+    }
+  },
+  "synthetic_model_audits": [
+    {
+      "method": "ols",
+      "n_train": 1200,
+      "n_parameters": 8,
+      "iterations": 1,
+      "converged": true,
+      "coefficient_max": 0.0011629067640270046,
+      "variance_calibration": 3.765036148396562
+    },
+    {
+      "method": "ridge",
+      "n_train": 1200,
+      "n_parameters": 8,
+      "iterations": 1,
+      "converged": true,
+      "coefficient_max": 0.0010540088551888602,
+      "variance_calibration": 3.770734807756562
+    },
+    {
+      "method": "lasso",
+      "n_train": 1200,
+      "n_parameters": 8,
+      "iterations": 4,
+      "converged": true,
+      "coefficient_max": 0.0010557771647310456,
+      "variance_calibration": 3.7683374736055044
+    },
+    {
+      "method": "elastic_net",
+      "n_train": 1200,
+      "n_parameters": 8,
+      "iterations": 4,
+      "converged": true,
+      "coefficient_max": 0.0010873414396617084,
+      "variance_calibration": 3.764828877049193
+    },
+    {
+      "method": "huber",
+      "n_train": 1200,
+      "n_parameters": 8,
+      "iterations": 7,
+      "converged": true,
+      "coefficient_max": 0.0009226996760910435,
+      "variance_calibration": 3.7646579434737775
+    },
+    {
+      "method": "quadratic_ridge",
+      "n_train": 1200,
+      "n_parameters": 33,
+      "iterations": 1,
+      "converged": true,
+      "coefficient_max": 0.0010773157325500782,
+      "variance_calibration": 3.7224204051861665
+    }
+  ],
+  "limitations": [
+    "Models are predictive estimators; these checks do not establish investment alpha.",
+    "Diagonal conditional variance does not model cross-stock covariance.",
+    "Variance calibration is deliberately bounded0.1..20; shrinkage and final bounds mean final forecasts need not exactly match training residual variance.",
+    "OLS uses normalized weighted normal equations with SVD tolerance1e-10, so nearly singular columns may be dropped.",
+    "The optimizer scales one-day conditional mean/variance by five for weekly positions; persistence and zero serial covariance are approximations, not separately learned five-day forecasts."
+  ],
+  "variance_tail_note": "Confirmed final models.py retains raw uncapped training returns for variance residuals; only mean-regression fitting labels are capped.",
+  "actual_fit_audit": {
+    "records": 1512,
+    "expected_for_complete_study": 1512,
+    "all_converged": true,
+    "all_training_windows_strictly_precede_prediction_year": true,
+    "min_training_rows": 17331,
+    "max_training_rows": 30240,
+    "variance_calibration_min": 5.562630693522,
+    "variance_calibration_max": 7.638779117760053
+  }
+}

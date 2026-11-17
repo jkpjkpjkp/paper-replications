@@ -1,0 +1,76 @@
+Verified primary sources for the announcement-cycle overlay study
+Checked 2026-11-02. This is a methods/source note, not a replication of any
+paper's reported returns. Live master code may differ from the frozen 2026.10
+input release; the local download receipts and SignalDoc hash define our data.
+
+1. Open Source Asset Pricing: SignalDoc
+https://raw.githubusercontent.com/OpenSourceAP/CrossSection/master/SignalDoc.csv
+Primary dataset documentation. Local frozen copy:
+/home/jkp/Téléchargements/Chen_Zimmermann_Factor_Zoo_2026_10/SignalDoc.csv
+Verified signs: MS +1; CompEquIss -1; InvestPPEInv -1; Cash +1;
+RIO_Disp +1; RDIPO -1. Publication years: 2005, 2006, 2008, 2012,
+2005, 2006 respectively. CompEquIss measures five-year equity-value growth
+minus stock return; InvestPPEInv measures changes in equipment and inventory
+over lagged assets; Cash is quarterly cash/short-term investments over assets;
+RIO_Disp is lagged institutional-ownership rank within high disagreement.
+The Return field is a collected original-paper statistic, with different
+portfolio/regression conventions by row; it is not a common net-cost return.
+
+2. Open Source Asset Pricing: FAQ
+https://www.openassetpricing.com/faq/
+Verified directly. Monthly predictor dates are month-end information and
+predict subsequent returns. The FAQ explains conservative accounting lags,
+why some predictor dates extend into the future, the importance of portfolio
+construction, and difficulties with tied/discrete characteristics. Therefore
+we use the exact previous calendar month's snapshot and do not forward-fill
+absent snapshots. Source construction lags do not establish a complete
+point-in-time restatement audit.
+
+3. OpenSourceAP MS implementation
+https://raw.githubusercontent.com/OpenSourceAP/CrossSection/master/Signals/pyCode/Predictors/MS.py
+Verified directly through Chrome. The construction restricts to the lowest
+book-to-market quintile, builds eight indicators, and clips the final score
+to 1 through 6. Its comments explicitly discuss difficult mixed-frequency
+timing and reproduction details. Our factor baseline uses these available
+characteristics rather than claiming exact original-paper replication.
+
+4. OpenSourceAP RDIPO implementation
+https://raw.githubusercontent.com/OpenSourceAP/CrossSection/master/Signals/pyCode/Predictors/RDIPO.py
+Verified directly through Chrome. RDIPO equals one for firms more than six
+and at most 36 months after IPO with R&D expense exactly zero; it is zero
+otherwise. Our signed economic comparison shorts raw1 and buys raw0.
+This binary distinction must not be replaced by arbitrary percentile-tie
+splitting. The regular-announcement universe substantially reduces IPO supply.
+
+5. Boyd, Busseti, Diamond, Kahn, Koh, Nystrup and Speth (2017),
+Multi-Period Trading via Convex Optimization
+https://web.stanford.edu/~boyd/papers/cvx_portfolio.html
+Verified author-hosted paper page. Provides an explicit expected-return,
+risk, trading-cost and holding-cost optimization framework. It does not
+provide predictive alpha. Our constrained mean-variance/no-trade-band design
+is a simplified implementation motivated by that framework, not a claim
+that its full multi-period optimizer has been reproduced.
+
+6. Gu, Kelly and Xiu (2020), Empirical Asset Pricing via Machine Learning
+https://doi.org/10.1093/rfs/hhaa009
+Verified original journal search text and NBER working-paper record. Uses
+separate temporally ordered training, validation and testing periods; tuning
+uses validation and is not itself untouched out-of-sample evidence. Motivates
+linear/regularized/nonlinear comparisons with common information sets and
+explicit separation of model fitting, tuning and evaluation. Its reported
+ML performance is not evidence for this announcement-cycle signal.
+
+Interpretation of the user's historical net monthly return ranges
+The supplied 80-100/60-80/etc. basis-point ranges have no specified sample,
+cost model, borrow availability, weighting, exposure or portfolio definition.
+They have not been verified as common after-cost returns and are not inputs,
+targets or promised performance in this study. We estimate all six baselines
+from the same local stock returns, the same available information and the
+same cost scenarios used by their augmented models. Cost scenarios are not
+observed historical implementation costs. Positive raw increments do not
+automatically constitute risk-adjusted or deployable alpha.
+
+Access note
+Chrome-use verified the official repository, data page, MS and RDIPO source.
+The Chrome relay subsequently disconnected; the remaining primary sources
+were verified with the web tool. Browser session cleanup was requested.

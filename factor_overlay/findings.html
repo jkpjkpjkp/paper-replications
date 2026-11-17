@@ -1,0 +1,195 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Announcement overlay: what the correlations reveal</title><style>body{font:16px/1.6 system-ui;color:#193440;max-width:1450px;margin:35px auto;padding:0 25px}h1,h2{line-height:1.2}img{width:100%;height:auto}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:8px;border-bottom:1px solid #d5e2e6;text-align:right}th{background:#eaf2f5}.box{padding:20px;background:#eaf2f5;border-left:5px solid #007f86}a{color:#007580}pre{white-space:pre-wrap;background:#eff4f5;padding:20px}</style></head><body>
+<h1>Announcement-cycle overlays: what the correlations reveal</h1>
+<p class="box">The main problem is weak and unstable incremental return forecasting, followed by extra trading costs—not strongly negative correlation between stock signals. The clock improves conditional variance prediction, but this did not become reliable profitable position sizing. Earlier than2018 looks brighter in some diagnostics, not as a general, statistically supported incremental-alpha regime.</p>
+<p>All results are retrospective. Models use only prior-year data, but related historical results were already examined. The follow-up diagnostics, five-day labels, cost veto and2018 split were introduced after the initial result and are labeled accordingly. No strategy was tuned to win before2018.</p>
+<h2>Do the stock signals agree?</h2><p>The announcement row is close to zero. This rejects strong opposition of stock rankings as the general explanation. N/A for composite issuance versus RDIPO reflects insufficient variation in their overlapping universe; it must not be read as zero. Each pair can have different available stocks, so this descriptive matrix is not a covariance matrix to feed to an optimizer.</p><a href="plots/01_signal_correlation_matrices.png"><img src="plots/01_signal_correlation_matrices.png" alt="Do the stock signals agree?"></a><p><a href="plots/01_signal_correlation_matrices.pdf">Download PDF</a></p><h2>Do they predict actual subsequent returns?</h2><p>Ground truth is the observed next-session or next-five-session stock return, measured after the signal. Correlations are within-date ranks and then averaged across rebalance dates. This removes common market-level movements from the cross-sectional comparison. The signal has a small positive five-day relationship, but many intervals are wide. Earlier results are not uniformly stronger: composite issuance strengthens, while investment and institutional ownership/disagreement weaken. These unadjusted intervals are descriptive.</p><a href="plots/02_signal_vs_ground_truth.png"><img src="plots/02_signal_vs_ground_truth.png" alt="Do they predict actual subsequent returns?"></a><p><a href="plots/02_signal_vs_ground_truth.pdf">Download PDF</a></p><h2>Does the ML model scale the added information correctly?</h2><p>For a fixed ridge model trained on five-day returns, the horizontal axis is the extra forecast from including the clock. The vertical axis is actual five-day signed payoff minus the baseline forecast. Both are centered within date and leg. A well-calibrated addition should follow the dashed diagonal. The noisy, often flat/nonmonotone curves show why larger forecast tilts need not generate larger actual gains. This is a diagnostic of the existing model, not a new parameter search.</p><a href="plots/03_added_forecast_vs_ground_truth.png"><img src="plots/03_added_forecast_vs_ground_truth.png" alt="Does the ML model scale the added information correctly?"></a><p><a href="plots/03_added_forecast_vs_ground_truth.pdf">Download PDF</a></p><h2>Where do gross gains disappear?</h2><p>Each circle is gross incremental P&L on the actual holdings, and its square is after trading and borrow fees. The average spans the six fixed regression families; it is not a selected trading portfolio. Some gross increments are already negative, and fees erode small positive increments. The pre-2018 comparison preserves the same trained model rules and continuous portfolios; no refitting at the cutoff.</p><a href="plots/04_gross_to_net_before_after_2018.png"><img src="plots/04_gross_to_net_before_after_2018.png" alt="Where do gross gains disappear?"></a><p><a href="plots/04_gross_to_net_before_after_2018.pdf">Download PDF</a></p><h2>Does the timing portfolio diversify the factor portfolios?</h2><p>This is return correlation, not stock-score correlation. The fixed timing portfolio uses all eligible names; factor portfolios require their own characteristics. All days, including cash days, are retained. Low or negative return correlation can improve diversification, but does not establish positive expected incremental return from changing individual factor holdings.</p><a href="plots/05_portfolio_return_correlations.png"><img src="plots/05_portfolio_return_correlations.png" alt="Does the timing portfolio diversify the factor portfolios?"></a><p><a href="plots/05_portfolio_return_correlations.pdf">Download PDF</a></p>
+<h2>What the math distinguishes</h2><pre>Signal redundancy: corr(factor score, announcement score)
+Predictive information: corr(score at t, realized future return)
+Added forecasting value: E[future return | baseline features, clock]
+                       − E[future return | baseline features]
+Gross portfolio improvement: E[(w_with_clock − w_without_clock)' r]
+Net improvement: gross improvement − additional trading/borrow costs
+
+Being uncorrelated with an existing signal is not enough.
+The proposed weight change must predict a positive realized payoff.
+Portfolio variance change = 2 Cov(baseline return, incremental return)
+                            + Var(incremental return).</pre>
+<p>In2015–2025, the primary added forecast worsened mean-squared prediction error in34/36 comparisons. Its median within-date/leg rank correlation with actual returns was−0.00318, and all incremental calibration intervals included zero. These figures are noisy and do not prove the true effect is negative. Holding the baseline mean forecast fixed, using the clock-conditioned variance improved risk scores in36/36 comparisons after the stated Holm correction. Variance-only portfolio changes were small; the harmful position changes mostly came from conditional means.</p>
+<h2>Baseline scale: before adding the clock</h2><p>2015–2025, same local universe and weekly execution. 5bp per dollar bought/sold,1% annual short borrow. Target exposure is100% long and100% short, except cash periods. One basis point is0.01%; variance is the square of daily standard deviation. RDIPO is a concentrated sensitivity with at least5 shorts, not a diversified strategy.</p><table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Factor</th>
+      <th>Gross mean (bp/day)</th>
+      <th>Net mean (bp/day)</th>
+      <th>Net variance (bp²/day)</th>
+      <th>Daily standard deviation (bp)</th>
+      <th>Invested fraction</th>
+      <th>Costs (bp/day)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MS</td>
+      <td>1.566</td>
+      <td>0.922</td>
+      <td>1967.063</td>
+      <td>44.352</td>
+      <td>1.000</td>
+      <td>0.644</td>
+    </tr>
+    <tr>
+      <td>CompEquIss</td>
+      <td>1.297</td>
+      <td>0.659</td>
+      <td>2671.366</td>
+      <td>51.685</td>
+      <td>1.000</td>
+      <td>0.638</td>
+    </tr>
+    <tr>
+      <td>InvestPPEInv</td>
+      <td>-0.481</td>
+      <td>-1.084</td>
+      <td>1329.569</td>
+      <td>36.463</td>
+      <td>1.000</td>
+      <td>0.603</td>
+    </tr>
+    <tr>
+      <td>Cash</td>
+      <td>0.658</td>
+      <td>0.012</td>
+      <td>10604.777</td>
+      <td>102.980</td>
+      <td>1.000</td>
+      <td>0.646</td>
+    </tr>
+    <tr>
+      <td>RIO_Disp</td>
+      <td>0.189</td>
+      <td>-0.613</td>
+      <td>5028.917</td>
+      <td>70.915</td>
+      <td>1.000</td>
+      <td>0.802</td>
+    </tr>
+    <tr>
+      <td>RDIPO</td>
+      <td>0.704</td>
+      <td>0.373</td>
+      <td>7710.387</td>
+      <td>87.809</td>
+      <td>0.426</td>
+      <td>0.331</td>
+    </tr>
+  </tbody>
+</table>
+<p>The quoted paper monthly returns are not comparable verified net returns. Source-rank terciles, availability screens, vintages and cost definitions differ. Some local baselines have positive net averages; positive averages alone do not establish statistically reliable profitability.</p>
+<h2>Cost decomposition (2015–2025)</h2><p>Mean across six primary regression families; each gross/net difference uses the identical underlying holdings. Numbers are percentage points per year.</p><table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Factor</th>
+      <th>Gross increment (pp/year)</th>
+      <th>Extra fees (pp/year)</th>
+      <th>Net increment (pp/year)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cash</td>
+      <td>-0.030</td>
+      <td>0.346</td>
+      <td>-0.376</td>
+    </tr>
+    <tr>
+      <td>CompEquIss</td>
+      <td>0.277</td>
+      <td>0.350</td>
+      <td>-0.073</td>
+    </tr>
+    <tr>
+      <td>InvestPPEInv</td>
+      <td>-0.206</td>
+      <td>0.341</td>
+      <td>-0.547</td>
+    </tr>
+    <tr>
+      <td>MS</td>
+      <td>-0.341</td>
+      <td>0.377</td>
+      <td>-0.718</td>
+    </tr>
+    <tr>
+      <td>RDIPO</td>
+      <td>-0.111</td>
+      <td>0.153</td>
+      <td>-0.265</td>
+    </tr>
+    <tr>
+      <td>RIO_Disp</td>
+      <td>-0.279</td>
+      <td>0.269</td>
+      <td>-0.548</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Does pre-2018 rescue the overlay?</h2><table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>period</th>
+      <th>family</th>
+      <th>Positive /36 models</th>
+      <th>Median incremental return (pp/year)</th>
+      <th>Positive significant /108 tests</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2005_2017</td>
+      <td>cost_guard</td>
+      <td>16</td>
+      <td>0.000</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2005_2017</td>
+      <td>h1</td>
+      <td>7</td>
+      <td>-0.249</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2005_2017</td>
+      <td>h5</td>
+      <td>3</td>
+      <td>-0.129</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2018_2025</td>
+      <td>cost_guard</td>
+      <td>15</td>
+      <td>-0.003</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2018_2025</td>
+      <td>h1</td>
+      <td>7</td>
+      <td>-0.402</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2018_2025</td>
+      <td>h5</td>
+      <td>2</td>
+      <td>-0.119</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>There is no positive adjusted incremental success in either period across the72 target-horizon candidates or108 candidates including the cost veto. The standalone original timing strategy has a notably strong2015–2017 interval (+7.20% annual net mean), but−1.97% in2005–2014 and−2.40% in2018–2025; the full2005–2017 average is only+0.146%. The shorter three-year episode does not establish a stable earlier regime.</p>
+<h2>Your cost-reduction rule</h2><p>Implemented a hard veto for all36 directly trained five-day models: execute the announcement target only when its exact trading fee is strictly lower than the no-cycle target from the <b>same current holdings</b>, including exits. Otherwise use the no-cycle target. This accepts only5.42% of active decisions in2015–2025. Seventeen increments are positive; none is significant after correction. The largest observed gain is only3.38bp/year.</p>
+<p>The rule guarantees a cheaper chosen trade at the comparison instant. It does not guarantee lower costs over a separately evolved full baseline path: only3/36 accumulated lower trading fees, and the maximum increase was0.675bp/year. A cumulative fee-budget policy would additionally change execution/exposure and has not been claimed or tested here.</p>
+<h2>Reproducibility and detailed results</h2><p><a href="results/report.html">Primary study and mathematical allocation rule</a> · <a href="results_h5/report.html">Direct five-day sensitivity</a> · <a href="results_cost_guard/performance.csv">Cost-veto results</a> · <a href="diagnostics/groundtruth_signal_correlations.csv">Predictor/ground-truth correlations</a> · <a href="diagnostics/forecast_evidence_notes.txt">Forecast diagnosis</a> · <a href="diagnostics/pre2018_notes.txt">Period comparison and correction details</a> · <a href="sources.txt">Verified sources</a> · <a href="README.txt">Reproduce everything</a></p>
+<p>Daily return costs/holdings, regression algorithms, chronological labels and independent absolute-dollar accounting were validated separately. Borrow availability, impact, financing and source restatements remain unobserved. The allocation controls diagonal tracking risk, not full covariance. All plotted confidence intervals are pointwise; they should not be read as simultaneous confirmation of discovered alpha.</p></body></html>

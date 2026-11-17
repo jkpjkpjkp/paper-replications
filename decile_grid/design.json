@@ -1,0 +1,274 @@
+{
+  "design_version": 1,
+  "study": "Extreme-factor portfolios combined with the earnings announcement cycle",
+  "created_date": "2026-11-02",
+  "status": "Retrospective exploratory research; grid defined before this grid's return evaluation",
+  "paper": {
+    "path": "13699_paper_YrbKK6Zn.pdf",
+    "title": "The Earnings Announcement Return Cycle",
+    "authors": [
+      "Juhani T. Linnainmaa",
+      "Conson Y. Zhang"
+    ],
+    "date": "November 2018",
+    "original_method": "Daily equal-weight long age6..20 trading sessions since earnings, short age36..50; at least five analysts in prior three months; regular prior announcements; quarter-fixed characteristic quintiles.",
+    "page_references_printed": {
+      "sample": 7,
+      "daily_portfolio": 9,
+      "uncertainty_sorts": [
+        20,
+        21
+      ],
+      "baseline_table": 36,
+      "exact_phase_boundaries": 37,
+      "characteristic_tables": [
+        41,
+        42,
+        43
+      ]
+    },
+    "deviations": [
+      "Extreme deciles, independent 2x3 sorts, cosine timing scores and explicit transaction costs are extensions; none is prescribed by the paper.",
+      "The reused panel uses IBES events rather than Compustat rdq, a 180-day active analyst proxy rather than the paper's three months, and regular65 historical session-gap screens rather than the paper's calendar-day gap screens.",
+      "Characteristics are refreshed daily rather than fixed in quarterly paper quintiles. Volatility is lagged63-session total-return SD, not one-year Carhart residual volatility; ADV is a liquidity proxy, not Amihud illiquidity."
+    ]
+  },
+  "input_paths": {
+    "feature_cache": "factor_overlay/data/YYYY.npz",
+    "eligible_and_all_market_panel": "coverage5/results_regular65/panel/YYYY.parquet",
+    "signals": "factor_timing/data/Predictors.parquet",
+    "signal_documentation": "/home/jkp/T\u00e9l\u00e9chargements/Chen_Zimmermann_Factor_Zoo_2026_10/SignalDoc.csv"
+  },
+  "factors": [
+    "MS",
+    "CompEquIss",
+    "InvestPPEInv",
+    "Cash",
+    "RIO_Disp",
+    "RDIPO"
+  ],
+  "publication_years": {
+    "MS": 2005,
+    "CompEquIss": 2006,
+    "InvestPPEInv": 2008,
+    "Cash": 2012,
+    "RIO_Disp": 2005,
+    "RDIPO": 2006
+  },
+  "information_set": {
+    "factor": "Source signal multiplied by documented Sign, average-tie percentile rank in source month/universe; exact prior-calendar-month signal used in following month, no forward fill.",
+    "events": "Only latest economically dated announcement known by prior close; known_idx<idx and event_idx<idx. No realized future announcement dates.",
+    "universe": "Inherited eligible US common-stock regular65 panel, >=5 available analyst proxy in prior180 calendar days; last3 release gaps each50..80 market sessions, median60..70; current age0..80.",
+    "characteristics": "lag_cap, lag_adv and sigma63 available before return day. sigma63 uses previous63 calendar-market sessions, minimum21 observed returns, excluding current day. Cross-sectional ranks use all eligible stocks for that day."
+  },
+  "grid": {
+    "D10": {
+      "factor_long": "rank>0.90",
+      "factor_short": "rank<=0.10",
+      "characteristics": [
+        "none",
+        "size",
+        "adv",
+        "vol"
+      ],
+      "groups": {
+        "none": [
+          "all"
+        ],
+        "size": [
+          "low",
+          "high",
+          "balanced"
+        ],
+        "adv": [
+          "low",
+          "high",
+          "balanced"
+        ],
+        "vol": [
+          "low",
+          "high",
+          "balanced"
+        ]
+      },
+      "weighting": [
+        "EW",
+        "VW"
+      ],
+      "timing": [
+        "baseline",
+        "H_H",
+        "H_L",
+        "L_H",
+        "L_L",
+        "P1_P1",
+        "P1_P2",
+        "P1_P3",
+        "P2_P1",
+        "P2_P2",
+        "P2_P3",
+        "P3_P1",
+        "P3_P2",
+        "P3_P3"
+      ],
+      "count_per_factor": 280
+    },
+    "S30": {
+      "factor_long": "rank>0.70",
+      "factor_short": "rank<=0.30",
+      "characteristics": [
+        "size",
+        "adv",
+        "vol"
+      ],
+      "groups": [
+        "low",
+        "high",
+        "balanced"
+      ],
+      "weighting": [
+        "EW",
+        "VW"
+      ],
+      "timing": [
+        "baseline",
+        "P1_P1",
+        "P1_P2",
+        "P1_P3",
+        "P2_P1",
+        "P2_P2",
+        "P2_P3",
+        "P3_P1",
+        "P3_P2",
+        "P3_P3"
+      ],
+      "count_per_factor": 180
+    },
+    "factor_configs_total": 2760,
+    "timing_only_comparators": [
+      "Fixed paper phase1 long minus phase3 short",
+      "Fixed cosine high decile long minus low decile short"
+    ],
+    "total_configs": 2762,
+    "meaning_2x3": "Independent characteristic halves (low/high) crossed with original-factor low30%, middle40%, high30%. Middle original-factor group supplies breakpoints but is not held. Report low-half spread, high-half spread and equal-half balanced spread. This is an independent 2x3 construction, not exact Fama-French portfolios or NYSE-breakpoint replication.",
+    "coverage": "Exhaustive only over this explicitly finite grid; not all possible factors, phase functions, cutoffs or trading rules."
+  },
+  "timing": {
+    "continuous_score": "cos(2*pi*(age-13)/65)",
+    "score_interpretation": "Hand-chosen smooth extension with peak at paper phase1 midpoint13 and trough45.5, fixed65-session period. Both constants are design choices, not estimated from this grid's returns or supplied by the paper. Cosine is periodic and can repeat near age78 while the inherited universe allows age<=80; periodic score repetition is not an assertion that a new announcement occurred.",
+    "deciles": "Average-tie percentile ranks across eligible stocks each day; H rank>0.90, L rank<=0.10.",
+    "phases": {
+      "P1": [
+        6,
+        20
+      ],
+      "P2": [
+        21,
+        35
+      ],
+      "P3": [
+        36,
+        50
+      ]
+    },
+    "pair_order": "First label gates the original factor long leg; second gates the original factor short leg. Original factor direction is never reversed."
+  },
+  "portfolio": {
+    "characteristic_halves": "Average-tie daily percentile rank<=0.5 low and >0.5 high, computed independently of factor and timing; no splitting equal values.",
+    "ties": "Average-tie ranks retained without random or security-ID tie breaking. Actual tail fractions can differ from10%/30%; discrete factors can lack one tail and remain inactive, including RDIPO. Strict thresholds define tails, not forced equal counts. Cached factor ranks are float32, so factor cutpoints use the same float32 representation to preserve endpoint inclusion; newly computed timing/characteristic ranks are float64.",
+    "EW": "Equal weight within eligible cells",
+    "VW": "Weight within eligible cells proportional to positive lagged market capitalization; no per-security weight cap, so minimum name counts do not guarantee diversification.",
+    "exposure": "At daily rebalance target +1 long and -1 short per1 NAV;200% gross. Balanced gives each characteristic half +0.5 long,-0.5 short. Cash if any required leg/cell is underpopulated.",
+    "minimum_names": 5,
+    "minimum_names_sensitivity": 20,
+    "baseline": "Same original-factor quantile, characteristic, half aggregation, weighting, rebalance and minimum counts, with timing gate removed; paired comparison includes every market date, including inactive cash days."
+  },
+  "gross_selection": {
+    "training": [
+      1985,
+      2004
+    ],
+    "required": [
+      "candidate gross mean>0",
+      "candidate minus matched-baseline gross mean>0",
+      "candidate active fraction>=0.50",
+      "baseline active fraction>=0.80"
+    ],
+    "selectors_per_factor_and_sort_family": [
+      "maximum paired gross incremental arithmetic mean",
+      "maximum paired gross incremental HAC20 t-statistic"
+    ],
+    "deduplicate": true,
+    "freeze": "Store selected model IDs from training only before exact later-period selected evaluation. Do not optimize selection against net costs or later returns.",
+    "no_passing_candidate": "Report no selection; do not relax eligibility to force a winner.",
+    "primary_selector": "Maximum training paired HAC20 t-statistic across all eligible factor/sort configurations."
+  },
+  "evaluation": {
+    "periods": {
+      "development": [
+        1985,
+        2004
+      ],
+      "validation": [
+        2005,
+        2014
+      ],
+      "holdout": [
+        2015,
+        2025
+      ],
+      "post2004": [
+        2005,
+        2025
+      ],
+      "post2018": [
+        2019,
+        2025
+      ],
+      "all": [
+        1985,
+        2025
+      ]
+    },
+    "gross_grid": "Report all model means and paired incremental means; later-period all-grid winners are descriptive ex-post results, not independently validated selections.",
+    "inference": "HAC20 inference on daily paired differences, with correction over all tested non-baseline grid comparisons within each reported period; distinguish this from corrections over frozen selected comparisons. Neither correction covers earlier related research.",
+    "performance": "Annual arithmetic mean=252*mean daily return; CAGR and Sharpe reported separately when calculated. Incremental mean compares model and matched baseline, not causal alpha.",
+    "chronological_status": "All six factors were published after2004, paper dated2018, and related holdouts already inspected. Date-separated evaluation is retrospective, not pristine out-of-sample or prospective evidence.",
+    "expost_cost_extension": "After full-grid evaluation, also simulate2015-2025 per-factor/family maximum paired gross uplift and maximum paired gross HAC20 t candidates identified on that same2015-2025 sample, using unchanged five cost scenarios. These are explicitly ex-post descriptive candidates; frozen.json remains unchanged and outputs have expost_exact prefix. These ex-post selectors require current-period candidate activity>=50% and baseline activity>=80%, not positive returns or training eligibility."
+  },
+  "cost_evaluation": {
+    "one_way_bps": [
+      0,
+      1,
+      5,
+      10,
+      25
+    ],
+    "annual_short_borrow_rate": {
+      "0": 0.0,
+      "1": 0.01,
+      "5": 0.01,
+      "10": 0.01,
+      "25": 0.01
+    },
+    "trade_measure": "All dollars bought or sold divided by prior NAV; no half-turnover convention.",
+    "accounting": "Separate self-financing NAV and holdings path for each model and cost scenario; fees reduce investable capital; held-share price drift and cash dividends explicitly retained.",
+    "initial_and_terminal": "Open from cash at simulation start, charge initial trades and terminal liquidation at each simulation endpoint.",
+    "missing": "Observed rows with missing returns earn zero and are counted; disappearing held securities close at last observed mark and pay scenario cost.",
+    "unmodeled": [
+      "market impact",
+      "stock-specific borrow availability and rates",
+      "financing and collateral rebates",
+      "cash interest",
+      "measured historical bid-ask spreads"
+    ],
+    "interpretation": "Cost scenarios are assumptions, not measured historical implementability. A positive net strategy return and positive net uplift versus baseline are separate tests."
+  },
+  "validation": [
+    "Scalar reference reconstruction of full weight matrices on two actual days",
+    "Independent absolute-dollar ledger versus vectorized self-financing ledger",
+    "Chronology and finite-weight checks",
+    "Train-only selector eligibility and baseline pairing",
+    "No-split ties and balanced exposure checks"
+  ]
+}

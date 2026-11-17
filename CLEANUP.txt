@@ -1,0 +1,75 @@
+INTERMEDIATE-DATA CLEANUP -- 2026-11-03
+
+Removed 494 generated files totaling 17.327 GiB, plus 15 empty directories.
+This workspace has no Git metadata. Deleted data must be regenerated from the
+retained scripts and source inputs; it cannot be restored with git checkout.
+
+Removed groups (GiB is the sum of file sizes):
+  0.878  results/panel/YYYY.parquet (41 files; market_YYYY.parquet retained)
+  1.270  combinations/results/features/*.parquet (41)
+  2.637  coverage5/results/panel/*.parquet (41)
+  2.859  coverage5/results_regular65/panel/*.parquet (41)
+  1.389  factor_timing/data/ranks_finite_*.npz (43)
+  6.053  factor_timing/horizon_data/*.{npz,parquet} (114)
+  1.689  factor_timing/horizon_oracle_data/*.{npz,parquet} (32)
+  0.511  factor_overlay/data/*.npz (43; annual features and train/train5)
+  0.039  coverage5/exploration/results/leg_cache.npz (1)
+  <0.01  factor_overlay/superseded_fits/*.{json,pkl} (10)
+  <0.01  project *.log (58, excluding .venv)
+  <0.01  project __pycache__ and .mpl-cache files (29, excluding .venv)
+
+Retained: all Python source and dependency files, the reference paper, HTML
+reports and plots, result tables and saved simulation arrays, frozen designs
+and choices, audit/validation records, active fits/fits_h5, and .venv.
+factor_timing/data/Predictors.parquet and its metadata/download receipt remain.
+Linked events, trading calendars, coverage states and market-return panels
+also remain. External CRSP, IBES and SignalDoc source files were untouched.
+
+.gitignore now excludes the removed intermediate paths and runtime artifacts.
+It does not ignore final research outputs or the raw factor dataset.
+
+REBUILD ORDER
+
+Run from /home/jkp/data/earnings-timing. Rebuild only the branches needed.
+The analysis commands below can also regenerate their reports and statistics.
+Do not assume the removed caches are available for validation or further runs.
+No research/backtest was rerun as part of this cleanup.
+
+First rebuild the base panel:
+  .venv/bin/python analyze.py
+
+For the combinations feature panel, after the base panel:
+  .venv/bin/python combinations/combine.py
+
+For the analyst-coverage and regular-65 panels, in this order:
+  .venv/bin/python coverage5/analyze.py
+  .venv/bin/python coverage5/analyze_regular65.py
+
+After the regular-65 panel, rebuild the exploration leg cache if needed:
+  .venv/bin/python coverage5/exploration/explore.py prepare
+
+For factor branches, set these environment variables first:
+  export OPENBLAS_NUM_THREADS=1
+  export OMP_NUM_THREADS=1
+
+After the regular-65 panel, rebuild factor ranks and horizon caches in order:
+  .venv/bin/python factor_timing/research.py prepare
+  .venv/bin/python factor_timing/horizons.py prepare
+  .venv/bin/python factor_timing/horizon_oracle.py prepare
+The final command is needed only for the realized-date oracle diagnostic.
+
+For overlay features and training labels, after the regular-65 panel:
+  .venv/bin/python factor_overlay/data.py
+  .venv/bin/python factor_overlay/horizon_labels.py
+
+Source requirements include the sibling CRSP/IBES directories described in
+README.txt, retained Predictors.parquet, and the SignalDoc.csv path configured
+in factor_timing/research.py and factor_overlay/data.py. These source locations
+were present at cleanup time. Refer to each study's README for its subsequent
+analysis and validation commands. Superseded fits need not be rebuilt.
+
+REPORT LINK BASELINE
+
+Before cleanup, 84 of 85 local HTML resource links resolved. The existing
+factor_overlay/results_h5/report.html link to portfolio_validation.json was
+already missing. No removed file was a target of a working report link.

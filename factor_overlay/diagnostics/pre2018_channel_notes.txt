@@ -1,0 +1,22 @@
+USER-SPECIFIED REGIME SPLIT: 2005–2017 / 2018–2025
+
+No new model fits or simulations. This is an exploratory split after prior results were inspected.
+pre2018_channels.csv is the ORIGINAL ONE-DAY ridge mean/risk ablation, with unchanged five-session execution. It is not the direct-five-day experiment.
+Positive gross increment means the extra positions earned more before fees/borrow; positive extra_fees means added cost. Net = gross - extra_fees - extra_borrow.
+pre2018_weight_diagnostics.csv averages each active rebalance/leg equally. The allocator no-trade fraction is at target-weight level, before common post-fee NAV scaling.
+pre2018_guard_acceptance.csv uses DIRECT-FIVE-DAY fits. Its local savings compare candidate targets starting from identical guard holdings; they do not equal cumulative savings versus a separately evolved baseline.
+Variance-only input attribution is not causal: each variance model was trained using its own corresponding mean residuals; nonlinear allocation creates an interaction.
+
+   period       factor  net_increment_bp_year  gross_increment_bp_year  extra_fees_bp_year
+2005-2017           MS             -78.502145               -42.187221           36.313680
+2005-2017   CompEquIss             -27.674148                 3.616466           31.294513
+2005-2017 InvestPPEInv             -27.195416                 8.926498           36.124985
+2005-2017         Cash             -35.369803                 0.412655           35.785471
+2005-2017     RIO_Disp             -17.783627                 7.896956           25.687430
+2005-2017        RDIPO              13.097693                30.745578           17.655126
+2018-2025           MS             -57.134286               -26.004762           31.128136
+2018-2025   CompEquIss              15.882032                44.745248           28.872901
+2018-2025 InvestPPEInv             -57.994043               -29.872101           28.118993
+2018-2025         Cash             -39.428192                -6.396035           33.029299
+2018-2025     RIO_Disp             -72.885733               -52.165522           20.711612
+2018-2025        RDIPO             -39.438535               -29.707812            9.720126

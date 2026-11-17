@@ -1,0 +1,96 @@
+EARNINGS-CYCLE RETURN CONSTRUCTION (final primary, 2026-11-03)
+
+PRIMARY DELIVERABLES
+  build_paper_factor.py: independent fixed EARC rebuild; no old search rerun.
+  paper_factor_daily.csv: 30,990 rows =10,330 sessions x3 scenarios,
+    1985-01-02..2025-12-31.
+  paper_factor_audit.json: full definitions, input receipts/fingerprints,
+    chronology, exact execution, bisection checks, concentration and summaries.
+
+Run from earnings-timing:
+  OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python \
+    rolling_sharpe5/build_paper_factor.py
+  --event-source compustat is the default; --event-source ibes writes *_ibes.
+
+PRIMARY EVENT SOURCE
+  ../compustat/ccm/quarterly_announcements_crsp_daily.parquet.
+  Compustat fundq RDQ with official historical CCM LC/LU and P/C links, which
+  matches the paper's announcement source. Existing join_validation.complete
+  must be true. Standard INDL/STD/D/C rows; first chronological RDQ per
+  permno/datadate; distinct permno/RDQ; if nontrading RDQs map same session,
+  retain latest date. No accounting values or event-day returns enter signal.
+  Historical CRSP CUSIP at event supplies analyst-coverage join identity.
+  RDQ has no historical activation/version field. It is tradable only strictly
+  after its mapped market event session (one-session conservative lag).
+
+FIXED PAPER RULE
+  At latest known announcement, current+3 preceding observed earnings dates
+  within400 calendar days and latest gap70..110 calendar days. Counting current
+  among four is a disclosed convention for the paper's ambiguous prior400day
+  wording. No old extra median-gap or regular65 trading-session gate.
+  Require>=5 distinct analysts at event using retained n90 annualUS FY1/FY2 EPS
+  active-update counts frozen at event. 90calendar days approximates3months.
+  Updates have conservative announcement/activation availability lags. No
+  realized future announcement or EPS value enters signal.
+  Long known event age6..20 trading sessions; short36..50 inclusive. Daily
+  equal weights; $1 each leg per $1 after-cost NAV,200%gross. Both legs must be
+  nonempty; no extra20-name safeguard. All10,330 days active in final primary.
+  Lagged US ordinarycommon shares NYSE/AMEX/Nasdaq, regular-way active and
+  positive lagged price/cap. No additional size/price/liquidity threshold.
+
+COST AND OUTPUT SCHEMA
+  date,scenario,returns,before_fee,turnover,cost,borrow,n_long,n_short,active,
+  missing_held_returns,absent_exits.
+  gross: no costs/borrow.
+  5bps: EXACT0.0005 per dollar bought/sold, no borrow (user primary).
+  5bps_1pct_borrow: same5bps plus1%annual short borrow sensitivity.
+  All scenarios independently evolve holdings/NAV; solves after-cost size.
+  Total returns determine P&L; ex-dividend returns drift positions; dividends
+  stay cash. Missing held returns become0; absentnames exit at last mark.
+  No terminal liquidation, financing, collateral interest, measured impact or
+  stock-specific borrow availability. Fee identity exactlycost=.0005turnover.
+
+FINAL PRIMARY SUMMARY (annual arithmetic mean, not CAGR)
+  Sample       gross       exact5bp      annual5bpfee     5bpSharpe
+  1985-2025    6.9969%      0.3404%       6.6545%          0.0390
+  2005-2025    3.7830%     -3.1094%       6.8912%         -0.3239
+  2015-2025    4.6210%     -2.4550%       7.0743%         -0.2196
+  These are standalone summaries; parent rolling-factor analysis evaluates
+  pool-adjusted alpha separately.
+
+VALIDATION
+  All sessions present exactly once/scenario; raw keys unique; no ret/retx<-1.
+  Signal known_idx<returnidx, coverage_state_idx<=eventidx, no future selectors.
+  41 first-session ledgers independently bisection-checked, maxerror2.22e-16.
+  Maxcostsolvererror1.11e-16; maxaccountingerror4.99e-18.
+  44 missing-held observations and724 absentexits per scenario.
+  2025 minlong/minshort12, medianlong112/short109.5; no1name concentration.
+  Raw CRSP receipts checked for completion, row counts and byte sizes; existing
+  raw hash audits reused. Small event/coverage inputs and Compustat merged
+  input fingerprinted. Historical revisions/CCM linkage are retrospective;
+  strategy construction is chronological, not prospective untouched evidence.
+
+SENSITIVITY ARCHIVES
+  paper_factor_daily_ibes.csv / paper_factor_audit_ibes.json:
+    same current+3/90day/fixedrule/exactcost, but IBES act_epsus anndats and
+    conservative maxannouncement/activation availability. Bothlegsnonempty.
+    Exact5bp annual2005-2025 -2.7818%;2015-2025 -2.6794%.
+  paper_factor_daily_min20.csv / paper_factor_audit_min20.json:
+    earlier IBES run with at least20 eachleg (local safeguard, notpaper rule).
+    This sidelines some dates and is NOT primary. Exact5bp annual2005-2025
+    -2.4257%;2015-2025 -1.9994%.
+
+PRIOR FILE AUDIT
+  coverage5/results/daily_returns.csv known_cycle has daily180daycoverage and
+  extra median-gap gate; its5bps includes1%borrow. regular65 adds50..80 trading
+  gaps/median60..70/currentage<=80; also differs frompaper. Mainresults/cycle
+  lacks analystfilter and addsliquidityfilters, using gross-path costapprox.
+  gross_reproduction lacks turnover. None is used for finalprimary returns.
+  Original results and code remain unchanged. Removed signalcaches need not
+  be restored: fresh pipeline reads rawreturns and retained analyststates.
+
+Independent paper-agent review of FINAL Compustat/min1: event session mapping
+12,974 RDQ/session combinations including1,895 non-sameday pairs,0errors;
+20,286 historical2025 eventCUSIPs match rawCRSP,0errors;250daily2025 gross
+returns reconstructed separately,maxdifference2.08e-17;0futurecoverage or
+known_idx>=returnidx violations. Added toprimaryaudit JSON.

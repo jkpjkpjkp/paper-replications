@@ -1,0 +1,89 @@
+{
+  "independent_manual_hac_checks": [
+    {
+      "period": "1990-2025",
+      "hac_lags": 3,
+      "n": 432,
+      "slope_count": 10,
+      "intercept_columns": 1,
+      "annual_se": 0.015139170248499385,
+      "annual_alpha": 0.004863080936221749,
+      "t": 0.3212250642801104,
+      "p": 0.7481992470000608,
+      "ci_low": -0.024894696042958214,
+      "ci_high": 0.03462085791540171
+    },
+    {
+      "period": "1990-2025",
+      "hac_lags": 6,
+      "n": 432,
+      "slope_count": 10,
+      "intercept_columns": 1,
+      "annual_se": 0.015655285406264586,
+      "annual_alpha": 0.004863080936221749,
+      "t": 0.3106350864913487,
+      "p": 0.7562317818864523,
+      "ci_low": -0.025909179631441112,
+      "ci_high": 0.03563534150388461
+    },
+    {
+      "period": "1990-2025",
+      "hac_lags": 12,
+      "n": 432,
+      "slope_count": 10,
+      "intercept_columns": 1,
+      "annual_se": 0.016312580754331448,
+      "annual_alpha": 0.004863080936221749,
+      "t": 0.298118428313709,
+      "p": 0.7657598480533595,
+      "ci_low": -0.02720116909031947,
+      "ci_high": 0.03692733096276297
+    },
+    {
+      "period": "2005-2025",
+      "hac_lags": 3,
+      "n": 252,
+      "slope_count": 1,
+      "intercept_columns": 1,
+      "annual_se": 0.017747640524966673,
+      "annual_alpha": -0.031134857587448266,
+      "t": -1.754309680976972,
+      "p": 0.08060264534954308,
+      "ci_low": -0.06608880708838627,
+      "ci_high": 0.003819091913489746
+    },
+    {
+      "period": "2005-2025",
+      "hac_lags": 6,
+      "n": 252,
+      "slope_count": 1,
+      "intercept_columns": 1,
+      "annual_se": 0.017061456826233248,
+      "annual_alpha": -0.031134857587448266,
+      "t": -1.8248651275532417,
+      "p": 0.06921471968138466,
+      "ci_low": -0.06473736939613901,
+      "ci_high": 0.002467654221242486
+    },
+    {
+      "period": "2005-2025",
+      "hac_lags": 12,
+      "n": 252,
+      "slope_count": 1,
+      "intercept_columns": 1,
+      "annual_se": 0.01602544617992944,
+      "annual_alpha": -0.031134857587448266,
+      "t": -1.942838735213633,
+      "p": 0.05315833415054935,
+      "ci_low": -0.06269694809267645,
+      "ci_high": 0.0004272329177799315
+    }
+  ],
+  "costed_increment_or_oos_residual_rows_checked": 192,
+  "positive_significant_costed_increment_or_oos_residual_rows": 0,
+  "costed_dynamic_alpha_rows_checked": 96,
+  "positive_significant_costed_dynamic_alpha_rows": 0,
+  "interpretation": "Common-alpha ex-post conditional regression, one separate selected-factor slope per target year, no year intercepts; not out-of-sample tradable hedge weights. Incumbent controls remain gross.",
+  "qualification": "Gross scenarios do have significant positive findings. Absence of significance applies to the specified costed cases; not proof the true effect is zero or discovery-adjusted inference.",
+  "source_sha256": "a61e5affab07617171add5e393cd7a74cb2e9b655451391614ee912b47a6e9a5"
+}

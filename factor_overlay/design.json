@@ -1,0 +1,19 @@
+{
+  "study": "Six requested factors: conditional position sizing with and without an announcement clock",
+  "created_date": "2026-11-02",
+  "evaluation": "Annual walk-forward 2005-2025, each model fit on prior ten calendar years only; fixed families and hyperparameters, no selection using evaluation returns",
+  "periods": {"validation": [2005,2014], "holdout": [2015,2025], "all_oos": [2005,2025]},
+  "factors": ["MS","CompEquIss","InvestPPEInv","Cash","RIO_Disp","RDIPO"],
+  "families": ["ols","ridge","lasso","elastic_net","huber","quadratic_ridge"],
+  "paired_comparison": "Identical model, train rows, noncycle controls, rebalance dates, optimizer and cost scenarios. Only announcement features differ. Plain equal-weight factor also shown.",
+  "base_inputs": "Signed factor rank, lagged Mom12m rank, prior 63-session realized volatility, lag capitalization, dollar volume, price and long/short leg",
+  "cycle_inputs": "Known release age phase harmonics, forecast clock and pre/post flags; interactions with factor rank and long/short leg. No realized future release dates.",
+  "training": "Deterministic max30 stocks per leg per factor each fifth market session; each observed date/leg equally weighted. Signed daily payoff target clipped to +/-20% during estimation only. Training rows ending before evaluation year. Training-fitted medians/means/scales. Predictions capped +/-1% per day.",
+  "variance": "Ridge log residual squared regression, training-calibrated arithmetic variance, 50% shrinkage to lag stock variance; no claim of full covariance optimality",
+  "allocation": "Every fifth session, maximize 5*mu'a - 5*10/2 sum sigma_i^2(a_i-b_i)^2/b_i -c sum|a_i-p_i| separately per leg. b_i=1/n, sum a_i=1, .5b_i<=a_i<=min(1.5b_i,.2). Two legs +1/-1 of after-fee NAV. Holdings drift between rebalances. This is a regularized diagonal-risk tracking optimizer, not an unconstrained Markowitz optimum.",
+  "availability": "Factor and Mom12m exact prior-calendar-month snapshots, strict existing regular-cycle / >=5 analyst coverage universe. Source signal construction inherits vintage/revision limitations.",
+  "minimum_names": "First five factors >=20 names EACH side, RDIPO >=5 each side explicitly concentrated sensitivity; RDIPO raw0 long, raw1 short. Cash if threshold fails on rebalance. No requirement that held names stay eligible between scheduled rebalances.",
+  "costs": "0bp+0borrow diagnostic, 5bp+1% annual borrow primary, 10bp+1% annual borrow stress; each scenario own optimizer/holdings/NAV; all dollars bought/sold charged including terminal liquidation. No impact, financing, rebate, observed stock loan or terminal data corrections.",
+  "inference": "Paired daily net differences with HAC60 CI; Holm over all 36 factor/model pairs per scenario/period. Net positivity also tested with Holm36. Spanning intercept vs paired baseline, local VW market, and Mom12m factor net portfolio; CER gamma3, Sharpe, turnover and monthly HAC3. Joint success requires positive adjusted incremental mean and own net mean. Family scope excludes unrecorded earlier searches.",
+  "interpretation": "Retrospective chronological research; related holdouts previously inspected; all six factor papers published after 2004. User monthly historical net-return ranges are unverified context and are not local baseline returns. No claim of live/untouched OOS or official Fama-French alpha."
+}

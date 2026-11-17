@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "checks": [
+    "independent numpy.corrcoef vs saved CompEquIss cross-sectional score correlation on one2015date",
+    "statsmodels Bartlett HAC60 vs independent calendar-distance HAC on full CompEquIss holdout daily means",
+    "independent four-cell raw-return contrast vs Cash pre5-versus-midcycle interaction"
+  ],
+  "maximum_allowed_difference": 1e-12,
+  "sample_cross_section_correlation": -0.01300794257678205,
+  "dense_daily_HAC60_standard_error": 0.00147339474348474,
+  "Cash_holdout_interaction_bps_per_day": 8.031185438661357
+}

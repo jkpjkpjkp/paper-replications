@@ -1,0 +1,13 @@
+{
+  "dates_match_actual_baseline": true,
+  "return_cost_decomposition_max_abs_error": 0.0,
+  "independent_Cash_correlation_error": 1.3877787807814457e-16,
+  "holdout_timing_net_mean_HAC60": {
+    "n": 2766,
+    "mean": 8.70494717769857e-06,
+    "se": 0.00010890090624157201,
+    "lo": -0.00020473690693954987,
+    "hi": 0.00022214680129494703,
+    "p": 0.9362892944318342
+  }
+}

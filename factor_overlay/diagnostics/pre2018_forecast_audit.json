@@ -1,0 +1,16 @@
+{
+  "status": "post-result requested date split of saved forecasts; no refitting or selection",
+  "periods": [
+    "2005-2017 inclusive",
+    "2018-2025 inclusive"
+  ],
+  "models": "primary annual one-day-trained models for both evaluation horizons",
+  "horizon1": "signed next-day stock payoff",
+  "horizon5": "signed exact five-session fixed-share gross payoff divided by5; these are primary forecasts, not horizon-matched-model forecasts",
+  "factor_summary": "equal arithmetic mean across six regression methods; correlations are averaged, not the correlation of an ensemble forecast",
+  "dates": "date is actual first return/forecast-evaluation trading date; idx is original market session index; sampled every fifth market session. Five-day labels run date session through idx+4 and exclude source-year boundaries.",
+  "sign_conventions": "positive relative_mse_improvement means lower forecast MSE with the cycle; positive variance_score_improvement means better variance scoring with baseline mean held fixed; positive incremental IC means better ranking by added forecast",
+  "calibration": "mean_method_incremental_calibration averages six joint-projection slopes; pooled_calibration_increment uses the pooled moments instead. Slope0=no added linear direction;1=correct scale. These differ from portfolio returns.",
+  "inference": "HAC12 on equally method-averaged weekly dates. Holm6 for displayed IC/risk tests separately by period/horizon; Holm36 for individual-method calibration separately by period/horizon. Change tests unadjusted diagnostics.",
+  "limitation": "The split is chosen after previous results. Counts across correlated methods are descriptive. RDIPO sparse-short caveat remains. No claim of causal change at2018."
+}

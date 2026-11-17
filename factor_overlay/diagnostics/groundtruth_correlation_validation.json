@@ -1,0 +1,8 @@
+{
+  "independent_existing_train5_label_overlap_rows": 15633,
+  "max_float32_label_difference": 8.129441542159555e-08,
+  "independent_scipy_pearson_difference": 2.7755575615628914e-17,
+  "independent_scipy_spearman_difference": 0.0,
+  "scalar_fixed_share_label_checks": 105,
+  "scalar_max_difference": 0.0
+}

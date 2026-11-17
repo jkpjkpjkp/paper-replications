@@ -1,0 +1,79 @@
+These are post-result diagnostics, not another alpha search.
+
+Correlation answers a different question from incremental profitability.
+Negative factor/clock score correlation means their stock rankings oppose one
+another; zero correlation means little alignment. Neither alone determines
+whether a timing-conditioned long/short factor improves net returns. Likewise,
+negative factor/timing portfolio return covariance can aid diversification but
+does not show that within-factor timing tilts have a positive conditional mean.
+
+Each score correlation is cross-sectional within one date. Summaries average
+those correlations across dates with trading-date HAC uncertainty. Return
+correlations use daily equal-weight GROSS diagnostic spreads on the same finite
+factor universe and common active dates, not the weekly costed strategy ledger.
+
+Phase comparisons use the audited five-session fixed-share labels. Each cell
+first averages its sampled stocks, then dates are equally weighted. Raw short
+returns describe underlying stocks; signed short payoffs have the opposite sign.
+If preannouncement raw returns rise equally for both factor legs, the common
+drift cancels in long minus short. The interaction table directly estimates the
+difference between those leg-specific phase shifts on the SAME dates. It also
+reports the common raw-return shift. Sparse cells, changing names and conditional
+sample selection make these descriptive, not causal treatment effects.
+
+All phase/interaction intervals are unadjusted descriptive intervals. The five-
+session labels are sampled and not the full investment universe. These data
+cannot establish an economic mechanism uniquely or repair prior sample search.
+
+Reproduce: OPENBLAS_NUM_THREADS=1 .venv/bin/python factor_overlay/diagnose_correlations.py
+Definitions: correlation_definitions.json. Primary source provenance:
+../sources.txt and ../data/train5_audit.json.
+
+Observed findings
+The fixed timing score and factor stock rankings have correlations very close
+to zero in both periods (absolute mean Pearson correlation below0.007).
+The data do not support strong negative stock-score alignment as an explanation.
+Gross diagnostic portfolio return correlations have mixed signs, a different
+object from stock-score correlation; they are particularly support-sensitive
+for RIO_Disp and MS. Negative covariance is not conditional return amplification.
+
+The pre1..5 versus pre21..40 factor-strength interaction is imprecise for every
+factor in both periods: all displayed95% intervals span zero. CompEquIss and
+RIO_Disp change interaction sign, as does sparse RDIPO. Thus the observed
+phase differences do not identify stable factor amplification. They also do
+not establish equal cancellation as the unique explanation: common raw drift
+and long-minus-short interaction are both estimated noisily.
+
+Mean daily cross-sectional Pearson score correlation:
+period        2005_2014  2015_2025
+factor                            
+MS             0.000615  -0.003108
+CompEquIss    -0.001033  -0.000831
+InvestPPEInv   0.001060   0.003505
+Cash           0.001048   0.006772
+RIO_Disp       0.001977   0.005812
+RDIPO          0.000908   0.002641
+
+2015–2025 gross diagnostic return correlation:
+      factor  n_joint  fraction_joint  correlation  corr_ci_low  corr_ci_high
+          MS      356        0.128706     0.182267     0.030914      0.333620
+  CompEquIss     1004        0.362979    -0.170021    -0.258530     -0.081512
+InvestPPEInv     1007        0.364064     0.004882    -0.073354      0.083117
+        Cash     1144        0.413594    -0.226813    -0.304348     -0.149278
+    RIO_Disp      172        0.062184    -0.414876    -0.685811     -0.143942
+       RDIPO      521        0.188359     0.144285     0.042835      0.245736
+
+Five-day-label preannouncement factor interaction (basis points/day):
+   period       factor   n  mean_bps_day  ci_low_bps_day  ci_high_bps_day
+2005_2014         Cash 119     10.699093      -14.158941        35.557127
+2005_2014   CompEquIss 115     15.671652      -12.735612        44.078917
+2005_2014 InvestPPEInv 133    -27.356103      -60.365004         5.652797
+2005_2014           MS 127     17.677032       -8.049881        43.403946
+2005_2014        RDIPO  17    -12.429295      -85.686555        60.827965
+2005_2014     RIO_Disp 110      7.960256      -33.596930        49.517442
+2015_2025         Cash 110      8.031185      -19.845211        35.907582
+2015_2025   CompEquIss 112    -18.707930      -52.494377        15.078516
+2015_2025 InvestPPEInv 125    -15.351209      -39.662787         8.960369
+2015_2025           MS 144      5.947053      -17.017452        28.911559
+2015_2025        RDIPO  18     11.211466      -83.675825       106.098757
+2015_2025     RIO_Disp 102    -23.677944      -61.003094        13.647207

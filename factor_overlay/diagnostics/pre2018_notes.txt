@@ -1,0 +1,54 @@
+Pre-2018 follow-up: descriptive splits of already computed portfolios.
+No model was refitted, no signal changed, and no strategy selected for these
+subperiods. The2018cutoff was requested after looking at results; it is not a
+prospectively specified structural-break hypothesis or new untouched holdout.
+The shorter2015–2017period has only3years and much wider uncertainty.
+
+Primary comparison is enhanced-minus-ITS-MATCHED-baseline net daily return,
+not enhanced raw return or the market's return. Each period has36 models in
+each of h1,h5,cost_guard. Holm72 corrects the two target-horizon families;
+Holm108 additionally includes costguard. Corrections are per reported period
+and net/gross statistic, not over all prior analyses or all imaginable cutoffs.
+Joint profitability uses p_joint=max(two-sided p_increment,two-sided p_own),
+then Holm adjustment and positive estimates for both. Daily HAC60 is used;
+stock-level observations are not treated as independent evidence.
+
+Gross refers to P&L on the actual5bp-scenario holdings before that day's
+fee/borrow deductions, not a separately optimized zero-cost portfolio.
+Portfolios remain continuous across2017/2018; no artificial exit/reentry cost
+is inserted at the split. Only the original end-of2025terminal liquidation
+appears. The change table estimates post-minus-pre incremental mean using
+the SAME strategy and HAC60 regression on a fixed2018indicator. It does not
+compare the best strategy chosen separately in each period.
+
+Original-clock timing uses all eligible names, whereas factor baselines need
+their own characteristics. Its moments are contextual, not a matched ablation.
+All units in CSV are decimal returns unless explicitly named otherwise.
+
+Reproduce: OPENBLAS_NUM_THREADS=1 .venv/bin/python factor_overlay/pre2018.py
+
+Net incremental summary (each row contains the full36model family):
+   period     family series  n_days  n_models  positive_increments  positive_significant72  positive_significant108  joint_success108  median_increment  mean_increment  min_increment  max_increment  median_own_return  median_delta_fee
+2005_2014 cost_guard    net    2517        36                   15                       0                        0                 0          0.000000       -0.000006      -0.000509       0.000305           0.017267          0.000004
+2005_2014         h1    net    2517        36                    7                       0                        0                 0         -0.002230       -0.001777      -0.007992       0.005197           0.015508          0.002910
+2005_2014         h5    net    2517        36                    2                       0                        0                 0         -0.001347       -0.001289      -0.004007       0.003541           0.018399          0.001312
+2005_2017 cost_guard    net    3272        36                   16                       0                        0                 0          0.000000       -0.000002      -0.000542       0.000218           0.006968          0.000008
+2005_2017         h1    net    3272        36                    7                       0                        0                 0         -0.002488       -0.002632      -0.008418       0.004219           0.003691          0.002926
+2005_2017         h5    net    3272        36                    3                       0                        0                 0         -0.001291       -0.001214      -0.003892       0.003660           0.004854          0.001343
+2015_2017 cost_guard    net     755        36                   14                       0                        0                 0          0.000000        0.000010      -0.000655       0.000322           0.011835          0.000009
+2015_2017         h1    net     755        36                    6                       0                        0                 0         -0.004920       -0.005485      -0.019558       0.008435           0.007285          0.003253
+2015_2017         h5    net     755        36                    8                       0                        0                 0         -0.001847       -0.000963      -0.005406       0.015577           0.010323          0.001533
+2018_2025 cost_guard    net    2011        36                   15                       0                        0                 0         -0.000030       -0.000058      -0.001129       0.000610           0.009191          0.000009
+2018_2025         h1    net    2011        36                    7                       0                        0                 0         -0.004021       -0.003730      -0.008092       0.004846           0.004869          0.002608
+2018_2025         h5    net    2011        36                    2                       0                        0                 0         -0.001188       -0.001388      -0.004141       0.001527           0.006626          0.000753
+
+Plain baseline net annual means:
+period          2005_2014  2005_2017  2015_2017  2018_2025
+factor                                                    
+Cash             0.020031   0.018853   0.014927  -0.005189
+CompEquIss       0.034270   0.028859   0.010819   0.018796
+InvestPPEInv    -0.024269  -0.012958   0.024752  -0.046861
+MS               0.007297   0.008841   0.013988   0.026707
+RDIPO            0.025884   0.003581  -0.070772   0.039488
+RIO_Disp         0.012523  -0.002894  -0.054289  -0.000860
+original_clock  -0.019702   0.001461   0.072014  -0.024019

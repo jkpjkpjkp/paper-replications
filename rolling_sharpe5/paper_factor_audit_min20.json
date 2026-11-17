@@ -1,0 +1,1293 @@
+{
+  "created_utc": "2026-11-03T03:21:39.862042+00:00",
+  "seconds": 38.62588065900127,
+  "factor": "Fixed EARC long age6..20 / short age36..50 trading sessions after observed announcement",
+  "source_pdf": "/home/jkp/data/earnings-timing/13699_paper_YrbKK6Zn.pdf",
+  "signal": "At prior close latest usable strictly advancing event only; current plus3 previous known earnings in400 calendar days; latest gap70..110 calendar days. No future realized earnings.",
+  "coverage": "At event freeze retained n90 distinct analysts with US FY1/FY2 EPS estimates; n90 state<=event_idx. Estimates conservatively available after max(announcement,activation) with previous-close lag. 90 calendar days approximates paper3months.",
+  "execution": "Lagged CRSP US ordinary common shares NYSE/AMEX/Nasdaq, regular-way active, positive previous price/cap. No additional price/size/liquidity screen. Daily equal-weight $1 long/$1 short after-cost NAV, >=20 each side else cash. All bought/sold dollars charged; separate exact NAV paths. Total returns P&L, ex-dividend value drift; distributions remain cash.",
+  "scenarios": [
+    [
+      "gross",
+      0.0,
+      0.0
+    ],
+    [
+      "5bps",
+      0.0005,
+      0.0
+    ],
+    [
+      "5bps_1pct_borrow",
+      0.0005,
+      0.01
+    ]
+  ],
+  "min_names_per_leg": 20,
+  "deviations": "Retrospective exact-CUSIP event links; incomplete data vintages; conservative delayed information; analyst states are active-update proxy not vendor NUMEST. Paper uses3months and at least four earnings announcement dates over prior400-calendar-day wording; implementation four observed releases including current. Minimum20 names is local execution safeguard. Windows inclusive6..20/36..50. No financing, cash interest, impact, measured borrow availability, terminal liquidation or collateral rebates. Raw CRSP extends2025, so no2026 realized EARC returns.",
+  "event_audit": {
+    "events": 624555,
+    "regular_events": 439816,
+    "qualified_events": 195015,
+    "future_coverage": 0,
+    "future_announcement": 0,
+    "first": "1983-01-20 00:00:00",
+    "last": "2025-12-31 00:00:00",
+    "source": "I/B/E/S act_epsus anndats with retrospective CUSIP links",
+    "path": "/home/jkp/data/earnings-timing/results/linked_events.parquet"
+  },
+  "input_small_fingerprints": [
+    {
+      "path": "/home/jkp/data/earnings-timing/results/linked_events.parquet",
+      "bytes": 20811379,
+      "sha256": "7e0c3665e542a38dd113278e49ed62d990c84a782c0962780eeef70bbd27bfc0"
+    },
+    {
+      "path": "/home/jkp/data/earnings-timing/results/trading_calendar.csv",
+      "bytes": 177412,
+      "sha256": "c37e75d12e547c23bbc9f094c02da780dc00835f63afecff3f27ec44b02637c8"
+    },
+    {
+      "path": "/home/jkp/data/earnings-timing/coverage5/results/coverage_states.parquet",
+      "bytes": 12356864,
+      "sha256": "4735632576831139a4a207bd127e0b453ef07b3897fd3bb86ca51bc1490e95e8"
+    }
+  ],
+  "raw_partitions": [
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1984.parquet",
+      "rows": 1625527,
+      "bytes": 39312251,
+      "receipt_sha256": "738fb29a017382744542b2f9b63fbee9787b7b49fda0edccf5c63a629bc26b0a",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1985.parquet",
+      "rows": 1619007,
+      "bytes": 41528111,
+      "receipt_sha256": "e02e0c11a0f92acf8ad1cba6e5d2229153fbacd86e49a5e5a91b3a43e12014ef",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1986.parquet",
+      "rows": 1668360,
+      "bytes": 44313688,
+      "receipt_sha256": "37d701e98fb9168538f275aec0ce75ff959ff383eac5902ab094f8c629f39d73",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1987.parquet",
+      "rows": 1799267,
+      "bytes": 49173887,
+      "receipt_sha256": "c4d4f84d2367c7ad90b77942bba7fe8ce8a060a2c9d369a7c98a5f35dbd6ec99",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1988.parquet",
+      "rows": 1817685,
+      "bytes": 48023800,
+      "receipt_sha256": "0e9259b98104bfaa7ee9cb6b646d5c6c431327e6e35d06d804ecec7ba0f5bb11",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1989.parquet",
+      "rows": 1761076,
+      "bytes": 46156100,
+      "receipt_sha256": "4aa26b7215485dad634adc840c23fd2f96b5045ca9a466ee4dc92ff3f31c5ab9",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1990.parquet",
+      "rows": 1741478,
+      "bytes": 45498761,
+      "receipt_sha256": "ac6e865ab7e60012cb835481b26db9a2595a20985dd0343a23cbfb368d720131",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1991.parquet",
+      "rows": 1722275,
+      "bytes": 45191145,
+      "receipt_sha256": "00697fe54c44aab193ba119651608db74db1d1e9d0e458d5916d4f8d586b9ae7",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1992.parquet",
+      "rows": 1773930,
+      "bytes": 49979231,
+      "receipt_sha256": "520fa595dcf4f516c537b31cff18b15729ae494025ef0c57502426eea0a6804a",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1993.parquet",
+      "rows": 1874841,
+      "bytes": 59096087,
+      "receipt_sha256": "54fd522a5516ee249264c21627eb5d51f4522aa2376cc8736d006ca58cc2c7db",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1994.parquet",
+      "rows": 2055579,
+      "bytes": 63879990,
+      "receipt_sha256": "8d73d1578f2982119c1ff2a2338c26a5f0e0277b2f970ef491fda135f7829a93",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1995.parquet",
+      "rows": 2114326,
+      "bytes": 66569727,
+      "receipt_sha256": "1c172079e02ef4c4aa9141d3c88a5e9fe413bd0abe1621661e5152cde22da9f0",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1996.parquet",
+      "rows": 2247238,
+      "bytes": 72072271,
+      "receipt_sha256": "6eafdfc103138a5ca7d2a636111f7333a96efc6ef2b11d04204665c2b346956c",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1997.parquet",
+      "rows": 2323064,
+      "bytes": 79241904,
+      "receipt_sha256": "4ec4a60d9b97f91806d29320d737be7d8e4b2d9160bc6e09219f062663190390",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1998.parquet",
+      "rows": 2290345,
+      "bytes": 80453730,
+      "receipt_sha256": "ba1cec806954792f816505de589a6840b526ca978a7473e54558b8475d58d753",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/1999.parquet",
+      "rows": 2178965,
+      "bytes": 77428110,
+      "receipt_sha256": "a1596f3f4cd21cf09bb0e69801e6d3d69735db9c02b67e5d5d8a3dd115a35070",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2000.parquet",
+      "rows": 2135364,
+      "bytes": 79967150,
+      "receipt_sha256": "de842edd61fcad3ebd9b3420e6769e025a723d66c194e10ff1e7aef8363d9066",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2001.parquet",
+      "rows": 1966750,
+      "bytes": 80272606,
+      "receipt_sha256": "cfe03d51092ad56805c9aab36a6aed20063112e8318d4c1c9731bf34c7464f45",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2002.parquet",
+      "rows": 1864775,
+      "bytes": 79530542,
+      "receipt_sha256": "1b1e64dd18e8ff25b82b53c01e1f480a1fb3c156868fbcad2de6683d91cbb6ac",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2003.parquet",
+      "rows": 1767112,
+      "bytes": 74273572,
+      "receipt_sha256": "82fe2df1b1a3f434f0ce007cc98488dc5bff14a068b290d7a0c18d398abd6547",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2004.parquet",
+      "rows": 1738395,
+      "bytes": 74475450,
+      "receipt_sha256": "9305d5a72d45a5e3e7fa7e3a6dbce852fea54e15c095028db1976e32758fa04b",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2005.parquet",
+      "rows": 1740235,
+      "bytes": 75866566,
+      "receipt_sha256": "aa4bd6af2f4cb5b63500d9de23ed7e1d45c55be45540320b17fbeb8bb303b90f",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2006.parquet",
+      "rows": 1737278,
+      "bytes": 76987686,
+      "receipt_sha256": "96eb5ee65b370f5fd37f08deb297766436aa0a1ce9b4318bc5725c901e39608e",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2007.parquet",
+      "rows": 1774208,
+      "bytes": 80341081,
+      "receipt_sha256": "256a0bc62349f58dfbca88923b91689fe811b5758dc41ff421d1132d886bed8f",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2008.parquet",
+      "rows": 1779393,
+      "bytes": 80707686,
+      "receipt_sha256": "ef1135268711a7c77c4d6cfe358fc2e52248b16e7039429a471a1b0192a3a8bb",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2009.parquet",
+      "rows": 1697125,
+      "bytes": 76178882,
+      "receipt_sha256": "ab335532fa5c6e83769d89b7ea17d9608954a147aa5c70b642f0744b6bfb2ebc",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2010.parquet",
+      "rows": 1687536,
+      "bytes": 77047040,
+      "receipt_sha256": "e34bc62996b6f1ac2b577c8ab1397dc1c176c7f6b76427a4d6949b5b867d65fd",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2011.parquet",
+      "rows": 1706875,
+      "bytes": 79005841,
+      "receipt_sha256": "a52eb828a29dfec3023ee292ff40d50cb4262ab5aff56f9c7be4a06fdd7047a0",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2012.parquet",
+      "rows": 1701795,
+      "bytes": 78939614,
+      "receipt_sha256": "c14a24c3d2ab37a980a540d02709ab0a7ba3b82c0973a5953c2cc9ec4f488e7c",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2013.parquet",
+      "rows": 1709728,
+      "bytes": 80574832,
+      "receipt_sha256": "9e9cb80b1dd069e8ca9412f6eb09b094a93d504703ee4aaba49718016c5feb56",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2014.parquet",
+      "rows": 1771529,
+      "bytes": 85217518,
+      "receipt_sha256": "1254553cf244f61dc33d31fc0585524a57a136d33df4babdeae33d36249180a7",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2015.parquet",
+      "rows": 1821381,
+      "bytes": 89406124,
+      "receipt_sha256": "3e94b08bc0616bcf41515b505b5d7aba62126b3f7733e804ad90863fb4f4d47b",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2016.parquet",
+      "rows": 1829837,
+      "bytes": 89607332,
+      "receipt_sha256": "9f32321c1aa187cf4585dae51927503ca6c961a32734a334f8ea063fb1c2c3e8",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2017.parquet",
+      "rows": 1829117,
+      "bytes": 89307903,
+      "receipt_sha256": "3c9fc1152d876de7084a22ae2fb07d381ad1c1f41f98b0f3ddcf50b81f8c05d8",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2018.parquet",
+      "rows": 1870828,
+      "bytes": 93098525,
+      "receipt_sha256": "0c8b9f84f949896fe70834ea50acd5d8ee1c55badcd56e994cc03d32fc8630cc",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2019.parquet",
+      "rows": 1913322,
+      "bytes": 97066886,
+      "receipt_sha256": "68d3c0b2325d77b2cf9efc2ccfd78f937d86f64999923c904f576ea45c337894",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2020.parquet",
+      "rows": 1950357,
+      "bytes": 100425428,
+      "receipt_sha256": "c40a88088c2b340d9f28c4cf78f761a065dfc2b03a6b0e1c0710a1de071c340d",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2021.parquet",
+      "rows": 2188964,
+      "bytes": 112324991,
+      "receipt_sha256": "523f8f7ebb058069750adcf305ce194cbbd32aa2122bc06bf9ec3f17833efc73",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2022.parquet",
+      "rows": 2391799,
+      "bytes": 122518519,
+      "receipt_sha256": "228303bdb935bb86ac887f257632e6c0590f4033f1c1b41d085a28480e71ecd6",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2023.parquet",
+      "rows": 2356072,
+      "bytes": 121614276,
+      "receipt_sha256": "4cdeadf7705212ba501397130193e811b5451ac664ddc0e41e6ac378aa49391d",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2024.parquet",
+      "rows": 2403637,
+      "bytes": 125588814,
+      "receipt_sha256": "a1c5042e6e6cd4a178ec6ba3404db85145dba50ffa5f47ee34f7dc25a1d8d933",
+      "rehash": false
+    },
+    {
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2025.parquet",
+      "rows": 2541801,
+      "bytes": 134645000,
+      "receipt_sha256": "8168b487134f92f91b46e589cade98b85a18e8197c5c992eea2fe1519f742da0",
+      "rehash": false
+    }
+  ],
+  "inherited_audit_references": [
+    "/home/jkp/data/earnings-timing/results/input_audit.json",
+    "/home/jkp/data/earnings-timing/coverage5/results/input_audit.json",
+    "/home/jkp/data/earnings-timing/coverage5/results_regular65/validation_checks.json"
+  ],
+  "years": [
+    {
+      "year": 1985,
+      "raw_stock_days": 1619007,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.9
+    },
+    {
+      "year": 1986,
+      "raw_stock_days": 1668360,
+      "sessions": 253,
+      "active_sessions": 253,
+      "seconds": 0.94
+    },
+    {
+      "year": 1987,
+      "raw_stock_days": 1799267,
+      "sessions": 253,
+      "active_sessions": 253,
+      "seconds": 0.87
+    },
+    {
+      "year": 1988,
+      "raw_stock_days": 1817685,
+      "sessions": 253,
+      "active_sessions": 253,
+      "seconds": 0.83
+    },
+    {
+      "year": 1989,
+      "raw_stock_days": 1761076,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.85
+    },
+    {
+      "year": 1990,
+      "raw_stock_days": 1741478,
+      "sessions": 253,
+      "active_sessions": 253,
+      "seconds": 0.95
+    },
+    {
+      "year": 1991,
+      "raw_stock_days": 1722275,
+      "sessions": 253,
+      "active_sessions": 253,
+      "seconds": 0.94
+    },
+    {
+      "year": 1992,
+      "raw_stock_days": 1773930,
+      "sessions": 254,
+      "active_sessions": 254,
+      "seconds": 0.86
+    },
+    {
+      "year": 1993,
+      "raw_stock_days": 1874841,
+      "sessions": 253,
+      "active_sessions": 253,
+      "seconds": 0.84
+    },
+    {
+      "year": 1994,
+      "raw_stock_days": 2055579,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.92
+    },
+    {
+      "year": 1995,
+      "raw_stock_days": 2114326,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.98
+    },
+    {
+      "year": 1996,
+      "raw_stock_days": 2247238,
+      "sessions": 254,
+      "active_sessions": 254,
+      "seconds": 1.02
+    },
+    {
+      "year": 1997,
+      "raw_stock_days": 2323064,
+      "sessions": 253,
+      "active_sessions": 253,
+      "seconds": 1.06
+    },
+    {
+      "year": 1998,
+      "raw_stock_days": 2290345,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 1.04
+    },
+    {
+      "year": 1999,
+      "raw_stock_days": 2178965,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 1.01
+    },
+    {
+      "year": 2000,
+      "raw_stock_days": 2135364,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 1.0
+    },
+    {
+      "year": 2001,
+      "raw_stock_days": 1966750,
+      "sessions": 248,
+      "active_sessions": 248,
+      "seconds": 0.88
+    },
+    {
+      "year": 2002,
+      "raw_stock_days": 1864775,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.85
+    },
+    {
+      "year": 2003,
+      "raw_stock_days": 1767112,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.86
+    },
+    {
+      "year": 2004,
+      "raw_stock_days": 1738395,
+      "sessions": 252,
+      "active_sessions": 250,
+      "seconds": 0.94
+    },
+    {
+      "year": 2005,
+      "raw_stock_days": 1740235,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.96
+    },
+    {
+      "year": 2006,
+      "raw_stock_days": 1737278,
+      "sessions": 251,
+      "active_sessions": 251,
+      "seconds": 0.88
+    },
+    {
+      "year": 2007,
+      "raw_stock_days": 1774208,
+      "sessions": 251,
+      "active_sessions": 251,
+      "seconds": 0.84
+    },
+    {
+      "year": 2008,
+      "raw_stock_days": 1779393,
+      "sessions": 253,
+      "active_sessions": 253,
+      "seconds": 0.83
+    },
+    {
+      "year": 2009,
+      "raw_stock_days": 1697125,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.93
+    },
+    {
+      "year": 2010,
+      "raw_stock_days": 1687536,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.94
+    },
+    {
+      "year": 2011,
+      "raw_stock_days": 1706875,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.98
+    },
+    {
+      "year": 2012,
+      "raw_stock_days": 1701795,
+      "sessions": 250,
+      "active_sessions": 250,
+      "seconds": 0.92
+    },
+    {
+      "year": 2013,
+      "raw_stock_days": 1709728,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.93
+    },
+    {
+      "year": 2014,
+      "raw_stock_days": 1771529,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.86
+    },
+    {
+      "year": 2015,
+      "raw_stock_days": 1821381,
+      "sessions": 252,
+      "active_sessions": 252,
+      "seconds": 0.86
+    },
+    {
+      "year": 2016,
+      "raw_stock_days": 1829837,
+      "sessions": 252,
+      "active_sessions": 250,
+      "seconds": 0.85
+    },
+    {
+      "year": 2017,
+      "raw_stock_days": 1829117,
+      "sessions": 251,
+      "active_sessions": 251,
+      "seconds": 0.83
+    },
+    {
+      "year": 2018,
+      "raw_stock_days": 1870828,
+      "sessions": 251,
+      "active_sessions": 251,
+      "seconds": 0.84
+    },
+    {
+      "year": 2019,
+      "raw_stock_days": 1913322,
+      "sessions": 252,
+      "active_sessions": 248,
+      "seconds": 0.86
+    },
+    {
+      "year": 2020,
+      "raw_stock_days": 1950357,
+      "sessions": 253,
+      "active_sessions": 225,
+      "seconds": 0.88
+    },
+    {
+      "year": 2021,
+      "raw_stock_days": 2188964,
+      "sessions": 252,
+      "active_sessions": 232,
+      "seconds": 1.01
+    },
+    {
+      "year": 2022,
+      "raw_stock_days": 2391799,
+      "sessions": 251,
+      "active_sessions": 237,
+      "seconds": 1.14
+    },
+    {
+      "year": 2023,
+      "raw_stock_days": 2356072,
+      "sessions": 250,
+      "active_sessions": 242,
+      "seconds": 1.07
+    },
+    {
+      "year": 2024,
+      "raw_stock_days": 2403637,
+      "sessions": 252,
+      "active_sessions": 219,
+      "seconds": 1.1
+    },
+    {
+      "year": 2025,
+      "raw_stock_days": 2541801,
+      "sessions": 250,
+      "active_sessions": 220,
+      "seconds": 1.15
+    }
+  ],
+  "chronology_violations": 0,
+  "max_cost_solver_error": 1.1102230246251565e-16,
+  "max_independent_bisection_error": 2.220446049250313e-16,
+  "max_accounting_error": 3.2390539903004445e-18,
+  "independent_ledger_samples": [
+    {
+      "date": "1985-01-02",
+      "x": [
+        1.0,
+        0.999000999000999,
+        0.999000999000999
+      ],
+      "turnover": [
+        2.0,
+        1.998001998001998,
+        1.998001998001998
+      ]
+    },
+    {
+      "date": "1986-01-02",
+      "x": [
+        1.0,
+        0.999755481935333,
+        0.9997554769548804
+      ],
+      "turnover": [
+        0.48909426315976834,
+        0.48903612933396223,
+        0.48904609023916823
+      ]
+    },
+    {
+      "date": "1987-01-02",
+      "x": [
+        1.0,
+        0.9998101883382914,
+        0.9998101871859517
+      ],
+      "turnover": [
+        0.379687940153183,
+        0.3796233234172822,
+        0.379625628096646
+      ]
+    },
+    {
+      "date": "1988-01-04",
+      "x": [
+        1.0,
+        0.99981023510919,
+        0.9998102613820247
+      ],
+      "turnover": [
+        0.3798551705218792,
+        0.37952978161998224,
+        0.37947723595074595
+      ]
+    },
+    {
+      "date": "1989-01-03",
+      "x": [
+        1.0,
+        0.9998012318521123,
+        0.9998012618415625
+      ],
+      "turnover": [
+        0.39791793061920017,
+        0.39753629577525584,
+        0.39747631687512697
+      ]
+    },
+    {
+      "date": "1990-01-02",
+      "x": [
+        1.0,
+        0.9998491108916991,
+        0.9998491197842722
+      ],
+      "turnover": [
+        0.30189159277903327,
+        0.30177821660175425,
+        0.30176043145565057
+      ]
+    },
+    {
+      "date": "1991-01-02",
+      "x": [
+        1.0,
+        0.9998280693550811,
+        0.9998280832502768
+      ],
+      "turnover": [
+        0.34404156821091386,
+        0.3438612898379615,
+        0.3438334994464365
+      ]
+    },
+    {
+      "date": "1992-01-02",
+      "x": [
+        1.0,
+        0.9999114771910054,
+        0.9999114444381001
+      ],
+      "turnover": [
+        0.1769152118998333,
+        0.1770456179891569,
+        0.1771111237998716
+      ]
+    },
+    {
+      "date": "1993-01-04",
+      "x": [
+        1.0,
+        0.9997380339823505,
+        0.9997380631473994
+      ],
+      "turnover": [
+        0.5244548735305083,
+        0.5239320352990409,
+        0.5238737052012387
+      ]
+    },
+    {
+      "date": "1994-01-03",
+      "x": [
+        1.0,
+        0.9997137850777543,
+        0.999713778420687
+      ],
+      "turnover": [
+        0.5724977598967357,
+        0.5724298444914568,
+        0.5724431586261378
+      ]
+    },
+    {
+      "date": "1995-01-03",
+      "x": [
+        1.0,
+        0.9997499966010913,
+        0.9997500261986947
+      ],
+      "turnover": [
+        0.5005059410456258,
+        0.5000067978174078,
+        0.4999476026106146
+      ]
+    },
+    {
+      "date": "1996-01-02",
+      "x": [
+        1.0,
+        0.9997427994089245,
+        0.9997428278607757
+      ],
+      "turnover": [
+        0.514904301201552,
+        0.5144011821508536,
+        0.5143442784485522
+      ]
+    },
+    {
+      "date": "1997-01-02",
+      "x": [
+        1.0,
+        0.999906376923561,
+        0.999906402054885
+      ],
+      "turnover": [
+        0.1873824388509937,
+        0.18724615287794977,
+        0.18719589022997823
+      ]
+    },
+    {
+      "date": "1998-01-02",
+      "x": [
+        1.0,
+        0.9998325270005608,
+        0.9998325585737442
+      ],
+      "turnover": [
+        0.3352694154615214,
+        0.3349459988784187,
+        0.3348828525116704
+      ]
+    },
+    {
+      "date": "1999-01-04",
+      "x": [
+        1.0,
+        0.9998010984031825,
+        0.9998011062002343
+      ],
+      "turnover": [
+        0.397959756124159,
+        0.39780319363487343,
+        0.39778759953124865
+      ]
+    },
+    {
+      "date": "2000-01-03",
+      "x": [
+        1.0,
+        0.999809444826943,
+        0.9998094626985483
+      ],
+      "turnover": [
+        0.38135414904331566,
+        0.38111034611389416,
+        0.38107460290336514
+      ]
+    },
+    {
+      "date": "2001-01-02",
+      "x": [
+        1.0,
+        0.9997875445458145,
+        0.9997875506163326
+      ],
+      "turnover": [
+        0.42506662084491437,
+        0.42491090837089623,
+        0.42489876733475435
+      ]
+    },
+    {
+      "date": "2002-01-02",
+      "x": [
+        1.0,
+        0.9998096062341472,
+        0.9998096103280053
+      ],
+      "turnover": [
+        0.38090230278109816,
+        0.38078753170577545,
+        0.3807793439894382
+      ]
+    },
+    {
+      "date": "2003-01-02",
+      "x": [
+        1.0,
+        0.9999563108414963,
+        0.9999563009947338
+      ],
+      "turnover": [
+        0.08736051571582124,
+        0.08737831700752954,
+        0.0873980105325143
+      ]
+    },
+    {
+      "date": "2004-01-02",
+      "x": [
+        1.0,
+        0.9999011766314966,
+        0.9999012114462438
+      ],
+      "turnover": [
+        0.19784028711187304,
+        0.19764673700685154,
+        0.19757710751242424
+      ]
+    },
+    {
+      "date": "2005-01-03",
+      "x": [
+        1.0,
+        0.9997927909320278,
+        0.9997928222472678
+      ],
+      "turnover": [
+        0.41483255408046665,
+        0.41441813594452187,
+        0.4143555054642909
+      ]
+    },
+    {
+      "date": "2006-01-03",
+      "x": [
+        1.0,
+        0.9998264424138092,
+        0.9998264388305751
+      ],
+      "turnover": [
+        0.347144098645846,
+        0.34711517238148093,
+        0.34712233884974847
+      ]
+    },
+    {
+      "date": "2007-01-03",
+      "x": [
+        1.0,
+        0.9997533253696372,
+        0.9997533221826522
+      ],
+      "turnover": [
+        0.49343172531226887,
+        0.49334926072543706,
+        0.4933556346955772
+      ]
+    },
+    {
+      "date": "2008-01-02",
+      "x": [
+        1.0,
+        0.9998888332086193,
+        0.9998888439674329
+      ],
+      "turnover": [
+        0.22241887722176742,
+        0.22233358276140136,
+        0.2223120651340248
+      ]
+    },
+    {
+      "date": "2009-01-02",
+      "x": [
+        1.0,
+        0.9998823297347819,
+        0.9998823219634084
+      ],
+      "turnover": [
+        0.23532212356063043,
+        0.23534053043624142,
+        0.23535607318314972
+      ]
+    },
+    {
+      "date": "2010-01-04",
+      "x": [
+        1.0,
+        0.9998280831221249,
+        0.9998281151324343
+      ],
+      "turnover": [
+        0.34417120319008376,
+        0.34383375575022,
+        0.34376973513135983
+      ]
+    },
+    {
+      "date": "2011-01-03",
+      "x": [
+        1.0,
+        0.9998071834989538,
+        0.9998072153857066
+      ],
+      "turnover": [
+        0.38601800600310227,
+        0.38563300209236717,
+        0.38556922858688253
+      ]
+    },
+    {
+      "date": "2012-01-03",
+      "x": [
+        1.0,
+        0.9997791455049567,
+        0.9997791738319424
+      ],
+      "turnover": [
+        0.4421215156592545,
+        0.44170899008656084,
+        0.44165233611526034
+      ]
+    },
+    {
+      "date": "2013-01-02",
+      "x": [
+        1.0,
+        0.9999019139558019,
+        0.9999018750024501
+      ],
+      "turnover": [
+        0.19599856418138326,
+        0.1961720883962561,
+        0.19624999509985352
+      ]
+    },
+    {
+      "date": "2014-01-02",
+      "x": [
+        1.0,
+        0.999967077328619,
+        0.9999670559936225
+      ],
+      "turnover": [
+        0.06581228983046211,
+        0.06584534276193732,
+        0.06588801275503454
+      ]
+    },
+    {
+      "date": "2015-01-02",
+      "x": [
+        1.0,
+        0.9999008923782345,
+        0.9999009197583948
+      ],
+      "turnover": [
+        0.19837189790842938,
+        0.19821524353083408,
+        0.19816048321045046
+      ]
+    },
+    {
+      "date": "2016-01-04",
+      "x": [
+        1.0,
+        0.999859201959642,
+        0.9998592332645803
+      ],
+      "turnover": [
+        0.2818573856460491,
+        0.2815960807160653,
+        0.28153347083947966
+      ]
+    },
+    {
+      "date": "2017-01-03",
+      "x": [
+        1.0,
+        0.9997479069449267,
+        0.9997479335170834
+      ],
+      "turnover": [
+        0.5046515073685915,
+        0.5041861101467435,
+        0.5041329658333344
+      ]
+    },
+    {
+      "date": "2018-01-02",
+      "x": [
+        1.0,
+        0.9997845833651913,
+        0.9997845451437654
+      ],
+      "turnover": [
+        0.43051269850184165,
+        0.4308332696175178,
+        0.430909712469177
+      ]
+    },
+    {
+      "date": "2019-01-02",
+      "x": [
+        1.0,
+        0.9997526613056481,
+        0.9997526552891218
+      ],
+      "turnover": [
+        0.494724480262997,
+        0.494677388703723,
+        0.49468942175638625
+      ]
+    },
+    {
+      "date": "2020-01-02",
+      "x": [
+        1.0,
+        0.999968917105418,
+        0.9999689343940481
+      ],
+      "turnover": [
+        0.06219494653030505,
+        0.06216578916387758,
+        0.06213121190389853
+      ]
+    },
+    {
+      "date": "2021-01-04",
+      "x": [
+        1.0,
+        0.999866588376799,
+        0.9998666160560603
+      ],
+      "turnover": [
+        0.2670451424167398,
+        0.2668232464020658,
+        0.2667678878794691
+      ]
+    },
+    {
+      "date": "2022-01-03",
+      "x": [
+        1.0,
+        0.9996969537221255,
+        0.999696960438439
+      ],
+      "turnover": [
+        0.606384372417694,
+        0.6060925557488963,
+        0.6060791231218877
+      ]
+    },
+    {
+      "date": "2023-01-03",
+      "x": [
+        1.0,
+        0.9997114952722226,
+        0.9997114867495486
+      ],
+      "turnover": [
+        0.5770523443801923,
+        0.5770094555547601,
+        0.5770265009027982
+      ]
+    },
+    {
+      "date": "2024-01-02",
+      "x": [
+        1.0,
+        0.9997363263358626,
+        0.9997363199470729
+      ],
+      "turnover": [
+        0.5274020747801744,
+        0.5273473282748384,
+        0.5273601058540882
+      ]
+    },
+    {
+      "date": "2025-01-02",
+      "x": [
+        1.0,
+        0.9999611753846618,
+        0.9999611736314317
+      ],
+      "turnover": [
+        0.07764888618648214,
+        0.07764923067637533,
+        0.07765273713673146
+      ]
+    }
+  ],
+  "missing_held_returns": {
+    "5bps": 42,
+    "5bps_1pct_borrow": 42,
+    "gross": 42
+  },
+  "absent_exits": {
+    "5bps": 698,
+    "5bps_1pct_borrow": 698,
+    "gross": 698
+  },
+  "summary": [
+    {
+      "start": "1985-01-01",
+      "scenario": "gross",
+      "days": 10330,
+      "annual_mean": 0.07204083033694435,
+      "annual_cost": 0.0,
+      "annual_borrow": 0.0,
+      "sharpe": 0.838341605725425,
+      "active_fraction": 0.986350435624395
+    },
+    {
+      "start": "1985-01-01",
+      "scenario": "5bps",
+      "days": 10330,
+      "annual_mean": 0.004577509823587092,
+      "annual_cost": 0.06744139716569138,
+      "annual_borrow": 0.0,
+      "sharpe": 0.05328000210927184,
+      "active_fraction": 0.986350435624395
+    },
+    {
+      "start": "1985-01-01",
+      "scenario": "5bps_1pct_borrow",
+      "days": 10330,
+      "annual_mean": -0.005283695001082937,
+      "annual_cost": 0.06744173051459794,
+      "annual_borrow": 0.009860871650295552,
+      "sharpe": -0.06150001517514001,
+      "active_fraction": 0.986350435624395
+    },
+    {
+      "start": "2005-01-01",
+      "scenario": "gross",
+      "days": 5283,
+      "annual_mean": 0.04599735901720742,
+      "annual_cost": 0.0,
+      "annual_borrow": 0.0,
+      "sharpe": 0.4953135196186164,
+      "active_fraction": 0.9736891917471134
+    },
+    {
+      "start": "2005-01-01",
+      "scenario": "5bps",
+      "days": 5283,
+      "annual_mean": -0.024257232166284406,
+      "annual_cost": 0.07023726252859336,
+      "annual_borrow": 0.0,
+      "sharpe": -0.26129879143905793,
+      "active_fraction": 0.9736891917471134
+    },
+    {
+      "start": "2005-01-01",
+      "scenario": "5bps_1pct_borrow",
+      "days": 5283,
+      "annual_mean": -0.033992085411612374,
+      "annual_cost": 0.07023792969639599,
+      "annual_borrow": 0.009734186064065205,
+      "sharpe": -0.36616474255797404,
+      "active_fraction": 0.9736891917471134
+    },
+    {
+      "start": "2015-01-01",
+      "scenario": "gross",
+      "days": 2766,
+      "annual_mean": 0.05330206513475815,
+      "annual_cost": 0.0,
+      "annual_borrow": 0.0,
+      "sharpe": 0.5022382276613407,
+      "active_fraction": 0.9497469269703543
+    },
+    {
+      "start": "2015-01-01",
+      "scenario": "5bps",
+      "days": 2766,
+      "annual_mean": -0.019993851323150635,
+      "annual_cost": 0.07327201363999121,
+      "annual_borrow": 0.0,
+      "sharpe": -0.18850178384297045,
+      "active_fraction": 0.9497469269703543
+    },
+    {
+      "start": "2015-01-01",
+      "scenario": "5bps_1pct_borrow",
+      "days": 2766,
+      "annual_mean": -0.02948942899903606,
+      "annual_cost": 0.07327287428449455,
+      "annual_borrow": 0.00949471702330766,
+      "sharpe": -0.27802858492902666,
+      "active_fraction": 0.9497469269703543
+    }
+  ],
+  "output": {
+    "path": "/home/jkp/data/earnings-timing/rolling_sharpe5/paper_factor_daily_min20.csv",
+    "bytes": 3877386,
+    "sha256": "e1d4342c13c9dfafd390b7ff1454358a6a538cdb81905dab0a7fe0d90d9a295d",
+    "original_output_path_before_archiving": "/home/jkp/data/earnings-timing/rolling_sharpe5/paper_factor_daily.csv"
+  }
+}

@@ -1,0 +1,50 @@
+Paper extraction and implementation specification
+Source: /home/jkp/data/earnings-timing/13699_paper_YrbKK6Zn.pdf
+Title: The Earnings Announcement Return Cycle
+Authors: Juhani T. Linnainmaa and Conson Y. Zhang
+Version: November 2018; 47 PDF pages. PDF page numbers are one larger than printed body page numbers.
+
+Primary tradable factor: Earnings Announcement Return Cycle (EARC)
+PDF p10 (printed p9), Figure 2 and paragraph below; PDF p37 (printed p36), Table 2.
+Long stocks whose latest quarterly earnings announcement was one to four weeks ago; short stocks whose latest announcement was seven to ten weeks ago. Equal-weight each leg and rebalance daily. Return is long underlying return minus short underlying return; each leg is conventionally $1, making 200% gross notional per $1 equity. The paper calls the long-short portfolio Hedge. It is separate from the short underlying portfolio reported in Table 2.
+Visual inspection of Figure 2 confirms phase boundaries at 5, 20, 35, and 50 trading days. A non-overlapping implementation is age 6..20 long and age 36..50 short. Exact boundary inclusivity is an implementation convention because the prose and graph do not specify it. Use only the previous-close-known announcement clock to avoid contemporaneous/after-hours leakage; this information timing is a conservative implementation addition rather than an exact paper statement.
+No future announcement date is needed for EARC. The forecast-based timing strategies in the existing workspace are not the primary EARC factor.
+
+Universe and announcement regularity
+PDF p8 (printed p7), Data section; PDF p36 (printed p35), Table 1.
+U.S. common stocks listed on NYSE, AMEX or Nasdaq. Drop firm-quarters with missing quarterly Compustat rdq. At an announcement, require at least four earnings announcement dates in the prior 400 calendar days and gap from preceding announcement between 70 and 110 calendar days. The paper wording is not explicit about whether the current event is included in the count; the existing project README counts current plus three preceding, which should be disclosed.
+Main sample requires at least five distinct analysts in I/B/E/S detail who issued an annual earnings forecast during the three months before the announcement. Main paper sample January 1985 through December 2016. Section 3.1.1 on PDF p11 says a 30-day coverage period once, conflicting with Data and repeated figure/table descriptions; use the three-month Data definition and flag this textual inconsistency.
+Retrospective I/B/E/S CUSIP linking, publication availability, data revisions and a >=5 summary-file analyst proxy cannot be represented as exact reconstruction of the detail-file count.
+
+Secondary factor/control: Earnings Announcement Premium (EAP)
+PDF p11 (printed p10) and Table 2 PDF p37.
+Long stocks from two weeks before through one week after an announcement and short stocks outside that window. Real-time EAP predicts next quarterly announcement on the same weekday as the corresponding announcement a year earlier. Perfect-foresight EAP assumes actual next date known at least two weeks in advance and is only a diagnostic, not an implementable trading input. EAP is an extra risk-control factor in the paper, not the primary contribution being tested.
+
+Published baseline (gross, not cost adjusted)
+PDF p37 Table 2: daily alpha in basis points, sample 1985-2016, N=7,779 trading observations.
+CAPM EARC Hedge alpha 3.27 bp/day, t=5.95.
+Carhart4 EARC Hedge alpha 3.37 bp/day, t=6.12.
+Carhart4 + real-time EAP alpha 3.33 bp/day, t=6.04.
+Carhart4 + perfect-foresight EAP alpha 3.24 bp/day, t=5.89.
+Carhart4 controls are excess market, SMB, HML and UMD. Table 2 has no Newey-West lag specification. It reports daily time-series regressions; its t values should not be presumed to be a specified HAC estimator.
+
+Cross-sectional extensions (secondary, avoid silently selecting ex post)
+PDF p21-22 and Table 6 PDF p42: partition stocks at each quarter end into uncertainty quintiles and hold assignments next quarter. Uncertainty is first PC of quarterly cross-section-standardized size, age, idiosyncratic volatility, cash-flow volatility. Visually verified signs in equation (4): (-0.532, -0.461, +0.576, +0.415). Negative signs are lost by pdftotext; do not use all positive coefficients. A historical test must fit loadings with training data or explicitly treat fixed paper loadings as a published 2018 rule.
+PDF p20 Figure 6: idiosyncratic volatility is standard deviation of residuals of Carhart4 over prior one year of daily data; update at quarter end. Cash-flow volatility window and exact size/age transformations are not fully specified in the reviewed text.
+Table 6 high-uncertainty EARC alpha 7.02 bp/day (t4.34), low 1.67 (t1.63); high-minus-low alpha 5.59 (t2.81). Inverse-size high quintile 6.96 (t5.61), low0.73 (t0.75), difference6.21 (t3.96).
+Table 7 PDF p43: low book-to-market and low operating profitability show stronger cycle. Profitability is (sales - COGS - SG&A if available - interest)/lagged book equity. These are separate conditioning sorts, not new independently defined standalone factors.
+Table 8 PDF p44: Amihud illiquidity and event-intensity conditioning. Event intensity counts firms announcing the same quarter earnings on the same day as the stock. Table9 PDF p45 compares event-time vs calendar-time means; event-time weights are not a fixed-capital daily portfolio.
+
+5 bp transaction cost and testing requirements for the new task
+Full text contains no trading-cost, turnover, Sharpe or 5bp assumption; paper results are gross. A new cost model is necessary.
+Defensible stated convention: cost_t = 0.0005 * sum_i(abs(target dollar exposure_i,t - pretrade drifted exposure_i,t))/reference equity. This charges 5 bp per dollar traded, both buys and sells, rather than subtracting 5bp per day or only once per position. Half-turnover is not interchangeable. If using retained turnover normalized to gross-path equity, disclose that cost compounding does not feed back into future share counts and terminal liquidation might not be charged.
+Short-borrow fees, financing and collateral are separate assumptions. If source series named net_5bp_1pct_borrow is used, it is 5bp transaction cost PLUS 1% annual short borrow, and should not be mislabeled as 5bp cost only; construct gross minus0.0005*turnover for the requested transaction-cost-only scenario and optionally retain 1% borrow sensitivity.
+At year y start, factor pool selection must use only years y-5..y-1. Literal user rule is positive statistically significant Sharpe in EACH of five calendar years, not a pooled 60-month Sharpe. Freeze testing direction, alpha, minimum complete observations and HAC/serial-correlation adjustment before examining outcomes. Report empty pools, do not silently relax selection.
+Published direction and latest-vintage factor library can embed discovery and revision hindsight even with rolling training dates. If the factor universe includes EARC itself or exact aliases, remove those from benchmark pool for a clean incremental test and document exclusions.
+Incremental net alpha should test the paper factor after costs against the contemporaneously eligible factor exposures (with historical estimation/selection). A standalone positive net mean or an improved in-sample Sharpe is not itself proof of incremental alpha.
+
+Read-only artifact inspection performed
+Read repository README.txt and enumerated result artifact filenames; did not inspect broad source code. Candidate retained daily EARC series likely available under coverage5/results/daily_returns.csv and coverage5/results_regular65/daily_returns.csv; parent/other audit agent must verify design, age windows, coverage proxy, turnover and regularity before reuse.
+
+Visual verification
+Rendered and visually inspected complete PDF pages 8,10,11,21,37 using Poppler at scale1400. Images are intermediate under tmp/pdfs/paper_spec. Text extracted to /tmp/paper13699.txt. No PDF content was edited.

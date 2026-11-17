@@ -1,0 +1,2135 @@
+The Earnings Announcement Return Cycle
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: 13699_paper_YrbKK6Zn.pdf
+Source SHA-256: 653177a27f938db433ccc1bf3ae8ba3400a2e585276e72f94953920c15f2cb0a
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Note: November 2018 original local paper. The project also retains a separate redacted methods copy under crsp-daily; this extraction uses the complete local PDF.
+Layout extraction: spacing retains approximate PDF columns and tables.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+                    The Earnings Announcement Return Cycle⇤
+
+                          Juhani T. Linnainmaa                  Conson Y. Zhang
+
+
+                                               November 2018
+
+
+                                                   Abstract
+
+      Stocks earn significantly negative abnormal returns before earnings announcements and positive
+
+      after them. This “earnings announcement return cycle” (EARC) is unrelated to the earnings
+
+      announcement premium, and it is a feature of stocks widely covered by analysts. Analysts’
+
+      forecasts follow the same pattern as returns: analysts’ forecasts become more optimistic after
+
+      an earnings announcement and more pessimistic as the next one draws near. We attribute one-
+
+      half of the earnings announcement return cycle to this optimism cycle. The EARC may stem
+
+      from mispricing: both the return and optimism patterns are stronger among high-uncertainty
+
+      and difficult-to-arbitrage stocks, and the EARC strategy is more profitable on days when it
+
+      would accommodate larger amounts of arbitrage capital.
+
+
+
+
+   ⇤
+     Juhani Linnainmaa is with the University of Southern California and NBER and Conson (Yingguang) Zhang is
+with the University of Southern California. We thank Kenneth Ahern, David Solomon (discussant), Wayne Ferson,
+Bing Han, Gerard Hoberg, Chris Jones, Larry Harris, Christopher Parsons, Richard Sloan, K. R. Subramanyam,
+and the seminar and conference participants at University of Southern California and Society of Financial Studies
+Cavalcade 2018 for helpful comments.
+
+=== PDF PAGE 2 ===
+1    Introduction
+
+Many return anomalies relate to earnings announcements. Stock prices tend to move in the direction
+
+of recent earnings surprises1 and returns are higher in the months in which firms report earnings
+
+than in those they do not.2 So and Wang (2014) and Engelberg, McLean, and Ponti↵ (2018b) find
+
+that earnings announcements amplify anomaly returns by a factor of six or seven. Kim and So
+
+(2018) show that firms earn low returns before, and high returns during, earnings announcements
+
+because firms typically manage expectations down before the announcements. The competing
+explanations for price patterns such as these relate to risk, mispricing, and illiquidity. In this
+paper we present new evidence that suggests that biases in investors’ expectations generate return
+predictability around earnings announcements.
+    We first document a new stock return regularity, the earnings announcement return cycle
+
+(EARC). The term “cycle” refers to the period between two consecutive quarterly earnings an-
+
+nouncements. We show that stocks widely followed by analysts earn positive abnormal returns
+early in the cycle and negative returns late in the cycle. This pattern is distinct from the earn-
+ings announcement premium, that is, the tendency of stocks to earn high returns around their
+earnings announcements. Our trading rule is neither long nor short stocks around the earnings
+announcement dates themselves.
+    Figure 1 illustrates our key result. We center the graph around a quarterly earnings announce-
+
+ment and plot (1) the average market-adjusted returns (solid line) and (2) the percentage of positive
+
+forecast revisions by analysts (dashed line) for a six-month period around this date. The sample
+
+includes U.S. common stocks followed by at least five analysts. The x-axis counts trading days.
+The vertical line at t =      63 is the typical date of the previous earnings announcement; the line
+at t = 0 is the current announcement; and the line at t = 63 is the expected date of the next
+announcement.
+    Figure 1 shows that, apart from the earnings announcement premium period, which we define as
+running from two weeks before an announcement to a week after it, stocks continue to outperform
+the market by about three basis points per day for the remainder of the first month. After this point,
+   1
+     See, for example, Ball and Brown (1968), Beaver (1968), Foster, Olsen, and Shevlin (1984), Bernard and Thomas
+(1989, 1990), and Daniel, Hirshleifer, and Subrahmanyam (1998).
+   2
+     See, for example, Chari, Jagannathan, and Ofer (1988), Ball and Kothari (1991), Cohen, Dey, Lys, and Sunder
+(2007), Frazzini and Lamont (2007), Barber, De George, Lehavy, and Trueman (2013) and Savor and Wilson (2016).
+
+
+
+                                                        1
+
+=== PDF PAGE 3 ===
+                                                                                                                                                        52
+
+                                                   Typical previous                Current                                    Expected next
+                                 0.06               announcement                 announcement                                 announcement              50
+
+
+                                 0.04
+
+
+
+
+     Average daily return (%)
+                                                                                                                                                        48
+
+
+
+
+                                                                                                                                                             Upward revision (%)
+                                 0.02
+                                                                                                                                                        46
+
+
+                                 0.00
+                                                                                                                                                        44
+
+
+
+                                - 0.02                                                                                                                  42
+
+                                                  Stock return
+                                - 0.04            Upward revision (%)                                                                                   40
+
+                                         - 70   - 60   - 50    - 40     - 30   - 20    - 10     0     10      20     30       40    50        60   70
+                                                                      Trading day relative to current earnings announcement
+
+Figure 1: Earnings announcement return cycle and analyst optimism. This figure plots the
+average daily market-adjusted return (solid line) and the percentage of positive forecast revisions by
+analysts (dashed line) for common stocks traded on the NYSE, Nasdaq and Amex for a six-month
+period centered around a firm’s quarterly earnings announcement. The sample begins in January
+1985 and ends in December 2016 and includes stocks covered by at least five analysts over the
+previous quarter. A stock’s market-adjusted return is its return minus the equal-weighted market
+return; we report three-day moving averages of these returns. The vertical line at t = 63 is the
+typical date of the previous earnings announcement; the line at t = 0 is the current announcement;
+and the line at t = 63 is the expected date of the next announcement.
+
+
+they go on to earn the market premium for about six weeks before beginning to underperform the
+market by two to three basis points per day for about a month as the next earnings announcement
+
+draws close.3
+    Both the positive returns in the early phase and the negative returns in the late phase are
+
+statistically significant. A long-short strategy that buys stocks in the early phase (excluding the
+
+earnings announcement period) and sells those in the late phase earns a monthly four-factor model
+
+alpha of 71 basis points (t-value = 6.02). This alpha remains at 68 basis points (t-value = 5.89)
+
+when we also include the earnings announcement premium factor that is long stocks inside the
+earnings announcement window and short those outside it.
+
+    We apply a bootstrapping procedure in the spirit of White (2000) and Stambaugh, Yu, and
+
+Yuan (2014) to verify that the earnings announcement return cycle is unlikely an artifact of data-
+   3
+     The two cycles in Figure 1—the one before the current announcement at date t = 0 and the one after it—are
+not identical because we have a limited number of earnings announcements for each firm and because firms do not
+always announce their earnings exactly every 63 trading days. The two cycles in the figure slightly di↵er because
+each firm’s first quarterly announcement in the sample can only appear on the left-hand side of the graph and the
+last one can only appear on its right-hand side.
+
+
+                                                                                                2
+
+=== PDF PAGE 4 ===
+mining. The actual EARC strategy is long stocks in the early part of the cycle and short those in
+the late part. We generate 100,000 strategies that resample the positions of this strategy without
+replacement. That is, whereas the original strategy has positions L, L, L, . . . , S, S, S over a combined
+30-day period over the earnings cycle—where L and S stand for long and short positions—one
+of the randomized strategies might take positions L, S, S, . . . , L, S, L. By bootstrapping without
+replacement, both the actual and bootstrapped strategies are long and short each stock the same
+number of days in the cycle. If the earnings announcement return cycle was an artifact of data-
+mining, we would expect a number of the randomized trading rules to outperform the actual rule.
+
+The data do not support to this view; only 0.004% of the randomized strategies outperform the
+actual EARC strategy.
+   What is remarkable in Figure 1 is the synchronization between the average returns and analysts’
+forecast revisions. During the earnings announcement periods, the majority of earnings forecast
+
+revisions are positive. This percentage, however, promptly falls below 50% and reaches a low point
+
+of 37% eight weeks after the announcement. This low point coincides with the period during which
+stocks earn their lowest returns during the cycle. As the next earnings announcement draws closer,
+the proportion of positive forecast revisions begins to increase.
+   To explain a periodic pattern in stock returns, such as the earnings announcement return cycle,
+the drivers of this pattern must also be periodic. Figure 1 suggests that the analyst optimism cycle
+may be a key driver of the pattern in average returns. We measure the connection between the
+patterns in average returns and forecast revisions using a counterfactual portfolio approach. In this
+test we contrast the EARC strategy with a modified strategy that excludes stock-days associated
+with analyst forecast revisions or recommendation changes. That is, when an analyst revises his
+forecast or recommendation, we remove the target stock from the long and short portfolios for a
+three-day window around this event. The counterfactual portfolio’s monthly alpha of 38 basis points
+
+(t-value = 3.22) is 55% of the original alpha of 68 basis points (t-value = 6.10). The di↵erence
+
+between the two is statistically significant with a t-value of 5.81. The EARC strategy therefore
+earns approximately one-half of its returns by being long or short in stocks when analysts revise
+their forecasts or recommendations.
+   This test does not establish causality from forecast revisions to returns; both the returns and
+
+
+
+
+                                                    3
+
+=== PDF PAGE 5 ===
+forecasts may respond to the same omitted variable.4 An unusual property of the earnings an-
+nouncement return cycle, however, is important to bear in mind. An investor can capture the
+EARC e↵ect by using information only on the distance from the previous earnings announcement;
+it uses no information on realized earnings or analyst forecasts. Our counterfactual portfolio ap-
+proach shows that, whatever mechanism generates the profits of the EARC strategy, an investor
+earns one-half of these profits exactly when analysts revise their forecasts or recommendations. We
+interpret these results as suggesting that the optimism cycle is an important factor of the earn-
+ings announcement return cycle. This statement holds without taking any stance on the causality
+between analyst actions and returns.
+
+    Our results confirm the key findings of Kim and So (2018). Stock returns are low before
+
+announcements, and these low returns seem to stem from changes in expectations. The actual
+EARC strategy earns a daily alpha of           0.73 basis points before an earnings announcement, but the
+counterfactual strategy that excludes analyst-days has an alpha of 0.63 basis points. The di↵erence
+between the two alphas has a t-value of            7.44, indicating that the forecast-revision days explain
+
+all of the low pre-announcement returns. This di↵erence is consistent with Kim and So’s (2018)
+
+suggestion that firms guide market expectations down before announcements. Our estimates show
+that when firms do not do so, and analysts do not revise their forecasts, firms earn high returns
+before announcements.
+    Although forecast revisions explain all of the negative returns before announcements, they do not
+explain why returns are high after firms have announced their earnings. Analyst actions explain only
+
+between 4% and 14% of the high post-announcement returns. That is, analysts explain all of the
+low returns before announcements but almost none of the high returns after announcements. The
+mechanism that drives stock prices up for weeks after announcements must therefore be di↵erent
+from the one that drives them down before the announcements. If this part of the cycle is about
+changing expectations, analysts do not appear to share the same expectations as those who set the
+prices. Moreover, the fact that stocks earn significantly positive abnormal returns for a long time
+
+after firms have announced their earnings casts some uncertainty on the risk-based explanations5
+for this part of the cycle. Because these firms have already announced their earnings, these returns
+   4
+     Bradley, Clarke, Lee, and Ornthanalai (2014) use intraday data on analyst forecast revisions to suggest that the
+association between revisions and stock returns is causal; they show that stock returns move in response to forecast
+revisions.
+   5
+     See, for example, Savor and Wilson (2016).
+
+
+                                                         4
+
+=== PDF PAGE 6 ===
+cannot be due to non-announcing firms being riskier at times they are expected to announce their
+earnings.
+   If the earnings announcement return cycle is about mispricing, the literature provides guidance
+
+on when this pattern should be weaker or stronger. Hirshleifer (2001) and Daniel, Hirshleifer,
+
+and Subrahmanyam (1998, 2001), for example, suggest that behavioral biases should be more pro-
+
+nounced when uncertainty is high. Uncertainty, in the context of the earnings announcement return
+cycle, should change almost deterministically; market participants’ uncertainty about a firm’s next-
+quarter earnings should decrease over time as investors acquire more information. Overoptimism,
+if any, should therefore be the most pronounced when the next earnings announcement is as far in
+the future as possible. Figure 1 is consistent with this prediction. Analysts tend to be the most
+optimistic at the beginning of the earnings cycle and become less so over time.
+   Both the earnings announcement return cycle and the pattern in analysts’ forecasts are more
+pronounced among high-uncertainty stocks, as measured by size, age, idiosyncratic volatility, and
+cash-flow volatility. The EARC strategy earns a monthly four-factor model alpha of 147 basis
+
+points (t-value = 4.34) among firms in the top-uncertainty quintile; among the low-uncertainty
+
+stocks, this strategy’s alpha is 35 basis points is not statistically di↵erent from zero. We also
+find that the EARC pattern is more pronounced among unprofitable growth firms. This finding is
+
+consistent with Baker and Wurgler (2006), who suggest that variation in investor sentiment has a
+
+greater e↵ect on the prices of unprofitable growth firms. Taken together, our results suggest that
+the cyclical pattern in returns around earnings announcements may stem from mispricing.
+   The earnings announcement return cycle is unlikely to emanate from systematic risk factors.
+The EARC strategy is long and short the same stocks but at di↵erent times; it is long a stock
+after an earnings announcement and short as the next announcement draws close. For a risk-based
+explanation to apply, firms’ systematic risks would therefore need to vary significantly based solely
+on the amount of time that has passed after the previous earnings announcement. An analysis of
+how the EARC varies between firms with low and high analyst coverage also provides a test of the
+risk-based explanation. Under the risk story, the EARC should not depend on the level of analyst
+coverage—the behavior of analysts should be unrelated to the risk dynamics. In the data, however,
+the EARC pattern is absent among stocks with low analyst coverage.
+   If the EARC is due to mispricing, why it not arbitraged away? One possibility is the difficulty
+
+
+                                                 5
+
+=== PDF PAGE 7 ===
+in arbitraging away this form of mispricing. To capture the abnormal returns associated with the
+earnings announcement cycle, an investor would have to switch between long and short positions
+in individual stocks on almost a daily basis. Moreover, the amount of capital that this trade could
+accommodate varies significantly as well: the number of firms announcing their earnings ranges
+from 0 to over 180 per day over our sample. If a fund has a fixed amount of capital allocated to
+this strategy, it might fully correct mispricing when only a few firms announce earnings. However,
+when hundreds of firms announce, the fund may have no meaningful impact on mispricing due
+
+to limited capital (Shleifer and Vishny, 1997). Conversely, if the fund has enough capital to fully
+
+eliminate mispricing even at the height of the earnings season, it would have large amounts of idle
+capital at times when only a few firms announce earnings; this idle capital, in turn, would lower
+the fund’s average return on capital and render the trade unattractive.
+      This limits-to-arbitrage argument implies that the abnormal return associated with the earnings
+announcement cycle strategy should be higher among firms that announce their earnings on days
+when many others do so as well. Consistent with this prediction, we show that the abnormal returns
+
+are 30% to 70% higher in event-time than in calendar-time. That is, the average returns are higher
+when the strategy holds more stocks—but these are also the days when the would-be arbitrageurs
+
+would need to commit more capital.6
+
+      Two studies closely relate to ours. Grinblatt, Jostova, and Philipov (2016) show that a pre-
+
+dictable component in analysts’ optimism forecasts the cross section of stock returns. Our results
+suggest that the dynamics of investors’ biases lead to a cyclical pattern in stock returns, the earn-
+ings announcement return cycle. An investor can capture the return associated with the earnings
+announcement cycle without directly conditioning on, for example, analyst optimism—they only
+need to condition on the amount of time that has elapsed since the previous earnings announcement.
+
+Kim and So (2018) examine the link between stock returns and management guidance. Our results
+
+are consistent with their findings on low returns before firms announce their earnings, and the fact
+that these returns seem to stem from managers guiding market expectations down. We show that
+firms earn significantly positive abnormal returns for weeks after announcing their earnings, and
+that analyst actions cannot explain this part of the pattern.
+  6
+    Savor and Wilson (2016) find the opposite result for the earnings announcement premium: the earnings an-
+nouncement premium is lower when more firms announce their earnings. This discrepancy further suggests that the
+earnings announcement premium is disconnected from the earnings announcement return cycle.
+
+
+
+                                                      6
+
+=== PDF PAGE 8 ===
+2     Data
+
+We use data from four sources:
+
+    1. Monthly and daily CRSP: monthly and daily stocks returns, industry classifications, and
+      the number of shares outstanding.
+    2. Annual and quarterly Compustat: book value of equity, operating profitability, and
+      quarterly earnings announcement dates.
+
+    3. Thomson Reuters I/B/E/S: analyst coverage, annual earnings forecasts, quarterly earn-
+
+      ings forecasts at one- to four-quarter horizons, and recommendations.
+    4. Ravenpack: news and media coverage data.
+
+In our main tests we include firms covered by at least five analysts. We measure analyst coverage
+
+at the time of each earnings announcement by counting the number of analysts in the I/B/E/S
+
+detail file who issued at least one annual earnings forecast over the three-month period prior to the
+earnings announcement.
+    We limit the sample to the common stock of U.S. firms listed on the NYSE, AMEX, and
+Nasdaq. We drop all firm-quarters with missing quarterly earnings announcement dates. We
+identify earnings announcement dates using the rdq variable in the quarterly Compustat. We also
+require firms to have, at the time of an earnings announcement, at least four earnings announcement
+dates over the prior 400-calendar day period and the gap to the last earnings announcement to be
+between 70 and 110 calendar days. These screens ensure that our sample includes firms that have
+followed, up to the current announcement, regular schedules in reporting quarterly earnings. Our
+sample period runs from January 1985 to December 2016. Data limitations determine the starting
+data; analyst coverage is sparse before 1985. The media coverage data start in 2001.
+    Table 1 shows the descriptive statistics for the main sample and compares this sample to firms
+not widely covered by analysts. The unit of observation is a firm-earnings announcement pair. The
+statistics we report are time-series averages of quarterly cross-sectional statistics; the average size
+
+of $7.4 billion, for example, is the size of the average firm in the average quarter.
+    A comparison between the main sample and the excluded firms shows that the sample firms
+
+(1) are significantly larger by market value; (2) have lower book-to-market ratios; (3) are more
+
+profitable; (4) are more likely to pay dividends; and (5) receive greater amounts of media coverage.
+
+
+                                                  7
+
+=== PDF PAGE 9 ===
+The main sample includes approximately 25% of the total number of CRSP stocks and 74% of the
+total market capitalization.
+        Panel B summarizes the key variables related to analysts’ forecasts and recommendations.
+“Number of analysts” is the number of analysts that issued forecasts in the previous quarter; the
+sample includes firms covered by at least five analysts. The average firm in the sample is covered by
+10.6 analysts. We compute the other analyst variables using data between two consecutive earn-
+ings announcements; we exclude the earnings announcement period itself and consider forecasts
+and recommendations issued between two and ten weeks after the most recent quarterly earnings
+announcement. Analysts issue 6.1 forecast revisions and 0.6 recommendation changes for the aver-
+
+age firm during this period.7 A breakdown into positive and negative changes shows that downward
+forecast revisions outnumber upward revisions at 3.6 to 2.5. This pattern is consistent with ana-
+
+lysts being, on average, initially too optimistic (Ertimur et al., 2011). Analysts’ recommendation
+
+changes, by contrast, are evenly split between upgrades and downgrades.
+
+
+3        Empirical results
+
+3.1       The earnings announcement return cycle
+
+We use the term “earnings announcement return cycle” to refer to the pattern in average stock
+returns between two consecutive quarterly earnings announcements, excluding the periods imme-
+diately around earnings announcements. Figure 2 illustrates this cycle by plotting the average
+market-adjusted buy-and-hold returns around earnings announcements. These estimates corre-
+spond to those reported in Figure 1 except that here we measure cumulative returns. We begin
+computing returns two weeks before an earnings announcement and end the computation 13 weeks
+after the announcement. This period covers the expected gap between consecutive earnings an-
+nouncements; the typical gap is t = 63 trading days.
+        Figure 2 shows the earnings announcement premium. The average stock outperforms the market
+by 20 basis points over the period from two weeks prior to an earnings announcement to a week
+after it. Following this earnings announcement period, stocks continue to outperform the market
+    7
+    The data on stock recommendations become available in late 1993; Malmendier and Shanthikumar (2014), how-
+ever, show that these data are not reliable prior to February 1994. We therefore use post-February 1994 data to
+compute the statistics associated with analyst recommendations.
+
+
+
+
+                                                      8
+
+=== PDF PAGE 10 ===
+                                  0.6         Phase 0   Phase 1        Phase 2         Phase 3          Phase 0'
+
+
+                                  0.5
+
+
+
+
+          Cumulative return (%)
+                                  0.4
+
+
+                                  0.3
+
+
+                                  0.2
+
+
+                                  0.1
+
+
+                                  0.0
+
+
+                                        -10        0     10        20         30         40       50     60        70
+                                                        Trading day relative to earnings announcement
+
+Figure 2: Earnings announcement return cycle: Cumulative market-adjusted returns.
+This figure shows the average cumulative market-adjusted buy-and-hold returns between two con-
+secutive quarterly earnings announcements. The sample includes common stocks traded on the
+NYSE, Nasdaq and Amex. A stock is included if it is covered by at least five analysts over a
+three-month period prior to the current earnings announcement. The sample begins in January
+1985 and ends in December 2016. We begin computing returns two weeks (t = 10) before an
+earnings announcement and end the computation 13 weeks (t = 70) after the announcement. A
+stock’s market-adjusted buy-and-hold return for a stock-earnings announcement pair i at time T is
+                                              YT               YT
+                    Buy-and-hold returni,T =       (1 + ri,t )     (1 + rm,t ),
+                                                                     t= 10                t= 10
+where ri,t is stock i’s return on day t relative to the announcement and rm,t is the equal-weighted
+market return on the same day.
+
+
+for three more weeks. At the peak between two consecutive earnings announcements, firms are
+
+valued 0.65% higher relative to the week before the earnings announcement. After this point, stock
+prices remain flat relative to the market for about two to three weeks before starting their decline
+relative to the market.
+   Table 2 examines the performance of a long-short strategy that captures the earnings announce-
+ment return cycle. This strategy is long stocks that announced their earnings one to four weeks
+ago; we label this period as “Phase 1” in Figure 2. It is short stocks that announced their earnings
+seven to ten weeks ago; this period is “Phase 3” in the figure. We consider an equal-weighted
+strategy that is rebalanced daily; we later partition the sample by firm size.
+   We regress the excess returns of the long- and short-portfolios and those of the long-short
+
+strategy against the CAPM, the four-factor model (Carhart, 1997), and a five-factor model that
+
+
+                                                                        9
+
+=== PDF PAGE 11 ===
+adds the earnings announcement premium (EAP) factor to the four-factor model. The earnings
+
+announcement premium factor is long stocks from two weeks before an earnings announcement
+to a week after it—this period is labeled “Phase 0” in Figure 2—and short stocks outside this
+window. In constructing this factor, we either forecast the date of the next earnings announcement
+
+(“real-time EAP”) or assume that investors know the date of the next earnings announcement at
+
+least two weeks prior to it (“perfect-foresight EAP”). In forecast the next earnings announcement,
+
+we expect firms to announce their quarterly earnings on the same weekday as they did a year ago.
+   The results in Table 2 show that the alphas are significantly di↵erent from zero in all factor
+
+models. The long-short portfolio earns a CAPM alpha of 3.3 basis points (t-value = 5.95) per day;
+
+the four-factor model alpha is 3.4 basis points (t-value = 6.12). Because the earnings announcement
+
+return cycle strategy takes long and short positions in stocks outside the earnings announcement
+period, its correlation with the earnings announcement premium is economically small. In the
+five-factor models that include one of the earnings announcement premium factors, the t-values
+
+associated with alphas are 6.04 (real-time EAP) and 5.89 (perfect-foresight EAP).
+
+
+3.1.1   Limited analyst coverage and the earnings announcement return cycle
+
+   Our main sample consists of firms covered by at least five analysts over a 30-day period before
+the current earnings announcement. Figure 3 shows the earnings announcement return cycle for
+firms with limited analyst coverage. We retain all the other filters—such as those relating to the
+number of earnings announcements over the prior 400-calendar day period—but limit the sample
+to firms that were covered by at least one but no more than four analysts over the prior quarter
+
+(Panel A) or those that were not covered by any analyst (Panel B). Figure 3 is the same as Figure 1
+
+except for changing this analyst-coverage requirement.
+   Figure 3 shows that the earnings announcement return cycle is largely absent among low-
+coverage firms and firms with no analyst coverage. These findings show that the earnings an-
+nouncement return cycle behaves di↵erently from many other anomalies, such as momentum, which
+
+are stronger for firms with low analyst coverage Hong et al. (2000). At the same time, these re-
+
+sults appear to support the mispricing interpretation. Engelberg, McLean, and Ponti↵ (2018a),
+
+for example, suggest that investors who follow analysts’ price targets and recommendations may
+contribute to mispricing. If so, the earnings announcement return cycle may be stronger among
+
+                                                10
+
+=== PDF PAGE 12 ===
+                                                                                                        Panel A: Low analyst coverage
+
+                                                           0.08
+
+                                                                                 Typical previous                  Current                                     Expected next              50
+                                                                                  announcement                   announcement                                  announcement
+                                                           0.06
+
+
+
+
+               Average daily return (%)                                                                                                                                                        Upward revision (%)
+                                                           0.04
+                                                                                                                                                                                          45
+
+
+                                                           0.02
+
+
+
+                                                                                                                                                                                          40
+                                                           0.00
+
+
+                                                                                Stock return
+                                                          - 0.02                Upward revision (%)
+
+                                                                   - 70       - 60     - 50    - 40     - 30    - 20   - 10     0     10      20     30        40    50        60    70
+                                                                                                      Trading day relative to current earnings announcement
+
+
+                                                                                                         Panel B: No analyst coverage
+
+                                                                                     Typical previous             Current                                     Expected next
+                                                               0.06                   announcement              announcement                                  announcement
+
+
+                                                               0.04
+
+
+
+
+                               Average daily return (%)
+                                                               0.02
+
+
+
+                                                               0.00
+
+
+
+                                                              - 0.02
+
+
+
+                                                              - 0.04
+                                                                       - 70     - 60    - 50    - 40     - 30   - 20   - 10     0     10      20     30       40    50     60       70
+                                                                                                  Trading day relative to current earnings announcement
+
+
+Figure 3: Earnings announcement return cycle for firms with limited or no analyst cov-
+erage. This figure plots the average daily market-adjusted return (solid line) and the percentage
+of positive forecast revisions by analysts (dashed line) for common stocks traded on the NYSE,
+Nasdaq and Amex for a six-month period centered around a firm’s quarterly earnings announce-
+ment. This figure is the same as Figure 1 except that it only includes stocks covered by at least
+one but no more than four analysts (Panel A) or those not covered by any analyst (Panel B); the
+sample in Figure 1 consists of stocks covered by at least five analysts.
+
+
+stocks widely covered by analysts because a larger number of analysts reaches a larger pool of
+investors.
+
+
+3.1.2   Data-mining and the earnings announcement return cycle
+
+   The actual earnings announcement return cycle strategy is long each stock for a 15-day period
+from one week after an earnings announcement to four weeks after it; it is short the same stock for
+another 15-day period from seven weeks after the announcement to ten weeks after it. A concern
+
+
+                                                                                                                              11
+
+=== PDF PAGE 13 ===
+Figure 4: Bootstrapped distribution of t-values associated four-factor model alphas.
+The actual earnings announcement return cycle strategy is long stocks that announced quarterly
+earnings between one and four weeks ago and short stocks that announced earnings between seven
+and ten weeks ago. The strategy is therefore long each stock for 15 days and short another 15 days.
+In this figure we construct 100,000 strategies that randomly choose which days, over the combined
+30-day window, to be long or short. We estimate the daily four-factor model regression for each
+strategy and record the t-values associated with the alphas. This figure plots the distribution of
+these bootstrapped t-values. The red arrow at t-value = 6.22 denotes the t-value associated with
+the actual earnings announcement return cycle strategy.
+
+
+about the profitability of this trading rule is that it might be due to luck; if we were to try enough
+many trading rules similar to this strategy, we might expect to find many others that display
+comparable or even better performance. In Figure 4 we address this concern by comparing the
+performance of the actual strategy to a large number of alternative trading rules.
+   We construct 100,000 trading rules that randomly choose when to be long and short each
+stock. We can characterize the actual strategy as a 30-element sequence L, L, L, . . . , S, S, S over
+the earnings cycle, where L and S stand for long and short positions. We generate each randomized
+strategy by reordering this sequence so that the strategy is still short and long each stock for 15
+days each. We compute the daily return series associated with each randomized strategy, estimate
+the four-factor model regression, and record the t-value associated with the alpha. A comparison
+of t-values is appropriate; these t-values are proportional to the strategies’ information ratios, that
+is, their alphas divided by the standard deviation of the residuals.
+   Figure 4 shows the bootstrapped distribution of the t-values. By the virtues of randomization
+
+
+
+                                                  12
+
+=== PDF PAGE 14 ===
+                                    52
+
+
+
+                                    50
+
+
+
+
+          Percent of upgrades (%)
+                                    48
+
+
+
+                                    46
+
+
+
+                                    44
+
+
+
+                                    42
+
+                                         -10   0      10        20         30         40       50    60   70
+                                                     Trading day relative to earnings announcement
+
+Figure 5: The proportion of analyst recommendation upgrades around earnings an-
+nouncements. This figure shows the average proportion of analysts’ stock recommendation up-
+grades from two weeks before an earnings announcement to 13 weeks after it. The proportion of
+upgrades is the total number of upgrades across all stocks divided by the total number of recom-
+mendation changes.
+
+
+and for being long and short each stock for the same number of days, the mean of this distribution
+is close to zero at t-value =                  0.01. The actual strategy’s t-value of 6.22 stands out as an outlier; the
+
+99.9th percentile of the bootstrapped distribution, for example, lies at 5.19. Indeed, just 0.004% of
+the 100,000 bootstrapped strategies return t-values that exceed that of the actual strategy. This
+
+estimate of 0.004% is also the bootstrapped p-value associated with the actual strategy; it suggests
+that it would improbable to identify a trading rule as profitable as the earnings announcement
+return cycle by luck.
+
+
+3.2    Analysts’ optimism cycle
+
+   The pattern in average returns around earnings announcements aligns with those in analysts’
+forecast revisions and recommendation changes. Figure 1 shows that, as measured by the fraction
+of positive forecast revisions, analysts are the most optimistic around and immediately following
+an earnings announcement; they are the most pessimistic close to the midpoint between two earn-
+ings announcements. Figure 5 is similar to Figure 1 except that it shows the fraction of analyst
+recommendation upgrades. The resulting pattern is similar to that in forecast revisions. After an
+
+
+                                                                     13
+
+=== PDF PAGE 15 ===
+earnings announcement, approximately 50% of all recommendation changes are upgrades; before
+
+the next earnings announcement, this fraction is just 44%. Figures 1 and 5 show that there is a
+predictable unconditional di↵erence in analyst behavior that depends only on the distance from
+the firm’s previous earnings announcement, and that this pattern aligns with a similar pattern in
+average returns.
+   In Table 3 we report estimates from panel regressions to assess the economic magnitude of the
+patterns shown in Figures 1 and 5. The dependent variable is either the proportion of positive
+
+forecast changes or recommendation upgrades (“Proportion”) or an indicator variable that takes
+
+the value of one if the number of positive changes exceeds the number of negative changes and zero
+
+otherwise (“Up     Down”). We again exclude from the analysis all forecasts and recommendations
+
+issued around earnings announcement, and consider the period that runs from one week after an
+announcement to 13 weeks after it. The main regressors in Table 3 are indicator variables for
+Phases 1 and 3. Phase 1 is the three-week period from one week after an earnings announcement
+to four weeks after it; Phase 3 is the three-week period from seven weeks after an announcement to
+ten weeks after it. The period in the middle, Phase 2, is the omitted category. We include in the
+regressions firm-earnings announcement fixed e↵ects; we therefore identify di↵erences in analyst
+behavior from within-earnings announcement time-series variation alone.
+   Table 3 shows that, relative to the period in the middle of two earnings announcements, the
+
+proportion of positive forecast revisions is 3.5% higher (t-value = 7.67) immediately after earnings
+
+announcements and 2.4% lower (t-value =      5.59) as the next earnings announcement draws close.
+
+The results for recommendation changes are similar albeit weaker. In the regression in with indi-
+cator variables, the t-values associated with the two indicator variables are 2.12 and   2.16. Both
+
+the average return (Table 2) and optimism patterns (Table 3) are therefore statistically significant.
+
+
+3.3   Measuring the association between the EARC and optimism: The counter-
+      factual portfolio methodology
+
+   We use a counterfactual portfolio methodology to measure the association between the earnings
+announcement return cycle and the analyst optimism pattern. This methodology measures how
+much of the earnings announcement return cycle can be attributed to days surrounding analyst
+
+actions. In this analysis we create an alternative (counterfactual) strategy that removes all stock-
+
+                                                 14
+
+=== PDF PAGE 16 ===
+days in the vicinity of analysts’ forecast revisions and recommendation changes. If the actual
+strategy is long or short a stock in the vicinity of an analyst event, we remove this position from the
+portfolios. We then measure the return di↵erence between the actual and counterfactual strategies.
+If this di↵erence is small, the excluded set of events are not important in generating the profits of
+the anomaly; if the di↵erence is large, a large proportion of the anomaly profits derives from these
+
+events.8
+      This methodology is well-suited for assessing the extent to which a strategy derives its alpha
+from the excluded set of events. Suppose that the strategy’s alpha is unrelated to the analyst
+events, and that the strategy derives its alpha from the di↵erential exposures that the long and
+short legs have to some factors. In our computation, we, in e↵ect, replace an excluded stock’s
+actual return with the cross-sectional average of the other stocks. If the events do not correlate
+with risk exposures—that is, that a stock’s HML beta, for example, is not higher or lower on days
+analysts issue revised forecasts—then the excluded stock’s expected return is equal to this average
+plus measurement error. The actual strategy’s average return should then be close to that of the
+counterfactual strategy; after all, under the null, we merely drop a handful of random stocks from
+the portfolios that still remain well-diversified.
+      Assuming that the returns on the actual and counterfactual strategies follow factor structures,
+these processes can be written as:
+
+
+                                  rtactual = ↵tactual +       actual
+                                                                       Ft + eactual
+                                                                             t      ,                                (1)
+
+                                      rtcf = ↵tcf +    cf
+                                                            Ft + ecf
+                                                                  t ,                                                (2)
+
+
+           actual and   cf are 1 ⇥ K vectors of factor loadings and F
+where                                                                              t is a K ⇥ 1 vector of factor returns.
+
+Our tests are about the di↵erence in the strategy returns,
+
+                                   ⇣               ⌘ ⇣                         ⌘       ⇣               ⌘
+                  rtactual   rtcf = ↵tactual   ↵tcf +  actual             cf
+                                                                                   Ft + eactual
+                                                                                         t         ecf
+                                                                                                    t    .           (3)
+
+
+Under the null hypothesis that the strategy’s alpha is unrelated to the excluded events, ↵tactual
+
+↵tcf ⇡ 0. Moreover, if the factor loadings also are unrelated to the events—that is, they are not
+  8
+    This analysis is similar to that in Engelberg, McLean, and Ponti↵ (2018b), who measure di↵erences in anomaly
+returns between news and no-news days. Our methodology is the same in spirit, but we implement it by comparing
+the returns on two strategies.
+
+
+                                                      15
+
+=== PDF PAGE 17 ===
+di↵erent on analyst and non-analyst days—then | actual         cf | ⇡ 0. A time-series regression of the
+
+
+di↵erence between the actual and counterfactual strategy returns against factors therefore measures
+the extent to which the actual strategy’s alpha stems from the excluded events, and the extent to
+which factor loadings vary between days when analysts revise their forecasts and non-analyst days.
+   Table 4 reports estimates from time-series regressions that compare the actual strategy to
+the counterfactual strategy. We estimate five-factor model regressions that include the earnings
+announcement premium factor. Panel A defines an analyst event as a forecast change; that is,
+when an analyst revises his forecast, we remove the stock from the long and short portfolios, when
+applicable, for a three-day window around this event. If an analyst, for example, issues a forecast
+revision about a stock in the long-portfolio on May 5, 2005, we replace this stock’s return from May
+4 to May 6, 2005 with the average return on the other stocks in the long portfolio on these three
+days. We use a three-day window to ensure that the window captures the e↵ects of the forecast
+revision even if the forecast is issued after-hours. One-fifth of stocks that are either on the long or
+short side of the actual strategy experience at least one forecast revision on a typical day.
+   Panel A shows that the actual long-short strategy that trades the earnings announcement return
+
+cycle earns a daily alpha of 3.2 basis points (t-value = 5.89). The estimates for the “counterfactual”
+
+long-short strategy show that this alpha falls to 1.8 basis points (t-value = 3.22) when we remove
+
+stocks from the portfolios around analyst forecast revisions. This reduction of 45% in the point
+estimates is statistically significant; the rightmost column shows that the alpha of the di↵erence
+between the actual and counterfactual long-short strategies has a t-value of 5.81.
+   The decomposition of the long-short strategy in the other columns shows that the removal of
+analyst events alters the returns on the short side significantly more than those on the long side.
+Whereas the alphas of the actual and counterfactual strategies are almost the same for the long
+portfolio—the di↵erence of 0.08 basis points is less than one standard error away from zero—the
+alpha of the short side increases from     0.73 basis points per day to 0.63 basis points when we
+remove the analyst events. The earnings announcement return cycle strategy therefore derives a
+disproportionate amount of its profits by being short stocks on days when analysts lower their
+forecasts.
+   Panel B of Table 4 uses the post-1994 to examine the roles of both analyst forecast revisions
+and recommendation changes. When an analyst issues a revised forecast or a recommendation,
+
+
+                                                  16
+
+=== PDF PAGE 18 ===
+we again remove the stock from the portfolios for a three-day window around this event. In this
+analysis the alpha associated with the long-short strategy falls from 3.4 basis points per day to 1.4,
+
+and this reduction of 58% is significant with a t-value of 6.34. Almost all of the reduction in alphas
+is again concentrated on the short side.
+   Table 4 provides no evidence to suggest that stocks’ factor exposures vary significantly between
+days when analysts revise their forecasts and no-analyst days. The factor loadings in the three
+rightmost columns, both in Panel A and B, are all close to zero. Although analyst event contribute
+significant to alphas, they do not meaningfully alter the factor exposures.
+
+
+3.4   Forecast revisions, recommendation changes, and stock returns after and
+      before earnings announcements
+
+   Table 4 shows that analyst-days—that is, analysts’ forecast revisions and recommendation
+
+changes—explain between 45% and 58% of the total earnings announcement return cycle. The
+importance of this mechanism, however, di↵ers significant between the early and late parts of the
+cycle. Because the EARC strategy is long stocks that have recently announced their earnings and
+short those that are expected to announce their earnings, we can compare the long and short legs
+in Table 4 to assess the importance of analyst days.
+   Panel A of Table 4 shows that the actual EARC strategy earns a daily alpha of     0.73 basis points
+
+before an earnings announcement (column “short”). The counterfactual strategy that excludes
+
+analyst-days, however, has an alpha of 0.63 basis points, and the di↵erence between the two alphas
+has a t-value of   7.44. The forecast-revision days therefore explain all of the low pre-announcement
+
+returns. This finding is consistent with the analysis of Kim and So (2018): stock returns are low
+
+before announcements, and these low returns seem to stem from changes in expectations.
+   Neither forecast revisions nor recommendation changes, however, explain why firms earn high re-
+turns well after they have announced their earnings. A comparison of the “long” column in Panel A
+
+of Table 4 shows that analyst forecast revisions explain only 4% of the high post-announcement
+returns; Panel B, which also excludes days with recommendation changes, moves this estimate up,
+
+but only to 14%. That is, the comparison of the “long” and “short” columns shows that analyst
+actions fully explain the low returns before firms announce earnings—but almost none of the high
+returns after they have done so.
+
+
+                                                  17
+
+=== PDF PAGE 19 ===
+   In a supplementary analysis (Table A1 in the appendix), we follow Kim and So (2018) and,
+
+instead of measuring the analysts’ e↵ect of the earnings announcement return cycle, we examine
+the role of management guidance. Similar to Table 4, we construct a counterfactual strategy that
+excludes a three-day window for each stock around a day when the management issues guidance.
+The sample period in this analysis begins in January 2002, which is the start date of the guidance
+
+data. Consistent with Kim and So (2018), we find that management guidance alone explains a
+
+significant part of the returns in late part of the cycle. The alpha increases from   1.39 basis points
+per day to      0.58 when we exclude these days, and this change is statistically significant with a
+t-value of 4.64. At the same time, management guidance is unrelated to the significantly positive
+returns that firms earn in the early part of the cycle. The alpha falls from 1.56 to 1.49, and this
+change within one standard error from zero. Taken together, Tables 4 and A1 show that the actions
+taken neither by analysts nor the management can explain why stock prices drift up well after firms
+have disclosed their earnings to the public.
+
+
+3.5     Cross-sectional variation in the earnings announcement return cycle
+
+3.5.1    Analyst optimism by uncertainty and forecast horizon
+
+   Hirshleifer (2001) and Daniel, Hirshleifer, and Subrahmanyam (1998, 2001) suggest that if an
+
+anomaly stems from mispricing, it should be stronger in a high-uncertainty environment. Ackert
+
+and Athanassakos (1997) and Zhang (2006a) find empirical support for this conjecture; they show
+
+that the dispersion in analysts’ forecasts positively correlates with analysts’ optimism and under-
+reaction to new information. We first test whether analyst optimism correlates with firm size, age,
+idiosyncratic volatility, and cash-flow volatility, which are the uncertainty measures used in Zhang
+
+(2006b). We then test whether these measures positively correlate with the earnings announcement
+
+return cycle.
+   Figure 6 shows that analyst optimism significantly varies by the amount of idiosyncratic volatil-
+ity. We consider analysts’ one- to four-quarter ahead forecasts. We report the cross-sectional median
+forecast error, which is defined as the di↵erence between the analyst forecast and the actual quar-
+terly earnings, divided by the closing stock price on the day of the previous earnings announcement.
+We assign firms into quintiles based on the standard deviation of the residuals from the four-factor
+
+
+
+                                                  18
+
+=== PDF PAGE 20 ===
+                               0.30           4 quarters ahead                                                                High IVOL (Q5)
+                                                                                                                                   Q4
+                                                                                                                                   Q3
+                                                                                                                                   Q2
+                               0.25                                  3 quarters ahead                                         Low IVOL (Q1)
+
+
+
+                               0.20
+
+
+
+
+          Forecast error (%)
+                               0.15                                                        2 quarters ahead
+
+
+                               0.10
+
+
+                               0.05                                                                                 1 quarter ahead
+
+
+                               0.00
+
+
+                                      -260   -240   -220   -200    -180 -160 -140 -120 -100             -80   -60     -40     -20     0
+                                                                  Trading day relative to earnings announcement
+
+
+Figure 6: Forecast optimism by forecast horizon and idiosyncratic volatility. This figure
+plots median analyst forecast errors in event time around earnings announcements. We partition
+analysts’ forecasts by forecast horizon (one to four quarters ahead) and stocks by idiosyncratic
+volatility quintile. Forecast error is the di↵erence between the forecasted and actual quarterly
+earnings divided by the closing stock price on the day of the previous earnings announcement.
+Firm i’s forecast error on day t is the last non-missing forecast error. Idiosyncratic volatility is
+the standard deviation of the residuals from the four-factor model (Carhart, 1997). We compute
+idiosyncratic volatility using one year of daily data. We update the idiosyncratic volatility measures
+and rebalance the corresponding quintiles at the end of each quarter. The vertical lines denote the
+dates of earnings announcement. The line to the left from each point is the date of the previous
+earnings announcement; the line to the right is the expected date of the next announcement. We
+assume that the gap between two consecutive quarterly earnings announcements is 63 trading days.
+
+
+model (Carhart, 1997). We divide the graph into four regions to delineate between the four forecast
+
+horizons. The leftmost region, labeled “4 quarters ahead,” shows how analysts’ forecasts of quarter
+q + 4 earnings change between quarter q and q + 1 earnings announcements.
+   Two patterns stand out in Figure 6. First, analysts’ optimism decreases from one earnings an-
+nouncement to the next. Analysts are the most optimistic about quarter q + 4 earnings, then about
+q + 3 earnings, and so forth, and the amount of optimism decreases monotonically between earnings
+announcements. Second, analysts are significantly more optimistic about high-idiosyncratic volatil-
+ity firms that those of low volatility. It is also among the high-idiosyncratic volatility firms that
+the analysts walk down their forecasts the most. Whereas analysts overestimate the four-quarters
+
+ahead earnings yield by over 0.25% among the high-idiosyncratic volatility firms, the median fore-
+
+cast error at this horizon is 0.02% among low-volatility firms. The average actual earnings yield in
+
+the sample is 0.88%, and so an error of 0.25% corresponds, in percentage terms, to analysts being
+
+overly optimistic about the earnings yield by 28%. Analysts are therefore excessively optimistic
+
+                                                                                  19
+
+=== PDF PAGE 21 ===
+about these firms’ future prospects by an economically significant margin. As the date of the actual
+earnings draws close—this is the “1 quarter ahead” region in Figure 6—analysts’ median forecasts
+are consistently below the actual value. This reversal in expectations is consistent with the finding
+
+that management has incentives guide analysts down so that they can beat analyst estimates (Kim
+
+and So, 2018; Richardson et al., 2004).
+
+   Table 5 reports the correlation coefficients between analysts’ next period optimism and lagged
+measures of uncertainty. We define two measures of analyst optimism. “Early optimism” is the
+di↵erence between the analyst forecast of quarterly earnings and the actual earnings, divided by
+the closing stock price at the time of the previous earnings announcement. We average across
+the one to four quarters ahead forecasts, and measure optimism over the two-week period after
+the previous quarterly earnings announcement. “Optimism Walkdown” is the di↵erence between
+“Early optimism” and “Late optimism,” where late optimism is defined the same way as early
+optimism except that it is measured over a period from seven to ten weeks after the previous
+quarterly earnings announcement.
+   Table 5 shows that firm size, firm age, idiosyncratic volatility and cash-flow volatility all pos-
+itively correlate with both early optimism and optimism walkdown. Firm size and idiosyncratic
+volatility are the strongest predictors; their correlations with early optimism and optimism walk-
+down are approximately 20 percent and 10 percent, respectively.
+
+
+3.5.2   Uncertainty and the earnings announcement return cycle
+
+   Table 6 partitions the sample by firm-level uncertainty and reports daily four-factor model
+alphas for portfolios associated with the earnings announcement return cycle. We measure uncer-
+tainty either by firm size or by the first principal component of the four measures examined in
+Table 5: firm size, firm age, idiosyncratic volatility, and cash-flow volatility. We cross-sectionally
+standardize these four variables each quarter to be mean-zero with unit standard deviations before
+extracting the first principal component. The resulting principal component’s weights on these four
+variables are:
+
+
+                 w = (wfirm size , wfirm age , wivol , wcvol ) = ( 0.532, 0.461, 0.576, 0.415).   (4)
+
+
+
+
+                                                      20
+
+=== PDF PAGE 22 ===
+We compute this composite uncertainty measure for each firm-earnings announcement observation
+as the product of these weights and the standardized variables.
+   We sort stocks into quintiles at the end of each quarter and hold the assignments fixed over
+the following quarter. The long-portfolio again consists of stocks that announced their quarterly
+earnings between one and four weeks ago; those in the short-portfolio announced earnings between
+seven and ten weeks ago.
+   The alpha estimates in Table 6 show that the earnings announcement return cycle is stronger
+among high-uncertainty stocks. Using the first principal component to measure uncertainty, the
+first row shows that the alpha of the long-portfolio increases from 1.8 to 4.3 basis points from the
+bottom to the top quintile. A strategy that is long the top-uncertainty long-portfolio and short the
+
+bottom-uncertainty long-portfolio returns 2.7 basis points (t-value = 1.92). Short-portfolios display
+
+the same pattern. The alpha decreases from a statistically insignificant 0.3 basis points to       2.7
+basis points from the low- to the high-uncertainty quintile, and the di↵erence has a t-value of   2.10.
+The estimates for the long and short portfolios imply that the alpha associated with the long-short
+strategy must increase significantly as well; indeed, the “hedge” row shows that while the earnings
+
+announcement return cycle strategy has an alpha of 1.7 basis points (t-value = 1.63) per day among
+
+low-uncertainty stocks, this alpha is 7.0 basis points (t-value = 4.34) among the high-uncertainty
+
+stocks. The di↵erence between the high- and low-uncertainty strategies is statistically significant
+with a t-value of 2.81.
+   The lower part of Table 6 sorts stocks into portfolios by the inverse of firm size. The estimates
+on the hedge-row show that the earnings announcement return cycle is more pronounced among the
+smaller stocks in the sample. In the two highest quintiles—which correspond to smaller firms—the
+alphas of the earnings announcement return cycle strategy have t-values of 4.56 and 5.61; among
+larger firms, the t-values range from 0.75 to 1.56. These estimates do not imply that the earnings
+announcement return cycle exists only among tiny stocks—our sample, after all, excludes stocks
+not widely covered by analysts. The descriptive statistics in Table 1 show that even the firm at the
+
+25th percentile in our sample has a market value of $0.7 billion.
+   Figure 7 illustrates the relation between idiosyncratic volatility and the earnings announcement
+return cycle. Each line in this figure represents the average market-adjusted buy-and-hold return
+for an earnings announcement return cycle strategy. We assign stocks into quintiles at the end of
+
+
+                                                 21
+
+=== PDF PAGE 23 ===
+                                                                                                   High IVOL (Q5)
+                                                                                                        Q4
+                                                                                                        Q3
+                                                                                                        Q2
+                                                                                                   Low IVOL (Q1)
+
+                                   1.0
+
+
+
+
+           Cumulative return (%)
+                                   0.5
+
+
+
+
+                                   0.0
+
+
+
+
+                                         -10   0    10        20         30         40       50    60        70
+                                                   Trading day relative to earnings announcement
+
+Figure 7: Earnings announcement return cycle and idiosyncratic volatility. This fig-
+ure shows the average cumulative market-adjusted buy-and-hold returns between two consecutive
+quarterly earnings announcements. The sample includes U.S. common stocks traded on the NYSE,
+Nasdaq and Amex. A firm is included if it was covered by at least five analysts over the three-month
+period prior to the previous earnings announcement. The sample begins in January 1985 and ends
+in December 2016. We assign stocks into quintiles at the end of each quarter by idiosyncratic
+volatility; these portfolios are held constant over the following quarter. Idiosyncratic volatility is
+measured as the standard deviation of residuals from the four-factor model regression that uses
+daily returns over the prior year. We begin computing returns two weeks (t = 10) before an
+earnings announcement and end the computation 13 weeks (t = 70) after the announcement. A
+stock’s market-adjusted buy-and-hold return for a stock-earnings announcement pair i at time T is
+                                                 YT               YT
+                     Buy-and-hold returni,T =        (1 + ri,t )      (1 + rm,t ),
+                                                                t= 10                t= 10
+where ri,t is the daily stock return on day t relative to the announcement and rm,t is the equal-
+weighted market return on the same day.
+
+
+each quarter based on idiosyncratic volatility, and held these assignment constant over the following
+quarter. Figure 2 is the unconditional version of this figure; it does not partition the sample by
+idiosyncratic volatility.
+   As suggested by the alpha estimates in Table 6, the earnings announcement return cycle is more
+pronounced among high-uncertainty firms. Among the firms in the highest idiosyncratic volatility
+
+quintiles, cumulative returns peak at approximately 1.3%. That is, the firms in this top quintile
+
+are typically priced 1.3% higher four weeks after the earnings announcement relative to one week
+before it. Among the firms in the lowest quintile, the cumulative return at the four-week mark is
+
+just 0.2%. The results in Table 6 and Figure 7 are consistent with those in Stambaugh, Yu, and
+
+
+
+                                                                  22
+
+=== PDF PAGE 24 ===
+Yuan (2015) on asset pricing anomalies being stronger among high-idiosyncratic volatility stocks.
+
+
+3.5.3    Valuation subjectivity
+
+   Barberis and Shleifer (2003), Barberis, Shleifer, and Wurgler (2005), Baker and Wurgler (2006),
+
+and others suggest that the prices of unprofitable growth (or “glamour”) stocks likely fluctuate more
+
+with investor sentiment than those of profitable value firms. If the earnings announcement return
+cycle relates to analyst optimism, and analyst optimism, in turn, relates to investor sentiment, we
+would expect to find a stronger e↵ect among unprofitable growth stocks.
+   Table 7 partitions stocks by book-to-market and profitability, and reports average abnormal
+returns for long- and short-portfolios based on the earnings announcement return cycle. Abnormal
+returns are the highest for stocks with low book-to-market ratios and for those with low profitability.
+The average daily market-adjusted return for the long-short portfolios increases from 3.5 basis points
+per day to 7.6 when we move from value stocks to growth stocks. Similarly, the return increases
+from 4.4 basis points to 8.1 basis points when we move from high- to low-profitability stocks. These
+di↵erences are statistically significant with t-values of 2.39 and 2.81.
+   The results in Table 7 are consistent with the view of that investor sentiment a↵ects the prices
+of unprofitable stocks with low book-to-market more than those of profitable stocks with high book-
+
+to-market ratios (Baker and Wurgler, 2006). If the cycle in optimism contributes to the earnings
+
+announcement return cycle, then this variation in optimism should have a disproportionate e↵ect
+on the returns of unprofitable growth stocks.
+
+
+3.6     Earnings announcement return cycle and limits to arbitrage
+
+   If the earnings announcement return cycle stems from mispricing, its persistence points to severe
+limits to arbitrage. We examine the association between the earnings announcement return cycle
+and limits to arbitrage in both the cross section and time series. First, in our cross-sectional analysis
+we measure and sort stocks by illiquidity. We expect the EARC to be stronger among stocks that
+are more expensive to trade; rational arbitrageurs will trade against the EARC only up to the point
+where it is profitable to do so. Second, in our time-series analysis, we measure how the strength
+of the EARC varies by the intensity of the earnings season. When only a handful of companies
+announce earnings, arbitrageurs would require relatively little capital to trade against the EARC;
+
+
+                                                   23
+
+=== PDF PAGE 25 ===
+but far more capital would be needed when hundreds of companies announced their earnings at
+the same time. Event intensity is important if a fund’s amount of arbitrage capital is fixed. If a
+fund has enough capital to eliminate mispricing even at the height of the earnings season, it will
+have large amounts of idle capital at times when only a few firms announce earnings. The optimal
+amount of capital allocated to this trade, to maximize the return on capital, would therefore be
+such that it leaves some arbitrage profits on the table towards the peak of the earnings season.
+   Table 8 presents the results. The first block of numbers sort stocks into quintiles based on
+
+Amihud’s (2002) illiquidity measure. The average return on the long-portfolio is significantly higher
+
+for illiquid stocks. The 2.5 basis point di↵erence per day between the top and bottom quintiles
+is significant with a t-value of 2.16. The average return on the short-portfolio, by contrast, does
+not vary as greatly based on stock-level illiquidity; the di↵erence between the top and the bottom
+quintiles is within one standard error from zero. As a consequence, the average return on the
+long-short portfolio increases modestly in illiquidity.
+   The second block of numbers in Table 8 sorts trading days into quintiles based on event intensity.
+We define event intensity as a firm-level variable that counts the number of firms that announced
+their earnings on the same day. Each quintile therefore has the same number of trading days in it;
+but, because the days are partitioned by event intensity, the portfolios in the top quintile contain
+many more stocks than those in the bottom quintile.
+   The average return estimates in Table 8 show that the earnings announcement return cycle
+significantly correlates with event intensity. The average return on the long-portfolio increases by
+
+3.2 basis points per day (t-value = 2.13) from the bottom to the top quintile, and that on the
+
+short-portfolio decreases by 4.6 basis points (t-value =    3.44). As a consequence, the long-short
+
+strategy yields 7.3 basis points more per day (t-value = 3.73) in the top quintile. In the bottom
+
+quintile, which represents times when arbitrage capital would be spread out over a small number
+stocks, the average return on the earnings announcement return cycle strategy is negative at        1
+basis points per day and statistically insignificant. These estimates are consistent with the earnings
+announcement return cycle stemming from mispricing; when the number of arbitrage opportunities
+is greater, more of the mispricing persists.
+   Figure 8 assign stocks into quintiles by event intensity—for example, a stock is assigned into
+the top quintile if many other stocks announced their earnings on the same day it did—and plots
+
+
+                                                  24
+
+=== PDF PAGE 26 ===
+                                                                                                   High Event Intensity (Q5)
+                                                                                                           Q4
+                                  1.0                                                                      Q3
+                                                                                                           Q2
+                                                                                                   Low Event Intensity (Q1)
+                                  0.8
+
+
+
+
+          Cumulative return (%)
+                                  0.6
+
+
+                                  0.4
+
+
+                                  0.2
+
+
+                                  0.0
+
+
+                                  -0.2
+
+
+                                         -10   0    10        20         30         40       50           60           70
+                                                   Trading day relative to earnings announcement
+
+Figure 8: Earnings announcement return cycle and event intensity. This figure plots the
+average buy-and-hold market-adjusted returns in event time between two consecutive quarterly
+earnings announcements. The sample includes U.S. common stocks traded on the NYSE, Nasdaq
+and Amex. A firm is included if it was covered by at least five analysts over the three-month
+period prior to the previous earnings announcement. The sample begins in January 1985 and ends
+in December 2016. Event intensity is a firm-level measure that counts the number of firms that
+announce their quarterly earnings on the same day. We first assign stocks into portfolios based on
+event intensity and then construct the long-short earnings announcement return cycle strategies
+within each quintile. The top quintile includes those stocks that announced their earnings on days
+when many others did so as well.
+
+
+the average returns on the earnings announcement return cycle strategies within each quintile. The
+resulting pattern is similar to that in Figure 7 for idiosyncratic volatility. This figure shows that the
+
+firms announcing earnings close to the peak of the earnings season have approximately 1% higher
+valuations a month after an earnings announcement relative to their valuations a week before it.
+Among firms that announce their earnings when relatively few others do, the average di↵erence
+
+between the pre- and post-announcement valuations is less than 0.4%.
+   The estimates in Table 8 and Figure 8 support the limits to arbitrage hypothesis. Abnormal
+returns positively correlate with event intensity and, to a lesser extent, with stock-level illiquidity.
+The earnings announcement return cycle is more pronounced for firms that announce their earnings
+close to the peak of the earnings season, that is, at times when arbitrage capital would be spread
+out more thinly.
+   The results on the correlation between event intensity and the earnings announcement return
+
+
+
+                                                                   25
+
+=== PDF PAGE 27 ===
+cycle relate to the event-time versus calendar-time measurement of returns on the long-term per-
+formance of initial public o↵erings. The long-term performance of IPOs is significantly worse when
+measured in event time because a greater number of IPOs occur at times of high valuations Schultz
+
+(2003)—similar to earnings (although at a di↵erent frequency), IPOs come in waves. The event-
+
+intensity results in Table 8 and Figure 8 are similar: the returns on the earnings announcement
+return cycle are higher when a greater number of firms announce their earnings. We can there-
+fore alternatively quantify the association between event intensity and the earnings announcement
+return cycle by comparing event- and calendar-time returns.
+   Table 9 compares market-adjusted returns between event- and calendar-time portfolios. We
+sort stocks into portfolios by firm-level uncertainty—we use the same first-principal component
+measure as in Table 6—and then measure average returns over equal-weighted market returns.
+The event-time portfolios, similar to the calendar-time portfolios, are long stocks that announced
+their quarterly earnings between one and four weeks ago, and short stocks that announced their
+earnings between seven and ten weeks ago. The two event- and calendar-time computations are
+therefore the same in every dimension except in how they weight the data.
+   The estimates in Table 9 show that the abnormal returns associated with the earnings an-
+nouncement return cycle are significantly higher in event-time than in calendar-time. For the
+top-uncertainty quintile, the average market-adjusted long-short return is 10.8 basis points per day
+
+(t-value = 7.13) in event time; in calendar time, this average return is 6.8 basis points (t-value
+
+= 4.40). This di↵erence between two measures is consistent with the event-intensity results. An
+
+arbitrageur who invests the same amount of capital into each stock would earn significantly higher
+returns than one who commits the same amount of capital to the earnings announcement return
+cycle each day.
+
+
+3.7   Earnings announcement return cycle in Fama-MacBeth regressions
+
+   Our results on the earnings announcement return cycle above are based on univariate portfolio
+
+sorts; we have sorted, in turn, by firm-level uncertainty, valuation subjectivity (as measured by
+
+book-to-market and profitability), and measures of limits to arbitrage. In this section we estimate
+
+Fama and MacBeth (1973) regressions that predict the cross section of quarterly stock returns using
+
+these three measures at the same time.
+
+                                                26
+
+=== PDF PAGE 28 ===
+   We define the dependent variable in three ways. First, the long-return component in quarter q
+is the stock’s average “phase 1” return, that is, its average return from one week after the quarterly
+earnings announcement to four weeks after it. Second, the short-return component is the stock’s
+average “phase 3” return, that is, its average return from seven weeks after the announcement to ten
+weeks after it. Third, the long-short return is the di↵erence between these two components. Every
+stock in the sample has both long- and short-return components each quarter. We use Fama-
+MacBeth regressions to examine the extent to which firm characteristics explain cross-sectional
+variation in these return components.
+   The explanatory variables represent the same factors we examine above. Each is defined for
+firm i at the start of quarter q. The first is firm-level uncertainty, which is the same first principal
+component of firm size, firm age, idiosyncratic volatility, and cash-flow volatility examined in
+Table 6. The second is event intensity, which is defined as the log-number of firms that announced
+earnings on the same day as firm i. We cross-sectionally standardize both of these variables each
+quarter so that they have a mean of zero and a standard deviation of one. The third and fourth
+are similarly cross-sectionally standardized book-to-market ratios and profitability.
+   Because we standardize the explanatory variables to be mean-zero, the intercepts in these
+regressions measure the average long- and short-return components over the earnings announcement
+return cycle for the “average” firm, that is, for the firm that is of average uncertainty, event
+intensity, book-to-market, and profitability. Because the explanatory variables have unit standard
+deviations, the slopes in the Fama-MacBeth regressions measure the changes in average returns
+when the explanatory variables move by one standard deviation in the distribution.
+   Table 10 presents the results. Each row represents estimates from one set of Fama-MacBeth
+regressions. Both the univariate and multivariate regressions are consistent with the patterns
+documented above. First, uncertainty positively correlates with analyst optimism, and therefore
+the long-return components increase and the short-return components decrease in uncertainty. The
+
+point estimate for the di↵erence between the long and short return components (row 9) shows that
+
+a one-standard deviation increase in uncertainty increases the earnings announcement return cycle
+
+by 50%.
+   Second, event intensity, which plausibly measures limits to arbitrage, also amplifies the earnings
+announcement return cycle. The point estimate of 1.46 on row 10 indicates that a one-standard de-
+
+
+                                                  27
+
+=== PDF PAGE 29 ===
+viation shock to event intensity strengthens the return pattern by approximately one-third. Third,
+the earnings announcement return cycle significantly decreases in both book-to-market and prof-
+itability. A simultaneous one-standard deviation shock to both, on row 11, amplifies the earnings
+
+announcement return cycle by approximately 50%. The last regression shows that all these e↵ects
+coexist. While the “average” firm earns a return of 5.80 basis points per day over the earnings
+announcement return cycle—this is the average daily return from being long a stock in weeks two
+through four after an earnings announcement and short in weeks seven through ten—this return
+e↵ect is more than twice as high for stocks that lie one standard deviation above or below the
+average firm in terms of uncertainty, event intensity, book-to-market, and profitability.
+    Table 10 shows that uncertainty, event intensity, book-to-market, and profitability each capture
+cross-sectional variation in the earnings announcement return cycle strategy. Moreover, each of
+these variables point to the same behavioral explanation for the earnings announcement return
+cycle. The pattern in average returns is stronger in high-uncertainty stocks, at times when more
+capital would be required to eliminate mispricing, and among stocks whose prices we would expect
+to be more swayed by variation in investor sentiment.
+
+
+4    Conclusions
+
+In this paper we document a new regularity in stock returns, the earnings announcement return cy-
+cle. We show that stocks widely followed by analysts earn high returns in the weeks after announcing
+their quarterly earnings and low returns during the period leading up the next announcement. This
+pattern in average returns coincides with that in analyst optimism. Analysts become increasingly
+optimistic about firms’ prospects after earnings announcements, and they revise their forecasts
+downwards as the next announcement draws close. The optimism cycle accounts for approximately
+one-half of the earnings announcement return cycle. Firm-level uncertainty positively correlates
+with both the analysts’ optimism cycle and the earnings announcement return cycle.
+    Figure 9 illustrates the connection between the optimism cycle and the earnings announcement
+return cycle. As in Section 3.3 we compare the returns of the actual earnings announcement return
+cycle strategy against a counterfactual strategy; this counterfactual strategy removes stocks from
+portfolios for three-day windows around analyst forecast revisions. The shaded area in the figure
+denotes the amount of the earnings announcement return cycle that accrues around the days revise
+
+
+                                                 28
+
+=== PDF PAGE 30 ===
+                                                                                                Original return
+                                                                                                No analysts updates
+                             0.06
+
+
+
+                             0.04
+
+
+
+
+          Daily return (%)
+                                                                              Return cycle
+                             0.02                                             explained by
+                                                                            analysts' updates
+
+
+                             0.00
+
+
+
+                             -0.02
+
+
+
+                             -0.04
+
+                                     -10   0    10        20         30         40       50      60           70
+                                               Trading day relative to earnings announcement
+
+Figure 9: Earnings announcement return cycle and analyst optimism. This figure plots
+the three-day moving average of average daily market-adjusted return from seven trading days
+before a quarterly earnings announcement to 70 trading days after it. The sample contains all
+common stocks traded on the NYSE, Nasdaq, or Amex; a stock must have been covered by at least
+five analysts in the previous quarter. The sample begins in January 1985 and ends in December
+2016. The solid line in this figure represents the return on the actual earnings announcement
+return cycle strategy; it is identical to that in Figure 1. The dashed line represents the return
+on the counterfactual strategy; it removes a stock from a portfolio for a three-day window around
+each analyst forecast revision. The shaded gap between the two lines represents the amount of the
+earnings announcement return cycle that is due to being long or short on stocks around analyst
+forecast revisions.
+
+their forecasts. The estimates in Table 4 show approximately one-half of the profits to the earnings
+announcement return cycle disappear when the strategy does not take positions in stocks around
+analyst forecast revisions.
+   The explanatory power of analysts concentrates in the latter part of the cycle. By excluding
+analyst days, we can fully explain why firms earn low returns before earnings announcements. The
+
+result in this part of the cycle is consistent with guide-down mechanism of Kim and So (2018).
+
+At the same time, neither the actions of analysts nor management guidance can explain the high
+returns that firms earn well after they have announced earnings. In Figure 9, the shaded area
+shows up mostly in the period leading up to the next announcement. Why do stock prices drift
+upwards for weeks even after the uncertainty about their earnings has been resolved, and when at
+least analysts do not revise their expectations of these firms’ prospects higher?
+   Our estimates of how much the optimism cycle contributes to the earnings announcement return
+
+
+                                                              29
+
+=== PDF PAGE 31 ===
+cycle are plausibly conservative. Insofar as analyst forecast revisions do not perfectly correlate with
+changes in investor sentiment, our estimates of the role of investor sentiment are biased downwards.
+Indeed, when we consider both analyst forecast revisions and recommendation changes, our estimate
+of how much analyst events contribute to the return cycle increases by 13 percentage points. When
+available, it would be valuable to consider other measures of firm-level sentiment to revisit this
+computation. The investors who set the prices after earnings announcements, for example, may
+not share the same beliefs as analysts, and that may explain why the exclusion of analyst days does
+not explain away this part of cycle in average stock returns.
+   Our results on the connection between returns and sentiment could also be read in reverse. If
+one subscribes to our interpretation of these results—that the majority of the earnings announce-
+ment return cycle likely derives from predictable variation in sentiment—one could use the earnings
+announcement return cycle itself as a proxy for within-firm time-series variation in investor senti-
+ment. The market participants who set prices are seemingly the most optimistic after a firm has
+released its earnings and the most pessimistic as the next announcement draws near.
+
+
+
+
+                                                  30
+
+=== PDF PAGE 32 ===
+References
+
+Ackert, Lucy F., and George Athanassakos, 1997, Prior uncertainty, analyst bias, and subsequent
+  abnormal returns, Journal of Financial Research 20, 263–273.
+
+Amihud, Yakov, 2002, Illiquidity and stock returns: cross-section and time-series e↵ects, Journal
+  of Financial Markets 5, 31–56.
+
+Baker, Malcolm, and Je↵rey Wurgler, 2006, Investor sentiment and the cross-section of stock re-
+  turns, Journal of Finance 61, 1645–1680.
+
+Ball, Ray, and Philip Brown, 1968, An empirical evaluation of accounting income numbers, Journal
+  of Accounting Research 159–178.
+
+Ball, Ray, and Stephen P. Kothari, 1991, Security returns around earnings announcements, The
+  Accounting Review 718–738.
+
+Barber, Brad M., Emmanuel T. De George, Reuven Lehavy, and Brett Trueman, 2013, The earnings
+  announcement premium around the globe, Journal of Financial Economics 108, 118–138.
+
+Barberis, Nicholas, and Andrei Shleifer, 2003, Style investing, Journal of Financial Economics 68,
+  161–199.
+
+Barberis, Nicholas, Andrei Shleifer, and Je↵rey Wurgler, 2005, Comovement, Journal of Financial
+  Economics 75, 283–317.
+
+Beaver, William H., 1968, The information content of annual earnings announcements, Journal of
+  Accounting Research 6, 67–92.
+
+Bernard, Victor L., and Jacob K. Thomas, 1989, Post-earnings-announcement drift: Delayed price
+  response or risk premium? Journal of Accounting Research 27, 1–36.
+
+Bernard, Victor L., and Jacob K. Thomas, 1990, Evidence that stock prices do not fully reflect the
+  implications of current earnings for future earnings, Journal of Accounting and Economics 13,
+  305–340.
+
+
+
+
+                                               31
+
+=== PDF PAGE 33 ===
+Bradley, Daniel, Jonathan Clarke, Suzanne Lee, and Chayawat Ornthanalai, 2014, Are analysts’
+  recommendations informative? Intraday evidence on the impact of time stamp delays, Journal
+  of Finance 69, 645–673.
+
+Carhart, Mark M., 1997, On persistence in mutual fund performance, Journal of Finance 52, 57–82.
+
+Chari, V. V., Ravi Jagannathan, and Aharon R. Ofer, 1988, Seasonalities in security returns: The
+  case of earnings announcements, Journal of Financial Economics 21, 101–121.
+
+Cohen, Daniel A., Aiyesha Dey, Thomas Z. Lys, and Shyam V. Sunder, 2007, Earnings announce-
+  ment premia and the limits to arbitrage, Journal of Accounting and Economics 43, 153–180.
+
+Daniel, Kent, David Hirshleifer, and Avanidhar Subrahmanyam, 1998, Investor psychology and
+  security market under-and overreactions, Journal of Finance 53, 1839–1885.
+
+Daniel, Kent D., David Hirshleifer, and Avanidhar Subrahmanyam, 2001, Overconfidence, arbi-
+  trage, and equilibrium asset pricing, Journal of Finance 56, 921–965.
+
+Engelberg, Joseph, R David McLean, and Je↵rey Ponti↵, 2018a, Analysts and anomalies, Working
+  paper.
+
+Engelberg, Joseph, R David McLean, and Je↵rey Ponti↵, 2018b, Anomalies and news, Journal of
+  Finance 73, 1971–2001.
+
+Ertimur, Yonca, Volkan Muslu, and Frank Zhang, 2011, Why are recommendations optimistic?
+  Evidence from analysts’ coverage initiations, Review of Accounting Studies 16, 679–718.
+
+Fama, E., and K. French, 2015, A five-factor asset pricing model, Journal of Financial Economics
+  116, 1–22.
+
+Fama, Eugene F, and James D MacBeth, 1973, Risk, return, and equilibrium: Empirical tests,
+  Journal of political economy 81, 607–636.
+
+Foster, George, Chris Olsen, and Terry Shevlin, 1984, Earnings releases, anomalies, and the behav-
+  ior of security returns, The Accounting Review 59, 574–603.
+
+Frazzini, Andrea, and Owen A. Lamont, 2007, The earnings announcement premium and trading
+  volume, Working paper.
+
+                                               32
+
+=== PDF PAGE 34 ===
+Grinblatt, Mark, Gergana Jostova, and Alexander Philipov, 2016, Analyst bias and mispricing,
+  Working paper.
+
+Hirshleifer, David, 2001, Investor psychology and asset pricing, Journal of Finance 56, 1533–1597.
+
+Hong, Harrison, Terence Lim, and Jeremy C Stein, 2000, Bad news travels slowly: Size, analyst
+  coverage, and the profitability of momentum strategies, Journal of Finance 55, 265–295.
+
+Kim, Jinhwan, and Eric C. So, 2018, Expectations management and stock returns, Working paper.
+
+Malmendier, Ulrike, and Devin Shanthikumar, 2014, Do security analysts speak in two tongues?
+  Review of Financial Studies 27, 1287–1322.
+
+Richardson, Scott, Siew Hong Teoh, and Peter D. Wysocki, 2004, The walk-down to beatable
+  analyst forecasts: The role of equity issuance and insider trading incentives, Contemporary Ac-
+  counting Research 21, 885–924.
+
+Savor, Pavel, and Mungo Wilson, 2016, Earnings announcements and systematic risk, Journal of
+  Finance 71, 83–138.
+
+Schultz, Paul, 2003, Pseudo market timing and the long-run underperformance of IPOs, Journal
+  of Finance 58, 483–517.
+
+Shleifer, Andrei, and Robert W. Vishny, 1997, The limits of arbitrage, Journal of Finance 52,
+  35–55.
+
+So, Eric C., and Sean Wang, 2014, News-driven return reversals: Liquidity provision ahead of
+  earnings announcements, Journal of Financial Economics 114, 20–35.
+
+Stambaugh, Robert F, Jianfeng Yu, and Yu Yuan, 2014, The long of it: Odds that investor sentiment
+  spuriously predicts anomaly returns, Journal of Financial Economics 114, 613–619.
+
+Stambaugh, Robert F., Jianfeng Yu, and Yu Yuan, 2015, Arbitrage asymmetry and the idiosyncratic
+  volatility puzzle, Journal of Finance 70, 1903–1948.
+
+White, Halbert, 2000, A reality check for data snooping, Econometrica 68, 1097–1126.
+
+Zhang, X. Frank, 2006a, Information uncertainty and analyst forecast behavior, Contemporary
+  Accounting Research 23, 565–590.
+
+                                               33
+
+=== PDF PAGE 35 ===
+Zhang, X. Frank, 2006b, Information uncertainty and stock returns, Journal of Finance 61, 105–
+  137.
+
+
+
+
+                                             34
+
+=== PDF PAGE 36 ===
+                                   Table 1: Summary Statistics
+This table reports summary statistics for U.S. common equities traded on the NYSE, Amex, and
+Nasdaq. Each observation is a firm-earnings announcement pair. In this table we report time-series
+averages of cross-sectional statistics. Panel A reports firm characteristics for the main sample and
+excluded sample due to low analyst coverage. The main sample includes firms covered by at least
+five analysts during the previous quarter; the excluded sample includes firms with a lower level of
+coverage. Panel B reports variables related to analysts for a period from 50 trading days prior to
+6 trading days prior to each earnings announcement. The data begin in January 1985 and end in
+December 2016 except for the analyst recommendations in Panel B, for which the data begin in
+February 1994.
+
+                               Main sample (N =1,066)              Excluded firms (N =3,476)
+                                         Percentiles                           Percentiles
+Variable                     Mean  25th     50th     75th         Mean    25th     50th    75th
+
+                                                   Fundamental variables
+
+Market value, $ billions       7.43    0.67     1.83      5.62     0.79      0.04    0.14     0.50
+Book-to-market                 0.61    0.32     0.52      0.79     1.16      0.41    0.70     1.12
+Profitability                  6.8%    3.5%     6.4%      9.8%     2.3%      0.2%    3.9%     7.7%
+Dividend payer                54.2%    3.2%    51.6%    100.0%    31.4%      0.0%    0.0%    95.2%
+No. of news articles          22.51    6.70    14.09     27.50     4.25      0.00    0.00     5.09
+
+                                        Analyst forecasts and recommendations
+
+Number of analysts            10.57    6.14     8.68     13.16
+Forecast revisions             6.10    1.74     3.94      7.87
+ Upward                        2.51    0.15     1.29      3.07
+ Downward                      3.60    0.38     1.81      4.53
+Recommendation changes         0.56    0.00     0.06      0.90
+ Upgrade                       0.27    0.00     0.00      0.25
+ Downgrade                     0.29    0.00     0.01      0.32
+
+
+
+
+                                                35
+
+=== PDF PAGE 37 ===
+            Table 2: Earnings announcement return cycle: Daily time-series regressions
+This table reports alphas and factor loadings from daily time-series regressions in which the depen-
+dent variable is a return associated with a strategy that trades the earnings announcement return
+cycle. The long-portfolio holds stocks from one week after an earnings announcement to four weeks
+after it; the short-portfolio holds stocks from seven weeks after an earnings announcement to ten
+weeks after it; and the hedge-portfolio is the return di↵erence between the long and short portfolios.
+The portfolios are equal-weighted and rebalanced daily. The returns are in basis points per day.
+The two rightmost columns add an earnings announcement premium (EAP) factor to Carhart’s
+(1997) four-factor model. This factor is long stocks from two weeks before an earnings announce-
+ment to one week after it and short all other stocks. The real-time factor uses the predicted date of
+the next earnings announcement; the perfect-foresight factor assumes that investors know the date
+of the next earnings announcement two weeks prior to it. We report t-values associated with alphas
+in parentheses and the standard errors associated with the factor loadings in square brackets. The
+sample period begins in January 1985 and ends in December 2016.
+
+                                                                                 + EAP factor
+                                                                                           Perfect
+                        CAPM                      Four-factor model          Real-time   foresight
+Regressor     Long       Short    Hedge        Long      Short   Hedge          Hedge       Hedge
+
+                                             Daily alpha (basis points)
+
+Constant       1.92      1.36        3.27        2.47      0.90      3.37          3.33         3.24
+              (3.48)   ( 2.36)      (5.95)      (6.02)   ( 2.09)    (6.12)        (6.04)       (5.89)
+
+                                                 Factor loadings
+
+Market         1.07       1.11       0.04        1.08      1.12      0.04          0.04         0.04
+              [0.01]     [0.01]     [0.01]      [0.00]    [0.00]    [0.01]        [0.01]       [0.01]
+SMB                                              0.50      0.53      0.03          0.03         0.03
+                                                [0.01]    [0.01]    [0.01]        [0.01]       [0.01]
+HML                                              0.02      0.01      0.03          0.03         0.03
+                                                [0.01]    [0.01]    [0.01]        [0.01]       [0.01]
+UMD                                              0.19      0.17      0.02          0.01         0.01
+                                                [0.01]    [0.01]    [0.01]        [0.01]       [0.01]
+EAP                                                                                0.02         0.07
+                                                                                  [0.01]       [0.01]
+
+N             7,779      7,779     7,779       7,779      7,779    7,779          7,779        7,779
+Adj. R2       85.9%      85.7%      0.7%       92.2%      92.0%     0.9%           0.9%         1.2%
+
+
+
+
+                                                   36
+
+=== PDF PAGE 38 ===
+Table 3: Analysts’ forecast revisions and recommendation changes around earnings announcements
+This table reports estimates from panel regressions that explain optimism in analyst behavior
+between two consecutive quarterly earnings announcements. The dependent variable is either the
+proportion of positive forecast changes or recommendation upgrades (“Proportion”) or an indicator
+variable that takes the value of one if the number of positive changes exceeds the number of negative
+changes and zero otherwise (“Up Down”). “Phase 1” is an indicator variable that takes the value
+of one if the firm announced its earnings between one and four weeks ago and zero otherwise; “Phase
+3” is an indicator variables that takes the value of one if the firm announced its earnings between
+seven and ten weeks ago and zero otherwise. “Phase 2,” which identifies the period in the middle, is
+the omitted category. The sample excludes firms from two weeks before an earnings announcement
+to one week after it. The sample in the first two columns begins in January 1985 and ends in
+December 2016; in columns three and four, it begins in February 1994. We cluster standard errors
+by quarter and industry and report t-values in parentheses; we use the 49 Fama-French industries.
+
+                                        Forecast                         Recommendation
+Explanatory                             revisions                             changes
+variable                        Proportion      Up      Down         Proportion      Up Down
+Phase 1                               3.46               5.32              0.79          2.36
+(6  t  20)                         (7.67)             (8.82)            (0.29)        (2.16)
+Phase 2                                  .                 .                  .                 .
+(21  t  35)                            .                 .                  .                 .
+Phase 3                                2.38              3.72               2.21              2.33
+(36  t  50)                        ( 5.59)           ( 5.24)            ( 0.89)           ( 2.18)
+Firm-announcement FEs                  Y                  Y                Y                  Y
+                             YYYYYYYY           YYYYYYYY           YYYYYYYY          YYYYYYYY
+N                                249,845            348,225            42,248            98,652
+Adj. R2                           42.0%              23.3%              3.0%              0.2%
+
+
+
+
+                                                 37
+
+=== PDF PAGE 39 ===
+Table 4: Measuring the contribution of analyst-update days to the earnings announcement return
+cycle
+This table reports alphas and factor loadings from daily time-series regressions in which the depen-
+dent variable is a return associated with a strategy that trades the earnings announcement return
+cycle. The long-portfolio holds stocks from one week after an earnings announcement to four weeks
+after it; the short-portfolio holds stocks from seven weeks after an earnings announcement to ten
+weeks after it; the hedge-portfolio is the return di↵erence between the long and short portfolios.
+The portfolios are equal-weighted and rebalanced daily. The returns are in basis points per day.
+The “actual strategy” in columns one through three is the same as that examined in Table 2.
+The “counterfactual strategy” in columns four through six removes a stock from a portfolio for a
+three-day window around each analyst event. The dependent variable in columns seven through
+nine is the di↵erence between the actual and counterfactual strategies. Panel A defines an analyst
+event as a forecast revision; Panel B defines an analyst event as a forecast revision or recommen-
+dation change. The earnings announcement premium (EAP) factor is long stocks from two weeks
+before the announcement to one week after and short all other stocks. This factor is computed by
+assuming that investors know the date of the next earnings announcement at least two weeks prior
+to it. We report t-values associated with alphas in parentheses and the standard errors associated
+with the factor loadings in square brackets. The sample period in Panel A begins in January 1985
+and ends in December 2016; that in Panel B begins in February 1994.
+
+Panel A: Removing stocks around analyst forecast revisions
+                     Actual                  Counterfactual                     Actual
+                    strategy                     strategy                     Counterfactual
+Regressor   Long      Short   Hedge      Long     Short    Hedge         Long    Short    Hedge
+
+                                           Daily alpha (basis points)
+
+Constant       2.51      0.73      3.24       2.42     0.63     1.79      0.08      1.36      1.45
+              (6.10)   ( 1.71)    (5.89)     (5.82)   (1.44)   (3.22)    (0.48)   ( 7.44)    (5.81)
+
+                                               Factor loadings
+
+Market         1.08       1.12     0.04       1.07     1.11     0.04      0.01       0.01     0.00
+              [0.00]     [0.00]   [0.01]     [0.00]   [0.00]   [0.01]    [0.00]     [0.00]   [0.00]
+SMB            0.50       0.53     0.03       0.52     0.55     0.03      0.02       0.02     0.01
+              [0.01]     [0.01]   [0.01]     [0.01]   [0.01]   [0.01]    [0.00]     [0.00]   [0.00]
+HML            0.02       0.01     0.03       0.02     0.01     0.03      0.00       0.00     0.01
+              [0.01]     [0.01]   [0.01]     [0.01]   [0.01]   [0.01]    [0.00]     [0.00]   [0.01]
+UMD            0.19       0.17     0.01       0.18     0.16     0.01      0.01       0.01     0.00
+              [0.01]     [0.01]   [0.01]     [0.01]   [0.01]   [0.01]    [0.00]     [0.00]   [0.00]
+EAP            0.02       0.09     0.07       0.02     0.06     0.04      0.00       0.03     0.03
+              [0.01]     [0.01]   [0.01]     [0.01]   [0.01]   [0.01]    [0.00]     [0.00]   [0.01]
+
+N             7,779     7,779     7,779     7,779     7,779    7,779     7,779     7,779     7,779
+Adj. R2       92.2%     92.1%      1.2%     91.8%     91.7%     1.1%      1.4%      1.8%      0.2%
+
+
+
+
+                                                 38
+
+=== PDF PAGE 40 ===
+Panel B: Removing stocks around analyst forecast revisions and recommendation changes
+                     Actual                  Counterfactual                 Actual
+                    strategy                     strategy                 Counterfactual
+Regressor   Long      Short   Hedge      Long     Short     Hedge    Long    Short    Hedge
+
+                                         Daily alpha (basis points)
+
+Constant      2.41      0.95     3.36       2.08     0.67     1.41     0.33      1.61     1.95
+             (4.54)   ( 1.71)   (4.72)     (3.97)   (1.20)   (2.03)   (1.65)   ( 6.81)   (6.34)
+
+                                             Factor loadings
+
+Market        1.07      1.10     0.04       1.05     1.09     0.04     0.01      0.01     0.00
+             [0.01]    [0.01]   [0.01]     [0.01]   [0.01]   [0.01]   [0.00]    [0.00]   [0.00]
+SMB           0.50      0.53     0.03       0.52     0.55     0.03     0.02      0.02     0.00
+             [0.01]    [0.01]   [0.01]     [0.01]   [0.01]   [0.01]   [0.00]    [0.00]   [0.01]
+HML           0.01      0.02     0.03       0.02     0.02     0.04     0.01      0.00     0.01
+             [0.01]    [0.01]   [0.01]     [0.01]   [0.01]   [0.01]   [0.00]    [0.00]   [0.01]
+UMD           0.20      0.19     0.01       0.19     0.18     0.01     0.01      0.01     0.00
+             [0.01]    [0.01]   [0.01]     [0.01]   [0.01]   [0.01]   [0.00]    [0.00]   [0.00]
+EAP           0.00      0.08     0.08       0.00     0.05     0.05     0.00      0.03     0.03
+             [0.01]    [0.01]   [0.02]     [0.01]   [0.01]   [0.02]   [0.00]    [0.01]   [0.01]
+
+N           5,463      5,463    5,463     5,463     5,463    5,463    5,463     5,463    5,463
+Adj. R2     92.4%      92.2%     1.2%     92.4%     92.1%     1.0%     1.6%      1.8%     0.3%
+
+
+
+
+                                               39
+
+=== PDF PAGE 41 ===
+               Table 5: Analysts’ optimism, walkdown, and firm-level uncertainty
+This table reports regression-based estimates of the correlations between analyst optimism and four
+firm-level measures uncertainty. The unit of observation is a firm-quarterly earnings announcement
+pair. The dependent variable is either Early Optimism or Optimism Walkdown. Early Optimism
+is the analyst forecast minus the actual quarterly earnings divided by the closing stock price on
+the day of the previous earnings announcement. We average over the one- to four-quarter ahead
+forecasts, and measure optimism over a two-week period after the previous earnings announcement.
+Optimism Walkdown is the di↵erence between Late Optimism and Early Optimism, where Late
+Optimism is defined the same way as Early Optimism except that it is measured from seven weeks
+after an announcement to ten weeks after it. The explanatory variables are firm size, firm age,
+idiosyncratic volatility, and cash-flow volatility. We standardize the dependent and explanatory
+variables each quarter to be mean-zero with unit standard deviations. The regressions include
+industry and year-quarter fixed e↵ects, where the industries are the 49 Fama-French industries.
+The standard errors, which are reported in parentehses, also cluster by industry and year-quarter.
+
+                           Firm                 Firm           Idiosyncratic           Cash-flow
+                            size                 age               volatility           volatility
+
+                                       Dependent variable: Early Optimism
+
+Coefficient              20.38                7.49                   26.67               10.99
+S.E.                      1.48                0.88                    2.61                1.80
+                    YYYYYYY              YYYYYYY                YYYYYYY              YYYYYYY
+N                      80,785               80,785                 80,785               65,186
+Adj. R2                 10.0%                7.0%                   11.0%                7.0%
+
+                                    Dependent variable: Optimism Walkdown
+
+Coefficient                 7.38                 2.29                  11.82                 5.28
+S.E.                        0.99                 0.63                   1.81                 1.26
+
+N                        80,198                80,198                 80,198               64,660
+Adj. R2                   5.0%                  4.0%                   5.0%                 5.0%
+
+
+
+
+                                                40
+
+=== PDF PAGE 42 ===
+            Table 6: Firm-level uncertainty and the earnings announcement return cycle
+This table reports four-factor model alphas for long and short portfolios associated with the earnings
+announcement return cycle. The alphas are reported in basis points per day. Stocks are assigned
+into quintiles at the end of each quarter by either the first principal component of uncertainty or
+the inverse of firm size. Uncertainty increases from the low to the high quintile. The rightmost
+column shows the alphas associated with the strategy that is long the high-uncertainty portfolio
+and short the low-uncertainty strategy. The first principal component of uncertainty is that of
+cross-sectionally standardized firm size, firm age, idiosyncratic volatility, and cash-flow volatility.
+The long-portfolio contains stocks that announced their quarterly earnings between one and four
+weeks ago; the short portfolio contains stocks that announced their earnings seven to ten weeks
+ago; and the hedge portfolio is the di↵erence between the two. We report t-values in parentheses.
+
+                                             Quintile                                           High
+Portfolio        Low             Q2             Q3             Q4           High                Low
+
+                             Uncertainty measure: First principal component
+
+Long              1.82          1.18           2.09           4.11           4.32                2.71
+                 (2.52)        (1.81)         (2.95)         (4.58)         (3.70)              (1.92)
+Short             0.25         0.44           0.84           2.09           2.72                3.13
+                 (0.32)      ( 0.62)        ( 1.11)        ( 2.27)        ( 2.20)             ( 2.10)
+Hedge             1.67          1.68           2.98           6.22           7.02                5.59
+                 (1.63)        (1.86)         (3.03)         (5.06)         (4.34)              (2.81)
+
+                                        Uncertainty measure: 1/Firm size
+
+Long              1.43          2.05           1.36           2.43           4.61                3.15
+                 (2.20)        (2.84)         (1.86)         (3.24)         (5.13)              (2.88)
+Short             0.64          0.28          0.23           2.24           2.30                3.01
+                 (0.90)        (0.29)       ( 0.29)        ( 2.84)        ( 2.44)             ( 2.58)
+Hedge             0.73          1.72           1.62           4.69           6.96                6.21
+                 (0.75)        (1.45)         (1.56)         (4.56)         (5.61)              (3.96)
+
+
+
+
+                                                  41
+
+=== PDF PAGE 43 ===
+            Table 7: Earnings announcement return cycle, book-to-market, and profitability
+This table reports average daily market-adjusted returns for long and short portfolios associated
+with the earnings announcement return cycle. The average returns are reported in basis points
+per day. The long-portfolio contains stocks that announced quarterly earnings between one and
+four weeks ago; the short portfolio contains stocks that announced quarterly earnings seven to ten
+weeks ago; and the hedge portfolio is the di↵erence between the two. We compute returns over
+the equal-weighted market portfolio. We sort stocks into quintiles either by book-to-market ratio
+or profitability. Profitability is the operating profitability of Fama and French (2015); it is defined
+as the sales minus the cost of good sold minus selling, general and administrative expenses (if
+available), minus interest and related expense, all divided by the lagged book value of equity. We
+report t-values in parentheses.
+
+                                               Quintile                                         High
+Portfolio            Low             Q2            Q3               Q4           High           Low
+
+                                                  Book-to-market
+
+Long                  3.61          2.35           1.82           1.74            0.66          2.95
+                     (2.43)        (3.02)         (2.37)         (2.75)          (1.03)       ( 1.78)
+Short                3.77          4.51           3.46           2.18            2.38            1.39
+                   ( 2.56)       ( 4.26)        ( 5.36)        ( 3.31)         ( 2.55)          (0.83)
+Hedge                 7.56          7.00           5.40           4.12            3.51          4.05
+                     (5.37)        (6.67)         (5.55)         (4.66)          (3.15)       ( 2.39)
+
+                                                    Profitability
+
+Long                  1.21          1.50           1.92           2.16            3.08           1.87
+                     (0.77)        (2.33)         (2.91)         (2.70)          (4.06)         (1.12)
+Short                6.10          4.33           3.25           2.29            1.16            4.94
+                   ( 3.49)       ( 5.08)        ( 5.54)        ( 3.25)         ( 1.37)          (3.49)
+Hedge                 8.12          5.96           5.23           4.46            4.35          3.78
+                     (5.68)        (6.63)         (6.52)         (4.72)          (4.44)       ( 2.81)
+
+
+
+
+                                                  42
+
+=== PDF PAGE 44 ===
+            Table 8: Arbitrage difficulty and the earnings announcement return cycle
+This table reports average daily market-adjusted returns for long and short portfolios associated
+with the earnings announcement return cycle. The average returns are reported in basis points per
+day. The long-portfolio contains stocks that announced quarterly earnings between one and four
+weeks ago; the short portfolio contains stocks that announced earnings seven to ten weeks ago. The
+first block of numbers assigns stocks into quintiles by Amihud’s (2002) illiquidity measure; each
+quintile therefore contains the same number of stocks. The second block of numbers assigns trading
+days into quintiles based on event intensity; each quintile therefore contains the same number of
+trading days. Event intensity of stock i in quarter q is defined as the number of firms that announced
+their quarter q 1 earnings on the same day as stock i. We report t-values in parentheses.
+
+                                               Quintile                                        High
+Portfolio          Low              Q2             Q3              Q4           High           Low
+
+                                 Sort stocks by Amihud’s (2002) illiquidity
+
+Long                0.59           2.41           1.80           2.38            3.09           2.50
+                   (0.52)         (3.39)         (2.38)         (3.63)          (4.49)         (2.16)
+Short              3.47           3.08           4.15            3.05           2.51            0.96
+                 ( 2.55)        ( 3.62)        ( 5.57)         ( 3.62)        ( 2.78)          (0.59)
+Hedge               4.09           5.55           6.14           5.68            6.24           2.15
+                   (3.89)         (5.14)         (6.88)         (5.81)          (5.56)         (1.65)
+
+                                           Sort days by event intensity
+
+Long               0.90            0.29           0.16           2.43            2.27           3.17
+                 ( 0.76)          (0.35)         (0.24)         (3.30)          (2.77)         (2.13)
+Short               0.72          0.56           2.31            2.53           3.86           4.58
+                   (0.61)       ( 0.56)        ( 2.71)         ( 3.64)        ( 3.94)        ( 3.44)
+Hedge              0.93            1.06           2.75           5.21            6.34           7.27
+                 ( 0.57)          (0.72)         (2.62)         (4.58)          (6.20)         (3.73)
+
+
+
+
+                                                 43
+
+=== PDF PAGE 45 ===
+    Table 9: Returns on the earnings announcement return cycle in event- and calendar-time
+This table reports daily market-adjusted returns for long- and short-portfolios associated with the
+earnings announcement return cycle. The long-portfolio contains stocks that announced quarterly
+earnings between one and four weeks ago; the short-portfolio contains those that announced earnings
+between seven and ten weeks ago. We sort stocks into quintiles based on firm-level uncertainty,
+measured as of the end of the previous quarter. Uncertainty is the first principal component of
+cross-sectionally standardized firm size, firm age, idiosyncratic volatility, and cash-flow volatility.
+This table reports average returns computed in event- and calendar-time. The event-time averages
+are weighted towards stocks that announce their earnings at times when many other firms do so as
+well; the calendar-time averages weigh all days the same. We report t-values in parentheses.
+
+                                           Uncertainty quintile                                 High
+Portfolio           Low             Q2               Q3              Q4          High           Low
+
+                                           Event-time abnormal returns
+
+Long                1.07           1.25             1.92            2.81          4.78           3.70
+                   (1.24)         (1.93)           (2.13)          (2.49)        (3.73)         (2.20)
+Short              1.25           2.64             3.11             4.25         5.98           4.73
+                 ( 1.39)        ( 3.34)          ( 3.22)          ( 3.19)      ( 4.07)        ( 2.64)
+Hedge               2.32           3.89             5.03            7.05        10.76            8.44
+                   (2.40)         (3.82)           (4.62)          (6.02)       (7.13)          (4.43)
+
+                                         Calendar-time abnormal returns
+
+Long                1.08           0.33             1.22            2.95          3.06           2.18
+                   (1.26)         (0.47)           (1.58)          (2.65)        (2.10)         (1.17)
+Short              0.68           1.25             1.71             3.15         3.92           3.53
+                 ( 0.74)        ( 1.67)          ( 2.03)          ( 2.81)      ( 2.42)        ( 1.75)
+Hedge               1.64           1.60             2.96            6.09          6.79           5.40
+                   (1.69)         (1.80)           (3.19)          (5.11)        (4.40)         (2.84)
+
+
+
+
+                                                   44
+
+=== PDF PAGE 46 ===
+            Table 10: Earnings announcement return cycle in Fama-MacBeth regressions
+This table reports average coefficients and t-values from Fama and MacBeth (1973) regressions
+that predict the cross section of quarterly stock returns. A stock’s long-return component, rlong ,
+in quarter q is its cumulative return over the equal-weighted market portfolio from one week after
+its quarterly earnings announcement to four weeks after it; the short-return component, rshort , is
+the stock’s cumulative return over the equal-weighted market portfolio from seven weeks after the
+announcement to ten weeks after it; and rlong rshort is the di↵erence between these two return
+components. The four explanatory variables for stock i in quarter q are defined as follows: (1)
+uncertainty is the first principal component of cross-sectionally standardized firm size, firm age,
+idiosyncratic volatility, and cash-flow volatility at the beginning of quarter q; (2) event intensity
+is the log-number of firms that announced their quarter q 1 earnings on the same day as firm i;
+(3) book-to-market ratio; and (4) profitability. Profitability is the operating profitability of Fama
+and French (2015); it is defined as the sales minus the cost of good sold minus selling, general and
+administrative expenses (if available), minus interest and related expense, all divided by the lagged
+book value of equity. All explanatory variables are cross-sectionally standardized each quarter to
+be mean-zero and with unit standard deviations; they are also winsorized at the 1st and 99th
+percentiles. We report t-values in parentheses. These t-values are Newey-West-adjusted using four
+quarterly lags.
+
+                                                          Event
+Dep.               Constant       Uncertainty           intensity      BE/ME          Profitability
+variable    #        b̂      t       b̂       t           b̂      t     b̂        t      b̂         t
+            1     2.37    3.46    1.30    2.11
+            2     2.26    3.63                         0.63    1.96
+rlong
+            3     2.16    3.27                                        0.83    1.60     0.01     0.01
+            4     2.31    3.38     1.38    2.36        0.90    2.56   0.88    1.61     0.17     0.37
+            5     3.45    4.10     1.61    2.46
+            6     3.27    4.42                         0.82    2.52
+rshort
+            7     3.36    4.27                                        1.00    1.79     1.69     1.68
+            8     3.49    4.15     1.46    2.44        1.05    2.66   0.79    1.44     1.32     2.45
+            9     5.81    6.79     2.91    4.30
+rlong       10    5.54    6.89                         1.46    3.55
+   rshort   11    5.53    6.83                                        1.84    3.81     1.68     4.30
+            12    5.80    6.76     2.83    4.14        1.96    3.74   1.67    3.52     1.15     2.89
+
+
+
+
+                                                  45
+
+=== PDF PAGE 47 ===
+Table A1: Measuring the contribution of management guidance to the earnings announcement
+return cycle
+This table reports alphas and factor loadings from daily time-series regressions in which the depen-
+dent variable is a return associated with a strategy that trades the earnings announcement return
+cycle. The long-portfolio holds stocks from one week after an earnings announcement to four weeks
+after it; the short-portfolio holds stocks from seven weeks after an earnings announcement to ten
+weeks after it; the hedge-portfolio is the return di↵erence between the long and short portfolios.
+The portfolios are equal-weighted and rebalanced daily. The analysis in this table is the same
+as that in Table 4 except that, instead of removing events relating to analysts, it conditions on
+management guidance. The “actual strategy” in columns one through three is the same as that
+examined in Table 2. The “counterfactual strategy” in columns four through six removes a stock
+from a portfolio for a three-day window around each day when management issues guidance. We
+report t-values associated with alphas in parentheses and the standard errors associated with the
+factor loadings in square brackets. The sample period begins in January 2002 and ends in December
+2016.
+
+                        Actual                    Counterfactual                 Actual
+                       strategy                     strategy                   Counterfactual
+Regressor     Long       Short    Hedge       Long    Short    Hedge      Long    Short    Hedge
+
+                                            Daily alpha (basis points)
+
+Constant       1.56      1.39      2.94        1.49      0.58     2.07     0.07      0.80     0.87
+              (2.61)   ( 2.19)    (3.51)      (2.51)   ( 0.96)   (2.53)   (0.93)   ( 4.64)   (4.67)
+
+                                                Factor loadings
+
+Market         1.06       1.10      0.04       1.07      1.11     0.04     0.00      0.00     0.00
+              [0.01]     [0.01]    [0.01]     [0.01]    [0.01]   [0.01]   [0.00]    [0.00]   [0.00]
+SMB            0.54       0.56      0.02       0.54      0.56     0.02     0.00      0.01     0.01
+              [0.01]     [0.01]    [0.02]     [0.01]    [0.01]   [0.02]   [0.00]    [0.00]   [0.00]
+HML            0.02       0.01      0.03       0.02      0.01     0.03     0.00      0.00     0.00
+              [0.01]     [0.01]    [0.02]     [0.01]    [0.01]   [0.02]   [0.00]    [0.00]   [0.00]
+UMD            0.16       0.15      0.02       0.16      0.15     0.02     0.00      0.00     0.00
+              [0.01]     [0.01]    [0.01]     [0.01]    [0.01]   [0.01]   [0.00]    [0.00]   [0.00]
+EAP            0.02       0.10      0.08       0.02      0.10     0.09     0.00      0.00     0.00
+              [0.01]     [0.01]    [0.02]     [0.01]    [0.01]   [0.02]   [0.00]    [0.00]   [0.00]
+
+N             3,525      3,525    3,525       3,525     3,525    3,525    3,525     3,525    3,525
+Adj. R2      94.6%      94.3%     1.8%       94.6%     94.7%     1.8%     0.5%      0.0%     0.1%
+
+
+
+
+                                                  46
+
+=== END SOURCE TEXT ===

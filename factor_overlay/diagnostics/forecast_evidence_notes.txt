@@ -1,0 +1,15 @@
+POST-RESULT FORECAST DIAGNOSIS
+
+The announcement clock has detectable risk information, but the new mean-return predictions did not reliably improve forecasts. This helps explain why additional trading failed to earn its costs. It is a predictive diagnosis, not proof of a unique causal mechanism.
+
+Primary 2015–2025: adding cycle features worsens raw next-day forecast MSE in 34/36 factor/model pairs; median relative change +0.0903%. Median within-date/leg incremental rank correlation is -0.00318; only 6/36 are positive, and none is significantly positive at 5% even before multiple-testing correction. All 36 incremental-calibration95% intervals include zero. The median incremental-calibration slope is -0.0777; ideal calibration would be 1. The negative median is descriptive, not evidence that the true relationship is reliably negative.
+
+The extra predictions vary by a median 7.69 bp/day across stocks, while realized signed returns vary by 248 bp/day. Small signal/noise alone does not disprove alpha; here it accompanies poor out-of-sample calibration and worse forecast error. Models are making changes that lack reliable directional support.
+
+Holding the baseline mean fixed and substituting only the cycle model's variance improves Gaussian variance scoring in all 36/36 holdout comparisons; every improvement survives Holm across 36 (largest adjusted p = 0.00383). This isolates a gain in risk forecasting. Better risk forecasts do not by themselves imply positive incremental mean return or sufficient trading profits. The portfolio risk penalty is diagonal and tracks an equal-weight book; it does not fully optimize correlated portfolio risk.
+
+Using the primary one-day forecasts against exact five-session average payoffs, all 36 pairs worsen MSE (median +0.516%); median incremental rank correlation is only +0.00277 and joint calibration remains near zero. Separately trained horizon-matched models also worsen MSE in all 36 pairs (median+0.0799%, equal-year mean of existing results_h5 scores). Thus horizon mismatch contributes to forecast error but is insufficient to explain or fix the underperformance.
+
+A limited optimism check uses 2004 observations already included in the 2005 model training window: all 36 pairs improve one-day MSE there (median-0.512%), versus 34/36 worsening in 2015–2025. This is consistent with fitting unstable sample relationships; it is not a formal attribution of overfitting or proof that the clock contains no information.
+
+Inference averages stocks within date/leg and then legs within date, with HAC12 across weekly sampled dates. IC requires at least 5 sampled stocks in a leg; sparse RDIPO short legs may be omitted from IC while remaining in other moments. The 36 model pairs are correlated; counts are descriptive rather than 36 independent replications. These diagnostic tests were designed after seeing strategy results and do not establish new trading alpha.

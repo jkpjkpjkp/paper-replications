@@ -1,0 +1,76 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "check": "identical_paths_zero_difference_and_ci",
+      "pass": true
+    },
+    {
+      "check": "positive_scaling_preserves_sharpe",
+      "pass": true,
+      "maximum_absolute_numerical_error": 3.8459253727671276e-16,
+      "note": "Pure multiplicative scale; an additive cash shift need not preserve Sharpe."
+    },
+    {
+      "check": "numerical_zero_sharpe_delta_does_not_create_false_significance",
+      "pass": true,
+      "pvalues": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "check": "independent_four_raw_moment_HAC_delta_covariance",
+      "pass": true,
+      "details": [
+        {
+          "hac_lag": 0,
+          "maximum_error": 3.3306690738754696e-16,
+          "se": 0.09328240483349809
+        },
+        {
+          "hac_lag": 3,
+          "maximum_error": 4.440892098500626e-16,
+          "se": 0.1106354559610982
+        },
+        {
+          "hac_lag": 6,
+          "maximum_error": 1.6653345369377348e-16,
+          "se": 0.1116434089947475
+        },
+        {
+          "hac_lag": 12,
+          "maximum_error": 2.7755575615628914e-16,
+          "se": 0.11774644728553765
+        }
+      ]
+    },
+    {
+      "check": "paired_path_swap_negates_estimate_and_intervals",
+      "pass": true,
+      "maximum_error": 5.551115123125783e-17
+    },
+    {
+      "check": "test_year_perturbation_leaves_all_weights_betas_and_fit_diagnostics_invariant",
+      "pass": true,
+      "test_year": 2015,
+      "training_months": 60,
+      "factor_count": 10
+    },
+    {
+      "check": "portfolio_gain_weight_and_residual_identities",
+      "pass": true,
+      "maximum_errors": {
+        "equal_weight_gain": 3.0357660829594124e-18,
+        "simplex_baseline": 2.220446049250313e-16,
+        "simplex_augmented": 0.0,
+        "oos_residual_retains_train_intercept": 6.938893903907228e-17
+      }
+    }
+  ],
+  "tested_module": "/home/jkp/data/earnings-timing/rolling_sharpe5/min10/analyze.py",
+  "tested_module_sha256": "532d3e499784c9cefd55da182cb1e318dee6567bde9cb08b73722cd3eb9cdda7",
+  "scope": "Synthetic numerical and information-chronology tests only. No main analysis run or real result files changed.",
+  "limits": "Fixed-path Sharpe inference does not reselect factors or refit historical portfolios in bootstrap; sparse publication/vintage history and missing OOS factors require separate source audits."
+}

@@ -1,0 +1,8 @@
+The Earnings Announcement Return Cycle
+
+Condensed abstract
+
+Documents negative abnormal stock returns before earnings announcements and positive
+returns afterward, distinct from the announcement premium. Analyst optimism follows a
+similar cycle and explains part of the return pattern. Stronger effects among uncertain
+and difficult-to-arbitrage stocks support a mispricing interpretation.

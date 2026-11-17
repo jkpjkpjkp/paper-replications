@@ -1,0 +1,28 @@
+{
+  "status": "Post-result descriptive diagnostics, no refit or new portfolio selection",
+  "sample": "ALL eligible rows on idx%5==0, before any factor-tail selection; >=20 pairwise finite names per date, nonzero variance; calendar-year crossing five-day labels purged",
+  "score": "Economic signed source-month percentile rank for first5factors; RDIPO+1raw0,-1raw1; fixed originalclock+1pre1..5,-1pre21..40,0otherwise",
+  "groundtruth": "return_1d is raw observed stock total return; return_5d is exact5session fixed-share gross underlying payoff including distributions retained as cash, not annualized. Future prices used only for outcome labels.",
+  "missing": "Missing observed nextday return excluded from its pairwise correlations. Five-day label missing observed marks0, missingretx effective totalret, first missinglisting closesatlastmark; no survivor filter.",
+  "correlation": "Within-date Pearson or Spearman on same pairwise-complete names, then equalweight average across dates. Pearson subtracts cross-sectional means, removing a common stock-return market level; not pooled level/trend correlation.",
+  "uncertainty": "HAC12 on original five-session grid including gaps for omitted dates; descriptive95% intervals/p, no multiplicity-adjusted discovery claims",
+  "limits": "Pairwise supports differ by predictor; matrix need not be positive semidefinite and is not an optimizer covariance input. These are in-period realized information coefficients, not model OOSprediction correlations; do not establish nonlinear conditional alpha.2018cutoff chosen after outcomes.",
+  "variables": [
+    "MS",
+    "CompEquIss",
+    "InvestPPEInv",
+    "Cash",
+    "RIO_Disp",
+    "RDIPO",
+    "clock_score",
+    "return_1d",
+    "return_5d"
+  ],
+  "periods": [
+    "2005_2017",
+    "2018_2025"
+  ],
+  "total_label_rows": 1251064,
+  "scalar_label_checks": 105,
+  "max_scalar_label_error": 0.0
+}
