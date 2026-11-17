@@ -1,0 +1,78 @@
+{
+  "frozen_at": "2026-11-09T02:47:15.821479+00:00",
+  "paper_id": 405,
+  "models": [
+    "DLinear",
+    "PatchTST",
+    "iTransformer",
+    "TimeMixer"
+  ],
+  "datasets": [
+    "NASDAQ",
+    "NYSE"
+  ],
+  "layouts": [
+    "tfb_native_blocks",
+    "date_complete"
+  ],
+  "horizons": [
+    24,
+    36,
+    48,
+    60
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "model_kwargs": {
+    "task_name": "long_term_forecast",
+    "seq_len": 96,
+    "enc_in": 5,
+    "c_out": 5,
+    "dec_in": 5,
+    "label_len": 48,
+    "moving_avg": 25,
+    "dropout": 0.1,
+    "d_model": 128,
+    "d_ff": 512,
+    "e_layers": 2,
+    "d_layers": 1,
+    "n_heads": 4,
+    "activation": "gelu",
+    "factor": 5,
+    "output_attention": false,
+    "patch_len": 16,
+    "stride": 8,
+    "embed": "timeF",
+    "freq": "d",
+    "channel_independence": 1,
+    "decomp_method": "moving_avg",
+    "down_sampling_layers": 3,
+    "down_sampling_window": 2,
+    "down_sampling_method": "avg",
+    "top_k": 5,
+    "use_norm": 1,
+    "use_future_temporal_feature": 0,
+    "num_class": 2
+  },
+  "epochs": 10,
+  "batch_size": 32,
+  "optimizer": "Adam",
+  "learning_rate": 0.0001,
+  "scheduler": "CosineAnnealingWarmRestarts T_0=10,T_mult=1,eta_min=0",
+  "checkpoint_selection": "minimum validation MSE only",
+  "source": "Official decisionintelligence/TFB commit889459188ec89c9cb3c7e5ec40f30b8c0c5c2529, selected numerical model code unmodified. Optional unused Reformer-only import omitted and empty namespace initializers used to avoid unrelated plugins.",
+  "external_dependency": "einops0.8.1 loaded read-only by explicit package path; no environment installs or copied Torch environment.",
+  "adaptations": "Common compact fixed defaults and original RISE normalization/lr/epochs; exact baseline-specific original tuning/settings unavailable. Native model internal normalization remains active as coded by TFB. No test-tuning or preferred data-layout choice.",
+  "evaluation_level": "Retrospective benchmark comparison; RISE/classical test errors were already inspected before these model runs. This is not an untouched confirmatory financial test.",
+  "grid_size_seed_runs": 320,
+  "primary_config": "/home/jkp/data/paper-reproduction-audit/workspaces/405/frozen_tfb_config.json",
+  "script_sha256": {
+    "prepare_tfb_models.py": "741bc5bb8333726698d1d9baf078de6aea52e35ff84b83a7469907c9941687ba",
+    "run_tfb_neural_baselines.py": "630e45f8acae6f098c3158aba1bb21cdc20b36f4496b9a907eab9aeac84c4162"
+  }
+}

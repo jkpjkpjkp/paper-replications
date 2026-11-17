@@ -1,0 +1,450 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "rise",
+  "title": "Retrieve the Right Signal: Decomposition-Guided Retrieval-Augmented Forecasting for Financial Markets",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/paper-reproduction-audit/workspaces/405/sources/paper-viewer-export.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/paper-reproduction-audit/workspaces/405/sources/paper-viewer-export.pdf",
+    "sha256": "8252711c810e75e48df4bffcd11a3cfb798bdf8e00af42644d77782d0a37d43a",
+    "bytes": 1511775,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 10,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 128
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 129,
+      "line_end": 222
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 223,
+      "line_end": 364
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 365,
+      "line_end": 487
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 488,
+      "line_end": 716
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 717,
+      "line_end": 890
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 891,
+      "line_end": 2688
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 2689,
+      "line_end": 3264
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 3265,
+      "line_end": 3464
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 3465,
+      "line_end": 3532
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 75
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 76,
+      "line_end": 141
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 142,
+      "line_end": 229
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 230,
+      "line_end": 292
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 293,
+      "line_end": 392
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 393,
+      "line_end": 472
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 473,
+      "line_end": 554
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 555,
+      "line_end": 630
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 631,
+      "line_end": 701
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 702,
+      "line_end": 743
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 72,
+      "text": "Abstract"
+    },
+    {
+      "line": 722,
+      "text": "4 Experiments"
+    },
+    {
+      "line": 723,
+      "text": "4.1 Experimental Setup"
+    },
+    {
+      "line": 3447,
+      "text": "Conclusion"
+    },
+    {
+      "line": 3470,
+      "text": "References"
+    },
+    {
+      "line": 3474,
+      "text": "A Time Series is Worth 64 Words: Long-term Forecasting with Transformers. In"
+    },
+    {
+      "line": 3478,
+      "text": "2024. TFB: Towards Comprehensive and Fair Benchmarking of Time Series"
+    },
+    {
+      "line": 3481,
+      "text": "2025. DUET: Dual Clustering Enhanced Multivariate Time Series Forecasting."
+    },
+    {
+      "line": 3516,
+      "text": "2025. Retrieval-Augmented Forecasting for Time Series. In Proceedings of the"
+    },
+    {
+      "line": 3519,
+      "text": "2024. MASTER: Market-Guided Stock Transformer for Stock Price Forecasting."
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2757
+    },
+    {
+      "id": 39,
+      "line_start": 2750,
+      "line_end": 2829
+    },
+    {
+      "id": 40,
+      "line_start": 2822,
+      "line_end": 2901
+    },
+    {
+      "id": 41,
+      "line_start": 2894,
+      "line_end": 2973
+    },
+    {
+      "id": 42,
+      "line_start": 2966,
+      "line_end": 3045
+    },
+    {
+      "id": 43,
+      "line_start": 3038,
+      "line_end": 3117
+    },
+    {
+      "id": 44,
+      "line_start": 3110,
+      "line_end": 3189
+    },
+    {
+      "id": 45,
+      "line_start": 3182,
+      "line_end": 3261
+    },
+    {
+      "id": 46,
+      "line_start": 3254,
+      "line_end": 3333
+    },
+    {
+      "id": 47,
+      "line_start": 3326,
+      "line_end": 3405
+    },
+    {
+      "id": 48,
+      "line_start": 3398,
+      "line_end": 3477
+    },
+    {
+      "id": 49,
+      "line_start": 3470,
+      "line_end": 3533
+    }
+  ],
+  "line_count": 3533,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "38724c1941e0bff7e4afaaf31c23649dc4fb8506aff12ab718e13666fcce888e",
+      "bytes": 58381
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "f3d782250eb3468225a55f047b782894b0964023d5a84fcdcf5954dc1e5c23cd",
+      "bytes": 87845
+    }
+  }
+}

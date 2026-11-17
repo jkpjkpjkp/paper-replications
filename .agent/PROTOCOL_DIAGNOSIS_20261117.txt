@@ -1,0 +1,159 @@
+RISE protocol diagnosis — 2026-11-17
+
+Current grade: 1. The main-method numerical mismatch remains unresolved.
+
+Eight fresh exploratory RISE fits completed with L36, date-complete inputs,
+within-split windows, seed 0, and ten epochs. Average MSE was 0.859239508888
+versus 0.657 (+30.78%); MAE was 0.600819114231 versus 0.537 (+11.88%).
+One seed provides no measured seed uncertainty. These results do not reproduce
+the paper and are not a clean refutation of its unreleased exact protocol.
+
+The deterministic protocol diagnosis reproduces 32/32 dataset/horizon cells
+for two complete Table 3 baselines: Persistence and Random Walk with Drift.
+The absolute rounding tolerance is 0.0005. This is exploratory reconstruction,
+not confirmation of the author implementation or a fresh RISE training match.
+
+Selection chronology:
+1. Reconstructed both historical data layouts independently from raw TFB long
+   CSVs and confirmed identical retained arrays. The paper reports 1240/1239
+   samples, agreeing with the date-complete inner join.
+2. After inspecting published baseline values, checked Persistence at origins
+   starting at the nominal test boundary plus {0, 36, 48, 60, 96}, for both
+   layouts. Date-complete +36 reproduced all 16 dataset/horizon metrics. This
+   was post-hoc selection. Every trial result is retained in audit.json.
+3. At the same fixed border, checked per-window drift with L36 and L96; neither
+   reproduced RW+drift. Then evaluated the training-split mean increment once:
+   d = (z[train_end-1] - z[0]) / (train_end-1), forecast = z[t-1] + h*d.
+   All 16 RW metrics matched. No drift coefficient was fitted to paper or test
+   values. This complementary check is still exploratory, not a blinded holdout.
+4. Paper page 6 confirms training-only per-channel z-scores, 7:1:2 splits, and
+   multivariate forecasting. Table 6 on page 9 independently includes L36;
+   page 8 says TFB uses a broader lookback grid. Exact borders and the drift
+   estimator are omitted. The inferred setup is consistent with windows formed
+   wholly within the test partition using lookback 36. Author confirmation or
+   released code is still required.
+5. Fixed the exploratory L36 configuration before inspecting any fresh RISE
+   test result, then completed all eight seed-0 dataset/horizon fits. No further
+   settings were selected from those results.
+
+Tolerance and aggregate limitations:
+Persistence maximum absolute error: MSE 0.000440113471, MAE 0.000485886724.
+RW maximum absolute error: MSE 0.000499997257, MAE 0.000446516619.
+NASDAQ H48 RW MSE 1.653499997257 versus 1.653 is only 2.74e-9 inside the bound;
+its last printed digit can change with floating-point arithmetic.
+Persistence overall unrounded MSE 0.956427506756 / MAE 0.629450213564 versus
+paper 0.957 / 0.630 has errors -0.000572493244 / -0.000549786436, outside
+0.0005. Averaging the rounded dataset averages produces the printed overall
+values, but that explanation is an inference. Overall agreement is not claimed.
+RW overall MSE 0.892721478816 / MAE 0.600796431335 versus 0.893 / 0.601.
+
+Historical failures preserved:
+Original official-block L96 five-seed MSE 0.788789 / MAE 0.594619 versus
+0.657 / 0.537. Restricting date-complete L96 saved predictions to +36 origins
+yields MSE 0.897387847963 +/- 0.013719614180 seed SD and MAE 0.633635745585
++/- 0.005294447678 seed SD. These are archived-model re-evaluation results;
+changing only the evaluated border does not resolve the model discrepancy.
+Seed variability is not a confidence interval or additional independent dates.
+
+Code and verification:
+- audit_tfb_protocol.py reconstructs raw inputs, calculates all baseline trials,
+  checks raw-space/scaled-space equivalence, re-evaluates the 40 archived RISE
+  runs, and independently verifies the eight fresh runs.
+- run_rise_tfb.py accepts --config, --data-root, --output, and --threads. Config
+  keys lookback and split_context select input length and preceding versus
+  within_split context. Historical defaults are preserved.
+- Default data arrays, all network state tensors, and forward outputs are
+  identical to the archived runner at every horizon. L36 input/label partition
+  boundaries and all eight window counts passed. Retrieval and an epoch passed.
+- frozen_tfb_protocol36_config.json locks L36/date_complete/within_split; other
+  neural settings retain the previous defaults. This is explicitly exploratory.
+- All eight fresh test/validation targets, train-only scalers, full origin
+  lists, finite predictions, and metrics passed independent reconstruction
+  from raw source CSVs. Checkpoint inference was repeated exactly by the runner.
+- Fresh suite resources: one CPU thread, 1 GiB hard RAM limit, zero swap,
+  3m 52.72s wall time, 615772 KiB peak process RSS. No GPU or rental.
+  Runtime was Torch 2.4.1+cu121 / NumPy 1.26.4; the historical runtime differs.
+- Single-seed SD is undefined. The launch snapshot emitted NaN SD metadata,
+  preserved in summary.runner-raw.json. summary.json replaces only those SD
+  fields with null; no metrics changed. The project runner now emits null.
+
+Next requirement:
+Confirm author TFB input construction, split-window borders, drift fitting, and
+neural lookback/top-m/initialization/scheduler settings, or obtain released code.
+Then run the fixed five-seed representative grid. More fixed-default seeds alone
+cannot resolve the missing author specification. The eight original Yahoo
+artifacts and full ablation/sensitivity coverage also remain unavailable.
+
+Evidence directory:
+/mnt/data/home/jkp/replications/rise-resolve-20261117/
+Contains audit.json, runner-verification.json, run-receipt.json, reproduce.txt,
+run-resources.txt, code-search.json, author-repository-check.txt, and fresh-seed0/
+with complete predictions, checkpoints, histories, metrics, and source snapshot.
+Original PDF:
+../.replication-local/artifacts/paper-reproduction-audit/workspaces/405/sources/paper-viewer-export.pdf
+SHA256: 8252711c810e75e48df4bffcd11a3cfb798bdf8e00af42644d77782d0a37d43a
+Original Table 3 (page 8) was visually checked in saved tfb-ablation.png.
+The current author repository filter returned zero RISE repositories; exact-title
+code search found no author release. This does not prove that no release exists.
+https://github.com/dancing-with-coffee?tab=repositories&q=RISE&type=&language=&sort=
+https://www.google.com/search?q=%22Retrieve+the+Right+Signal%22+code
+
+All matching baseline cells (local / paper / signed error):
+NASDAQ Persistence H24 (n=189):
+  MSE 0.684274110336 / 0.684 / +0.000274110336
+  MAE 0.582079964501 / 0.582 / +0.000079964501
+NASDAQ RW_train_drift H24 (n=189):
+  MSE 0.666077707301 / 0.666 / +0.000077707301
+  MAE 0.575379175044 / 0.575 / +0.000379175044
+NASDAQ Persistence H36 (n=177):
+  MSE 1.179693895334 / 1.180 / -0.000306104666
+  MAE 0.775714848331 / 0.776 / -0.000285151669
+NASDAQ RW_train_drift H36 (n=177):
+  MSE 1.138232764587 / 1.138 / +0.000232764587
+  MAE 0.761885266826 / 0.762 / -0.000114733174
+NASDAQ Persistence H48 (n=165):
+  MSE 1.720101563221 / 1.720 / +0.000101563221
+  MAE 0.938415199549 / 0.938 / +0.000415199549
+NASDAQ RW_train_drift H48 (n=165):
+  MSE 1.653499997257 / 1.653 / +0.000499997257
+  MAE 0.917562386053 / 0.918 / -0.000437613947
+NASDAQ Persistence H60 (n=153):
+  MSE 2.081952940763 / 2.082 / -0.000047059237
+  MAE 1.029314969453 / 1.029 / +0.000314969453
+NASDAQ RW_train_drift H60 (n=153):
+  MSE 1.999127455524 / 1.999 / +0.000127455524
+  MAE 1.005553483381 / 1.006 / -0.000446516619
+NYSE Persistence H24 (n=188):
+  MSE 0.212758924127 / 0.213 / -0.000241075873
+  MAE 0.276246473773 / 0.276 / +0.000246473773
+NYSE RW_train_drift H24 (n=188):
+  MSE 0.192995244620 / 0.193 / -0.000004755380
+  MAE 0.260423570896 / 0.260 / +0.000423570896
+NYSE Persistence H36 (n=176):
+  MSE 0.377026114247 / 0.377 / +0.000026114247
+  MAE 0.373955793626 / 0.374 / -0.000044206374
+NYSE RW_train_drift H36 (n=176):
+  MSE 0.329881569738 / 0.330 / -0.000118430262
+  MAE 0.343275353003 / 0.343 / +0.000275353003
+NYSE Persistence H48 (n=164):
+  MSE 0.572052619492 / 0.572 / +0.000052619492
+  MAE 0.468388572551 / 0.468 / +0.000388572551
+NYSE RW_train_drift H48 (n=164):
+  MSE 0.484854569510 / 0.485 / -0.000145430490
+  MAE 0.420043910310 / 0.420 / +0.000043910310
+NYSE Persistence H60 (n=152):
+  MSE 0.823559886529 / 0.824 / -0.000440113471
+  MAE 0.591485886724 / 0.591 / +0.000485886724
+NYSE RW_train_drift H60 (n=152):
+  MSE 0.677102521994 / 0.677 / +0.000102521994
+  MAE 0.522248305163 / 0.522 / +0.000248305163
+
+Fresh locked RISE seed-0 results (local versus paper):
+NASDAQ H24: MSE 0.692394873130 versus 0.553; MAE 0.594505725862 versus 0.531.
+NASDAQ H36: MSE 1.152510411373 versus 0.809; MAE 0.773143022061 versus 0.655.
+NASDAQ H48: MSE 1.514443568273 versus 1.077; MAE 0.891712447007 versus 0.750.
+NASDAQ H60: MSE 1.751797341812 versus 1.259; MAE 0.959616290119 versus 0.811.
+NYSE H24: MSE 0.195443272154 versus 0.183; MAE 0.265835666271 versus 0.267.
+NYSE H36: MSE 0.317633730652 versus 0.309; MAE 0.326131597953 versus 0.342.
+NYSE H48: MSE 0.506921887581 versus 0.446; MAE 0.436778175396 versus 0.421.
+NYSE H60: MSE 0.742770986130 versus 0.617; MAE 0.558829989176 versus 0.511.

@@ -1,0 +1,104 @@
+{
+  "paper_id": 405,
+  "frozen_at": "2026-11-09T03:18:16.027969+00:00",
+  "models": [
+    "GTR",
+    "RAFT",
+    "DUET"
+  ],
+  "datasets": [
+    "NASDAQ",
+    "NYSE"
+  ],
+  "layouts": [
+    "tfb_native_blocks",
+    "date_complete"
+  ],
+  "horizons": [
+    24,
+    36,
+    48,
+    60
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "epochs": 10,
+  "batch_size": 32,
+  "optimizer": "Adam",
+  "learning_rate": 0.0001,
+  "scheduler": "CosineAnnealingWarmRestarts T_0=10,T_mult=1,eta_min=0",
+  "checkpoint": "minimum validation MSE among ten epochs",
+  "source_versions": {
+    "GTR": "macovaseas/GTR@d94161906151bdc0c94f4d21c2b0ca356aeb3135",
+    "RAFT": "archon159/RAFT@bfe2320f5d719d1e2a024330de3410b370bbb2a9",
+    "DUET": "decisionintelligence/DUET@dcc6e6780a9138731b64b9b5398a94a1d97033f0"
+  },
+  "method_kwargs": {
+    "GTR": {
+      "d_model": 512,
+      "dropout": 0.0,
+      "cycle": 24,
+      "use_revin": 1,
+      "individual": 0
+    },
+    "RAFT": {
+      "task_name": "long_term_forecast",
+      "gpu": 0,
+      "n_period": 3,
+      "topm": 20
+    },
+    "DUET": {
+      "d_model": 512,
+      "d_ff": 2048,
+      "hidden_size": 256,
+      "e_layers": 2,
+      "n_heads": 8,
+      "dropout": 0.2,
+      "fc_dropout": 0.2,
+      "moving_avg": 25,
+      "activation": "gelu",
+      "output_attention": 0,
+      "factor": 1,
+      "num_experts": 4,
+      "k": 1,
+      "noisy_gating": true,
+      "CI": true
+    }
+  },
+  "source_default_policy": "GTR cycle,d_model,dropout,RevIN and individual follow native CLI; DUET architecture/router/dropout follow native adapter; RAFT topm20 and periods4,2,1 match RISE paper. Original RISE baseline-specific implementations/tuned settings unavailable.",
+  "loss": {
+    "GTR": "MSE",
+    "RAFT": "MSE",
+    "DUET": "native Huber plus native load/importance auxiliary loss, coefficient1 as source"
+  },
+  "evaluation_randomness": {
+    "DUET": "Native stochastic Gumbel mask retained. Separate validation seed10000+seed and test seed20000+seed; fork/restore RNG avoids changing training stream; exact checkpoint rerun uses same evaluation stream.",
+    "GTR_RAFT": "Same repeatable evaluation wrapper; native models deterministic in eval."
+  },
+  "GTR_cycle_index": "forecast origin modulo24, matching native DataLoader cycle_index[s_end]",
+  "RAFT_retrieval": "Native RetrievalTool.prepare_dataset/retrieve called with fixed training bank only; batches256 and no8-worker retrieve_all loader. Native training whole-window overlap mask verified against independent raw-retrieval reference.",
+  "read_only_dependencies": {
+    "einops": {
+      "version": "0.8.1",
+      "path": "/home/jkp/data/alpha-research-reproduction/.venv/lib/python3.11/site-packages/einops"
+    },
+    "tqdm": {
+      "version": "4.70.1",
+      "path": "/home/jkp/data/alphapareto-reproduction/.venv/lib/python3.11/site-packages/tqdm"
+    }
+  },
+  "retrospective_evaluation": true,
+  "no_test_tuning": true,
+  "return_extension": "Blocked by non-calendar ordinal data and no executable investable long/short mapping/cashflows; no trading variants tested.",
+  "new_seed_runs": 240,
+  "source_download_cap": "16 source/license files,1MiB each,<16MiB; no data/model-weight downloads",
+  "script_sha256": {
+    "prepare_remaining_models.py": "58d5e3d5230a98a51b35a0d46d712bbace588d9d30a837a54c90af58f6a2dd60",
+    "run_remaining_tfb.py": "d6015c63a182d5f641c6a40e23bcba0f024eca637faa5930bf8559e46c2fcd85"
+  }
+}

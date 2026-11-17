@@ -1,0 +1,744 @@
+Retrieve the Right Signal: Decomposition-Guided Retrieval-Augmented Forecasting for Financial Markets
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/artifacts/paper-reproduction-audit/workspaces/405/sources/paper-viewer-export.pdf
+Source SHA-256: 8252711c810e75e48df4bffcd11a3cfb798bdf8e00af42644d77782d0a37d43a
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Layout extraction: spacing retains approximate PDF columns and tables.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+               Retrieve the Right Signal: Decomposition-Guided
+            Retrieval-Augmented Forecasting for Financial Markets
+                   Yongdam Kim                                               Hyeonji Park∗                                        Dongwoo Lee∗
+    Department of Computer Science and                        Department of Computer Science and                      Department of Computer Science and
+                Engineering                                               Engineering                                             Engineering
+             Sogang University                                         Sogang University                                       Sogang University
+          Seoul, Republic of Korea                                  Seoul, Republic of Korea                                Seoul, Republic of Korea
+        yongdamkim@sogang.ac.kr                                    phjgina314@sogang.ac.kr                                dongwoolee@sogang.ac.kr
+
+                 Jeongseon Cho∗                                                  Yein Lee∗                                          Jihoon Yang
+    Department of Computer Science and                        Department of Computer Science and                      Department of Computer Science and
+                Engineering                                               Engineering                                             Engineering
+             Sogang University                                         Sogang University                                       Sogang University
+          Seoul, Republic of Korea                                  Seoul, Republic of Korea                                Seoul, Republic of Korea
+         jeongseon@sogang.ac.kr                                      leeyein@sogang.ac.kr                                    yangjh@sogang.ac.kr
+
+                                                                           Sungwon Jung†
+                                                              Department of Computer Science and
+                                                                          Engineering
+                                                                       Sogang University
+                                                                    Seoul, Republic of Korea
+                                                                    jungsung@sogang.ac.kr
+
+Abstract                                                                                       that are relevant to the current query. It also allows retrieved infor-
+Financial time-series forecasting is important for portfolio con-                              mation to influence representation learning, rather than being used
+struction, risk management, and investment strategy design, but                                only through output-level fusion. Across eight real-world financial
+financial markets are highly nonstationary and often lack stable                               datasets and two TFB financial-market benchmarks, RISE outper-
+periodicity. Retrieval-augmented forecasting is attractive in this                             forms retrieval-augmented, decomposition-based, attention-based,
+setting because similar market conditions can lead to similar his-                             patch-based, clustering-based, and classical statistical baselines. On
+torical market responses. However, when retrieval is performed                                 the eight real-world datasets, RISE ranks first in 23 out of 48 settings
+over the raw signal, similarity can be dominated by level or trend                             under both MSE and MAE; on the TFB benchmarks, it ranks first
+rather than by detrended temporal patterns that are more relevant                              in 7 out of 8 MSE configurations.
+to future market reactions. We propose RISE (Retrieve the Right
+Signal: Decomposition-Guided Retrieval-Augmented Forecasting                                   CCS Concepts
+for Financial Markets), a decomposition-guided retrieval frame-                                • Mathematics of computing → Time series analysis; • Com-
+work for financial time-series forecasting. RISE decomposes each                               puting methodologies → Neural networks; • Information sys-
+input into a trend component and a detrended component using                                   tems → Information retrieval.
+a strictly causal moving average, and performs retrieval in the de-
+trended space. The retrieved detrended futures are used both as                                Keywords
+a direct retrieval-based forecasting component and as Retrieval-                               time series forecasting, retrieval-augmented forecasting, trend-
+as-Context (RAC) tokens that provide additional context to the                                 seasonality decomposition, financial time series
+forecasting backbone. This design separates trend modeling from                                ACM Reference Format:
+retrieval over detrended temporal patterns, reducing misleading                                Yongdam Kim, Hyeonji Park, Dongwoo Lee, Jeongseon Cho, Yein Lee, Jihoon
+raw-signal matches while preserving historical market responses                                Yang, and Sungwon Jung. 2026. Retrieve the Right Signal: Decomposition-
+∗ These authors contributed equally to this work; the order among them was determined          Guided Retrieval-Augmented Forecasting for Financial Markets. In Proceed-
+randomly by mutual agreement.                                                                  ings of the 35th ACM International Conference on Information and Knowledge
+† Corresponding author.                                                                        Management (CIKM ’26), November 07–11, 2026, Rome, Italy. ACM, New
+                                                                                               York, NY, USA, 10 pages. https://doi.org/10.1145/3799682.3841004
+
+This work is licensed under a Creative Commons Attribution 4.0 International License.          1    Introduction
+CIKM ’26, Rome, Italy                                                                          Recent advances in deep learning have substantially refined time-
+© 2026 Copyright held by the owner/author(s).
+ACM ISBN 979-8-4007-2539-5/2026/11                                                             series forecasting. Traditional statistical models typically rely on
+https://doi.org/10.1145/3799682.3841004                                                        explicit assumptions or structures to model autocorrelation, trend,
+
+
+
+
+                                                                                        2268
+
+=== PDF PAGE 2 ===
+CIKM ’26, November 07–11, 2026, Rome, Italy                                                                                         Yongdam Kim et al.
+
+
+volatility, and other temporal dependencies. Modern deep-learning
+models learn complex temporal dependencies through architec-
+tures such as MLPs, CNNs, Transformers, decomposition-based
+models, and patch-based models. Three directions stand out in
+recent work. The first is decomposition-based forecasting (e.g.,
+DLinear [19], Autoformer [18]), which separates a series into trend
+and seasonal or residual components and models the resulting com-
+ponents separately. The second is patch-based forecasting (e.g.,
+PatchTST [12]), which slices the series into short segments and
+efficiently learns temporal interactions among nearby time steps.
+The third is retrieval-augmented forecasting (e.g., RAFT [7]), which
+retrieves past segments resembling the present and uses what fol-
+lowed them to inform the prediction.                                              Figure 1: Motivating example on the S&P 500 index (16-day
+   Yet these approaches have largely been developed and validated                 forecast horizon). (a) input window and ground-truth future;
+on standard benchmarks with relatively stable periodicity, such as                (b) its causal trend–detrended decomposition; (c, d) the query
+electricity, weather, and traffic. Financial series, by contrast, behave          together with the nearest neighbor retrieved by RAFT on the
+differently.                                                                      raw signal and by RISE on the detrended signal. Series in (c)
+   In financial forecasting [15, 16], predictive information is often             and (d) are per-window z-scored, so visual shape similarity
+less tied to the trend component or stable periodicity than to de-                matches the Pearson correlation 𝑟 . Both panels isolate the
+trended temporal patterns around the trend [4, 6, 10]. Downstream                 retrieval step; the complete models, which fuse retrieval with
+tasks, including portfolio construction, volatility estimation [1, 5],            trend and patch predictions, are evaluated in Section 4.
+risk management [4, 15, 16], and investment strategy design [15, 16],
+rely more heavily on detrended temporal patterns that reflect short-              in two complementary ways: as a retrieval-based forecasting com-
+term market responses than on long-term price levels. Although                    ponent added directly to the final prediction, and as Retrieval-
+such detrended temporal patterns rarely form stable periodic cy-                  as-Context (RAC) tokens that serve as additional context for
+cles, comparable historical conditions can lead to similar historical             the forecasting backbone’s representation learning. Through this
+market responses.                                                                 decomposition-guided design, RISE jointly models stable trend in-
+   This recurrence makes retrieval-based forecasting attractive for               formation and detrended temporal patterns, enabling more robust
+financial time series. By directly referring to past windows with                 forecasting even under the highly nonstationary conditions of fi-
+similar detrended temporal patterns, retrieval mechanisms can use                 nancial markets.
+historical market responses more explicitly than models that store                   Contributions.
+temporal structure only implicitly in their parameters. However,                       • We propose decomposition-guided retrieval for financial
+retrieval over the raw signal has a structural limitation in finance.                    time-series forecasting. RISE decomposes each series into
+Because financial trends vary substantially across macroeconomic                         a trend component and a detrended component, and per-
+regimes, raw-signal similarity can be dominated by level or trend                        forms retrieval in the detrended space to reduce misleading
+rather than by detrended temporal patterns. Consequently, the                            matches caused by raw-signal similarity dominated by level
+retrieved windows may appear similar in overall level or trend                           or trend.
+while the retrieved detrended futures fail to align with the historical                • RISE incorporates multi-granularity retrieval over the de-
+market response relevant to the current query. Figure 1 shows this                       trended component, allowing the model to compare de-
+failure mode on the S&P 500: raw-signal retrieval finds a higher-                        trended temporal patterns at different temporal resolutions
+correlation neighbor whose future direction contradicts the ground                       and aggregate the retrieved detrended futures by similarity.
+truth. Detrended retrieval finds a lower-correlation neighbor whose                    • We introduce Retrieval-as-Context (RAC), which projects
+future direction is aligned with the query.                                              retrieved detrended futures into context tokens and feeds
+   To address these issues, we propose RISE: Retrieve the Right                          them into the forecasting backbone.
+Signal, a decomposition-guided retrieval framework for financial                       • RISE achieves state-of-the-art performance across diverse
+time-series forecasting. The key idea is that retrieval should focus                     financial benchmarks, including eight real-world datasets
+on detrended temporal patterns rather than on raw-signal similar-                        and two TFB financial-market benchmarks (NASDAQ and
+ity dominated by level or trend. RISE therefore decomposes the                           NYSE).
+input into a trend component and a detrended component, and
+confines retrieval to the detrended space. This focuses retrieval on              2   Related Work
+the detrended component, reducing misleading matches caused by                    Financial time-series forecasting has long been studied through
+raw-signal similarity dominated by level or trend while preserving                both traditional statistical models and deep-learning approaches.
+detrended temporal patterns.                                                      ARIMA models capture autocorrelation and trend-based patterns,
+   RISE further performs multi-granularity retrieval to capture de-               ARCH/GARCH models describe conditional volatility [1, 5], and
+trended temporal patterns at different temporal resolutions. The                  VAR models capture dependencies among macroeconomic vari-
+retrieved detrended futures are aggregated by similarity and used                 ables [15]. Random-walk and random-walk-with-drift baselines
+
+
+
+
+                                                                           2269
+
+=== PDF PAGE 3 ===
+Retrieve the Right Signal: Decomposition-Guided Retrieval-Augmented Forecasting for Financial Markets                            CIKM ’26, November 07–11, 2026, Rome, Italy
+
+
+have also served as simple but strong references, reflecting the                        detrended futures are injected as context tokens into the patch en-
+efficient-market view that market prices already incorporate avail-                     coder, so that retrieval shapes representation learning rather than
+able information [6, 10] and illustrating the empirical difficulty of                   only output-level fusion. A learnable weighted fusion of the three
+predicting financial markets [11]. Deep-learning models such as                         pathway outputs produces the final forecast.
+RNNs and LSTMs have been used to learn temporal dependencies in
+financial time series, while recent approaches such as MASTER [8],                      3.1     Problem Formulation and Notation
+MATCC [3], and DoubleAdapt [20] have advanced cross-sectional                           Given a multivariate look-back window xraw ∈ R𝐿×𝐶 , RISE pro-
+stock return prediction and ranking-oriented settings.                                  duces forecasts for all 𝐶 channels over horizon 𝐻 . We denote the
+   Recent deep time-series forecasting models have explored sev-                        all-channel future window by yraw         ∈ R𝐻 ×𝐶 .
+                                                                                                                             all
+eral architectural directions. Decomposition-based methods such                            Let C𝑦 ⊆ {1, . . . , 𝐶} denote the set of channels used for super-
+as DLinear [19] and Autoformer [18] separate a series into trend                        vision and evaluation, and let 𝐶 ′ = |C𝑦 |. The supervised target
+and seasonal or residual components and model the resulting                             is
+                                                                                                                                     𝐻 ×𝐶 ′
+components separately. These methods make component sepa-                                                        yraw = yraw
+                                                                                                                         all,:,C𝑦 ∈ R       .             (1)
+ration explicit, but they mainly use the separated components
+                                                                                        In the fully multivariate setting, C𝑦 = {1, . . . , 𝐶} and thus 𝐶 ′ = 𝐶.
+for forecasting rather than for deciding which component should
+                                                                                        In the multivariate-to-single (MS) setting, C𝑦 = {𝑐 ★ } and 𝐶 ′ = 1,
+serve as the basis for historical comparison. Patch-based models
+                                                                                        where 𝑐 ★ denotes the target channel. In our financial datasets, the
+such as PatchTST [12] divide the input into short segments to
+                                                                                        target variable is the closing price, and the target column is placed
+learn temporal interactions among nearby time steps. Transformer-
+                                                                                        as the last channel; hence 𝑐 ★ = 𝐶.
+based and multiscale architectures, including iTransformer [9]
+                                                                                           We distinguish three versions of the same window. Raw ob-
+and TimeMixer [17], further improve forecasting by redesigning
+                                                                                        servations are denoted by xraw and yraw . Globally standardized
+attention or mixing mechanisms for long-range temporal model-
+                                                                                        observations are denoted by x̃ and ỹ. Locally anchored inputs and
+ing. DUET [14] is also related as a clustering-based multivariate
+                                                                                        targets, which are the actual quantities processed by RISE, are de-
+forecasting method that exploits structured grouping in time-series
+                                                                                        noted by x and y without tildes. The index 𝑡 denotes time, 𝑐 denotes
+data. These architectures improve representation or structural
+                                                                                        channel, and x̃𝐿,𝑐 is the last observed standardized input value in
+modeling, but they do not explicitly retrieve similar historical
+                                                                                        channel 𝑐.
+market responses in financial time series.
+   Retrieval-augmented forecasting provides another direction by
+                                                                                        3.2     Two-Stage Normalization
+connecting the current segment with similar past segments and
+using what followed them to inform the prediction. RAFT [7] is                          Financial time series exhibit both long-term scale drift and local
+a representative method in this line, retrieving past windows re-                       level shifts. We address these effects separately. First, each input
+sembling the present and incorporating the corresponding future                         channel is standardized using statistics computed from the training
+information into the forecast. GTR [2] is also related in that it                       split:
+                                                                                                                 raw − 𝜇 train
+                                                                                                                x𝑡,𝑐
+exploits historical patterns or memory, although it is closer to us-                                    x̃𝑡,𝑐 =
+                                                                                                                            𝑐
+                                                                                                                               , 𝑐 = 1, . . . , 𝐶.        (2)
+ing learned global cycle representations than to explicit nearest-                                                   𝜎𝑐train
+neighbor retrieval. These methods introduce historical information                      The all-channel future window is standardized with the same train-
+into forecasting, but they do not explicitly address which signal                       ing statistics:
+component should be used for retrieval in financial time series,                                                      yraw     − 𝜇𝑐train
+                                                                                                                       all,𝑡,𝑐
+where raw-signal similarity can be dominated by level or trend.                                         ỹall,𝑡,𝑐 =            ,     𝑐 = 1, . . . , 𝐶.      (3)
+   Unlike these prior approaches, RISE combines decomposition                                                        𝜎𝑐train
+and retrieval by using the detrended component as the retrieval                         The standardized supervised target is the subset ỹ𝑡,𝑐 = ỹall,𝑡,𝑐 for
+target in financial time-series forecasting. This design distinguishes                  𝑐 ∈ C𝑦 . In the MS setting, this selects only the closing-price channel
+RISE from decomposition-based models that use separated compo-                          𝑐 ★ = 𝐶.
+nents mainly for forecasting, patch-based models that encode tem-                           Second, for each forecasting window, we subtract the last ob-
+poral patterns implicitly, and retrieval-based models that typically                    served standardized input value as a local anchor. For the input
+retrieve from the raw signal or raw-signal-derived representations.                     window, this operation is applied to all input channels:
+                                                                                                            x𝑡,𝑐 = x̃𝑡,𝑐 − x̃𝐿,𝑐 ,         𝑐 = 1, . . . , 𝐶.             (4)
+3    Proposed Method
+                                                                                        For the future target, the same operation is applied only to the
+RISE (Figure 2) uses decomposition as a routing mechanism. A                            target channels:
+strictly causal moving-average filter splits the input x into a slow
+trend T and a detrended component D = x − T: T is routed to a                                                  y𝑡,𝑐 = ỹ𝑡,𝑐 − x̃𝐿,𝑐 ,         𝑐 ∈ C𝑦 .                   (5)
+channel-independent linear head, while D is processed in parallel by                    In the MS setting, Eq. (5) becomes
+a nearest-neighbor retrieval module and a patch-based Transformer.
+                                                                                                             y𝑡,𝑐★ = ỹ𝑡,𝑐★ − x̃𝐿,𝑐★ ,          𝑐 ★ = 𝐶.                 (6)
+This confines retrieval to the component where reusable patterns
+reside, avoiding level-dominated similarity. The two detrended mod-                     Thus, the model learns the future deviation of the target variable
+ules are coupled through Retrieval-as-Context (RAC): retrieved                          relative to the last observed value of the same target channel.
+
+
+
+
+                                                                                 2270
+
+=== PDF PAGE 4 ===
+CIKM ’26, November 07–11, 2026, Rome, Italy                                                                                                        Yongdam Kim et al.
+
+
+
+
+Figure 2: RISE architecture. A strictly causal moving average splits the input x into a macro trend T and a detrended signal
+D = x − T. Three pathways run in parallel—trend (blue), retrieval (green) and patch (orange)—and their forecasts are combined
+by a learnable weighted fusion (purple). Retrieval-as-Context (RAC) tokens carry the retrieved context into the patch encoder.
+Hyperparameter values are listed in Section 4; the two-stage normalization and per-window anchoring are described in Section 3.
+
+
+3.3     Causal Decomposition and Trend Pathway                                   We write 𝐺 = |G| for the number of granularities. In our default
+RISE decomposes the locally anchored input x ∈ R𝐿×𝐶 into a causal                setting, G = {4, 2, 1} and 𝐺 = 3. We choose 𝐿 and 𝐻 such that they
+trend component T and a detrended component D. The trend is                      are divisible by every 𝑔 ∈ G. This allows block-level smoothing to
+extracted using a strictly causal moving average. To compute the                 be applied without padding or truncation.
+trend without using future observations, RISE averages only the                     Before training, we construct a memory bank from the training
+current and previous values. For early time steps, where fewer than              split. For each training window 𝑗, we store a detrended input key
+𝑘 past observations are available, we extend the sequence to the                 and a detrended future value. Unlike the patch and trend pathways,
+left by repeating the first value x1,𝑐 . Equivalently, define                    the retrieval bank is constructed from globally standardized win-
+                              {︄                                                 dows before local anchoring. Specifically, the standardized input
+                       pad       x1,𝑐 , 𝑡 < 1,                                                                                           (𝑗)
+                                                                                 window x̃ ( 𝑗 ) ∈ R𝐿×𝐶 and standardized future window ỹall ∈ R𝐻 ×𝐶
+                     x𝑡,𝑐 =                                      (7)
+                                 x𝑡,𝑐 , 1 ≤ 𝑡 ≤ 𝐿.                               are detrended separately:
+The causal moving-average trend is then                                             D ( 𝑗 ) = x̃ ( 𝑗 ) − MA𝑘 ( x̃ ( 𝑗 ) ),    D𝑦( 𝑗 ) = ỹall
+                                                                                                                                          (𝑗)           (𝑗)
+                                                                                                                                              − MA𝑘 ( ỹall ).   (11)
+                                       𝑘 −1
+                                     1                                           Here, D ( 𝑗 ) is used as the retrieval key, and D𝑦( 𝑗 ) is used as the future
+                                       ∑︁   pad
+                            T𝑡,𝑐 =        x       .                (8)
+                                     𝑘 𝑖=0 𝑡 −𝑖,𝑐                                residual associated with that key.
+This filter never accesses x𝑡 +𝑖,𝑐 for 𝑖 > 0, so it cannot leak future              For any detrended input sequence D ∈ R𝐿×𝐶 , either from the
+information. The remaining high-frequency component is the de-                   online query or from the memory bank, we first form a block-level
+trended signal:                                                                  sequence B𝑔 ∈ R (𝐿/𝑔) ×𝐶 by averaging every block of 𝑔 time steps:
+                            D = x − T.                              (9)                                    1 ∑︁
+                                                                                                                𝑔
+
+   The trend pathway predicts the future contribution of the locally                           B𝑔,𝑏,𝑐 =           D (𝑏 −1)𝑔+𝑟,𝑐 ,     𝑏 = 1, . . . , 𝐿/𝑔.        (12)
+                                                                                                           𝑔 𝑟 =1
+anchored low-frequency trend using a linear projection:
+                                                                                 We then repeat each block average 𝑔 times along the temporal
+                        (trend)
+                      y:,𝑐
+                      ˆ︁        = Wtrend T:,𝑐 + btrend .          (10)           axis to obtain the smoothed sequence D𝑔 ∈ R𝐿×𝐶 , and subtract its
+Here, T:,𝑐 ∈ R𝐿 denotes the observed trend vector for channel 𝑐,                 terminal value:
+Wtrend ∈ R𝐻 ×𝐿 and btrend ∈ R𝐻 are the channel-shared projection                                       D𝑔,𝑡,𝑐 ← D𝑔,𝑡,𝑐 − D𝑔,𝐿,𝑐 .                 (13)
+                  (trend)                                                        The same block-smoothing and terminal-recentering operations
+                 y:,𝑐
+parameters, and ˆ︁        ∈ R𝐻 denotes the trend-pathway forecast
+over the prediction horizon.                                                     are applied to the memory input D ( 𝑗 ) to obtain D𝑔( 𝑗 ) .
+                                                                                    For the future residual stored in the memory bank, we apply
+3.4     Multi-Granularity Detrended Retrieval                                    block smoothing at the same granularity 𝑔. Specifically, for D𝑦( 𝑗 ) ∈
+The retrieval pathway searches for historical patterns using only
+the detrended signal D. We define a set of retrieval granularities G,
+where each 𝑔 ∈ G controls the temporal resolution of the search.
+
+
+
+
+                                                                          2271
+
+=== PDF PAGE 5 ===
+Retrieve the Right Signal: Decomposition-Guided Retrieval-Augmented Forecasting for Financial Markets                                CIKM ’26, November 07–11, 2026, Rome, Italy
+
+
+R𝐻 ×𝐶 , we compute                                                                         Here W𝑔ctx ∈ R𝑑 ×𝐻 and b𝑔ctx, e𝑔 ∈ R𝑑 . The projection parameters
+                          𝑔                                                                are shared across channels and differ only by granularity 𝑔. In the
+           (𝑗)         1 ∑︁ ( 𝑗 )
+          B𝑔,𝑦,𝑏,𝑐 =         D              ,         𝑏 = 1, . . . , 𝐻 /𝑔.   (14)          implementation, RAC tokens are appended after the patch tokens:
+                       𝑔 𝑟 =1 𝑦,(𝑏 −1)𝑔+𝑟,𝑐
+                                                                                                             S𝑐 = [u1,𝑐 , . . . , u𝑁𝑝 ,𝑐 , z𝑔1 ,𝑐 , . . . , z𝑔𝐺 ,𝑐 ].        (22)
+Repeating each future block average 𝑔 times along the temporal
+axis gives a smoothed future residual. As with the retrieval keys,                         The sequence S𝑐 is processed by a two-layer Transformer encoder
+we subtract its terminal value:                                                            with full self-attention. After encoding, only the original patch-
+                        (𝑗)        (𝑗)        (𝑗)                                          token positions are retained:
+                       D𝑔,𝑦,𝑡,𝑐 ← D𝑔,𝑦,𝑡,𝑐 − D𝑔,𝑦,𝐻,𝑐 .                      (15)
+                                                                                                                       H𝑐 = Encoder(S𝑐 )1:𝑁𝑝 .                               (23)
+                (𝑗)
+The resulting D𝑔,𝑦  ∈ R𝐻 ×𝐶 is constant within each block of size 𝑔                        The retained patch representations are flattened and projected to
+and serves as the retrieved future residual at granularity 𝑔.                              the forecast horizon:
+  For similarity search, we flatten the smoothed query and                                                           (patch)
+memory-bank entries:                                                                                               y
+                                                                                                                   ˆ︁:,𝑐       = W𝑝 vec(H𝑐 ) + b𝑝 .                          (24)
+
+                  q𝑔 = vec(D𝑔 ),           k𝑔( 𝑗 ) = vec(D𝑔( 𝑗 ) ).          (16)          3.6     Weighted Fusion and Training Objective
+The similarity score is mean-subtracted cosine similarity:                                 The retrieval pathway also provides a direct retrieval forecast. Since
+                                                                                           ȳ𝑔 is block-smoothed, it contains only 𝐻 /𝑔 unique temporal val-
+                                          k𝑔( 𝑗 ) − k̄𝑔( 𝑗 )
+               ⟨︄                                                   ⟩︄
+                      q𝑔 − q̄𝑔
+   sim𝑔 ( 𝑗) =                       ,                                 .     (17)          ues. We keep one value per block as p𝑔 ∈ R (𝐻 /𝑔) ×𝐶 and apply a
+                  max(∥q𝑔 − q̄𝑔 ∥, 𝜖) max(∥k𝑔( 𝑗 ) − k̄𝑔( 𝑗 ) ∥, 𝜖)                        granularity-specific linear head:
+Here, q̄𝑔 and k̄𝑔( 𝑗 ) denote the scalar means of the flattened vec-                               (ret)
+                                                                                                 y𝑔,:,𝑐
+                                                                                                 ˆ︁      = W𝑔 p𝑔,:,𝑐 + b𝑔 ,              W𝑔 ∈ R𝐻 ×𝐻 /𝑔 ,         b𝑔 ∈ R𝐻 .   (25)
+tors, and 𝜖 is a small constant for numerical stability. During train-
+                                                                                           The retrieval-pathway output is the sum of the granularity-specific
+ing, memory entries whose input-future intervals overlap with
+                                                                                           predictions:
+the query interval are masked out. Equivalently, if two training                                                            ∑︁
+                                                                                                                  ˆ︁(ret) =
+                                                                                                                  y            ˆ︁𝑔(ret) .
+                                                                                                                               y                         (26)
+windows start at indices 𝑖 and 𝑗, the memory entry is excluded
+                                                                                                                                         𝑔∈ G
+whenever the intervals [𝑖, 𝑖 + 𝐿 + 𝐻 − 1] and [ 𝑗, 𝑗 + 𝐿 + 𝐻 − 1]
+                                                                                             The three pathway outputs are first computed for all channels
+overlap.
+                                                                                           and then combined by a learnable weighted fusion:
+   Let N𝑔 be the top-𝑚 retrieved neighbors under sim𝑔 . Their
+                                                                                                                           (patch)              (trend)          (ret)
+weights are computed by a temperature-scaled softmax:                                                y                  y𝑡,𝑐
+                                                                                                     ˆ︁all,𝑡,𝑐 = 𝑤 patchˆ︁           + 𝑤 trendˆ︁
+                                                                                                                                              y𝑡,𝑐      + 𝑤 retˆ︁
+                                                                                                                                                               y𝑡,𝑐    ,     (27)
+                             exp(sim𝑔 ( 𝑗)/𝜏)                                              for 𝑐 = 1, . . . , 𝐶. The locally anchored forecast is converted back
+           𝑎𝑔 ( 𝑗) = ∑︁                      ′
+                                                   , 𝑗 ∈ N𝑔 .     (18)
+                        𝑗 ′ ∈ N𝑔 exp(sim𝑔 ( 𝑗 )/𝜏)                                         to the globally standardized target space by adding back the corre-
+The retrieved future at granularity 𝑔 is the weighted average of the                       sponding local anchor:
+corresponding block-smoothed future residuals:                                                                          yall,𝑡,𝑐 + x̃𝐿,𝑐 ,
+                                                                                                                ỹ𝑡,𝑐 = ˆ︁
+                                                                                                                ˆ︁                                    𝑐 ∈ C𝑦 .               (28)
+                              ∑︁
+                                           (𝑗)
+                        ȳ𝑔 =     𝑎𝑔 ( 𝑗) D𝑔,𝑦 .                (19)                          RISE is trained using the forecasting MSE in the globally stan-
+                                  𝑗 ∈ N𝑔                                                   dardized target space. Although the model predicts locally anchored
+                                                                                           deviations, the prediction is first restored to the globally standard-
+Thus, ȳ𝑔 ∈ R𝐻 ×𝐶 denotes the retrieved detrended future at granu-
+                                                                                           ized level using Eq. (28). The loss is then computed only over the
+larity 𝑔.
+                                                                                           target channels:
+3.5     Patch Transformer with                                                                                            𝐻
+                                                                                                                    1 ∑︁ ∑︁ (︂ˆ︁                 )︂ 2
+                                                                                                            L=                      ỹ𝑡,𝑐 − ỹ𝑡,𝑐 .          (29)
+        Retrieval-as-Context                                                                                     𝐻 |C𝑦 | 𝑡 =1 𝑐 ∈ C
+                                                                                                                                            𝑦
+The patch pathway models local nonlinear dynamics in the de-
+trended signal D. We split the sequence into overlapping patches of                        In the MS setting, C𝑦 = {𝑐 ★ } with 𝑐 ★ = 𝐶, and the loss reduces to
+length 𝑝 and stride 𝑠. Since the implementation appends replication                                                                  𝐻
+                                                                                                                               1 ∑︁ (︂ˆ︁           )︂ 2
+padding of length 𝑠 to the right side of the sequence before patching,                                            LMS =               ỹ𝑡,𝐶 − ỹ𝑡,𝐶 .                        (30)
+                                                                                                                               𝐻 𝑡 =1
+the number of patches is
+                              ⌊︃          ⌋︃                                               Thus, in the financial MS setting, RISE may process all input chan-
+                                 𝐿 +𝑠 −𝑝
+                        𝑁𝑝 =                 + 1.                 (20)                     nels internally, but supervision and evaluation are performed only
+                                    𝑠                                                      on the closing price channel.
+Each patch is projected into a 𝑑-dimensional token and augmented
+with sinusoidal positional encoding, producing patch tokens
+u1,𝑐 , . . . , u𝑁𝑝 ,𝑐 for channel 𝑐.
+   RISE injects retrieval information through Retrieval-as-Context
+(RAC). For each granularity 𝑔, the retrieved future ȳ𝑔 is projected
+into one context token per channel:
+                        z𝑔,𝑐 = W𝑔ctx ȳ𝑔,:,𝑐 + b𝑔ctx + e𝑔 .                  (21)
+
+
+
+
+                                                                                    2272
+
+=== PDF PAGE 6 ===
+CIKM ’26, November 07–11, 2026, Rome, Italy                                                                                          Yongdam Kim et al.
+
+
+4 Experiments                                                                  and DUET [14]. We additionally include three classical statisti-
+                                                                               cal baselines, namely Persistence, Random Walk with Drift, and
+4.1 Experimental Setup
+                                                                               ARIMA(1,1,1), to establish random-walk reference bounds.
+Datasets. We evaluate RISE on two complementary testbeds with                     Evaluation protocol and data leakage mitigation. To en-
+distinct objectives: (1) a curated real-world financial forecasting            sure a fair comparison across all evaluated models, the two-stage
+suite designed to capture heterogeneous market dynamics, and                   normalization detailed in Section 3 is applied identically: global
+(2) financial-domain datasets selected from the public Time-Series             per-channel z-score statistics are computed strictly on the training
+Forecasting Benchmark (TFB) [13] for standardized external val-                partition, and the terminal input value is subtracted locally during
+idation (Table 1). Our real-world suite consists of eight financial            sample construction.
+datasets spanning four asset classes and four global regions (US, JP,             For RISE specifically, three additional measures strictly preclude
+HK, DE). We adopt the multivariate-to-univariate (‘MS’) forecasting            look-ahead bias. First, the offline memory bank is populated exclu-
+setting, where the model predicts the future value of a target asset           sively with sliding windows from the training split, ensuring that
+using OHLCV features (Open, High, Low, Close, Volume). The suite               validation and test queries can only retrieve historically observed
+spans equity indices across multiple geographies (S&P 500, NAS-                memory bank entries. Second, during training, memory entries
+DAQ, Nikkei 225, Hang Seng, DAX), commodities (Gold), foreign                  whose input-future intervals overlap with the query window are
+exchange markets (EUR/USD) [11], and cryptocurrency markets                    excluded from retrieval, preventing any query from accessing tem-
+(Bitcoin), covering a diverse range of market microstructures — from           porally adjacent training windows (Section 3.4). Third, detrended
+near-random-walk FX dynamics to highly non-stationary crypto                   retrieved futures are precomputed offline employing the identical
+volatility — allowing us to assess RISE across heterogeneous finan-            deterministic causal moving average (Eq. (8)) utilized during online
+cial market conditions. For external validation, we further evaluate           inference, ensuring that neither the decomposition process nor the
+RISE on two financial-domain datasets from TFB [13]: NASDAQ                    retrieval candidates are exposed to validation or test data.
+and NYSE, following the official multivariate-to-multivariate (‘M’)               Implementation details. All deep-learning experiments are
+setting.                                                                       conducted on two NVIDIA RTX 3090 GPUs, using the Adam opti-
+                                                                               mizer with a learning rate of 10−4 , a batch size of 32, and a CosineAn-
+Table 1: Dataset characteristics. The eight real-world datasets
+                                                                               nealingWarmRestarts scheduler over 10 epochs. We evaluate pre-
+span four asset classes and four geographies, cover daily ob-
+                                                                               dictive horizons 𝐻 ∈ {8, 16, 24, 36, 48, 60}, corresponding approxi-
+servations from 2015 to 2025 collected from Yahoo Finance,
+                                                                               mately to 1.5 weeks to 3 months.
+and are evaluated under the multivariate-to-univariate (‘MS’)
+                                                                                  To reduce evaluation asymmetries from disparate hyperparam-
+setting using OHLCV features. The two TFB datasets are
+                                                                               eter tuning budgets, Table 2 evaluates all deep-learning models
+financial-domain benchmarks evaluated under the official
+                                                                               under a controlled protocol with a fixed look-back length (𝐿=96)
+multivariate-to-multivariate (‘M’) setting. All datasets are
+                                                                               and reports averages over five random seeds {0, 1, 2, 3, 4}. For RISE
+sampled at a daily frequency and evaluated with chronologi-
+                                                                               and RAFT, top-𝑚 is selected via grid search over {1, 5, 10, 20} and
+cal 7:1:2 train/validation/test splits.
+                                                                               fixed to 20 in the main results; for RAFT, we use three retrieval
+                                                                               periods {1, 2, 4}.
+  Dataset         Vars    Samples      Split   Period      Domain                 For RISE, the default configuration uses 𝑘=25, patch length 𝑝=16,
+                   Real-world financial datasets (ours)                        stride 𝑠=8, embedding dimension 𝑑=128, a 2-layer Transformer
+                                                                               encoder with 4 attention heads, 𝐺=3 granularities with pooling
+  S&P 500           5       2,517      7:1:2   2015–2025   US Equity
+                                                                               widths {4, 2, 1}, and softmax temperature 𝜏=0.1.
+  NASDAQ            5       2,517      7:1:2   2015–2025   US Equity
+  Nikkei 225        5       2,443      7:1:2   2015–2025   JP Equity
+                                                                               4.2    Main Results
+  Hang Seng         5       2,513      7:1:2   2015–2025   HK Equity
+  DAX               5       2,593      7:1:2   2015–2025   DE Equity           Table 2 summarizes the MSE and MAE performance on the eight
+  Gold              5       2,517      7:1:2   2015–2025   Commodity           real-world datasets across six forecast horizons, yielding 48 distinct
+  EUR/USD           5       2,609      7:1:2   2015–2025   Forex               configurations. RISE secures the highest number of first-place rank-
+  Bitcoin           5       2,517      7:1:2   2015–2025   Crypto              ings in both metrics (23/48 for MSE and 23/48 for MAE), substan-
+                                                                               tially exceeding the next strongest neural baseline (PatchTST, 8/48
+                        TFB benchmark datasets [13]
+                                                                               in MSE). Pairwise, RISE outperforms RAFT in 71% of settings (34/48),
+  NASDAQ            5       1,240      7:1:2   —           Stock               PatchTST in 79% (38/48), iTransformer in 88% (42/48), TimeMixer
+  NYSE              5       1,239      7:1:2   —           Stock               in 96% (46/48), and DLinear in 100% (48/48).
+                                                                                  The gains are most pronounced on broad equity-index datasets
+   Baselines. We benchmark RISE against seven state-of-the-art                 (S&P 500, NASDAQ, Nikkei 225, and DAX) at short-to-medium
+forecasting models covering the main architectural directions                  horizons (𝐻 ≤24), where detrended local dynamics retain reusable
+discussed above: retrieval-augmented forecasting, decomposition-               temporal structure that retrieval can exploit. In contrast, RW+drift
+based modeling, patch-based modeling, Transformer-based and                    strictly dominates EUR/USD across all horizons, consistent with
+multiscale architectures, and clustering-based multivariate fore-              the Meese–Rogoff puzzle [11]. On Bitcoin, RAFT outperforms RISE
+casting. Specifically, we compare against RAFT [7], GTR [2],                   by 10.1% in average MSE, suggesting that explicit retrieval can
+DLinear [19], PatchTST [12], iTransformer [9], TimeMixer [17],
+
+
+
+
+                                                                        2273
+
+=== PDF PAGE 7 ===
+Retrieve the Right Signal: Decomposition-Guided Retrieval-Augmented Forecasting for Financial Markets                                           CIKM ’26, November 07–11, 2026, Rome, Italy
+
+
+Table 2: Financial forecasting results (MSE/MAE, lower is better) on eight real-world datasets with 𝐻 ∈ {8, 16, 24, 36, 48, 60}
+(48 settings). Deep-learning models are reported as multi-seed means (𝑛=5) with 𝐿=96; for retrieval-augmented models, top-
+𝑚=20 is used. Classical baselines are evaluated in the same z-score-normalized target space. Best in bold red, second-best in
+underlined blue.
+
+                       RISE             GTR            DUET            RAFT            iTrans.        PatchTST        DLinear        TimeMixer         Persist.       RW+drift        ARIMA
+ Dataset       𝐻
+                     MSE MAE         MSE MAE         MSE MAE         MSE MAE         MSE MAE         MSE MAE         MSE MAE         MSE MAE         MSE MAE         MSE MAE         MSE MAE
+               8     .0136   .0876   .0188   .1070   .0200   .1159   .0186   .1018   .0176   .1013   .0161   .0988   .0379   .1560   .0230   .1220   .0148   .0913   .0145   .0902   .0148   .0912
+               16    .0242   .1196   .0275   .1325   .0318   .1446   .0261   .1247   .0286   .1312   .0267   .1282   .0428   .1681   .0296   .1399   .0272   .1270   .0262   .1233   .0272   .1266
+               24    .0310   .1407   .0334   .1510   .0375   .1592   .0319   .1425   .0343   .1489   .0327   .1457   .0484   .1774   .0352   .1552   .0354   .1500   .0329   .1431   .0354   .1493
+ S&P 500       36    .0426   .1661   .0441   .1743   .0472   .1780   .0431   .1673   .0474   .1749   .0425   .1660   .0554   .1892   .0479   .1811   .0507   .1809   .0444   .1697   .0504   .1799
+               48    .0550   .1893   .0576   .1970   .0584   .1982   .0558   .1903   .0578   .1931   .0524   .1840   .0616   .1985   .0624   .2034   .0692   .2103   .0575   .1927   .0687   .2090
+               60    .0706   .2152   .0723   .2183   .0699   .2189   .0705   .2147   .0667   .2081   .0619   .2013   .0723   .2161   .0758   .2253   .0924   .2424   .0734   .2158   .0916   .2409
+               Avg   .0395   .1531   .0423   .1633   .0441   .1691   .0410   .1569   .0421   .1596   .0387   .1540   .0531   .1842   .0457   .1712   .0483   .1670   .0415   .1558   .0480   .1662
+               8     .0137   .0882   .0190   .1055   .0208   .1154   .0189   .1024   .0206   .1080   .0160   .0961   .0424   .1655   .0227   .1175   .0153   .0935   .0152   .0927   .0155   .0941
+               16    .0246   .1184   .0277   .1279   .0336   .1452   .0267   .1239   .0325   .1372   .0273   .1243   .0482   .1788   .0306   .1352   .0283   .1273   .0276   .1244   .0286   .1279
+               24    .0306   .1357   .0334   .1441   .0385   .1592   .0315   .1377   .0388   .1549   .0314   .1373   .0532   .1875   .0357   .1502   .0351   .1453   .0333   .1396   .0352   .1452
+ NASDAQ        36    .0408   .1599   .0452   .1710   .0482   .1787   .0416   .1615   .0483   .1765   .0376   .1531   .0598   .1989   .0479   .1768   .0486   .1739   .0438   .1646   .0486   .1735
+               48    .0520   .1823   .0588   .1956   .0553   .1925   .0530   .1840   .0554   .1902   .0436   .1665   .0645   .2058   .0589   .1959   .0652   .2026   .0563   .1883   .0651   .2020
+               60    .0651   .2052   .0713   .2160   .0609   .2034   .0646   .2045   .0607   .2010   .0483   .1763   .0743   .2217   .0672   .2119   .0839   .2308   .0690   .2095   .0838   .2302
+               Avg   .0378   .1483   .0426   .1600   .0429   .1657   .0394   .1523   .0427   .1613   .0340   .1423   .0570   .1930   .0438   .1646   .0461   .1622   .0409   .1532   .0461   .1621
+               8     .0668   .1836   .0903   .2269   .0831   .2160   .0773   .2016   .0837   .2192   .0764   .2077   .1709   .3106   .1110   .2571   .0748   .1924   .0747   .1920   .0880   .1947
+               16    .1160   .2446   .1362   .2794   .1314   .2756   .1213   .2521   .1487   .2970   .1363   .2814   .2250   .3546   .1515   .2942   .1295   .2541   .1288   .2532   .1467   .2533
+               24    .1558   .2842   .1763   .3227   .1781   .3228   .1575   .2863   .1977   .3462   .1968   .3443   .2791   .3952   .1808   .3206   .1681   .2906   .1662   .2884   .1906   .2916
+ Nikkei 225    36    .2116   .3350   .2424   .3810   .2485   .3852   .2118   .3354   .2574   .4002   .2734   .4124   .3581   .4472   .2393   .3712   .2166   .3380   .2118   .3337   .2486   .3422
+               48    .2724   .3771   .3046   .4204   .3184   .4304   .2789   .3829   .3191   .4438   .3425   .4576   .4341   .4915   .3115   .4170   .2764   .3810   .2674   .3753   .3242   .3937
+               60    .3281   .4118   .3589   .4491   .3875   .4695   .3371   .4204   .3788   .4799   .3964   .4874   .5274   .5460   .3771   .4566   .3361   .4183   .3209   .4101   .3982   .4369
+               Avg   .1918   .3060   .2181   .3466   .2245   .3499   .1973   .3131   .2309   .3644   .2370   .3652   .3324   .4242   .2285   .3528   .2003   .3124   .1950   .3088   .2327   .3187
+               8     .0285   .1260   .0397   .1520   .0478   .1672   .0339   .1425   .0376   .1497   .0322   .1355   .1147   .2642   .0512   .1751   .0311   .1331   .0304   .1317   .0323   .1353
+               16    .0524   .1695   .0622   .1884   .0758   .2089   .0554   .1764   .0662   .1973   .0560   .1776   .1507   .2993   .0742   .2100   .0597   .1819   .0572   .1788   .0636   .1882
+               24    .0731   .2006   .0858   .2214   .1063   .2461   .0747   .2035   .0944   .2361   .0798   .2138   .1902   .3358   .0977   .2409   .0859   .2192   .0803   .2129   .0912   .2277
+ Gold          36    .1083   .2427   .1265   .2665   .1507   .2894   .1112   .2457   .1424   .2864   .1190   .2578   .2477   .3842   .1368   .2811   .1361   .2736   .1236   .2625   .1442   .2842
+               48    .1439   .2790   .1586   .2975   .1944   .3287   .1500   .2836   .1800   .3194   .1581   .2938   .2874   .4145   .1686   .3098   .1880   .3201   .1668   .3028   .2001   .3334
+               60    .1721   .3057   .1854   .3226   .2284   .3601   .1808   .3130   .1988   .3378   .1787   .3154   .3606   .4689   .1881   .3292   .2310   .3563   .1990   .3308   .2457   .3716
+               Avg   .0964   .2206   .1097   .2414   .1339   .2667   .1010   .2274   .1199   .2545   .1040   .2323   .2252   .3611   .1194   .2577   .1220   .2473   .1096   .2366   .1295   .2567
+               8     .0462   .1608   .0681   .2053   .0600   .1857   .0594   .1870   .0551   .1762   .0516   .1732   .1375   .2995   .0804   .2237   .0415   .1527   .0415   .1524   .0423   .1548
+               16    .0823   .2217   .1071   .2615   .1006   .2496   .0840   .2260   .0984   .2413   .0929   .2387   .1704   .3314   .1174   .2748   .0719   .2073   .0716   .2067   .0732   .2091
+               24    .1216   .2724   .1468   .3078   .1452   .3076   .1139   .2656   .1436   .2971   .1353   .2931   .2154   .3702   .1498   .3127   .1019   .2487   .1011   .2477   .1033   .2499
+ EUR/USD       36    .1725   .3253   .2020   .3590   .1978   .3600   .1611   .3166   .2093   .3610   .1992   .3547   .2823   .4214   .1982   .3574   .1490   .3034   .1469   .3017   .1499   .3035
+               48    .2280   .3711   .2470   .3940   .2423   .3936   .2096   .3561   .2630   .4009   .2617   .4026   .3620   .4724   .2486   .3938   .2054   .3486   .2016   .3460   .2058   .3486
+               60    .2682   .4014   .2843   .4177   .2751   .4113   .2508   .3869   .3034   .4281   .3205   .4425   .4380   .5143   .2887   .4199   .2554   .3863   .2496   .3824   .2550   .3856
+               Avg   .1531   .2921   .1759   .3242   .1702   .3179   .1465   .2897   .1788   .3174   .1769   .3175   .2676   .4015   .1805   .3304   .1375   .2745   .1354   .2728   .1382   .2753
+               8     .0390   .1318   .0530   .1593   .0751   .1856   .0436   .1460   .0681   .1849   .0483   .1513   .1430   .2636   .0681   .1860   .0437   .1407   .0434   .1404   .0459   .1439
+               16    .0704   .1785   .0911   .2099   .1271   .2467   .0734   .1832   .1320   .2580   .0895   .2069   .1966   .3031   .1095   .2351   .0809   .1920   .0800   .1912   .0862   .1989
+               24    .1067   .2216   .1300   .2521   .1756   .2902   .1090   .2236   .1829   .3062   .1382   .2571   .2470   .3363   .1448   .2683   .1235   .2391   .1216   .2377   .1294   .2453
+ Bitcoin       36    .1669   .2769   .1970   .3068   .2580   .3465   .1647   .2752   .2638   .3624   .2278   .3220   .3297   .3839   .2120   .3217   .1891   .2928   .1845   .2898   .1982   .3002
+               48    .2515   .3366   .2740   .3614   .3329   .3929   .2282   .3222   .3652   .4261   .3313   .3821   .4132   .4286   .2815   .3697   .2663   .3428   .2576   .3379   .2825   .3535
+               60    .3709   .4088   .3500   .4074   .4127   .4407   .2847   .3575   .4324   .4627   .4479   .4471   .4992   .4729   .3655   .4189   .3376   .3847   .3232   .3779   .3567   .3967
+               Avg   .1676   .2590   .1825   .2828   .2302   .3171   .1506   .2513   .2407   .3334   .2138   .2944   .3048   .3647   .1969   .3000   .1735   .2654   .1684   .2625   .1831   .2731
+               8     .0492   .1588   .0719   .1893   .0613   .1741   .0632   .1864   .0670   .1888   .0569   .1705   .1746   .3528   .0918   .2157   .0509   .1581   .0509   .1581   .0628   .1638
+               16    .0926   .2090   .1155   .2364   .1002   .2196   .0973   .2172   .1182   .2423   .1027   .2193   .2160   .3982   .1329   .2567   .1006   .2131   .1006   .2131   .1333   .2264
+               24    .1309   .2488   .1553   .2765   .1359   .2623   .1303   .2497   .1569   .2807   .1441   .2620   .2630   .4440   .1652   .2840   .1458   .2591   .1458   .2590   .1993   .2772
+ Hang Seng     36    .1749   .2924   .1968   .3175   .1799   .3076   .1684   .2868   .2077   .3248   .1967   .3095   .3464   .5154   .2067   .3194   .1978   .3059   .1979   .3058   .2909   .3304
+               48    .2164   .3298   .2245   .3466   .2036   .3365   .1864   .3109   .2335   .3484   .2244   .3390   .4448   .5800   .2203   .3381   .2259   .3385   .2261   .3385   .3555   .3686
+               60    .2750   .3746   .2538   .3754   .2410   .3731   .2190   .3445   .2781   .3804   .2711   .3746   .5626   .6459   .2539   .3729   .2580   .3736   .2582   .3736   .4199   .4084
+               Avg   .1565   .2689   .1696   .2903   .1537   .2789   .1441   .2659   .1769   .2942   .1660   .2792   .3346   .4894   .1785   .2978   .1632   .2747   .1633   .2747   .2436   .2958
+               8     .0344   .1388   .0463   .1674   .0636   .1927   .0424   .1582   .0425   .1586   .0414   .1544   .1539   .3079   .0646   .1974   .0353   .1401   .0347   .1391   .0351   .1396
+               16    .0669   .1928   .0755   .2124   .1010   .2411   .0712   .2005   .0728   .2064   .0723   .2032   .2132   .3606   .0865   .2259   .0703   .1985   .0681   .1964   .0704   .1976
+               24    .1023   .2361   .1062   .2501   .1347   .2768   .1044   .2390   .1016   .2400   .1032   .2411   .2704   .4064   .1207   .2619   .1085   .2465   .1037   .2424   .1095   .2476
+ DAX           36    .1545   .2863   .1502   .2903   .1802   .3192   .1589   .2917   .1430   .2747   .1461   .2806   .3400   .4557   .1637   .3019   .1685   .3046   .1580   .2963   .1715   .3090
+               48    .2109   .3348   .1880   .3239   .2104   .3460   .2103   .3366   .1840   .3108   .1810   .3112   .3973   .4962   .2191   .3509   .2278   .3550   .2100   .3413   .2301   .3579
+               60    .2372   .3645   .2263   .3570   .2483   .3805   .2454   .3676   .2194   .3469   .2113   .3402   .4664   .5433   .2387   .3721   .2713   .3948   .2451   .3752   .2738   .3973
+               Avg   .1344   .2589   .1321   .2669   .1564   .2927   .1388   .2656   .1272   .2562   .1259   .2551   .3069   .4283   .1489   .2850   .1469   .2732   .1366   .2651   .1484   .2748
+ Overall Avg         .1221   .2384   .1341   .2594   .1445   .2698   .1198   .2403   .1449   .2676   .1370   .2550   .2352   .3558   .1428   .2699   .1297   .2471   .1238   .2412   .1462   .2528
+ 1st Count             23      23      0       0       0       0       7       6       2       2       8       7       0       0       0       0       0       1       8       9       0       0
+
+
+
+become less reliable when extreme non-stationary volatility breaks                                   4.3      TFB Benchmark Evaluation
+the coherence of historical neighbors.                                                               To assess external generalization, we evaluate all models on two
+                                                                                                     financial-market datasets from the TFB benchmark [13] (NASDAQ
+
+
+
+
+                                                                                             2274
+
+=== PDF PAGE 8 ===
+CIKM ’26, November 07–11, 2026, Rome, Italy                                                                                                                          Yongdam Kim et al.
+
+
+Table 3: TFB benchmark results (MSE/MAE, lower is better) evaluated on two financial-market datasets for 𝐻 ∈ {24, 36, 48, 60}.
+Deep-learning results report multi-seed averages (𝑛=5); classical baselines operate deterministically per window. Best perfor-
+mance in bold red, second-best in underlined blue.
+
+                     RISE            GTR           DUET           RAFT           iTrans.       PatchTST       DLinear        TimeMixer       Persist.         RW+drift        ARIMA
+ Dataset     𝐻
+                   MSE MAE        MSE MAE        MSE MAE        MSE MAE        MSE MAE        MSE MAE        MSE MAE         MSE MAE        MSE MAE          MSE MAE         MSE MAE
+             24    .553    .531   .738    .658    .566   .566   .570    .544    .558   .560   .621    .570   1.634   .971    1.194   .819   .684    .582      .666    .575   .662    .531
+             36    .809    .655   1.084   .783    .866   .686   .897    .685    .844   .685   .989    .714   2.012   1.061   1.250   .849   1.180   .776     1.138   .762    1.140   .719
+ NASDAQ      48    1.077   .750   1.299   .843   1.177   .774   1.206   .788   1.120   .770   1.299   .800   2.101   1.080   1.343   .865   1.720   .938     1.653   .918    1.840   .928
+             60    1.259   .811   1.317   .845   1.254   .803   1.374   .841   1.349   .840   1.376   .827   1.949   1.051   1.139   .820   2.082   1.029    1.999   1.006   2.537   1.090
+             Avg   .925    .687   1.110   .782   .966    .707   1.012   .715   .968    .714   1.071   .728   1.924   1.041   1.231   .839   1.417   .831     1.364   .815    1.545   .817
+             24    .183    .267   .266    .342   .240    .312   .213    .298   .247    .325   .207    .287    .582   .571     .502   .522   .213    .276     .193    .260    .187    .263
+             36    .309    .342   .408    .424   .410    .419   .353    .382   .397    .415   .345    .375    .854   .707     .773   .645   .377    .374     .330    .343    .360    .371
+ NYSE        48    .446    .421   .559    .492   .610    .525   .494    .448   .546    .481   .492    .447   1.191   .846    1.049   .785   .572    .468     .485    .420    .564    .471
+             60    .617    .511   .750    .581   .849    .643   .668    .537   .724    .566   .664    .537   1.576   .984    1.250   .887   .824    .591     .677    .522    .824    .594
+             Avg   .389    .386   .496    .460   .527    .475   .432    .416   .479    .447   .427    .412   1.051   .777    .894    .710   .496    .428     .421    .386    .484    .425
+ Overall Avg       .657    .537   .803    .621   .747    .591   .722    .566   .724    .581   .749    .570   1.488   .909    1.063   .775   .957    .630     .893    .601    1.015   .621
+ 1st Count           7       4      0       0      0       1      0       0      0       0      0       0      0       0       1       0      0       0        0       2       0       1
+
+
+
+and NYSE), following the official multivariate-to-multivariate (‘M’)                           Table 4: Component ablation (avg. MSE across 𝐻 ∈ {8, 16, 24,
+setting and chronological 7:1:2 splits (Table 1). Forecast horizons                            36, 48, 60}). Best in bold red, second-best in underlined blue.
+are set to 𝐻 ∈ {24, 36, 48, 60}, while 𝐿 and top-𝑚 are selected from                           Δ: relative change vs. Full RISE.
+a broader grid for RISE and RAFT. RISE achieves the lowest overall
+average MSE (0.657) across the two TFB market datasets and ranks                                                     Full        w/o         w/o         w/o             w/o Trend
+first in 7/8 MSE configurations (Table 3). On NYSE, RISE obtains the                             Dataset
+                                                                                                                     RISE       Patch       Trend      Retrieval         & Retrieval
+lowest MSE across all four evaluated horizons; on NASDAQ, it per-
+                                                                                                 S&P 500             .0380      .0435       .0382           .0381            .0380
+forms best at 3/4 horizons and remains competitive at 𝐻 =60. These
+                                                                                                 NASDAQ              .0367      .0417       .0376           .0374            .0383
+results indicate that the gains of decomposition-guided retrieval
+                                                                                                 Nikkei 225          .1879      .1957       .1882           .1884            .1902
+are not limited to our curated real-world suite, but also transfer to
+                                                                                                 Gold                .0950      .1025       .0963           .0966            .0988
+standardized public financial-market benchmarks.
+                                                                                                 EUR/USD             .1469      .1473       .1473           .1508            .1500
+4.4        Ablation Studies                                                                      Overall             .1009      .1061       .1015           .1023            .1031
+We conduct two targeted ablation studies: (i) a component abla-                                  Δ vs. Full            —        +5.2%       +0.6%           +1.3%            +2.1%
+tion isolating the contribution of each predictive pathway, and
+(ii) a diagnostic comparison of retrieval similarity keys to assess                            whether historical neighbors are more informative when matched
+whether retrieval should be performed in the raw price space or                                in the raw price space or in the detrended local-dynamics space
+the detrended local-dynamics space.                                                            (Table 5).
+    (i) Component ablation. We evaluate four ablated variants                                     The two variants achieve comparable prediction MSE overall,
+of RISE on five representative real-world datasets: w/o Patch, w/o                             with raw retrieval being marginally lower (.130 vs. .131). However,
+Trend, w/o Retrieval, and w/o Trend & Retrieval (Table 4). All variants                        detrended retrieval substantially improves directional accuracy
+are retrained under the standard hyperparameter configuration.                                 (.560 vs. .537) and outperforms raw retrieval on 7 out of 8 datasets.
+    Excluding the patch predictor incurs the most severe perfor-                               This suggests that detrending the retrieval key better aligns histor-
+mance degradation (+5.2% overall increase in MSE), indicating that                             ical neighbors with the future direction of the query, even when
+the patch pathway contributes most to overall predictive perfor-                               standalone point-wise MSE does not always improve. The result
+mance. Ablating the linear trend predictor or the retrieval pathway                            supports our design choice of computing retrieval similarity over
+individually incurs a moderate penalty of 0.6–1.3%. Removing both                              the detrended signal rather than the raw price space in the full RISE
+simultaneously yields a larger combined penalty (+2.1%) than re-                               model.
+moving either pathway alone, suggesting that the two pathways
+provide partially non-overlapping predictive signals within the full                           4.5      Hyperparameter Sensitivity
+model.                                                                                         Table 6 documents the architecture’s empirical sensitivity to three
+    (ii) Effect of retrieval key: detrended vs. raw space. To iso-                             core structural hyperparameters.
+late the effect of the retrieval similarity key, we conduct a diagnostic                          Kernel size (𝑘): Performance varies within a 1.0% range, indi-
+retrieval-only comparison between two variants: (a) Raw retrieval,                             cating low sensitivity to kernel size. We adopt 𝑘=25 as the default,
+which computes similarity over the raw input window, and (b) De-                               corresponding approximately to one active trading month of daily
+trended retrieval, which computes similarity over the causal-MA                                observations. Look-back window (𝐿): Shorter context windows
+detrended signal. Both variants use the same nearest-neighbor se-                              (𝐿=36) outperform extended look-backs, with a range of 7.3% across
+lection and softmax-weighted aggregation rule. This analysis does                              tested values. This suggests that excessively distant historical obser-
+not aim to reproduce the full RISE architecture; rather, it evaluates                          vations may precede structural regime changes, introducing noise
+
+
+
+
+                                                                                       2275
+
+=== PDF PAGE 9 ===
+Retrieve the Right Signal: Decomposition-Guided Retrieval-Augmented Forecasting for Financial Markets                   CIKM ’26, November 07–11, 2026, Rome, Italy
+
+
+Table 5: Retrieval-key comparison using raw windows                                     output-level fusion. RAC adds only 𝐺 (𝐻 + 2)𝑑 parameters (3.8K–
+vs. causal-MA detrended windows as the similarity space.                                23.8K for 𝐺=3, 𝑑=128).
+Both variants use the same nearest-neighbor selection and                                  Empirical evidence. Across eight real-world financial datasets,
+softmax-weighted aggregation rule. Directional accuracy (↑):                            RISE attains the highest first-place count in both MSE and MAE
+fraction of forecast steps whose predicted direction from                               (23/48 each), nearly triple the next best neural baseline, and pair-
+the last observed value matches the ground truth. Prediction                            wise outperforms all deep-learning baselines on 71–100% of settings.
+MSE (↓): lower is better. Results averaged over 𝐻 ∈{8, . . . , 60}.                     On the independent TFB financial-market benchmark (NASDAQ,
+Bold: better of the two per metric.                                                     NYSE), RISE attains the lowest overall MSE (.657) and ranks first
+                                                                                        in 7/8 MSE configurations. A retrieval-key diagnostic (Table 5) fur-
+                    Prediction MSE (↓)            Directional accuracy (↑)              ther isolates the contribution of decomposition: while raw and
+    Dataset                                                                             detrended retrieval are essentially tied on aggregate MSE (.130 vs.
+                    Raw Detrended                 Raw       Detrended
+                                                                                        .131), detrended retrieval improves directional accuracy on seven of
+    S&P 500         .055          .039            .516           .591                   eight datasets (.560 vs. .537), directly substantiating the motivating
+    NASDAQ          .039          .038            .601           .606                   example (Figure 1). Component ablations confirm that the patch,
+    Nikkei 225      .182          .204            .558           .525                   trend, and retrieval pathways provide partially non-overlapping
+    Hang Seng       .202          .217            .540           .544                   signals; RISE is robust to retrieval hyperparameters (≤ 1.0% vari-
+    DAX             .111          .119            .537           .580                   ation), while a shorter look-back (𝐿=36) further reduces MSE by
+    Gold            .102          .095            .531           .549                   3.9% over our default 𝐿=96, indicating that the reported margins
+    EUR/USD         .204          .185            .497           .557                   under protocol-parity are conservative.
+    Bitcoin         .147          .150            .516           .531                      Limitations. RISE’s predictive advantage diminishes in regimes
+                                                                                        where historical similarity offers limited actionable signal: a naive
+    Overall         .130           .131           .537           .560                   drift baseline dominates EUR/USD (consistent with the Meese–
+                                                                                        Rogoff puzzle), and RAFT’s raw-signal retrieval outperforms RISE
+Table 6: Hyperparameter sensitivity. Kernel 𝑘: S&P 500, aver-
+                                                                                        on Hang Seng and on Bitcoin’s volatility-burst regime (by 10.1%
+aged over 𝐻 ∈{24, 36, 48, 60}. Look-back 𝐿 and top-𝑚: average
+                                                                                        in average MSE on the latter), yielding a slightly lower Over-
+MSE across six datasets × four horizons (𝐻 ∈{24, 36, 48, 60}). All
+                                                                                        all Avg MSE for RAFT (.1198 vs. .1221). Our dataset suite also
+runs use the OHLCV-only main configuration; bold marks
+                                                                                        under-represents mainland-Chinese equities, energy commodities,
+the default (𝐿=96, top-𝑚=20, 𝑘=25) used in the main results.
+                                                                                        and broader FX pairs. These limitations motivate learnable asset-
+                                                                                        adaptive decomposition filters and robust retrieval protocols for
+    Kernel 𝑘      MSE         𝐿      Avg MSE             top-𝑚   Avg MSE                near-random-walk and high-volatility regimes, as well as extending
+                                                                                        RISE to intraday and microstructural forecasting.
+        5        .0495       36           .1409            1        .1477                  More broadly, RISE suggests that decomposition in retrieval-
+       15        .0496       64           .1417            5        .1464               augmented forecasting is best understood as a division of labor:
+       25        .0494       96           .1466           10        .1462               retrieval over the detrended residual specializes in directional struc-
+       45        .0491       104          .1512           20        .1463               ture, while a separate trend pathway handles absolute level. The
+       65        .0492                                                                  empirical effectiveness of this design is not visible in any single
+                                                                                        retrieval metric alone, but emerges once directional accuracy and
+      Range: 1.0%              Range: 7.3%                 Range: 1.0%                  integration with a learned representation are considered jointly.
+
+that degrades predictive accuracy. Top-𝑚 selection: Predictive                          GenAI Usage Disclosure
+accuracy remains stable across different values of 𝑚 (range: 1.0%),                     During the preparation of this work, the authors utilized a genera-
+indicating that RISE is not sensitive to the number of retrieved                        tive AI tool (Claude Sonnet 4.6) to polish the manuscript and source
+neighbors.                                                                              code. Specifically, the tool was used to refine the implementation of
+                                                                                        the GPU processing part in the code, as well as to correct wording
+5     Conclusion                                                                        and enhance sentence clarity throughout the entire paper. No part
+We introduced RISE, a decomposition-guided retrieval architecture                       of the research design, experimental execution, data analysis, or in-
+for financial time-series forecasting. RISE uses a strictly causal                      terpretation of results was conducted using generative AI. All core
+trend–detrended decomposition as a routing mechanism: the macro                         technical and scientific contributions remain entirely the authors’
+trend is directed to a channel-independent linear head, while the                       own work.
+detrended residual is processed in parallel by a multi-granularity
+similarity-based retrieval module and a patch-based Transformer,                        Acknowledgments
+with the three pathway outputs combined via a learnable weighted                        This work was supported by the National Research Foundation of
+fusion. The retrieved detrended futures are also injected as Retrieval-                 Korea (NRF) grant funded by the Korea government (MSIT) (RS-
+as-Context (RAC) tokens into the patch encoder, allowing retrieval                      2024-00416666).
+to shape representation learning rather than acting only through
+
+
+
+
+                                                                                 2276
+
+=== PDF PAGE 10 ===
+CIKM ’26, November 07–11, 2026, Rome, Italy                                                                                                                          Yongdam Kim et al.
+
+
+References                                                                                             1–2 (1983), 3–24.
+ [1] Tim Bollerslev. 1986. Generalized autoregressive conditional heteroskedasticity.             [12] Yuqi Nie, Nam H. Nguyen, Phanwadee Sinthong, and Jayant Kalagnanam. 2023.
+     Journal of Econometrics 31, 3 (1986), 307–327.                                                    A Time Series is Worth 64 Words: Long-term Forecasting with Transformers. In
+ [2] Fanpu Cao, Lu Dai, Jindong Han, and Hui Xiong. 2026. Enhancing Multivariate                       Proceedings of the 11th International Conference on Learning Representations.
+     Time Series Forecasting with Global Temporal Retrieval. In Proceedings of the                [13] Xiangfei Qiu, Jilin Hu, Lekui Zhou, Xingjian Wu, Junyang Du, Buang Zhang,
+     14th International Conference on Learning Representations.                                        Chenjuan Guo, Aoying Zhou, Christian S. Jensen, Zhenli Sheng, and Bin Yang.
+ [3] Zhiyuan Cao, Jiayu Xu, Chengqi Dong, Peiwen Yu, and Tian Bai. 2024. MATCC: A                      2024. TFB: Towards Comprehensive and Fair Benchmarking of Time Series
+     Novel Approach for Robust Stock Price Prediction Incorporating Market Trends                      Forecasting Methods. In Proceedings of the VLDB Endowment, Vol. 17. 2363–2377.
+     and Cross-time Correlations. In Proceedings of the 33rd ACM International Con-               [14] Xiangfei Qiu, Xingjian Wu, Yan Lin, Chenjuan Guo, Jilin Hu, and Bin Yang.
+     ference on Information and Knowledge Management. 187–196.                                         2025. DUET: Dual Clustering Enhanced Multivariate Time Series Forecasting.
+ [4] Rama Cont. 2001. Empirical properties of asset returns: Stylized facts and statis-                In Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and
+     tical issues. Quantitative Finance 1, 2 (2001), 223–236.                                          Data Mining V. 1. 1185–1196.
+ [5] Robert F. Engle. 1982. Autoregressive conditional heteroscedasticity with esti-              [15] Christopher A. Sims. 1980. Macroeconomics and reality. Econometrica: journal of
+     mates of the variance of United Kingdom inflation. Econometrica: Journal of the                   the Econometric Society 48, 1 (1980), 1–48.
+     econometric society 50, 4 (1982), 987–1007.                                                  [16] Yajiao Tang, Zhenyu Song, Yulin Zhu, Huaiyu Yuan, Maozhang Hou, Junkai Ji,
+ [6] Eugene F. Fama. 1970. Efficient capital markets: A review of theory and empirical                 Cheng Tang, and Jianqiang Li. 2022. A survey on machine learning models for
+     work. Journal of Finance 25, 2 (1970), 383–417.                                                   financial time series forecasting. Neurocomputing 512 (2022), 363–380.
+ [7] Sungwon Han, Seungeon Lee, Meeyoung Cha, Sercan O Arik, and Jinsung Yoon.                    [17] Shiyu Wang, Haixu Wu, Xiaoming Shi, Tengge Hu, Huakun Luo, Lintao Ma,
+     2025. Retrieval-Augmented Forecasting for Time Series. In Proceedings of the                      James Y. Zhang, and Jun Zhou. 2024. TimeMixer: Decomposable Multiscale Mix-
+     42nd International Conference on Machine Learning.                                                ing for Time Series Forecasting. In Proceedings of the 12th International Conference
+ [8] Tong Li, Zhaoyang Liu, Yanyan Shen, Xue Wang, Haokun Chen, and Sen Huang.                         on Learning Representations.
+     2024. MASTER: Market-Guided Stock Transformer for Stock Price Forecasting.                   [18] Haixu Wu, Jiehui Xu, Jianmin Wang, and Mingsheng Long. 2021. Autoformer:
+     In Proceedings of the AAAI Conference on Artificial Intelligence, Vol. 38. 162–170.               Decomposition Transformers with Auto-Correlation for Long-Term Series Fore-
+ [9] Yong Liu, Tengge Hu, Haoran Zhang, Haixu Wu, Shiyu Wang, Lintao Ma, and                           casting. In Advances in Neural Information Processing Systems, Vol. 34. 22419–
+     Mingsheng Long. 2024. iTransformer: Inverted Transformers Are Effective for                       22430.
+     Time Series Forecasting. In International Conference on Learning Representations,            [19] Ailing Zeng, Muxi Chen, Lei Zhang, and Qiang Xu. 2023. Are Transformers
+     Vol. 2024. 11116–11140.                                                                           Effective for Time Series Forecasting?. In Proceedings of the AAAI Conference on
+[10] Andrew W. Lo and A. Craig MacKinlay. 1988. Stock market prices do not follow                      Artificial Intelligence, Vol. 37. 11121–11128.
+     random walks: Evidence from a simple specification test. The review of financial             [20] Lifan Zhao, Shuming Kong, and Yanyan Shen. 2023. DoubleAdapt: A Meta-
+     studies 1, 1 (1988), 41–66.                                                                       learning Approach to Incremental Learning for Stock Trend Forecasting. In
+[11] Richard A. Meese and Kenneth Rogoff. 1983. Empirical exchange rate models of                      Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and
+     the seventies: Do they fit out of sample? Journal of International Economics 14,                  Data Mining. 3492–3503.
+
+
+
+
+                                                                                           2277
+
+=== END SOURCE TEXT ===

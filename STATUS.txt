@@ -1,0 +1,61 @@
+1: RISE TFB NASDAQ/NYSE, horizons 24/36/48/60, official-block layout, average MSE: rerun 0.788789; paper 0.657.
+
+Assessment date: 2026-11-17. Grade remains 1.
+Scope: the historical five-seed reconstruction (640 neural fits and 48 classical
+settings), plus eight fresh exploratory L36 seed-0 fits, a deterministic baseline
+protocol diagnosis, and re-evaluation of archived RISE predictions.
+
+Fresh completed result:
+The fixed L36/date-complete/within-split configuration covered NASDAQ and NYSE
+at horizons 24, 36, 48, and 60, with ten epochs per fit. Average MSE was
+0.859239508888 versus paper 0.657: absolute error +0.202239508888 (+30.78%).
+MAE was 0.600819114231 versus 0.537: error +0.063819114231 (+11.88%).
+One seed provides no measured seed uncertainty. All eight saved targets, scalers,
+origin lists, and MSE/MAE values passed independent verification; the runner also
+repeated checkpoint inference exactly. Runtime was 3m 52.72s on one CPU thread,
+with 615772 KiB peak RSS and zero swap under a 1 GiB RAM cap. No GPU was used.
+Runtime: Torch 2.4.1 / NumPy 1.26.4, which differs from the historical environment.
+
+Partial protocol resolution:
+All 32 Persistence and RW+drift dataset/horizon MSE/MAE cells in Table 3 match
+within absolute 0.0005 rounding tolerance using date-complete data, forecast
+origins beginning 36 observations after the test boundary, and training-fitted
+drift. Layout and offset were selected after inspecting paper cells. Per-window
+drift with L36 and L96 failed before training-split mean drift was checked.
+This is exploratory reconstruction, not independent confirmation of author code.
+NASDAQ H48 RW MSE 1.653499997257 versus 1.653 is only 2.74e-9 inside the bound.
+Persistence overall MSE 0.956427506756 / MAE 0.629450213564 versus 0.957 / 0.630
+has errors -0.000572493244 / -0.000549786436, outside 0.0005. Averaging rounded
+dataset summaries explains those printed totals, but is not author-confirmed.
+No grade-2 or main-method match is claimed from this post-hoc baseline agreement.
+
+Historical failures preserved:
+Original five-seed L96 RISE MSE was 0.788789 (official blocks) or 0.780318
+(date-complete) versus 0.657: +20.1% / +18.8%. MAE was 0.594619 / 0.591130
+versus 0.537. MSE ranked first in 0/8 or 3/8 cases versus the claimed 7/8.
+Restricting archived date-complete predictions to the inferred +36 origins gives
+MSE 0.897387847963 +/- 0.013719614180 seed SD and MAE 0.633635745585 +/-
+0.005294447678 seed SD. Changing only evaluation borders does not fix the gap.
+
+Fixes and remaining requirements:
+The runner now supports explicit lookback, within-split or preceding input
+context, and separate config/data/output paths. Historical defaults produce
+identical arrays, state tensors, and forward outputs. The L36 configuration was
+fixed before fresh test results. The paper lists L36 and a broader TFB grid, but
+omits exact borders and the drift estimator. Current author-page and code
+searches found no released RISE implementation. Exact author preprocessing,
+tuning, and runtime remain unresolved. Eight curated Yahoo datasets and their
+full baselines, ablations, and sensitivities remain unexecuted. These numerical
+mismatches do not establish a methodological flaw in the paper.
+
+Evidence:
+- .agent/PROTOCOL_DIAGNOSIS_20261117.txt (chronology, all baseline cells and fresh fits)
+- audit_tfb_protocol.py; frozen_tfb_protocol36_config.json; run_rise_tfb.py
+- /mnt/data/home/jkp/replications/rise-resolve-20261117/audit.json
+- /mnt/data/home/jkp/replications/rise-resolve-20261117/fresh-seed0/summary.json
+- /mnt/data/home/jkp/replications/rise-resolve-20261117/runner-verification.json
+- /mnt/data/home/jkp/replications/rise-resolve-20261117/run-receipt.json
+- /mnt/data/home/jkp/replications/rise-resolve-20261117/reproduce.txt
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/405/REPORT.txt
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/405/results/paper-table3-comparison.csv
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/405/results/verification-and-comparison.json

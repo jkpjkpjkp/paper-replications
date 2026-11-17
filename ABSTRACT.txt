@@ -1,0 +1,9 @@
+Retrieve the Right Signal: Decomposition-Guided Retrieval-Augmented Forecasting for Financial Markets
+
+Condensed abstract
+
+Separates financial series into causal trend and detrended components, then retrieves
+similar historical patterns in the detrended space. Retrieved futures contribute both
+direct forecasts and context tokens for the forecasting backbone. Experiments report
+improved accuracy over retrieval, neural, and statistical baselines while avoiding
+misleading matches driven mainly by signal levels.

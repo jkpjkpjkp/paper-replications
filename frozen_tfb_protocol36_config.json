@@ -1,0 +1,83 @@
+{
+  "paper_id": 405,
+  "frozen_at": "2026-11-17",
+  "scope": "Exploratory protocol reconstruction following Table 3 deterministic baseline matching; not author-verified or confirmatory. All settings fixed before any new RISE result.",
+  "datasets": [
+    "NASDAQ",
+    "NYSE"
+  ],
+  "layouts": [
+    "date_complete"
+  ],
+  "horizons": [
+    24,
+    36,
+    48,
+    60
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "models": [
+    "RISE_equation_reimplementation",
+    "Persistence",
+    "RW_drift",
+    "ARIMA111"
+  ],
+  "lookback": 36,
+  "top_m": 20,
+  "kernel": 25,
+  "patch_length": 16,
+  "patch_stride": 8,
+  "d_model": 128,
+  "layers": 2,
+  "heads": 4,
+  "granularities": [
+    4,
+    2,
+    1
+  ],
+  "temperature": 0.1,
+  "epochs": 10,
+  "batch_size": 32,
+  "optimizer": "Adam",
+  "lr": 0.0001,
+  "split": "train=floor(.7N), test=floor(.2N), remainder validation; both input and future windows wholly within each partition",
+  "metrics": [
+    "global-train-z-score MSE",
+    "global-train-z-score MAE"
+  ],
+  "unspecified_choices_frozen_without_test_tuning": {
+    "transformer_feedforward_dim": 512,
+    "dropout": 0.1,
+    "activation": "GELU",
+    "encoder_norm_first": false,
+    "transformer_encoder_init": "PyTorch standard TransformerEncoder cloning; no extra manual initialization",
+    "fusion_weights": "unconstrained learned scalars initialized1/3 each",
+    "scheduler": "CosineAnnealingWarmRestarts T_0=10, T_mult=1, eta_min=0; step each epoch",
+    "checkpoint": "lowest validation MSE of ten epochs",
+    "patch_positional_encoding": "standard sinusoidal on patch positions; granularity embeddings zero initialized",
+    "ARIMA": "per-channel input96, order111, no drift/trend, statsmodels state-space ML maxiter50, stationarity/invertibility enforced",
+    "random_walk_drift": "per-window mean of95 input first differences",
+    "TFB_search": "No further grid search. Exploratory lookback36 locked from baseline protocol diagnosis."
+  },
+  "source_data_ambiguity": {
+    "date_complete": "Matches paper counts and all16 Persistence plus16 RW drift dataset/horizon metric cells after test offset36; original author preprocessing remains unverified."
+  },
+  "validation_checks": [
+    "training-only scaler and fixed training memory bank",
+    "all horizon labels inside train/val/test partition",
+    "whole-interval training retrieval overlap mask",
+    "causal moving-average prefix invariance",
+    "detrended retrieval key additive-shift invariance",
+    "checkpoint exact deterministic inference rerun",
+    "raw/standardized persistence error reconciliation"
+  ],
+  "returns_extension": "blocked; no tradeable-asset mapping, original calendar dates or actual execution/corporate-action cashflows",
+  "test_selection": "Post-hoc baseline diagnostic selected date_complete and test origin offset36; no new RISE training/test results have been inspected for this config.",
+  "split_context": "within_split"
+}
