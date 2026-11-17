@@ -1,0 +1,25 @@
+2: at least one representative experiment matches the paper's claim
+
+
+
+Scope: Approximate CSI300 predictive-correlation match in a completed one-seed rerun.
+
+Evidence and explanation:
+The script-matched run gives IC 0.066693 versus 0.0687 (-2.92%), ICIR 0.536245 versus
+0.5497 (-2.45%), RankIC 0.060229 versus 0.0621 (-3.01%), and RankICIR 0.487056 versus
+0.511 (-4.69%). These four independently checked forecasting metrics agree roughly
+within 5%, an explicit descriptive tolerance, not an error-bar/equivalence claim. Only
+one seed is available. Portfolio results do not match as well: net excess annual return
+10.19% versus 12.96%, and IR 1.1914 versus 1.5123 (both about 21% lower).
+
+Limits / next requirement:
+Level 2 covers the representative predictive experiment only. Fidelity review, original-
+data/configuration equivalence, repeated seeds and all paper markets/baselines/ablations
+remain incomplete. This assessment does not turn the archived pending fidelity gate into
+a completed exact replication.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/ordered-reproductions/results/doubleadapt-script-matched/summary.json
+- ../.replication-local/artifacts/ordered-reproductions/results/doubleadapt-script-matched/comparison-to-baseline.json
+- README.md
+

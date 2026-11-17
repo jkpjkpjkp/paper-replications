@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "doubleadapt",
+  "title": "DoubleAdapt: A Meta-learning Approach to Incremental Learning for Stock Trend Forecasting",
+  "coverage": "html_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/ordered-reproductions/sources/doubleadapt-paper.txt",
+    "path_relative_to_collection": ".replication-local/artifacts/ordered-reproductions/sources/doubleadapt-paper.txt",
+    "sha256": "0ab6ccd48025c4dda67c33b4ca5222170fc0180478ea5e08ed96bf6088066429",
+    "bytes": 96801,
+    "urls": [
+      "https://arxiv.org/abs/2306.09862v3"
+    ]
+  },
+  "method": "Article body; navigation and known site footer removed",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": null,
+  "pages": [
+    {
+      "page": null,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 1303
+    }
+  ],
+  "layout_file": null,
+  "layout_pages": null,
+  "heading_candidates": [
+    {
+      "line": 15,
+      "text": "# DoubleAdapt: A Meta-learning Approach to Incremental Learning for Stock Trend Forecasting"
+    },
+    {
+      "line": 43,
+      "text": "###### Abstract."
+    },
+    {
+      "line": 54,
+      "text": "###### Keywords:"
+    },
+    {
+      "line": 58,
+      "text": "## 1. Introduction"
+    },
+    {
+      "line": 107,
+      "text": "## 2. Preliminaries"
+    },
+    {
+      "line": 155,
+      "text": "## 3. Key Insights"
+    },
+    {
+      "line": 185,
+      "text": "## 4. Methodology"
+    },
+    {
+      "line": 187,
+      "text": "### 4.1. Overview"
+    },
+    {
+      "line": 235,
+      "text": "### 4.2. Data Adapter"
+    },
+    {
+      "line": 316,
+      "text": "### 4.3. Model Adapter"
+    },
+    {
+      "line": 334,
+      "text": "### 4.4. Optimization of Meta-learners"
+    },
+    {
+      "line": 374,
+      "text": "## 5. Training Procedure"
+    },
+    {
+      "line": 487,
+      "text": "## 6. Experiments"
+    },
+    {
+      "line": 505,
+      "text": "### 6.1. Experimental Settings"
+    },
+    {
+      "line": 507,
+      "text": "#### 6.1.1. Datasets"
+    },
+    {
+      "line": 514,
+      "text": "#### 6.1.2. Evaluation Metrics"
+    },
+    {
+      "line": 530,
+      "text": "#### 6.1.3. Baseline"
+    },
+    {
+      "line": 565,
+      "text": "#### 6.1.4. Implementation Details"
+    },
+    {
+      "line": 598,
+      "text": "### 6.2. Performance Comparison (RQ1)"
+    },
+    {
+      "line": 615,
+      "text": "### 6.3. Ablation Study (RQ2)"
+    },
+    {
+      "line": 625,
+      "text": "### 6.4. Time Cost Study (RQ3)"
+    },
+    {
+      "line": 640,
+      "text": "## 7. Related Work"
+    },
+    {
+      "line": 642,
+      "text": "### 7.1. Stock Trend Forecasting"
+    },
+    {
+      "line": 647,
+      "text": "### 7.2. Meta-Learning"
+    },
+    {
+      "line": 654,
+      "text": "## 8. Conclusion"
+    },
+    {
+      "line": 662,
+      "text": "###### Acknowledgements."
+    },
+    {
+      "line": 666,
+      "text": "## References"
+    },
+    {
+      "line": 783,
+      "text": "2016 IEEE Conference on Computer Vision and"
+    },
+    {
+      "line": 837,
+      "text": "A Contrastive Learning Approach with Adaptive Fusion. In"
+    },
+    {
+      "line": 959,
+      "text": "2021 IEEE/CVF Conference on Computer Vision"
+    },
+    {
+      "line": 970,
+      "text": "A Dual-Stage Attention-Based Recurrent Neural"
+    },
+    {
+      "line": 1048,
+      "text": "2021. ACM."
+    },
+    {
+      "line": 1166,
+      "text": "## Appendix A Implementation Details"
+    },
+    {
+      "line": 1172,
+      "text": "## Appendix B Hyperparameter Study"
+    },
+    {
+      "line": 1205,
+      "text": "## Appendix C Approximation of Meta-gradients"
+    },
+    {
+      "line": 1213,
+      "text": "### C.1. Gradients of Model Adapter"
+    },
+    {
+      "line": 1227,
+      "text": "### C.2. Gradients of Data Adapter"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1304
+    }
+  ],
+  "line_count": 1304,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "46b04f2fee9b62851f09d72e2b07f2392a15083f84853f54532fee93415d89e2",
+      "bytes": 94997
+    }
+  }
+}

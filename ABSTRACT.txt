@@ -1,0 +1,9 @@
+DoubleAdapt: A Meta-learning Approach to Incremental Learning for Stock Trend Forecasting
+
+Condensed abstract
+
+Addresses changing stock-data distributions through jointly learned data and model
+adapters. Meta-learning trains the data adapter to reshape incoming observations and the
+model adapter to update predictions efficiently as new data arrive. Stock-ranking
+experiments evaluate forecasting accuracy, adaptation benefits, and computational
+efficiency.
