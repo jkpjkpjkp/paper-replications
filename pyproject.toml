@@ -1,0 +1,10 @@
+[project]
+name = "limt-reproduction"
+version = "0.1.0"
+description = "Audited LiMT reproduction with dated CSI membership"
+requires-python = ">=3.11,<3.12"
+dependencies = ["torch==2.4.1", "numpy==2.2.6", "pandas==2.2.3", "scipy==1.17.0", "pyqlib==0.9.7", "pytest==9.0.2", "matplotlib==3.10.8", "pyarrow==23.0.1", "lightgbm==4.7.0", "requests==2.34.2"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

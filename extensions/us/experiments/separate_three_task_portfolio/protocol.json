@@ -1,0 +1,40 @@
+{
+  "question": "How does APO profitability change when return, volume shock and volatility are predicted by three separate models rather than the released three-head LiMT?",
+  "scope": "Retrospective follow-up in the existing US CRSP transfer, not a literal replication of the paper's Chinese profitability.",
+  "seeds": [0, 1, 2],
+  "joint_source": "Original completed results/seed{0,1,2}: full three-head LiMT, task weights 0.65/0.30/0.05, one checkpoint selected by validation return IC.",
+  "separate_sources": {
+    "return": "Reuse completed experiments/joint_price_volatility/results/return_only/seed{0,1,2}.",
+    "volatility": "Reuse completed experiments/joint_price_volatility/results/volatility_only/seed{0,1,2}.",
+    "volume": "Train new volume-only specialists in this experiment."
+  },
+  "training": {
+    "epochs": 100,
+    "patience": 21,
+    "learning_rate": 0.00001,
+    "gradient_value_clip": 3.0,
+    "cuda_memory_fraction": 0.22,
+    "selection": "Volume-only: mean validation daily volume-shock IC, matching each reused specialist's own-task selection policy.",
+    "loss": "Masked cross-sectional MSE on the existing daily normalized volume-shock labels; no return or volatility supervision.",
+    "architecture": "Same pinned full LiMT initialization, 256-dimensional cross-stock/temporal encoder and 8 experts; retain only the volume gate and projection, remove all other heads and fusion. Identical active-branch extraction to the reused specialists.",
+    "randomness": "Seed full core before extracting the active branch, reset training dropout RNG to seed+100000, shuffle dates with seed+epoch, as for reused specialists.",
+    "concurrency": 1
+  },
+  "portfolio": {
+    "primary_rule": "Existing causal APO equations22-26, r=0.1: rank by predicted return, long top and short bottom deciles; size with predicted volume shock (liquidity) and volatility (risk). USD1bn nominal per side, 2% signal target and execution trade caps, equal-dollar executable legs, residual cash earns zero.",
+    "timing": "Signal t, assumed execution t+1 close, CRSP total payoff t+2. Same eligibility, terminal events, missing-payoff policy and US OHLC4 substitution as the base experiment.",
+    "costs": {
+      "gross": {"buy_bp": 0, "sell_bp": 0},
+      "legacy_buy5": {"buy_bp": 5, "sell_bp": 0},
+      "paper_trade10": {"buy_bp": 10, "sell_bp": 10}
+    },
+    "fees": "Charge both opening/rebalance trades and final liquidation; paper_trade10 charges 10bp on all buys, sells, short entries and covers. Engine must reproduce the existing US ledgers exactly when sell_bp=0.",
+    "primary_forecasts": "Three-seed ensemble per target before portfolio construction, for joint and all-separate systems. Same date/stock rows in every combination.",
+    "diagnostics": "Equal-weight return-decile portfolios isolate ranking changes; separately substitute only the return, only the volume, or only the volatility ensemble into joint APO at paper_trade10. Per-seed APO at paper_trade10 and adverse missing-payoff stress are descriptive."
+  },
+  "inference": {
+    "primary": "Paired calendar-day net-return difference, separate minus joint, over full 2017-2025 at each of the three declared costs. Bartlett HAC20 with correction and t intervals; Holm across three paired APO cost tests. Annual mean=252*daily mean. CAGR, Sharpe, drawdown, turnover, deployed exposure and costs also reported.",
+    "sensitivity": "HAC5/60 and 5000 circular bootstrap replicates with blocks20/60 for paired daily return gains. Equal-weight and single-output substitutions are diagnostics, not additional chances to pass the primary test.",
+    "limits": "Joint checkpoint selection is return-centered, while specialists are selected by their own tasks. This tests the original published-style joint system against separately validated specialists; it does not isolate sharing alone. Historical panel and prior forecast results were already examined. No selection of tasks, checkpoints, weights, cost settings, seeds or portfolio parameters based on new test profitability. Execution is idealized; shorts assumed available; no borrow, financing, market impact or slippage beyond the stated fees. Profit differences can include different deployed exposure."
+  }
+}

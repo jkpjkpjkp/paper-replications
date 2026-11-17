@@ -1,0 +1,21 @@
+{
+  "paper": "https://arxiv.org/html/2609.25617v1",
+  "author_commit": "c0232623d50db26b02275b6f77b682f25effeec5",
+  "scope": "US CRSP transfer of the released LiMT model; not the original Chinese benchmark",
+  "universe": "Daily 500 largest US-incorporated corporate common stocks by known signal-close capitalization, one PERMNO per PERMCO; NYSE/AMEX/NASDAQ, active regular-way, observed trade close >=5 USD, positive volume, not already delisted. No future-return or current-survivor filter.",
+  "source_years": [2007, 2025],
+  "train": ["2008-01-01", "2014-12-31"],
+  "valid": ["2015-01-01", "2016-12-31"],
+  "test": ["2017-01-01", "2025-12-31"],
+  "report_windows": [["2017-01-01", "2020-08-01"], ["2021-01-01", "2025-12-31"]],
+  "lookback": 21,
+  "features": "Qlib Alpha158 with CRSP split-adjusted OHLC, raw share volume, and an explicitly substituted OHLC4 price for VWAP; training-member median/MAD normalization, clip[-3,3], within-window ffill then observed-window mean then zero",
+  "vwap_substitution": "CRSP daily lacks true VWAP. (open+high+low+close)/4 is a price proxy, never called observed VWAP. dlyprcvol is close times volume and is not treated as VWAP.",
+  "return_label": "CRSP dlyretx on session t+2, with signal at t and assumed execution at t+1 close",
+  "auxiliary_labels": "Paper volume shock using raw shares and t+2 high-low range divided by the OHLC4 proxy; targets standardized cross-sectionally within training dates",
+  "model": {"d_model": 256, "cross_heads": 4, "temporal_heads": 2, "experts": 8, "dropout": 0.5, "variant": "full"},
+  "training": {"seeds": [0, 1, 2], "epochs": 100, "patience": 21, "learning_rate": 0.00001, "weights": [0.65, 0.30, 0.05], "gradient_value_clip": 3.0, "selection": "validation mean daily return IC only", "precision": "FP32 parameters/activations, CUDA TF32 matmul enabled; no mixed precision", "batch": "one complete cross-section per step; dates shuffled deterministically each epoch"},
+  "baseline": {"method": "LightGBM", "seeds": [0, 1, 2], "num_leaves": 31, "learning_rate": 0.05, "min_data_in_leaf": 100, "feature_fraction": 0.9, "bagging_fraction": 0.9, "bagging_freq": 1, "max_rounds": 1000, "early_stopping": 50, "selection": "validation MSE"},
+  "portfolio": {"primary": "Equal-weight top/bottom deciles, target +50%/-50% of NAV, zero costs, daily rebalance at t+1 close, P&L CRSP total returns t+2; tradeability checked at execution without filtering on t+2 returns", "secondary": "LiMT APO r=0.1 with USD1bn each side, 2% signal-day target caps and execution-day trade caps, larger desired leg scaled down to equal dollars; unallocated capital earns zero", "cost_sensitivity": "5 bp on positive signed trades (long buys and short covers); sells free; no borrowing/financing/slippage or impact", "missing_payoffs": "Preserve missing held returns as a limitation, zero in primary accounting; report number/weight and adverse +/-100% stress without outcome-based universe deletion", "terminal": "CRSP supplied total return includes terminal outcomes; after a flagged terminal observation convert that security position to cash without adding a second legacy delisting return", "neutrality": "Equal executed long/short dollars at rebalance; no claim of beta neutrality; actual gross exposure and between-rebalance drift reported"},
+  "inference": {"primary": "Calendar trading days, HAC Bartlett20 with small-sample correction, two-sided 95% CI and p", "sensitivity_lags": [5, 60], "bootstrap": "5000 circular resamples, blocks20 and60", "multiplicity": "All enumerated model/portfolio/window aggregate comparisons reported with Holm correction; seeds are diagnostics, never independent trading-day samples", "forecast_comparison": "Paired daily IC difference between three-seed LiMT and LightGBM score ensembles on identical dates/stocks", "holdout_status": "Newly constructed US transfer, but retrospective historical sample and contemporary method selection; not prospective validation"}
+}

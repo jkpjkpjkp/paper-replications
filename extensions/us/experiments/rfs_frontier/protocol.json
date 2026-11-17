@@ -1,0 +1,30 @@
+{
+  "paper": "https://academic.oup.com/rfs/article/39/10/3035/8524346",
+  "doi": "10.1093/rfs/hhag022",
+  "scope": "Retrospective zero-trading-cost application of equation 11, Figure 1 and Table 2 to frozen LiMT US forecasts. This is not a replication of the paper's Portfolio-ML learner or its nonzero-cost implementable frontier.",
+  "created": "2026-11-07",
+  "known_prior_results": "Base 2017-2025 returns and yearly results have already been inspected. This plan is frozen before new rank portfolios and utility tests, not before all test-set inspection.",
+  "seeds": [0, 1, 2],
+  "cases": ["LiMT_equal", "LiMT_rank", "LiMT_apo", "LightGBM_equal", "LightGBM_rank"],
+  "ensemble": "Average all three frozen score vectors before portfolio construction; individual seeds are diagnostics, not independent observations or selection candidates.",
+  "portfolios": {
+    "equal": "Existing dynamic US500 top/bottom deciles, +50%/-50% NAV; reuse the unchanged execution engine.",
+    "rank": "Average-tie cross-sectional ranks minus (N+1)/2, separately normalized positive/negative weights to +50%/-50% NAV. Daily adaptation of Rank-ML at half the paper's 200% gross exposure.",
+    "apo": "Existing capacity-constrained equal-dollar APO with USD1bn per side budget and 2% caps; retain cash and report actual gross."
+  },
+  "timing": "Frozen signal at t, execution t+1 close, CRSP total payoff t+2; drift with CRSP price returns and account for dividends and terminal outcomes. No contemporaneous-close fill.",
+  "costs": {"commission": 0, "spread": 0, "slippage": 0, "market_impact": 0, "borrow": 0, "financing": 0, "cash_yield": 0},
+  "windows": {"full-2017-2025": ["2017-01-01", "2025-12-31"], "paper-period-2017-2020": ["2017-01-01", "2020-08-01"], "recent-2021-2025": ["2021-01-01", "2025-12-31"]},
+  "annualization": 252,
+  "utility": "U_gamma = 252*(mean(r) - gamma/2*mean((r-mean(r))**2)); population divisor matches equation 11. U is an empirical risk penalty, not a realized investable return. gamma=0 is the gross mean endpoint.",
+  "gammas": [0, 1, 5, 10, 20, 100],
+  "primary_gamma": 10,
+  "inference": {"hac_lags": [20, 5, 60], "kernel": "Bartlett", "small_sample_correction": true, "reference": "two-sided t", "bootstrap": "5000 paired circular block resamples, blocks 20 and 60; re-estimate mean and variance within every draw", "bootstrap_seed": 8524346},
+  "paired_comparisons": "LiMT minus LightGBM on identical dates for equal and rank constructions, gamma 0 and 10. No inference from unequal-date or unequal-sampling-unit comparisons.",
+  "factor_diagnostics": "CAPM and FF5+momentum on each portfolio/window, HAC20. Zero-net long/short P&L is regressed directly on excess-return factors; do not subtract risk-free return again. Ex post alpha and beta are diagnostics, not an ex ante beta hedge.",
+  "multiplicity": "One Holm family of 5 cases*3 windows*6 gamma endpoints + 2 constructions*3 windows*2 paired endpoints + 5 cases*3 windows*2 factor alpha endpoints = 132. Also conservatively append all 21 prior base aggregate hypotheses (including overlaps), total 153. Individual seeds, alternative HAC lags, bootstrap intervals, missing-return stresses and descriptive scaled curves are diagnostics.",
+  "frontier": "Descriptive zero-cost strategy rays only: scale each full-test return stream to ex-post volatility 0%-10% in 1pp steps. This is explicitly ex post, not an executable risk target or a proof of the globally efficient frontier. No test-selected scale is deployed.",
+  "validation_scale": "Separate diagnostic: fix a constant multiplier at 10% annual volatility / 2015-2016 validation volatility, before application to test. Report actual test risk, return, U10 and implied gross; primary remains 100% gross decile/rank.",
+  "missing_payoffs": "Preserve missing selected returns as zero in primary; repeat each ensemble with adverse long=-100%, short=+100%, without deleting or reselecting assets.",
+  "limitations": ["Already inspected retrospective sample; no fresh prospective holdout", "Current-vintage CRSP, OHLC4 VWAP proxy, assumed short availability and ideal closes", "Dollar neutrality is not beta neutrality", "Monthly 1981-2020 paper design, annual nested refitting, 115 characteristics and Barra-style risk model are not reproduced", "Nonzero-cost AUM grid and dynamic cost-aware Portfolio-ML/Static-ML/Multiperiod-ML are outside the requested before-cost test; cannot claim implementability", "Existing joint price/volatility ablation is running independently and is excluded from this completed frozen base-model audit"]
+}

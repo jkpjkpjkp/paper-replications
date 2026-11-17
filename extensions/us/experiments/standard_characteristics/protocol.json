@@ -1,0 +1,34 @@
+{
+  "scope": "LiMT US transfer with Chen-Zimmermann individual-stock characteristics; a new retrospective specification, separate from all prior runs.",
+  "characteristics": "Unsigned official Predictors.parquet, Data-Release-2026.10: 209 published characteristics; Price, Size and STreversal are absent from this public file and are not reconstructed. Exclude only columns empty or constant in training. No Alpha158 features.",
+  "universe": "Preserve original dynamic largest-500 daily US common-stock universe, then explicitly require previous-month-end capitalization >= the NYSE common-stock 20th percentile, and an observed previous-month CZ record. This is not an all-nonmicrocap CRSP experiment.",
+  "microcap": "NYSE 20th percentile computed each month over US-incorporated corporate ordinary common shares, positive capitalization, regular-way active NYSE listings, not already delisted; no USD5 price filter for the breakpoint population. Apply using the immediately preceding calendar month only. Unknown lagged capitalization is excluded and counted separately.",
+  "timing": "CZ yyyymm is available at that month end according to the authors. Every daily signal uses only the immediately preceding calendar month's characteristics. Historical window values keep their own historical information sets. No future fill or stale cross-month carry.",
+  "normalization": "For each source month, rank each characteristic over that month's observed nonmicrocap eligible CRSP common shares, ties averaged; map observed ranks to [-1,1], singleton/constant to 0; missing -> 0. Cross-sectional ranks use no returns. Retain/drop columns on 2008-2014 training observations only.",
+  "train": ["2008-01-01", "2014-12-31"],
+  "valid": ["2015-01-01", "2016-12-31"],
+  "test": ["2017-01-01", "2025-12-31"],
+  "lookback": 21,
+  "labels": "Original CRSP daily price-return label at t+2; original raw-share volume shock and OHLC4-denominated range auxiliary labels, with identical cross-sectional training target standardization. Realized portfolio P&L uses total returns.",
+  "model": {"d_model": 256, "cross_heads": 4, "temporal_heads": 2, "experts": 8, "dropout": 0.5, "variant": "full"},
+  "training": {"seeds": [0, 1, 2], "epochs": 100, "patience": 21, "learning_rate": 0.00001, "weights": [0.65, 0.30, 0.05], "gradient_value_clip": 3.0, "selection": "validation mean daily return IC only", "precision": "FP32 parameters and activations, CUDA TF32", "max_concurrent_trainers": 1},
+  "portfolio": {
+    "weights": ["value", "volume"],
+    "value": "Within each predicted-return decile, weights proportional to positive previous-month-end CRSP capitalization, known at signal time.",
+    "volume": "Within each predicted-return decile, weights proportional to observed signal-day raw share volume; no realized t+1 or t+2 volume is used for weights.",
+    "construction": "Daily score-ensemble deciles. Standard D10-D1 spread targets +100%/-100% NAV, gross 200%; also report 100%-gross equivalents by dividing returns and alpha by two. Direction fixed ex ante; no sign flip. Individual seeds are diagnostics.",
+    "execution": "Signal t, assumed execution t+1 close, total-return P&L t+2. Retain original frozen-position dollar-neutral projection and execution tradability rules. No liquidity participation cap for these conventional decile portfolios.",
+    "cost_bp_all_trades": [0, 10],
+    "costs": "Charge stated basis points on all traded dollars, including initial trades and final long liquidation/short cover. No borrowing, financing, impact or collateral interest.",
+    "missing": "Keep missing held returns; primary payoff zero with counts/weights reported, separate adverse stress long -100%, short +100%. Terminal positions convert to cash after source total return; no duplicate delisting adjustment."
+  },
+  "inference": {
+    "models": ["mean", "FF5", "FF5+UMD"],
+    "factors": "Frozen locally verified French daily FF5 and Mom (WRDS UMD), decimal units, joined on realized return date. Regress zero-net long-short returns directly; never subtract RF again.",
+    "primary_hac_lag": 20,
+    "sensitivity_hac_lags": [5, 60],
+    "reference": "OLS with explicit intercept, Bartlett HAC small-sample correction, t-reference two-sided p and 95% CI; annual arithmetic intercept = daily intercept *252.",
+    "windows": {"full-2017-2025": ["2017-01-01", "2025-12-31"], "paper-2017-2020": ["2017-01-01", "2020-08-01"], "recent-2021-2025": ["2021-01-01", "2025-12-31"]},
+    "multiplicity": "One Holm family over 2 weight schemes x 2 cost levels x 3 windows x 3 factor specifications =36 ensemble intercept tests. This does not adjust across prior historical research choices. Seed and stress/lag diagnostics are not confirmatory tests."
+  }
+}

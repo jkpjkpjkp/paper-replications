@@ -1,0 +1,9 @@
+Hierarchical Multi-Task Learning with Liquidity-Aware Signals for Stock Forecasting
+
+Condensed abstract
+
+Separates cross-stock dependencies from temporal dynamics, then jointly predicts
+returns, volatility, and trading-volume signals through a gated mixture of experts. An
+adaptive optimizer converts these forecasts into portfolios with transaction-cost and
+liquidity constraints. CSI300 and CSI500 experiments report improved forecasts and more
+effective portfolio allocation.

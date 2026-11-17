@@ -1,0 +1,37 @@
+{
+  "question": "Does one LiMT-style return/volatility model outperform two independently trained specialists?",
+  "price_definition": "Existing CRSP price-return target (not a price level): dlyretx at t+2, signal t, execution t+1 close.",
+  "volatility_definition": "Existing t+2 high-low range divided by OHLC4; a range proxy, not realized standard deviation.",
+  "base_protocol": "../../protocol.json",
+  "variants": {
+    "joint": ["return", "volatility"],
+    "return_only": ["return"],
+    "volatility_only": ["volatility"]
+  },
+  "seeds": [0, 1, 2],
+  "architecture": "Pinned full LiMT encoder and eight shared experts. Remove the volume branch and unused feature gate. Joint retains the released one-way volatility-hidden-to-return fusion, using its original second gate row. Specialists retain the same initialized encoder/experts and their own task gate/head only, with no cross-task fusion. Thus this measures joint supervision plus LiMT task fusion, not the isolated causal effect of parameter sharing.",
+  "initialization": "For each seed, initialize the complete pinned LiMT identically before extracting active branches; all common parameters start equal. Reset training RNG identically after construction.",
+  "training": {
+    "epochs": 100,
+    "patience": 21,
+    "learning_rate": 0.00001,
+    "gradient_value_clip": 3.0,
+    "loss": "Mean of per-task cross-sectional MSEs on the existing daily standardized targets; joint equal weights 0.5/0.5, each specialist weight 1. Missing labels masked before arithmetic.",
+    "selection": "One joint checkpoint selected by equal mean of validation return IC and volatility IC; each specialist selected by its own validation IC. Same cap and patience. No test-based selection.",
+    "sensitivity": "Additionally save each joint task's own validation-IC-best checkpoint from the same training trajectory. These need two checkpoint deployments and are explicitly secondary.",
+    "precision": "FP32 parameters/activations, CUDA TF32 permitted, no mixed precision",
+    "batch": "One complete 500-stock cross-section; deterministic date shuffle seed+epoch.",
+    "concurrency": 1,
+    "cuda_memory_fraction": 0.22
+  },
+  "evaluation": {
+    "population": "Unchanged historical US 500-stock panel, features, normalization, lookback, splits and purged label boundaries from the base protocol.",
+    "primary": "For each target compare mean daily cross-sectional Pearson IC of the three-seed score ensembles on exactly the same observations, dates and targets. Positive joint-minus-specialist IC favors joint.",
+    "primary_family": "Two two-sided HAC20 tests, Holm adjustment across return and volatility. Claim joint outperforms both only if both differences are positive and both adjusted p-values <0.05. Otherwise identify the supported outcome or report inconclusive.",
+    "secondary": "Daily Spearman RankIC and daily normalized MSE, four tests adjusted together with Holm, descriptive calendar-year effects and per-seed comparisons. Positive specialist-minus-joint MSE favors joint. MSE is in daily target-z-score units, not raw price or volatility units.",
+    "dependence": "Unique trading dates are sampling units; intercept-only OLS, Bartlett HAC20, small-sample correction and t intervals. HAC5/HAC60 and 5000 circular bootstrap means with blocks20/60 are sensitivities. Seeds are diagnostics, not independent daily samples.",
+    "checkpoint_sensitivity": "Repeat ensemble comparisons with per-task-selected joint checkpoints; exploratory, not a second chance to pass the primary test.",
+    "test_windows": "Primary full 2017-2025; calendar-year effects descriptive only.",
+    "limits": "Retrospective follow-up on a previously analyzed panel; not a pristine new holdout or prospective evidence. Does not test price levels, realized volatility, trading profitability, other task weights or other architectures. Equal loss weights are fixed without a search."
+  }
+}

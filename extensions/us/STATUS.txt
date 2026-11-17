@@ -1,0 +1,23 @@
+0: blocked
+
+
+
+Scope: Paper-match assessment blocked/not applicable to this US transfer experiment.
+
+Evidence and explanation:
+US return/volume/volatility experiments have completed results and replay checks, but
+they change LiMT's original markets, features and portfolio protocol. There is no
+published US target against which to assign a numerical match or mismatch. This level 0
+describes the paper-replication gate, not whether the US research code ran.
+
+Limits / next requirement:
+Assess native-paper agreement in limt/STATUS.txt. Keep the US transfer results separate;
+a successful transfer or its confidence interval cannot upgrade the original-paper
+status.
+
+Evidence paths (relative to this STATUS.txt):
+- ../../../.replication-local/artifacts/limt-us/REPORT.txt
+- ../../../.replication-local/artifacts/limt-us/prediction-replay-verification.json
+- README.md
+
+Scale and update instructions: ../../../AGENTS.md

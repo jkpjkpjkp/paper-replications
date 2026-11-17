@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "limt-us",
+  "title": "Hierarchical Multi-Task Learning with Liquidity-Aware Signals for Stock Forecasting",
+  "coverage": "html_text",
+  "source": {
+    "path_relative_to_project": "../../../.replication-local/artifacts/limt/sources/paper-browser.txt",
+    "path_relative_to_collection": ".replication-local/artifacts/limt/sources/paper-browser.txt",
+    "sha256": "f48d61250317e51e9d65cae5bbe248fc6f6871557a96315350175116375352a6",
+    "bytes": 58027,
+    "urls": [
+      "https://arxiv.org/abs/2609.25617v1"
+    ]
+  },
+  "method": "Article body; navigation and known site footer removed",
+  "note": "Shares the LiMT paper; this folder is a US equity adaptation, not the original empirical protocol.",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": null,
+  "pages": [
+    {
+      "page": null,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 941
+    }
+  ],
+  "layout_file": null,
+  "layout_pages": null,
+  "heading_candidates": [
+    {
+      "line": 16,
+      "text": "# Hierarchical Multi-Task Learning with Liquidity-Aware Signals for Stock Forecasting"
+    },
+    {
+      "line": 40,
+      "text": "###### Abstract"
+    },
+    {
+      "line": 50,
+      "text": "###### Index Terms:"
+    },
+    {
+      "line": 56,
+      "text": "## I Introduction"
+    },
+    {
+      "line": 72,
+      "text": "## II Problem Formulation"
+    },
+    {
+      "line": 76,
+      "text": "### II-A Main Task - Return"
+    },
+    {
+      "line": 80,
+      "text": "### II-B Auxiliary Task 1 - Volume Shock"
+    },
+    {
+      "line": 84,
+      "text": "### II-C Auxiliary Task 2 - Volatility"
+    },
+    {
+      "line": 90,
+      "text": "## III Methodology"
+    },
+    {
+      "line": 94,
+      "text": "### III-A Overview"
+    },
+    {
+      "line": 100,
+      "text": "### III-B Market Regime Encoder Module"
+    },
+    {
+      "line": 112,
+      "text": "#### III-B1 Cross-Stock Attention"
+    },
+    {
+      "line": 152,
+      "text": "#### III-B2 Temporal-Stock Modeling"
+    },
+    {
+      "line": 201,
+      "text": "### III-C Liquidity-Driven Learning (LDL) Module"
+    },
+    {
+      "line": 205,
+      "text": "#### III-C1 Multi-gate Mixture-of-Experts (MMoE)"
+    },
+    {
+      "line": 231,
+      "text": "#### III-C2 Cross-Task Knowledge Transfer"
+    },
+    {
+      "line": 258,
+      "text": "#### III-C3 Multi-task Loss"
+    },
+    {
+      "line": 268,
+      "text": "### III-D Adaptive Portfolio Optimization Module"
+    },
+    {
+      "line": 300,
+      "text": "## IV Experiments"
+    },
+    {
+      "line": 349,
+      "text": "#### IV-1 Datasets"
+    },
+    {
+      "line": 353,
+      "text": "#### IV-2 Baselines"
+    },
+    {
+      "line": 357,
+      "text": "#### IV-3 Evaluation"
+    },
+    {
+      "line": 361,
+      "text": "#### IV-4 Implementation"
+    },
+    {
+      "line": 365,
+      "text": "### IV-A Overall Performance (RQ1)"
+    },
+    {
+      "line": 388,
+      "text": "### IV-B Ablation Study (RQ2)"
+    },
+    {
+      "line": 420,
+      "text": "### IV-C Backtest Evaluation (RQ3)"
+    },
+    {
+      "line": 424,
+      "text": "#### IV-C1 Experiment Setting"
+    },
+    {
+      "line": 428,
+      "text": "#### IV-C2 Experiment Performance"
+    },
+    {
+      "line": 448,
+      "text": "#### IV-C3 Parameter Analysis"
+    },
+    {
+      "line": 468,
+      "text": "## V Conclusions and Future Work"
+    },
+    {
+      "line": 474,
+      "text": "## Appendix A Evaluation and Implementation"
+    },
+    {
+      "line": 480,
+      "text": "### A-A Backtest Portfolio Baselines"
+    },
+    {
+      "line": 514,
+      "text": "## Appendix B Metric Definitions"
+    },
+    {
+      "line": 520,
+      "text": "## Appendix C Computational Complexity Analysis"
+    },
+    {
+      "line": 536,
+      "text": "## References"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 15,
+      "line_end": 94
+    },
+    {
+      "id": 2,
+      "line_start": 87,
+      "line_end": 166
+    },
+    {
+      "id": 3,
+      "line_start": 159,
+      "line_end": 238
+    },
+    {
+      "id": 4,
+      "line_start": 231,
+      "line_end": 310
+    },
+    {
+      "id": 5,
+      "line_start": 303,
+      "line_end": 382
+    },
+    {
+      "id": 6,
+      "line_start": 375,
+      "line_end": 454
+    },
+    {
+      "id": 7,
+      "line_start": 447,
+      "line_end": 526
+    },
+    {
+      "id": 8,
+      "line_start": 519,
+      "line_end": 598
+    },
+    {
+      "id": 9,
+      "line_start": 591,
+      "line_end": 670
+    },
+    {
+      "id": 10,
+      "line_start": 663,
+      "line_end": 742
+    },
+    {
+      "id": 11,
+      "line_start": 735,
+      "line_end": 814
+    },
+    {
+      "id": 12,
+      "line_start": 807,
+      "line_end": 886
+    },
+    {
+      "id": 13,
+      "line_start": 879,
+      "line_end": 942
+    }
+  ],
+  "line_count": 942,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "6890e4e043aa7365ff1d033a903938b06fff68aa41cbd81b2d70b09b926f95f7",
+      "bytes": 54133
+    }
+  }
+}

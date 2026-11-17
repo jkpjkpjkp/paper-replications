@@ -1,0 +1,160 @@
+{
+  "checked_at": "2026-11-17T11:44:34.126325+00:00",
+  "status": "six_local_author_share_files_size_hash_and_sample_dates_checked",
+  "source_url": "https://pan.quark.cn/s/468880eeb1bc",
+  "historical_listing": "/home/jkp/data/.replication-local/artifacts/limt/published-replication/author-files.json",
+  "bytes": 3121620953,
+  "inspection": "Restricted unpickler; __main__.TSDataSampler mapped to an inert state class. Sample index follows released get_index: data_index[start_idx:end_idx].",
+  "limitations": [
+    "File sizes match the recorded author-share listing; no author-published checksums are available for comparison.",
+    "This checks local availability and date coverage, not exact preprocessing, selected training configurations, or numerical paper replication."
+  ],
+  "files": [
+    {
+      "path": "/home/jkp/data/.replication-local/artifacts/limt/AAAI 2026-HiMT-Dataset/R_Vol2_Vola2_csi300_Alpha158/dl_test.pkl",
+      "bytes": 336970519,
+      "listed_bytes": 336970519,
+      "sha256": "d0625dafdbc448090961b09cf3da9bfe283704a4804c916064cf5bcfb39d3798",
+      "declared_start": "2017-01-01",
+      "declared_end": "2020-08-01",
+      "sample_start": "2017-01-03",
+      "sample_end": "2020-07-31",
+      "sample_dates": 871,
+      "sample_rows": 254135,
+      "data_shape": [
+        254135,
+        161
+      ],
+      "step_len": 21,
+      "fillna_type": "ffill+zero",
+      "years": [
+        2017,
+        2018,
+        2019,
+        2020
+      ]
+    },
+    {
+      "path": "/home/jkp/data/.replication-local/artifacts/limt/AAAI 2026-HiMT-Dataset/R_Vol2_Vola2_csi300_Alpha158/dl_train.pkl",
+      "bytes": 654796049,
+      "listed_bytes": 654796049,
+      "sha256": "74c569adb11f929b50840ca541c6ea39516dfde63883442374f5dc8a084c9394",
+      "declared_start": "2008-01-01",
+      "declared_end": "2014-12-31",
+      "sample_start": "2008-01-02",
+      "sample_end": "2014-12-31",
+      "sample_dates": 1702,
+      "sample_rows": 491884,
+      "data_shape": [
+        491884,
+        161
+      ],
+      "step_len": 21,
+      "fillna_type": "ffill+zero",
+      "years": [
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014
+      ]
+    },
+    {
+      "path": "/home/jkp/data/.replication-local/artifacts/limt/AAAI 2026-HiMT-Dataset/R_Vol2_Vola2_csi300_Alpha158/dl_valid.pkl",
+      "bytes": 182251316,
+      "listed_bytes": 182251316,
+      "sha256": "90ae38ea8f6f81f9e61b9e115f3c9814b9ae516e7e5e5d8bb5479d12f24391ee",
+      "declared_start": "2015-01-01",
+      "declared_end": "2016-12-31",
+      "sample_start": "2015-01-05",
+      "sample_end": "2016-12-30",
+      "sample_dates": 488,
+      "sample_rows": 137788,
+      "data_shape": [
+        137788,
+        161
+      ],
+      "step_len": 21,
+      "fillna_type": "ffill+zero",
+      "years": [
+        2015,
+        2016
+      ]
+    },
+    {
+      "path": "/home/jkp/data/.replication-local/artifacts/limt/AAAI 2026-HiMT-Dataset/R_Vol2_Vola2_csi500_Alpha158/dl_test.pkl",
+      "bytes": 560615172,
+      "listed_bytes": 560615172,
+      "sha256": "57ebdfefcd9034ef239ba5b9784ab2fd33b489fddccf49ec3373b7d6c3eb8ee4",
+      "declared_start": "2017-01-01",
+      "declared_end": "2020-08-01",
+      "sample_start": "2017-01-03",
+      "sample_end": "2020-07-31",
+      "sample_dates": 871,
+      "sample_rows": 422041,
+      "data_shape": [
+        422041,
+        161
+      ],
+      "step_len": 21,
+      "fillna_type": "ffill+zero",
+      "years": [
+        2017,
+        2018,
+        2019,
+        2020
+      ]
+    },
+    {
+      "path": "/home/jkp/data/.replication-local/artifacts/limt/AAAI 2026-HiMT-Dataset/R_Vol2_Vola2_csi500_Alpha158/dl_train.pkl",
+      "bytes": 1093489206,
+      "listed_bytes": 1093489206,
+      "sha256": "70bafa625eaf7d3c345a019916a0714fd6fec9c5720ea3c560fca5562231f0a1",
+      "declared_start": "2008-01-01",
+      "declared_end": "2014-12-31",
+      "sample_start": "2008-01-02",
+      "sample_end": "2014-12-31",
+      "sample_dates": 1702,
+      "sample_rows": 817090,
+      "data_shape": [
+        817090,
+        161
+      ],
+      "step_len": 21,
+      "fillna_type": "ffill+zero",
+      "years": [
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014
+      ]
+    },
+    {
+      "path": "/home/jkp/data/.replication-local/artifacts/limt/AAAI 2026-HiMT-Dataset/R_Vol2_Vola2_csi500_Alpha158/dl_valid.pkl",
+      "bytes": 293498691,
+      "listed_bytes": 293498691,
+      "sha256": "f219e6158f4ffca631121177f9d84aee246683f02c0f284378df3b93ed6ad19b",
+      "declared_start": "2015-01-01",
+      "declared_end": "2016-12-31",
+      "sample_start": "2015-01-05",
+      "sample_end": "2016-12-30",
+      "sample_dates": 488,
+      "sample_rows": 221470,
+      "data_shape": [
+        221470,
+        161
+      ],
+      "step_len": 21,
+      "fillna_type": "ffill+zero",
+      "years": [
+        2015,
+        2016
+      ]
+    }
+  ]
+}

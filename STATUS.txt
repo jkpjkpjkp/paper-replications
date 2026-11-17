@@ -1,0 +1,48 @@
+1: LiMT CSI300 Alpha158 adaptation (three seeds), IC: rerun 0.043949 +/- 0.001060 seed SD; paper 0.0575.
+
+
+
+Scope: Completed community-data Alpha158 adaptation; released-author-data training is running and original APO execution remains blocked.
+Data availability rechecked: 2026-11-17.
+
+Evidence and explanation:
+Three-seed CSI300 IC is 0.043949 +/- 0.001060 seed SD versus 0.0575: -23.6%, about 12.8
+local seed SDs away. CSI500 IC is 0.045201 +/- 0.002435 versus 0.0496 (-8.87%). The
+saved published-results tracker reports 129 alternative-data counterparts but zero
+verified exact-original-data targets. The CSI300 shortfall is material; no
+representative full paper configuration is established as matched.
+
+Limits / next requirement:
+The completed runs train from 2010 rather than the paper's 2008 because they use
+the separate community Qlib snapshot, whose calendar begins on 2010-01-04.
+All six author-share processed pickle files are now confirmed locally under
+../.replication-local/artifacts/limt/AAAI 2026-HiMT-Dataset/ (3,121,620,953 bytes).
+Their sizes match the recorded share listing; SHA256 hashes and actual sample
+indexes were checked. Both universes train from 2008-01-02 to 2014-12-31,
+validate from 2015-01-05 to 2016-12-30, and test from 2017-01-03 to 2020-07-31.
+The archived 2026-11-10 download blocker/intake is stale: the files have local
+modification times on 2026-11-11. The released-data runner passed five checks in
+PyTorch 1.11.0/pandas 1.5.3 and separate real-data smoke checks on both universes.
+The full run started on 2026-11-17 at 20:29 Asia/Shanghai, with CSI300 seed 0
+training on all 1,702 training dates. Both universes, three seeds and all 36
+paper loss-weight combinations are queued (216 fits). Selection uses mean
+validation IC; only selected checkpoints reach test evaluation. It uses the
+released model/trainer/sampler, paper-stated settings and disclosed CLI defaults.
+The files contain raw-scale labels and ffill+zero; this differs from parts of
+the release README. Exact private-run identity is not established.
+Selected settings remain incomplete and the original
+APO execution engine is unreleased. US/CZ extensions do not satisfy those missing
+paper experiments. The numerical grade still refers to completed community-data
+results; the new training has no completed full-test result yet.
+
+Live run: /mnt/data/home/jkp/replications/limt-author-2008-20261117/experiment/
+Service: limt-author-2008-20261117.service (systemd --user).
+Read suite_status.json and runs/<universe>/<weights>/seed*/progress.json there.
+
+Evidence paths (relative to this STATUS.txt):
+- .agent/AUTHOR_DATA_INVENTORY.json
+- published-replication/AUTHOR_RUN_PROTOCOL.md
+- ../.replication-local/artifacts/paper-claim-validation/results/native_claim_comparison.csv
+- ../.replication-local/artifacts/limt/published-replication/STATUS.txt
+- ../.replication-local/artifacts/limt/published-replication/comparison.csv
+
