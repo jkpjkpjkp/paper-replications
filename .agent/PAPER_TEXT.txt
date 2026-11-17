@@ -1,0 +1,1090 @@
+Progressive Dependency Representation Learning for Stock Ranking in Uncertain Risk Contrasting
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text_from_archive
+Original source: ../.replication-local/artifacts/pdu/sources/paper.txt
+Source SHA-256: 1ed35059ca9f6729a24720f6d7e72af08b60452be2170cb65c1ab34527731f46
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+       Progressive Dependency Representation Learning for Stock
+                 Ranking in Uncertain Risk Contrasting
+                         Li Huang                                                      Yanzhe Xie                                          Qiang Gao∗
+     School of Computing and Artificial                              School of Computing and Artificial                      School of Computing and Artificial
+    Intelligence, Southwestern University                           Intelligence, Southwestern University                   Intelligence, Southwestern University
+           of Finance and Economics                                        of Finance and Economics                                of Finance and Economics
+                 Chengdu, China                                                 Chengdu, China                                          Chengdu, China
+             lihuang@swufe.edu.cn                                    223081200056@smail.swufe.edu.cn                                qianggao@swufe.edu.cn
+
+                  Kunpeng Zhang                                                       Guisong Liu                                        Xueqin Chen
+               University of Maryland                                  Engineering Research Center of                          Kash Institute of Electronics and
+                 College Park, USA                                     Intelligent Finance, Ministry of                             Information Industry
+                kpzhang@umd.edu                                      Education, Southwestern University                                Kashgar, China
+                                                                          of Finance and Economics                                nedchen0728@gmail.com
+                                                                               Chengdu, China
+                                                                              gliu@swufe.edu.cn
+
+Abstract                                                                                              experimental results conducted on four real-world stock market
+The practice of ranking a list of stocks to facilitate investment deci-                               datasets demonstrate the superiority of PDU over several baselines.
+sions has garnered a lot of attention in the fintech field, aiming at
+minimizing investment risk while maximizing profitable returns.                                       CCS Concepts
+With recent developments in deep representation learning such                                         • Applied computing → Decision analysis; • Computing method-
+as temporal/relational dependency, prior efforts either strive to                                     ologies → Artificial intelligence.
+explore the temporal dynamics behind distinct stocks or expect to
+expose the collaborative signals from predefined relations, resulting                                 Keywords
+in promising achievements in stock ranking. However, owing to
+                                                                                                      stock ranking, stock movement, dependency learning, contrastive
+the profound or intricate fluctuations of stock markets, existing
+                                                                                                      mechanism, uncertain risk
+insights rarely consider the uncertain risks underlying the learning
+of dependency representation, which could bring a narrow per-                                         ACM Reference Format:
+spective on how to perceive market laws and ultimately yield an                                       Li Huang, Yanzhe Xie, Qiang Gao, Kunpeng Zhang, Guisong Liu, and Xueqin
+unprofitable decision-making procedure. In this study, we introduce                                   Chen. 2025. Progressive Dependency Representation Learning for Stock
+a novel Progressive Dependency representation learning solution                                       Ranking in Uncertain Risk Contrasting. In Proceedings of the 31st ACM
+with Uncertain risk contrasting (PDU), primarily seeking to pro-                                      SIGKDD Conference on Knowledge Discovery and Data Mining V.1 (KDD ’25),
+gressively uncover multiple dependency dynamics from historical                                       August 3–7, 2025, Toronto, ON, Canada. ACM, New York, NY, USA, 12 pages.
+trading signals for stock ranking in addition to addressing the un-                                   https://doi.org/10.1145/3690624.3709189
+certain risks. Specifically, we devise a Progressive Dependency
+learning block (or PD) in PDU that can progressively capture the
+                                                                                                      1    Introduction
+temporal and relational dependencies besides multi-term dependen-
+cies in the latent space, allowing a coupled exposure of diffusion                                    Recently, quantitative investing has drawn much attention from
+impacts over historical trading. Furthermore, we introduce an un-                                     researchers and practitioners in finance and the artificial intelli-
+certain risk contrasting mechanism in PDU by placing the PD block                                     gence (AI) community [34]. In particular, ranking a list of stocks
+in a contrastive environment (i.e., certainty vs. uncertainty), aiming                                for future investment by exploring historical trading signals has
+to stably enhance dependency learning in the latent space. The                                        become one of the deep learning hotspots, as it can provide us with
+                                                                                                      technical insight that meticulously selects lower-risk stocks while
+∗ Corresponding Author (qianggao@swufe.edu.cn)
+                                                                                                      maximizing their returns. Typically, stock ranking is known as a
+                                                                                                      learning-to-rank problem [15, 37], predominantly concentrating on
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed                 exploring historical trading signals (e.g., stock volatility) to build
+for profit or commercial advantage and that copies bear this notice and the full citation             an investment list that could yield the maximum possible returns.
+on the first page. Copyrights for components of this work owned by others than the                       With the wide use of AI in quantitative investing, current deep
+author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or
+republish, to post on servers or to redistribute to lists, requires prior specific permission         neural networks, such as recursive networks and graph neural net-
+and/or a fee. Request permissions from permissions@acm.org.                                           works (GNNs) [16, 40], have emerged as the preferred alternatives
+KDD ’25, Toronto, ON, Canada                                                                          to handle the stock ranking task. In contrast to traditional statistical
+© 2025 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+ACM ISBN 979-8-4007-1245-6/25/08                                                                      and machine learning solutions [30], they primarily seek exposure
+https://doi.org/10.1145/3690624.3709189                                                               to the diverse dependencies and interactive relations underlying
+
+
+
+
+                                                                                                532
+
+=== PDF PAGE 2 ===
+KDD ’25, August 3–7, 2025, Toronto, ON, Canada                                                                                                                           Li Huang et al.
+
+
+            Observations           Certainty diffusion impacts coupled
+                                                                         stock 2                               interactions. The inadequacy hampers the precise dissection of
+                                                                                   stock3
+                                     stock 2                                                                   diffusion effects through historical transactions. Thus, providing
+                                                                                               stock 1
+              stock 2
+                                               stock3
+                                                                                                               a progressively coupled exposure of diffusion impacts over his-
+ stock 1                stock3     stock 1
+                                                                               Stock ranking list
+                                                                                                               torical transactions is an essential consideration. As depicted in
+                                                                                                               Fig. 1, the coupled diffusion impacts among multiple stocks yield re-
+  stock 2                           stock 2                                                                    ciprocal information influence, allowing collaborative interactions
+            stock3                             stock3
+                                                                                            Investment
+                                                                                             Strategy
+                                                                                                               between stocks. Besides, current solutions rarely equip the ability
+stock 1                            stock 1                                Investor                             to uncover the impact of different ranges of historical dynamics
+   Uncertainty situation (noisy)     Uncertainty situation (mask)                                              behind temporal-relational interactions, as historical dynamics may
+                                                                                                               underlie different contributions to future trends. Hence, offering dif-
+Figure 1: Illustration of dynamic diffusion effects in the stock                                               ferent perceptual fields to maximize the mutual correlation between
+market, associated with uncertainty risk.                                                                      historical and future trends is also a vital concern.
+                                                                                                                   Second, the stock market is a dynamic and complex system
+                                                                                                               filled with phenomena of a thoroughly stochastic nature, e.g., un-
+stock trading, benefiting in acknowledging potential trading trends                                            certain/noisy risks, which could hinder the accurate capture of
+and finding possible profitable investment prospects in the future.                                            future trends. Existing solutions typically assume that historical
+    For dependency learning, the majority of previous efforts have de-                                         transactions are of high quality and reliability, thus attempting to
+veloped neural models, like Recurrent Neural Networks (RNNs) and                                               build a discriminative model in a certain scenario. However, due to
+attention-based networks, to capture temporal dynamics from his-                                               facts such as profound or intricate fluctuations, current learning
+torical stock movements, which offers a basis for making investment                                            paradigms could bring a narrow perspective on how to perceive
+decisions based on current observed trends. For instance, GRU [38]                                             market laws, which further poses a robustness challenge in the
+and LSTM [3], as two variants of RNNs, treat stock movements as                                                decision-making process. To this end, one popular clue is to involve
+the typical financial time series and thereby can capture temporal                                             generative models such as variational Bayes [12, 29, 46] to relieve
+dependencies by memory settings. In addition, the Knowledge-                                                   the uncertainty in deep representation learning by providing a
+Driven Temporal Convolutional Network (KDTCN) [10] and CN-                                                     stochastic signal to craft the observation noise. For instance, the
+Npred [24] attempt to extend the standard convolution operations                                               incorporation of noise or intentional omission of information sim-
+to explore the local or adjacent dependencies, allowing an effec-                                              ulates the real-world conditions, echoing the depicted uncertainty
+tive way to preserve the dynamics from the past. More recently,                                                situation in Fig. 1. However, they heavily rely on the simple prior as-
+attention-based models, especially for self-attention mechanisms,                                              sumption or build an intricate posterior approximation, which still
+provide us with an interactive insight that is capable of revealing                                            brings instability to either training or decision-making inference.
+temporal dynamics by aggregating all possible correlations between                                                 Motivated by recent alignment learning in Masked AutoEn-
+components in a financial sequence. For example, [11] and [42] suc-                                            coders [2, 20] and Exponential Moving Average (EMA) theory [18,
+cessfully employ multiple self-attention blocks to handle historical                                           35, 51] in self-supervised learning, we introduce a Progressive
+stock trades, yielding promising results in stock trend prediction.                                            Dependency representation learning solution with Uncertain risk
+    Due to the inherent effect of momentum spillover, current solu-                                            contrasting (PDU), attempting to progressively uncover multiple
+tions argue that mining a specific stock’s movements should also                                               dependency dynamics from historical trading signals for stock rank-
+consider the diffusion impact of stock price fluctuations from its                                             ing in addition to alleviating the uncertain risks. Specifically, we
+related companies. Hence, diverse GNNs have become the prior-                                                  devise a progressive dependency learning block (or PD) in PDU
+itized alternative to handle complex relations between different                                               that captures temporal dependencies, relational dependencies, and
+stocks [4, 26, 48]. For instance, [4] attempts to employ a graph                                               multi-term dynamics in the latent space. In particular, the Temporal
+convolutional network (GCN) to uncover the stock relations along                                               Dependency Aggregator, Relational Dependency Aggregator, and
+with using LSTM to capture the temporal dependencies. Song et                                                  Multi-term Dynamic Capture components in the PD are coupled in
+al. use the Dynamic Time Warping (DTW) algorithm to capture                                                    a progressive manner, which can finally result in a unified represen-
+price similarity regarding historical transactions and treat it as a                                           tation for future stock ranking by evolving the diffusion impacts
+supplementary signal in graph learning [40]. [50] extends relational-                                          over historical trading. Moreover, we operate the PD block within
+temporal GCNs to uncover the temporal-aware relations behind the                                               a contrasting framework that collocates certainty against uncer-
+stock movements. Despite the remarkable achievements in recent                                                 tainty, thereby aiming to enhance dependency learning through
+dependency learning and graph learning, we still argue that two                                                EMA update stably. Especially, this paradigm initializes the uncer-
+major concerns remain inadequately addressed in stock ranking.                                                 tain environment via dual mechanisms: noise injection and data
+    First, stock trading contains multiple temporal and relational sig-                                        masking. Finally, our key contributions are summarized as follows:
+nals that can increase awareness of future trends. Although current
+efforts have been well put into exploring temporal and relational                                              • We present a novel progressive dependency representation learn-
+dependencies, they either concentrate exclusively on capturing                                                   ing solution, i.e., PDU. it is under the guidance of uncertain risk
+interactive signals among different stocks from predefined relation-                                             contrasting, offering a novel perspective on stock-dependency
+ships or collaborate on relational dynamics through deterministic                                                enhancement by incorporating uncertain risks.
+temporal dependency learning, yielding loose coupling (e.g., the jux-                                          • To make coupled exposure of diffusion impacts over historical
+taposition of different latent sources) regarding temporal-relational                                            transactions, our devised PD block progressively manages three
+
+
+
+
+                                                                                                         533
+
+=== PDF PAGE 3 ===
+Progressive Dependency Representation Learning for Stock Ranking in Uncertain Risk Contrasting                            KDD ’25, August 3–7, 2025, Toronto, ON, Canada
+
+
+  components to provide a cohesive representation, transcending                         of a stock indicates the expected revenue of the stock [15, 37], we
+  the limitation of juxtaposed different representations.                                                                               𝑥 𝑐 −𝑥 𝑐
+                                                                                        also use a one-day return ratio 𝑟𝑡 = 𝑡 𝑥 𝑐 𝑡 −1 for each stock 𝑠 on
+• We devise a contrasting paradigm that leverages the alignment                                                                               𝑡 −1
+                                                                                        trading day 𝑡. Formally, given historical trading data X𝑡 −𝛿+1:𝑡 with
+  of output from PD blocks under conditions of certainty and un-
+                                                                                        observation window 𝛿 and stock relations K, the objective of stock
+  certainty to enhance the stability of stock-dependency represen-
+                                                                                        ranking is to build a learning function M and use it to produce a
+  tation, thereby eliminating the necessity of negative samples.
+                                                                                        ranked list 𝒓 𝑡 +1 of stocks, such that 𝒓 𝑡 +1 = {𝑟𝑡1+1 > 𝑟𝑡2+1 · · · > 𝑟𝑡𝑆+1 }
+• Experiments on four real-world datasets demonstrate the supe-
+                                                                                        for the following (𝑡 +1)-th trading day, i.e., 𝒓 𝑡 +1 = M(X𝑡 −𝛿+1:𝑡 , K).
+  riority of PDU. In-depth analyses highlight the advantages of
+                                                                                        Trading Signal Extraction. When we receive historical end-of-
+  dependency learning, alongside its ability to resist risk.
+                                                                                        day data X𝑡 −𝛿+1:𝑡 of 𝑆 stocks, in practice, each X𝜏 ∈ X𝑡 −𝛿+1:𝑡 pre-
+                                                                                        serves stocks’ end-of-day indicators on trading day 𝜏 (𝜏 ∈ [𝑡 −
+2    Related Work                                                                       𝛿 + 1, 𝑡]). Since the one-day return ratio only shows the daily re-
+Stock Movement Learning. Early studies attempt to forecast                              turn, we also incorporate the historical (middle) long-term earning
+stock trends by using linear models such as ARIMA [1], which                            impacts of each stock as additional signals to help reduce future
+project trends linearly from past prices. In machine learning (ML),                     investment risk. Specifically, we augment the stock features by
+representative models like SVM [33] and Random Forest [27] also                         incorporating return ratios calculated from 5-, 10-, 20-, and 30-day
+aim to forecast stock trends but require extensive feature engineer-                    moving averages, denoted as X𝑡 −𝛿+1:𝑡 ∈ R𝛿 ×𝑆 ×𝐼 . For instance,
+ing and are sensitive to data quality. To handle complex temporal                       X𝜏,𝑠 = [𝑥𝜏,𝑠𝑜 , 𝑥 ℎ , 𝑥 𝑙 , 𝑥 𝑐 , 𝑥 𝑣 , 𝑥 𝑎5 , 𝑥 𝑎10 , 𝑥 𝑎20 , 𝑥 𝑎30 ] refers to the
+                                                                                                          𝜏,𝑠 𝜏,𝑠 𝜏,𝑠 𝜏,𝑠 𝜏,𝑠 𝜏,𝑠                𝜏,𝑠    𝜏,𝑠
+patterns, deep learning techniques like RNN [7], LSTM [23], and                         obtained indicators of stock 𝑠 on trading day 𝜏.
+GRU [8] have been widely adopted. These models excel in capturing                       Factual Relation Extraction. We follow the practice of most pre-
+long-term dependencies through advanced gating mechanisms [5],                          vious studies [15, 17, 43] and extract the stock relations from two
+significantly enhancing stock forecasting accuracy [3]. RNN-based                       sources, i.e., sector-industry relations and topicality associations.
+models have outperformed traditional ML in stock trend predictions.                     In detail, we first gather the sector-industry relations between dif-
+Recent advancements include attention-based models like those                           ferent stocks since stocks in the same industry usually have similar
+with dual-stage mechanisms [36] and Transformer variants [11],                          trend effects. As Wikipedia displays real-world firm associations
+which prioritize crucial information in time-series data, improv-                       such as ownership and supplier-consumer, we collect those factual
+ing prediction accuracy. Moreover, seq2seq and generative mod-                          associations to supplement stock relations. Finally, we use an adja-
+els [32, 45, 46] have shown promising results in stock predictions.                     cency matrix A to maintain relations between different stocks, e.g.,
+While existing research primarily focuses on trend prediction using                     A𝑖 𝑗 = 1 indicates that stock S𝑖 has one of these relations with S 𝑗 .
+historical data, our work shifts towards stock ranking, aiming to                       Relational Graph Construction. To help explore the collabora-
+devise an optimal stock list to minimize risks and maximize returns.                    tive relations behind diverse stocks, we let G = (S, E) denote a
+Stock Relation Learning. Efficient Market Hypothesis (EMH) [13]                         relational stock graph, where S refers to 𝑆 stocks and E is a set
+asserts that the intricate interrelations among stocks shape their                      of edges that indicate the predefined relationship between stocks.
+volatility. To decode these dynamics, graph neural networks are                         More concretely, we use the above defined A ∈ [0, 1] 𝑆 ×𝑆 to expose
+increasingly deployed, leveraging interactions across stocks to elu-                    the relations between different stocks. Notably, more details includ-
+cidate their mutual influences [6, 47, 48]. For instance, GCN [44]                      ing trading strategy (stock ranking) are provided in Appendix A.
+employs global graph convolutions to synthesize these intercon-
+nections, while FinGAT [26] utilizes attention mechanisms to dy-                        4    Progressive Dependency Learning
+namically quantify and enhance stock nodes’ interactions. [37]
+                                                                                        As Fig. 2 shows, progressive dependency learning (PD) is the core
+introduces a temporal attention framework to refine stock selec-
+                                                                                        skeleton of our PDU solution. It mainly contains three components,
+tion, surmounting the constraints of prior models by optimizing
+                                                                                        including, Temporal Dependency Aggregator (TDA) explores the
+returns and delineating stock interdependencies. Nonetheless, we
+                                                                                        temporal dependencies of each individual stock; Relational De-
+contend that existing models inadequately mine the latent relation-
+                                                                                        pendency Aggregator (RDA) is responsible for exposing temporal-
+ships within stocks and often fail to capture the temporal variations
+                                                                                        aware relations; and Multi-term Dynamic Capture (MDC) aims to
+or filter out noise-induced anomalies effectively. To rectify these
+                                                                                        distill the temporal dynamics regarding different terms. We couple
+shortcomings, our proposed PDU not only focuses on inter-stock
+                                                                                        these blocks in a progressive manner – all of which we detail next.
+relations but also masters the temporal nuances across diverse time
+                                                                                        Temporal Dependency Aggregator (TDA). Given the historical
+scales via convolutional layers. By integrating an uncertainty con-
+                                                                                        trading observations 𝑿 𝑡 −𝛿+1:𝑡 , we first encode it into a latent space:
+trast enhancement, our approach markedly amplifies its capability
+to discern and manage anomalous stock data, thus significantly
+                                                                                                                 𝑿 𝑟 = [𝑿 𝑡 −𝛿+1:𝑡 ]𝑊𝑿 + 𝑏 𝑿 ,                          (1)
+bolstering its resilience and precision in stock selection endeavors.
+                                                                                        where [𝑿 𝑡 −𝛿+1:𝑡 ] ∈ R𝛿 ×𝑆 ×𝐼 ×1 denotes the tiled 𝑿 𝑡 −𝛿+1:𝑡 , 𝑊𝑿 ∈
+3    Preliminaries                                                                      R1×𝐶 , 𝑏 𝑿 ∈ R𝐶 are learnable parameters, and 𝑿 𝑟 ∈ R𝛿 ×𝑆 ×𝐼 ×𝐶
+Stock Ranking. Let S be a set of stocks in a market and 𝑆 = |S|.                        refers to trading observations that explain in 𝐶 distinct views.
+For each stock 𝑠 ∈ S on trading day 𝑡, it is associated with end-                          Following previous arts [42, 48, 50], we then uncover temporal
+of-day trading data X𝑡 , including open, high, low, close prices and                    dependencies behind 𝑿 𝑟 under the guidance of the Multi-Head
+trading volume (i.e., X𝑡 = [𝑥𝑡𝑜 , 𝑥𝑡ℎ , 𝑥𝑡𝑙 , 𝑥𝑡𝑐 , 𝑥𝑡𝑣 ]). As the return ratio         Attention (MHA) mechanism. Therefore, subspace mappings are
+
+
+
+
+                                                                                  534
+
+=== PDF PAGE 4 ===
+KDD ’25, August 3–7, 2025, Toronto, ON, Canada                                                                                                                                                                Li Huang et al.
+
+
+
+        (I) Temporal Dependency Aggregator                                                      (II) Relational Dependency Aggregator                               (III) Multi-term Dynamic Capture
+             t − +1:t                                     X t − +1:t
+
+                                                                                                                            ...
+
+
+                                                                                     Tˆ
+                                                                                                                          Position Embedding
+                                 Views         Xr                                                                                                        F                                 Conv
+
+
+                                                     …
+                                                                                                                                             F                     Z A( k )                       Z B( k )
+
+                         K               Q                 V
+                                                                                                                                                                              tanh                            
+
+       (h)                                                                                        F'                   Aggregation
+    A                    Scaled & Add
+      l −1
+
+                                                                                                          Learning to Rank                                                           Concat   +      Linear
+                              Softmax
+
+                                                                                                                                                         Z                          Add      +      ReLU
+                               Concat +        Linear                                                                                                         Xr
+                                                                                                                                                                     Conv             Add +         ReLU          +   Norm
+                                                                         Tˆ
+                                 Add     +    Norm
+                                                                                                       Aggregation                   List
+                                                                                                                                                                                Conv          +        Reshape
+
+
+
+Figure 2: The structure of progressive dependency learning (PD), where 𝑍𝛼 is later as input for learning-to-rank optimization.
+
+
+conducted as follows in a temporal view of 𝑿 𝑟 , denoted as:                                                           Relational Dependency Aggregator (RDA). Considering stocks
+                                         (ℎ)                                          (ℎ)                              under the same industry may have similarly influenced trends [15],
+                             {𝑸, 𝑲, 𝑽 }𝑙        = 𝑿 𝑟 {𝑾 𝑞 , 𝑾 𝑘 , 𝑾 𝑣 }𝑙                   ,              (2)         RDA aims to uncover interdependent relationships among stocks
+where 𝑿 𝑟 first undergoes a transformation as R : 𝛿 × 𝑆 × 𝐼 × 𝐶 ↦→                                                     under the guidance of relational structure.
+𝐼 × 𝐶 × 𝛿 × 𝑆 to align with the temporal view, learnable matrices                                                         Initially, 𝑻ˆ is transformed into a trading view as R : (𝛿 ×𝑆 ×𝐼 ) ↦→
+             (ℎ)                              (ℎ)
+{𝑾 (𝑞,𝑘,𝑣) }𝑙 ∈ R𝑆 ×𝑑ℎ map 𝑿 𝑟 to {𝑸, 𝑲, 𝑽 }𝑙 ∈ R𝐼 ×𝐶 ×𝛿 ×𝑑ℎ in 𝐻                                                      (𝐼 × 𝑆 × 𝛿). Due to the natural advantages in capturing the local
+low-dimensional spaces (attention heads). Subsequently, we com-                                                        correlations regarding different stocks, we employ a feed-forward
+pute residual attention scores [22, 31] to enhance interactions be-                                                    layer to grasp local correlations on stock view as,
+tween attention blocks across various adjacent layers by integrating                                                                                          𝑻 ′ = ˆ𝑻𝑊 ′ + 𝑏 ′,                                             (7)
+both shallow and deep temporal dependencies, denoted as:
+                                                                                                                       where 𝑊 ′ ∈ R        𝛿 ×𝛿 ′            𝛿′
+                                                                                                                                           , 𝑏 ′ ∈ R , thus we have 𝑻 ′ ∈ R       .                     𝐼 ×𝑆 ×𝛿 ′
+                                                (ℎ)    (ℎ) 
+   (ℎ)               (ℎ) (ℎ)           (ℎ)    𝑸𝑙 𝑲 𝑙 T          (ℎ)                                                       Next, we attempt to aggregate the relational dependencies behind
+ 𝑶 𝑙 = Softmax(𝑨𝑙 )𝑽 , where 𝑨𝑙 =                            + 𝑨𝑙 −1 .
+                                                                                                                       stocks. Firstly, we mark them by a simple positional embedding [31,
+                                                   √︁
+                                                     𝑑ℎ
+                                                                   (3)                                                 39] to specify the distinction of different stocks, denoted as:
+            (ℎ)   𝐼 ×𝐶 ×𝛿 ×𝛿
+Herein, 𝑨∗ ∈ R               denotes the attention score from corre-                                                                          𝑭 ′ = LayerNorm(𝑻 ′ + Embed(𝑻 ′ )),                                            (8)
+sponding block and 𝑨0 = 0. The output 𝑶 𝑙 ∈ R𝐼 ×𝐶 ×𝛿 × (𝐻 ×𝑑ℎ ) is
+the concatenation of all heads, namely:                                                                                where Embed(·) refers to the positional embedding [39]. Subse-
+                                              (1)       (2)                   (𝐻 )                                     quently, we employ the graph G to aggregate varied influences
+                                𝑶 𝑙 = [𝑶 𝑙          ∥𝑶 𝑙       ∥ · · · ∥𝑶 𝑙          ].                    (4)         among stocks by graph attention network. As 𝑭 ′ maintains the
+   Like the standard MHA, each block will be coupled with a resid-                                                     time-varying dependencies behind historical stock movements, we
+ual layer, followed by a normalization to generate the final output:                                                   treat the representation of each stock in 𝑭 ′ as the node feature. For
+                                                                                                                      instance, given stock node S𝑖 ∈ S, we update its representation as:
+                𝑻 𝑙 = LayerNorm (𝑶 𝑙 𝑊𝑶 + 𝑏 𝑶 ) + 𝑿 𝑟 ,          (5)                                                                                       ∑︁
+                                                                                                                                      𝑭 𝑖 = 𝛼𝑖,𝑖 𝑭 𝑖′ V𝑖 +          𝛼𝑖,𝑗 𝑭 ′𝑗 V𝑗 ,
+where learnable parameters 𝑊𝑶 ∈ R (𝐻 ×𝑑ℎ ) ×𝑆 , 𝑏 𝑶 ∈ R𝑆 are de-
+                                                                                                                                                                       S 𝑗 ∈ S,S 𝑗 ≠S𝑖
+signed to reconstruct 𝑶 𝑙 from the low-dimensional space to align
+with the number of initial stocks, thus we have 𝑻 𝑙 ∈ R𝐼 ×𝐶 ×𝛿 ×𝑆 .                                                                                                           𝑒𝑥𝑝 (𝑒𝑖 𝑗 )                                    (9)
+                                                                                                                                            where 𝛼𝑖,𝑗 = Í                                     ,
+   At the last layer of TDA, we re-transform 𝑻 𝑙 to the original                                                                                                          S𝑖 ,S𝑘 ∈ S exp(𝑒𝑖𝑘 )
+format, i.e., R : (𝐼 × 𝐶 × 𝛿 × 𝑆) ↦→ (𝛿 × 𝑆 × 𝐼 × 𝐶), and use a                                                                             𝑒𝑖 𝑗 = a⊤ · LeakyReLU 𝑭 𝑖′ V𝑖 + 𝑭 ′𝑗 V𝑗 .
+                                                                                                                                                                                   
+feed-forward layer to consolidate the temporal dependency as:
+                                                                                                                                                     ∗                           ′     ∗
+                                                                                                                       Herein, a ∈ R𝐼 ×1×𝛿 and V𝑖 , V𝑗 ∈ R𝛿 ×𝛿 are learnable parameters
+                                             𝑻ˆ = 𝑻 𝑙 𝑊𝑻 + 𝑏𝑻 ,                                            (6)
+                                                                                                                       acting on nodes, LeakyReLU refers to the non-linear activation
+                                                                                                                                                                                       ∗
+where 𝑊𝑇 ∈ R𝐶 ×1, 𝑏𝑇 ∈ R1 , and 𝑻ˆ ∈ R𝛿 ×𝑆 ×𝐼 ×1 . To simplify, we                                                     function. Hence, we derive the stock representation 𝑭 ∈ R𝐼 ×𝑆 ×𝛿 ,
+compress the last dimension, resulting in 𝑻ˆ ∈ R𝛿 ×𝑆 ×𝐼 .                                                              which encapsulates aggregated relational dependencies.
+
+
+
+
+                                                                                                                 535
+
+=== PDF PAGE 5 ===
+Progressive Dependency Representation Learning for Stock Ranking in Uncertain Risk Contrasting                             KDD ’25, August 3–7, 2025, Toronto, ON, Canada
+
+
+   Multi-term Dynamic Capture (MDC). Since existing efforts                             To contrastively but effectively align them in the latent space, we
+mainly seek to model historical dynamics from a single span or                          follow the exponential moving average (EMA) theory [18, 35, 51]
+receptive field (e.g., the given maximum observation window 𝛿),                         to make alignment optimization. Fig. 3 depicts the workflow of our
+we argue that the future movement of each stock may be affected                         uncertain risk contrasting, which will be elaborated below.
+by different ranges of observed dynamics. To this end, we devise
+the MDC that extends the popular gated convolution network [9]
+to capture observed dynamics with different ranges.                                              Real                                                 Certainty
+   Motivated by MHA that divided attention heads to process in-                                                                                                                                  Z (Φ)
+                                                                                                                          TDA                     RDA                   MDC
+formation from distinct representation spaces, MDC extends this                                                                                                                                  Z  (Φ)
+                                                                   ∗
+concept to feature decomposition. Initially, we split 𝑭 ∈ R𝐼 ×𝑆 ×𝛿
+                ′
+to [𝑭 ] ∈ R𝐼 ×𝐶 ×𝑆 ×𝛿 , where 𝛿 ∗ is now the product of 𝐶 ′ × 𝛿. A                                                                =         (G( Z (Θ)), Z  (Φ)) +         ( Z (Φ)), G(Z  (Θ)))
+                                                                                                                              c       Θ,Φ                             Θ,Φ
+
+subsequent convolutional layer is conducted to capture distinct
+patterns within the stock feature map, which can be described as:                                                                                                                                    G ( Z (Θ))
+                                                                                                                          TDA                    RDA                  MDC                Dense
+                           𝒁 𝑘 = [𝑭 ] ∗ 𝑈 𝑘 + 𝑏𝑧 .                         (10)                                                                                                                      G ( Z  (Θ))
+
+                                                                  ′                              Noise                                               Uncertainty
+Herein, convolution kernel is parameterized as 𝑈 𝑘 ∈ R2𝐶 ×1×𝑘ℎ ×𝑘 𝑤
+                         ′
+with bias 𝑏𝑧 ∈ R2𝐶 . Specifically, we design three distinct filters
+  𝑘         1    2   3
+𝑈 = (𝑈 , 𝑈 , 𝑈 ) to extract stock dynamics from multiple terms.                                  Figure 3: Uncertain Risk Contrasting Mechanism.
+They correspond to three different kernels with scales of (1×2), (1×
+3), and (1 × 4), respectively. The rationale for designing convolu-
+tion kernels with distinct scales lies in the need to maximize the                      5.1       Uncertain Risk Contrasting
+inter-correlation between historical and future trends over differ-
+ent observation terms. Hence, through the use of kernels with                           Uncertain Design. We build an uncertainty view regarding his-
+different scales, short-, medium-, and long-term dynamics can be                        torical observations by purposely using two uncertain operations.
+respectively extracted, enabling the effective capture of the intricate                 (i) Noise Operation: Given end-of-day data 𝑿 𝑡 −𝛿+1:𝑡 , we introduce
+nature of stock dynamics and ensuring adaptation to the varying                         Gaussian noise to actual observations corresponding to each indi-
+relational-temporal dependencies inherent in stock movements.                           cator, e.g., we randomly sample the noise for the indicator 𝑖 by:
+    After that, we concatenate these three outputs to obtain 𝒁 ∈                                               𝑁𝑖 ∼ N (𝜇, 𝜎 2 ), 𝑖 = 1, 2, · · · , 𝐼 .                                                         (13)
+    ×2𝐶 ′ ×𝑆 ×𝛿 #
+R 𝐼               , where 𝛿 # = 3𝛿 ∗ −(𝑘 𝑤
+                                         1 +𝑘 2 +𝑘 3 )+3 . A gate operation
+                                              𝑤 𝑤                                       Herein, 𝑁𝑖        ∈ R𝑆 ×𝛿 denotes Gaussian noise generated for each
+is then applied to 𝒁 , which can be summarized as follows:
+                                                                                        stock , in which each element is independently sampled from a
+                𝒁 ′ = ∥ [tanh (𝒁 𝑘𝐴 ) ⊙ Γ(𝒁 𝑘𝐵 )], 𝑘 = 1, 2, 3.            (11)         Gaussian distribution with a mean of 𝜇 and a standard deviation of
+                                                ′      #                                𝜎. Afterward, we augment original inputs with noise samples as:
+Herein, 𝒁 = [𝒁 𝐴 ∥𝒁 𝐵 ], {𝒁 𝐴 , 𝒁 𝐵 } ∈ R𝐼 ×𝐶 ×𝑆 ×𝛿 , Γ(·) is the sigmoid
+function and ⊙ refers to point-wise multiplication. The output                                      𝑿 𝑁 = 𝑿 𝑡 −𝛿+1:𝑡 + 𝑵 , 𝑵 = [𝑁 1 ∥ 𝑁 2 ∥ · · · ∥ 𝑁𝐼 ],                                                      (14)
+           ′     #
+𝒁 ′ ∈ R𝐼 ×𝐶 ×𝑆 ×𝛿 , following the gate operation, retains the identical                 where 𝑿 𝑁        ∈ R𝐼 ×𝑆 ×𝛿 is a three-way tensor containing noise.
+spatial dimensions of 𝒁 while reducing the channel by half.                             (ii) Mask Operation: Motivated by the mask mechanism [14, 19] in
+   Next, we add residual connections from the input of each convo-                      alignment learning, we perform the subsequent masking operation:
+lution to the output associated with a feed-forward network and                                                                (
+layer normalization, which can be expressed as follows:                                                                          1, 𝑚 ∗ > 𝜖
+                                                                                                     𝑿˜ = 𝑿 𝑁 ⊙ 𝑴, 𝑴 𝑖,𝑗,𝑘 =                .       (15)
+                                                                                                                                 0, else
+    𝒁ˆ = 𝐿𝑎𝑦𝑒𝑟 𝑁𝑜𝑟𝑚(ReLU(ReLU(𝒁 ′𝑊𝒛 + 𝑏 𝒛 + [𝑭 ]) + 𝑿 𝑟 )),                (12)
+                #                                             ′                         Herein, 𝑴 is a mask tensor, which is formed by setting a mask-
+where 𝑊𝑧    ∈ R𝛿 ×𝛿 , 𝑏𝑧   ∈ R𝛿 are parameters, and 𝒁ˆ ∈ R𝐼 ×𝐶 ×𝑆 ×𝛿 .                  ing probability 𝜖 to generate a proportionate amount of uniform
+   Finally, we further aggregate the above result from the stock                        random numbers 𝑚 ∗ . 𝑴 is operated by performing an element-
+indicator perspective by applying a convolutional operation with                        wise multiplication with 𝑿 𝑁 , resulting in 𝑿˜ , which represents the
+the kernel size of 1 × 𝑪 ′ on 𝒁ˆ . This is followed by a dense layer,                   ultimate noise-enhanced data and has the same size as 𝑿 𝑡 −𝛿+1:𝑡 .
+resulting in the final output 𝒁 𝛼 ∈ R𝐼 ×𝑆 ×𝛿 .
+                                             𝛼
+                                                                                        Uncertain Contrasting. When obtaining the historical observa-
+                                                                                        tion 𝑿 𝑡 −𝛿+1:𝑡 and its uncertain version 𝑿˜ , we attempt to align them
+5    PD with Uncertain Risk Contrasting                                                 in the latent space via contrastive learning. However, we argue
+Now we operate the PD block with the proposed uncertain risk                            that current contrastive learning requires massive negative samples
+contrasting mechanism. In a nutshell, our PDU follows the merits                        to augment pair-wise optimization such as InfoNCE [21], which
+of mask-aware (pre-)training paradigms [2, 20] that provide an                          usually brings efficiency and bias learning issues. Hence, we follow
+alignment enhancement for representation learning. Hence, we                            the merits of the exponential moving average (EMA) theory in
+employ the mask operation on raw data (certain view) to provide                         self-supervised learning and make uncertain contrasts from the
+an uncertain view for contrastive learning. Moreover, considering                       perspective of parameter optimization.
+the volatility of the stock market, we also provide a noise operation                      Specifically, we sequentially input the 𝑿 𝑡 −𝛿+1:𝑡 and 𝑿˜ into the
+to disturb the data, aiming to further craft the market uncertainty.                    PD block. As such, we can obtain two representations, denoted
+
+
+
+
+                                                                                  536
+
+=== PDF PAGE 6 ===
+KDD ’25, August 3–7, 2025, Toronto, ON, Canada                                                                                                          Li Huang et al.
+
+
+as 𝒁 𝛼 and 𝒁 𝛽 . We denote the output of the PD block regarding                     5.2      Optimization
+𝑿 𝑡 −𝛿+1:𝑡 as 𝒁 𝛼 (Θ), showing it is obtained with parameter sets Θ.                Learning to Rank. By our PDU, we finally obtain the augmented
+To further enhance the uncertainty for contrastive learning, we                     𝒁 𝛼 , which can be used to produce the ranking results:
+feed 𝒁 𝛽 into a dense layer (i.e., Linear(·)), expressed as follows:
+                                                                                                      𝑟ˆ𝑡 +1 = R(𝒁 𝛼 𝑊𝑒 + 𝑏𝑒 )𝑊𝑟 + 𝑏𝑟 ,                (24)
+  𝐺 (𝒁 𝛽 (Φ)) = Linear(ReLU(BatchNorm(Linear(𝒁 𝛽 (Φ))))). (16)                                  𝛿 𝛼 ×1               𝐼 ×1
+                                                                                    where 𝑊𝑒 ∈ R        and 𝑊𝑟 ∈ R        are applied to the aggregation of
+For clarity, Φ refers to the parameter sets that can obtain 𝒁 𝛽 . As we             the temporal window dimension and the stock indicator dimension,
+sequentially input the 𝑿 𝑡 −𝛿+1:𝑡 and 𝑿˜ into the PD block, we draw                 respectively. Besides, we use the reshaping operation 𝑅 to merge
+inspiration from [18] and further reverse the input order to make a                 dimensions. As such, we obtain the next trading day’s return ratios:
+fair comparison. Thus, the final objective can be denoted as:                       𝑟ˆ𝑡 +1 ∈ R𝑆 ×1 of S stocks. Ultimately, we can generate a ranked list
+                                                                                  of stocks based on the values of predicted results.
+  L𝑐 = LΘ,Φ 𝐺 (𝒁 𝛼 (Θ)), 𝒁 𝛽 (Φ) + LΘ,Φ 𝒁 𝛼 (Φ), 𝐺 (𝒁 𝛽 (Θ)) . (17)
+                                                                                    Objective. To reduce the loss between predicted return ratios and
+Here, for example, LΘ,Φ (𝐺 (𝒁 𝛼 (Θ)), 𝒁 𝛽 (Φ)) is the measurement                   actual values while ensuring the selection of stocks with superior
+of the alignment level, which can be denoted as follows:                            returns for investment purposes, we design three loss functions:
+     LΘ,Φ (𝐺 (𝑍𝛼 (Θ)), 𝑍 𝛽 (Φ)) ≜∥ 𝐺 (𝑍𝛼 (Θ)) − 𝑍 𝛽 (Φ) ∥ 22 .         (18)                                     L𝑎 =∥ 𝑟ˆ𝑡 +1 − 𝑟𝑡 +1 ∥ 2,                         (25)
+
+EMA Update. According to the above Eq. (17), the challenge is that                                    ∑︁ 𝑆
+                                                                                                       𝑆 ∑︁
+                                                                                               L𝑒 =             ReLU(−(𝑟ˆ𝑡𝑠+1 − 𝑟ˆ𝑡𝑘+1 )(𝑟𝑡𝑠+1 − 𝑟𝑡𝑘+1 )),        (26)
+these two output representations are derived from the PD block
+                                                                                                      𝑠=0 𝑘=0
+but are respectively conditioned on Θ and Φ, which could bring
+                                                                                      L𝑐 = LΘ,Φ (𝐺 (𝒁 𝛼 (Θ)), 𝒁 𝛽 (Φ)) + LΘ,Φ (𝒁 𝛼 (𝜙)), 𝐺 (𝒁 𝛽 (Θ))). (27)
+optimization competition. To this end, we follow the EMA idea to
+bridge the correlation between them, summarized as follows:                         L𝑎 is a point-wise regression loss and L𝑒 refers to a ranking-aware
+                                                                                    loss, widely used in early efforts [37, 50]. Our goal is to minimize:
+               Φ ← 𝜆Φ + (1 − 𝜆)Θ,         Θ ← Θ − 𝜂∇Θ L𝑐 ,             (19)
+                                                                                                                L = L𝑎 + L𝑒 + 𝜉 L𝑐 ,                              (28)
+where 𝜆 refers to the decay rate, 𝜂 is the learning rate. Hence, the
+                                                                                    where 𝜉 is a hyperparameter used to adjust the contribution of L𝑐 .
+benefit of EMA is that we only need to optimize parameter sets
+                                                                                    Furthermore, we detail the algorithmic aspect in Appendix A.
+Θ while Φ can be correspondingly updated, which well addresses
+the optimization competition concern. To more clearly explore the
+                                                                                    6     Evaluation
+basis of gradient update and objective convergence, we assume
+that the optimal status sought in the gradient update is 𝑝 ★, and the
+specific expression of 𝑝 ★ is illustrated as follows:                                      Table 1: Descriptive statistics of stock trading data.
+                                                                                        Description                   NASDAQ        NYSE       S&P 500       SZSE
+               𝑝 ★ ≜ arg min E[∥ 𝐺 (𝑍𝛼 (Θ)) − 𝑍 𝛽 (Φ) ∥ 22 ],          (20)
+                           𝑝
+                                                                                        Stocks                           1026        1737         519         2017
+               𝑝 ★ (𝑍𝛼 (Θ)) = E[𝑍 𝛽 (Φ)|𝑍𝛼 (Θ)].                       (21)             Industry Relational Types        112         130           5          109
+                                                                                        Wiki Relational Types             42          32          75            -
+In the case of searching for the optimal solution, the objective
+LΘ,Φ (𝐺 (𝒁 𝛼 (Θ)), 𝒁 𝛽 (Φ)) follows the gradient of the expected con-
+ditional variance, denoted as follows:                                              Datasets. We choose four real-world stock datasets, including:
+                                         h ∑︁                          i            NASDAQ and New York Stock Exchange (NYSE) collected by [15]
+∇Θ E[∥ 𝐺 (𝒁 𝛼 (Θ))−𝒁 𝛽 (Φ) ∥ 22 ] = ∇Θ E      𝑉 𝑎𝑟 (𝒁 𝛽 (Φ, 𝑖)|𝒁 𝛼 (Θ)) ,
+                                                                                    from January 2, 2013 to November 8, 2017; S&P 500 companies
+                                                 𝑖
+                                                                   (22)             derived from [28] with the period from February 8, 2013 to January
+where 𝒁 𝛽 (Φ, 𝑖) is derived from the 𝑖-th dimension of 𝒁 𝛽 (Φ). Con-                18, 2018; and the Shenzhen Stock Exchange (SZSE) crawled by us
+                                    Í
+sidering the goal is to minimize E[ 𝑖 𝑉 𝑎𝑟 (𝑍 𝛽 (Φ, 𝑖)|𝑍𝛼 (Θ))], hence              from November 16, 2018, to December 29, 2023. After preprocess-
+the gradient of this quantity regarding Θ can be expressed according                ing [15, 28, 50], we derive 1026, 1737, 519, and 2017 stocks from
+to Eq. (20)-Eq. (22) as follow:                                                     four datasets, respectively, showcasing in Table 1. Importantly, we
+                                                                                    adhere to their approach by utilizing stock relations from two per-
+            𝜕
+              E[∥ 𝑝 ★ (𝒁 𝛼 (Θ)) − 𝒁 𝛽 (Φ) ∥ 22 ]                                    spectives: industry and Wiki. However, since the majority of stocks
+           𝜕Θ                                                                       in SZSE lack Wiki descriptions, we do not use this information. For
+           = E[LΘ,Φ (𝑝 ★ (Θ, Φ, 𝒁 𝛼 (Θ)), 𝒁 𝛽 (Φ))],                   (23)         fair evaluations, we select the first 756 trading days for training,
+                 𝜕LΘ,Φ 𝜕𝑝 ★ 𝜕LΘ,Φ 𝜕𝑝 ★ 𝜕𝒁 𝛼 (Θ)                                     the next 252 days for validation, and the remaining days for testing.
+            = E[      ·    +     ·      ·       ],                                  Baselines. We compare PDU with various representative methods:
+                  𝜕𝑝    𝜕Θ   𝜕𝑝    𝜕𝒁 𝛼   𝜕Θ
+                                                                                    LSTM [3] uses the LSTM to predict stock returns, incorporating
+        𝜕𝑝 ★       𝜕𝑝 ★                                 𝜕L      𝜕𝑝 ★
+where 𝜕Θ and 𝜕𝒁 𝛼 are the gradients of 𝑝, and E[ 𝜕𝑝Θ,Φ · 𝜕Θ ] = 0                   multiple stock indicators. GRU [38] is another RNN. We use it to
+can be obtained according to the optimal conditional constraints of                 model stock movements. CNNpred [25] aggregates several market
+the dense layer. Therefore, it is proved that the gradient update di-               factors in a CNN-based framework for feature extraction and finan-
+rection of the remaining terms is the update direction of LΘ,Φ . This               cial behavior modeling. StockNet [46] operates variational Bayes
+self-supervised updating of the asymmetric parameters is effective                  to handle stock prices. For fairness, we remove the used textual
+in augmenting the input with the use of constructed noise/mask.                     information. LSTM+GCN [4] uses the LSTM to tackle stock prices
+
+
+
+
+                                                                              537
+
+=== PDF PAGE 7 ===
+Progressive Dependency Representation Learning for Stock Ranking in Uncertain Risk Contrasting                                                                                                                                         KDD ’25, August 3–7, 2025, Toronto, ON, Canada
+
+
+while adopting a GCN to explore stock correlations. RSR [15] is                               risk-awareness investors. These outcomes uncover PDU’s potential
+a temporal graph-based method that considers the temporal evo-                                in generating an economical investment portfolio. We will investi-
+lution and relation correlation between stocks. HATR [42] uses                                gate the design advantages of PDU through more experiments.
+multiple self-attention layers to learn temporal dependencies while
+using the GCN to explore the relational structure. STHAN-SR [37]                                                      
+                                                                                                                                                3 ' 8  E D V H                         3 ' 8  Z  R  '
+                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                           3 ' 8  E D V H                                          3 ' 8  Z  R  '
+                                                                                                                                                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                                                                                                                                                               3 ' 8  E D V H                 3 ' 8  Z  R  '
+                                                                                                                                             3 ' 8  Z  R  $                       3 ' 8  Z  R  &                                  3 ' 8  Z  R  $                                        3 ' 8  Z  R  &                                                       3 ' 8  Z  R  $               3 ' 8  Z  R  &
+incorporates the Hawkes process to enhance the temporal evolu-                                                                                  3 ' 8  Z  R  5                       3 ' 8                                          3 ' 8  Z  R  5                                        3 ' 8                                                                      3 ' 8  Z  R  5               3 ' 8
+                                                                                                                                                                                                                                                                                                                                                
+tion of stock movements, where a hypergraph is built to integrate                                                                                                                                                                                                                                                                               
+
+
+                                                                                                                                                                                                                                                                                                                                  1 ' & * # 
+                                                                                                                                                                                                                           
+the underlying stock community. RT-GCN [50] devises a temporal-                                6 5                                                                                                         0 5 5                                                                                                                                
+
+aware graph to model stock relations and daily features. CTTS [49]                                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                                                                                
+exploits Transformer, along with the CNN, to model both short-                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                                                                
+and long-term stock dependencies within a time series perspective.
+                                                                                                                                                                                                                                                                                                                                            
+Evaluation Metrics. By following previous works [15, 37], we                                                                      1 $ 6 ' $ 4                                      1 < 6 (                                         1 $ 6 ' $ 4                                                1 < 6 (                                                         1 $ 6 ' $ 4                                 1 < 6 (
+
+select four representative metrics for stock investment decisions:
+Sharpe Ratio (SR), Mean Reciprocal Rank (MRR), Downside Deviation                             Figure 4: The contribution analysis of different components.
+(DD), and Normalized Discounted Cumulative Gain (e.g., NDCG@K).
+we choose NDCG@5 in this study.
+Implementation Details. We implemented our PDU using Py-
+                                                                                                                               
+Torch, accelerated by an NVIDIA RTX 3090 GPU. In the TDA of                                                                                       3 ' 8  Z  R  &
+                                                                                                                                                  3 ' 8  Z  R  '
+                                                                                                                                                                                3 ' 8  Z  R  5
+                                                                                                                                                                                3 ' 8  E D V H                                                                                           
+                                                                                                                                                                                                                                                                                                             3 ' 8  Z  R  &
+                                                                                                                                                                                                                                                                                                             3 ' 8  Z  R  '
+                                                                                                                                                                                                                                                                                                                                                          3 ' 8  Z  R  5
+                                                                                                                                                                                                                                                                                                                                                          3 ' 8  E D V H
+                                                                                                                                             3 ' 8  Z  R  $             3 ' 8                                                                                                                        3 ' 8  Z  R  $                            3 ' 8
+PDU, we set the dimension of the attention 𝑑ℎ to 64, the head num-                                                                                                                                                                                                                        
+                                                                                                                               
+
+
+                                                                                               5 H W X U Q  5 D W L R                                                                                                                                    5 H W X U Q  5 D W L R
+ber 𝐻 is 8, and the embedding size 𝐶 is 32. The observation window                                                                                                                                                                                                                        
+                                                                                                                               
+𝛿 was maintained at 4. The elevated 𝛿 ′ is 512. We set the noise                                                                                                                                                                                                                          
+                                                                                                                               
+                                                                                                                                                                                                                                                                                          
+operation with 𝜇=0 and 𝜎 = 0.01. The mask operation is with a
+                                                                                                                               
+                                                                                                                                                                                                                                                                                          
+ratio of 0.01. We use the attention parameter 𝜉 = 0.5 to regulate the                                                          
+                                                                                                                                                                                                                                                                                                                                                                            
+model for the uncertainty contrast. For optimization, we employ                                                                                                                  7 U D G L Q J  G D \ V                                                                                                                                                   7 U D G L Q J  G D \ V
+the popular Adam optimizer with an initial learning rate of 0.0011 .                                                                                                  (a) NASDAQ                                                                                                                                                            (b) NYSE
+Overall Performance. Table 2 reports the mean and standard
+deviation of the performance results from three runs of each method.
+   (1) Baseline Performance: Despite their capacity to capture nonlin-                        Figure 5: The return ratio comparison for different variants.
+ear correlations and temporal dynamics, LSTM and GRU are unable
+to achieve satisfactory results due to their failure to consider inter-                       Module Contribution. To elucidate the contribution of each de-
+stock correlations. Results of CNNpred and StockNet demonstrate                               sign component in PDU, we present four variants: PDU-base is a fun-
+efficacy on S&P 500 by dynamically capturing local and neighbor-                              damental variant that utilizes a graph attention network (GAT) [26,
+ing information, while they exhibit limitations in larger datasets due                        41] to aggregate stock relations and employs only self-attention
+to their narrow focus. LSTM+GCN demonstrates superior perfor-                                 networks to explore temporal dependencies; PDU w/o A omits
+mance on SR, indicating that refining stock relationships enhances                            Temporal Dependency Aggregator; PDU w/o R removes Relational
+ranking performance. Furthermore, RSR and STHAN-SR exhibit                                    Dependency Aggregator; PDU w/o D excludes Multi-term Dynamic
+robust results across all metrics, underscoring the value of incorpo-                         Capture; and PDU w/o C does not use uncertain risk contrasting
+rating temporal information in relationship learning. Conversely,                             mechanism. Fig. 4 shows that PDU exhibits superior performance,
+RT-GCN, which relies on graph learning, displays inconsistent per-                            and removing any component leads to a significant decrease in the
+formance across different markets and historical ranges, likely due                           effectiveness of stock ranking regarding SR. Besides, Fig. 5 visualizes
+to market volatility and noise creating a learning gap between his-                           the real portfolio returns (i.e., return ratios) of predicted ranking
+torical data and future trends, affecting model robustness. CTTS,                             lists (in this study, we choose the top-5 stocks). It is ultimately
+with the merits of both CNNs and Transformers, excels especially                              evident that our PDU achieves greater profitability compared to
+on NYSE, uncovering the critical role of modeling multi-temporal                              these variants across most future trading days, demonstrating the
+dependencies for accurate stock behavior learning.                                            effectiveness of our progressive design of PD block. For instance,
+   (2) Our Solution: our PDU consistently outperforms all baselines,                          the performance of PDU w/o R underscores the critical importance
+indicating its robustness and stability in handling stock observa-                            of learning relational dependencies between different stocks. More-
+tions. Through longitudinal comparisons, the highest SR value                                 over, the results of PDU w/o A and PDU w/o D indicate that both
+obtained by PDU presents its profitability in handling stock rank-                            temporal dependency and multi-term dynamic capture are advanta-
+ing tasks. MRR and NDCG@5 further quantify the alignment of                                   geous for future stock ranking. Furthermore, PDU outperforms PDU
+selected stocks with real rankings, evidencing the effectiveness of                           w/o C, indicating that incorporating the uncertain risk can make
+PDU. The consistent minimal DD reflects the efficacy of PDU in                                the model more robust and profitable in future ranking inferences.
+mitigating substantial losses compared to baselines, indicating its                           Temporal Representation Learning. In our PD, temporal repre-
+superior risk-mitigation capacity, which is of pivotal concern for                            sentation learning is essential to capture the intricate movement
+                                                                                              patterns behind sequential stock transactions. Given the inherent
+1 For reproducibility, the source code of our PDU is available at https://github.com/         volatility and complex dynamics of the stock market, we employ a
+xieyanzhe/PDU.                                                                                residual attention network to help capture temporal dependency.
+
+
+
+
+                                                                                        538
+
+=== PDF PAGE 8 ===
+KDD ’25, August 3–7, 2025, Toronto, ON, Canada                                                                                                                                                                                                                                                       Li Huang et al.
+
+
+            Table 2: The performance comparison, where the best gain is stressed in bold while the second best is underlined.
+                                                NASDAQ                                                    NYSE                                                                                            S&P 500                                                                     SZSE
+     Method
+                            SR↑   MRR↑            NDCG@5↑           DD↓               SR↑    MRR↑          NDCG@5↑           DD↓                                                         SR↑      MRR↑             NDCG@5↑                DD↓                 SR↑       MRR↑             NDCG@5↑               DD↓
+
+                         0.5701   0.0257             0.8876         0.1870   0.6263    0.0388                0.8582         0.2138     1.2685   0.0483                                                                     0.7077        0.1544   0.9526    0.0039                          0.8510           0.1515
+     LSTM
+                       (±0.1041) (±0.0007)         (±0.0298)      (±0.0011) (±0.0113) (±0.0005)             (±0.0436)      (±0.0047) (±0.0974) (±0.0056)                                                                 (±0.0147)     (±0.0310) (±0.0323) (±0.0001)                       (±0.0077)        (±0.0005)
+
+                         0.6765   0.0248             0.8570         0.1792   1.2001    0.0409                0.7798         0.2054     1.7927   0.0485                                                                     0.7708        0.1605   1.5131    0.0039                          0.8510           0.1475
+     GRU
+                       (±0.0995) (±0.0009)         (±0.0135)      (±0.0038) (±0.0260) (±0.0010)             (±0.0238)      (±0.0093) (±0.1510) (±0.0020)                                                                 (±0.0745)     (±0.0331) (±0.1221) (±0.0002)                       (±0.0078)        (±0.0064)
+
+                         0.7470   0.0318             0.8346         0.1755   0.4863    0.0422                0.8372         0.2097     2.4112    0.0476                                                                    0.8882        0.1186   1.0433    0.0039                          0.8533           0.1408
+     CNNpred
+                       (±0.0342) (±0.0006)         (±0.0920)      (±0.0129) (±0.0649) (±0.0034)             (±0.0367)      (±0.0139) (±0.3296) (±0.0107)                                                                 (±0.0769)     (±0.0046) (±0.1029) (±0.0003)                       (±0.0045)        (±0.0104)
+
+                         1.7783    0.0212            0.7717         0.1680   0.5555    0.0380                0.7953         0.2203     2.1377   0.0318                                                                     0.9081        0.1255   1.4345    0.0027                          0.8625           0.1437
+     LSTM+GCN
+                       (±0.0756) (±0.0044)         (±0.0433)      (±0.0041) (±0.1356) (±0.0045)             (±0.0074)      (±0.0071) (±0.0953) (±0.0023)                                                                 (±0.0096)     (±0.0028) (±0.1294) (±0.0010)                       (±0.0212)        (±0.0106)
+
+                         1.3741   0.0360             0.9069         0.1955   1.3861    0.0375                0.8341         0.1780     2.0365   0.0495                                                                     0.9041        0.1328   1.3105    0.0039                          0.8455           0.1468
+     StockNet
+                       (±0.1785) (±0.0024)         (±0.0325)      (±0.0158) (±0.1249) (±0.0012)             (±0.0417)      (±0.0166) (±0.1648) (±0.0010)                                                                 (±0.0133)     (±0.0239) (±0.1499) (±0.0001)                       (±0.0078)        (±0.0022)
+
+                         1.1707   0.0370             0.8460         0.1814   1.6445    0.0207                0.8763         0.1939     1.3555   0.0467                                                                     0.8552        0.1517   1.4533    0.0042                          0.8111           0.1706
+     RSR
+                       (±0.0850) (±0.0015)         (±0.0290)      (±0.0002) (±0.0857) (±0.0123)             (±0.0139)      (±0.0186) (±0.1219) (±0.0039)                                                                 (±0.0165)     (±0.0123) (±0.1903) (±0.0003)                       (±0.0205)        (±0.0204)
+
+                         1.2216   0.0219             0.7573         0.2133   1.3243    0.0176                0.7573         0.1961     0.8729   0.0501                                                                     0.9097        0.1561   1.6089    0.0041                          0.8586           0.1365
+     HATR
+                       (±0.1030) (±0.0141)         (±0.0195)      (±0.0104) (±0.0578) (±0.0127)             (±0.0195)      (±0.0148) (±0.0376) (±0.0035)                                                                 (±0.0060)     (±0.0098) (±0.0435) (±0.0002)                       (±0.0147)        (±0.0058)
+
+                         1.1163   0.0310             0.8885         0.1943   1.1436    0.0338                0.7781         0.2047     0.3378   0.0489                                                                     0.9132        0.1664   1.9546    0.0033                          0.8653            0.1320
+     STHAN-SR
+                       (±0.0252) (±0.0067)         (±0.0095)      (±0.0024) (±0.0769) (±0.0021)             (±0.0094)      (±0.0038) (±0.0216) (±0.0039)                                                                 (±0.0047)     (±0.0040) (±0.0950) (±0.0008)                       (±0.0099)        (±0.0046)
+
+                         1.1072   0.0273             0.9176         0.1742   0.7222    0.0401                0.8356         0.2161     1.5339   0.0321                                                                     0.8978        0.1234   1.3046    0.0035                          0.8537           0.1377
+     RT-GCN
+                       (±0.0123) (±0.0012)         (±0.0181)      (±0.0049) (±0.0668) (±0.0023)             (±0.0385)      (±0.0016) (±1.0455) (±0.0042)                                                                 (±0.0264)     (±0.0022) (±0.2019) (±0.0003)                       (±0.0020)        (±0.0099)
+
+                         0.9852   0.0330             0.7870         0.1808   1.7921    0.0400                0.9020          0.2133    1.4056   0.0408                                                                     0.7858        0.1591   1.0415    0.0036                          0.8551           0.1367
+     CTTS
+                       (±0.2094) (±0.0041)         (±0.0583)      (±0.0087) (±0.0779) (±0.0007)             (±0.0565)      (±0.0041) (±0.2339) (±0.0026)                                                                 (±0.1387)     (±0.0035) (±0.0441) (±0.0005)                       (±0.8565)        (±0.0155)
+
+                        2.2112    0.0407            0.9578         0.1674    2.0668    0.0423                0.9523         0.1742    3.1117    0.0544                                                                    0.9223        0.1177    2.0810    0.0045                          0.9002           0.1303
+     PDU
+                       (±0.1283) (±0.0005)         (±0.0101)      (±0.0031) (±0.1432) (±0.0029)             (±0.0377)      (±0.0039) (±0.1870) (±0.0110)                                                                 (±0.0385)     (±0.0061) (±0.0692) (±0.0003)                       (±0.0258)        (±0.0136)
+
+
+
+                                                                                                                                                                                                             3 ' 8  Z  R  5                                                            3 ' 8
+                 2 S H Q                               + L J K                               & O R V H
+
+
+
+
+                                                                                                                                    ) R U H F D V W H G  5 H W X U Q  5 D W L R
+                                                                                                                                                                                                   $ / 1 <                $ / ; 1          $ 0 $ *                       $ / 1 <              $ / ; 1           $ 0 $ *
+                                                                                                                                                                                                                                                         
+                                                                          
+                                                                                                                                                                                     
+                                                                                                                                                                                                                                                      
+                                                                                                             
+                                                                                                                                                                                                                                                        
+                                                                                                               
+                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                   7 U D G L Q J  ' D \ V                                               7 U D G L Q J  ' D \ V
+                 2 S H Q                               + L J K                               & O R V H
+                                                                                                                                                                                                          Figure 7: Predict return ratios.
+                                     
+                                                                             
+                                                                                                                     
+                                                                          
+                                                                                                                   
+                                                                               
+                                     
+                                                                                                                                    Relational Representation learning. Exploring relational depen-
+                                                                             
+                                                                                                               
+                                                                                                                                       dency is also instrumental in augmenting the analytic acumen and
+                                                                                                    
+                                                                                                                                       prognostic precision within the realm of the stock market. To eluci-
+                                                                                                                                       date the profound implications of relational dependency learning
+                Figure 6: The comparison of attention scores.                                                                          on model effectiveness, we meticulously selected two cohorts of
+                                                                                                                                       NASDAQ-listed stocks that have demonstrated pronounced inter-
+                                                                                                                                       correlation. We then juxtaposed the disparities in the forecasted
+As shown in Fig. 6, to explore the fitness of the residual atten-                                                                      returns with and without the application of relational learning
+tion mechanism to our task, we visualize the attention scores of                                                                       techniques. Subsequently, the Mean Squared Error (MSE) loss is
+our design with and without the use of residuals on NASDAQ,                                                                            employed to estimate the approximate ratio of forecasted to ac-
+where Open, High and Close refer to the open, high and close in-                                                                       tual returns. As depicted in the left part of Fig. 7 and Fig. 8, the
+dicators, respectively. The results at the top of Fig. 6 show that                                                                     results of PDU w/o R have a large deviation on most future trading
+our model dynamically captures time-dependent importance and                                                                           days, which reveals a negligible degree of correlation among these
+exhibits aggregation, with attention significantly focused on day                                                                      stocks in the absence of relational learning strategies. Nonetheless,
+2. This concentration suggests that day 2 is particularly instruc-                                                                     through the strategic deployment of our RDA, we are not only
+tive for temporal dependency learning. Hence, compared to results                                                                      capable of elucidating the underlying interactions amongst these
+without a residual mechanism (the bottom of Fig. 6), our model can                                                                     stocks but also of markedly enhancing their trend correlations. This
+concentrate on specific days more effectively while showing signifi-                                                                   finding unequivocally corroborates the profound capability of PDU
+cant aggregation and dynamically demonstrating variability across                                                                      to yield substantive results and insights by conducting a thorough
+different indicators, demonstrating the effectiveness of residual use.                                                                 dissection of the complex relational dynamics among stocks.
+
+
+
+
+                                                                                                                           539
+
+=== PDF PAGE 9 ===
+Progressive Dependency Representation Learning for Stock Ranking in Uncertain Risk Contrasting                                                                                                                                                                                           KDD ’25, August 3–7, 2025, Toronto, ON, Canada
+
+
+                                        3 ' 8  Z  R  5                                                                  3 ' 8                                                                                
+                                                                                                                                                                                                                                                                                                                                    
+                                   $ / 1 <                $ / ; 1           $ 0 $ *                                $ / 1 <                   $ / ; 1          $ 0 $ *                                                                            3 ' 8  Z  R  &                                          3 ' 8  Z  R  &
+                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                              3 ' 8                                                      3 ' 8
+                                                                                                                                                                                                                       
+                                                                                            
+
+
+                                                                                                                                                                               5 H W X U Q  5 D W L R
+ 0 6 (      
+                                                                                            
+                                                                                                                                                                                                                       
+                                                                                                                                                                                                                       
+                                                                                                                                                                                                           
+
+                                                                                                                                                                                                         
+                                                                                                                                       
+                                          7 U D G L Q J  ' D \ V                                                        7 U D G L Q J  ' D \ V                                                                  
+                                                                                                                                                                                                                  
+                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                                                
+                           Figure 8: MSE loss on future trading days.                                                                                                                                                                       3 ' 8  Z  R  &                                          3 ' 8  Z  R  &
+                                                                                                                                                                                                                                                 3 ' 8                                                      3 ' 8
+                                                                                                                                                                                                                       
+
+
+
+                                                                                                                                                                               5 H W X U Q  5 D W L R
+                                                                                                                                                                                                                       
+Dynamic Dependency Capture. PDU utilizes multiple convolu-                                                                                                                                                             
+tional operators with different kernel sizes for multi-term dynamic                                                                                                                                               
+learning. Specifically, the smaller convolutional kernel (e.g., 𝑈 1 )                                                                                                                                             
+focuses on capturing shorter-term patterns, while the larger con-                                                                                                                                                 
+                                                                                                                                                                                                                  
+volutional kernel (e.g., 𝑈 3 ) aims to capture longer-term dynamics.                                                                                                                                                                                                                                                                 
+                                                                                                                                                                                                                                                               7 U D G L Q J  ' D \ V                                    7 U D G L Q J  ' D \ V
+To deeply investigate the impact of multi-term dependencies, we
+further explore the impact of different combinations of convolution
+scales(i.e., 𝑘 in Eq. (10)) on 7 sets of experiments: 𝑣 1 − 𝑣 3 corre-                                                                                                                                           Figure 10: Experimental diagram of noise comparison.
+sponds to using a single perspective, namely short- (𝑈 1 ), medium-
+(𝑈 2 ), and long-(𝑈 3 ) perspectives, respectively; 𝑣 4 − 𝑣 6 refers to the
+combination of two perspectives, i.e., short-medium, short-long,                                                                                                                                                                  
+
+
+
+
+                                                                                                                                                                                         $ Y H U D J H  7 L P H  
+ P L Q 
+
+=== PDF PAGE 10 ===
+and medium-long; and 𝑣 7 is the combination of all three perspec-                                                                                                                                                                 
+tives (our design). As shown in Fig. 9, the performance of 𝑣 7 high-                                                                                                                                                              
+lights the significance of incorporating multi-term analysis for ef-
+                                                                                                                                                                                                                                  
+fectively striking a balance between stock volatility and robustness,
+especially in mitigating investment losses that are uncovered by                                                                                                                                                                  
+DD. Hence, PDU adeptly captures dynamic patterns across multiple                                                                                                                                                                  
+scales, fostering a more extensive comprehension of stock trends                                                                                                                                                                            0  * 5 8  S U H G  N 1 H W  5 1 1  * & 1  7 7 6  3 ' 8  $ 7 5  5 6 5   6 5
+                                                                                                                                                                                                                                   / 6 7               1       F        
+                                                                                                                                                                                                                                                   & 1  6 W R  ' $  6 7 0 
+                                                                                                                                                                                                                                                                                      &            +               $ 1
+through the integration of diverse convolution-receptive fields.
+                                                                                                                                                                                                                                                                           /                                6 7 +
+
+                                                6 5                                                                            0 5 5
+                                                                                          
+     
+                                                                                                                                                                                                                                  Figure 11: Training time comparison on NASDAQ.
+                                                                                          
+                                                                                       
+              v     v            v           v         v       v         v                  v    v          v               v        v     v        v            Therefore, our PDU still maintains a competitive edge. Note that
+                                      1 ' & * #                                                                                 ' '                                           additional experiments are performed in Appendix B.
+                                                                                          
+
+     
+
+                                                                                          
+                                                                                       
+                                                                                                                                                                               7                                                Conclusion
+              v     v            v           v         v       v         v                  v    v          v               v        v     v        v            This paper introduces a novel progressive dependency representa-
+                                                                                                                                                                               tion learning solution with uncertain risk contrasting, namely PDU.
+           Figure 9: The impact in multi-term dynamic learning.                                                                                                                Specifically, we devise a PD block to progressively study tempo-
+                                                                                                                                                                               ral and relational dependencies as well as multi-term dynamics in
+Noise Immunity. In Fig. 10, we test our proposed PDU by con-                                                                                                                   the latent space, allowing a more comprehensive understanding of
+structing Gaussian noise with standard deviations of 0.01, 0.1, and                                                                                                            historical trading signals and their diffusion impacts. Furthermore,
+1, and directly adding it to the input data. Meanwhile, we also vary                                                                                                           PDU employs an uncertain risk contrasting mechanism, operating
+the mask ratio from 0 to 1. We find that as we continuously adjust                                                                                                             in contrastive environments to enhance its robustness and reliabil-
+the variance of Gaussian noise, the combined return rate of our                                                                                                                ity. The superiority of PDU suggests promising avenues for future
+PDU is always higher than without uncertain risk contrasting en-                                                                                                               research, particularly in refining dependency learning mechanisms
+hancement. This verifies that our PDU facilitates noise immunity,                                                                                                              and exploring their applicability to broader financial contexts.
+enabling better handling and understanding of stock noise.
+Model Efficiency. We visualize the average training time of all                                                                                                                Acknowledgment
+baselines and our PDU on the NASDAQ dataset. As depicted in                                                                                                                    This work was supported by the National Natural Science Founda-
+Fig. 11. The training costs of all models are arranged in increas-                                                                                                             tion of China under Grant No.62102326 and No.62376228, Sichuan
+ing order from left to right. Despite our PDU comprising multiple                                                                                                              Science and Technology Program under Grant No.2023ZYD0145,
+components and involving uncertain risk contrasting, its average                                                                                                               the Natural Science Foundation of Sichuan Province under Grant
+training time remains shorter than that of mainstream baselines.                                                                                                               No.2023NSFSC1411 and No.25QNJJ0627.
+
+
+
+
+                                                                                                                                                                        540
+
+=== PDF PAGE 11 ===
+KDD ’25, August 3–7, 2025, Toronto, ON, Canada                                                                                                                           Li Huang et al.
+
+
+References                                                                                      [24] Ehsan Hoseinzade and Saman Haratizadeh. 2019. CNNpred: CNN-based stock
+ [1] Adebiyi A Ariyo, Adewumi O Adewumi, and Charles K Ayo. 2014. Stock price                        market prediction using a diverse set of variables. Expert Syst. Appl. 129 (2019),
+     prediction using the ARIMA model. In 2014 UKSim-AMSS 16th International                         273–285.
+     Conference on Computer Modelling and Simulation. IEEE, 106–112.                            [25] Ehsan Hoseinzade and Saman Haratizadeh. 2019. CNNpred: CNN-based stock
+ [2] Yutong Bai, Zeyu Wang, Junfei Xiao, Chen Wei, Huiyu Wang, Alan L Yuille, Yuyin                  market prediction using a diverse set of variables. Expert Systems with Applications
+     Zhou, and Cihang Xie. 2023. Masked autoencoders enable efficient knowledge                      129 (2019), 273–285.
+     distillers. In Proceedings of the IEEE/CVF Conference on Computer Vision and               [26] Yi-Ling Hsu, Yu-Che Tsai, and Cheng-Te Li. 2021. FinGAT: Financial Graph At-
+     Pattern Recognition. 24256–24265.                                                               tention Networks for Recommending Top-K Profitable Stocks. IEEE Transactions
+ [3] Kai Chen, Yi Zhou, and Fangyan Dai. 2015. A LSTM-based method for stock                         on Knowledge and Data Engineering (2021).
+     returns prediction: A case study of China stock market. In IEEE Big Data. IEEE,            [27] Luckyson Khaidem, Snehanshu Saha, and Sudeepa Roy Dey. 2016. Predict-
+     2823–2824.                                                                                      ing the direction of stock market prices using random forest. arXiv preprint
+ [4] Yingmei Chen, Zhongyu Wei, and Xuanjing Huang. 2018. Incorporating cor-                         arXiv:1605.00003 (2016).
+     poration relationship via graph convolutional neural networks for stock price              [28] Raehyun Kim, Chan Ho So, Minbyul Jeong, Sanghoon Lee, Jinkyu Kim, and
+     prediction. In Proceedings of the 27th ACM International Conference on Information              Jaewoo Kang. 2019. Hats: A hierarchical graph attention network for stock
+     and Knowledge Management. 1655–1658.                                                            movement prediction. arXiv preprint arXiv:1908.07999 (2019).
+ [5] Li-Chen Cheng, Yu-Hsiang Huang, and Mu-En Wu. 2018. Applied attention-based                [29] Kelvin JL Koa, Yunshan Ma, Ritchie Ng, and Tat-Seng Chua. 2023. Diffusion
+     LSTM neural networks in stock prediction. In 2018 IEEE International Conference                 Variational Autoencoder for Tackling Stochasticity in Multi-Step Regression
+     on Big Data (Big Data). IEEE, 4716–4718.                                                        Stock Price Prediction. In Proceedings of the 32nd ACM International Conference
+ [6] Rui Cheng and Qing Li. 2021. Modeling the Momentum Spillover Effect for Stock                   on Information and Knowledge Management. 1087–1096.
+     Prediction via Attribute-Driven Graph Attention Networks. In Proceedings of the            [30] Mahinda Mailagaha Kumbure, Christoph Lohrmann, Pasi Luukka, and Jari Porras.
+     AAAI Conference on Artificial Intelligence, Vol. 35. 55–62.                                     2022. Machine learning techniques and data for stock market forecasting: A
+ [7] Kyunghyun Cho, Bart van Merrienboer, Çaglar Gülçehre, Dzmitry Bahdanau,                         literature review. Expert Systems with Applications 197 (2022), 116659.
+     Fethi Bougares, Holger Schwenk, and Yoshua Bengio. 2014. Learning Phrase                   [31] Shiyong Lan, Yitong Ma, Weikang Huang, Wenwu Wang, Hongyu Yang, and
+     Representations using RNN Encoder–Decoder for Statistical Machine Translation.                  Pyang Li. 2022. Dstagnn: Dynamic spatial-temporal aware graph neural network
+     In EMNLP.                                                                                       for traffic flow forecasting. In International conference on machine learning. PMLR,
+ [8] Junyoung Chung, Caglar Gulcehre, Kyung Hyun Cho, and Yoshua Bengio. 2014.                       11906–11917.
+     Empirical Evaluation of Gated Recurrent Neural Networks on Sequence Modeling.              [32] Shuqi Li, Weiheng Liao, Yuhan Chen, and Rui Yan. 2023. PEN: Prediction-
+     arXiv preprint arXiv:1412.3555 (2014).                                                          Explanation Network to Forecast Stock Price Movement with Better Explain-
+ [9] Yann N Dauphin, Angela Fan, Michael Auli, and David Grangier. 2017. Language                    ability. In Proceedings of the AAAI Conference on Artificial Intelligence, Vol. 37.
+     modeling with gated convolutional networks. In International conference on                      5187–5194.
+     machine learning. PMLR, 933–941.                                                           [33] Yuling Lin, Haixiang Guo, and Jinglu Hu. 2013. An SVM-based approach for
+[10] Shumin Deng, Ningyu Zhang, Wen Zhang, Jiaoyan Chen, Jeff Z Pan, and Huajun                      stock market trend prediction. In The 2013 international joint conference on neural
+     Chen. 2019. Knowledge-driven stock trend prediction and explanation via tem-                    networks (IJCNN). IEEE, 1–7.
+     poral convolutional network. In Companion proceedings of the 2019 world wide               [34] Yang Liu, Qi Liu, Hongke Zhao, Zhen Pan, and Chuanren Liu. 2020. Adaptive
+     web conference. 678–685.                                                                        quantitative trading: An imitative deep reinforcement learning approach. In
+[11] Qianggang Ding, Sifan Wu, Hao Sun, Jiadong Guo, and Jian Guo. 2021. Hier-                       Proceedings of the AAAI conference on artificial intelligence, Vol. 34. 2128–2135.
+     archical multi-scale Gaussian transformer for stock movement prediction. In                [35] Suhong Moon, Domas Buracas, Seunghyun Park, Jinkyu Kim, and John Canny.
+     Proceedings of the Twenty-Ninth International Conference on International Joint                 2023. An Embedding-Dynamic Approach to Self-Supervised Learning. In Pro-
+     Conferences on Artificial Intelligence. 4640–4646.                                              ceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision.
+[12] Yitong Duan, Lei Wang, Qizhong Zhang, and Jian Li. 2022. Factorvae: A proba-                    2750–2758.
+     bilistic dynamic factor model based on variational autoencoder for predicting              [36] Yao Qin, Dongjin Song, Haifeng Cheng, Wei Cheng, Guofei Jiang, and Garrison W
+     cross-sectional stock returns. In Proceedings of the AAAI Conference on Artificial              Cottrell. 2017. A dual-stage attention-based recurrent neural network for time
+     Intelligence, Vol. 36. 4468–4476.                                                               series prediction. In Proceedings of the 26th International Joint Conference on
+[13] Eugene F Fama. 1965. The Behavior of Stock-Market Prices. The Journal of                        Artificial Intelligence. 2627–2633.
+     Business 38, 1 (1965), 34–105.                                                             [37] Ramit Sawhney, Shivam Agarwal, Arnav Wadhwa, Tyler Derr, and Rajiv Ratn
+[14] Christoph Feichtenhofer, haoqi fan, Yanghao Li, and Kaiming He. 2022. Masked                    Shah. 2021. Stock Selection via Spatiotemporal Hypergraph Attention Network:
+     Autoencoders As Spatiotemporal Learners. In Advances in Neural Information                      A Learning to Rank Approach. In Proceedings of the AAAI Conference on Artificial
+     Processing Systems, Vol. 35. Curran Associates, Inc., 35946–35958.                              Intelligence, Vol. 35. 497–504.
+[15] Fuli Feng, Xiangnan He, Xiang Wang, Cheng Luo, Yiqun Liu, and Tat-Seng Chua.               [38] Guizhu Shen, Qingping Tan, Haoyu Zhang, Ping Zeng, and Jianjun Xu. 2018. Deep
+     2019. Temporal relational ranking for stock prediction. ACM Transactions on                     learning with gated recurrent unit networks for financial sequence predictions.
+     Information Systems (TOIS) 37, 2 (2019), 1–30.                                                  Procedia computer science 131 (2018), 895–903.
+[16] Jianliang Gao, Xiaoting Ying, Cong Xu, Jianxin Wang, Shichao Zhang, and Zhao Li.           [39] Chao Song, Youfang Lin, Shengnan Guo, and Huaiyu Wan. 2020. Spatial-
+     2021. Graph-Based Stock Recommendation by Time-Aware Relational Attention                       temporal synchronous graph convolutional networks: A new framework for
+     Network. ACM Transactions on Knowledge Discovery from Data (TKDD) 16, 1                         spatial-temporal network data forecasting. In Proceedings of the AAAI conference
+     (2021), 1–21.                                                                                   on artificial intelligence, Vol. 34. 914–921.
+[17] Qiang Gao, Xinzhu Zhou, Li Huang, Kunpeng Zhang, Siyuan Liu, and Fan Zhou.                 [40] Guowei Song, Tianlong Zhao, Suwei Wang, Hua Wang, and Xuemei Li. 2023.
+     2024. Relational fusion-based stock selection with Neural Recursive Ordinary                    Stock ranking prediction using a graph aggregation network based on stock price
+     Differential Equation Networks. Information Fusion (2024), 102468.                              and stock relationship information. Information Sciences 643 (2023), 119236.
+[18] Jean-Bastien Grill, Florian Strub, Florent Altché, Corentin Tallec, Pierre                 [41] Petar Velickovic, Guillem Cucurull, Arantxa Casanova, Adriana Romero, Pietro
+     Richemond, Elena Buchatskaya, Carl Doersch, Bernardo Avila Pires, Zhaohan                       Lio, Yoshua Bengio, et al. 2017. Graph attention networks. stat 1050, 20 (2017),
+     Guo, Mohammad Gheshlaghi Azar, et al. 2020. Bootstrap your own latent-a new                     10–48550.
+     approach to self-supervised learning. Advances in neural information processing            [42] Heyuan Wang, Shun Li, Tengjiao Wang, and Jiayi Zheng. 2021. Hierarchical Adap-
+     systems 33 (2020), 21271–21284.                                                                 tive Temporal-Relational Modeling for Stock Trend Prediction. In Proceedings of
+[19] Agrim Gupta, Jiajun Wu, Jia Deng, and Fei-Fei Li. 2023. Siamese Masked Autoen-                  the Thirtieth International Joint Conference on Artificial Intelligence. 3691–3698.
+     coders. In Advances in Neural Information Processing Systems, Vol. 36. Curran              [43] Heyuan Wang, Tengjiao Wang, Shun Li, and Shijie Guan. 2023. HATR-I: Hier-
+     Associates, Inc., 40676–40693.                                                                  archical Adaptive Temporal Relational Interaction for Stock Trend Prediction.
+[20] Kaiming He, Xinlei Chen, Saining Xie, Yanghao Li, Piotr Dollár, and Ross Girshick.              IEEE Transactions on Knowledge and Data Engineering 35, 7 (2023), 6988–7002.
+     2022. Masked autoencoders are scalable vision learners. In Proceedings of the              [44] Heyuan Wang, Tengjiao Wang, and Yi Li. 2020. Incorporating expert-based
+     IEEE/CVF conference on computer vision and pattern recognition. 16000–16009.                    investment opinion signals in stock prediction: A deep learning framework. In
+[21] Kaiming He, Haoqi Fan, Yuxin Wu, Saining Xie, and Ross Girshick. 2020. Mo-                      Proceedings of the AAAI Conference on Artificial Intelligence, Vol. 34. 971–978.
+     mentum contrast for unsupervised visual representation learning. In Proceedings            [45] Jia Wang, Tong Sun, Benyuan Liu, Yu Cao, and Hongwei Zhu. 2019. CLVSA: a con-
+     of the IEEE/CVF conference on computer vision and pattern recognition. 9729–9738.               volutional LSTM based variational sequence-to-sequence model with attention
+[22] Ruining He, Anirudh Ravula, Bhargav Kanagal, and Joshua Ainslie. 2021. Real-                    for predicting trends of financial markets. In Proceedings of the 28th International
+     Former: Transformer Likes Residual Attention. In Findings of the Association for                Joint Conference on Artificial Intelligence. 3705–3711.
+     Computational Linguistics: ACL-IJCNLP 2021. 929–943.                                       [46] Yumo Xu and Shay B Cohen. 2018. Stock movement prediction from tweets and
+[23] Sepp Hochreiter and Jürgen Schmidhuber. 1997. Long short-term memory. Neural                    historical prices. In Proceedings of the 56th Annual Meeting of the Association for
+     Computation 9, 8 (1997), 1735–1780.                                                             Computational Linguistics. 1970–1979.
+
+
+
+
+                                                                                          541
+
+=== PDF PAGE 12 ===
+Progressive Dependency Representation Learning for Stock Ranking in Uncertain Risk Contrasting                                KDD ’25, August 3–7, 2025, Toronto, ON, Canada
+
+
+[47] Tao Yin, Chenzhengyi Liu, Fan Ding, Ziming Feng, Bo Yuan, and Ning Zhang.                  injected to form 𝑋˜ . These two tensors 𝑋𝑡 −𝛿+1:𝑡 , 𝑋˜ , representing
+     2022. Graph-based stock correlation and prediction for high-frequency trading              certain and uncertain perspectives, are treated as inputs that will,
+     systems. Pattern Recognition 122 (2022), 108209.
+[48] Xiaoting Ying, Cong Xu, Jianliang Gao, Jianxin Wang, and Zhao Li. 2020. Time-              respectively, feed into the PD block to progressively couple the
+     aware Graph Relational Attention Network for Stock Recommendation. In Pro-                 diffusion impact under the interactive guidance of the contrasting
+     ceedings of the 29th ACM International Conference on Information & Knowledge
+     Management. 2281–2284.
+                                                                                                mechanism, namely 𝒁 𝛼 (Θ) and 𝒁 𝛽 (Φ). Next, the TDA of PD turns
+[49] Zhen Zeng, Rachneet Kaur, Suchetha Siddagangappa, Saba Rahimi, Tucker Balch,               to process them to discern temporal dependency within the his-
+     and Manuela Veloso. 2023. Financial time series forecasting using cnn and                  torical transactions, whereafter the RDA identifies correlations in
+     transformer. arXiv preprint arXiv:2304.04912 (2023).
+[50] Zetao Zheng, Jie Shao, Jia Zhu, and Heng Tao Shen. 2023. Relational Temporal               transactions between different stocks, and MDA follows RDA to
+     Graph Convolutional Networks for Ranking-Based Stock Prediction. In 2023 IEEE              synthesize dynamics in a multi-term perspective. By joint optimal
+     39th International Conference on Data Engineering (ICDE). IEEE, 123–136.                   parameters Θ with Φ and updated guidance from the EMA theory,
+[51] Xin Zhou, Hongyu Zhou, Yong Liu, Zhiwei Zeng, Chunyan Miao, Pengwei Wang,
+     Yuan You, and Feijun Jiang. 2023. Bootstrap latent representations for multi-modal         we finally obtain the augmented Z𝛼 that can be used to produce
+     recommendation. In Proceedings of the ACM Web Conference 2023. 845–854.                    the ranking results 𝑟ˆ𝑡 +1 . In this way, we will obtain the optimal Θ∗
+                                                                                                after multiple iteration training until the PDU convergence.
+Technical Appendix
+A The Supplement of PDU solution                                                                 Algorithm 1: The training process of PDU.
+In this part, we supplement the details of the stock transaction and                              Input: A piece of historical end-of-day trading data
+the trading strategy, together with the algorithmic aspect.                                                X𝑡 −𝛿+1:𝑡 , relational stock graph G = (S, E).
+                                                                                                1 Initialize Θ in PDU;
+A.1 Stock Transaction Aspect. Initially, we extracted fundamen-                                 2 for formulate the trading tensor X𝑡 −𝛿+1:𝑡 from X𝑡 −𝛿+1:𝑡 do
+tal indicators from the stock markets, including the trading date,                                    // Noise designs construct uncertain
+open price, high price, low price, close price, and trading volume.                                        perspectives
+To enhance the significance of the characteristics, the average re-                                       𝑢𝑛𝑐𝑒𝑟𝑡𝑎𝑖𝑛
+                                                                                                3     𝑿˜ ←−−−−−−−−− 𝑿 𝑡 −𝛿+1:𝑡 ;
+turns over 5-day, 10-day, 20-day, and 30-day periods for each stock
+are computed as well. This provides an indication of the medium-                                      // Data flows from each viewpoint pass
+to long-term trends or returns underlying stock movements. The                                            through the PD block
+integration of these additional indicators allows for the effective                                                     𝑃𝐷 𝑏𝑙𝑜𝑐𝑘
+                                                                                                4     𝒁 𝛼 (Θ), 𝒁 𝛽 (Φ) ←−−−−−−−− 𝑿 𝑡 −𝛿+1:𝑡 , 𝑿˜ ;
+reduction of future investment risk. Specifically, we augment the                                     // Feed 𝒁 𝛽 into a dense layer
+stock features by incorporating return ratios calculated from 5-, 10-,                                              𝐷𝑒𝑛𝑠𝑒
+20-, and 30-day moving averages, denoted as X𝑡 −𝛿+1:𝑡 ∈ R𝛿 ×𝑆 ×𝐼 .                              5     𝐺 (𝒁 𝛽 (Φ)) ←−−−−− 𝒁 𝛽 (Φ);
+For instance, X𝜏,𝑠 = [𝑥𝜏,𝑠 𝑜 , 𝑥 ℎ , 𝑥 𝑙 , 𝑥 𝑐 , 𝑥 𝑣 , 𝑥 𝑎5 , 𝑥 𝑎10 , 𝑥 𝑎20 , 𝑥 𝑎30 ]
+                                𝜏,𝑠 𝜏,𝑠 𝜏,𝑠 𝜏,𝑠 𝜏,𝑠 𝜏,𝑠                𝜏,𝑠     𝜏,𝑠
+                                                                                                      // Constructing a single view of loss
+refers to the obtained indicators of stock 𝑠 on trading day 𝜏.                                  6     Obtain LΘ,Φ (𝐺 (𝑍𝛼 (Θ)), 𝑍 𝛽 (Φ)) via Eq. (18);
+    Furthermore, like common routines in early efforts, the open                                      // Total loss construction for uncertainty
+price, high price, low price, and trading volume are normalized to                                        comparison learning
+eliminate the effects of different dimensions (e.g., prevent numerical                          7     Obtain L𝑐 via Eq. (17);
+instability) and ensure comparability between different indicators.                                   // Obtain the next trading day’s return ratios
+To extract effective training data and for a fair comparison, a slid-                                       𝑎𝑔𝑔𝑟𝑒𝑔𝑎𝑡𝑒
+ing window strategy (e.g., a length of 4) was used to retrieve stock                            8     𝑟ˆ𝑡 +1 ←−−−−−−−− 𝒁 𝛼 (Θ);
+indicators from raw data and treat them as the model input. That                                      // Calculate point-wise regression loss via
+is to say, our optimization strategy is to train our proposed PDU as                                        Eq. (25)
+well as all baselines using the data through the sliding window iter-                            9     L𝑎 =∥ 𝑟ˆ𝑡 +1 − 𝑟𝑡 +1 ∥ 2 ;
+ations. During the validation and testing phase, we also employ the                             10    Obtain the ranking-aware loss L𝑒 via Eq. (26);
+identical sliding window to simulate trader behavior for investing                                    // Get total PDU loss expression formula
+in the ranked stocks.                                                                           11     L = L𝑎 + L𝑒 + 𝜉 L𝑐 ;
+A.2 Trading strategy. In accordance with the recommendations set                                      // Updating parameters with EMA
+forth by [15], we have implemented a daily buy-hold-sell trading                                12    Φ ← 𝜆Φ + (1 − 𝜆)Θ;
+strategy. At the end of each trading day, a trader uses a well-trained                          13    Θ ← Θ − 𝜂∇Θ L𝑐 ;
+model (e.g., our PDU) to generate a ranking list according to pre-                              14 end
+dicted returns (sorted by stock returns of all stocks). The trader then                            Output: Obtain the optimal Θ∗ .
+purchases the top-𝐾 stocks and sells these stocks at the opening of
+the market on the second trading day. The efficacy of this strategy
+is quantified by the SR metric.                                                                    In addition, the complexity of the PDU is primarily determined
+                                                                                                by two main parts. First, the time cost depends on the iteration over
+A.3 Algorithmic Aspect. Algorithm 1 summarizes the complete                                     the sliding window when collecting the trading tensor 𝑋𝑡 −𝛿+1:𝑡 ,
+workflow of our proposed PDU. In a nutshell, our PDU initially                                  which is related to the number of stocks 𝑆 and the window size 𝛿,
+formulates the end-of-day observation 𝑋𝑡 −𝛿+1:𝑡 from the raw trad-                              resulting in the complexity of O (𝑆 × 𝛿). Second, the time cost is
+ing data. Subsequently, two uncertainty operators are sequentially                              highly related to the number of iterations of the training process,
+
+
+
+
+                                                                                          542
+
+=== PDF PAGE 13 ===
+KDD ’25, August 3–7, 2025, Toronto, ON, Canada                                                                                                                                                                                Li Huang et al.
+
+
+where the complexity for each iteration is O (|𝛿 | × |Θ|). Herein, the           and DD, showcasing its strong ability to correctly identify and rank
+|𝛿 | refers to the total amount of window slides.                                top-performing stocks and its excellent capability in minimizing
+                                                                                 downside risks. However, the performance of PDU on NDCG@5
+B     Experimental Aspect                                                        is below expectation, we conjecture that PDU prioritizes reducing
+In this section, we conducted more experiments to further examine                downside risk over maximizing immediate gains at the very top
+the advantages of our proposed PDU, e.g., sustainability ability and             ranks when encountering a small dataset (i.e., no sufficient diffusion
+sensitivity analysis.                                                            impacts coupled). This means, while PDU ranks relevant stocks
+   A Case Study for Sustainability. Given the inherent volatility                highly overall, the top 5 positions might include safer but slightly
+and unpredictability of the stock market, time-series model predic-              less relevant choices, reflecting the strategy of PDU on balance
+tions in this domain diverge markedly from those in other fields.                between risk management and ranking accuracy.
+This volatility is predominantly influenced by such as future market
+                                                                                                                                                                                                                                                
+sentiment and exogenous economic events, rendering traditional                                                              6 5               1 ' & * #          0 5 5                 6 5               1 ' & * #             0 5 5
+                                                                                                                                                                                                                                               
+
+
+
+
+                                                                                 6 5  	  1 ' & * # 
+models inadequate for precisely capturing fluctuations and making
+                                                                                                                                                                                                                                                
+forecasts prone to disruptions from new trades. To examine the
+                                                                                                                                                                                                                                                  0 5 5
+                                                                                                          
+                                                                                                                                                                                                                                                
+model’s responsiveness and predictive accuracy in a real and new
+                                                                                                          
+trading environment, we performed an online evaluation using                                                                                                                                                                                    
+
+stock data (NASDAQ and NYSE) from May 15, 2023, to June 30,                                               
+                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                                
+
+2023. The outcomes, presented in Table 3, highlight the superior                                                                                C                                                             0
+
+                                                                                                                                                                                                                                                
+                                                                                                                            6 5               1 ' & * #          0 5 5                 6 5               1 ' & * #             0 5 5
+persistence of our proposed PDU.                                                                                                                                                                                                               
+
+
+
+
+                                                                                 6 5  	  1 ' & * # 
+                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                  0 5 5
+                                                                                                          
+           Table 3: The results of the online case study.                                                                                                                                                                                       
+                                                                                                          
+                            NASDAQ                          NYSE                                                                                                                                                                                
+ Method
+            SR               MRR NDCG@5            SR      MRR NDCG@5                                     
+                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                
+ StockNet 0.7258            0.0724 0.7958        1.4843   0.0264 0.6917
+ LSTM+GCN 0.8933            0.0298 0.8868        0.9818   0.0336 0.9079
+ HATR     1.1260            0.0538 0.8916        2.0840   0.0227 0.7560                                                                        Figure 12: Sensitivity analysis.
+ RT-GCN   1.1019            0.0589 0.9199        1.9362   0.0173 0.6947
+ PDU              1.5030 0.0979        0.9544    2.8731 0.0637   0.9677            Sensitivity Analysis. We now investigate the impact of key
+                                                                                parameters, specifically the trading indicators views 𝐶, the correla-
+                                                                                tions scale 𝛿 ′ between stocks, the sampling noise variance 𝜎, and
+                                                                                the combination parameter 𝜉. The results, depicted in Fig. 12, are
+     Table 4: The performance comparison on Nikkei225
+                                                                                based on the NASDAQ dataset. Our findings are as follows:
+    Method                 SR          MRR        NDCG@5          DD↓              1) an applicable view of 𝐶 = 32 brings promising results, which
+    RSR                  0.7257        0.0344       0.9203       0.2685         PDU adopts in practice; 2) an increase in 𝛿 ′ does not guarantee
+    HATR                 1.2920        0.0263       0.9141       0.1600         a better result, suggesting that excessive stock connections may
+    STHAN-SR            -1.2150        0.0271       0.8572       0.1863         introduce a bias; 3) a too large value of 𝜎 brings severe perfor-
+    RT-GCN               2.1293        0.0247       0.9262       0.1963         mance degradation, indicating that high-variance noise may sup-
+    CTTS                 1.2724        0.0174       0.8293       0.2000         press learning process and lead to misguided learning trajectories;
+    PDU                 2.1978         0.0386       0.8665       0.1480         4) 𝜉 = 0.5 provides the optimal learning path for PDU, demon-
+                                                                                strating the positive contribution of uncertain contrastive learning
+                                                                                while also revealing that overly emphasizing the impact can disrupt
+    A Case Study for New Market. We perform an additional
+                                                                                the stability of optimization.
+validation to investigate the PDU’s performance in a new market.
+We use 𝑦 𝑓 𝑖𝑛𝑎𝑛𝑐𝑒 2 API to collect daily price quotations for the
+constituents of the Nikkei 225 index, comprising 225 companies
+listed on the Tokyo Stock Exchange. This dataset encompasses open,
+high, low, close, adjusted close prices, and volume, To align with the
+previous experiment settings, industry relationships are derived
+from the Global Industry Classification Standard on Wikipedia.
+The temporal scope of the Nikkei 225 ranges from January 4, 2017,
+to January 6, 2022, encapsulating 225 stocks associated with 70
+industry relationships. In our experiments, we take the previous five
+representative models, i.e., RSR, HATR, STHAN-SR, RT-GCN, and
+CTTS, as our baselines and report the results in Table 4. We observe
+that PDU consistently outperforms baselines in terms of SR, MRR,
+2 https://pypi.org/project/yfinance/
+
+
+
+
+                                                                          543
+
+=== END SOURCE TEXT ===

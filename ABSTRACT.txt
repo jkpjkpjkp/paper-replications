@@ -1,0 +1,9 @@
+Progressive Dependency Representation Learning for Stock Ranking in Uncertain Risk Contrasting
+
+Condensed abstract
+
+Learns temporal, relational, and multi-horizon dependencies in stock trading signals
+through a progressive representation-learning architecture. A contrastive mechanism
+distinguishes certain and uncertain environments to stabilize dependency learning.
+Experiments on four stock-market datasets evaluate its ability to improve stock rankings
+while accounting for uncertainty.

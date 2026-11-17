@@ -1,0 +1,62 @@
+--- official/PDUArch.py
++++ repaired/PDUArch.py
+@@ -16,7 +16,7 @@
+             self.d_k) + res_att
+         if attn_mask is not None:
+             scores.masked_fill_(attn_mask, -1e9)
+-        attn = F.softmax(scores, dim=3)
++        attn = F.softmax(scores, dim=-1)
+         context = torch.matmul(attn, V)
+         return context, scores
+ 
+@@ -34,6 +34,7 @@
+         self.W_K = nn.Linear(d_model, d_k * n_heads, bias=False)
+         self.W_V = nn.Linear(d_model, d_v * n_heads, bias=False)
+         self.fc = nn.Linear(n_heads * d_v, d_model, bias=False)
++        self.norm = nn.LayerNorm(d_model)
+ 
+     def forward(self, input_Q, input_K, input_V, attn_mask, res_att):
+         residual, indicators = input_Q, input_Q.size(0)
+@@ -52,7 +53,7 @@
+         context = context.transpose(2, 3).reshape(indicators, self.num_of_d, -1,
+                                                   self.n_heads * self.d_v)
+         output = self.fc(context)
+-        return nn.LayerNorm(self.d_model).to(self.DEVICE)(output + residual), res_attn
++        return self.norm(output + residual), res_attn
+ 
+ 
+ class Embedding(nn.Module):
+@@ -111,7 +112,7 @@
+ 
+     def forward(self, data, edges):
+         features = data
+-        edges = edges.cuda()
++        edges = edges.to(features.device)
+         features = self.layer1(features, edges)
+         features = self.activation(features)
+         for _ in range(self.block_num):
+@@ -143,7 +144,7 @@
+         self.residual_conv = nn.Conv2d(in_channels, nb_time_filter, kernel_size=(1, 1), stride=(1, time_strides))
+         self.dropout = nn.Dropout(p=0.02)
+         self.fc = nn.Sequential(
+-            nn.Linear(3 * num_of_timesteps - 4, num_of_timesteps),
++            nn.Linear(3 * num_of_timesteps - 6, num_of_timesteps),
+             nn.Dropout(0.02),
+         )
+         self.ln = nn.LayerNorm(nb_time_filter)
+@@ -196,13 +197,14 @@
+                                     kernel_size=(1, nb_time_filter))
+         self.DEVICE = DEVICE
+         self.len_input = len_input
++        self.num_of_vertices = num_of_vertices
+         self.num_for_predict = num_for_predict
+         self.norm = nn.BatchNorm1d(num_for_predict)
+         self.final_dense = nn.Linear(num_for_predict, num_for_predict)
+         self.to(DEVICE)
+ 
+     def forward(self, data, edge_index):
+-        indicators = 9
++        indicators = data.shape[0] // self.num_of_vertices
+         edges = edge_index
+         features = None
+         features = data

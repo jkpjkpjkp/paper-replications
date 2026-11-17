@@ -1,0 +1,32 @@
+PRIMARY BLOCKER: DATA/SPECIFICATION FOR EXACT REPLICATION; COMPUTE ATTEMPT STARTED
+Assessed: 2026-11-17 (Asia/Shanghai)
+
+DATA: PARTIAL: public RSR inputs recovered; author preprocessing/frozen arrays absent
+COMPUTE: YES: full training was unfinished; now using local CPU
+SPECIFICATION / PAPER TARGET: YES: code/metric/trading-horizon discrepancies
+
+NASDAQ and NYSE reconstructed inputs exist. Previous results were one-update
+diagnostics, not full training. NYSE has a substantial zero-OHLC defect on
+2017-07-31. Live upstream issues #1/#2 still request data/preprocessing and have
+no responses as of 2026-11-17. The repaired model, validation-MSE selection,
+close-to-close return treatment and NDCG/DD conventions are disclosed deviations.
+
+Action / next requirement:
+STARTED full NASDAQ seed 42 on CPU, 1,026 stocks, all 752 training dates per
+epoch, maximum 300 epochs, patience 20. Unit: replication-pdu-20261117.service.
+Run directory: .replication-local/runs/blocked-20261117/pdu/
+Targets: Table 2 NASDAQ SR 2.2112 +/- 0.1283 seed SD; MRR 0.0407 +/- 0.0005
+seed SD. One new seed has no measured seed uncertainty. Completion will replay
+saved predictions and write comparison.json, retaining metric/protocol caveats.
+This is a reconstructed-protocol attempt, not certification of original inputs.
+No rental or paid data required; archived diagnostics are preserved.
+
+Evidence (paths relative to /home/jkp/data):
+- .replication-local/artifacts/pdu/RESULTS.txt
+- .replication-local/artifacts/pdu/sources/access_audit.json
+- .replication-local/runs/blocked-20261117/pdu-issues.json
+- .replication-local/runs/blocked-20261117/pdu/launch-plan.json
+- .replication-local/runs/blocked-20261117/pdu/run-status.json
+
+Numerical replication status remains 0 until a representative comparison is
+completed and assessed. Starting a job or matching a smoke-test cell is not a match.

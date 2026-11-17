@@ -1,0 +1,30 @@
+0: blocked
+Assessment date: 2026-11-17
+
+
+
+Scope: Blocked original PDU; only one-update execution diagnostics.
+
+Evidence and explanation:
+The saved result certifies 0/16 PDU Table 2 cells. NASDAQ and NYSE runs each made one
+optimizer update, which is not a converged representative experiment. Some diagnostic
+scores look close to published values, but their budget, repaired metrics and
+reconstructed preprocessing prevent treating that proximity as replication. No three-
+seed uncertainty was measured.
+
+Limits / next requirement:
+Recover author-prepared inputs and resolve code/paper discrepancies, then complete
+training. The source NYSE panel has a substantial zero-OHLC defect. Full 300-epoch
+experiments, repeats, baselines, ablations and the case study are absent.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/pdu/RESULTS.txt
+- ../.replication-local/artifacts/pdu/results/STATUS.json
+
+
+Blocker triage and new work — 2026-11-17:
+Primary blocker: DATA/SPECIFICATION FOR EXACT REPLICATION; COMPUTE ATTEMPT STARTED. See BLOCKER.txt for data/compute flags,
+current actions, remaining requirements and evidence. Grade remains 0.
+Fresh local CPU attempt: ../.replication-local/runs/blocked-20261117/pdu/
+Live service and progress were checked at launch; run-status.json is a dated receipt,
+not permanent proof of liveness. No completed comparison is claimed for this attempt.

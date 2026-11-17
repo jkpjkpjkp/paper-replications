@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "pdu",
+  "title": "Progressive Dependency Representation Learning for Stock Ranking in Uncertain Risk Contrasting",
+  "coverage": "pdf_text_from_archive",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/pdu/sources/paper.txt",
+    "path_relative_to_collection": ".replication-local/artifacts/pdu/sources/paper.txt",
+    "sha256": "1ed35059ca9f6729a24720f6d7e72af08b60452be2170cb65c1ab34527731f46",
+    "bytes": 147493,
+    "urls": []
+  },
+  "method": "Existing PDF text extraction; preserved form-feed page boundaries and spacing",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 13,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 81
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 82,
+      "line_end": 158
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 159,
+      "line_end": 244
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 245,
+      "line_end": 339
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 340,
+      "line_end": 423
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 424,
+      "line_end": 508
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 509,
+      "line_end": 610
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 611,
+      "line_end": 721
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 722,
+      "line_end": 775
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 776,
+      "line_end": 829
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 830,
+      "line_end": 916
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 917,
+      "line_end": 991
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 992,
+      "line_end": 1089
+    }
+  ],
+  "layout_file": null,
+  "layout_pages": null,
+  "heading_candidates": [
+    {
+      "line": 54,
+      "text": "1    Introduction"
+    },
+    {
+      "line": 268,
+      "text": "A                    Scaled & Add"
+    },
+    {
+      "line": 400,
+      "text": "#                                             ′                         Herein, 𝑴 is a mask tensor, which is formed by setting a mask-"
+    },
+    {
+      "line": 464,
+      "text": "6     Evaluation"
+    },
+    {
+      "line": 805,
+      "text": "7                                                Conclusion"
+    },
+    {
+      "line": 943,
+      "text": "1 Initialize Θ in PDU;"
+    },
+    {
+      "line": 1068,
+      "text": "A Case Study for New Market. We perform an additional"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1090
+    }
+  ],
+  "line_count": 1090,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "7ba01a4d4e1623c422962eac6208754b233c57f81dd74d89ab8b9f89c33350d2",
+      "bytes": 148353
+    }
+  }
+}
