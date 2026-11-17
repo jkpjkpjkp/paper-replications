@@ -1,0 +1,33 @@
+{
+  "status": "waiting_resources",
+  "question": "Do anomalies relative to observed corporate/customer-supplier relationships coincide with or precede upward abnormal stock returns?",
+  "source_priority": [
+    "Historical WRDS FactSet Revere supply-chain links with usable as-of timestamps",
+    "Compustat disclosed customer links, subject to public-availability and identifier validation",
+    "Broader corporate relations only if actual source supports them; not interchangeable with observed supply chain"
+  ],
+  "prices": "Reuse local CRSP CIZ daily total returns, full available securities through2025; CCM links at valid dates",
+  "core_separation": [
+    "Contemporaneous association",
+    "Forward predictive study using information available before outcomes",
+    "Self-financing no-cost50%long/50%short ledger only if a signed ranking and timing are supported"
+  ],
+  "provisional_horizons_trading_days": [
+    1,
+    5,
+    20
+  ],
+  "selection": "Freeze scores, direction, event thresholds and splits before return outcomes; all variants and multiplicity; no test tuning",
+  "inference": "Calendar-time HAC and at least1000 time-block resamples; no treating firms or overlapping labels as independent days",
+  "llm_prefilter": "eligible_non_llm; paper spectralEB/PCA/compact controls only",
+  "unknowns": [
+    "Subscription entitlement and access",
+    "Relationship record availability vs retrospective validity timestamps",
+    "Historical identifier match to CRSP",
+    "Whether unsigned anomaly severity supports an upward direction"
+  ],
+  "required_resource_policy": "/home/jkp/data/paper-reproduction-audit/WORKER_INSTRUCTIONS.txt",
+  "resource_reason": "{\"status\": \"waiting_resources\", \"reason\": \"Another new reproduction job owns the shared computation slot\"}",
+  "next_command": "python /home/jkp/data/paper-reproduction-audit/run_guarded.py --paper-id 29 --memory-gib 8 --threads 2 --gpu-mib 0 --disk-gib 1 --cwd /home/jkp/data/corporate-graph-anomalies -- /home/jkp/data/financial-graph-reproduction/.venv/bin/python /home/jkp/data/corporate-graph-anomalies/score_graphs.py",
+  "updated_at": "2026-11-07T09:21:49.721212+00:00"
+}

@@ -1,0 +1,65 @@
+2: Parent-paper LOF baseline on Elliptic, archived fit independently re-evaluated: AUROC 45.0857028871%; arXiv:2609.38424v1 Table 1 reports 45.1%.
+Assessment date: 2026-11-17
+
+Scope of level 2:
+The corporate customer-graph study has no single original paper. Its paper29
+reference was traced to EB-GAD, whose public arXiv version is titled "Graph
+Anomaly Detection as Finite-Horizon Control: Training-Free Scoring via Empirical
+Bayes". This assessment covers only the representative LOF baseline in that
+parent paper. It does not establish reproduction of EB-GAD, the corporate graph
+extension, a stock-return result, or the inaccessible submitted OpenReview version.
+
+Completed evidence:
+On 2026-11-17, independently recomputed metrics from the complete saved local
+LOF outputs fitted on 2026-11-07. This is archived-fit re-evaluation, not fresh
+training/fitting today and not replay of author-provided predictions.
+All 46,564 labeled transactions (4,545 illicit, 42,019 licit) are included.
+Three raw Elliptic++ CSV hashes match the acquisition manifest; labels rebuilt
+in raw feature-row order match both cached labels and saved score node indexes.
+Tie-aware concordance AUROC and independently integrated PR curves agree with
+scikit-learn at absolute tolerance 1e-12. Scores keep their native direction.
+
+Comparison, percentage units:
+  Elliptic LOF AUROC:  local 45.0857028871; paper 45.1; abs error 0.0142971129 pp.
+  Elliptic LOF AUPRC:  local 10.1638282724; paper 10.2; abs error 0.0361717276 pp.
+  Elliptic++ AUROC:    local 45.8874895795; paper 45.9; abs error 0.0125104205 pp.
+  Elliptic++ AUPRC:    local  8.4561089796; paper  8.5; abs error 0.0438910204 pp.
+All four cells match the 0.05 percentage-point rounding tolerance. Primary
+AUROC relative error is 0.0317009154%. LOF is deterministic and the paper gives
+no SD/SEM/CI for it. AUPRC uses trapezoidal integration; AP is saved separately.
+
+Unfinished work and earlier failures:
+- The original EB-GAD spectral run was interrupted at iteration 250, with zero
+  completed spectral orders or checkpoints. Its main-method result is unverified.
+  Archived code/manuscript discrepancies in ties, precision and preprocessing
+  remain documented in the parent's METHOD_LIMITATIONS.txt.
+- The corporate extension still has preparation only: 736,107 raw customer rows
+  and 37,162 matched disclosure edges. No graph anomaly scoring, anomaly-to-price
+  estimate, portfolio series or corporate paper-comparable result is complete.
+  FactSet Revere access was denied; current-release historical relationships
+  cannot certify original-vintage publication-time contents.
+- Fresh LOF fitting today was deferred: guarded preflight returned exit 75 because
+  another job owns paper-reproduction-compute.service. Approximately 5.1 GiB free
+  disk also falls below the guard's 20 GiB reserve. No background fit is running
+  for this task. The exact resumable command is saved below.
+- Exact submitted OpenReview paper access remains unresolved. The comparison is
+  to the public arXiv v1 manuscript freshly read on 2026-11-17.
+
+Assessment change:
+Previous grade 0 covered only the unfinished independent corporate study. Grade 2
+now records the explicitly scoped parent-paper baseline requested in this task;
+the independent extension remains unverified. See REPRESENTATIVE_NUMBER.txt.
+
+Evidence paths (relative to this STATUS.txt):
+- REPRESENTATIVE_NUMBER.txt
+- reproduce_representative.py
+- .agent/representative-number-20261117/audit/comparison.json
+- .agent/representative-number-20261117/source.json
+- .agent/representative-number-20261117/arxiv-2609.38424v1.txt
+- .agent/representative-number-20261117/resource_preflight.json
+- .agent/representative-number-20261117/FRESH_COMMAND.txt
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/029_graph_anomaly_dynamical_transport/results/data_and_LOF.json
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/029_graph_anomaly_dynamical_transport/METHOD_LIMITATIONS.txt
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/029_graph_anomaly_dynamical_transport/guard-interrupted-original-spectral.json
+- ../.replication-local/artifacts/corporate-graph-anomalies/REPORT.txt
+- README.md

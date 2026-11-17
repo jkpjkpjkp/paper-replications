@@ -1,0 +1,42 @@
+PRIMARY REMAINING BLOCKERS: CORPORATE DATA TIMING + MAIN METHOD; FRESH FIT RESOURCES
+Assessed: 2026-11-17 (Asia/Shanghai)
+
+Representative parent-paper comparison is now verified (scoped grade 2):
+LOF Elliptic AUROC 45.0857028871% vs 45.1% in arXiv:2609.38424v1 Table 1.
+This is independent re-evaluation of archived local baseline scores, with four
+AUROC/AUPRC cells matching rounding, not a new fit or an EB-GAD reproduction.
+See STATUS.txt and REPRESENTATIVE_NUMBER.txt for the exact scope and evidence.
+
+Fresh baseline resource preflight returned exit 75: an existing job owns the
+guarded compute cgroup. Disk free was about 5.1 GiB, below the guard's 20 GiB
+reserve. No fresh fit was launched and no automatic retry is scheduled.
+Resumable command: .agent/representative-number-20261117/FRESH_COMMAND.txt.
+
+The following limitations still apply to the independent corporate extension:
+DATA: PARTIAL: relationships exist; publication-time provenance unresolved
+COMPUTE: NO: local CPU is sufficient for scoring
+SPECIFICATION / PAPER TARGET: independent study has no corporate paper-number target
+
+The archived 736,107-row export and 37,162 matched edges exist. FactSet Revere
+entitlement was denied in the archived access check. Fiscal-period relationship
+dates are not publication dates; filing dates must establish signal availability.
+The old waiting_resources record is historical. This is an independent study,
+not an identified original-paper experiment; scoring alone would not produce a
+matched paper number.
+
+Action / next requirement:
+Parent baseline: the source table/protocol is resolved for the public arXiv
+version; fresh fitting must pass resource admission. Main EB-GAD remains pending.
+Corporate extension: resolve relationship publication timing and the independent
+study's evaluation requirements before executing score_graphs.py. No paid data
+purchased. Original OpenReview version access remains unresolved.
+
+Evidence (paths relative to /home/jkp/data):
+- corporate-graph-anomalies/study-plan.json
+- corporate-graph-anomalies/README.md
+- .replication-local/artifacts/corporate-graph-anomalies/REPORT.txt
+- .replication-local/artifacts/corporate-graph-anomalies/data/edges.parquet
+
+The independent corporate experiment remains unverified. The project-level grade
+2 is restricted to the parent-paper LOF benchmark and must not be transferred to
+corporate anomaly scoring or stock returns.

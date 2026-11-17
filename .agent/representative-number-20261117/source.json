@@ -1,0 +1,46 @@
+{
+  "checked_at_utc": "2026-11-17T12:30:47.470135+00:00",
+  "paper_id": "arXiv:2609.38424v1",
+  "public_title": "Graph Anomaly Detection as Finite-Horizon Control: Training-Free Scoring via Empirical Bayes",
+  "archived_conference_title": "Graph Anomaly Detection as Dynamical Transport: Training-Free Scoring via Empirical Bayes",
+  "public_url": "https://arxiv.org/html/2609.38424v1",
+  "retrieval": "chrome-use read, public full HTML manuscript",
+  "coverage": "full_text_html",
+  "local_path": "arxiv-2609.38424v1.txt",
+  "sha256": "d096f1676a5dbb714f1350a1a765e83b6b33190256c5f22c63f7fad4d547a396",
+  "target": {
+    "table": 1,
+    "dataset": "Elliptic",
+    "method": "LOF",
+    "metric": "AUROC_percent",
+    "value": 45.1,
+    "absolute_rounding_tolerance_percentage_points": 0.05
+  },
+  "supporting_targets": {
+    "Elliptic_AUPRC_percent": 10.2,
+    "Elliptic++_AUROC_percent": 45.9,
+    "Elliptic++_AUPRC_percent": 8.5
+  },
+  "passages_1_based": {
+    "title": 192,
+    "Table1_caption": 600,
+    "Table1_Elliptic": 611,
+    "Table1_Elliptic++": 612,
+    "evaluation_subset": 1415,
+    "native_score_direction": 1459,
+    "Table15_caption": 1871,
+    "Table15_LOF": 1875
+  },
+  "source_version_limit": "Public arXiv version only; exact submitted OpenReview version remains unverified. No claim that arXiv and submitted tables are identical.",
+  "archive_code_commit_reported": "cba2969e390ae6cd4381fe86393fa6cfcfc40d13",
+  "archive_files": {
+    "official-code/baselines/run_pyod_baselines.py": "ff353a08a3dbefa1395d96aa220bfe9cdb73340f2955fbbbcc9c62235e38db08",
+    "official-code/data_utils.py": "a142fd932af20eb2d0d50e522d2167d960e240e1c7b28e6b6a8d26821f9fecb9",
+    "official-code/tools/reconstruct_elliptic.py": "128a600ed382a13bde88cb48dd68d81b28466ac81c467d3f8c72aec6749067a4",
+    "audit_data_baseline.py": "f3489caed47a8364023230bf7c7ca7a24d8107263bc7a8ac8d19a10132d7a4d1",
+    "environment-pins.json": "dde4e363876fb3a9a75512ffa0b0d517511d49a195c54c66808c109c92657fe6",
+    "sources/data_manifest.json": "c7ab911f2ecfb8f62df8a1028c80389afa034d78d14ea710d9129f2254ddef83",
+    "results/data_and_LOF.json": "16f92063477e8753895c32ac26fb5f38ff962996ea146e4e7f7b31b0e431ca37"
+  },
+  "scope_choice": "The project has no single original paper; its paper29 reference identifies this parent method. Representative baseline chosen for the user request; corporate extension remains separate."
+}

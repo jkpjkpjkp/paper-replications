@@ -1,0 +1,20 @@
+{
+  "frozen_before_return_outcome_access": true,
+  "study_type": "retrospective methodological finance extension, not exact paper29 reproduction",
+  "universe": "Strictly name-matched disclosed company customer links and dated primary CCM supplier links; only named listed common-stock endpoints",
+  "source_dates": "Monthly calendar ends January2004-December2024; inputs must have filing_date strictly before signalcalendar date; last disclosure540days, fiscalperiod730days",
+  "formation": "Compute at first market close on/after calendar monthend, execute at following market close; earn subsequent daily P&L",
+  "features": ["log1p(number disclosed customers)","log1p(number listed suppliers)","new disclosed customer fraction vs12months earlier","outdegree change/(1+prior outdegree)","indegree change/(1+prior indegree)","largest disclosed customer sales/sum matched disclosed customer sales"],
+  "primary_score": "eb_selected: equilibrium J or R selected by unlabeled fitted-null KS; full-spectrum normalized-Laplacian EB anchor with paper kappa grid",
+  "all_score_variants": ["eb_selected","eb_J","eb_R","feature_LOF","degree_change"],
+  "portfolio_rule": "Long highest10% and short lowest10% anomaly scores, equal dollars50/50,gross1/net0; threshold ties included symmetrically, zero costs; no retrospective sign reversal",
+  "event_windows_trading_days": [1,5,20],
+  "primary_event_test": "Five-day abnormal return difference high-score minus low-score firms, after delayed execution; positive direction fixed in advance",
+  "abnormal_return": "Compounded stock totalreturn minus compounded valueweighted common-stock market totalreturn",
+  "price_jump_outcome": "Forward abnormalreturn >2*past63day idiosyncratic volatility*sqrt(horizon), report upward and downward frequencies",
+  "development": "2004-2010",
+  "validation": "2011-2015; no optimization currently planned",
+  "test": "2016-2024; fresh strategy-specific evaluation, historically accessible price archive; retrospective vendor release",
+  "inference": "Primary calendar-time portfolio mean: HAC20daily lags;2000moving-block bootstrap resamples length63tradingdays. Monthly event spread HAC3months;2000moving-block bootstrap length3months. All20event/portfolio variants in one Holm family; any additional jump tests descriptive unless included explicitly",
+  "important_limitations": ["Not all supply-chain relationships are disclosed or named","FactSet Revere subscription denied","Exact normalized historical-name matching has incomplete coverage","Historical Compustat records may be revised; filing dates do not certify original-vintage contents","Association/prediction does not establish causal supply-chain propagation","Unsigned anomaly severity may precede declines rather than rises","No borrow availability, slippage or real execution cost evidence"]
+}

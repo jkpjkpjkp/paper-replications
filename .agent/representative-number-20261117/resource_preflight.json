@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-17",
+  "status": "deferred",
+  "exit_code": 75,
+  "fresh_fit_started": false,
+  "probe_command": "run_guarded.py --paper-id 29 --memory-gib 2 --threads 2 --gpu-mib 0 --disk-gib 0.01 --cwd /home/jkp/data/corporate-graph-anomalies -- /usr/bin/true",
+  "reason": "paper-reproduction-compute.service already active with its own cgroup; no other job modified",
+  "disk_free_observed_GiB_approx": 5.1,
+  "guard_disk_reserve_GiB": 20,
+  "additional_pending_condition": "Guard disk-reserve condition must also pass before a fresh fit; no automatic retry or background run scheduled.",
+  "prepared_fresh_command": "python /home/jkp/data/_replication/support/paper-reproduction-audit/run_guarded.py --paper-id 29 --memory-gib 2 --threads 2 --gpu-mib 0 --disk-gib 0.01 --cwd /home/jkp/data/corporate-graph-anomalies -- /home/jkp/data/.replication-local/artifacts/arboreal/.venv/bin/python /home/jkp/data/corporate-graph-anomalies/reproduce_representative.py --mode fresh --output /home/jkp/data/.replication-local/runs/corporate-graph-lof-20261117",
+  "completed_work": "Read-only source/hash/label checks and independent recomputation from saved LOF scores; no model fit."
+}

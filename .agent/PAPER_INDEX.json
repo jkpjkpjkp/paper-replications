@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "corporate-graph-anomalies",
+  "title": "Corporate customer-graph anomaly study",
+  "coverage": "no_single_paper",
+  "source": {
+    "path_relative_to_project": "ABSTRACT.txt",
+    "path_relative_to_collection": "corporate-graph-anomalies/ABSTRACT.txt",
+    "sha256": "7840a38757640814adf4b4d32cd277bb159a51294d9689ffc3da48c1eab4b288",
+    "bytes": 426,
+    "urls": []
+  },
+  "method": "Existing local study overview; no single target paper",
+  "note": "Independent research study with no single original paper target. This is the project overview, not an original paper or evidence of replication.",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": null,
+  "pages": [
+    {
+      "page": null,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 25
+    }
+  ],
+  "layout_file": null,
+  "layout_pages": null,
+  "heading_candidates": [],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 15,
+      "line_end": 26
+    }
+  ],
+  "line_count": 26,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "c94e96fb994a441b4fc8214d7486c0c68c158b9e45fdd8638b4ee477a73b9dd8",
+      "bytes": 1107
+    }
+  }
+}

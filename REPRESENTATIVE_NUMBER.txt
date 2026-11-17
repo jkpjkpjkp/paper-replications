@@ -1,0 +1,106 @@
+Representative-number reproduction — assessed 2026-11-17
+
+Result: Elliptic LOF AUROC = 45.0857028871%, compared with 45.1% in
+arXiv:2609.38424v1, Table 1. Absolute error = 0.0142971129 percentage points;
+relative error = 0.0317009154%. This matches the 0.05 pp rounding tolerance.
+
+Scope and paper identity
+The source directory is an independent corporate-relationship study, catalogued
+as no_single_paper in PAPER_TEXT_INDEX.txt. Its analysis_config.json and
+study-plan.json refer to paper29; the archived review maps that ID to EB-GAD.
+For the user's request for one representative paper number, the complete LOF
+baseline on the observed Elliptic financial dataset was selected. It is a
+published benchmark baseline, not the paper's main EB-GAD method.
+
+The public version, freshly read through Chrome on 2026-11-17, is titled
+"Graph Anomaly Detection as Finite-Horizon Control: Training-Free Scoring via
+Empirical Bayes", arXiv:2609.38424v1, dated 29 September 2026.
+https://arxiv.org/html/2609.38424v1
+The earlier conference/code title uses "Dynamical Transport". Exact submitted
+OpenReview access was denied in the earlier audit; equality of those paper
+versions is not assumed. The public arXiv table is the comparison source.
+
+What ran in this task
+Independent verification of the complete local LOF score artifacts fitted on
+2026-11-07. No fit was performed today, and the score files were not supplied
+by the paper's authors. The current verification:
+  - checked all three raw Elliptic++ CSV SHA-256 hashes against their acquisition
+    manifest, including the 694,789,588-byte feature source;
+  - independently rebuilt labels in the 203,769 feature rows' transaction order;
+  - checked the exact 46,564 evaluated indexes and all saved labels against that
+    reconstruction and both cached label arrays;
+  - recomputed AUROC as tie-aware positive/negative-pair concordance;
+  - independently integrated grouped-threshold PR curves and computed AP;
+  - checked the independent metrics against scikit-learn to 1e-12.
+All checks passed. No raw data, archived scores or historical reports changed.
+
+Published baseline protocol
+The archived author runner is official-code/baselines/run_pyod_baselines.py,
+recorded commit cba2969e390ae6cd4381fe86393fa6cfcfc40d13. It fits PyOD LOF with
+n_neighbors=20 on the labeled feature subset. The completed local baseline used
+the corresponding sklearn LocalOutlierFactor implementation and its native score
+-negative_outlier_factor_. Features are the author loader's float32 values cast
+to float64, with no additional scaling. Elliptic has 166 features; Elliptic++
+has 182. Both use 4,545 illicit and 42,019 licit transactions; 157,205 unknown
+labels are excluded from this feature-only baseline's fit and evaluation.
+No class values enter model fitting, no sign reversal is selected using labels,
+and no test tuning was performed. This is a static transductive benchmark, not
+a chronological stock-price forecast. Below-chance AUROC is the native result.
+The original Elliptic feature set was reconstructed by the authors' conversion
+script from Elliptic++; this provenance is retained rather than claiming an
+independent Kaggle download.
+
+Companion checks guard against an isolated rounded-cell coincidence
+Dataset       Metric              Paper (%)    Local (%)       Absolute error (pp)
+Elliptic      AUROC                45.1         45.0857028871   0.0142971129
+Elliptic      AUPRC, trapezoid     10.2         10.1638282724   0.0361717276
+Elliptic++    AUROC                45.9         45.8874895795   0.0125104205
+Elliptic++    AUPRC, trapezoid      8.5          8.4561089796   0.0438910204
+AUROC sources: Table 1. AUPRC sources: Table 15. All four errors are <=0.05 pp.
+LOF is deterministic; no empirical seed SD, SEM or CI is claimed. The tolerance
+comes from the paper's one-decimal-percent rounding. Average precision is saved
+separately and is not substituted for trapezoidal AUPRC.
+
+Reproduce this verification from the source directory
+/home/jkp/data/.replication-local/artifacts/arboreal/.venv/bin/python reproduce_representative.py --mode audit --output .agent/representative-number-20261117/audit
+
+The compatible archived environment is used read-only: Python 3.12.13,
+NumPy 1.26.4, scikit-learn 1.9.1. Environment details and input/script hashes
+are in audit/comparison.json and source.json. The previous fit used Python
+3.11.16; its pinned environment record is preserved in the parent archive.
+
+Fresh-fit attempt and remaining requirements
+The shared run_guarded.py admission preflight returned exit 75 because another
+job owns paper-reproduction-compute.service. Fresh fitting was not started.
+Free disk was about 5.1 GiB, also below its 20 GiB reserve. No automatic retry
+or background job was scheduled. FRESH_COMMAND.txt contains the exact guarded
+command for the implemented --mode fresh path, which reuses the full cached
+feature arrays and writes new outputs separately. Fresh resource estimate:
+2 GiB RAM cap, two CPU threads, no GPU, 0.01 GiB additional output storage.
+
+The original EB-GAD spectral run remains interrupted at iteration 250 with zero
+completed spectral orders/checkpoints; it is not a result. The parent code audit
+also records tie handling, numeric precision and preprocessing discrepancies
+against the corrected public manuscript. None is resolved by this baseline.
+The independent corporate extension still has only its 736,107-row export and
+37,162 matched edges. Graph scoring, stock-return comparisons and portfolio
+evaluation are unexecuted; retrospective relationship/publication timing remains
+unresolved, and FactSet Revere access was denied.
+
+Assessment
+Level 2 is supported only for this parent-paper baseline, using independently
+verified archived local fitted outputs. It does not certify the main method,
+the corporate extension or the whole paper. The previous project grade 0
+described the separate unfinished corporate study. STATUS.txt and the workspace
+REPLICATION_STATUS.txt now state the narrower baseline scope explicitly.
+
+Evidence relative to this directory
+.agent/representative-number-20261117/audit/comparison.json
+.agent/representative-number-20261117/source.json
+.agent/representative-number-20261117/arxiv-2609.38424v1.txt
+.agent/representative-number-20261117/resource_preflight.json
+.agent/representative-number-20261117/FRESH_COMMAND.txt
+reproduce_representative.py
+../.replication-local/artifacts/paper-reproduction-audit/workspaces/029_graph_anomaly_dynamical_transport/results/
+../.replication-local/artifacts/paper-reproduction-audit/workspaces/029_graph_anomaly_dynamical_transport/METHOD_LIMITATIONS.txt
+../.replication-local/artifacts/corporate-graph-anomalies/REPORT.txt

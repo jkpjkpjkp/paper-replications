@@ -1,0 +1,100 @@
+{
+  "assessment_utc": "2026-11-17T12:29:41.099855+00:00",
+  "mode": "audit",
+  "fresh_fit_performed": false,
+  "paper": "arXiv:2609.38424v1",
+  "paper_url": "https://arxiv.org/html/2609.38424v1",
+  "scope": "LOF baseline only; not EB-GAD or the corporate relationship extension",
+  "protocol": {
+    "n_neighbors": 20,
+    "score_direction": "negative negative_outlier_factor_",
+    "fit_scope": "all 46564 labeled transactions, as in authors' baseline runner",
+    "features": "author-loader float32 values cast to float64, no extra scaling",
+    "labels_used_in_model_fit": false,
+    "test_tuning": false,
+    "uncertainty": "deterministic baseline; paper gives rounding, not SD/CI"
+  },
+  "raw_source_hashes_verified": {
+    "txs_classes.csv": "013a11742969071a906878ded0319571df0657f9b7133e5c6cdb36217bf0d240",
+    "txs_features.csv": "2db326ec8ddb68f1d810c1834e1ff62e0a8300378f0984a1e3b2ca82a439821b",
+    "txs_edgelist.csv": "a35053ba68a98e4382cae2ba65b9d9e36b23b6439e02dff084971b1b72a5156e"
+  },
+  "raw_label_alignment_verified": true,
+  "results": {
+    "elliptic": {
+      "metrics": {
+        "AUROC": 0.45085702887145374,
+        "AUPRC_trapezoid": 0.10163828272431069,
+        "average_precision": 0.10185474727742128,
+        "concordant_pairs_twice": 172206064,
+        "positive_negative_pairs": 190976355,
+        "distinct_score_thresholds": 46464
+      },
+      "comparisons": {
+        "AUROC": {
+          "paper_percent": 45.1,
+          "local_percent": 45.08570288714537,
+          "absolute_error_percentage_points": 0.01429711285462787,
+          "relative_error_percent": 0.031700915420460905,
+          "rounding_tolerance_percentage_points": 0.05,
+          "within_tolerance": true
+        },
+        "AUPRC_trapezoid": {
+          "paper_percent": 10.2,
+          "local_percent": 10.163828272431068,
+          "absolute_error_percentage_points": 0.036171727568930834,
+          "relative_error_percent": 0.3546247800875572,
+          "rounding_tolerance_percentage_points": 0.05,
+          "within_tolerance": true
+        }
+      },
+      "nodes_total": 203769,
+      "nodes_fit_and_evaluate": 46564,
+      "positive_nodes": 4545,
+      "features": 166,
+      "archived_score_path": "/home/jkp/data/.replication-local/artifacts/paper-reproduction-audit/workspaces/029_graph_anomaly_dynamical_transport/results/elliptic_LOF_scores.npz",
+      "archived_score_sha256": "5f16fc4f4b8d9eeff9cbf67b223ac2da12a3d918a5d78d1fa4ec0f9f2a9e5c7a",
+      "independent_metrics_match_sklearn_at_1e_12": true
+    },
+    "elliptic_plus_plus": {
+      "metrics": {
+        "AUROC": 0.45887489579534596,
+        "AUPRC_trapezoid": 0.08456108979568942,
+        "average_precision": 0.08461813462825205,
+        "concordant_pairs_twice": 175268510,
+        "positive_negative_pairs": 190976355,
+        "distinct_score_thresholds": 46483
+      },
+      "comparisons": {
+        "AUROC": {
+          "paper_percent": 45.9,
+          "local_percent": 45.887489579534595,
+          "absolute_error_percentage_points": 0.012510420465403627,
+          "relative_error_percent": 0.027255818007415306,
+          "rounding_tolerance_percentage_points": 0.05,
+          "within_tolerance": true
+        },
+        "AUPRC_trapezoid": {
+          "paper_percent": 8.5,
+          "local_percent": 8.456108979568942,
+          "absolute_error_percentage_points": 0.04389102043105808,
+          "relative_error_percent": 0.5163649462477421,
+          "rounding_tolerance_percentage_points": 0.05,
+          "within_tolerance": true
+        }
+      },
+      "nodes_total": 203769,
+      "nodes_fit_and_evaluate": 46564,
+      "positive_nodes": 4545,
+      "features": 182,
+      "archived_score_path": "/home/jkp/data/.replication-local/artifacts/paper-reproduction-audit/workspaces/029_graph_anomaly_dynamical_transport/results/elliptic_plus_plus_LOF_scores.npz",
+      "archived_score_sha256": "ef963acf35979b38238fdb2866b919d2a5631ed570e408dafd9d047467e85d0d",
+      "independent_metrics_match_sklearn_at_1e_12": true
+    }
+  },
+  "python": "3.12.13 (main, Aug  7 2026, 02:25:39) [Clang 22.1.3 ]",
+  "numpy": "1.26.4",
+  "sklearn": "1.9.1",
+  "script_sha256": "55fb56195f18307825b97da4cce55a0d4883c870f4eacbba7e61a35f9084cea2",
+  "seconds": 3.552365303039551
+}

@@ -1,0 +1,26 @@
+Corporate customer-graph anomaly study
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: no_single_paper
+Original source: ABSTRACT.txt
+Source SHA-256: 7840a38757640814adf4b4d32cd277bb159a51294d9689ffc3da48c1eab4b288
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Note: Independent research study with no single original paper target. This is the project overview, not an original paper or evidence of replication.
+
+=== BEGIN SOURCE TEXT ===
+
+=== TEXT SEGMENT 1 ===
+Corporate customer-graph anomaly study
+
+Concise study summary
+
+Studies anomalies in disclosed corporate customer relationships using chronological
+graph scores and filing dates. The research plan distinguishes contemporaneous
+association from forward prediction and examines links to subsequent stock returns only
+where timing and identifiers support that analysis. Graph anomaly scores themselves do
+not use return outcomes.
+
+=== END SOURCE TEXT ===

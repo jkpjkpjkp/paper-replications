@@ -1,0 +1,9 @@
+Corporate customer-graph anomaly study
+
+Concise study summary
+
+Studies anomalies in disclosed corporate customer relationships using chronological
+graph scores and filing dates. The research plan distinguishes contemporaneous
+association from forward prediction and examines links to subsequent stock returns only
+where timing and identifiers support that analysis. Graph anomaly scores themselves do
+not use return outcomes.
