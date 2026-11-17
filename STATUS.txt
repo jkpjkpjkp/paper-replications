@@ -1,0 +1,27 @@
+0: blocked
+Assessment date: 2026-11-17
+
+
+
+Scope: Blocked full HGA-MT; only a reduced price-only diagnostic completed.
+
+Evidence and explanation:
+Three matched-seed price-only BiLSTM diagnostics ran on 86 stocks, but they omit the
+graph/news/fundamental components that define HGA-MT. Their bootstrap gains cannot be
+compared with the original model's claims. Original RESSET 39-feature inputs, Hundsun
+news/MSC checkpoint, 336 typed Qichacha edges and walk-forward details are missing. The
+report also identifies metric-definition/table inconsistencies requiring clarification.
+
+Limits / next requirement:
+Recover the essential inputs and original method/evaluation definitions. The reduced
+diagnostic is neither evidence of matching paper numbers nor evidence that the full
+model fails.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/hga-mt/REPORT.txt
+- ../.replication-local/artifacts/hga-mt/STATUS.json
+
+
+Blocker triage and new work — 2026-11-17:
+Primary blocker: DATA + SPECIFICATION. See BLOCKER.txt for data/compute flags,
+current actions, remaining requirements and evidence. Grade remains 0.

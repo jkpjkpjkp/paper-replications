@@ -1,0 +1,24 @@
+PRIMARY BLOCKER: DATA + SPECIFICATION
+Assessed: 2026-11-17 (Asia/Shanghai)
+
+DATA: YES
+COMPUTE: NO: data/specification are the immediate gates
+SPECIFICATION / PAPER TARGET: YES
+
+Original RESSET 39-feature panel, Hundsun news/MSC embeddings and 336 typed
+Qichacha relations are unavailable. The paper reports lack of permission to
+share data. The existing 86-stock price-only diagnostic omits defining components.
+Walk-forward settings are incomplete; the stated Top10 MRR upper bound conflicts
+with Table 7 and Table 8 repeats IRR as Sharpe.
+
+Action / next requirement:
+No full-model launch. Obtain licensed features/news/typed relations or author
+artifacts and clarify metrics. Additional price-only fitting cannot test HGA-MT.
+
+Evidence (paths relative to /home/jkp/data):
+- .replication-local/artifacts/hga-mt/REPORT.txt
+- .replication-local/artifacts/hga-mt/BLOCKER.txt
+- hga-mt/protocol.json
+
+Numerical replication status remains 0 until a representative comparison is
+completed and assessed. Starting a job or matching a smoke-test cell is not a match.

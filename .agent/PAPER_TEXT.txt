@@ -1,0 +1,2721 @@
+Quantitative stock portfolio optimization by multi-task learning risk and return
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/artifacts/hga-mt/sources/paper.pdf
+Source SHA-256: e3e70a98ab7f4b901d53c9cc29a94a866e9b175ff2ab4c3bc94dada95285219f
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+Information Fusion 104 (2024) 102165
+
+Contents lists available at ScienceDirect
+
+Information Fusion
+journal homepage: www.elsevier.com/locate/inffus
+
+Full length article
+
+Quantitative stock portfolio optimization by multi-task learning risk and
+return
+Yu Ma a ,1 , Rui Mao b ,1 , Qika Lin c , Peng Wu d , Erik Cambria b ,∗
+a
+
+School of Economics and Management, Nanjing University of Science & Technology, 200 Xiaolingwei Road, Nanjing, 210094, Jiangsu, China
+School of Computer Science and Engineering, Nanyang Technological University, 50 Nanyang Avenue, 639798, Singapore
+School of Computer Science and Technology, Xi’an Jiaotong University, Xi’an, 710049, Shaanxi, China
+d
+School of Intelligent Manufacturing, Nanjing University of Science & Technology, 200 Xiaolingwei Road, Nanjing, 210094, Jiangsu, China
+b
+c
+
+ARTICLE
+
+INFO
+
+Keywords:
+Stock portfolio optimization
+Quantitative stock selection
+Multi-task learning
+Stock relation graph
+Graph-based learning
+
+ABSTRACT
+Selecting profitable stocks for investments is a challenging task. Recent research has made significant progress
+on stock ranking prediction to select top-ranked stocks for portfolio optimization. However, the stocks are
+only ranked by predicted stock return, ignoring the stock price volatility risk — a critical aspect for stock
+selection and investments. Moreover, they preliminarily attempted to capture the effects of related stocks
+from a singular relation, disregarding the rich information regarding multiple spillover effects from related
+stocks and the distinctions in effects among various relations. Thus, we propose a risk and return multitask learning model with a heterogeneous graph attention network (HGA-MT) to predict stock ranking for
+portfolio optimization. First, to aggregate the multiple spillover effects of related stocks, we introduce graph
+convolutional networks to fuse the effects of related stocks in each relation and design an attention network
+to allocate varying weights to different types of relationships. Second, we use a multi-task learning paradigm
+to learn stock return and volatility risks jointly. The stock ranking results are calculated by simultaneously
+considering the risk and return. Thus, Top-𝐾 ranked stocks are recommended in the portfolio for the next
+trading day to achieve higher and more stable profits. Extensive experiments prove that HGA-MT outperforms
+previous state-of-the-art methods in stock ranking and backtesting trading evaluation tasks.
+
+1. Introduction
+Investing in stock markets to achieve profits is an extremely attractive topic for traders and investors. Currently, machine learning-based
+methods have shown great success in assisting financial investments [1–
+3]. Developing a portfolio is an important way for financial investments
+because compared with investing in a single stock, carefully selecting
+multiple stocks as a portfolio can spread the investment risks of individual stocks [4,5]. However, there exist multiple factors that affect
+stock prices [6]. The stock markets are known for their intricate and
+volatile nature [7]. Therefore, it is a challenging task to incorporate
+a wide range of factors as well as consider return and volatility risk
+to select profitable stocks, thereby establishing the portfolio for investors. Recently, there have been several deep learning-based portfolio
+optimization studies that aimed to maximize stock investment profits [5,8–13]. They have formulated stock selection as a stock ranking
+prediction task. The objective is to directly obtain a stock list ranked
+by the anticipated return ratio for the next trading day.
+
+The top-ranked stocks are expected to earn higher investment revenues, which are selected in a portfolio. However, previous works only
+ranked and recommended stocks based on higher stock return ratios
+while ignoring stock volatility risk. Risk is a crucial aspect that should
+always be considered in financial investment [4]. Hence, risk-oriented
+criteria should be introduced as much as possible in stock ranking for
+stock selection [9]. Among other factors, stock price volatility serves as
+a reliable measure for assessing trading risk [14]. It is prudent to steer
+clear of stocks exhibiting high price volatility, despite the potential for
+a higher return ratio on the subsequent trading day, to avoid losses
+in the long run. Therefore, in order to achieve higher and more stable
+profits, it is crucial to take into account both risk and return to rank
+stocks for portfolio optimization. On the other hand, stock prices are
+affected by multiple information sources due to the complicated stock
+market environment [15,16]. Extensive stock prediction research has
+been conducted using quantitative indicators, including fundamental
+and technical indicators [17,18].
+
+∗ Corresponding author.
+
+E-mail addresses: mayu@njust.edu.cn (Y. Ma), rui.mao@ntu.edu.sg (R. Mao), linqika@stu.xjtu.edu.cn (Q. Lin), wupeng@njust.edu.cn (P. Wu),
+cambria@ntu.edu.sg (E. Cambria).
+1
+These authors contributed equally.
+https://doi.org/10.1016/j.inffus.2023.102165
+Received 8 May 2023; Received in revised form 27 November 2023; Accepted 28 November 2023
+Available online 30 November 2023
+1566-2535/© 2023 Elsevier B.V. All rights reserved.
+
+=== PDF PAGE 2 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+• We propose a multi-task learning model that jointly learns the
+stock return and volatility risk for stock ranking prediction, which
+can achieve higher and more stable profits. To the best of our
+knowledge, we are the first to incorporate the concept of stock
+price volatility risk through multi-task learning into the stock
+ranking prediction model for portfolio optimization.
+• We introduce an HGA module based on GCN and attention networks to fuse the multiple effects of related stocks to target stocks.
+The HGA module can disentangle various stock relationships and
+effectively integrate the related stock information by assigning
+varying degrees of importance.
+• Extensive experimental results indicate that our proposed model
+outperforms the state-of-the-art baselines in terms of stock ranking and financial evaluation, demonstrating our model’s effectiveness.
+
+Moreover, incorporating financial news also benefits stock price
+prediction [6,19–21], because investment is likely to be affected by
+news sentiment [22,23]. Finally, financial research has discovered crisis
+spillover effects that the adverse effects of a crisis not only affect a
+target company but also spread to its related enterprises [24]. This
+is because various relationships interconnect listed companies in stock
+markets, such as the supply chain [25], the shareholding chain [26],
+and the industry competition relationships [27].
+Recently, several studies have attempted to model stock relation
+information and capture the effects of related stocks by using the graphbased method [8,10,26,28]. Each stock is depicted as a node in a
+graph, and the edge between two nodes is defined as a specific stock
+relation. However, these studies only incorporated a single type of
+stock relations, such as shareholding [26] or industry [8]. Furthermore,
+prior studies have failed to give ample consideration to differentiating
+the effects of related stock information on target stocks based on
+distinct relations. Given different company relationships, the news and
+stock trading impacts of related companies on a target company may
+be different [5,29]. For example, the negative news about industry
+competitors and the related stocks in shareholding chains may have
+different impacts on the target stocks [30–32]. Therefore, it is essential
+to aggregate multiple spillover effects and assign different importance
+weights to different relations.
+In light of the above limits, we propose a novel multi-task learning
+model with a heterogeneous graph attention network (HGA-MT) that
+leverages risk and return as well as stock relationships to improve
+ranking-based portfolio optimization. The heterogeneous graph attention (HGA) module is introduced to fuse multi-source information,
+encompassing not only the information concerning a target stock but
+also information about related stocks that share multiple relationships
+with the target stock. Multi-task learning is used to simultaneously
+acquire knowledge regarding the risk and return associated with a
+target stock.
+First, we concatenate 39 quantitative indicators and financial news
+features to represent the market information of each stock. The concatenated features are delivered to the following Bidirectional Long ShortTerm Memory (BiLSTM) [33] encoders to capture the financial temporal hidden states. Second, the heterogeneous graph, which presents
+the three stock relations, is reconstructed into three relation-specific
+subgraphs. We employ Graph Convolutional Networks (GCN) [34] to
+fuse the effects of related stocks in each relation and assign different
+importance to different relation types by an attention mechanism.
+Third, the fused information is fed to the multi-task learning module to
+learn and predict the stock return and volatility risk on the next trading
+day. The investment-oriented stock ranking results are given by a score
+function, incorporating the predicted risk and return. Finally, 𝐾 stocks
+with the highest scores are selected to invest on the next trading day.
+We test the effectiveness of the proposed HGA-MT model in Chinese
+stock markets and execute the experiments with the stock set of CSI100
+index constituent stocks.
+For stock ranking performance, the results indicate that our model
+outperforms previous state-of-the-art methods, i.e., MAC [15] with
+0.0118 (11.09%) gains in Precision and 0.0221 (8.29%) gains in Mean
+Reciprocal Rank (MRR) on average. For the financial evaluation, HGAMT exceeds MAC by 0.0510 (14.94%) in cumulative Investment Return
+Ratio (IRR) and 0.2055 (11.24%) in Sharpe (SP) ratio on average,
+achieving higher profits in the backtesting trading. Additionally, compared to MAC, HGA-MT yields a lower Maximum Drawdown (MDD,
+8.81% vs. 7.54% on average), indicating that HGA-MT achieves lower
+investment risk. Our ablation study shows that learning both risk and
+return can yield more accurate return-based stock ranking predictions.
+Meantime, ranking stocks by considering both risk and return factors deliver more robust portfolio profits. Finally, learning and distinguishing multiple stock relationships also contribute to higher ranking
+accuracy and investment profits.
+The contributions of this work are threefold:
+
+The rest of this paper is organized as follows: Section 2 presents
+the related works; Section 3 describes our proposed HGA-MT method;
+Section 4 presents our experimental settings; Section 5 reports the evaluation results, ablation, and hyperparameter analysis; Finally, Section 6
+concludes this work and suggests future work directions.
+2. Related work
+2.1. Ranking-based stock portfolio optimization
+A crucial task for financial investments is constructing the portfolio
+by selecting profitable stocks. Extensive research has been conducted
+for stock selection and portfolio optimization, forming different research directions with different emphases, based on different perspectives and forms [35–39]. Among these approaches is the conceptualization of the portfolio optimization task as a stock ranking task,
+aimed at ranking stocks with the potential for higher returns, and
+then incorporating high-ranked stocks into the portfolio [40,41]. The
+advantage of such a task formulation is that: (1) The stock ranking
+approach provides a straightforward and transparent mechanism for
+portfolio optimization. Investors can easily understand the rationale
+behind including or excluding specific stocks based on their ranking.
+(2) By explicitly emphasizing the ranking of stocks according to their
+potential for higher returns, this approach directs attention to one
+of the key goals of portfolio optimization: maximizing returns. (3)
+The success of deep learning in financial forecasting can be attributed
+to its proficiency in complex pattern recognition and holistic feature
+integration. Harnessing these strengths in a regression-like framework
+is optimally achieved by framing the portfolio optimization task as a
+ranking task. Consequently, an intuitive approach is to rank stocks,
+based on time-series prediction.
+As the pioneer, Feng et al. [9] tailored the deep learning models
+for stock ranking prediction to select top-ranked stocks for portfolio
+optimization. Sawhney et al. [10] proposed a neural hypergraph framework for stock selection, resulting in a list of stocks prioritized based on
+their return ratios. The top-ranked stocks with higher expected returns
+were selected for investment. Ma et al. [5] proposed an attributeoriented fuzzy hypergraph model for stock recommendations, which
+also focused on stock ranking prediction to recommend top-ranked
+stocks. Feng et al. [12] designed a model to recommend Top-N return
+ratio stocks, which combined a time series module for encoding timing
+characteristics with attributed GCN for capturing correlation topology
+information.
+These ranking-based models have achieved promising results for
+stock selection and portfolio optimization [5,8,10,42]. However, these
+methods obtained the stock ranking results only based on higher expected returns without considering stock price volatility risks. As a crucial aspect, risk should be considered in financial investments [4]. The
+classical study on stock ranking prediction indicated that risk-oriented
+criteria should be introduced in stock ranking [9].
+2
+
+=== PDF PAGE 3 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+Therefore, it is essential to consider both the risk and return concurrently to achieve more reasonable stock ranking outcomes that can
+optimize the investment portfolio. Stock price volatility can serve as a
+reliable measure to assess trading risk [14]. This notion has motivated
+us to construct a multi-task learning model that can simultaneously
+acquire knowledge about both the stock return and risk.
+
+On the other hand, most existing research preliminarily attempted
+to capture the effects of related stocks from a singular relation, disregarding the multiple spillover effects from related stocks with different
+relationships. Moreover, existing research ignored the distinctions in
+effects from various relations. The effects of each relation on the
+target stock are different. To effectively capture the effects of related
+stocks, the effects of related stocks from various relations should be
+aggregated, and the distinctions in relation strength should be learned.
+Table 1 shows the difference between the most relevant works and our
+proposed method.
+
+2.2. Multi-source information for stock price prediction
+Stock prices are affected by multi-source information in complex
+stock trading environments [15,43]. Extensive research indicated that
+fundamental and technical indicators reflect the profitability of listed
+companies and stock price patterns, which help to predict stock prices
+[18,44]. Moreover, research on event-driven trading shows that material news can significantly influence stock return volatility [45,46],
+while the market volatility also impacts the cognition of market participants [47]. Excessive media attention and negative news would cause
+abnormal stock price volatility [48,49]. Several existing research works
+combine technical indicators with financial news to predict stock price,
+demonstrating that financial news is essential information for effective
+stock price prediction [21,40,50]. Besides, with the developments of
+the market economy, listed companies are connected through various
+relations, such as supply chain [25], shareholding chain [26] and
+industry competitor relations [27]. Research on public opinion crisis
+management argues that there are spillover effects among interrelated
+firms. The public judgment of a company will be affected by the
+information about its related companies [51].
+Recently, several works have attempted to use stock relations to
+aid stock price prediction [46,52]. Graph-based models were used to
+capture the impacts of related stocks [28,53,54]. To incorporate stock
+relation information, Wu et al. [54] used historical price correlations
+among stocks to construct a correlation graph, which improved the
+stock price prediction in the Chinese stock markets. Chen et al. [26]
+proposed a GCN-based framework to improve the performance of stock
+price movement prediction by aggregating the data of relevant stocks
+from a shareholding graph. Hsu et al. [8] built a hierarchical industry
+graph by analyzing the relation between industries for stock ranking
+prediction and profitable stock recommendations. Although the above
+models have attempted to capture the effects of related stocks, these
+studies only fuse the effects from a single stock relation, such as
+shareholding [26] or industry [8,10].
+In practice, listed companies are connected through various relationships [25–27]. Stock prices are also affected by the spillover effects
+of various relations [15,29]. It may result in sub-optimal prediction
+results due to insufficient valid information if only a single type of
+related stock is considered. Ma et al. [15] proposed a multi-source
+aggregated classification model based on GCN for stock price prediction, which can aggregate the effects of related stocks in the supply
+chain, shareholding chain, and industry competitors. They organized
+the stock relation graph with three relations as a homogeneous graph
+and indiscriminately integrated information from related stocks with
+equal weights. However, the impact of each relation on a specific stock
+node is not uniform [5,29]. For example, related stocks in shareholding
+chains and industry competitors possess distinct influence levels on
+the target stocks [30–32]. Therefore, it is critical to consolidate the
+spillover impacts of related stocks across multiple relations and proficiently discern the variations in the degrees of these effects in different
+relations.
+To sum up, there are two shortcomings in the aforementioned
+related works. On the one hand, the research on stock ranking prediction for portfolio optimization obtained the stock ranking results only
+based on higher expected returns while the stock price volatility risk is
+disregarded. As a crucial aspect of financial investments, risk-oriented
+criteria should be considered and introduced into the stock ranking
+method for stock selection.
+
+3. Methodology
+Following previous studies [8–10], stock portfolio optimization is
+formulated as a stock ranking problem to select superior stocks in this
+work. We propose an HGA-MT method for stock ranking and portfolio
+optimization. The model introduces an HGA mechanism to fuse the
+textual and quantitative features of multiple related stocks and employs
+a multi-task learning paradigm to concurrently learn both the stock
+}
+{
+risk and return. Given 𝑆 = 𝑠1 , 𝑠2 , … , 𝑠𝑁 is the set of 𝑁 stocks, our
+task is to predict the stock ranking results of the 𝑁 stocks on the
+next trading day, and then accordingly select Top-𝐾 ranked stocks to
+achieve a higher and sound investment revenue. As shown in Fig. 1,
+the proposed HGA-MT method includes four technical components.
+First (Section 3.1), we obtain the quantitative indicators and news
+features of 𝑁 stocks in the set 𝑆 and use a BiLSTM encoder to capture
+the temporal information. The input feature (𝐹 ) of each training step
+aggregates the features of the 𝑁 stocks over a time window of 𝑇
+days. 𝑇 represents the count of trading days preceding the day of
+stock ranking prediction. The BiLSTM yields the post-encoding feature
+matrix (𝐻) of the 𝑁 stocks, subsequently. Second (Section 3.2.1), the
+stock relationship data of the 𝑁 stocks are collected and presented via
+a heterogeneous graph (𝐺), including the supply chain, shareholding
+chain, and industry competitor relationships. To distinguish the effects
+of related stocks in different relation types, we construct three relationspecific subgraphs that are defined as 𝐺𝑠𝑢 , 𝐺𝑠ℎ and 𝐺𝑐𝑜 , corresponding
+to supply, shareholding, and industry competitor relationships, respectively. Third (Section 3.2.2), GCN is utilized to capture the stock
+relations, fuse the effects of related stocks in each relationship, and an
+attention mechanism is utilized to assign different weights to different
+relation types. We aggregate the overall effects of related stocks to
+form a post-fusion matrix (𝑋) by summing up the weighted information
+extracted from the supply chain (𝑋𝑠𝑢 ), shareholding chain (𝑋𝑠ℎ ), and
+industry competitor (𝑋𝑐𝑜 ) relationships. Finally (Section 3.3), the postfused matrix 𝑋 is learned in a multi-task learning paradigm to predict
+the stock return (𝑦̂𝑅𝑒𝑡𝑢𝑟𝑛
+) and volatility risk (𝑦̂𝑅𝑖𝑠𝑘
+) on the next trading
+𝑡+1
+𝑡+1
+𝑅𝑂𝑅
+day 𝑡+1. We obtain the stock ranking results ( ̂
+𝑅𝑎𝑛𝑘
+) by considering
+𝑡+1
+
+both the risk and return in a score function. The Top-𝐾-ranked stocks
+are selected as an investment portfolio to achieve sound investment
+profits. The description of symbols that are introduced in this paper
+is shown in Table 2.
+3.1. Stock feature extraction
+3.1.1. Quantitative indicator and news feature extraction
+The extraction of quantitative indicators. Extensive research [2,6,
+18] has proved that fundamental2 and technical indicators3 are effective features for stock price prediction. Following previous studies [15,
+
+2
+The fundamental features are used to show the intrinsic value of stocks
+from several aspects, such as profitability, operating ability, capital structure,
+and liquidity analysis.
+3
+The technical indicators are used to capture the stock price patterns by
+the mathematical operation based on the given historical transaction data,
+e.g., price, trading volume or time span.
+
+3
+
+=== PDF PAGE 4 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+Table 1
+The comparison of related works with our proposed method. QI denotes the quantitative indicators; News denotes the financial news features. RSL denotes relation strength
+learning.
+Studies
+
+Features
+
+Modeled relationships
+
+QI
+
+News
+
+Sawhney et al. [10]
+Hsu et al. [8]
+Ma et al. [5]
+
+✓
+✓
+✓
+
+–
+–
+–
+
+Feng et al. [12]
+Wu et al. [54]
+Chen et al. [26]
+Ma et al. [15]
+
+✓
+✓
+✓
+✓
+
+–
+–
+–
+✓
+
+Ours
+
+✓
+
+✓
+
+Industry
+Industry
+Industry, Concept,
+Fund-hold.
+Price trend
+Price trend
+Sharehold.
+Supply, Sharehold.,
+Industry competitor
+Supply, Sharehold.,
+Industry competitor
+
+RSL
+
+Selected by
+Return
+
+Risk
+
+—
+—
+—
+
+✓
+✓
+✓
+
+—
+—
+—
+
+—
+—
+—
+—
+
+✓
+✓
+✓
+✓
+
+—
+—
+—
+—
+
+✓
+
+✓
+
+✓
+
+Fig. 1. Overview of the HGA-MT framework.
+
+20,43,44,55] with superior prediction results, 39 widely used indicators
+are used in this work, including 8 fundamental features that show
+the intrinsic values of stocks and 31 technical indicators that capture
+the stock price patterns. These fundamental and technical indicators
+are denoted as quantitative indicators. Table 3 shows all quantitative
+indicators used in this work. The original stock data were gathered from
+the RESSET platform.4 Then, Min-Max normalization is employed to
+standardize each indicator [43], owing to their distinct value ranges.
+The quantitative indicators of Stock 𝑖 in the trading Day 𝑡 are described
+as:
+𝐪𝑖,𝑡 = [𝑅𝑂𝐴𝑖,𝑡 , 𝐷𝐴𝑅𝑖,𝑡 , … , 𝐿𝑜𝑤𝑒𝑟𝐵𝑎𝑛𝑑𝑖,𝑡 ],
+
+If the stock price goes down, the sentiment label of the news title is
+negative; otherwise, positive. In our application, the pre-trained MSC
+from the work of Ma et al. [15] is used to generate embeddings for
+news titles. In practical scenarios, a stock may receive more than one
+news article in a day. Therefore, the news embeddings of the stock in a
+day are averaged, thereby obtaining a daily news feature (𝐧 ∈ R1×768 ,
+where 768 is the vector dimension of news feature) to represent all
+news titles in a day. The process of generating a news embedding of
+the Stock 𝑖 in Day 𝑡 can be defined as:
+𝐧𝑖,𝑡 = 𝑀𝑆𝐶(𝑁𝑒𝑤𝑠1 , 𝑁𝑒𝑤𝑠2 , … , 𝑁𝑒𝑤𝑠𝑚 ),
+
+(1)
+
+(2)
+
+∈ R1×768 denotes the daily news feature of Stock 𝑖 on Day 𝑡.
+
+where 𝐧𝑖,𝑡
+𝑀𝑆𝐶(⋅) refers to the pre-trained MSC-based news embedding generator. 𝑁𝑒𝑤𝑠1 , … , 𝑁𝑒𝑤𝑠𝑚 are 𝑚 financial news titles on Day 𝑡 related to
+Stock 𝑖.
+Then, the quantitative indicators 𝐪𝑖,𝑡 and news features 𝐧𝑖,𝑡 of Stock
+𝑖 on Day 𝑡 are concatenated (⊕), yielding its daily feature (𝐟𝑖,𝑡 ) by
+[
+]
+𝐟𝑖,𝑡 = 𝐪𝑖,𝑡 ⊕ 𝐧𝑖,𝑡 ,
+(3)
+
+where 𝐪𝑖,𝑡 ∈ R1×39 . 39 is the vector dimension of quantitative indicators.
+The extraction of news features. With the advancement of natural
+language processing techniques, financial news has been wildly incorporated with quantitative indicators to improve stock price prediction
+accuracy. Our previous work [15] proves that a pre-trained Marketdriven Sentiment Classifier (MSC) can effectively generate marketdriven news sentiment features. Therefore, the MSC module from
+the previous work [15] is also applied to generate news embedding
+features in this study. MSC is a pre-trained sentiment classifier based on
+ChineseRoBERTa [56] and news titles. The pre-training process encompasses
+training a Chinese-RoBERTa classifier to learn market-driven sentiment
+polarities. The polarity labels of market-driven sentiment are established based on the variation in stock prices on the day after the news
+release.
+
+where 𝐟𝑖,𝑡 ∈ R1×807 denotes the daily feature of Stock 𝑖 on Day 𝑡. 807 is
+the vector dimension of concatenated quantitative indicators and news
+features.
+3.1.2. Temporal feature extraction
+The stock market data are typical time series data. BiLSTM performs
+well in processing sequential data in stock price prediction [1–3]. Thus,
+BiLSTM is used to learn the time series features. For a training step that
+learns the stock risk and return at Day 𝑡 + 1, the features in lookback
+window 𝑇 are used to capture the time series information. The lookback
+window 𝑇 denotes 𝑇 trading days before the prediction day (Day 𝑡 + 1),
+i.e., 𝑇 trading day from 𝑡 − 𝑇 + 1 to 𝑡.
+
+4
+RESSET (http://www.resset.com/) is a Chinese platform, providing
+financial and economic information.
+
+4
+
+=== PDF PAGE 5 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+Table 2
+Symbol description.
+Notation
+
+Description
+
+𝑆
+𝑁
+𝐾
+
+The set of stocks.
+The number of stocks in the stock set 𝑆.
+The number of top-ranked stocks in an
+investment portfolio.
+The number of trading days before the
+prediction day.
+𝐪𝑖,𝑡 ∈ R1×39 , the quantitative indicators of
+Stock 𝑖 on Day 𝑡.
+𝐧𝑖,𝑡 ∈ R1×768 , the news features of Stock 𝑖 on
+Day 𝑡.
+𝐟𝑖,𝑡 ∈ R1×807 , the daily features of Stock 𝑖 on
+Day 𝑡.
+𝐹𝑖 ∈ R𝑇 ×807 , the feature matrix of Stock 𝑖
+within a time window 𝑇 .
+𝐹 ∈ R𝑁×𝑇 ×807 , the feature matrix of 𝑁 stocks
+within a time window 𝑇 .
+𝐻 ∈ R𝑁×200 , the hidden states of BiLSTM of
+𝑁 stocks, representing the feature matrix of
+𝑁 stocks.
+𝐺 is a heterogeneous graph of stock relation.
+𝑉 is the set of nodes (stocks). 𝐸 is the set of
+edges (relations). 𝑅 is the set of relation
+types, including supply chain (𝑠𝑢),
+shareholding chain (𝑠ℎ) and industry
+competitor (𝑐𝑜) relation.
+𝐺𝑠𝑢 , 𝐺𝑠𝑢 , 𝐺𝑠𝑢 are the subgraphs of 𝐺 only
+containing the 𝑠𝑢, 𝑠ℎ and 𝑐𝑜 relation,
+respectively.
+𝐴𝑠𝑢 , 𝐴𝑠ℎ , 𝐴𝑐𝑜 ∈ R𝑁×𝑁 , the adjacency matrix
+associated with the subgraphs 𝐺𝑠𝑢 , 𝐺𝑠ℎ and
+𝐺𝑐𝑜 , respectively.
+𝐿𝑠𝑢 , 𝐿𝑠ℎ , 𝐿𝑐𝑜 ∈ R𝑁×200 , the hidden states of
+GCN, fusing the features of related stocks in
+the 𝑠𝑢, 𝑠ℎ and 𝑐𝑜 relations, respectively.
+𝑀𝑠𝑢 , 𝑀𝑠ℎ , 𝑀𝑐𝑜 ∈ R𝑁×400 , the concatenation of
+𝐿𝑠𝑢 , 𝐿𝑠ℎ and 𝐿𝑐𝑜 with 𝐻, respectively.
+𝑎𝑠𝑢 , 𝑎𝑠ℎ , 𝑎𝑐𝑜 ∈ R𝑁×1 , the importance
+(attention) weights of related stocks in 𝑠𝑢, 𝑠ℎ
+and 𝑐𝑜 relations, respectively.
+𝑋𝑠𝑢 , 𝑋𝑠ℎ , 𝑋𝑐𝑜 ∈ R𝑁×400 , the effects of related
+stocks from the 𝑠𝑢, 𝑠ℎ and 𝑐𝑜 relations,
+respectively, given by HGA.
+𝑋 ∈ R𝑁×400 , a post-fusion matrix that
+aggregates the effects of related stocks from
+the 𝑠𝑢, 𝑠ℎ and 𝑐𝑜 relations.
+The hyperparameter for GCN layers.
+The hyperparameter for balancing the losses
+of the two subtasks.
+
+𝑇
+𝐪𝑖,𝑡
+𝐧𝑖,𝑡
+𝐟𝑖,𝑡
+𝐹𝑖
+𝐹
+𝐻
+
+𝐺 = (𝑉 , 𝐸, 𝑅)
+
+𝐺𝑠𝑢 , 𝐺𝑠ℎ , 𝐺𝑐𝑜
+
+𝐴𝑠𝑢 , 𝐴𝑠ℎ , 𝐴𝑐𝑜
+
+𝐿𝑠𝑢 , 𝐿𝑠ℎ , 𝐿𝑐𝑜
+
+𝑀𝑠𝑢 , 𝑀𝑠ℎ , 𝑀𝑐𝑜
+𝑎𝑠𝑢 , 𝑎𝑠ℎ , 𝑎𝑐𝑜
+
+𝑋𝑠𝑢 , 𝑋𝑠ℎ , 𝑋𝑐𝑜
+
+𝑋
+
+𝑘
+𝛼
+
+Then, the input features of Stock 𝑖 in a training step are defined as
+[
+]
+𝐹𝑖 = 𝐟𝑖,𝑡−𝑇 +1 , … , 𝐟𝑖,𝑡−1 , 𝐟𝑖,𝑡 ,
+(4)
+where 𝐹𝑖 ∈ R𝑇 ×807 is the feature matrix of the Stock 𝑖 during the
+preceding 𝑇 trading days. We analyze the sensitivity of 𝑇 in Section 5.3.
+Next, 𝐹𝑖 is fed into a single BiLSTM layer with a dropout ((⋅)) to
+discover temporal patterns of Stock 𝑖:
+ℎ𝑖,𝑡+1 = (𝐵𝑖𝐿𝑆𝑇 𝑀(𝐹𝑖 )),
+
+where ℎ𝑖,𝑡+1
+Stock 𝑖 with the dropout. The hidden state size of the BiLSTM layer is
+200. Since there are 𝑁 input stocks at a training step, the overall input
+feature set is 𝐹 ∈ R𝑁×𝑇 ×807 . After BiLSTM encoding 𝐹 and dropout, the
+temporal features (𝐻) of all stocks are defined as:
+[
+]
+𝐻 = ℎ1,𝑡+1 , ℎ2,𝑡+1 , … , ℎ𝑖,𝑡+1 , … , ℎ𝑁,𝑡+1 ,
+(6)
+where 𝐻 ∈ R𝑁×200 denotes the feature matrix of 𝑁 stocks.
+3.2. Information fusion of related stocks
+In this section, we first develop the stock relation graphs that are
+used to present the relations between stocks (Section 3.2.1). Then, we
+present the process for the information fusion of related stocks based
+on the proposed HGA module (Section 3.2.2).
+3.2.1. Stock relation graph construction
+The relationships among listed companies are diverse and interconnected. Stock prices are affected by multiple spillover effects from
+related stocks. The relation graph is an appropriate method for representing the stock relationship information. In this study, we collect the
+relationship data for 𝑁 stocks from Qichacha,5 including the supply
+chain (suppliers and customers), the shareholding chain (holding and
+being held), and the industry competitor relationships. Qichacha is a
+leading information service in China that focuses on companies’ enterprise credit and relationship information. They objectively determine
+the related companies of each company based on official reports and
+announcements. More details regarding the data collection and stock
+relations extraction by Qichacha are shown in Appendix A. In this work,
+the interactive relations among stocks are obtained from Qichacha.
+Then, the relationship data of 𝑁 stocks is presented by a heterogeneous graph (𝐺). In the heterogeneous graph 𝐺 = (𝑉 , 𝐸, 𝑅), 𝑉 is the
+set of 𝑁 nodes, where each node denotes a stock. In this study, the
+node (stock) set 𝑉 includes 86 nodes (stocks) (𝑁=86, details shown
+in Section 4.1). 𝐸 is the set of edges, where each edge represents that
+two connected stocks have a type of business relationship. In this study,
+the set 𝐸 includes 336 edges, indicating 336 pairwise relationships
+among 86 stocks. 𝑅 is the set of edge types (i.e., relation types). In our
+work, 𝑅 includes three types: the supply chain (𝑠𝑢), the shareholding
+chain (𝑠ℎ), and the industry competitor (𝑐𝑜) relationships. Each edge in
+set 𝐸 belongs to one of the three edge types.
+In the stock relation heterogeneous graph, a stock node is usually
+linked with other stock nodes by multiple relations. Related nodes in
+different relation types have different influences on the target stock
+node because the spillover effects on different relation types are different. Therefore, the information aggregation of related stock nodes
+in different relation types should be distinguished. According to the
+relation types in the heterogeneous graph (𝐺), we construct three
+relation-specific subgraphs, namely 𝐺𝑠𝑢 , 𝐺𝑠ℎ and 𝐺𝑐𝑜 . Fig. 2 shows the
+process of developing the stock relation graphs and the adjacent matrices. 𝐺𝑠𝑢 = (𝑉 , 𝐸𝑠𝑢 ) denotes the subgraph of 𝐺 only containing the supply
+chain relation, where all nodes are linked by supply chain relations.
+Similarly, 𝐺𝑠ℎ and 𝐺𝑐𝑜 refer to the subgraphs only connecting stock
+nodes by shareholding and industry competitor relations, respectively.
+
+Table 3
+The employed fundamental and technical indicators of stocks.
+Feature name
+
+Feature name
+
+Return on Asset (ROA)
+Earnings Per Share (EPS)
+Operational Profit (OProfit)
+Asset Turnover Rate (ATR)
+Opening/Closing Price
+(OP/CP)
+Highest/Lowest Price
+(HP/LP)
+Volume of Trade (Vol)
+
+Debt Asset Ratio (DAR)
+Total Assets Growth Rate (TAGR)
+Revenue Growth Rate (RGR)
+Gross profit growth rate (GPGR)
+Moving Average
+(MA10/MA20/MA30)
+Simple/Exponential Moving Average
+(SMA/EMA)
+Relative Strength Index
+(RSI6/RSI12/RSI24)
+Money Flow Index (MFI)
+Daily Amplitude (DA)
+Stochastic Indicator KDJ
+(Slowk/Slowd)
+True/Average True Range (TR/ATR)
+Williams Indicator (WR)
+Bollinger Bands
+(UpperBand/ MiddleBand/
+LowerBand)
+
+Turnover Rate (TurR)
+Daily Return (DR)
+Price-to-Earnings Ratio
+(P/E)
+Price-to-Book Ratio (P/B)
+Price-to-Sales Ratio (P/S)
+Moving Average
+Convergence and
+Divergence
+(DIFF/DEA/MACD)
+
+(5)
+
+∈ R1×200 is the final hidden states of 𝐵𝑖𝐿𝑆𝑇 𝑀(⋅) outputs of
+
+5
+
+5
+
+https://www.qcc.com/
+
+=== PDF PAGE 6 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+Fig. 2. The illustration of stock relation graph and adjacent matrix construction.
+
+According to the subgraphs 𝐺𝑠𝑢 , we construct the relation-specific
+adjacency matrix 𝐴𝑠𝑢 ∈ R𝑁×𝑁 which illustrates the supply relationships
+between the 𝑁 stocks. The adjacency matrix 𝐴𝑠𝑢 is defined as Eq. (7).
+𝑎𝑖,𝑗 is the element of Matrix 𝐴𝑠𝑢 . If Stocks 𝑖 and 𝑗 share a supply chain
+relation (the nodes are connected), the conjunction 𝑎𝑖,𝑗 is 1, otherwise
+is 0.
+⎡ 𝑎1,1
+⎢
+𝑎
+𝐴𝑠𝑢 = ⎢ 2,1
+⎢ ⋮
+⎢𝑎
+⎣ 𝑁,1
+
+𝑎1,2
+𝑎2,2
+⋮
+𝑎𝑁,2
+
+...
+...
+⋱
+...
+
+𝑎1,𝑁 ⎤
+⎥
+𝑎2,𝑁 ⎥
+⋮ ⎥
+𝑎𝑁,𝑁 ⎥⎦
+
+leveraging the information of its related stocks in the supply chain
+relationship. Then, the GCN output matrix 𝐿𝑠𝑢 and the feature matrix
+𝐻 are concatenated.
+𝑀𝑠𝑢 = 𝐿𝑠𝑢 ⊕ 𝐻,
+
+where 𝑀𝑠𝑢 ∈ R𝑁×400 . 400 is the matrix dimension of concatenated 𝐻
+and 𝐿𝑠𝑢 .
+Next, considering the fact that related stocks in different relation
+types have different impacts and importance on the target stock, the
+model should learn the importance of each relation. The matrix 𝑀𝑠𝑢 is
+fed into a dense layer and sigmoid to calculate the importance weight
+(𝑎𝑠𝑢 ∈ R𝑁×1 ) of related stocks in supply chain relation
+
+(7)
+
+Similarly, we can obtain the adjacency matrix 𝐴𝑠ℎ ∈ R𝑁×𝑁 and
+𝐴𝑐𝑜 ∈ R𝑁×𝑁 , representing the shareholding chain and industry competitor relationships among the 𝑁 stocks, respectively.
+
+𝑎𝑠𝑢 = 𝑠𝑖𝑔𝑚𝑜𝑖𝑑(𝐷𝑒𝑛𝑠𝑒(𝑀𝑠𝑢 )).
+
+3.2.2. HGA-based information fusion of related stocks
+Since the stock relationships are represented by graphs, to combine
+the impacts of associated stocks, we adopt a GCN network [34] to learn
+the graph. The GCN has demonstrated the ability to efficiently acquire
+the structural information present in graphs [57–59]. The inputs of the
+GCN model consist of a feature matrix, including each node’s features,
+and an adjacency matrix, presenting the relationships between nodes.
+The GCN model can update the feature representation of each node
+according to the adjacency matrix and fuse the features of its neighbor
+nodes by the convolutional operation. In practice, the effect extent of
+every relation to the nodes is different. For example, the effects of
+related stocks in the shareholding chain differ from those of industry
+competitors. Thus, assigning different importance weights to different
+relations is essential. We propose the HGA module to aggregate the
+effects of related stocks in multiple relationships by GCN networks and
+assign different importance weights to different relation types by an
+attention mechanism.
+The process of the HGA module for the information fusion of related
+stocks is shown in Fig. 3. To learn the impacts of related stocks in
+supply chain relation, first, the feature matrix (𝐻) and the adjacency
+matrix (𝐴𝑠𝑢 ) containing the supply chain relations between these nodes
+are input into a GCN layer for convolutional processing (see Eq. (8)).
+The feature vector of every node is enhanced by integrating the information from neighboring nodes in GCN. Consequently, the updated
+hidden states of each stock node in 𝐿𝑠𝑢 encompasses the information
+about its interrelated stocks in the supply chain relation.
+̃ −1∕2 𝐴𝑠𝑢 𝐷
+̃ −1∕2 𝐻𝑊 ),
+𝐿𝑠𝑢 = 𝑅𝑒𝐿𝑈 (𝐷
+
+(9)
+
+(10)
+
+This process is defined as the attention layer in Fig. 3.
+With the weight coefficient, the information of related stocks in the
+supply chain relation (𝑋𝑠𝑢 ∈ R𝑁×400 ) can be captured by Eq. (11),
+where ⊙ indicates dot product
+𝑋𝑠𝑢 = 𝑎𝑠𝑢 ⊙ 𝑀𝑠𝑢 .
+
+(11)
+
+Similarly, we can obtain the feature matrices 𝑀𝑠ℎ and 𝑀𝑐𝑜 , and the
+importance weights 𝑎𝑠ℎ and 𝑎𝑐𝑜 , thereby capturing the effects of the
+related stocks in shareholding (𝑋𝑠ℎ ) and industry competitor (𝑋𝑐𝑜 )
+relationships.
+The final representation of a stock node can be obtained by aggregating the information of related stocks in the supply chain, shareholding chain, and industry competitor relationships:
+𝑋𝑡 = 𝑋𝑠𝑢 + 𝑋𝑠ℎ + 𝑋𝑐𝑜 .
+
+(12)
+
+This process of HGA can be repeated 𝑘 times for more comprehensive feature fusion. We examine the GCN layers with different 𝑘 values
+in Section 5.3.
+3.3. Multi-task learning risk and return for stock ranking
+3.3.1. Multi-task learning risk and return
+Both risk and return drive investment decision-making. This inspires
+us to use a multi-task learning paradigm to jointly learn risk and return
+for stock ranking. The multi-task learning module can improve return
+and risk predictability because these learning tasks can leverage shared
+knowledge and utilize the correlation between them to enhance their
+generalization performance. More importantly, by taking into account
+both the predicted stock return ratio and stock volatility risk, we
+can attain more appropriate stock ranking results rather than solely
+prioritizing them based on their return ratios.
+
+(8)
+
+̃ −1∕2 𝐴𝑠𝑢 𝐷
+̃ −1∕2 ∈ R𝑁×𝑁 is Laplacian matrix. 𝐷
+̃ ∈ R𝑁×𝑁 denotes
+where 𝐷
+̃ = 𝛴𝑗 𝐴𝑖,𝑗 . 𝐴𝑠𝑢 ∈ R𝑁×𝑁 is an
+a diagonal degree matrix, where 𝐷
+adjacency matrix. 𝑊 ∈ R200×200 denotes trainable parameters in the
+GCN layer. We use a 𝑅𝑒𝐿𝑈 (⋅) activation function. 𝐿𝑠𝑢 ∈ R𝑁×200 is
+the activated GCN output, whose hidden state size is 200. 𝐿𝑠𝑢 represents the updated representation of each stock node in the graph by
+6
+
+=== PDF PAGE 7 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+Fig. 3. The illustration of the proposed HGA module for the information fusion of related stocks.
+
+Fig. 4. The method for computing ground truth risk (𝑦𝑅𝑖𝑠𝑘
+) and return (𝑦𝑅𝑒𝑡𝑢𝑟𝑛
+) labels for Stock 𝑖 at trading Day 𝑡 + 1.
+𝑖,𝑡+1
+𝑖,𝑡+1
+
+The stock return ratio is used as a training target for learning the
+‘‘return’’ subtask. The ground truth return ratio of Stock 𝑖 on the trading
+Day 𝑡 + 1 is denoted as
+𝑦𝑅𝑒𝑡𝑢𝑟𝑛
+=
+𝑖,𝑡+1
+
+𝐶𝑃𝑖,𝑡+1 − 𝐶𝑃𝑖,𝑡
+𝐶𝑃𝑖,𝑡
+
+,
+
+The process of stock selection by multi-task learning risk and return
+is shown in Fig. 5. The matrix 𝑋 that aggregates the information from
+related stocks is fed into task-specific layers to learn features related
+to each subtask. Task-specific layers are composed of two dense layers.
+The predictions of return and risk measures for 𝑁 stocks on the trading
+Day 𝑡 + 1 can be yielded from their task-specific layers
+
+(13)
+
+where the 𝐶𝑃𝑖,𝑡+1 and 𝐶𝑃𝑖,𝑡 are the close price of Stock 𝑖 on the trading
+Day 𝑡 and Day 𝑡 + 1, respectively.
+The stock price volatility during a period of time is used as another
+training target for learning the ‘‘risk’’ subtask. Wild volatility means
+higher risk. We define the standard deviation of 10-day close prices
+from Day 𝑡 − 4 to Day 𝑡 + 5 as the ground truth risk of Stock 𝑖 on Day
+𝑡 + 1:
+√∑
+𝑡+5
+𝑗=𝑡−4 (𝐶𝑃𝑖,𝑗 − 𝐶𝑃𝑖 )
+𝑦𝑅𝑖𝑠𝑘
+=
+,
+(14)
+𝑖,𝑡+1
+10
+
+𝑦̂𝑅𝑒𝑡𝑢𝑟𝑛
+= 𝐷𝑒𝑛𝑠𝑒(𝑅𝑒𝐿𝑈 (𝐷𝑒𝑛𝑠𝑒(𝑅𝑒𝐿𝑈 (𝐷𝑒𝑛𝑠𝑒(𝑋))))),
+𝑡+1
+
+(15)
+𝑦̂𝑅𝑖𝑠𝑘
+= 𝐷𝑒𝑛𝑠𝑒(𝑅𝑒𝐿𝑈 (𝐷𝑒𝑛𝑠𝑒(𝑅𝑒𝐿𝑈 (𝐷𝑒𝑛𝑠𝑒(𝑋))))),
+𝑡+1
+[
+]
+where 𝑦̂𝑅𝑒𝑡𝑢𝑟𝑛
+= 𝑦̂𝑅𝑒𝑡𝑢𝑟𝑛
+, 𝑦̂𝑅𝑒𝑡𝑢𝑟𝑛
+, … , 𝑦̂𝑅𝑒𝑡𝑢𝑟𝑛
+,
+𝑡+1
+1,𝑡+1
+2,𝑡+1
+𝑁,𝑡+1
+[
+]
+𝑅𝑖𝑠𝑘
+𝑅𝑖𝑠𝑘
+𝑅𝑖𝑠𝑘
+𝑅𝑖𝑠𝑘
+𝑅𝑒𝑡𝑢𝑟𝑛
+𝑦̂𝑡+1 = 𝑦̂1,𝑡+1 , 𝑦̂2,𝑡+1 , … , 𝑦̂𝑁,𝑡+1 . 𝑦̂𝑡+1
+∈ R𝑁×1 and 𝑦̂𝑅𝑖𝑠𝑘
+∈ R𝑁×1 are
+𝑡+1
+the predicted return ratio and risk of 𝑁 stocks on the trading Day 𝑡 + 1,
+respectively.
+The multi-task learning objective is optimized using a joint loss
+function, which simultaneously predicts the return ratio and risk of
+stocks. It updates network parameters by combining the loss values
+of both subtasks. We use the mean absolute error (MAE) as the loss
+function for the two subtasks. The final joint loss function of the
+proposed multi-task learning module (𝑅𝑅 ) is denoted as
+
+where 𝑗 ∈ {𝑡 − 4, 𝑡 − 3, … , 𝑡 + 5}. 𝐶𝑃𝑖,𝑗 is the close price of Stock 𝑖 on
+the trading Day 𝑗. 𝐶𝑃𝑖 is the mean value of 𝐶𝑃𝑖,𝑗 during 10 trading
+days from Day 𝑡 − 4 to Day 𝑡 + 5. We heuristically used the close prices
+during 10 trading days (trading days in two weeks) to calculate the risk
+label. Noticeably, the close prices from 𝑡 − 4 to 𝑡 + 5 are only used to
+calculate the risk label on Day 𝑡 + 1. The risk label (𝑦𝑅𝑖𝑠𝑘
+) and return
+𝑖,𝑡+1
+label (𝑦𝑅𝑒𝑡𝑢𝑟𝑛
+)
+are
+our
+training
+targets
+rather
+than
+model
+input. Thus,
+𝑖,𝑡+1
+the proposed method does not involve the issue of label leakage. The
+calculation process for 𝑦𝑅𝑒𝑡𝑢𝑟𝑛
+and 𝑦𝑅𝑖𝑠𝑘
+is shown in Fig. 4.
+𝑖,𝑡+1
+𝑖,𝑡+1
+
+𝑅𝑅 = (1 − 𝛼)𝑅𝑒𝑡𝑢𝑟𝑛 + 𝛼𝑅𝑖𝑠𝑘 ,
+𝑅𝑒𝑡𝑢𝑟𝑛 = 𝑀𝐴𝐸(𝑦̂𝑅𝑒𝑡𝑢𝑟𝑛
+, 𝑦𝑅𝑒𝑡𝑢𝑟𝑛
+),
+𝑡+1
+𝑡+1
+𝑅𝑖𝑠𝑘 = 𝑀𝐴𝐸(𝑦̂𝑅𝑖𝑠𝑘
+, 𝑦𝑅𝑖𝑠𝑘
+),
+𝑡+1
+𝑡+1
+7
+
+(16)
+
+=== PDF PAGE 8 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+Fig. 5. Stock selection with multi-task learning return and risk.
+
+where 𝑦𝑅𝑒𝑡𝑢𝑟𝑛
+and 𝑦𝑅𝑖𝑠𝑘
+are the ground truth return ratio and risk of
+𝑡+1
+𝑡+1
+𝑁 stocks on trading Day 𝑡 + 1. 𝛼 is a hyperparameter for balancing
+the losses of the two subtasks. Various values of 𝛼 are evaluated in
+Section 5.3.
+
+Table 4
+Dataset statistics.
+
+3.3.2. Trading-oriented stock selection based on risk and return
+We aim to obtain a more sound ranking result for stock investment
+by considering both risk and return. The return per unit of risk (ROR) is
+used as a measure for stock ranking. It is the ratio of return to volatility
+(risk), which means how much return is yielded for each unit of risk.
+ROR of Stock 𝑖 on the trading Day 𝑡 + 1 is defined as
+
+Dataset
+
+Start
+
+End
+
+#days
+
+#news
+
+Train
+Val.
+Test
+All
+
+02/01/2018
+26/05/2020
+22/09/2020
+02/01/2018
+
+25/05/2020
+21/09/2020
+02/06/2021
+02/06/2021
+
+581
+83
+166
+830
+
+42 515
+20 095
+71 910
+134 520
+
+Thus, the ranking result takes both the stock risk and return factors
+into account. Finally, the Top-𝐾 ranked stocks out of the 𝑁 stock
+candidates are selected to invest as a portfolio, according to the ranking
+results.
+
+39 quantitative indicators from January 2, 2018 to June 2, 2021 were
+collected from the RESSET platform4 . Moreover, a total of 134,520
+news titles concerning 86 stocks were gathered from Hundsun Electronics,6 spanning from January 2, 2018 to June 2, 2021. Details of
+the stock candidates and the number of news titles of each stock are
+shown in Appendix B. Besides, the relations (edges) among 86 stocks
+(nodes) were gathered from Qichacha5 , including three relation types:
+supply chain, shareholding chain, and industry competitor relations.
+We obtained 336 relations among 86 stocks.
+We split the dataset 70% for training, 10% for validation, and
+20% for testing. The statistics of the employed dataset are shown
+in Table 4. Following previous research [20,60], the ‘‘walk forward
+testing’’ method [60] is conducted for maximally utilizing the available
+data.
+
+4. Experiments
+
+4.2. Baselines
+
+4.1. Datasets
+
+To verify the validity of the proposed HGA-MT method, we compare
+it with the following baselines, namely MAC, FinGAT, LFM, TRAN, and
+TGC.
+
+𝑅𝑂𝑅𝑖,𝑡+1 =
+
+𝑦𝑅𝑒𝑡𝑢𝑟𝑛
+𝑖,𝑡+1
+𝑦𝑅𝑖𝑠𝑘
+𝑖,𝑡+1
+
+.
+
+(17)
+
+We compute the ROR for all stocks and rank the stocks in descending order (𝐷_𝑠𝑜𝑟𝑡(⋅)). The predicted ranking result based on ROR on Day
+𝑡 + 1 is given by
+̂ 𝑅𝑂𝑅 = 𝐷_𝑠𝑜𝑟𝑡([ ̂
+𝑅𝑎𝑛𝑘
+𝑅𝑂𝑅1,𝑡+1 , … , ̂
+𝑅𝑂𝑅𝑖,𝑡+1 , … , ̂
+𝑅𝑂𝑅𝑁,𝑡+1 ]).
+𝑡+1
+
+(18)
+
+As an emerging market and an essential part of the world economy,
+the Chinese stock markets are attractive to explore [2,3]. This work
+focuses on Chinese stock markets and executes the experiments using
+CSI100 index constituent stocks. CSI100 is the typical Index of Chinese
+markets. The stocks comprising the CSI100 Index are considered highly
+representative, characterized by significant market capitalization and
+robust liquidity in the Chinese market. As such, they serve as widely
+applicable and pertinent choices for financial investments. To ensure
+the validity of the experiment and minimize the impact of missing or
+abnormal data on the comparative analysis, we exclude stocks with
+limited trading days and financial news. In total, there are 86 stocks
+(𝑁 = 86) in our stock set.
+The features of each stock in our stock set include 39 quantitative
+indicators and financial news features (shown in Section 3.1.1). The
+
+• MAC [15] is a GCN-based model that effectively aggregates the
+news sentiments of related stocks for stock price movement prediction. The original settings of MAC are adopted. We change the
+learning target of MAC from the stock price movement prediction
+(a classification task) to the stock return ratio prediction (a regression task). Then, we rank stocks by the predicted return ratios of
+MAC.
+
+6
+Hundsun Electronics (https://www.hundsun.com) is a prominent Chinese
+financial technology company that offers comprehensive financial technology
+services.
+
+8
+
+=== PDF PAGE 9 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+• FinGAT [8] is a graph attention network-based model that incorporates a hierarchical correlation of sector and stocks to recommend the Top-𝐾 profitable stocks. It devises a multi-task objective
+that recommends profitable stocks and predicts stock movements.
+The original settings of FinGAT are adopted. The sector relationship information of the stocks in this study is collected from
+RESSET due to the different datasets.
+• LFM [61] is a multi-task learning model that integrates LSTM and
+random forest (RF) to simultaneously predict stock return and
+return movement directions. LFM is a non-graph-based method
+that does not incorporate related stocks’ information. The original
+settings of LFM are adopted. We first obtain the predicted stock
+return ratios, then accordingly rank stocks.
+• TRAN [11] is a graph-based model considering the industry relationships between stocks to rank the return ratios for stock
+recommendations. We adopt the model structure and original settings of TRAN. The sector relationship between stocks is collected
+from RESSET. Our quantitative indicators and news features are
+employed in this model.
+• TGC [9] is a classic model that treats stock prediction as a return
+ratio ranking task for stock recommendations. It captures the
+stock relations by a graph-based model. The quantitative indicators and model are employed from the original paper without
+modification, where the stock relation graph is constructed by our
+stock relation data.
+
+The lists of ground truth and predicted Top-𝐾 stocks are denoted
+̂ 𝑅𝑒𝑡𝑢𝑟𝑛 ), respectively. MRR reflects
+as 𝐿@𝐾(𝑅𝑎𝑛𝑘𝑅𝑒𝑡𝑢𝑟𝑛 ) and 𝐿@𝐾(𝑅𝑎𝑛𝑘
+the ranking order of the correct results among the predicted ranking
+results.
+∑
+1
+1
+𝑀𝑅𝑅 =
+,
+(20)
+𝑅𝑒𝑡𝑢𝑟𝑛
+𝐾
+𝑝𝑜𝑠𝑖𝑡𝑖𝑜𝑛(𝑅𝑎𝑛𝑘
+)
+𝑖
+̂ 𝑅𝑒𝑡𝑢𝑟𝑛
+)
+
+𝑖∈𝐿@𝐾(𝑅𝑎𝑛𝑘
+
+where 𝑝𝑜𝑠𝑖𝑡𝑖𝑜𝑛(𝑅𝑎𝑛𝑘𝑅𝑒𝑡𝑢𝑟𝑛
+) returns the ground truth ranking position of
+𝑖
+Stock 𝑖. In the following evaluation that uses Precision and MRR metrics
+in Section 5, we do not use ROR that takes both risks and returns into
+account for the stock ranking ((see Section 3.3.2)). This is because the
+ground truth ranking results are ordered by return ratios only. Using
+̂ 𝑅𝑒𝑡𝑢𝑟𝑛 along is more in line with the evaluation criteria of the stock
+𝑅𝑎𝑛𝑘
+ranking task setup.
+To evaluate the financial performance of a model, we conduct a
+simulation of stock trading based on the predicted rankings and the
+Top-𝐾 stocks recommended by the model. Following previous studies [9–11,13,15], the metrics including cumulative Investment Return
+Ratio (IRR) [9], Sharpe ratio (SP) [63], Total money (TMoney) [28]
+and Maximum Drawdown (MDD) [64] are adopted in this study for
+financial evaluation in terms of return and risk. A larger value of IRR,
+SP, or TMoney generally indicates better performance in profitability;
+A lower value of MDD indicates lower downside risk and a smoother
+performance trajectory.
+The IRR is adopted as the main metric to evaluate profitability,
+which is calculated by summing over the mean return ratios of the 𝐾
+selected stocks on each testing day.
+
+4.3. Setups
+𝐼𝑅𝑅 =
+
+𝑄
+∑
+
+𝐼𝑅𝑅𝑞 ,
+
+𝑞=1
+
+We adopt Keras and TensorFlow frameworks to perform the proposed model. The batch size is set to 32. The training process is
+limited to a maximum of 500 epochs and equipped with an early-stop
+mechanism. The Adam optimizer [62] is used to optimize the model
+parameters with an initial learning rate of 0.001. To regularize the
+weight matrix of the kernel, we apply activity regularization L2 (0.001).
+The experiments are performed on GPU machines (Tesla V100). In
+particular, we carry out several experiments to explore the optimal
+sliding window length 𝑇 within {1, 3, 5, 7, 9, 11, 13, 15}, the number of
+GCN layers (𝑘) within {1, 2, 3, 4} and the loss weighing factor (𝛼) of risk
+specific-task within {0.001, 0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7}, based on the
+validation sets. A grid search process is adopted to optimize the model
+performance, where all the possible combinations of 3 hyperparameters
+are tested to select the optimal values. Section 5.3 shows more details
+on verifying these hyperparameters. The testing results are reported by
+using the optimal time step (𝑇 = 7), 2 GCN layers, and the loss weighing
+factor 𝛼 = 0.3.
+
+∑
+
+𝐶𝑃𝑖,𝑞 −𝐶𝑃𝑖,𝑞−1
+
+̂ 𝑞)
+𝑖∈𝐿@𝐾(𝑅𝑎𝑛𝑘
+
+𝐼𝑅𝑅𝑞 =
+
+(21)
+
+𝐶𝑃𝑖,𝑞−1
+
+,
+𝐾
+where 𝐼𝑅𝑅𝑞 is the real return ratio on the 𝑞th testing day, 𝑄 is
+̂ 𝑞 ) is the set of Top-𝐾 stocks
+the number of testing days; 𝐿@𝐾(𝑅𝑎𝑛𝑘
+according to the predicted ranking results on the 𝑞th testing day; 𝐶𝑃𝑖,𝑞
+is the close price of Stock 𝑖 on the 𝑞th testing day.
+TMoney [28] is adopted as an essential metric to evaluate profitability intuitively. TMoney is the summation of the funds for each stock in
+the portfolio, which represents the real funds statement of the portfolio.
+The concept of TMoney is inspired by the work of Chou et al. [36]
+and basically uses a similar idea of its funds standardization. The daily
+TMoney in a portfolio can be calculated by
+∑
+𝐶𝑃𝑖,𝑞 × 𝑆ℎ𝑎𝑟𝑒𝑖,𝑞 ,
+(22)
+𝑇 𝑀𝑜𝑛𝑒𝑦𝑞 =
+̂ 𝑞)
+𝑖∈𝐿@𝐾(𝑅𝑎𝑛𝑘
+
+where 𝑆ℎ𝑎𝑟𝑒𝑖,𝑞 is the number of holing shares of Stock 𝑖 on the 𝑞th
+testing day. SP is the measure of risk-adjusted return, which is the
+average return earned in excess of the risk-free rate per unit of volatility
+(risk). A higher SP means a higher return relative to the amount of risk
+taken. SP is one of the most common financial evaluation metrics that
+has been widely used in previous studies [10,13,15].7
+
+4.4. Evaluation metrics
+The proposed model is evaluated in terms of ranking performance
+and financial evaluation. Ranking performance is an intuitive evaluation of the data science model for stock ranking. Financial evaluation
+is a crucial aspect of investments.
+To evaluate the ranking performance, Precision and Mean Reciprocal Rank (MRR) are employed as evaluation metrics, following previous
+studies [8,12,13]. A larger value of Precision or MRR indicates more
+accurate ranking performance. Specifically, Precision reflects the hit
+percentage of the predicted ranking results.
+
+𝑆𝑃 =
+
+𝐸(𝑅𝑝 ) − 𝑅𝑓
+𝑠𝑡𝑑(𝑅𝑝 )
+1 ∑𝑛
+
+= √𝑛
+
+,
+
+𝑞=1 𝑅𝑝,𝑞 − 𝑅𝑓
+
+(23)
+
+∑𝑛
+
+1 ∑𝑛
+2
+𝑞=1 (𝑅𝑝,𝑞 − 𝑛
+𝑞=1 𝑅𝑝,𝑞 )
+
+𝑛
+
+|
+̂ 𝑅𝑒𝑡𝑢𝑟𝑛 ) ∩ 𝐿@𝐾(𝑅𝑎𝑛𝑘𝑅𝑒𝑡𝑢𝑟𝑛 )||
+|𝐿@𝐾(𝑅𝑎𝑛𝑘
+|
+|,
+𝑃 𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 =
+(19)
+𝐾
+where the ranking result of the ground truth return ratios of 𝑁 stocks
+is denoted as 𝑅𝑎𝑛𝑘𝑅𝑒𝑡𝑢𝑟𝑛 , which orders the ground truth return ratios in
+𝑦𝑅𝑒𝑡𝑢𝑟𝑛 in descending; The ranking result of predicted return ratios of
+̂ 𝑅𝑒𝑡𝑢𝑟𝑛 , which orders the predicted return
+all stocks is denoted as 𝑅𝑎𝑛𝑘
+𝑅𝑒𝑡𝑢𝑟𝑛
+ratios in 𝑦̂
+in descending.
+
+7
+Trend Ratio [35] is also a useful metric. Compared with the Sharpe ratio,
+the risk in the trend ratio is the deviation between the portfolio trend and the
+fund standardization, instead of the deviation between the average of fund
+standardization and the fund standardization. The trend ratio takes the trend
+of the portfolio into consideration. This study uses SP instead of Trend Ratio
+because of their alignment with investors’ intuitive comprehension of riskadjusted returns. Besides, SP is widely used in related works and our baseline
+works.
+
+9
+
+=== PDF PAGE 10 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+Table 5
+The ranking performance of different models over Top-𝐾 stocks. 𝐾 ∈ {3, 5, 10}. ‘‘Prec.’’ denotes the Precision.
+Top3
+
+TGC
+TRAN
+LFM
+FinGAT
+MAC
+Ours
+
+Top5
+
+Top10
+
+MRR
+
+Prec.
+
+MRR
+
+Prec.
+
+MRR
+
+Prec.
+
+MRR
+
+0.0695
+0.0675
+0.0577
+0.0634
+0.0670
+0.0859
+
+0.1687
+0.1731
+0.1686
+0.1644
+0.1736
+0.1820
+
+0.0761
+0.0845
+0.0757
+0.0712
+0.0911
+0.1006
+
+0.2066
+0.2199
+0.2117
+0.2275
+0.2206
+0.2252
+
+0.0869
+0.1104
+0.0859
+0.1372
+0.1612
+0.1681
+
+0.2969
+0.3586
+0.2864
+0.3920
+0.4054
+0.4587
+
+0.0775
+0.0875
+0.0731
+0.0906
+0.1064
+0.1182
+
+0.2241
+0.2505
+0.2222
+0.2613
+0.2665
+0.2886
+
+Table 6
+The profitability comparison between different methods over Top-𝐾 stocks. NB: B&H
+strategy buys the CSI 100 Index, which does not involve the trading of Top-𝐾 stocks.
+
+where
+𝑅𝑝,𝑞 =
+
+Avg.
+
+Prec.
+
+𝑇 𝑀𝑜𝑛𝑒𝑦𝑞 − 𝑇 𝑀𝑜𝑛𝑒𝑦𝑞−1
+𝑇 𝑀𝑜𝑛𝑒𝑦𝑞−1
+
+,
+
+(24)
+
+𝑅𝑓 is the annual risk-free rate. In our evaluation, the yearly riskfree rate stands at 2.5%, aligning with established literature [28] and
+comparable to various residual maturities of China Government Bonds,
+spanning from 1 year to 10 years. 𝑅𝑝 is the return rate of the portfolio
+𝑝 over a testing period. 𝑅𝑝,𝑞 denotes the return rate of the 𝑞th day
+within the period. 𝑛 is the number of trading days during the testing
+period. The daily return rates are calculated by the daily TMoney
+(Eq. (24)) that represents the real fund statement of the portfolio. Thus,
+the change in return rates given by TMoney can truly reflect the return
+and risk varieties in a portfolio.
+MDD also serves as an instinctive and widely used financial metric,
+effectively capturing the portfolio’s downside risk. In portfolio analysis, MDD represents the largest percentage decline in value that the
+investment experiences from its peak value to its trough value before
+reaching a new peak. A lower MDD denotes less severe losses during
+an investment period, which is favored by investors.
+)
+(
+𝑇 𝑀𝑜𝑛𝑒𝑦𝑞 − 𝑇 𝑀𝑜𝑛𝑒𝑦𝑙
+,
+(25)
+𝑀𝐷𝐷 = max
+𝑞,𝑙∶𝑞<𝑙
+𝑇 𝑀𝑜𝑛𝑒𝑦𝑞
+where 𝑙 denotes the 𝑙th testing day that is later than 𝑞th testing day
+within the testing period.
+The stock ranking results of our model are based on ROR whose
+score function considers both risk and return factors. The stock ranking
+of baselines is only based on their predicted return ratios because they
+did not consider the risk factor in their original works.
+
+Strategy
+
+Models
+
+IRR
+
+SP
+
+MDD
+
+Top3
+
+TGC
+TRAN
+LFM
+FinGAT
+MAC
+Ours
+
+0.2985
+0.4010
+0.3320
+0.4143
+0.4420
+0.5123
+
+1.0827
+1.5502
+1.3978
+1.9031
+2.0960
+2.4092
+
+0.1862
+0.1278
+0.1053
+0.0920
+0.0898
+0.0792
+
+Top5
+
+TGC
+TRAN
+LFM
+FinGAT
+MAC
+Ours
+
+0.2339
+0.3104
+0.2463
+0.2983
+0.3297
+0.3817
+
+1.0844
+1.3059
+1.2349
+1.6560
+1.8679
+1.9511
+
+0.1655
+0.1545
+0.1199
+0.1004
+0.0867
+0.0806
+
+Top10
+
+TGC
+TRAN
+LFM
+FinGAT
+MAC
+Ours
+
+0.2081
+0.2611
+0.2186
+0.2443
+0.2521
+0.2828
+
+1.0144
+1.2684
+1.1495
+1.4669
+1.5198
+1.7400
+
+0.1427
+0.1200
+0.1191
+0.1081
+0.0877
+0.0664
+
+Avg.
+
+B&H
+TGC
+TRAN
+LFM
+FinGAT
+MAC
+Ours
+
+0.1665
+0.2468
+0.3242
+0.2656
+0.3190
+0.3413
+0.3923
+
+0.9316
+1.0605
+1.3748
+1.2607
+1.6753
+1.8279
+2.0334
+
+0.1579
+0.1648
+0.1341
+0.1148
+0.1002
+0.0881
+0.0754
+
+In particular, our proposed HGA-MT method outperforms MAC (the
+strongest baseline) with 0.0118 (11.09%) and 0.0221 (8.29%) gains
+in Precision and MRR on average, respectively. MAC also aggregates
+the financial news information of related stocks from multiple relationships. However, it yields the same weight for different relationships and
+delivers the results by a single return learning task. The improvements
+in our results demonstrate that the proposed method can better aggregate the effects of related stocks and optimize the model by multi-task
+learning.
+
+5. Results
+5.1. Main results
+5.1.1. Ranking performance of stock selection
+In this section, we compare the ranking performance of the proposed HGA-MT model against the state-of-the-art baselines. The results
+of different models are shown in Table 5. We report the Precision and
+MRR of Top-𝐾 ranking prediction, where the values of 𝐾 are 3, 5, and
+10. The results reveal that our proposed HGA-MT method achieves the
+best ranking performance than all baselines across the Top3, Top5, and
+Top10 predictions in terms of both the Precision and MRR metrics.
+We observe that FLM, which does not capture related stock information, falls behind the other graph-based models. It indicates that
+integrating the effects of related stocks is important for stock ranking.
+Compared with FinGAT and TRAN, which only use the industry relation
+graphs, the improvements of HGA-MT demonstrate that our method can
+better aggregate the effects of related stocks from multiple relationships
+based on the heterogeneous stock relation graphs. Besides, compared
+with TGC and TRAN which generate the results by a single return ranking factor, the proposed method can achieve better performance since
+our multi-task learning paradigm can extract more robust features and
+reduce overfitting by jointly learning two complementary tasks [65–
+67]. The improvements verify the advantage of using the multi-task
+learning paradigm to simultaneously learn stock return and risk.
+
+5.1.2. Profitability analysis of stock selection
+For financial evaluation, we perform trading simulations (backtesting) based on the predicted ranking results of different models.
+Following previous studies [9–11], the daily buy-hold-sell trading strategy is adopted for simulation trading. Specifically, the model is applied
+to obtain a predicted ranking list of 𝑁 stocks on the trading Day 𝑡. Then,
+we buy the Top-𝐾 ranked stocks with the highest predicted ranking
+scores at the closing price on the trading Day 𝑡 and sell it at the closing
+price on Day 𝑡+1. The budget is equally split to trade the Top-𝐾 stocks.
+Here, the 𝐾 is set to 3, 5, and 10. The backtesting is conducted on
+the data of the test set. The initial investment capital is set to 10,000
+RMB. The transaction cost is assumed as zero, which is in line with
+previous works [9,11,43]. Besides, we add an additional benchmark
+for financial evaluation. We buy the CSI 100 Index (the index that
+represents the weighted average price of 100 indexed stocks) on the
+first trading day of the testing period with all of the initial capital and
+hold it until the end of the testing period, which is defined as the Buy
+& Hold (B&H) strategy.
+10
+
+=== PDF PAGE 11 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+Fig. 6. TMoney of different models.
+
+Table 6 presents the profitability evaluation results for IRR, SP and
+MDD of different methods. Fig. 6 visualizes the detailed changes in
+TMoney with different methods during the backtesting period. The
+evaluation results reveal the following findings:
+(1) As shown in Table 6, our proposed HGA-MT method achieves
+the best performance across the Top3, Top5, and Top10 prediction
+tasks in terms of IRR and SP, yielding at least 0.0510 (14.94%) gains
+in IRR and 0.2055 (11.24%) gains in SP on average. HGA-MT also
+presents the lowest MDD (7.54%) on average, which is 14.42% lower
+than the strongest baseline. Moreover, Fig. 6 shows that our model can
+gain significantly higher TMoney across the Top3, Top5, and Top10
+prediction tasks than all baselines during backtesting. These results
+demonstrate that our HGA-MT method can produce higher profits with
+lower risk.
+(2) As shown in Table 6, the proposed method can achieve the
+best performance of SP with 2.0334 on average, which is higher than
+those of MAC (+0.2055), FinGAT (+0.3581), LFM (+0.7727), TRAN
+(+0.6586) and TGC (+0.9729). The higher SP means that HGA-MT can
+achieve a higher return on the investment relative to the same risk
+level. These results demonstrate the superiority of our HGA-MT method
+
+for stock ranking to optimize portfolios by considering return and risk
+simultaneously.
+(3) All models achieve better evaluation results in terms of IRR and
+SP compared to directly buying the stock of the CSI 100 Index (B&H),
+which yields an IRR of 0.1665 and an SP of 0.9316. Such an observation
+indicates that effectively capturing valuable information by promising
+models to assist investment can obtain more profits. Surprisingly, B&H
+has a lower MDD compared to TGC.
+Moreover, we conducted experiments to show the performance of
+different methods under the Top1-ranked stock selection setup. The
+results are shown in Appendix C.
+5.2. Ablation studies
+In this section, several ablation experiments are performed to examine the effectiveness of each technical component of HGA-MT, including the stock relation graphs, numerical quantitative indicator input,
+textual news feature input, the HGA module, the multi-task learning
+paradigm, and the adjusted ranking based on predicted risk values.
+Several variants of the model are conducted as follows:
+11
+
+=== PDF PAGE 12 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+Table 7
+The ranking performance of the ablation analysis over Top-𝐾 stocks. 𝐾 ∈ {3, 5, 10}.
+Top3
+
+w/o Graph
+w/o News
+w/o QI
+w/o HGA
+w/o MT
+Ours
+
+Top5
+
+Top10
+
+Avg.
+
+Prec
+
+MRR
+
+Prec
+
+MRR
+
+Prec
+
+MRR
+
+Prec
+
+MRR
+
+0.0675
+0.0745
+0.0777
+0.0754
+0.0781
+0.0859
+
+0.1728
+0.1741
+0.1703
+0.1759
+0.1754
+0.1820
+
+0.0896
+0.0903
+0.0920
+0.0936
+0.0929
+0.1006
+
+0.2135
+0.2147
+0.2157
+0.2178
+0.2228
+0.2252
+
+0.1166
+0.1287
+0.1478
+0.1552
+0.1577
+0.1681
+
+0.3625
+0.3985
+0.4168
+0.4274
+0.4485
+0.4587
+
+0.0912
+0.0978
+0.1058
+0.1081
+0.1096
+0.1182
+
+0.2496
+0.2624
+0.2676
+0.2737
+0.2822
+0.2886
+
+• w/o stock relation graphs (w/o Graph): The model excludes
+the stock relation graphs and GCN layers, which is used to verify
+the effectiveness of aggregating information from related stocks.
+• w/o news sentiment features (w/o News): The model excludes
+the news sentiment features of each stock. The information aggregated from related stocks only involves their quantitative indicators as well. It is used to verify the effectiveness of utilizing
+financial news features.
+• w/o quantitative indicators (w/o QI): The model excludes the
+quantitative indicators of each stock. The information aggregated
+from related stocks only involves their financial news features as
+well. It is used to verify the effectiveness of utilizing quantitative
+indicators.
+• w/o HGA module (w/o HGA): This model organizes the stock
+relation graph with three relations as a homogeneous graph and
+integrates information from related stocks with equal weights.
+This is used to verify the effectiveness of our HGA module.
+• w/o multi-task learning (w/o MT): This model is optimized
+solely on stock return loss, which is used to examine the effect
+of the multi-task learning paradigm.
+• w/o risk adjustment (w/o Risk): The model is still trained with
+multi-task learning. However, the ranking results are only sorted
+𝑅𝑒𝑡𝑢𝑟𝑛
+based on the predicted stock return ratios ( ̂
+𝑅𝑎𝑛𝑘
+) without
+considering the risk values. It is used to verify the effectiveness
+of taking both stock risk and return into account at the scoring
+stage.
+
+Table 8
+The profitability results of the ablation analysis over Top-𝐾 stocks. 𝐾 ∈ {3, 5, 10}.
+
+For the ranking performance, Table 7 shows the evaluation results
+of the ablation experiments. As seen, the model without graph (w/o
+Graph) obtains the worst performance, which indicates that integrating
+the information of related stocks is critical for target stock ranking due
+to the complicated relationship between stocks. The proposed HGA-MT
+model performs better than the model without financial news sentiment
+features (w/o News) or quantitative indicators (w/o QI). The results
+demonstrate that news sentiment features and quantitative indicators
+are effective features for stock ranking prediction. The model excluding
+news sentiment features (w/o News) performs worse than the model
+excluding quantitative indicators (w/o QI), showing that financial news
+sentiment features have a higher utility.
+Besides, our HGA-MT model outperforms the model without the
+HGA module (w/o HGA), demonstrating that the proposed HGA method
+can capture more useful information than naively integrating information from multiple related stocks without distinguishing the weights of
+different relationship types. Moreover, the results of the model without
+multi-task learning (w/o MT) show that the performance is degraded
+when removing the subtask of risk prediction. This proves that our
+proposed method with a multi-task paradigm can improve return-based
+ranking prediction performance. We do not include the performance of
+the ablation model w/o Risk in Table 7, because our full model in the
+ranking evaluation task does not take the risk factor into account in the
+scoring function (see Section 4.4), which is the same as the w/o Risk
+setup.
+For the financial evaluation, Table 8 shows the evaluation results of
+IRR, SP, and MDD. As seen, the proposed HGA-MT model achieves the
+best performance among all the evaluation metrics. The performance
+is degraded by removing any component. Fig. 7 shows the TMoney of
+
+Strategy
+
+Model
+
+IRR
+
+SP
+
+MDD
+
+Top3
+
+w/o Graph
+w/o News
+w/o QI
+w/o HGA
+w/o MT
+w/o Risk
+Ours
+
+0.4365
+0.4428
+0.4455
+0.4687
+0.4716
+0.5071
+0.5123
+
+1.6565
+1.8482
+1.9956
+2.0126
+2.1384
+2.2669
+2.4092
+
+0.1327
+0.0843
+0.0801
+0.0907
+0.1101
+0.1360
+0.0792
+
+Top5
+
+w/o Graph
+w/o News
+w/o QI
+w/o HGA
+w/o MT
+w/o Risk
+Ours
+
+0.3429
+0.3436
+0.3430
+0.3437
+0.3471
+0.3792
+0.3817
+
+1.5336
+1.6483
+1.7174
+1.8973
+1.8592
+1.8668
+1.9511
+
+0.1601
+0.0816
+0.0876
+0.0720
+0.0822
+0.1141
+0.0806
+
+Top10
+
+w/o Graph
+w/o News
+w/o QI
+w/o HGA
+w/o MT
+w/o Risk
+Ours
+
+0.2529
+0.2600
+0.2667
+0.2742
+0.2720
+0.2824
+0.2828
+
+1.2987
+1.5028
+1.5052
+1.5971
+1.6135
+1.6446
+1.7400
+
+0.1274
+0.0650
+0.0595
+0.0668
+0.0900
+0.1173
+0.0664
+
+Avg.
+
+w/o Graph
+w/o News
+w/o QI
+w/o HGA
+w/o MT
+w/o Risk
+Ours
+
+0.3441
+0.3488
+0.3517
+0.3622
+0.3636
+0.3896
+0.3923
+
+0.3441
+0.3488
+0.3517
+0.3622
+0.3636
+0.3896
+0.3923
+
+0.1401
+0.0770
+0.0757
+0.0765
+0.0941
+0.1225
+0.0754
+
+our proposed HGA-MT model and its submodels across Top3, Top5,
+and Top10 prediction tasks. The solid line represents the results of
+our full model. The results of the ablation models, which remove a
+particular component, are represented by the dashed lines. It can also
+be observed that subtracting a component (i.e., w/o Graph, w/o News,
+w/o QI, w/o HGA, w/o MT and w/o Risk) leads to lower TMoney across
+all tasks. Compared with the ablation model w/o HGA, the proposed
+model can achieve higher and more stable profits, demonstrating the
+effectiveness of integrating information by the HGA module. Moreover,
+the ablation model w/o Risk performs better than the ablation model
+w/o MT, showing the effect of multi-task learning in optimizing model
+parameters, thereby achieving better profitability.
+In particular, the HGA-MT approach, as proposed in this study,
+demonstrates superior performance compared to the ablation model
+w/o Risk. In the model w/o Risk, ranking results are solely based on
+the descending order of stock returns, without taking into account the
+predicted risk values to adjust the ranking outcome. The improvements
+consolidate our argument that financial investment should consider risk
+and return simultaneously, thereby achieving higher and more stable
+profits. Although IRR results are similar by comparing HGA-MT and
+w/o Risk in Table 8, SP has achieved a significant increase (+0.1073,
+i.e., 5.57% in averaged SP). As mentioned in Section 4.4, a higher SP
+means a higher return relative to the amount of risk taken. In other
+words, a higher SP means more stable profits. The MDD metric also
+confirms that the full model can yield portfolios with lower investment
+risk, compare to other ablation models.
+12
+
+=== PDF PAGE 13 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+Fig. 7. TMoney of the proposed HGA-MT model and its ablation models over various selected stocks 𝐾. 𝐾 ∈ {3, 5, 10}.
+
+Fig. 8. TMoney of the proposed HGA-MT model and the ablation model w/o Risk over different number of selected stocks 𝐾. 𝐾 ∈ {3, 5, 10}.
+
+Fig. 8 shows the TMoney of the proposed HGA-MT model and the
+ablation model w/o Risk across Top3, Top5, Top10, and on average.
+The TMoney lines of HGA-MT and that of w/o Risk are very close in
+many cases. However, the TMoney lines of w/o Risk present greater
+volatility, which shows consistent findings from IRR, SP, and MDD
+metrics. In summary, the improved performance of our proposed model
+in terms of IRR, SP, MDD, and TMoney demonstrates that HGA-MT can
+
+achieve higher and more stable profits by considering both risk and
+return for investment-oriented stock ranking.
+5.3. Hyperparameter analysis
+As mentioned in Section 4.3, a grid search process is first adopted
+to explore the optimal values of different hyperparameters, including
+13
+
+=== PDF PAGE 14 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+Fig. 9. Sensitivity analysis to (a) lookback window sizes, (b) the number of GCN layers, and (c) the weights for risk loss. The results are averaged over different portfolios including
+Top3, Top5 and Top10 stocks.
+
+the sliding window length (𝑇 ), the number of GCN layers, and the
+weight parameter (𝛼) that determines the contribution of the loss of
+the risk subtask to the overall loss. All the possible combinations of
+3 hyperparameters are tested to select the optimal values. The results
+show that the optimal values are time step 𝑇 = 7, 2 GCN layers, and the
+loss weighing factor by 𝛼 = 0.3. To clearly visualize the result variation
+of changing each hyperparameter, we show the results that when a
+hyperparameter is varying, the others are fixed by the optimal values.
+The Precision and SP with different windows (𝑇 ), GCN layers, and loss
+weights (𝛼) are shown in Fig. 9.
+Fig. 9(a) shows that our model obtains the best Precision and SP
+by 𝑇 =7, which can capture enough financial temporal information as
+well as avoid including outdated media and market signals. Moreover,
+Fig. 9(b) shows the performance by using varied numbers of GCN layers
+in the proposed model, where the optimal setting is given by 2 GCN
+layers. Besides, we show the performance by varying 𝛼 in Fig. 9(c).
+Specifically, the 𝛼 is first tested within {0.001, 0.01, 0.1, 0.5, 1}, following
+an existing study about multi-task learning [8].
+The preliminary results show that our model can achieve better
+performance, given 𝛼 ranging from 0.1 to 0.5. Then, additional tests
+with finer-grained interval {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7} are tested. Finally, the results by varying 𝛼 ∈ {0.001, 0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7}
+are shown in Fig. 9(c). A lower value of 𝛼 indicates a decreased
+influence of stock risk loss and an increased influence of stock return
+loss towards the overall loss. The results demonstrate the inclination of
+an initial increase followed by a subsequent decline, where the best
+performance is achieved by 𝛼=0.3. The results imply that properly
+fusing the risk prediction task can improve stock ranking performance
+and profitability. Moreover, the performance is slightly worse when
+the 𝛼 is higher than 0.4. This is likely because too much focus on risk
+control undermines profits.
+
+Our method exceeds the baselines at least by 14.94% in IRR 11.24%
+in SP, and 14.42% in MDD, achieving higher and more stable profits.
+In addition, the results of the ablation analysis indicate that jointly
+learning the stock risk and return significantly improves the stock
+ranking performance and financial profits. The designed HGA module
+is more effective for capturing the effects of related stocks than a
+homogeneous graph without weighing different relation types. These
+results demonstrate the effectiveness and applicability of the proposed
+HGA-MT method. In summary, our proposed HGA-MT method achieves
+better outcomes for stock ranking than baselines, resulting in higher
+and more stable profits.
+On the other hand, there are several limitations that can be improved in future work. First, more relations between stocks should
+be explored to improve the robustness of neural networks. We will
+continue to explore the latent interactions between stocks and timeevolving stock relationship information to improve the performance
+further. Enhancing the explainability of neural networks is also a
+promising direction to improve the trustworthiness of trading signal
+predictions in the investment domain [68–70]. Second, we observed
+that many figurative languages exist in financial news, which results in
+a misunderstanding of the semantics [71,72] of the input text. Thus, the
+metaphor understanding should be leveraged in future financial newsand natural language processing-based quantitative investments. Third,
+the risk measure of individual stocks is an intuitive way of ranking
+stocks, whereas it is sub-optimal for measuring the risk of a portfolio.
+We will extend our proposed method with other portfolio risk measures.
+CRediT authorship contribution statement
+Yu Ma: Conceptualization, Methodology, Writing – original draft.
+Rui Mao: Conceptualization, Methodology, Writing – review & editing.
+Qika Lin: Methodology, Software. Peng Wu: Funding acquisition,
+Writing – review & editing. Erik Cambria: Funding acquisition, Project
+administration, Supervision, Writing – review & editing.
+
+6. Conclusion
+
+Declaration of competing interest
+
+In order to select profitable stocks for portfolio optimization, we
+proposed a model to predict the stock ranking results on the next trading day by fusing the effects of related stocks and taking into account
+the stock return and volatility risk simultaneously. We designed a heterogeneous graph attention module that combines GCN and attention to
+capture various effects of related stocks from diverse relationships. The
+attention assigns distinct weights to scrutinize the distinction in effects
+among different relationships. Moreover, our model leverages a multitask learning paradigm that jointly learns and predicts the stock return
+ratios and volatility risk. Thus, we can obtain stock ranking results by
+considering both the risk and return.
+We examined our method on CSI 100 dataset in Chinese stock markets. The results showed that our proposed HGA-MT model significantly
+outperforms the state-of-the-art baselines, yielding at least 11.09% and
+8.29% gains in terms of Precision and MRR on average, respectively.
+Moreover, the backtesting demonstrated the superiority of our method
+in financial evaluation.
+
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to
+influence the work reported in this paper.
+Data availability
+The authors do not have permission to share data.
+Acknowledgments
+This paper was supported by the National Natural Science Foundation of China (project numbers are 72274096, 72174087, 71774084
+and 71874082), the National Social Science Fund of China (project
+number is 17ZDA291), Foreign Cultural and Educational Expert Program of the Ministry of Science and Technology of China (G2022182009L).
+14
+
+=== PDF PAGE 15 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+Fig. A.10. Illustration of the process of stock relation extraction by Qichacha.
+
+Table B.9
+A list of stocks that are used for ranking in this work. Code denotes the stock code. #news denotes the number of news of the stock.
+Code
+
+#news
+
+Code
+
+#news
+
+Code
+
+#news
+
+Code
+
+#news
+
+000001
+000002
+000063
+000166
+000333
+000538
+000568
+000651
+000661
+000725
+000776
+000858
+000876
+000895
+001979
+002024
+002027
+002142
+002304
+002352
+002415
+002475
+
+1718
+924
+3543
+2237
+2124
+624
+798
+2610
+792
+996
+2316
+1462
+1621
+334
+1200
+877
+532
+853
+576
+1608
+1219
+1574
+
+002594
+002714
+002736
+300015
+300059
+300122
+300498
+600000
+600009
+600015
+600018
+600019
+600028
+600030
+600031
+600036
+600048
+600050
+600104
+600276
+600346
+600406
+
+6264
+1564
+2927
+689
+1162
+839
+1026
+1954
+606
+742
+240
+421
+892
+11 049
+869
+3257
+656
+4039
+2022
+1394
+526
+126
+
+600519
+600585
+600588
+600606
+600690
+600809
+600837
+600887
+600900
+600999
+601006
+601012
+601088
+601169
+601186
+601211
+601225
+601229
+601288
+601318
+601328
+601336
+
+4460
+870
+481
+762
+954
+600
+4302
+646
+475
+3592
+178
+2097
+758
+698
+424
+1970
+249
+688
+1913
+4007
+2642
+1437
+
+601360
+601390
+601398
+601601
+601628
+601668
+601688
+601766
+601800
+601818
+601857
+601888
+601899
+601933
+601988
+601989
+601998
+603160
+603288
+603501
+——
+——
+
+562
+648
+3055
+1918
+2206
+184
+4023
+688
+368
+1603
+586
+640
+981
+876
+4159
+134
+2150
+519
+654
+561
+——
+——
+
+Table C.10
+The ranking performance and profitability of different methods over Top1-ranked stocks.
+
+Appendix A
+
+Model
+
+More details regarding stock relations provided by Qichacha are as
+follows:
+
+TGC
+TRAN
+LFM
+FinGAT
+MAC
+Ours
+
+• Data sources: (1) the official website of listed companies, (2)
+the official website of the state regulator, such as the National
+Enterprise Credit Information Publicity System,8 China Tendering & Bidding Public Service Platform,9 Ministry of Industry and
+Information Technology10 and Cninfo.11
+• Technology: (1) web crawler for raw information collection,
+(2) natural language processing technology for key information
+extraction.
+• Data form: text data for key information extraction.
+• Data content: the public information, including listed companies’
+announcements, annual reports, bidding information, qualification certificates, prospectus, listing announcement, etc.
+
+Ranking performance
+
+Profitability performance
+
+Precision
+
+MRR
+
+IRR
+
+SP
+
+MDD
+
+0.0122
+0.0184
+0.0123
+0.0366
+0.0429
+0.0491
+
+0.0122
+0.0184
+0.0123
+0.0366
+0.0429
+0.0491
+
+0.2832
+0.3730
+0.2718
+0.3909
+0.4195
+0.4869
+
+1.0115
+1.5065
+1.3912
+1.8825
+1.9227
+2.3633
+
+0.1997
+0.1732
+0.1323
+0.0939
+0.0934
+0.0875
+
+relation information among stocks, including supply chain, shareholding chain, and industry competitors. Finally, the related stocks in three
+relation types of each stock are provided by Qichacha.
+Appendix B
+The pool of stocks for ranking can be seen in Table B.9.
+
+The process of stock relation extraction by Qichacha is illustrated
+in Fig. A.10. Qichacha primarily collects textual data from the official
+websites of listed companies and the state regulator through web
+crawlers, including various sources such as announcements, annual
+reports, bidding information, qualification certificates, prospectuses,
+listing announcements, etc. Then, key information is extracted and analyzed using natural language processing technology. Qichacha obtains
+
+Appendix C
+As seen in Table C.10 and Fig. C.11, our proposed HGA-MT method
+achieves the best performance on the Top1 prediction task in terms of
+ranking prediction and profitability, which demonstrates the effectiveness of (1) simultaneously acquiring knowledge regarding the stock risk
+and return and (2) fusing the effects of multiple related stocks.
+On the other hand, the evaluation outcomes of Table C.10, in conjunction with the findings presented in Tables 5 and 6 for Top3/5/10,
+illustrate a pattern that Top3 outperforms Top5 and Top10, and Top1
+ranks lower than Top3. The observed performance trend, such as Top3
+
+8
+
+https://shiming.gsxt.gov.cn/index.html
+http://www.cebpubservice.com/
+10
+https://www.miit.gov.cn/
+11
+http://www.cninfo.com.cn/new/index
+9
+
+15
+
+=== PDF PAGE 16 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+Fig. C.11. TMoney of different methods over Top1-ranked stocks.
+
+surpassing Top5 and Top10, can be attributed to the potential for
+heightened portfolio profitability when selecting a very limited number
+of stocks with superior rates of return, assuming a highly accurate
+model. At the extreme end of this spectrum is the notion of investing
+solely in the most profitable stock (Top1) every day, which would be
+the case if a ranking model is 100% accurate. However, acknowledging the impracticality of such a hypothetical scenario, we note the
+performance disparity where Top1 ranks lower than Top3.
+This discrepancy underscores the significance of a risk diversification strategy, exemplified by investing in multiple stocks, e.g., Top3.
+This approach, driven by portfolio optimization, enables the model
+to achieve superior profitability compared to a strategy exclusively
+focused on the Top1-ranked stocks. In practice, given the inherent
+uncertainty surrounding the accuracy of predictions over a specified
+period, the risk-diversified approach of investing in multiple stocks offers investors a means to attain expected returns with reduced exposure
+to risks.
+
+[12] S. Feng, C. Xu, Y. Zuo, G. Chen, F. Lin, J. XiaHou, Relation-aware dynamic
+attributed graph attention network for stocks recommendation, Pattern Recognit.
+121 (2022) 108119, http://dx.doi.org/10.1016/j.patcog.2021.108119.
+[13] H. Wang, T. Wang, S. Li, S. Guan, J. Zheng, W. Chen, Heterogeneous interactive
+snapshot network for review-enhanced stock profiling and recommendation,
+in: Proceedings of the Thirty-First International Joint Conference on Artificial
+Intelligence, IJCAI-22, International Joint Conferences on Artificial Intelligence
+Organization, 2022, pp. 3962–3969, http://dx.doi.org/10.24963/ijcai.2022/550,
+Main Track.
+[14] B. Li, Q. Wang, Y. Yu, M.-Z. Sun, L.-X. Chen, Z.-L. Xiang, F. Zhao, Q.-C. Lv, Z.-Y.
+An, A novel risk-control model for the online portfolio selection of high-frequency
+transactions, Knowl.-Based Syst. 240 (2022) 108176, http://dx.doi.org/10.1016/
+j.knosys.2022.108176.
+[15] Y. Ma, R. Mao, Q. Lin, P. Wu, E. Cambria, Multi-source aggregated classification
+for stock price movement prediction, Inf. Fusion 91 (2023) 515–528, http:
+//dx.doi.org/10.1016/j.inffus.2022.10.025.
+[16] Q. Li, Y. Chen, L.L. Jiang, P. Li, H. Chen, A tensor-based information framework
+for predicting the stock market, ACM Trans. Inf. Syst. 34 (2) (2016) http:
+//dx.doi.org/10.1145/2838731.
+[17] O. Bustos, A. Pomares-Quimbaya, Stock market movement forecast: A systematic
+review, Expert Syst. Appl. 156 (2020) 113464, http://dx.doi.org/10.1016/j.eswa.
+2020.113464.
+[18] I.K. Nti, A.F. Adekoya, B.A. Weyori, A systematic review of fundamental and
+technical analysis of stock market predictions, Artif. Intell. Rev. 53 (4) (2020)
+3007–3057, http://dx.doi.org/10.1007/s10462-019-09754-z.
+[19] L. Malandri, F.Z. Xing, C. Orsenigo, C. Vercellis, E. Cambria, Public mood–driven
+asset allocation: The importance of financial sentiment in portfolio management,
+Cogn. Comput. 10 (2018) 1167–1176, http://dx.doi.org/10.1007/s12559-0189609-2.
+[20] X. Li, P. Wu, W. Wang, Incorporating stock prices and news sentiments for stock
+market prediction: A case of Hong Kong, Inf. Process Manag. 57 (5) (2020)
+102212, http://dx.doi.org/10.1016/j.ipm.2020.102212.
+[21] W.-C. Lin, C.-F. Tsai, H. Chen, Factors affecting text mining based stock
+prediction: Text feature representations, machine learning models, and news
+platforms, Appl. Soft Comput. 130 (2022) 109673, http://dx.doi.org/10.1016/
+j.asoc.2022.109673.
+[22] E. Cambria, Q. Liu, S. Decherchi, F. Xing, K. Kwok, SenticNet 7: A commonsensebased neurosymbolic AI framework for explainable sentiment analysis, in:
+Proceedings of the Thirteenth Language Resources and Evaluation Conference,
+2022, pp. 3829–3839.
+[23] K. Du, F. Xing, R. Mao, E. Cambria, FinSenticNet: A concept-level lexicon for
+financial sentiment analysis, in: 2023 IEEE Symposium Series on Computational
+Intelligence, SSCI, 2023, pp. 109–114.
+[24] T. Yu, M. Sengul, R.H. Lester, Misery Loves company: The spread of negative
+impacts resulting from an organizational crisis, Acad. Manag. Rev. 33 (2) (2008)
+452–472, http://dx.doi.org/10.5465/amr.2008.31193499.
+[25] S. Pandit, C.E. Wasley, T. Zach, Information externalities along the supply chain:
+The economic determinants of suppliers’ stock price reaction to their customers’
+earnings announcements, Contemp. Account. Res. 28 (4) (2011) 1304–1343,
+http://dx.doi.org/10.1111/j.1911-3846.2011.01092.x.
+[26] Y. Chen, Z. Wei, X. Huang, Incorporating corporation relationship via graph
+convolutional neural networks for stock price prediction, in: Proceedings of the
+27th ACM International Conference on Information and Knowledge Management,
+CIKM ’18, Association for Computing Machinery, 2018, pp. 1655–1658, http:
+//dx.doi.org/10.1145/3269206.3269269.
+[27] S. He, H. Rui, A.B. Whinston, Social media strategies in product-harm crises, Inf.
+Syst. Res. 29 (2) (2018) 362–380, http://dx.doi.org/10.1287/isre.2017.0707.
+
+References
+[1] W. Jiang, Applications of deep learning in stock market prediction: Recent
+progress, Expert Syst. Appl. 184 (2021) 115537, http://dx.doi.org/10.1016/j.
+eswa.2021.115537.
+[2] M.M. Kumbure, C. Lohrmann, P. Luukka, J. Porras, Machine learning techniques
+and data for stock market forecasting: A literature review, Expert Syst. Appl.
+197 (2022) 116659, http://dx.doi.org/10.1016/j.eswa.2022.116659.
+[3] T. Kehinde, F.T. Chan, S. Chung, Scientometric review and analysis of recent
+approaches to stock market forecasting: Two decades survey, Expert Syst. Appl.
+213 (2023) 119299, http://dx.doi.org/10.1016/j.eswa.2022.119299.
+[4] H. Markowitz, Portfolio selection, J. Finance 7 (1) (1952) 77–91, http://dx.doi.
+org/10.2307/2975974.
+[5] X. Ma, T. Zhao, Q. Guo, X. Li, C. Zhang, Fuzzy hypergraph network for
+recommending top-K profitable stocks, Inform. Sci. 613 (2022) 239–255, http:
+//dx.doi.org/10.1016/j.ins.2022.09.010.
+[6] A. Thakkar, K. Chaudhari, Fusion in stock market prediction: A decade survey on
+the necessity, recent developments, and potential future directions, Inf. Fusion
+65 (2021) 95–107, http://dx.doi.org/10.1016/j.inffus.2020.08.019.
+[7] K. Adam, A. Marcet, J.P. Nicolini, Stock market volatility and learning, J. Finance
+71 (1) (2016) 33–82, http://dx.doi.org/10.1111/jofi.12364.
+[8] Y.-L. Hsu, Y.-C. Tsai, C.-T. Li, FinGAT: Financial graph attention networks for
+recommending top-𝐾 profitable stocks, IEEE Trans. Knowl. Data Eng. 35 (1)
+(2023) 469–481, http://dx.doi.org/10.1109/TKDE.2021.3079496.
+[9] F. Feng, X. He, X. Wang, C. Luo, Y. Liu, T.-S. Chua, Temporal relational
+ranking for stock prediction, ACM Trans. Inf. Syst. 37 (2) (2019) 30, http:
+//dx.doi.org/10.1145/3309547.
+[10] R. Sawhney, S. Agarwal, A. Wadhwa, T. Derr, R.R. Shah, Stock selection via
+spatiotemporal hypergraph attention network: A learning to rank approach, in:
+Proceedings of the AAAI Conference on Artificial Intelligence, vol. 35, 2021, pp.
+497–504.
+[11] J. Gao, X. Ying, C. Xu, J. Wang, S. Zhang, Z. Li, Graph-based stock recommendation by time-aware relational attention network, ACM Trans. Knowl. Discov.
+Data 16 (1) (2021) 21, http://dx.doi.org/10.1145/3451397.
+16
+
+=== PDF PAGE 17 ===
+Information Fusion 104 (2024) 102165
+
+Y. Ma et al.
+
+[51] J. Lei, N. Dawar, J. Lemmink, Negative spillover in brand portfolios: Exploring
+the antecedents of asymmetric effects, J. Market. 72 (3) (2008) 111–123,
+http: //dx.doi.org/10.1509/JMKG.72.3.111.
+[52] J. Long, Z. Chen, W. He, T. Wu, J. Ren, An integrated framework of deep
+learning and knowledge graph for prediction of stock price trend: An application
+in Chinese stock exchange market, Appl. Soft Comput. 91 (2020) 106205,
+http://dx.doi.org/10.1016/j.asoc.2020.106205.
+[53] X. Hou, K. Wang, C. Zhong, Z. Wei, ST-Trader: A spatial-temporal deep neural
+network for modeling stock market movement, IEEE/CAA J. Autom. Sin. 8 (5)
+(2021) 1015–1024, http://dx.doi.org/10.1109/JAS.2021.1003976.
+[54] J. Wu, K. Xu, X. Chen, S. Li, J. Zhao, Price graphs: Utilizing the structural
+information of financial time series for stock prediction, Inform. Sci. 588 (2022)
+405–424, http://dx.doi.org/10.1016/j.ins.2021.12.089.
+[55] Y.-M. Li, L.-F. Lin, C.-Y. Hsieh, B.-S. Huang, A social investing approach for
+portfolio recommendation, Inf. Manag. 58 (8) (2021) 103536, http://dx.doi.org/
+10.1016/j.im.2021.103536.
+[56] Z. Zhao, H. Chen, J. Zhang, X. Zhao, T. Liu, W. Lu, X. Chen, H. Deng, Q.
+Ju, X. Du, UER: An open-source toolkit for pre-training models, 2019,
+http: //dx.doi.org/10.48550/ARXIV.1909.05658.
+[57] Q. Lin, Y. Zhu, H. Lu, K. Shi, Z. Niu, Improving university faculty evaluations via
+multi-view knowledge graph, Future Gener. Comput. Syst. 117 (2021) 181–192,
+http://dx.doi.org/10.1016/j.future.2020.11.021.
+[58] Q. Lin, J. Liu, L. Zhang, Y. Pan, X. Hu, F. Xu, H. Zeng, Contrastive graph
+representations for logical formulas embedding, IEEE Trans. Knowl. Data Eng.
+(2021) 1, http://dx.doi.org/10.1109/TKDE.2021.3139333.
+[59] W. Li, L. Zhu, R. Mao, E. Cambria, SKIER: A symbolic knowledge integrated
+model for conversational emotion recognition, in: Proceedings of the AAAI
+Conference on Artificial Intelligence, vol. 37, (no. 11) 2023, pp. 13121–13129,
+http://dx.doi.org/10.1609/aaai.v37i11.26541.
+[60] A. Picasso, S. Merello, L. Oneto, Y. Ma, L. Malandri, E. Cambria, Ensemble
+of technical analysis and machine learning for market trend prediction, in:
+2018 IEEE Symposium Series on Computational Intelligence, SSCI, 2018, pp.
+2090–2096, http://dx.doi.org/10.1109/SSCI.2018.8628795.
+[61] H.J. Park, Y. Kim, H.Y. Kim, Stock market forecasting using a multi-task approach
+integrating long short-term memory and the random forest framework, Appl. Soft
+Comput. 114 (2022) 108106, http://dx.doi.org/10.1016/j.asoc.2021.108106.
+[62] D. Kingma, J. Ba, Adam: A method for stochastic optimization, in: International
+Conference on Learning Representations, ICLR, 2015, pp. 1–15.
+[63] S.A. Sharpe, Financial market imperfections, firm leverage, and the cyclicality of
+employment, Am. Econ. Rev. 84 (4) (1994) 1060–1074.
+[64] M. Magdon-Ismail, A.F. Atiya, Maximum drawdown, Risk Mag. 17 (10) (2004)
+99–102.
+[65] R. Mao, X. Li, Bridging towers of multi-task learning with a gating mechanism
+for aspect-based sentiment analysis and sequential metaphor identification, in:
+Proceedings of the AAAI Conference on Artificial Intelligence, vol. 35, (no. 15)
+2021, pp. 13534–13542, http://dx.doi.org/10.1609/aaai.v35i15.17596.
+[66] M. Ge, R. Mao, E. Cambria, Explainable metaphor identification inspired by
+conceptual metaphor theory, in: Proceedings of the AAAI Conference on Artificial
+Intelligence, vol. 36, (no. 10) 2022, pp. 10681–10689, http://dx.doi.org/10.
+1609/aaai.v36i10.21313.
+[67] R. Liu, G. Chen, R. Mao, E. Cambria, A multi-task learning model for goldtwo-mention co-reference resolution, in: 2023 International Joint Conference on
+Neural Networks, IJCNN, Queensland, Australia, 2023, pp. 1–9.
+[68] W.J. Yeo, W. van der Heever, R. Mao, E. Cambria, R. Satapathy, G. Mengaldo,
+A comprehensive review on financial explainable AI, 2023, arXiv preprint arXiv:
+2309.11960.
+[69] H. Turbé, M. Bjelogrlic, C. Lovis, G. Mengaldo, Evaluation of post-hoc interpretability methods in time-series classification, Nat. Mach. Intell. 5 (3) (2023)
+250–260.
+[70] E. Cambria, R. Mao, M. Chen, Z. Wang, S.-B. Ho, Seven pillars for the future of
+artificial intelligence, IEEE Intell. Syst. 38 (6), pp. 62-69 (2023).
+[71] R. Mao, C. Lin, F. Guerin, Word embedding and WordNet based metaphor
+identification and interpretation, in: Proceedings of the 56th Annual Meeting
+of the Association for Computational Linguistics (Volume 1: Long Papers), 2018,
+pp. 1222–1231, http://dx.doi.org/10.18653/v1/P18-1113.
+[72] R. Mao, X. Li, K. He, M. Ge, E. Cambria, MetaPro online: A computational
+metaphor processing online system, in: Proceedings of the 61st Annual Meeting
+of the Association for Computational Linguistics (System Demonstrations), Vol.
+3, Association for Computational Linguistics, 2023, pp. 127–135.
+
+[28] W. Chen, M. Jiang, W.-G. Zhang, Z. Chen, A novel graph convolutional feature
+based convolutional neural network for stock trend prediction, Inform. Sci. 556
+(2021) 67–94, http://dx.doi.org/10.1016/j.ins.2020.12.068.
+[29] J. Tan, Q. Li, J. Wang, J. Chen, FinHGNN: A conditional heterogeneous graph
+learning to address relational attributes for stock predictions, Inform. Sci. 618
+(2022) 317–335, http://dx.doi.org/10.1016/j.ins.2022.11.013.
+[30] S. He, H. Rui, A.B. Whinston, Social media strategies in product-harm crises, Inf.
+Syst. Res. 29 (2) (2018) 362–380, http://dx.doi.org/10.1287/isre.2017.0707.
+[31] P. Zou, G. Li, How emerging market investors’ value competitors’ customer
+equity: Brand crisis spillover in China, J. Bus. Res. 69 (9) (2016) 3765–3771,
+http://dx.doi.org/10.1016/j.jbusres.2015.12.068.
+[32] B. Sun, H. Li, P. An, Z. Wang, Dynamic energy stock selection based on
+shareholders’ coholding network, Physica A 542 (2020) 122243, http://dx.doi.
+org/10.1016/j.physa.2019.122243.
+[33] A. Graves, J. Schmidhuber, Framewise phoneme classification with bidirectional
+LSTM and other neural network architectures, Neural Netw. 18 (5–6) (2005)
+602–610, http://dx.doi.org/10.1016/j.neunet.2005.06.042.
+[34] T.N. Kipf, M. Welling, Semi-supervised classification with graph convolutional
+networks, in: 5th International Conference on Learning Representations, ICLR
+2017, Toulon, France, 2017, pp. 24–26, http://dx.doi.org/10.48550/ARXIV.
+1609.02907.
+[35] Y.-H. Chou, S.-Y. Kuo, Y.-C. Jiang, A novel portfolio optimization model based
+on trend ratio and evolutionary computation, IEEE Trans. Emerg. Top. Comput.
+Intell. 3 (4) (2019) 337–350, http://dx.doi.org/10.1109/TETCI.2018.2868939.
+[36] Y.-H. Chou, S.-Y. Kuo, Y.-T. Lo, Portfolio optimization based on funds standardization and genetic algorithm, IEEE Access 5 (2017) 21885–21900, http:
+//dx.doi.org/10.1109/ACCESS.2017.2756842.
+[37] Y.-H. Chou, Y.-C. Jiang, Y.-R. Hsu, S.-Y. Kuo, S.-Y. Kuo, A weighted portfolio
+optimization model based on the trend ratio, emotion index, and ANGQTS, IEEE
+Trans. Emerg. Top. Comput. Intell. 6 (4) (2022) 867–882, http://dx.doi.org/10.
+1109/TETCI.2021.3118041.
+[38] W. Chen, H. Zhang, M.K. Mehlawat, L. Jia, Mean–variance portfolio optimization
+using machine learning-based stock price prediction, Appl. Soft Comput. 100
+(2021) 106943, http://dx.doi.org/10.1016/j.asoc.2020.106943.
+[39] F. Yang, Z. Chen, J. Li, L. Tang, A novel hybrid stock selection method with
+stock prediction, Appl. Soft Comput. 80 (2019) 820–831, http://dx.doi.org/10.
+1016/j.asoc.2019.03.028.
+[40] Q. Song, A. Liu, S.Y. Yang, Stock portfolio selection using learning-to-rank
+algorithms with news sentiment, Neurocomputing 264 (2017) 20–28, http://dx.
+doi.org/10.1016/j.neucom.2017.02.097, Machine learning in finance.
+[41] T. Ma, Y. Tan, Stock ranking with multi-task learning, Expert Syst. Appl. 199
+(2022) 116886, http://dx.doi.org/10.1016/j.eswa.2022.116886.
+[42] H. Liu, T. Zhao, S. Wang, X. Li, A stock rank prediction method combining
+industry attributes and price data of stocks, Inf. Process. Manage. 60 (4) (2023)
+103358, http://dx.doi.org/10.1016/j.ipm.2023.103358.
+[43] A. Picasso, S. Merello, Y. Ma, L. Oneto, E. Cambria, Technical analysis and
+sentiment embeddings for market trend prediction, Expert Syst. Appl. 135 (2019)
+60–70, http://dx.doi.org/10.1016/j.eswa.2019.06.014.
+[44] K.-Y. Shen, G.-H. Tzeng, Combined soft computing model for value stock
+selection based on fundamental analysis, Appl. Soft Comput. 37 (2015) 142–155,
+http://dx.doi.org/10.1016/j.asoc.2015.07.030.
+[45] Y. Jeon, T.H. McCurdy, X. Zhao, News as sources of jumps in stock returns:
+Evidence from 21 million news articles for 9000 companies, J. Financ. Econ.
+145 (2) (2022) 1–17, http://dx.doi.org/10.1016/j.jfineco.2021.08.002.
+[46] Q. Li, J. Tan, J. Wang, H. Chen, A multimodal event-driven LSTM model for
+stock prediction using online news, IEEE Trans. Knowl. Data Eng. 33 (10) (2021)
+3323–3337, http://dx.doi.org/10.1109/TKDE.2020.2968894.
+[47] R. Mao, K. Du, Y. Ma, L. Zhu, E. Cambria, Discovering the cognition behind
+language: Financial metaphor analysis with MetaPro, in: 2023 IEEE International
+Conference on Data Mining, ICDM, IEEE, 2023.
+[48] Y. Shi, K.Y. Ho, News sentiment and states of stock return volatility: Evidence
+from long memory and discrete choice models, Finance Res. Lett. 38 (2021)
+101446, http://dx.doi.org/10.1016/j.frl.2020.101446.
+[49] N. Strauß, R. Vliegenthart, P. Verhoeven, Lagging behind? Emotions in newspaper articles and stock market prices in the netherlands, Public Relat. Rev. 42 (4)
+(2016) 548–555, http://dx.doi.org/10.1016/j.pubrev.2016.03.010.
+[50] X. Chen, X. Ma, H. Wang, X. Li, C. Zhang, A hierarchical attention network for
+stock prediction based on attentive multi-view news learning, Neurocomputing
+504 (2022) 1–15, http://dx.doi.org/10.1016/j.neucom.2022.06.106.
+
+17
+
+=== END SOURCE TEXT ===

@@ -1,0 +1,563 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "hga-mt",
+  "title": "Quantitative stock portfolio optimization by multi-task learning risk and return",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/hga-mt/sources/paper.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/hga-mt/sources/paper.pdf",
+    "sha256": "e3e70a98ab7f4b901d53c9cc29a94a866e9b175ff2ab4c3bc94dada95285219f",
+    "bytes": 3563283,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 17,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 104
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 105,
+      "line_end": 221
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 222,
+      "line_end": 357
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 358,
+      "line_end": 530
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 531,
+      "line_end": 735
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 736,
+      "line_end": 869
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 870,
+      "line_end": 1000
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 1001,
+      "line_end": 1140
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1141,
+      "line_end": 1335
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1336,
+      "line_end": 1652
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1653,
+      "line_end": 1698
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1699,
+      "line_end": 2025
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 2026,
+      "line_end": 2049
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 2050,
+      "line_end": 2146
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 2147,
+      "line_end": 2465
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 2466,
+      "line_end": 2577
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 2578,
+      "line_end": 2720
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 99
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 100,
+      "line_end": 172
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 173,
+      "line_end": 268
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 269,
+      "line_end": 335
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 336,
+      "line_end": 439
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 440,
+      "line_end": 508
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 509,
+      "line_end": 584
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 585,
+      "line_end": 654
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 655,
+      "line_end": 760
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 761,
+      "line_end": 851
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 852,
+      "line_end": 883
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 884,
+      "line_end": 969
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 970,
+      "line_end": 993
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 994,
+      "line_end": 1068
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1069,
+      "line_end": 1148
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1149,
+      "line_end": 1224
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1225,
+      "line_end": 1303
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 48,
+      "text": "ABSTRACT"
+    },
+    {
+      "line": 63,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 185,
+      "text": "2. Related work"
+    },
+    {
+      "line": 186,
+      "text": "2.1. Ranking-based stock portfolio optimization"
+    },
+    {
+      "line": 243,
+      "text": "2.2. Multi-source information for stock price prediction"
+    },
+    {
+      "line": 295,
+      "text": "3. Methodology"
+    },
+    {
+      "line": 342,
+      "text": "3.1. Stock feature extraction"
+    },
+    {
+      "line": 343,
+      "text": "3.1.1. Quantitative indicator and news feature extraction"
+    },
+    {
+      "line": 516,
+      "text": "3.1.2. Temporal feature extraction"
+    },
+    {
+      "line": 633,
+      "text": "200. Since there are 𝑁 input stocks at a training step, the overall input"
+    },
+    {
+      "line": 641,
+      "text": "3.2. Information fusion of related stocks"
+    },
+    {
+      "line": 646,
+      "text": "3.2.1. Stock relation graph construction"
+    },
+    {
+      "line": 793,
+      "text": "3.2.2. HGA-based information fusion of related stocks"
+    },
+    {
+      "line": 845,
+      "text": "3.3. Multi-task learning risk and return for stock ranking"
+    },
+    {
+      "line": 846,
+      "text": "3.3.1. Multi-task learning risk and return"
+    },
+    {
+      "line": 1020,
+      "text": "3.3.2. Trading-oriented stock selection based on risk and return"
+    },
+    {
+      "line": 1081,
+      "text": "4. Experiments"
+    },
+    {
+      "line": 1083,
+      "text": "4.2. Baselines"
+    },
+    {
+      "line": 1085,
+      "text": "4.1. Datasets"
+    },
+    {
+      "line": 1210,
+      "text": "4.3. Setups"
+    },
+    {
+      "line": 1276,
+      "text": "4.4. Evaluation metrics"
+    },
+    {
+      "line": 1614,
+      "text": "5. Results"
+    },
+    {
+      "line": 1615,
+      "text": "5.1. Main results"
+    },
+    {
+      "line": 1616,
+      "text": "5.1.1. Ranking performance of stock selection"
+    },
+    {
+      "line": 1620,
+      "text": "10. The results reveal that our proposed HGA-MT method achieves the"
+    },
+    {
+      "line": 1635,
+      "text": "5.1.2. Profitability analysis of stock selection"
+    },
+    {
+      "line": 1692,
+      "text": "5.2. Ablation studies"
+    },
+    {
+      "line": 2045,
+      "text": "5.3. Hyperparameter analysis"
+    },
+    {
+      "line": 2119,
+      "text": "6. Conclusion"
+    },
+    {
+      "line": 2544,
+      "text": "References"
+    },
+    {
+      "line": 2614,
+      "text": "2018 IEEE Symposium Series on Computational Intelligence, SSCI, 2018, pp."
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2721
+    }
+  ],
+  "line_count": 2721,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "78ac4df054ca3c187717615c2a217f75afa7ca8e35328d4eda40f879eed558dd",
+      "bytes": 101534
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "b8eba24f9e9fa2318e76b55da29cb88ab83f66448b7783168a755353eefc6445",
+      "bytes": 155262
+    }
+  }
+}

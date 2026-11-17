@@ -1,0 +1,9 @@
+Quantitative stock portfolio optimization by multi-task learning risk and return
+
+Condensed abstract
+
+Jointly predicts stock returns and volatility using a heterogeneous graph attention
+network that combines multiple relationships among stocks. Attention weights distinguish
+different spillover channels, and risk-return forecasts determine stock rankings for
+portfolio selection. Experiments report stronger ranking and trading performance than
+methods focused on return prediction alone.
