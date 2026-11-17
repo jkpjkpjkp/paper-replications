@@ -1,0 +1,21 @@
+{
+  "retrieved_date": "2026-11-06",
+  "publisher_page": "https://ijcai.org/proceedings/2026/580",
+  "publisher_pdf": "https://ijcai.org/proceedings/2026/0580.pdf",
+  "doi": "10.24963/ijcai.2026/580",
+  "search_receipts": [
+    "search-code.json",
+    "search-artifacts.json",
+    "search-author.json",
+    "search-github.json",
+    "search-title.json",
+    "search-huggingface.json"
+  ],
+  "finding": "No official author code or factor-data download located in these searches or linked in the inspected publisher full text",
+  "scope_limit": "Bounded title/author/site searches, not proof that no release exists",
+  "download_sha256": {
+    "paper.pdf": "b0dea83e4f84da8ebf6ebc4062f17569ef4b67c6ae154b88d82340c75619db73",
+    "paper.txt": "7aa09adfc965c63ee8b61c5c79aadd8b493515c29134d9f3450d3e28bcc6be62",
+    "publisher-page.txt": "a0f2fb9316478d9ddce71eabdf5f57f51dce3cecc36fd017b1ed30cabffa1e9c"
+  }
+}

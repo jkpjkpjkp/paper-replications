@@ -1,0 +1,10 @@
+[project]
+name = "transalpha-reproduction"
+version = "0.1.0"
+description = "Independent TransAlpha implementation and explicitly daily-frequency CSI experiment"
+requires-python = ">=3.11"
+dependencies = ["torch==2.4.1", "numpy==1.26.4", "pandas==2.2.3", "scipy==1.15.3", "pyqlib==0.9.7", "matplotlib==3.10.7"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

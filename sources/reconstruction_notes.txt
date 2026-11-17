@@ -1,0 +1,144 @@
+Reconstruction decisions and evidence boundaries (2026-11-06)
+============================================================
+
+Source identification
+---------------------
+The exact paper is the nine-page IJCAI 2026 publication by Xiao Yang of
+Carleton University. The publisher page and PDF were read; pages 3-5 were
+rendered to inspect equations, Algorithm 1, and experimental settings.
+paper.pdf is the downloaded source. paper.txt is a layout-preserving
+extraction. publisher-page.txt is the publisher's accessible full text.
+Search receipts preserve the search queries and returned URLs.
+
+Directly specified by Sections 3.1-3.4
+-------------------------------------
+N synchronized stocks, L=16, D=400 proprietary factors at 15-minute frequency;
+hidden dimension d=64. CSD subtracts the cross-sectional stock mean for
+each factor and time, uses factor-wise alpha/beta scales and threshold
+tau=1e-3, and leaves small alpha residuals unscaled. The projection is
+Linear -> LayerNorm -> ReLU -> Dropout. Scalar temporal scores are
+softmax-normalized over time, multiplied into all hidden states. SP
+concatenates the gated last state and temporal elementwise maximum.
+The output is a two-layer MLP. No positional encoding or self-attention
+block is added. The prose includes dropout; Algorithm 1 omits it. We use
+the prose equation. Factor scales start at one (initialization unspecified).
+
+Loss: 0.4 rank + 0.05 Huber + 0.4 correlation + 0.1 product + 0.05 L2.
+Top/bottom target quantiles are 20%; margin 0.1; Huber delta 1.0;
+L2=1e-5 * sum of squared model parameters. L2 is consequently multiplied
+by 0.05 again, as written in Section 3.3. Optimizer weight decay is zero
+to avoid an additional penalty. Correlation denominators are floored for
+constant vectors. All loss terms are reduced per cross section, then
+averaged across dates. Targets are raw decimal returns, not normalized.
+
+The paper uses ordinal ranks, not a differentiable rank surrogate. Hard
+ranks are evaluated with stable ordering and detached. Product loss still
+differentiates through its Pearson factor. Ties in training ranks use
+stable ordinal ranks; evaluation uses standard average ranks for Spearman.
+The top/bottom pairing is unspecified: we average the hinge over every
+top-bottom stock pair, rather than arbitrary one-to-one pairing or a
+hinge on mean returns. This is a disclosed interpretation, not recovered
+author code. Vectorized values and gradients are tested against separate
+per-date computations, including variable stock and label masks.
+
+Unspecified settings resolved before test evaluation
+---------------------------------------------------
+Head width=64 with ReLU between layers, dropout=0.1; Adam initial lr=1e-3,
+lr/sqrt(epoch) schedule; 30 maximum epochs, patience 5 on mean validation
+IC; four complete cross sections per optimizer step. Dates are shuffled,
+stocks remain synchronized. Three seeds (0,1,2); full precision and
+deterministic PyTorch operations. Paper says a validation grid search
+was used but does not publish the grid, chosen rate/dropout/batch size,
+epochs, stopping rule, seeds, head width, or target scale beyond raw returns.
+CSI500/1000 linear controls run on CPU; neural fits and CSI300 controls
+run on CUDA. Device choices affect runtime, not the fixed training objective
+or statistical selection. Floating-point results can vary across devices.
+This package fixes reconstruction choices instead of asserting they were
+the author's choices. PyTorch 2.4.1/CUDA12.1 on RTX4060 differs from the
+paper's stated PyTorch2.7.0/CUDA11.8 and four RTX4090s.
+Other workspace jobs share the GPU. Logged durations are operational
+records, not controlled evidence of speed relative to other architectures.
+
+Ablations: no-CSD bypasses denoising; no-TAG uses identity gating; no-SP
+uses temporal mean pooling. The paper reports only removal of CSD and
+TAG, without replacement specifications. The SP removal is an extra
+diagnostic. The independent linear control maps the last feature vector
+to a scalar and uses the same optimizer/loss/validation protocol. It is
+not the DLinear, RLinear, or other published baseline.
+
+Daily data adaptation
+---------------------
+The local, pinned community dataset contains daily OHLCV/VWAP and a price
+adjustment factor, not proprietary intraday alphas. We compute the public
+Qlib Alpha158 expressions, replacing every price reference by raw price
+times the positive finite cumulative factor. Volume is observed raw volume.
+Source bytes are verified against the existing transfer receipt. This
+does not independently establish vendor values or membership accuracy.
+
+Paper date ranges are kept: train Jan4 2021-Sep28 2023, validation Oct9-
+Dec29 2023, test Jan2-Dec31 2024. The 16-step lookback now spans daily
+sessions. Normalization fits only training-date historical constituents,
+per factor, ignores nonfinite values, uses population mean/std, and clips
+to [-5,5]. It preserves NaNs instead of imputing them. Eligible stocks
+require finite 16x158 windows and positive current price/factor/volume.
+Membership is checked at decision t. Past values can predate membership.
+No future outcome or final-period surviving universe determines eligibility.
+
+To give forecasts an explicit execution delay, the daily target is adjusted
+close[t+2]/adjusted close[t+1]-1. This differs from the paper's immediate
+15-minute forward raw return. Train/validation labels are purged when
+their exit lies beyond the split. Test contains all 242 decisions and a
+two-session 2025 label-completion tail. Historical context may precede a
+split; later outcomes never enter training labels or normalization.
+
+Portfolio interpretation
+------------------------
+The paper says 'naive long-short 50', without specifying leg leverage,
+neutrality, rebalancing/turnover definition, borrow restrictions, or IR
+benchmark. Our daily experiment targets +0.5 NAV on 50 highest-scored
+stocks and -0.5 NAV on 50 lowest. Ties resolve by sorted instrument ID.
+Rebalance at t+1 close using forecasts formed at t close; marked returns
+run to t+2 close. This idealized timing is not a verified fill model.
+
+Trading status is observed at execution t+1, not used to filter forecasts
+at decision t. Missing/nonpositive entry volume or missing adjusted close
+blocks new trades and freezes existing untradable positions. Stocks are
+selected from the remaining forecasts without using their future returns.
+Existing frozen weights consume that leg's half-NAV budget. Frozen dollar
+positions are preserved across rebalance fees, so small exposure deviations
+can occur; actual maximum net/gross exposures are reported. Last-observed
+adjusted closes mark suspended positions; raw missing labels stay missing
+in prediction scoring. Terminal NAV includes an estimated liquidation
+fee on all remaining marked positions, including any untradable ones.
+
+The stated paper fee is interpreted as 10bp on liquidated notional: long
+sales and short covers pay; opening/increasing exposure is free. Fees use
+drifted holdings and post-fee target NAV, not an unconditional daily tax.
+Final liquidation is included. Borrow fees, financing, spread, slippage,
+price-limit fills, A-share short eligibility, and T+1 trading constraints
+are not modeled. Reported P&L is a diagnostic under these assumptions,
+not evidence of a directly executable A-share strategy.
+The source's corporate-action factors and adjusted price returns are not
+a separately vendor-verified cash-dividend accounting dataset.
+
+IC/RankIC average daily cross-sectional correlations; ICIR/RankICIR divide
+by population daily standard deviation without annualization. Portfolio
+Sharpe uses mean/std(ddof=1)*sqrt(252), risk-free return zero. Annualized
+return is compounded NAV^(252/days)-1; drawdown includes initial NAV=1.
+Both gross and net figures are reported. Paper IR is left undefined because
+its benchmark is unspecified; no Sharpe proxy is relabeled as IR.
+Date-block confidence intervals describe sampling uncertainty within this
+single test year; three seeds are not independent market observations.
+
+Readiness for exact replication
+------------------------------
+The model accepts actual 400-factor synchronized tensors, including the
+400-dimensional shape in tests. No artificial minute bars or synthetic
+private factors are used as empirical evidence. An exact Table3 replication
+requires the unavailable author inputs and missing protocol details.
+Published reference figures are stored separately and labeled 15-minute;
+no numerical daily-vs-intraday difference is presented as replication error.
+
+sources/pilot/ contains an interrupted training-only performance pilot of
+the loop loss implementation. No pilot test forecasts were generated or
+used. The final suite uses the vectorized equivalent verified in tests.

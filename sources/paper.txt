@@ -1,0 +1,633 @@
+                          Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)
+
+
+
+
+         TransAlpha: Lightweight Design Empowers Stock Return Forecasting
+
+                                                            Xiao Yang
+                                                        Carleton University
+                                                   barnettyang@cmail.carleton.ca
+
+
+
+                          Abstract                                             et al., 2024]; (3) Non-stationarity and volatility: market
+                                                                               micro-structures shift rapidly; trained models cannot gener-
+     In intraday stock return forecasting, existing Trans-                     alize across time. As a result, leading quantitative compa-
+     former methods face high computational com-                               nies still rely on more robust and interpretable linear models
+     plexity and do not explicitly handle noisy pre-                           to combine with existing trading strategies for stable profit,
+     dictors. We propose TransAlpha, a light-weight                            but invest heavily in Transformer and Large Language Model
+     Transformer variant tailored for cross section data                       (LLM) research to explore possibilities improving model’s
+     to advance end-to-end forecasting methods with                            predictive power.
+     three novel components (Cross-Sectional Denois-                              Our work comes from a realistic production environment
+     ing for signal purification, Temporal Attention Gat-                      of a quantitative company: we demonstrate Transformer
+     ing for trend weighting, and Smart Pooling to avoid                       model theories can be transferred to a profitable pipeline us-
+     information loss) along with a multi-component                            ing proprietary alpha factors in A-Share market. We pro-
+     hybrid loss function. We validate on full A-                              pose TransAlpha, a lightweight transformer-based architec-
+     share market stock data and four key segments                             ture for stock return forecasting. Our main contributions are
+     (CSI 300/500/1000/2000) with 400 proprietary al-                          three-fold:
+     pha factors of 15-minute frequencies. TransAl-
+     pha outperforms state-of-the-art baselines in pre-                            • A systematic investigation that incorporates state-of-
+     dictive power and portfolio profitability, indicating                           the-art time series model architectures into multi-factor
+     tailored Transformer models have significant prac-                              framework to examine their effectiveness for stock re-
+     tical value in quantitative trade.                                              turn forecasting.
+                                                                                   • A domain-tailored Transformer architecture with three
+1   Introduction                                                                     novel components: cross-sectional denoising, temporal
+                                                                                     attention gating, and smart pooling, all validated by real
+Stock return forecasting has advanced with AI. A solid fore-                         trading data.
+casting method and stable prediction results can impact port-
+folio optimization and trading strategies. Practical stock fore-                   • An industry-aligned pipeline that enables for training
+casting methods can be categorized into time series forecast-                        and back-testing custom models under a realistic setup
+ing models that use temporal sequences of individual stocks                          with custom strategies.
+and multi-factor models that learn universal factor-return re-                 These components address universal challenges such as noise
+lationships across stocks and time via cross-sectional data. In                in high-dimensional data, inefficient attention, and informa-
+recent years, Transformer [Vaswani et al., 2017] approaches                    tion loss when pooling. We balance academic reproducibility
+rise as an alternative for time series forecasting. Despite their              and proprietary privacy by providing the processed data files
+success in processing language tokens, Transformers fail to                    with anonymous alpha factors.
+replicate breakthroughs in time series forecasting. Influential                   The remainder of this paper is organized as follows: Sec-
+work such as DLinear [Zeng et al., 2023] is skeptical about                    tion 2 reviews related work in time series forecasting methods
+whether complex Transformer architectures can outperform                       and past stock forecasting attempts. Section 3 presents the
+linear models. In particular, stock forecasting fundamentally                  TransAlpha architecture. Section 4 presents research ques-
+differs from other time series forecasting tasks in the follow-                tions and experimental results. Section 5 concludes.
+ing aspects of challenges: (1) Weak signal-to-noise ratio: pre-
+dictive features (alpha) signals are subtle, prune to noise and                2     Related Work
+overfitting [Fama, 1970]. Signals are diluted if model has
+multiple compositions and residual connection blocks, which                    2.1     Times Series Forecasting
+can decrease predictive power; (2) High dimensionality of                      Traditional time series methods are maximum likelihood-
+cross-sectional data: quantitative trading strategies contain                  based statistical models, such as ARIMA, and GARCH
+hundreds of alpha factors, introducing inter-dependencies [Li                  [Bollerslev, 1986]. Both methods and their variants assume
+
+
+
+                                                                        5209
+                          Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)
+
+
+
+stationarity, which are usually unrealistic, especially in in-                 3     Methodology
+traday price movements. Later, a shift to machine learn-                       3.1     Problem Formulation
+ing introduced tree-based models such as XGBoost [Chen
+and Guestrin, 2016], LightGBM [Ke et al., 2017]. They                          We formalize stock return forecasting as a supervised learn-
+can capture non-linearity without distribution or stationar-                   ing task. Let S = {s1 , s2 , . . . , sN } denote the A-share stock
+ity assumptions. Further, LSTMs [Hochreiter and Schmid-                        universe, where N represents the total number of stocks. Let
+huber, 1997] addressed the vanishing gradient problem, and                     T denote the set of 15-minute cross sections within the obser-
+DeepAR [Salinas et al., 2020] pioneered in probabilistic fore-                 vation period. For each cross section t ∈ T , the alpha factor
+casting. In addition, Convolutional Neural Network (CNN)                       matrix at time t is denoted as Xt ∈ RN ×D , where D = 400
+models such as TCN [Bai et al., 2018] and TimesNet [Wu et                      is the dimension of alpha factors, and each row xt,s ∈ RD
+al., 2022] use convolutional layers to capture local temporal                  corresponds to the factor value vector of stock s at time t.
+patterns. Modern TCN [donghao and wang xue, 2024] refines                      The true return vector at time t is Yt ∈ RN , where each
+TCN with much larger effective receptive fields. Later, Trans-                 element yt,s represents the 15-minute forward raw return of
+former [Vaswani et al., 2017] replaced LSTM’s recurrent lay-                   stock s at time t.
+ers with self-attention, enabling long-range dependency mod-                      We use a look-back window of fixed length L =
+eling. Transformer adaptations for time series faced high                      16, corresponding to 16 consecutive 15-minute cross sec-
+computational complexity up to O(L2 ), where L is sequence                     tions. Then, we construct a sequence of factor matrices
+length. Many variants are introduced to tackle this issue and                  {Xt−L+1 , Xt−L+2 , . . . , Xt }, where each matrix inside de-
+attempt novel structures to solve long-sequence forecasting                    scribes the cross-sectional distribution of factor values across
+problem. Informer [Zhou et al., 2021] proposes probabil-                       all stocks at a t. The forecasting model maps this temporal
+ity sparse attention to approximate the full attention matrix.                 sequence of cross-sectional factor data to a predicted return
+Autoformer [Wu et al., 2021] decomposes series to trend and                    vector Ŷt+1 ∈ RN for the next 15-minute cross section:
+seasonal components. PatchTST [Nie et al., 2023] frames
+                                                                                           Ŷt+1 = f (Xt−L+1 , Xt−L+2 , . . . , Xt ; Θ)
+time series as tokens. Pyraformer [Liu et al., 2022] proposes
+pyramidal attention to hierarchically compress temporal in-                    where f denotes the model, and Θ is the set of trainable pa-
+formation. Crossformer [Zhang and Yan, 2023] establishes a                     rameters. The observation period T is partitioned into non-
+Hierarchical Encoder-Decoder (HED) to use the information                      overlapping subsets of train, validation, and test segments.
+at different scales; iTransformer [Liu et al., 2024] simply ap-
+plies the attention and feed-forward network on the inverted                   3.2     Model
+dimensions. New direction involves adapting LLM tech-                          We propose TransAlpha for intraday cross-sectional stock
+niques [Zhang et al., 2024]. Time-MoE [Shi et al., 2025] used                  return forecasting in the A-share market. The model ad-
+a sparse Mixture-of-Experts (MoE) design based on scaling                      dresses three challenges: (1) idiosyncratic noise in alpha fac-
+laws [Kaplan et al., 2020] with 2.4 billion parameters but only                tor signals, (2) time-step relevance heterogeneity in intraday
+activate a subset of experts.                                                  trends, and (3) signal dilution induced by over-engineering.
+                                                                               We formalize the model following section 3.1.
+                                                                                  Let X = {Xt−L+1 , Xt−L+2 , . . . , Xt } denote the input
+2.2   Stock Return Prediction                                                  to TransAlpha. X is a temporal sequence of cross-sectional
+                                                                               alpha factor matrices, where X ∈ RN ×D . The output is
+The fluctuation of stock prices is influenced by a complex                     a predicted 15-minute forward return vector Ŷt+1 ∈ RN .
+array of factors. Therefore, there is a need to utilize ma-                    To present the three core modules of the model, we define
+chine learning techniques [Zou et al., 2023]. Models must                      the intermediate variables first. Let Xdenoise ∈ RN ×L×D be
+balance between predictive power and noise robustness. Suc-                    the denoised factor, Z ∈ RN ×L×d be the projected feature,
+cessful adaptations can date back to support vector machines                   and Zgated ∈ RN ×L×d be the time-weighted feature, where
+(SVMs) methods [Cao and Tay, 2003]. LSTMs and GRUs                             d is the model’s hidden dimension. We use d = 64 for all
+[Zhu et al., 2024] were also adapted. Graph WaveNet, [Park                     baseline models. Let Zpool ∈ RN ×2d denote the aggregated
+et al., 2025]) incorporates Graph Neural Networks (GNNs)                       features, and we define an output head that maps the aggre-
+and hypergraphs to capture higher-order stock relationships.                   gated features to predicted returns. The end-to-end workflow
+Mamba [Gu and Dao, 2024] integrates selective State-Space                      is demonstrated in Figure 1
+models (SSMs) into a simplified end-to-end neural network                      Cross-Sectional Denoising The Cross-Section Denoising
+architecture. MASTER [Li et al., 2024] introduced market-                      (CSD) module separates stock-specific alpha signals from
+guided attention to prioritize macroeconomic signals over                      market-wide systematic beta signals, with adaptive scaling to
+price fluctuations; MIGA [Yu et al., 2024] employed a MoE                      suppress noise while preserving predictive components. For
+framework to partition experts by temporal frequency. De-                      an input X ∈ RN ×L×D , let β be the market-wide signal,
+spite these advances, several gaps remain in the literature: (1)               and α be the stock-specific residual. They are defined and
+few works validate their models on high-dimensional alpha                      obtained by
+data from real production environment; (2) there are limited
+studies systematically studying performance of Transformer                                                     N
+                                                                                                          1 X
+models in stock forecasting. (3) successful methods and in-                                        β=           Xi , α = X − β,
+                                                                                                          N i=1
+sights are typically non-disclosed for proprietary concerns.
+
+
+
+                                                                        5210
+                          Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)
+
+
+
+
+                            Figure 1: Overall model workflow for intraday cross-sectional return forecasting.
+
+
+where β ∈ R1×L×D and α ∈ RN ×L×D . We introduce a                              Ŷt+1 as the predicted returns. We present Zlast and Zmax us-
+fixed scalar hyperparameter τ = 10−3 to partition the stock-                   ing standard tensor indexing, where the first dimension is in-
+specific alpha signal into noisy alphas (|α| ≤ τ ) and non-                    dividual stocks, second dimension is intraday time steps and
+noisy, predictive alphas (|α| > τ ). Further, let sα , sβ ∈                    third dimension is model’s hidden feature.
+R1×1×D be factor-wise trainable scaling tensors. sα is ap-                                                                       L
+plied exclusively to the non-noisy components α. During                               Zlast = Zgated [:, −1, :], Zmax = max Zgated [:, t, :],
+                                                                                                                                 t=1
+training, sα is optimized to amplify factors with high predic-
+tive power and dampen factors with weak signals, without af-                         Zpool = Concat(Zlast , Zmax ), Ŷt+1 = MLP(Zpool ).
+fecting noisy components. Similarly, sβ is applied uniformly                   where MLP denotes a two-layer perceptron, and Concat[· , · ]
+to the market-wide systematic signal β. Training optimizes                     denotes feature concatenation along the last dimension. The
+sβ to down-weight overly dominant systematic trends and up-                    pooling used direct concatenation instead of average or sum
+weight stable, predictive market signals, ensuring a balanced                  in traditional pooling methods that lead to information loss.
+combination of idiosyncratic and systematic components for
+return forecasting. We then combine both components and                        3.3     Training
+obtain the denoised input:
+                                                                               We design a multi-component loss function specifically
+  Xdenoise = α (sα ⊙ 1(|α| > τ ) + 1(|α| ≤ τ )) + β ⊙ sβ                       adapted to intraday cross-sectional stock return forecasting.
+                                                                               The loss is designed to balance regression performance, lin-
+where 1(·) is the indicator function and ⊙ denotes element-                    ear correlations between predicted and actual returns, relative
+wise multiplication.                                                           rank accuracy, and regularization to penalize parameter size.
+Temporal Attention Gating The Temporal Attention Gat-
+ing (TAG) module uses relevance to return predictions to                          L = λ1 Lrank + λ2 Lhuber + λ3 Lcorr + λ4 Lprod + λ5 Lreg ,
+weight time steps so that model can capture intraday trend                     where λ1 , . . . , λ5 are non-negative weighting coefficients.
+with minimal complexity. The denoised sequence Xdenoise is
+projected to model dimension d to yield Z via a feed-forward                   Let Ŷt+1 = {ŷt+1,s }s∈S and Yt+1 = {yt+1,s }s∈S be the
+block.                                                                         vectors of predicted and true forward returns for time t + 1,
+                                                                               respectively, and ŷ¯t+1 , ȳt+1 be their cross-sectional means.
+   Z = Dropout(ReLU(LayerNorm(Linear(Xdenoise )))),                            We elaborate on each loss component as follows. First, the
+                                                                               quantile ranking loss Lrank penalizes misalignment between
+where Linear(X) = WX + b is a linear layer with trainable                      predicted and true rankings of top and bottom stocks by en-
+parameters W, b. We then transformed Z to Zgated = Z⊙wt .                      forcing a minimum predicted return gap between the top 20%
+The attention time-step weights wt are computed as                             and bottom 20% of stocks, sorted by true returns, with a mar-
+                                                                               gin m = 0.1, formulated as:
+        wt = Softmax(Linear(Z)), wt ∈ RN ×L×1 ,
+                                                                                                                    top       bottom
+                                                                                                                                       
+where wt sums to 1 to ensure signal weights are normal-                                Lrank = E max 0, m − (ŷt+1,s       − ŷt+1,s  ) ,
+ized. TAG performs element-wise multiplication of atten-                               top         bottom
+tion weights with the entire temporal sequence to generate                     where ŷt+1,s and ŷt+1,s  are predicted returns for top/bottom
+Zgated , while traditional approaches only applies gating to the               quantile stocks, and E[·] denotes the expectation over train-
+final hidden state. Meanwhile, TAG replaces the complex                        ing samples. Next, the Huber loss Lhuber robustifies train-
+multi-head attention with a single-head scalar-scoring atten-                  ing against extreme returns by balancing mean squared error
+tion layer and removes positional encoding for further simpli-                 (MSE) for small prediction errors and mean absolute error
+fication.                                                                      (MAE) for outliers. Let ϵt+1,s = ŷt+1,s − yt+1,s denote the
+                                                                               prediction error for stock s, the loss with threshold δ = 1.0
+Smart Pooling and Output Head The Smart Pooling (SP)                           is:
+component aggregates time-weighted features into fixed-
+                                                                                                   0.5ϵ2t+1,s ,
+                                                                                                                                      
+dimensional vectors by combining the most recent time step                                                                |ϵt+1,s | ≤ δ
+and max pooled peak signals with extreme volatility. Let                            Lhuber = E                                            .
+                                                                                                   δ(|ϵt+1,s | − 0.5δ) , otherwise
+Zgated ∈ RN ×L×d be output from TAG module, we define
+Zlast as the most recent time step, Zmax as the max-pooled                     The correlation loss term Lcorr minimizes 1 − ρpearson , where
+feature, and Zpool as the concatenated features, and denote                    ρpearson is the pearson correlation coefficient. We denote
+
+
+
+                                                                        5211
+                                Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)
+
+
+
+auxiliary terms for cross-covariance and the product of stan-                        Algorithm 1 TransAlpha Forward Pass
+dard deviations:                                                                     Input: X ∈ RB×L×D , dmodel , τ , {sα , sβ , W, b} Output:
+           X
+   Ccov =     (ŷt+1,s − ŷ¯t+1 )(yt+1,s − ȳt+1 ),                                  Ŷ ∈ RB×1
+               s∈S                                                                    1: Step 1: Cross-Sectional Denoising
+                                                                                                   PB
+                                                                                           β = B1 i=1 Xi ∈ R1×L×D
+               sX                             sX
+                                                                                      2:
+      Cstd =           (ŷt+1,s − ŷ¯t+1 )2         (yt+1,s − ȳt+1 )2 ,
+                                                                                      3:   α = X − β ∈ RB×L×D
+                 s∈S                          s∈S
+                                                                                      4:   αscaled = α (sα ⊙ 1(|α| > τ ) + 1(|α| ≤ τ ))
+such that Lcorr = 1 − Ccov /Cstd . The product correlation                            5:   βscaled = β ⊙ sβ
+loss Lprod jointly maximize both correlations. Given a cross-                         6:   Xdenoise = αscaled + βscaled ∈ RB×L×D
+sectional vector of values V = {vs }s∈S , the rank operator                           7: Step 2: Input Projection to Model Dimension
+maps V to a rank vector by rank(V) = {rs }s∈S , where rs                              8:   Z1 = Linear(Xdenoise ) ∈ RB×L×dmodel
+is the ordinal rank of vs in V (1 smallest, N largest). The                           9:   Z2 = LayerNorm(Z1 ) ∈ RB×L×dmodel
+operator converts continuous return values into ordinal ranks.                       10:   Z3 = ReLU(Z2 ) ∈ RB×L×dmodel
+Consequently, ρpearson = Ccov /Cstd and                                              11: Step 3: Temporal Attention Gating
+                                                                                   12:   wt = Softmax(Linear(Z3 )) ∈ RB×L×1
+           ρspearman = ρ rank(Ŷt+1 ), rank(Yt+1 )                                   13:   Zgated = Z3 ⊙ wt ∈ RB×L×dmodel
+                                                                                     14: Step 4: Smart Temporal Pooling
+Then, the product loss is Lprod = 1 − ρpearson · ρspearman .                         15:   Zlast = Zgated [:, −1, :] ∈ RB×dmodel
+   Finally, the regularization loss Lreg = λreg ∥θ∥22 (with                                Zmax = maxL                            B×dmodel
+                                                                                     16:                 t=1 Zgated [:, t, :] ∈ R
+λreg = 10−5 ) prevents overfitting to training data noise,                           17:   Zpool = Concat(Zlast , Zmax ) ∈ RB×2dmodel
+where ∥ · ∥2 denotes the ℓ2 norm. The weighting coefficients                         18: Step 5: Output Head
+for the total loss function are chosen to prioritize ranking                         19:   Ŷ = MLP(Zpool ) ∈ RB×1
+and correlation objectives. We set small weights for huber
+and regularization components. The final utilized weights are                        20: Return: Ŷ
+determined empirically: λ1 = 0.4, λ2 = 0.05, λ3 = 0.4,
+λ4 = 0.1, λ5 = 0.05.                                                                 three-dimensional tensor X compatible with the TransAlpha
+3.4     Inference                                                                    model input size, which is then feeded into the forward pass
+                                                                                     workflow in Algorithm 1.
+After obtaining the trained model, we map the test file’s cross-
+sectional sequence, with input batch size B, to return predic-                                         X = Reshape(X˜t ) ∈ RÑt ×L×D .
+tions in the next time period. For each cross section t, we
+maintain a sliding look-back window of length L and apply                            3.5     Convergence Analysis
+two preliminary filters before feeding the batch.
+                                                                                     For simplicity, we sketch TransAlpha’s convergence to the
+Look-back Completeness Filter The completeness filter                                true return Yt+1 under three mild assumptions. (1) Multi-
+discards sequences which do not contain enough valid time                            component loss L is Lipschitz continuous. (2) Model parame-
+steps (< L) in a look-back window. Formally, the filter re-                          ters (sα , sβ , W) are bounded via Lreg in a compact parameter
+tains only sequences satisfying:                                                     space Θ. (3) Training√   uses mini-batch Adam with decreasing
+                          t
+                          X                                                          learning rate ηk ∝ 1/ k. The expected loss satisfies
+                                  1(Xτ ̸= ∅) = L,
+                                                                                                                          C
+                       τ =t−L+1                                                                    E[L(Θk )] − L(Θ∗ ) ≤ √ ,
+                                                                                                                           k
+where ∅ represent an empty factor matrix without valid stocks                                                     ∗
+at time τ .                                                                          where C > 0 is a constant, Θ is optimal parameter. As
+                                                                                     epochs k → ∞, ∥Ŷt+1 (Θk ) − Yt+1 ∥2 → 0.
+NaN Elimination Filter For each time step τ in a complete
+look-back window, the NaN elimination filter removes rows                            3.6     Complexity Analysis
+with missing or non-finite factor values, typically caused by
+                                                                                     Let h be the number of attention heads in baseline models,
+trading halts or data feed errors. Let Xτ (i, j) denote the j-th
+                                                                                     K be TCN kernel size, G be crossformer’s segment size.
+factor value of the i-th stock at time τ . The cleaned cross-
+                                                                                     TransAlpha’s time complexity is derived by calculating float-
+sectional matrix X̃τ ∈ RÑt ×D , where Ñt ≤ Nt is the number
+                                                                                     point operations. The input projection is the dominant term.
+of valid stocks at time τ ) is defined as,
+                                                                                           TCSD = O(N LD), TProj = O(N LDd),
+      X̃τ = {Xτ (i, :) | Xτ (i, j) ∈ Rfin ∀j ∈ {1, . . . , D}} .
+                                                                                           TTAG = O(N Ld), TMLP = O(N d2 ),
+where Xτ (i, :) denotes the i-th row of Xτ , and Rfin = R \
+{NaN, ±∞} denotes the set of finite real numbers. The fil-                                 TTotal = TCSD + TProj + TTAG + TMLP = O(N LDd).
+ter ensures all elements of X̃τ are valid real numbers, main-                        where TCSD is CSD’s mean aggregation and element-wise
+taining numerical stability of forward pass. The filtered se-                        operations on input tensors, TProj is input projection’s lin-
+quence X̃t = {X̃t−L+1 , . . . , X̃t } is then reshaped into a                        ear mapping of D-dimensional alpha factors to d-dimensional
+
+
+
+                                                                              5212
+                          Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)
+
+
+
+       Model          Time Complexity Space Complexity                         sections per day, total of T = Nd × Nt = 3856). Transac-
+       TransAlpha      O(N LDd)               O(N LDd)
+                                                                               tion costs are applied only on position liquidation at 0.1% per
+       DLinear         O(N LDd)               O(N LDd)                         trade, inclusive of fees.
+       TCN             O(N LdK)               O(N LDd)                         Baseline Models We compare TransAlpha against 3 cate-
+       Informer       O(N Ld log L)           O(N LDd)
+       Autoformer       O(N Ld)               O(N LDd)
+                                                                               gories of baselines. Linear models include DLinear [Zeng et
+       Pyraformer     O(N Ld log L)           O(N LDd)                         al., 2023], RLinear [Li et al., 2023], and TiDE [Das et al.,
+       Crossformer    O(N LdL/G)              O(N LDd)                         2023]. Non-Transformer DL models include GRU [Chung et
+       iTransformer   O(N L2 d/h)             O(N LDd)                         al., 2014], DeepAR [Salinas et al., 2020], and TCN [Bai et
+                                                                               al., 2018], TimesNet [Wu et al., 2022], Modern TCN [dong-
+          Table 1: Time and Space Complexity Summary                           hao and wang xue, 2024]. Transformer models include In-
+                                                                               former [Zhou et al., 2021], Autoformer [Wu et al., 2021],
+model features. TTAG is TAG’s linear layer and element-wise                    PatchTST [Nie et al., 2023], Pyraformer [Liu et al., 2022],
+gating on N × L × d features, and TMLP is the output MLP’s                     Crossformer [Zhang and Yan, 2023], Fedformer [Zhou et al.,
+time complexity which contains two linear layers operated on                   2022] and iTransformer [Liu et al., 2024].
+2d-dimensional pooled features. Table 1 summaries the time                     Implementation Details Our model is implemented in Py-
+complexity of TransAlpha and baseline models.                                  Torch 2.7.0 with CUDA11.8. All experiments are conducted
+   TransAlpha’s space complexity is dominated by interme-                      on a server equipped with an AMD EPYC 7T83 64-Core Pro-
+diate activation tensors (N × L × d), resulting in an asymp-                   cessor (256 total CPUs across 2 NUMA nodes, 64 physical
+totic complexity of O(N Ld), identical to all baseline mod-                    cores per socket, 128 siblings per node) and 1.5 TiB system
+els. Trainable parameters O(Dd + d2 ) are negligible in com-                   memory. For training, we utilized a cluster of four NVIDIA
+parison to activation memory usage. In terms of time ef-                       GeForce RTX 4090 GPUs (24564 MiB VRAM per GPU). We
+ficiency, TransAlpha ranks the best, highlighting its light-                   use grid search to perform hyperparameter optimization and
+weight characteristic. Autoformer has the same nominal                         obtain optimal values based on validation set. We trained the
+O(N Ld) time complexity, but its practical efficiency is lower                 model separately for all market subsets and adopted a naive
+due to Fast Fourier Transform (FFT) during decomposition.                      long-short 50 strategy to back-test.
+Crossformer introduces an extra L/G overhead factor. In-
+former and Pyraformer add a log L factor. iTransformer in-                     Evaluation Metrics Stock price forecasting’s success is
+troduces an L2 /h factor, and TCN adds a kernel size factor                    measured by trading profitability rather than point prediction
+K.                                                                             accuracy. Traditional forecasting metrics such as MSE fail
+                                                                               to capture the relative performance rankings that drive quant
+4     Experiments                                                              trading strategies. We use the Information Coefficient (IC),
+                                                                               Rank IC, Information Coefficient Information Ratio (ICIR)
+We formulate three core research questions (RQs).                              and Rank ICIR to quantify predictive power. We evaluate
+    • RQ1: Are Transformer models effective in general?                        a model’s profitability power using the Annualized Return
+      How is TransAlpha’s predictive power across different                    (AR), Information Ratio (IR), Sharp Ratio (SR), Maximum
+      market segments?                                                         Drawdown (MDD) and Turn over Rate (TR).
+    • RQ2: Can the models transfer their predictive power
+      into profit in back-test?                                                4.2     RQ1 Model Predictive Power
+    • RQ3: Are the proposed architectures effective?                           We experiment on both the full market data and all CSI in-
+                                                                               dices subsets to evaluate TransAlpha’s predictive power un-
+    • RQ4: Do TransAlpha’s prediction patterns exhibit dis-
+                                                                               der different market segments, via these standard metrics. See
+      tinct characteristics?
+                                                                               Table 3’s first four columns. Overall, TransAlpha’s predictive
+4.1    Experimental Set up                                                     power is consistent across all subsets and constantly among
+                                                                               the top models. Notably, subsets with more stocks do not
+Data Set Details We evaluate on an intraday dataset di-                        always mean performance increase.
+rectly coming from production environment, covering the
+entire A-share market (Shanghai and Shenzhen Stock Ex-                         4.3     RQ2 Backtest Result
+changes), with four key market segments (CSI 300, CSI
+500, CSI 1000, and CSI 2000) for subset modeling to as-                        Overall, TransAlpha offers strong AR, IR and SR, with no-
+sess generalization ability across market capitalization. The                  table lead in SR. Most importantly, strong predictive power
+dataset contains 400 proprietary alpha factors in 15-minute                    does not necessarily transfer to profitability, a sign of over-
+frequency cross-sectionals stored in HDF5 format and are                       fitting, with iTransformer as a typical example. MDD < 0.05
+normalized without extreme values. The observation period is                   suggests worst peak-to-trough loss is less than 5% at any
+non-overlapping, consisted of training (2021-01-04 to 2023-                    point. TR < 0.20 suggests it only needs to rebalance the
+09-28), validation (2023-10-09 to 2023-12-29), and testing                     portfolio by less than 20% regularly, consuming low trading
+(2024-01-02 to 2024-12-31) sets to avoid look-ahead bias and                   costs and minimal operational hassle. TransAlpha maintains
+ensure out-of-sample evaluation. There are Nd = 242 trade                      all lower than the empirical thresholds, offering stable predic-
+days, each from 09:45 am to 15:00 pm daily (Nt = 16 cross                      tions.
+
+
+
+                                                                        5213
+                              Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)
+
+
+
+         Model     Subset             IC            Rank IC            ICIR           Rank ICIR            AR                IR                SR          MDD         TR
+
+                   CSI 300     0.0594 (0.1583) ↓ 0.0726 (0.1673) 0.3755 (2.6629) ↓ 0.4340 (2.3042) ↓ 0.2761 (0.0997) 3.1715 (0.0879) ↓ 2.8670 (0.0843) ↓ 0.0550 ↓ 0.2105 ↓
+                   CSI 500     0.0671 (0.1582) ↓ 0.0704 (0.1569) 0.4240 (2.3583) ↓ 0.4487 (2.2288) ↓ 0.2785 (0.0953) ↓ 3.0832 (0.0731) ↓ 2.8317 (0.0730) ↓ 0.0548 ↓ 0.2090 ↓
+         No CSD    CSI 1000 0.0966 (0.1271) 0.0727 (0.1504) ↓ 0.7598 (1.3161) 0.4835 (2.0682) ↓ 0.2733 (0.1033) ↓ 3.0285 (0.0885) ↓ 2.7356 (0.0847) ↓ 0.0594 ↓ 0.2142 ↓
+                   CSI 2000 0.1412 (0.0958) 0.1029 (0.1130) ↓ 1.4745 (0.6782) 0.9110 (1.0977) 0.4861 (0.0717) ↓ 7.7130 (0.0879) 7.2162 (0.0857) 0.0202              0.2447 ↓
+                   Full Market 0.1430 (0.0825) 0.0972 (0.1251) 1.7331 (0.5770) 0.7769 (1.2872) 0.4333 (0.1095) ↓ 4.1331 (0.0797) 3.9085 (0.0798) 0.0918 ↓ 0.2557 ↓
+
+                   CSI 300     0.0604 (0.1619) ↓ 0.0730 (0.1707) 0.3730 (2.6813) ↓ 0.4275 (2.3390) ↓ 0.2710 (0.0939) ↓ 2.9056 (0.0653) ↓ 2.6877 (0.0661) ↓ 0.0623 ↓ 0.1909
+                   CSI 500     0.0671 (0.1582) ↓ 0.0704 (0.1567) 0.4246 (2.3552) ↓ 0.4495 (2.2249) ↓ 0.2795 (0.1001) ↓ 3.1722 (0.0873) ↓ 2.8746 (0.0834) ↓ 0.0548 ↓ 0.2093 ↓
+         No TAG    CSI 1000 0.0966 (0.1271) 0.0726 (0.1500) ↓ 0.7597 (1.3163) 0.4842 (2.0654) ↓ 0.2729 (0.0969) ↓ 2.9461 (0.0716) ↓ 2.7063 (0.0718) ↓ 0.0594 ↓ 0.2163 ↓
+                   CSI 2000 0.1407 (0.0962) ↓ 0.1022 (0.1123) ↓ 1.4625 (0.6838) ↓ 0.9102 (1.0986) 0.4780 (0.0693) ↓ 7.5524 (0.0804) 7.1118 (0.0798) 0.0202          0.2472 ↓
+                   Full Market 0.1406 (0.0834) 0.0941 (0.1210) ↓ 1.6856 (0.5933) 0.7782 (1.2851) 0.3851 (0.1058) ↓ 3.8507 (0.0796) ↓ 3.6110 (0.0814) ↓ 0.0877 ↓ 0.2507 ↓
+
+
+                  Table 2: Ablation results: ↓ on the right of a metric indicates worse performance compared to TransAlpha.
+
+
+
+
+         (a) CSI 300                                    (b) CSI 500
+                                                                                                         (a) CSI 300                                        (b) CSI 500
+
+
+
+
+        (c) CSI 1000                                   (d) CSI 2000
+                                                                                                        (c) CSI 1000                                       (d) CSI 2000
+Figure 2: Pairwise correlation heatmaps of model predictions: first
+row and column are TransAlpha, with the rest models sorted in al-                           Figure 3: Hierarchical dendrograms obtained by hierarchical clus-
+phabetical order.                                                                           tering with TransAlpha highlighted in blue.
+
+
+4.4   RQ3 Ablation Study                                                                    5      Conclusions
+                                                                                            This paper tackles challenges of forecasting noisy cross-
+We include an ablation study to test the effectiveness of core                              section data in a real stock market context. We introduce
+components in TransAlpha by removing CSD and TAG por-                                       TransAlpha, a lightweight Transformer variant. Extensive
+tion respectively. Table 2 shows an evident drop in back-                                   experiments suggest it outperforms on core trading metrics
+test metrics especially IR and SR after removing either core                                and its core components are effective to handle noise. Be-
+components, which indicates the components are effective                                    yond finance, CSD has the potential to denoise sensor data
+in boosting profitability. Specifically, CSD can reduce the                                 in manufacturing; TAG can prioritize time steps in patient
+over-fitting issue, which can be generalized to other high-                                 monitoring; Smart Pooling can aggregate sparse signals in
+dimensional forecasting tasks. TAG also verifies its effi-                                  traffic flow. The experiments are exclusively conducted on
+ciency gain over standard multi-head attention O(N LD) vs                                   A-Share market, using proprietary alpha factors from a single
+O(N L2 D).                                                                                  quantitative firm. Also, TransAlpha relies on a fixed look-
+                                                                                            back window and static loss function weights. In future work,
+                                                                                            we will extend to American stock markets and include MoE
+4.5   RQ4 Pattern distinction                                                               components with tailored experts to scale up parameter size,
+                                                                                            incorporating methods to adapt dynamic market conditions.
+The model’s generated predictions offer distinct patterns from                              Finally, we will test the architecture in different forecasting
+heatmaps and dendrograms of hierarchical clustering. See                                    tasks, such as the benchmark data sets in long-range time se-
+Figure 2, 3. On large-cap subsets (CSI 300 and CSI 500),                                    ries forecasting.
+the correlations are much lower, indicating the model learned
+distinct pattern compared to other baselines.
+
+
+
+                                                                                     5214
+                       Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)
+
+
+
+
+Model         Subset              IC             Rank IC            ICIR           Rank ICIR             AR                IR              SR        MDD      TR
+              CSI 300       0.0594 (0.1654)   0.0734 (0.1718)   0.3589 (2.7867)   0.4271 (2.3414)   0.2806 (0.0946)   3.4093 (0.0866) 3.0843 (0.0832) 0.0414 0.2144
+              CSI 500       0.0553 (0.1623)   0.0639 (0.1659)   0.3408 (2.9347)   0.3851 (2.5966)   0.2505 (0.0904)   2.8461 (0.0686) 2.6050 (0.0689) 0.0396 0.2000
+DLinear       CSI 1000      0.0709 (0.1581)   0.0749 (0.1828)   0.4483 (2.2306)   0.4099 (2.4399)   0.3191 (0.1253)   2.9161 (0.0906) 2.6640 (0.0862) 0.0677 0.1995
+              CSI 2000      0.1090 (0.0996)   0.1021 (0.1080)   1.0942 (0.9139)   0.9459 (1.0572)   0.4938 (0.0650)   8.0408 (0.0761) 7.6304 (0.0756) 0.0222 0.2407
+              Full Market   0.0968 (0.0890)   0.0909 (0.1079)   1.0879 (0.9192)   0.8419 (1.1878)   0.4883 (0.0731)   6.8408 (0.0694) 6.5296 (0.0697) 0.0286 0.2461
+              CSI 300       0.0558 (0.1486)   0.0662 (0.1546)   0.3757 (2.6618)   0.4282 (2.3353)   0.2258 (0.0852)   2.9396 (0.0804) 2.6264 (0.0784) 0.0454 0.2174
+              CSI 500       0.0561 (0.1467)   0.0628 (0.1409)   0.3825 (2.6141)   0.4453 (2.2455)   0.2343 (0.0821)   3.2582 (0.0862) 2.9063 (0.0823) 0.0326 0.2510
+RLinear       CSI 1000      0.0713 (0.1245)   0.0633 (0.1279)   0.5724 (1.7471)   0.4948 (2.0209)   0.2297 (0.0801)   3.1378 (0.0794) 2.8153 (0.0795) 0.0374 0.2364
+              CSI 2000      0.1084 (0.1141)   0.1031 (0.1326)   0.9496 (1.0531)   0.7777 (1.2859)   0.4856 (0.0903)   5.7123 (0.0761) 5.4123 (0.0760) 0.0562 0.1986
+              Full Market   0.1000 (0.0890)   0.0880 (0.1066)   1.1238 (0.8899)   0.8257 (1.2110)   0.4254 (0.0751)   5.9529 (0.0748) 5.6182 (0.0766) 0.0363 0.2472
+              CSI 300       0.0524 (0.1696)   0.0679 (0.1699)   0.3090 (3.2360)   0.3997 (2.5018)   0.2506 (0.0994)   2.8438 (0.0843) 2.5575 (0.0808) 0.0625 0.1958
+              CSI 500       0.0558 (0.1339)   0.0548 (0.1196)   0.4170 (2.3981)   0.4579 (2.1840)   0.2133 (0.0694)   3.2947 (0.0761) 2.9460 (0.0749) 0.0333 0.2326
+TiDE          CSI 1000      0.0953 (0.1203)   0.0686 (0.1367)   0.7923 (1.2622)   0.5017 (1.9932)   0.2403 (0.0816)   2.9880 (0.0675) 2.7312 (0.0679) 0.0507 0.2395
+              CSI 2000      0.1352 (0.0972)   0.1029 (0.1148)   1.3904 (0.7192)   0.8964 (1.1155)   0.4766 (0.0659)   7.3414 (0.0699) 7.0129 (0.0708) 0.0261 0.2438
+              Full Market   0.1334 (0.0896)   0.0945 (0.1206)   1.4891 (0.6715)   0.7835 (1.2764)   0.3956 (0.0862)   4.8776 (0.0779) 4.5766 (0.0779) 0.0515 0.2650
+              CSI 300       0.0509 (0.1472)   0.0579 (0.1460)   0.3460 (2.8900)   0.3963 (2.5231)   0.1624 (0.0731)   2.3928 (0.0762) 2.0680 (0.0742) 0.0494 0.2124
+              CSI 500       0.0467 (0.1130)   0.0437 (0.0889)   0.4134 (2.4188)   0.4916 (2.0342)   0.0990 (0.0468)   2.3152 (0.0785) 1.8153 (0.0782) 0.0184 0.2215
+GRU           CSI 1000      0.0945 (0.1197)   0.0681 (0.1312)   0.7897 (1.2663)   0.5188 (1.9274)   0.2413 (0.0890)   2.9601 (0.0793) 2.6689 (0.0780) 0.0535 0.2186
+              CSI 2000      0.1324 (0.1032)   0.1043 (0.1158)   1.2834 (0.7792)   0.9006 (1.1104)   0.4941 (0.0742)   7.0501 (0.0753) 6.6904 (0.0740) 0.0270 0.2375
+              Full Market   0.1366 (0.0832)   0.0895 (0.1227)   1.6417 (0.6091)   0.7296 (1.3707)   0.3727 (0.1075)   3.6468 (0.0781) 3.4171 (0.0798) 0.0773 0.2423
+              CSI 300       0.0447 (0.1243)   0.0474 (0.1170)   0.3594 (2.7825)   0.4050 (2.4693)   0.0850 (0.0502)   1.7528 (0.0694) 1.3313 (0.0692) 0.0420 0.2853
+              CSI 500       0.0548 (0.1202)   0.0476 (0.0998)   0.4559 (2.1937)   0.4768 (2.0971)   0.1175 (0.0486)   2.4233 (0.0667) 2.0100 (0.0689) 0.0210 0.2926
+DeepAR        CSI 1000      0.0826 (0.1225)   0.0666 (0.1268)   0.6737 (1.4844)   0.5255 (1.9028)   0.2138 (0.0862)   2.5651 (0.0705) 2.3101 (0.0700) 0.0617 0.2744
+              CSI 2000      0.1298 (0.1002)   0.0967 (0.1152)   1.2951 (0.7721)   0.8389 (1.1921)   0.4295 (0.0790)   5.6911 (0.0722) 5.3778 (0.0722) 0.0457 0.2710
+              Full Market   0.1325 (0.0911)   0.0960 (0.1260)   1.4535 (0.6880)   0.7622 (1.3120)   0.4133 (0.1115)   4.0005 (0.0815) 3.7507 (0.0838) 0.0806 0.2558
+              CSI 300       0.0647 (0.1673)   0.0704 (0.1619)   0.3867 (2.5858)   0.4349 (2.2994)   0.2515 (0.0883)   3.2175 (0.0839) 2.8933 (0.0810) 0.0459 0.2177
+              CSI 500       0.0658 (0.1536)   0.0668 (0.1372)   0.4285 (2.3335)   0.4867 (2.0547)   0.2454 (0.0830)   3.2390 (0.0811) 2.9230 (0.0790) 0.0478 0.2415
+TCN           CSI 1000      0.0992 (0.1152)   0.0638 (0.1143)   0.8615 (1.1608)   0.5584 (1.7910)   0.1798 (0.0759)   2.4904 (0.0721) 2.1921 (0.0727) 0.0503 0.2642
+              CSI 2000      0.1400 (0.1049)   0.1015 (0.1175)   1.3348 (0.7492)   0.8636 (1.1580)   0.4320 (0.0803)   5.6475 (0.0730) 5.3355 (0.0731) 0.0488 0.2650
+              Full Market   0.1423 (0.0925)   0.0941 (0.1290)   1.5386 (0.6499)   0.7294 (1.3709)   0.3599 (0.1219)   3.1836 (0.0822) 2.9632 (0.0861) 0.1035 0.2616
+              CSI 300       0.0386 (0.1216)   0.0454 (0.1247)   0.3173 (3.1516)   0.3641 (2.7466)   0.1112 (0.0588)   2.0070 (0.0735) 1.6271 (0.0719) 0.0250 0.2382
+              CSI 500       0.0462 (0.1436)   0.0543 (0.1480)   0.3219 (3.1063)   0.3666 (2.7275)   0.1530 (0.0900)   1.8597 (0.0791) 1.5890 (0.0773) 0.0578 0.2083
+TimesNet      CSI 1000      0.0580 (0.1357)   0.0589 (0.1498)   0.4275 (2.3394)   0.3932 (2.5430)   0.2060 (0.1009)   2.1980 (0.0782) 1.9562 (0.0766) 0.0656 0.1816
+              CSI 2000      0.0945 (0.1003)   0.0793 (0.1019)   0.9425 (1.0610)   0.7779 (1.2855)   0.3193 (0.0645)   5.0714 (0.0703) 4.7309 (0.0704) 0.0280 0.2150
+              Full Market   0.1027 (0.0977)   0.0880 (0.1184)   1.0507 (0.9517)   0.7436 (1.3448)   0.4672 (0.0860)   5.9321 (0.0802) 5.5830 (0.0804) 0.0382 0.2234
+           CSI 300          0.0370 (0.1197)   0.0452 (0.1186)   0.3086 (3.2403)   0.3808 (2.6263)   0.0765 (0.0538)   1.5312 (0.0770) 1.1146 (0.0750) 0.0387 0.2491
+           CSI 500          0.0481 (0.1175)   0.0498 (0.1112)   0.4089 (2.4454)   0.4477 (2.2339)   0.1174 (0.0604)   2.2258 (0.0875) 1.7955 (0.0858) 0.0308 0.2389
+Modern TCN CSI 1000         0.0749 (0.1237)   0.0646 (0.1307)   0.6052 (1.6522)   0.4940 (2.0243)   0.2157 (0.0888)   2.7566 (0.0870) 2.4416 (0.0836) 0.0604 0.2424
+           CSI 2000         0.1210 (0.1032)   0.1044 (0.1104)   1.1724 (0.8530)   0.9454 (1.0578)   0.5300 (0.0673)   8.6434 (0.0811) 8.1692 (0.0796) 0.0193 0.2427
+           Full Market      0.1169 (0.0943)   0.0982 (0.1148)   1.2401 (0.8064)   0.8557 (1.1687)   0.5048 (0.0923)   5.9864 (0.0800) 5.6504 (0.0815) 0.0497 0.2395
+              CSI 300       0.0609 (0.1540)   0.0651 (0.1500)   0.3955 (2.5284)   0.4341 (2.3034)   0.2375 (0.0798)   3.3658 (0.0823) 3.0108 (0.0802) 0.0337 0.2160
+              CSI 500       0.0677 (0.1465)   0.0686 (0.1473)   0.4621 (2.1638)   0.4655 (2.1484)   0.2623 (0.0888)   3.1701 (0.0747) 2.8887 (0.0747) 0.0490 0.2198
+Informer      CSI 1000      0.0990 (0.1302)   0.0723 (0.1455)   0.7602 (1.3154)   0.4969 (2.0124)   0.2724 (0.0969)   3.2091 (0.0879) 2.8998 (0.0843) 0.0542 0.2347
+              CSI 2000      0.1389 (0.0983)   0.0984 (0.1081)   1.4125 (0.7079)   0.9106 (1.0982)   0.4248 (0.0667)   6.9632 (0.0813) 6.5212 (0.0827) 0.0268 0.2600
+              Full Market   0.1379 (0.0895)   0.1002 (0.1263)   1.5421 (0.6485)   0.7936 (1.2600)   0.4715 (0.0965)   5.4929 (0.0842) 5.1440 (0.0848) 0.0611 0.2369
+              CSI 300       0.0533 (0.1527)   0.0635 (0.1541)   0.3487 (2.8678)   0.4119 (2.4276)   0.2075 (0.0836)   2.6930 (0.0769) 2.3952 (0.0750) 0.0374 0.1932
+              CSI 500       0.0626 (0.1346)   0.0605 (0.1307)   0.4652 (2.1496)   0.4625 (2.1621)   0.2330 (0.0750)   3.4679 (0.0816) 3.1039 (0.0800) 0.0254 0.2119
+Autoformer    CSI 1000      0.0868 (0.1278)   0.0714 (0.1385)   0.6790 (1.4727)   0.5154 (1.9401)   0.2758 (0.0915)   3.3197 (0.0808) 3.0226 (0.0796) 0.0534 0.2298
+              CSI 2000      0.1368 (0.0935)   0.0979 (0.1057)   1.4633 (0.6834)   0.9262 (1.0796)   0.4351 (0.0625)   7.0588 (0.0700) 6.7164 (0.0715) 0.0204 0.2479
+              Full Market   0.1340 (0.0909)   0.0948 (0.1136)   1.4735 (0.6787)   0.8346 (1.1981)   0.4091 (0.0900)   4.8444 (0.0784) 4.5505 (0.0802) 0.0634 0.2513
+              CSI 300       0.0548 (0.1398)   0.0621 (0.1463)   0.3922 (2.5495)   0.4246 (2.3553)   0.2148 (0.0795)   2.8648 (0.0741) 2.5684 (0.0720) 0.0423 0.2067
+              CSI 500       0.0593 (0.1484)   0.0625 (0.1537)   0.3999 (2.5004)   0.4066 (2.4594)   0.2362 (0.0931)   2.8923 (0.0879) 2.5823 (0.0842) 0.0544 0.2083
+PatchTST      CSI 1000      0.0860 (0.1211)   0.0669 (0.1435)   0.7101 (1.4082)   0.4659 (2.1462)   0.2323 (0.0910)   2.6472 (0.0714) 2.4019 (0.0708) 0.0553 0.2165
+              CSI 2000      0.1255 (0.0966)   0.0919 (0.1000)   1.3000 (0.7692)   0.9183 (1.0890)   0.4287 (0.0644)   7.2279 (0.0787) 6.7812 (0.0792) 0.0195 0.2411
+              Full Market   0.1283 (0.0783)   0.0936 (0.1182)   1.6394 (0.6100)   0.7919 (1.2629)   0.4163 (0.0834)   5.2717 (0.0761) 4.9650 (0.0769) 0.0461 0.2437
+              CSI 300       0.0451 (0.1598)   0.0609 (0.1637)   0.2819 (3.5479)   0.3719 (2.6888)   0.2033 (0.0911)   2.4738 (0.0820) 2.1867 (0.0789) 0.0488 0.1660
+              CSI 500       0.0642 (0.1608)   0.0689 (0.1605)   0.3993 (2.5047)   0.4296 (2.3277)   0.3017 (0.0896)   3.4552 (0.0687) 3.2095 (0.0693) 0.0341 0.1911
+Pyraformer    CSI 1000      0.0897 (0.1237)   0.0673 (0.1280)   0.7254 (1.3786)   0.5256 (1.9027)   0.2502 (0.0752)   3.3878 (0.0685) 3.1060 (0.0682) 0.0359 0.2286
+              CSI 2000      0.1370 (0.0904)   0.0979 (0.1094)   1.5159 (0.6597)   0.8954 (1.1168)   0.4818 (0.0795)   6.6934 (0.0815) 6.2949 (0.0815) 0.0208 0.2171
+              Full Market   0.1387 (0.0928)   0.1030 (0.1329)   1.4950 (0.6689)   0.7751 (1.2902)   0.4962 (0.1057)   5.3727 (0.0875) 5.0262 (0.0878) 0.0552 0.2177
+              CSI 300       0.0618 (0.1790)   0.0773 (0.1892)   0.3452 (2.8968)   0.4088 (2.4462)   0.3078 (0.1104)   2.9571 (0.0739) 2.7336 (0.0724) 0.0667 0.1581
+              CSI 500       0.0674 (0.1446)   0.0627 (0.1361)   0.4660 (2.1458)   0.4604 (2.1722)   0.2495 (0.0800)   3.2096 (0.0700) 2.9358 (0.0702) 0.0408 0.2141
+Crossformer   CSI 1000      0.0992 (0.1244)   0.0734 (0.1461)   0.7977 (1.2536)   0.5024 (1.9906)   0.2860 (0.0979)   3.0840 (0.0730) 2.8380 (0.0729) 0.0613 0.2078
+              CSI 2000      0.1387 (0.0969)   0.1031 (0.1161)   1.4303 (0.6992)   0.8882 (1.1259)   0.4806 (0.0722)   7.1629 (0.0785) 6.7686 (0.0783) 0.0253 0.2407
+              Full Market   0.1406 (0.0870)   0.0997 (0.1300)   1.6151 (0.6191)   0.7669 (1.3039)   0.4568 (0.0985)   4.9025 (0.0777) 4.6373 (0.0794) 0.0623 0.2400
+             CSI 300        0.0670 (0.1676)   0.0756 (0.1787)   0.3999 (2.5008)   0.4229 (2.3646)   0.2809 (0.1063)   2.9206 (0.0807) 2.6607 (0.0789) 0.0796 0.1896
+             CSI 500        0.0702 (0.1478)   0.0677 (0.1463)   0.4749 (2.1058)   0.4623 (2.1631)   0.2493 (0.0864)   2.9615 (0.0698) 2.7100 (0.0696) 0.0547 0.2199
+iTransformer CSI 1000       0.0958 (0.1291)   0.0694 (0.1380)   0.7419 (1.3479)   0.5026 (1.9896)   0.2280 (0.0918)   2.5196 (0.0690) 2.2919 (0.0685) 0.0707 0.2452
+             CSI 2000       0.1390 (0.1000)   0.1035 (0.1140)   1.3899 (0.7195)   0.9076 (1.1018)   0.4678 (0.0746)   6.3857 (0.0694) 6.0901 (0.0707) 0.0349 0.2322
+             Full Market    0.1424 (0.0904)   0.1011 (0.1329)   1.5742 (0.6352)   0.7613 (1.3136)   0.4427 (0.1154)   4.0472 (0.0794) 3.8241 (0.0806) 0.0988 0.2368
+              CSI 300       0.0357 (0.1555)   0.0499 (0.1601)   0.2297 (4.3544)   0.3116 (3.2092)   0.1404 (0.0874)   1.8281 (0.0856) 1.5294 (0.0819) 0.0474 0.1646
+              CSI 500       0.0363 (0.1378)   0.0442 (0.1450)   0.2632 (3.7992)   0.3046 (3.2828)   0.0737 (0.0847)   0.9381 (0.0779) 0.6734 (0.0772) 0.0724 0.2055
+Fedformer     CSI 1000      0.0218 (0.1234)   0.0374 (0.1415)   0.1766 (5.6634)   0.2646 (3.7792)   0.0576 (0.0987)   0.6054 (0.0722) 0.3922 (0.0721) 0.0898 0.1565
+              CSI 2000      0.0303 (0.0624)   0.0297 (0.0790)   0.4849 (2.0623)   0.3755 (2.6629)   0.0262 (0.0497)   0.5306 (0.0680) 0.1262 (0.0670) 0.0604 0.2049
+              Full Market   0.0371 (0.0829)   0.0424 (0.1043)   0.4472 (2.2360)   0.4060 (2.4629)   0.1522 (0.0753)   2.2543 (0.0831) 1.9175 (0.0845) 0.0310 0.1763
+
+           CSI 300     0.0664⋆ (0.1597) 0.0713‡ (0.1620) 0.4159 (2.4046) 0.4401 (2.2722) 0.2730† (0.0878) 3.5075 (0.0840) 3.1769 (0.0805) 0.0392 0.1931
+           CSI 500     0.0697⋆ (0.1605) 0.0696 (0.1524) 0.4345 (2.3013) 0.4568 (2.1889) 0.2840⋆ (0.0859) 3.3877 (0.0686) 3.1336 (0.0692) 0.0383 0.2160
+TransAlpha CSI 1000    0.0966† (0.1316) 0.0732⋆ (0.1490) 0.7346 (1.3614) 0.4910 (2.0366) 0.2823† (0.1016) 3.1184 (0.0845) 2.8341 (0.0811) 0.0569 0.2161
+           CSI 2000     0.1406 (0.1021) 0.1056 (0.1188) 1.3771 (0.7262) 0.8887 (1.1252) 0.4940† (0.0707) 7.0237 (0.0684) 6.7332 (0.0695) 0.0318 0.2324
+           Full Market 0.1376‡ (0.0846) 0.0944 (0.1257) 1.6269⋆ (0.6147) 0.7509 (1.3318) 0.3866 (0.1065) 3.7897 (0.0789) 3.5636 (0.0793) 0.0868 0.2398
+
+
+
+                  Table 3: Metrics across CSI subsets in (mean (std)) format; 1st: bold, 2nd: ⋆ , 3rd: † , 4th: ‡
+
+
+
+
+                                                                             5215
+                         Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)
+
+
+
+References                                                                    [Li et al., 2023] Zhe Li, Shiyi Qi, Yiduo Li, and Zenglin Xu.
+[Bai et al., 2018] Shaojie Bai, J. Zico Kolter, and Vladlen                      Revisiting long-term time series forecasting: An investi-
+                                                                                 gation on linear mapping, 2023.
+   Koltun. An empirical evaluation of generic convolutional
+   and recurrent networks for sequence modeling. In Pro-                      [Li et al., 2024] Tong Li, Zhaoyang Liu, Yanyan Shen, Xue
+   ceedings of the 35th International Conference on Machine                      Wang, Haokun Chen, and Sen Huang. Master: Market-
+   Learning, volume 80, pages 384–393, Stockholm, Swe-                           guided stock transformer for stock price forecasting. In
+   den, 2018. PMLR.                                                              Proceedings of the Thirty-Eighth AAAI Conference on Ar-
+                                                                                 tificial Intelligence and Thirty-Sixth Conference on In-
+[Bollerslev, 1986] Tim Bollerslev. Generalized autoregres-
+                                                                                 novative Applications of Artificial Intelligence and Four-
+   sive conditional heteroskedasticity. Journal of Economet-                     teenth Symposium on Educational Advances in Artificial
+   rics, 31(3):307–327, 1986.                                                    Intelligence, AAAI’24/IAAI’24/EAAI’24, New York, NY,
+[Cao and Tay, 2003] Lijuan Cao and Francis Eng Hock Tay.                         USA, 2024. AAAI Press.
+   Support vector machine with adaptive parameters in finan-                  [Liu et al., 2022] Shizhan Liu, Hang Yu, Cong Liao, Jian-
+   cial time series forecasting. IEEE transactions on neural                     guo Li, Weiyao Lin, Alex X. Liu, and Schahram Dust-
+   networks, 14 6:1506–18, 2003.                                                 dar. Pyraformer: Low-complexity pyramidal attention for
+[Chen and Guestrin, 2016] Tianqi Chen and Carlos Guestrin.                       long-range time series modeling and forecasting. In Inter-
+   Xgboost: A scalable tree boosting system. In Proceedings                      national Conference on Learning Representations, 2022.
+   of the 22nd ACM SIGKDD International Conference on                         [Liu et al., 2024] Yong Liu, Tengge Hu, Haoran Zhang,
+   Knowledge Discovery and Data Mining, pages 785–794,                           Haixu Wu, Shiyu Wang, Lintao Ma, and Mingsheng Long.
+   New York, NY, USA, 2016. ACM.                                                 itransformer: Inverted transformers are effective for time
+[Chung et al., 2014] Junyoung Chung, Caglar Gulcehre,                            series forecasting, 2024.
+   KyungHyun Cho, and Yoshua Bengio. Empirical evalua-                        [Nie et al., 2023] Yuqi Nie, Nam H. Nguyen, Phanwadee
+   tion of gated recurrent neural networks on sequence mod-                      Sinthong, and Jayant Kalagnanam. A time series is worth
+   eling, 2014.                                                                  64 words: Long-term forecasting with transformers. In
+[Das et al., 2023] Abhimanyu Das, Weihao Kong, Andrew                            International Conference on Learning Representations,
+   Leach, Shaan K Mathur, Rajat Sen, and Rose Yu. Long-                          2023.
+   term forecasting with tiDE: Time-series dense encoder.                     [Park et al., 2025] Kijeong Park, Sungchul Hong, and Jong-
+   Transactions on Machine Learning Research, 2023.                              June Jeon. Dynamic higher-order relations and event-
+[donghao and wang xue, 2024] Luo donghao and wang xue.                           driven temporal modeling for stock price forecasting. In
+   ModernTCN: A modern pure convolution structure for                            Proceedings of the 34th International Joint Conference on
+   general time series analysis. In The Twelfth International                    Artificial Intelligence (IJCAI), 2025.
+   Conference on Learning Representations, 2024.                              [Salinas et al., 2020] David Salinas, Valentin Flunkert, and
+                                                                                 Jan Gasthaus. Deepar: Probabilistic forecasting with au-
+[Fama, 1970] Eugene F Fama. Efficient capital markets: A
+                                                                                 toregressive recurrent networks. International Journal of
+   review of theory and empirical work. The Journal of Fi-                       Forecasting, 36(3):1181–1191, 2020.
+   nance, 25(2):383–417, 1970.
+                                                                              [Shi et al., 2025] Xiaoming Shi, Shiyu Wang, Yuqi Nie, Di-
+[Gu and Dao, 2024] Albert Gu and Tri Dao. Mamba: Linear-                         anqi Li, Zhou Ye, Qingsong Wen, and Ming Jin. Time-
+   time sequence modeling with selective state spaces. In                        moe: Billion-scale time series foundation models with
+   Proceedings of the 41st International Conference on Ma-                       mixture of experts. In International Conference on Learn-
+   chine Learning, volume 235, pages 14890–14904, Vienna,                        ing Representations (ICLR), 2025.
+   Austria, 2024. PMLR.
+                                                                              [Vaswani et al., 2017] Ashish Vaswani, Noam Shazeer, Niki
+[Hochreiter and Schmidhuber, 1997] Sepp Hochreiter and                           Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez,
+   Jürgen Schmidhuber. Long short-term memory. Neural                           Łukasz Kaiser, and Illia Polosukhin. Attention is all you
+   Computation, 9(8):1735–1780, 1997.                                            need. In Advances in Neural Information Processing Sys-
+[Kaplan et al., 2020] Jared Kaplan, Sam McCandlish, Tom                          tems, volume 30, pages 5998–6008, Red Hook, NY, USA,
+   Henighan, Tom B Brown, Benjamin Chess, Rewon Child,                           2017. Curran Associates, Inc.
+   Scott Gray, Alec Radford, Jeffrey Wu, and Dario Amodei.                    [Wu et al., 2021] Haixu Wu, Jiehui Xu, Jianmin Wang, and
+   Scaling laws for neural language models. arXiv preprint                       Mingsheng Long. Autoformer: Decomposition transform-
+   arXiv:2001.08361, 2020.                                                       ers with Auto-Correlation for long-term series forecasting.
+[Ke et al., 2017] Guolin Ke, Qi Meng, Thomas Finley,                             In Advances in Neural Information Processing Systems,
+   Taifeng Wang, Wei Chen, Weidong Ma, Qiwei Ye, and                             volume 34, pages 22083–22094, Red Hook, NY, USA,
+   Tie-Yan Liu. Lightgbm: A highly efficient gradient boost-                     2021. Curran Associates, Inc.
+   ing decision tree. In Proceedings of the 31st International                [Wu et al., 2022] Haixu Wu, Tengge Hu, Jianmin Wang,
+   Conference on Neural Information Processing Systems,                          Mingsheng Long, Qing Wang, Jian Pei, Tong Yu, and
+   volume 30, pages 3146–3154, Red Hook, NY, USA, 2017.                          Chuxu Zhang. Timesnet: Temporal 2d-variation model-
+   Curran Associates, Inc.                                                       ing for general time series analysis. In Proceedings of
+
+
+
+                                                                       5216
+                         Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)
+
+
+
+  the 39th International Conference on Machine Learning,
+  pages 23008–23020, Baltimore, MD, USA, 2022. PMLR.
+[Yu et al., 2024] Zhaojian Yu, Yinghao Wu, Genesis Wang,
+  and Heming Weng. Miga: Mixture-of-experts with group
+  aggregation for stock market prediction, 2024.
+[Zeng et al., 2023] Ailing Zeng, Muxi Chen, Lei Zhang, and
+  Qiang Xu. Are transformers effective for time series fore-
+  casting? In Proceedings of the Thirty-Seventh AAAI Con-
+  ference on Artificial Intelligence and Thirty-Fifth Confer-
+  ence on Innovative Applications of Artificial Intelligence
+  and Thirteenth Symposium on Educational Advances
+  in Artificial Intelligence, AAAI’23/IAAI’23/EAAI’23.
+  AAAI Press, 2023.
+[Zhang and Yan, 2023] Yunhao Zhang and Junchi Yan.
+  Crossformer: Transformer utilizing cross-dimension de-
+  pendency for multivariate time series forecasting. In The
+  Eleventh International Conference on Learning Represen-
+  tations, 2023.
+[Zhang et al., 2024] Xiyuan Zhang, Ranak Roy Chowdhury,
+  Rajesh K. Gupta, and Jingbo Shang. Large language mod-
+  els for time series: a survey. In Proceedings of the Thirty-
+  Third International Joint Conference on Artificial Intelli-
+  gence, IJCAI ’24, 2024.
+[Zhou et al., 2021] Haoyi Zhou, Shanghang Zhang, Jieqi
+  Peng, Shuai Zhang, Jianxin Li, Hui Xiong, and Wancai
+  Zhang. Informer: Beyond efficient transformer for long
+  sequence time-series forecasting. In Proceedings of the
+  38th International Conference on Machine Learning, vol-
+  ume 139, pages 11106–11116, Online, 2021. PMLR.
+[Zhou et al., 2022] Tian Zhou, Ziqing Ma, Qingsong Wen,
+  Xue Wang, Liang Sun, and Rong Jin. Fedformer: Fre-
+  quency enhanced decomposed transformer for long-term
+  series forecasting, 2022.
+[Zhu et al., 2024] Peng Zhu, Yuante Li, Yifan Hu, Qinyuan
+  Liu, Dawei Cheng, and Yuqi Liang. Lsr-igru: Stock trend
+  prediction based on long short-term relationships and im-
+  proved gru. In Proceedings of the 33rd ACM International
+  Conference on Information and Knowledge Management,
+  CIKM ’24, page 5135–5142, New York, NY, USA, 2024.
+  Association for Computing Machinery.
+[Zou et al., 2023] Jinan Zou, Qingying Zhao, Yang Jiao,
+  Haiyao Cao, Yanxi Liu, Qingsen Yan, Ehsan Abbasnejad,
+  Lingqiao Liu, and Javen Qinfeng Shi. Stock market pre-
+  diction via deep learning techniques: A survey, 2023.
+
+
+
+
+                                                                       5217
+

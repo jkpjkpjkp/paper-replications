@@ -1,0 +1,102 @@
+[
+  {
+    "universe": "csi300",
+    "variant": "transalpha",
+    "seed": 0,
+    "epoch": 1,
+    "loss": 0.5329051949306877,
+    "validation_ic": -0.014603770713226896,
+    "lr": 0.001,
+    "seconds": 9.95518074199208
+  },
+  {
+    "universe": "csi300",
+    "variant": "transalpha",
+    "seed": 0,
+    "epoch": 2,
+    "loss": 0.5255352171238311,
+    "validation_ic": 0.02264493995523728,
+    "lr": 0.0007071067811865475,
+    "seconds": 19.728942096000537
+  },
+  {
+    "universe": "csi300",
+    "variant": "transalpha",
+    "seed": 0,
+    "epoch": 3,
+    "loss": 0.5193566619279142,
+    "validation_ic": 0.03579107778759771,
+    "lr": 0.0005773502691896258,
+    "seconds": 29.276647008999134
+  },
+  {
+    "universe": "csi300",
+    "variant": "transalpha",
+    "seed": 0,
+    "epoch": 4,
+    "loss": 0.5172582741626008,
+    "validation_ic": 0.029058865177687847,
+    "lr": 0.0005,
+    "seconds": 38.422390394000104
+  },
+  {
+    "universe": "csi300",
+    "variant": "transalpha",
+    "seed": 0,
+    "epoch": 5,
+    "loss": 0.5141635719173683,
+    "validation_ic": 0.03737872139832674,
+    "lr": 0.0004472135954999579,
+    "seconds": 46.69280535398866
+  },
+  {
+    "universe": "csi300",
+    "variant": "transalpha",
+    "seed": 0,
+    "epoch": 6,
+    "loss": 0.5129529437619055,
+    "validation_ic": 0.03854008869603636,
+    "lr": 0.0004082482904638631,
+    "seconds": 54.17805435099581
+  },
+  {
+    "universe": "csi300",
+    "variant": "transalpha",
+    "seed": 0,
+    "epoch": 7,
+    "loss": 0.5104051294797909,
+    "validation_ic": 0.03510942444093584,
+    "lr": 0.0003779644730092272,
+    "seconds": 63.37154578299669
+  },
+  {
+    "universe": "csi300",
+    "variant": "transalpha",
+    "seed": 0,
+    "epoch": 8,
+    "loss": 0.5073160475599552,
+    "validation_ic": 0.03532661537554341,
+    "lr": 0.00035355339059327376,
+    "seconds": 72.42577521299245
+  },
+  {
+    "universe": "csi300",
+    "variant": "transalpha",
+    "seed": 0,
+    "epoch": 9,
+    "loss": 0.5073349465153174,
+    "validation_ic": 0.04835160718150591,
+    "lr": 0.0003333333333333333,
+    "seconds": 81.09310151200043
+  },
+  {
+    "universe": "csi300",
+    "variant": "transalpha",
+    "seed": 0,
+    "epoch": 10,
+    "loss": 0.5040984021689363,
+    "validation_ic": 0.014221508410411815,
+    "lr": 0.00031622776601683794,
+    "seconds": 90.48109727598785
+  }
+]

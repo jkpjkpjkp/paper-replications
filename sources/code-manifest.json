@@ -1,0 +1,20 @@
+{
+  "scripts/audit.py": "beed9aa975f4a2e0d805e35e70f3dc4059f73beac890ad12852e34b3ea5b6a37",
+  "scripts/prepare_data.py": "61d3a12c5c8fc2032231fbc7d51448fb92e2ea84d3765e4d63fa1505f1f8fcef",
+  "scripts/prepare_execution.py": "c896736da109eb531ddc5e700bb8f6eb5af2e641b146eb742b638442183698f5",
+  "scripts/report.py": "3626c4353b9bc02f468dcbe3468926ad1c016d68e4a8c772f738eeca3015f23c",
+  "scripts/train.py": "87a725facccae52a9d97694ad24dfb2f7771f0a7bd328573ad3d9f82ac7fae7a",
+  "tests/test_reproduction.py": "eb36507d2c84ddbc586d42ce0526b0b2b2f84aaa66c4d20a2a64d772d9656bc0",
+  "transalpha/__init__.py": "9242120d365002aa6abe8c2a870e5342d18ecad9c6debc8501cf4ed395285c86",
+  "transalpha/data.py": "fd6eaa509c0639f15607d61eac5990e3930207c7bb5115e52fc35f8728fbf805",
+  "transalpha/evaluation.py": "3f52b393ab0f60989443653ca1ebb66688377adb612206205eee98e84f3d1be4",
+  "transalpha/loss.py": "cc2150b0149f01d93e0e7d9d0be57452d32f7eae32dc33a64d159117df9ca71c",
+  "transalpha/model.py": "fa73611943fc81476fa4a8c74dfdf683b13affc28412df212348054578748030",
+  "README.txt": "29a07730bf7c7b9fa241559aedef86e718bfaf645177e4cc503b1b483e81629a",
+  "config.json": "7858e35d0dd3630648196764e250297a9d76535d7f2e3955600aebf6db0c287d",
+  "pyproject.toml": "ffb14c119560d38d6d34367a86fb871747c8555f42701bd5d0fa606b9aca5152",
+  "requirements.lock.txt": "c5c34ef2e1e1915c346d3576a0160a9794a9a460c7c52bb9f45187da528fd039",
+  "reproduce.sh": "2e3255f2b9c65ba5dbdc6a078b29d522581c40e640b2e6991dfcda8920dc940d",
+  "reference.bib": "a8007f0674353647566319760334d58a8bd207451531842df9e6cbd1c6744c7a",
+  "sources/reconstruction_notes.txt": "eeafa07e76561b4cb9744f3c8c7a1257d85cfc77bd50a4fba8b81c5ca3fc9be9"
+}

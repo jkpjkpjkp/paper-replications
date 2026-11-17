@@ -1,0 +1,62 @@
+0: no verified original-paper comparison; CZ202 monthly adaptation complete.
+Assessment date: 2026-11-17
+
+Scope and completed evidence:
+Fresh monthly US CZ202 training: TransAlpha and a linear control, seeds 0/1/2
+(six completed fits). Training 2009-2019, validation 2020-2021, test 2022-2025
+(48 months); 202 stock-level characteristics; 16 calendar history months.
+Lagged NYSE20 size screen; value-weighted D10-D1 (+1/-1), 10bp/traded dollar.
+
+Local test results (equal-seed mean +/- sample seed SD; SD is not a CI):
+TransAlpha IC 0.014600 +/- 0.004106; rank IC 0.030828.
+TransAlpha gross Sharpe -0.094077; net Sharpe -0.212746 +/- 0.508346.
+Linear control IC 0.019100 +/- 0.000926; net Sharpe 0.180632 +/- 0.349045.
+TransAlpha underperforms this control in mean IC and mean net Sharpe.
+All three TransAlpha net FF5+UMD alpha 95% HAC intervals contain zero.
+Per-seed alpha, HAC t, CI and p are in results/cz202/REPORT.txt and metrics.json.
+
+Paper comparison and grade:
+The paper's Table 3 uses private 400-factor, 15-minute Chinese equity data.
+There is no corresponding published US monthly CZ202 target. Paper/local
+absolute error, relative error and matching tolerance: N/A, because these are
+different experiments. The grade remains 0; negative adapted portfolio results
+are not evidence that the original paper's numerical claims fail to reproduce.
+The original 27 daily CSI adaptation runs remain completed and audited; they
+also do not establish an original intraday numerical comparison. Neither the
+main private benchmark nor CSI2000/full-market experiments has been reproduced.
+
+Verification:
+15 implementation tests passed. The calendar/label-independence check also
+passed in the actual training environment. Saved checkpoint samples replay
+exactly. Six runs passed independent saved-score IC, market-cap decile and
+price-drift turnover ledger, fee, OLS/HAC coefficient, CI and p-value checks.
+Absolute tolerances: portfolio 1e-11, IC 1e-8 (float32 training targets),
+HAC statistics 1e-9. Source hash and independent full CRSP universe, lagged
+capitalization/NYSE20, month alignment and realized-return checks passed.
+
+Remaining gaps and missing data:
+See DATA.txt for source paths, exact missing-cell/history counts, neutral-fill
+assumptions and current-vintage limitations. No target labels are missing in
+the three experiment splits. The original anonymous 400-factor intraday panel,
+aligned identifiers/returns, preprocessing, selected settings and execution
+rules are still unavailable. Existing bounded searches did not locate an
+official release. The blocker file was removed; these gaps remain documented.
+
+Evidence paths (relative to this file):
+- DATA.txt
+- reproduce_cz202.sh
+- results/cz202/protocol.json
+- results/cz202/REPORT.txt
+- results/cz202/summary.json
+- results/cz202/completion.json
+- results/cz202/data_audit.json
+- results/cz202/source_verification.json
+- results/cz202/audit.json
+- results/cz202/calendar_test.json
+- results/cz202/*-seed*/metrics.json (checkpoints, histories, scores and holdings alongside)
+- results/cz202/environment.txt
+- results/REPORT.txt and results/audit.json (earlier daily CSI suite)
+- sources/paper.pdf and sources/reconstruction_notes.txt
+- ../.replication-local/artifacts/paper-claim-validation/results/claim_registry.csv
+
+Scale and update instructions: ../AGENTS.md

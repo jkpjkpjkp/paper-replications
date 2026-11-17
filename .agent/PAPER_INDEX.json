@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "transalpha",
+  "title": "TransAlpha: Lightweight Design Empowers Stock Return Forecasting",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "sources/paper.pdf",
+    "path_relative_to_collection": "transalpha/sources/paper.pdf",
+    "sha256": "b0dea83e4f84da8ebf6ebc4062f17569ef4b67c6ae154b88d82340c75619db73",
+    "bytes": 884283,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 9,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 94
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 95,
+      "line_end": 204
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 205,
+      "line_end": 301
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 302,
+      "line_end": 450
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 451,
+      "line_end": 584
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 585,
+      "line_end": 696
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 697,
+      "line_end": 1391
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 1392,
+      "line_end": 1479
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1480,
+      "line_end": 1517
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 78
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 79,
+      "line_end": 150
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 151,
+      "line_end": 220
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 221,
+      "line_end": 303
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 304,
+      "line_end": 376
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 377,
+      "line_end": 440
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 441,
+      "line_end": 538
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 539,
+      "line_end": 609
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 610,
+      "line_end": 664
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 22,
+      "text": "Abstract"
+    },
+    {
+      "line": 1395,
+      "text": "References"
+    },
+    {
+      "line": 1470,
+      "text": "2017. Curran Associates, Inc."
+    },
+    {
+      "line": 1475,
+      "text": "2021. Curran Associates, Inc."
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1518
+    }
+  ],
+  "line_count": 1518,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "1ef6431e96d3ae95c6370069424ba5e72ce71597d193141a4969f7bd36f73183",
+      "bytes": 50379
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "a5a1b7915944194d62c5d46a974537933721e266d9f808274f0be3d8fa8cc773",
+      "bytes": 68712
+    }
+  }
+}

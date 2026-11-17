@@ -1,0 +1,100 @@
+CZ202 inputs and missing data — assessed 2026-11-17
+=================================================
+
+Requested run: monthly US stock-level Chen–Zimmermann 202-factor adaptation.
+Run: bash reproduce_cz202.sh
+Outputs: results/cz202/ (separate from the completed 27 daily CSI runs).
+Protocol: results/cz202/protocol.json. Data audit: results/cz202/data_audit.json.
+
+Available input data
+--------------------
+Raw CZ release: /home/jkp/data/Chen_Zimmermann_Factor_Zoo_2026_10/
+  Firm Level Characteristics/Predictors.parquet
+Returns, capitalization and common-stock eligibility: /home/jkp/data/crsp-monthly/.
+Prepared panel and FF5+UMD factors:
+  /home/jkp/data/.replication-local/artifacts/ordered-reproductions/data/
+  cz-monthly/panel.parquet, cz-monthly/manifest.json,
+  factors-monthly/ff5-umd.csv
+Panel SHA256: 94c61d8b3e10b0b893db541e5c5372c34a011976188c2d9d097c389f36737711
+The runner verifies this hash before training. The 477,772-row panel spans
+2005-2025; 2005-2008 supplies historical context. Forecast splits are training
+2009-2019 (132 months), validation 2020-2021 (24), test 2022-2025 (48).
+Each return-month row uses previous-month CZ values, market capitalization and
+NYSE 20th-percentile size cutoff. All source-eligible US common stocks are used;
+forecast eligibility does not depend on future returns. The source independently
+reconstructed the complete CRSP-defined universe; scripts/verify_cz202_source.py
+reruns that check into results/cz202/source_verification.json.
+
+Missing characteristics and histories
+------------------------------------
+The 209 source signals yield 202 nonconstant observed training signals. Seven
+excluded signals: Activism1, Activism2, ChNAnalyst, Governance, PatentsRD,
+ProbInformedTrading, RDcap. Selection uses training data only, not test outcomes.
+Source evidence: ../.replication-local/artifacts/ordered-reproductions/results/
+cz-preflight.json (per-feature observed counts and training eligibility).
+
+Observed values are cross-sectionally percentile-ranked within the feature month
+using average ties, then transformed as 2*rank-1. Missing values are set to 0,
+a neutral rank, NOT an observed raw characteristic of zero. No future-month
+values are used to fill gaps. A normalized zero can also be an observed median;
+there is no extra missingness indicator. This is an adaptation assumption.
+
+Split       Missing cells / total characteristic cells    Missing targets
+Train       12,443,814 / 48,709,674                         0 / 241,137 rows
+Validation   2,947,126 / 10,154,136                         0 /  50,268 rows
+Test         5,807,086 / 19,723,482                         0 /  97,641 rows
+
+The model uses 16 consecutive calendar months ending at the row's feature month.
+Absent historical stock-month rows (e.g. new listings or previous exclusion by
+the size screen) receive an all-zero neutral vector. Histories are aligned by
+PERMNO and calendar month; gaps are never compressed or backfilled. These gaps
+need not mean the raw characteristic was unavailable: the prepared panel also
+omits stocks below the size screen. The current eligible universe remains whole
+for cross-sectional denoising, and all test stocks receive predictions.
+
+Split       Absent history slots / total stock-month history slots
+Train       269,286 / 3,858,192
+Validation   86,536 /   804,288
+Test         93,380 / 1,562,256
+
+Missing targets would stop this frozen run; they are never silently zero-filled.
+The source is a current-vintage CZ/CRSP release with publication lags, not a
+historically archived as-published vintage. Missingness and revisions limit
+interpretation even though no future labels enter inputs or universe selection.
+
+Evaluation and remaining original-paper inputs
+----------------------------------------------
+The adaptation uses raw monthly total returns, whole monthly cross sections,
+the reconstructed TransAlpha model/loss, 16 monthly history slots, three fixed
+seeds (0/1/2), and a linear control. Checkpoints use validation IC only.
+The primary portfolio is market-cap-weighted D10-D1 (+1/-1 exposure), with 10bp
+per dollar traded including initial and final trades. FF5+UMD regressions report
+annual alpha, HAC t, 95% CI and p (Bartlett 6 lags, finite-sample correction).
+Costs use a gross-weight turnover ledger; borrowing, financing, price impact,
+spread heterogeneity and taxes are not modeled. This is not the daily CSI
+portfolio or the paper's intraday execution protocol.
+
+Still absent: the paper's private anonymous 400-factor 15-minute panel, aligned
+stock identifiers/returns, exact preprocessing, chosen hyperparameters and full
+long/short execution rules. Its mentioned processed HDF5 data have no located
+official download in the bounded prior searches. See sources/ and the archived
+../.replication-local/runs/blocked-20261117/transalpha-search.json receipt.
+CZ202 cannot reconstruct those proprietary factors or CSI2000/full-market tests.
+Thus this run is a requested method adaptation, not an original Table 3 numerical
+replication. Original-paper error/tolerance is not applicable to US monthly
+metrics. The original numerical replication grade remains 0.
+
+Environment
+-----------
+The runner uses the existing shared .venv-tra (PyTorch 2.4.1+cu121, NumPy 1.23.5,
+PyArrow 19.0.1) on CPU with two Torch threads. The original project environment
+has an incompatible PyArrow/NumPy pair for parquet loading; it was left intact
+to preserve the daily results. Override PYTHON_CZ to supply a compatible env.
+The run's protocol records code, evaluator and factor-file hashes and versions.
+
+Completed outcome (2026-11-17)
+----------------------------
+All six fits (three TransAlpha, three linear) completed and passed the independent
+saved-output audit in results/cz202/audit.json. TransAlpha mean test IC=0.014600,
+net Sharpe=-0.212746; linear mean IC=0.019100, net Sharpe=0.180632.
+See results/cz202/REPORT.txt for per-seed results, uncertainty and FF5+UMD inference.

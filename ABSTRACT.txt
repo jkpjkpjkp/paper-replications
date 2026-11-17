@@ -1,0 +1,9 @@
+TransAlpha: Lightweight Design Empowers Stock Return Forecasting
+
+Condensed abstract
+
+Introduces a lightweight transformer for intraday cross-sectional stock forecasting with
+denoising, temporal attention gating, smart pooling, and a hybrid loss. Tests use 400
+proprietary 15-minute alpha factors across the Chinese A-share market. Reported
+comparisons assess predictive performance and portfolio profitability against existing
+architectures.

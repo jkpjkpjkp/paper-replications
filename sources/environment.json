@@ -1,0 +1,15 @@
+{
+  "torch": "2.4.1+cu121",
+  "cuda": "12.1",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 4060",
+  "device_assignments": {
+    "csi300/*": "cuda",
+    "csi500/linear": "cpu",
+    "csi1000/linear": "cpu",
+    "csi500/transalpha": "cuda",
+    "csi1000/transalpha": "cuda"
+  },
+  "cpu_threads_per_process": 2,
+  "note": "Runtime parallelism only; training protocol unchanged. No test-based selection. Cached end-to-end validation completed successfully."
+}

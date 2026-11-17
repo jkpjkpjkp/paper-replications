@@ -1,0 +1,57 @@
+{
+  "scope": "Daily CSI and monthly US CZ202 adaptations; original private intraday benchmark remains unreproduced",
+  "expected_runs": 27,
+  "completed_runs": 27,
+  "daily_suite_complete": true,
+  "exact_intraday_replication": "Pending author factor data and missing protocol details",
+  "report": "results/REPORT.txt",
+  "audited_runs": 27,
+  "all_completed_runs_audited": true,
+  "assessment_date": "2026-11-17",
+  "original_paper_grade": 0,
+  "cz202": {
+    "scope": "Fresh monthly US adaptation; no comparable original paper target",
+    "completed_runs": 6,
+    "audited_runs": 6,
+    "complete": true,
+    "report": "results/cz202/REPORT.txt",
+    "summary": {
+      "linear": {
+        "ic": {
+          "mean": 0.019100113992662645,
+          "seed_sd": 0.0009256698845379928
+        },
+        "rank_ic": {
+          "mean": 0.031648229598645106,
+          "seed_sd": 0.003249981720350881
+        },
+        "gross_sharpe": {
+          "mean": 0.3506611750452652,
+          "seed_sd": 0.34285968025838104
+        },
+        "net_sharpe": {
+          "mean": 0.18063226881597902,
+          "seed_sd": 0.3490453222292272
+        }
+      },
+      "transalpha": {
+        "ic": {
+          "mean": 0.014599629468254771,
+          "seed_sd": 0.004105784706273614
+        },
+        "rank_ic": {
+          "mean": 0.030827970090069063,
+          "seed_sd": 0.006280741809524167
+        },
+        "gross_sharpe": {
+          "mean": -0.09407689091702297,
+          "seed_sd": 0.49624917751710695
+        },
+        "net_sharpe": {
+          "mean": -0.2127462653277414,
+          "seed_sd": 0.5083463931740128
+        }
+      }
+    }
+  }
+}
