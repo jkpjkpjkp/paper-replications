@@ -1,0 +1,116 @@
+[
+  {
+    "market": "euro50",
+    "retrieved_utc": "2026-11-11T02:02:44.825951+00:00",
+    "start": "2016-01-01",
+    "end": "2025-12-31",
+    "paper_n": 47,
+    "author_snapshot": false,
+    "stable_membership_verified": false,
+    "command": [
+      "/home/jkp/data/sparse-tangent-original-reproduction/.venv/bin/python",
+      "/home/jkp/data/sparse-tangent-original-reproduction/upstream/src/data_generator.py",
+      "--data",
+      "euro50",
+      "--start",
+      "2016-01-01",
+      "--end",
+      "2025-12-31"
+    ],
+    "status": "downloaded",
+    "rows": 2559,
+    "n_assets": 47,
+    "first": "2016-01-05",
+    "last": "2025-12-30",
+    "sha256": "b2aac96b84f64dd90a7074fc08f445f504f9d42cc187761ad821fddd1f1bd2f4",
+    "same_values_as_frozen": false,
+    "shared_values_max_abs_change": 1.1189708954998864e-06,
+    "added_columns": [],
+    "removed_columns": []
+  },
+  {
+    "market": "ftse100",
+    "retrieved_utc": "2026-11-11T02:02:50.541871+00:00",
+    "start": "2016-01-01",
+    "end": "2025-12-31",
+    "paper_n": 93,
+    "author_snapshot": false,
+    "stable_membership_verified": false,
+    "command": [
+      "/home/jkp/data/sparse-tangent-original-reproduction/.venv/bin/python",
+      "/home/jkp/data/sparse-tangent-original-reproduction/upstream/src/data_generator.py",
+      "--data",
+      "ftse100",
+      "--start",
+      "2016-01-01",
+      "--end",
+      "2025-12-31"
+    ],
+    "status": "downloaded",
+    "rows": 2570,
+    "n_assets": 92,
+    "first": "2016-01-05",
+    "last": "2025-12-30",
+    "sha256": "184c92e556d5c7e1b96a9ff482ee47a2484a47b6d7d65e48cee4c36464823667",
+    "same_values_as_frozen": false,
+    "shared_values_max_abs_change": 1.821238802900138e-06,
+    "added_columns": [
+      "NWG.L"
+    ],
+    "removed_columns": [
+      "NWG"
+    ]
+  },
+  {
+    "market": "nikkei225",
+    "retrieved_utc": "2026-11-11T02:03:03.635395+00:00",
+    "start": "2016-01-01",
+    "end": "2025-12-31",
+    "paper_n": 208,
+    "author_snapshot": false,
+    "stable_membership_verified": false,
+    "command": [
+      "/home/jkp/data/sparse-tangent-original-reproduction/.venv/bin/python",
+      "/home/jkp/data/sparse-tangent-original-reproduction/upstream/src/data_generator.py",
+      "--data",
+      "nikkei225",
+      "--start",
+      "2016-01-01",
+      "--end",
+      "2025-12-31"
+    ],
+    "status": "downloaded",
+    "rows": 2442,
+    "n_assets": 196,
+    "first": "2016-01-05",
+    "last": "2025-12-30",
+    "sha256": "596fbae00ad70671ca3a58b664941d22fac8d189d1d450889ef340f6a6274297",
+    "same_values_as_frozen": false,
+    "shared_values_max_abs_change": 1.037340872400358e-06,
+    "added_columns": [],
+    "removed_columns": [
+      "1332.T",
+      "2503.T",
+      "3861.T",
+      "4004.T",
+      "5019.T",
+      "6702.T",
+      "7004.T",
+      "7752.T",
+      "8001.T",
+      "8253.T"
+    ]
+  },
+  {
+    "market": "kospi200",
+    "retrieved_utc": "2026-11-11T02:03:39.831366+00:00",
+    "start": "2016-01-01",
+    "end": "2025-12-31",
+    "paper_n": 162,
+    "author_snapshot": false,
+    "stable_membership_verified": false,
+    "status": "failed",
+    "error_type": "JSONDecodeError",
+    "error": "Expecting value: line 1 column 1 (char 0)"
+  }
+]

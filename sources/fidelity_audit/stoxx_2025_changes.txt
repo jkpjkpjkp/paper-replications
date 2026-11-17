@@ -1,0 +1,581 @@
+Skip to main content
+
+-->
+
+-
+
+- Looking for an index?
+
+- Looking for other information?
+
+Select Your Language
+
+- English
+
+-
+
+-->
+
+-
+
+Select Your Account
+
+- STOXX
+
+-
+Subscribe
+
+-
+
+-
+
+Our Solutions
+
+Back
+
+-->
+-->
+
+Index
+
+-
+Featured indices
+
+-
+DAX
+
+-
+EURO STOXX 50
+
+-
+STOXX Europe 600
+
+-
+Investable Market indices
+
+-
+Equity Factor indices
+
+-
+Artificial Intelligence indices
+
+-
+Equity indices
+
+-
+Equity indices overview
+
+-
+Benchmark indices
+
+-
+Investable market indices
+
+-
+Blue-chip indices
+
+-
+European equity indices
+
+-
+Global & regional indices
+
+-
+Sector indices
+
+-
+Size indices
+
+-
+Strategy indices
+
+-
+Thematic indices
+
+-
+Thematic indices overview
+
+-
+Revenue-based thematic indices
+
+-
+Transition metals indices
+
+-
+Patent-based thematic indices
+
+-
+Sustainability indices
+
+-
+Sustainability indices overview
+
+-
+ESG indices
+
+-
+Climate indices
+
+-
+ISS STOXX Biodiversity indices
+
+-
+STOXX ICE Fixed Income Sustainability indices
+
+-
+Factor-Based indices
+
+-
+Factor-based indices overview
+
+-
+Factor and ESG-X Factor indices
+
+-
+Equity factor indices
+
+-
+Industry Neutral Factor indices
+
+-
+Dividend indices
+
+-
+Minimum Variance indices
+
+-
+Volatility indices
+
+-
+Fixed Income indices
+
+-
+Fixed Income indices overview
+
+-
+STOXX ICE Fixed Income Sustainability indices
+
+-
+eb.rexx Bond indices
+
+-
+EUROGOV Bond indices
+
+-
+Digital Asset indices
+
+-
+Credit-spread indices
+
+-
+AXI/FXI indices
+
+-
+Other indices
+
+-
+Customized indices
+
+-
+All indices
+
+-->
+-->
+
+Client Segments
+
+-
+Asset managers
+
+-
+Asset owners
+
+-
+ETF issuers
+
+-
+Sell-side
+
+## WHITEPAPER
+
+### Buffer strategies for downside protection? A short- and long-term perspective
+
+Download
+
+-
+
+Insights & Research
+
+Back
+
+-->
+-->
+
+Insights & Research
+
+-
+Blog posts
+
+-
+Case studies
+
+-
+Whitepapers
+
+-
+ALL
+
+-->
+-->
+
+Newsletters
+
+-
+Monthly index news
+
+-->
+-->
+
+News & Events
+
+-
+Press releases
+
+-
+News & media mentions
+
+-
+Events
+
+## WHITEPAPER
+
+### VSTOXX 101: Understanding Europe’s volatility benchmark
+
+Download
+
+-
+
+Index Resources
+
+Back
+
+-->
+-->
+
+Index Data
+
+-
+General
+
+-
+Indices
+
+-
+Customized indices
+
+-
+Data vendor codes
+
+-
+Factsheets & components
+
+-
+Market consultation
+
+-
+Exchange traded products
+
+-
+Technical documentation
+
+-
+Methodology
+
+-
+Rulebooks
+
+-
+Withholding tax
+
+-
+Sector classification changes
+
+-
+Country classification
+
+-
+Dissemination
+
+-
+Data and reports
+
+-
+
+End of the day data
+
+- Index values & divisors
+
+- Currency rates
+
+- Legacy index reports
+
+- Corporate actions
+
+-
+Periodic review information
+
+-
+Selection lists
+
+-
+Review reports
+
+-
+Monthly data
+
+-
+Simulation files
+
+-
+Services
+
+-
+Index licensing
+
+-
+License agreement form
+
+-
+Academic data
+
+-
+iNAV
+
+-
+Announcements
+
+-
+Index updates
+
+-
+Dissemination
+
+-
+Methodology
+
+-
+Systems & IT
+
+-
+Help
+
+-->
+-->
+
+Index Regulations
+
+-
+Index regulations
+
+-
+Complaints
+
+-
+Legal
+
+-
+Trademarks
+
+-
+Disclaimers
+
+-
+Third party disclaimers
+
+## WHITEPAPER
+
+### Quantifying the challenge of market timing
+
+Download
+
+-
+
+About Us
+
+Back
+
+About Us
+
+-
+About STOXX
+
+-
+Customization & excellence
+
+-
+History & milestones
+
+-
+Recognition & awards
+
+-
+Locations
+
+-
+Careers
+
+-
+Contact us
+
+-
+Subscribe
+
+- Careers
+
+- Locations
+
+- LinkedIn
+
+- Contact us
+
+Continue active refreshing of this index's data?
+
+Yes
+No
+
+Continue active refreshing of this index's data?
+
+Yes
+No
+
+Press releases — September 1, 2025
+
+# STOXX blue-chip indices composition changes (Sep. 1, 2025)
+
+-->
+
+-
+
+Share
+
+LinkedIn
+
+Twitter
+
+Email
+
+Results of the regular annual review 2025 of the STOXX Blue-Chip Indices will be effective September 22, 2025.
+
+Media Contact
+Sarah Ball
+Executive Director, Communications
+press@iss-stoxx.com
+
+ZUG, Switzerland (September 1, 2025) – STOXX Ltd., part of the ISS STOXX group of companies and a leading provider of benchmark and custom index solutions to global institutional investors, today announced the regular annual review of the STOXX Blue-Chip Indices, among them the EURO STOXX 50, STOXX Europe 50, and the STOXX Eastern Europe 50 indices. All changes will be effective with the opening of European markets on September 22, 2025.
+
+The following stocks will be added to and deleted from the EURO STOXX 50 Index:
+
+| | |
+| --- | --- |
+| Additions | Deletions |
+| DEUTSCHE BANK (DE, Banks, DBKGn.DE) | NOKIA (FI, Telecommunications Equipment, NOKIA.HE) |
+| SIEMENS ENERGY (DE, Renewable Energy Equipment, ENR1n.DE) | STELLANTIS (IT, Automobiles, STLAM.MI) |
+| ARGENX (BE, Biotechnology, ARGX.BR1) | PERNOD RICARD (FR, Distillers and Vintners, PERP.PA1) |
+
+The following stocks will be added to and deleted from the STOXX Europe 50 Index:
+
+| | |
+| --- | --- |
+| Additions | Deletions |
+| BCO BILBAO VIZCAYA ARGENTARIA (ES, Banks, BBVA.MC) | BASF (DE, Chemicals: Diversified, BASFn.DE) |
+| RHEINMETALL (DE, Defense, RHMG.DE) | MERCEDES-BENZ GROUP (DE, Automobiles, MBGn.DE) |
+
+The following stocks will be added to and deleted from the STOXX Eastern Europe 50 Index:
+
+| | |
+| --- | --- |
+| Additions | Deletions |
+| PGE (PL, Conventional Electricity, PGE.WA) | CCC SA (PL, Apparel Retailers, CCCP.WA) |
+| ASSECO POLAND (PL, Software, ACPP.WA) | ZABKA GROUP (PL, Food Retailers and Wholesalers, ZAB.WA) |
+
+The following indices are also part of this regular quarterly review: STOXX Global 150, STOXX Global 200, STOXX Americas 100, STOXX All Europe 100, STOXX Asia 100, STOXX Pacific 50, STOXX BRIC 100, STOXX Latin America 50, STOXX Sub Balkan 30, STOXX China A 50, STOXX France 50, STOXX Italy 20, STOXX Spain 20, STOXX UK 50, STOXX USA 50, STOXX Canada 50, STOXX Hong Kong 50, STOXX Japan 50, STOXX Singapore 20 and STOXX Australia 50.
+
+The new composition of these indices can be found on the respective webpages at www.stoxx.com from Sep. 22, 2025.
+
+The review is based on the blue-chip rules published on www.stoxx.com using the September 2025 blue-chip selection lists. The selection lists are based on the stocks in the corresponding benchmark indices and their free-float market capitalization as of Aug. 29, 2025. The component selection lists that are used for the 2025 annual STOXX Blue-Chip Index review are based on the Industry Classification Benchmark (ICB).
+
+All additions and deletions to the above indices can be found here: https://www.stoxx.com/index-updates.
+
+About STOXX
+STOXX® and DAX® indices comprise a global and comprehensive family of more than 18,000 strictly rules-based and transparent indices. Best known for the leading European equity indices EURO STOXX 50®, STOXX® Europe 600 and DAX®, the portfolio of index solutions consists of total market, benchmark, blue-chip, sustainability, thematic and factor-based indices covering a complete set of world, regional and country markets. STOXX and DAX indices are licensed to more than 550 companies around the world for benchmarking purposes and as underlyings for ETFs, futures and options, structured products, and passively managed investment funds. STOXX Ltd., part of the ISS STOXX group of companies, is the administrator of the STOXX and DAX indices under the European Benchmark Regulation. stoxx.com
+
+About ISS STOXX
+ISS STOXX GmbH, through its group companies, is a leading provider of comprehensive and data-centric research and technology solutions that help capital market participants identify investment opportunities, detect qualitative and quantitative portfolio company risks, and meet evolving regulatory requirements. With roots dating back to 1985, we today deliver world-class benchmark and custom indices across asset classes and geographies and serve as a premier source of independent corporate governance, sustainability, cyber risk, and fund intelligence research, data, and related offerings. Our products and services give clients the scale and leverage they need to grow their business more effectively and efficiently. ISS STOXX, which is majority owned by Deutsche Börse Group, is comprised of more than 3,800 professionals operating across 30 global locations in 20 countries. Its approximately 5,500 clients include many of the world’s leading institutional investors who turn to ISS STOXX for its objective and varied offerings, as well as companies focused on ESG, cyber, and governance risk mitigation as a shareholder value enhancing measure. Clients rely on ISS STOXX’s expertise to help them make informed decisions to benefit their stakeholders.
+
+Legal disclaimer:
+STOXX Ltd., ISS STOXX GmbH, ISS STOXX Index GmbH, Deutsche Börse Group and their licensors, research partners or data providers do not make any warranties or representations, express or implied, with respect to the timeliness, sequence, accuracy, completeness, currentness, merchantability, quality or fitness for any particular purpose of its index data and exclude any liability in connection therewith. STOXX Ltd., ISS STOXX GmbH, ISS STOXX Index GmbH, Deutsche Börse Group and their licensors, research partners or data providers are not providing investment advice through the publication of indices or in connection therewith. None of their products or services recommends, endorses, approves or otherwise expresses any opinion regarding any issuer, securities, financial products or trading strategies. In particular, the inclusion of a company in an index, its weighting, or the exclusion of a company from an index, does not in any way reflect an opinion of STOXX Ltd., ISS STOXX GmbH, ISS STOXX Index GmbH, Deutsche Börse Group or their licensors, research partners or data providers on the merits of that company and may not be relied on as such. Financial instruments based on the STOXX® indices, DAX® indices or on any other indices supported by STOXX are in no way sponsored, endorsed, sold or promoted by STOXX Ltd., ISS STOXX GmbH, ISS STOXX Index GmbH, Deutsche Börse Group or their licensors, research partners or data providers.
+
+## Related Insights
+
+## Whitepapers
+
+### ETF Stream special report: The evolution of European buffer ETFs
+
+Download
+
+-->
+
+## Blog posts
+
+### Deutsche Börse’s ETF Forum discusses new index approaches, AI, German pension savings reform
+
+Read more
+
+-->
+
+## Monthly index news
+
+### Monthly Index News: October 2026
+
+Read more
+
+-->
+
+### Company
+
+- Careers
+
+- Locations
+
+### Connect
+
+- LinkedIn
+
+- Contact us
+
+-->
+
+-->
+
+-->
+
+-->
+
+&copy2026 STOXX Ltd. All rights reserved.
+
+- Legal/Privacy Portal
+
+- Warning - phishing & scam
+
+- Conditions of use
+
+- Privacy notice
+
+- Imprint
+
+-->
+Cookie Settings-->
+-->
+
+##
+Request more information

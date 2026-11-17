@@ -1,0 +1,177 @@
+{
+  "timestamp_utc": "2026-11-11T03:24:58.459431+00:00",
+  "reason": "Remove superseded acquisition entry points; download_specification.py is the single maintained downloader. Frozen inputs, provider receipts and historical manifests remain unchanged. No current code outside these three files imports or invokes them.",
+  "removed_files": [
+    {
+      "path": "reproduction/acquire.py",
+      "bytes": 2052,
+      "sha256": "a91e09da8800bdb2e96fd57e2276beb588286456c60678e8165c18aa181def43"
+    },
+    {
+      "path": "reproduction/acquire_remaining.py",
+      "bytes": 1607,
+      "sha256": "d9a4e1086583b21399f2392f85f06c3e891bfc7c1049e0f35784d29ec2f745bc"
+    },
+    {
+      "path": "reproduction/acquire_korea.py",
+      "bytes": 2255,
+      "sha256": "170eb0c94b1253e6243c38a5652757a638ffce4faa076814b6223bad4dcf4bdf"
+    }
+  ],
+  "checkpoint_pruning_state": "complete",
+  "removed_runtime_checkpoints": [
+    {
+      "path": "runtime/checkpoints/1e4458afa53a9ac138c2ab49ddde007da7b3f752b9ece095f80eaa0f91fc86f7.pt",
+      "bytes": 30640983,
+      "sha256": "4843384d4e40fab432cd4b91a31e8fbe74970d9e358ac8b912c4dc11345e9a62",
+      "retained_model": "artifacts_released/euro50_PFL_MSE_seed16/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/euro50_PFL_MSE_seed16/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/8c4529033e8799c51900604ac5fd46ab8770e6eea064258edf6523995ecba92b.pt",
+      "bytes": 30640983,
+      "sha256": "31fd2ab9480f7bead2a574eade0a9c206051ef057df2051a6abf4002a65941b8",
+      "retained_model": "artifacts_released/euro50_PFL_MSE_seed1947/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/euro50_PFL_MSE_seed1947/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/b09ae1290caaafb512b8fda6c7e42fad776385eb13fa3f11db06aeb66617ce38.pt",
+      "bytes": 30640983,
+      "sha256": "31135460e5b9c96967a97b28b1d147c34039f3304cf71d026b998c0b85356245",
+      "retained_model": "artifacts_released/euro50_PFL_MSE_seed214/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/euro50_PFL_MSE_seed214/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/016847c7738eb2bf2a72b7919d80cf4719f82ee78d325a392a48ed9aed7fa13e.pt",
+      "bytes": 30641047,
+      "sha256": "10ee2e94e0dfc6a59318dc263ead176fff0dde63de810364d67ab10efe36e842",
+      "retained_model": "artifacts_released/euro50_PFL_MSE_seed37/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/euro50_PFL_MSE_seed37/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/06f9800917785f89a7decd1243341618b8675a1c7bc7b3620948bc65c3a11aae.pt",
+      "bytes": 30641047,
+      "sha256": "dee2bae34ec27c96a4cdcaf82bcf77a2e0f51e98a2ab69312ca25eb722ecf17d",
+      "retained_model": "artifacts_released/euro50_PFL_MSE_seed47/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/euro50_PFL_MSE_seed47/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/dd35b967c337b06320d44d0b083be4236e962053c3f5d71e3a55edbc5c83a3f1.pt",
+      "bytes": 58427799,
+      "sha256": "9effe9f3ec81c81ee2e1b926366d23e47fd25513babc6639585b4a53b3cdd5b7",
+      "retained_model": "artifacts_released/ftse100_PFL_MSE_seed16/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/ftse100_PFL_MSE_seed16/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/29d32f95ed588554339cb77cb44dea552de89f6c1b8ee2fd6ad41b4b1d500109.pt",
+      "bytes": 58427799,
+      "sha256": "0f204f90fd8817b11bf5e53f4c3d8c833e461c24f619c720c80749be7dcb4127",
+      "retained_model": "artifacts_released/ftse100_PFL_MSE_seed1947/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/ftse100_PFL_MSE_seed1947/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/736b1c618bcb3e727b0d52a34af29046eb6bc7833b2a66d3597856ae27b0330d.pt",
+      "bytes": 58427799,
+      "sha256": "346c5d2ac4824a074ca2437f358131c70d87a27bc48e22084519380a366fe47b",
+      "retained_model": "artifacts_released/ftse100_PFL_MSE_seed214/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/ftse100_PFL_MSE_seed214/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/20928a7deceb08d58a2904476409b5c9c2cdd60b7b54db6f9505c894b7e2d913.pt",
+      "bytes": 58427863,
+      "sha256": "19a740d5cf53cdd80fa3ec5f5e85d67ac36db248e582a01c95c961cefa720959",
+      "retained_model": "artifacts_released/ftse100_PFL_MSE_seed37/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/ftse100_PFL_MSE_seed37/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/977914b03d2cbd3d92c4293fcc7f5813a03ce8d0e223f779cca656db39913a80.pt",
+      "bytes": 58427863,
+      "sha256": "2b178238b64864dec7681159c173463b3d49b9dfe348384636c721099c9e9115",
+      "retained_model": "artifacts_released/ftse100_PFL_MSE_seed47/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/ftse100_PFL_MSE_seed47/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/faa1efdd65bd92cfbeec4f30ba36e336916b0851e5e5c7feed70160e90dea3a8.pt",
+      "bytes": 99799191,
+      "sha256": "73fad9e6ca8801c32df16eec79f521b3c35b6c3a639f6901c1a1f445c32061a3",
+      "retained_model": "artifacts_released/kospi200_PFL_MSE_seed16/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/kospi200_PFL_MSE_seed16/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/26fdd915cd1b0c6ee45c5acc7ce946b1e3834e625ecc055ead6d0405d8df1cd9.pt",
+      "bytes": 99799191,
+      "sha256": "0abc5d72126b49a3d19d3f2d37facc2a6a5282baea5341732a2b2f314a9686e8",
+      "retained_model": "artifacts_released/kospi200_PFL_MSE_seed214/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/kospi200_PFL_MSE_seed214/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/e532f4dd60f89171457d0f52111a315933a89b8e25ea8bbc02e51f6c79b59f5d.pt",
+      "bytes": 99799255,
+      "sha256": "f9f80a53f2598047aa57170c8b524e66bd0a756851f3ded5a1dd82610599159d",
+      "retained_model": "artifacts_released/kospi200_PFL_MSE_seed37/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/kospi200_PFL_MSE_seed37/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/4db54ae8ebe4005a40f4e5e25f3e3eb20572f7521be6947987e961f3db7e23fa.pt",
+      "bytes": 99799255,
+      "sha256": "208d5b38769e28b84f8dfc0fb860e0d74d44f82dbfb6236a1b9da3e056bab85d",
+      "retained_model": "artifacts_released/kospi200_PFL_MSE_seed47/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/kospi200_PFL_MSE_seed47/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/d6f270d267f2dc285028d38727cce629d19e43165d1e507b3847bd6dc2e6fabf.pt",
+      "bytes": 128820951,
+      "sha256": "a094a5604313e98ae0b522ea9000cc0c1ec917246b163a7b4d3cd428ef150292",
+      "retained_model": "artifacts_released/nikkei225_PFL_MSE_seed16/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/nikkei225_PFL_MSE_seed16/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/3b3b557b75f6c2d1e6f938e58dab0a21cc25143adba7e1e9296b456b2317781a.pt",
+      "bytes": 128821015,
+      "sha256": "b663182604228cb008d92e6c4560fe4a226d5a5efdeb743dedb80bb01c94e8e4",
+      "retained_model": "artifacts_released/nikkei225_PFL_MSE_seed1947/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/nikkei225_PFL_MSE_seed1947/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/676d178e7a9cdcf8b473d42db641c15ebfa8952b68fdceb296c91c75bf5200ea.pt",
+      "bytes": 128820951,
+      "sha256": "053d8da69d917a1933eab0a9fc9d2a54d5e6bcf38400d08b519d2e06f58ab05c",
+      "retained_model": "artifacts_released/nikkei225_PFL_MSE_seed214/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/nikkei225_PFL_MSE_seed214/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/6e8a5c28456eea9a1124a0b9b636f7c9ee35a810fd9effb43a43830ffe5fb12d.pt",
+      "bytes": 128821015,
+      "sha256": "fbdffc9293486916be7cb7671f8c75e87cdf41ce811ba7add99827292eb91943",
+      "retained_model": "artifacts_released/nikkei225_PFL_MSE_seed37/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/nikkei225_PFL_MSE_seed37/provenance.json"
+    },
+    {
+      "path": "runtime/checkpoints/4f9faef47960437d5ef72f976d740b0464dc3ae8811130b675d343187cca305b.pt",
+      "bytes": 128821015,
+      "sha256": "bf95ef80f7f514eb58c83e88149fd396e2c5730dd58a6e6d0450b1dc0102b6d6",
+      "retained_model": "artifacts_released/nikkei225_PFL_MSE_seed47/model.pt",
+      "retained_identity_and_training_history": "artifacts_released/nikkei225_PFL_MSE_seed47/provenance.json"
+    }
+  ],
+  "checkpoint_pruning_reason": "All 19 are completed 300-update PFL states; final model tensors matched exactly before compaction. Final models, hashes, arguments, data/source identity and all training histories are retained. Independent source retraining of seed16 in all four markets matched every parameter and all 24 return traces. In-progress DFL and SDR checkpoints are retained.",
+  "removed_caches": [
+    {
+      "path": "reproduction/__pycache__",
+      "files": 15,
+      "bytes": 208321
+    },
+    {
+      "path": "upstream/src/__pycache__",
+      "files": 13,
+      "bytes": 103716
+    },
+    {
+      "path": ".pytest_cache",
+      "files": 5,
+      "bytes": 2684
+    }
+  ],
+  "completed_utc": "2026-11-11T03:42:08.356992+00:00",
+  "total_removed_bytes": 1488966640
+}

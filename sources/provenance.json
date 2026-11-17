@@ -1,0 +1,23 @@
+{
+  "commit": "8bc1e802b834bf82fe144e98cdd9e2227607c3e7",
+  "upstream_src_modified": false,
+  "sha256": {
+    "upstream/src/aggregate.py": "5add92f10fcfcef5ca0882f39212e5e0dc99417a7d52b6054ce51687b4cdaa33",
+    "upstream/src/artifacts.py": "44eda44b4d8092416c90cf5c0faad076363c5b8cfd6611bbafd323bff5b448dc",
+    "upstream/src/baseline.py": "381bbf5ff68bfa7ab73fbfeaa4a928e31970ab6c0900d32bc122b818ae354e8b",
+    "upstream/src/data.py": "b341b85d2e38c3f704cbbfc32a3fdb286d444f66da86fde181896777a5b6c500",
+    "upstream/src/data_generator.py": "3aeda3e357c705c4e475b901620f2d2119833f505f3b0cb0d373ac320e485e63",
+    "upstream/src/evaluate.py": "1c50f718b4ec5cf45fb6b319d95c631c655200dd4f969faf9229665970a65802",
+    "upstream/src/losses.py": "663691642719672c0559fc45490560a281d27f8013fb4f8a619dd5df375bded6",
+    "upstream/src/main.py": "b4ab4c71d718229f58580d3a60c9420ad7232f4b631b0528f4b04265b814929e",
+    "upstream/src/model.py": "acdaf1906bdfd6365276eb14addbdf422d24fa2ce9602d6a773e9693b99a97d4",
+    "upstream/src/oscar.py": "e9996ee2595ba871b275c2de49cadb6ffccd5106154b72b009eb426e20bbf9f5",
+    "upstream/src/problem.py": "e626e7605505a5f5f2de37619ad8bec711ca418e433e335634b8b4a48a170ee3",
+    "upstream/src/selector.py": "332d650162696e17599a333984b1b6b3ba53b27abba72f6d311f98fb3e9c733b",
+    "upstream/src/train.py": "1ec0e06734321c93f6bbafc9af9b84d4ba6e86e38cab6138c225e021c971431a",
+    "upstream/src/utils.py": "58cb8ee4dd44fe8fe3b5457f20ba00cff728b040b320f3f8e54c516b98988f66",
+    "upstream/requirements.txt": "d034894fa31b5087a13ebf428cad2061905f88fbd048e505bc253a9a965005bb",
+    "sources/paper.pdf": "35f40a9df34232d0d5386d8be00ff0c0d7a759fa8e6a572590eeaffe93abef82",
+    "reproduction/protocol.json": "93a1740462c355248937485866e67fa3ece8fbbda6161c4e2c0c8ef786519cd3"
+  }
+}

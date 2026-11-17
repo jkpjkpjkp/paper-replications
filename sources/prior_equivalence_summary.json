@@ -1,0 +1,16 @@
+{
+  "checks": 21,
+  "all_passed": true,
+  "same_torch_and_numpy_rng": true,
+  "max_gradient_absolute_error": 0.0,
+  "max_updated_parameter_absolute_error": 0.0,
+  "batches": {
+    "euro50": 64,
+    "ftse100": 64,
+    "nikkei_reference": 8,
+    "nikkei_streamed": 64
+  },
+  "source_batch64_nikkei_not_directly_compared": true,
+  "limitations": "Finite-loss paths only; source nonfinite-sample behavior is not validated. Nikkei full64 equivalence is supported by per-sample architecture/loss, full64 Euro/FTSE checks and batch8 Nikkei checks, rather than a completed full64 reference on Nikkei.",
+  "failed_first_attempt_preserved": "/home/jkp/data/paper-reproduction-audit/workspaces/038-original-audit/accumulation_attempt1_euro50.json"
+}

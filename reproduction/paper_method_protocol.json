@@ -1,0 +1,53 @@
+{
+  "purpose": "Literal published-method attempt; separate from author release replay and any corrected method",
+  "target": "Final PMLR paper, Algorithm 1, Eq. 5 right side, Eq. 12, Eq. 14, B.1",
+  "specified": {
+    "lookback": 100, "train_ratio": 0.8, "hidden_dims": [512,256],
+    "learning_rate": 0.001, "batchsize": 64, "alpha": 0.5,
+    "loss": "alpha*(-y_i dot w_i)+(1-alpha)*sum_assets((prediction-y_i)^2), averaged over batch",
+    "training_loop": "Visit every training window once per shuffled epoch; include final smaller batch",
+    "printed_conic_constraints": "sum(y)=t; norm(L@y)<=1; t>=0; covariance=L@L.T",
+    "soft_scores": "abs(L.T@initial_weights)",
+    "soft_gate": "sigmoid(beta*(score+shift)), shift found by 32 bisections to sum(gate)=k",
+    "masked_prediction": "prediction*soft_gate; re-solve printed Eq.5 over all assets",
+    "covariance": "Raw 100-day window sample covariance, shrink 0.10 toward trace/n identity; jitter only if Cholesky fails",
+    "historic": "Mean over full training segment, rolling per-sample covariance",
+    "conventional_oscar": "Eq.1 covariance risk norm(L.T@y), hard top-k transformed scores, re-optimize selected covariance submatrix",
+    "reported_metric": "Daily realized-return mean / sample standard deviation; no annualization"
+  },
+  "explicit_reconstruction_choices_not_claimed_as_published": {
+    "epochs_initial_attempt": 5,
+    "seeds": [16,37,47,214,1947],
+    "activation": "tanh inherited from release",
+    "dropout": 0.0,
+    "weight_decay": 0.0,
+    "optimizer_primary": "Plain SGD matches the displayed theta <- theta - eta*gradient update; actual experimental optimizer not stated",
+    "optimizer_sensitivity": "Adam, if run, is labeled separately; not substituted after test comparison",
+    "units": "No scaler; raw simple returns used consistently as features, targets, covariance and decision-loss returns",
+    "test_boundary": "All test targets evaluated using immediately preceding 100 observations, including pre-split history",
+    "topk_beta": 5.0,
+    "recovery_offset": 1e-8,
+    "solver": "CvxpyLayers/diffcp default SCS path; eps=1e-6,max_iters=10000",
+    "equivalent_numerical_coordinates": "q=F*y; a=F^-T*1; b=F^-T*mu; maximize (b/||b||).q subject to ||q||<=1,(a/||a||).q>=0; recover y=F^-1*q,t=sum(y). Same feasible set and argmax as Eq.5; used after direct coordinates caused inaccurate-unbounded numerical status. F=L for printed DFL, F=L.T for Eq.1 baseline.",
+    "precision": "float32 MLP; float64 loss, covariance and conic computations",
+    "jitter_if_needed": 1e-12,
+    "shuffle": "Python Random(seed), each sample exactly once per epoch",
+    "batch_remainder": "Keep final smaller batch, averaging over its actual size",
+    "input_panel": "Frozen current-vintage panel, not verified stable-membership cohort",
+    "nonfinite_policy": "Stop run; preserve failure; no gradient clipping, skipped samples or replacement solver",
+    "evaluation_validity": "Report budget violations >1e-3 and do not treat affected Sharpe as valid budget-constrained performance"
+  },
+  "irreconcilable_or_missing": [
+    "Printed Eq.5 norm(L@y) is not covariance risk when covariance=L@L.T; preserved for the literal DFL attempt",
+    "Soft gate mass does not enforce the claimed exact holding cardinality; no straight-through or hard DFL added",
+    "t=0 is allowed, where portfolio recovery y/t is singular; B.1 offset value unspecified",
+    "Exact epoch count, optimizer, activation, beta, regularization, dtype and preprocessing not fully published",
+    "Original constituent and adjusted-price snapshot unavailable",
+    "SDR realized-cardinality matching search parameters and threshold unavailable",
+    "Appendix B.3 and main-text mSSRM descriptions differ"
+  ],
+  "scope": "DFL plus conventional hard OSCAR Historic/PFL; SDR and mSSRM not claimed reproduced by this attempt",
+  "test_set_configuration_selection": false,
+  "upstream_source_modified": false,
+  "exact_published_experiment_recovered": false
+}

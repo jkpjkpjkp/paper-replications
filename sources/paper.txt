@@ -1,0 +1,1065 @@
+                   Decision-focused Sparse Tangent Portfolio Optimization
+
+
+               Haeun Jeon * 1 Seunghoon Choi * 1 Hyunglip Bae 2 Yongjae Lee 3 Woo Chang Kim 1
+
+
+                         Abstract                                      struct diversified portfolios that deliver lower variance for
+                                                                       a given level of expected return. This principle is formal-
+     Sparse tangent portfolio optimization aims to                     ized through the efficient frontier and performance measures
+     learn an interpretable, low-cardinality portfolio                 such as the Sharpe ratio, which captures the trade-off be-
+     in the tangency direction of the mean-variance                    tween excess return and portfolio volatility (Sharpe, 1966).
+     frontier. However, the associated cardinality-                    Although diversification is appealing in theory, holding too
+     constrained formulation is NP-hard, and stan-                     many assets is often impractical, as it raises monitoring and
+     dard predict-then-optimize pipelines often mis-                   transaction costs and makes the portfolio harder to interpret
+     align forecasting accuracy with downstream port-                  (Woodside-Oriakhi, 2011).
+     folio quality. We propose an end-to-end decision-
+     focused learning framework that reformulates                      For these practical reasons, portfolio managers often favor
+     Sharpe ratio maximization as a Disciplined                        sparse allocations that concentrate exposure on a limited
+     Parametrized Programming (DPP)-compliant con-                     number of assets. A standard way to formalize this pref-
+     vex programming layer and replaces discrete                       erence is through a cardinality constraint, which limits the
+     selection with a smooth top-k operator enforc-                    number of nonzero positions. Enforcing such sparsity, how-
+     ing an exact cardinality k. This enables gra-                     ever, introduces a fundamental tension: while restricting
+     dient flow through prediction, asset selection,                   the number of holdings improves interpretability and re-
+     and re-optimization, allowing the predictive                      duces transaction costs, it turns portfolio construction into
+     model to directly optimize portfolio performance.                 a challenging combinatorial problem. As a result, existing
+     Across four major equity markets, our method                      approaches must balance solution quality, computational ef-
+     achieves competitive and often superior out-of-                   ficiency, and flexibility under varying cardinality levels. Re-
+     sample Sharpe ratios compared with historical                     cently, heuristic pipelines that decouple asset selection from
+     and prediction-focused baselines, with particu-                   re-optimization have shown promise as practical tools for
+     larly strong gains in larger asset universes. Our                 constructing sparse tangent portfolios, offering a favorable
+     code is publicly available.                                       balance between solution quality and scalability. However,
+                                                                       these pipelines still rely on upstream forecasts produced by a
+                                                                       separate predictive model, and their effectiveness ultimately
+                                                                       depends on the end-to-end interaction between prediction,
+1. Introduction
+                                                                       discrete selection, and continuous re-optimization.
+Originating from Markowitz’s mean-variance model
+                                                                       Even with strong heuristics for sparse optimization, a per-
+(Markowitz, 1952), modern portfolio theory views invest-
+                                                                       sistent disconnect remains between prediction and decision.
+ment decisions through the lens of balancing risk and re-
+                                                                       Conventional frameworks typically fit models on historical
+turn at the portfolio level, rather than evaluating assets in
+                                                                       data and then deploy the resulting rules to make future de-
+isolation (Kim et al., 2021). By combining assets with
+                                                                       cisions (Fabozzi et al., 2007), but they often fail to adapt
+heterogeneous risk-return characteristics, investors can con-
+                                                                       to non-stationary, fast-moving markets and shifting con-
+   *
+     Equal contribution 1 Department of Industrial and Systems         straints (Schmitt et al., 2013; Hamilton, 2020; Hwang et al.,
+Engineering, Korea Advanced Institute of Science and Technology,       2025). To mitigate this, practitioners train machine-learning
+Daejeon, Republic of Korea 2 Department of Big Data Conver-            models to predict future returns and let an optimizer con-
+gence, and Bigdata Research Lab, Chonnam National University,          sume those predictions to construct portfolios. However,
+Gwangju, Republic of Korea 3 Department of Industrial Engineer-
+ing, Ulsan National Institute of Science and Technology, Ulsan,        these predictors are usually trained under statistical losses,
+Republic of Korea. Correspondence to: Yongjae Lee <yong-               which are misaligned with the ultimate objective of portfo-
+jaelee@unist.ac.kr>, Woo Chang Kim <wkim@kaist.ac.kr>.                 lio optimization and do not account for the selection and
+                                                                       re-optimization steps that drive realized performance. This
+Proceedings of the 43 rd International Conference on Machine           predict-then-optimize mismatch is especially harmful under
+Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026
+by the author(s).                                                      tight cardinality, where small forecast errors can cascade
+
+                                                                   1
+                                    Decision-focused Sparse Tangent Portfolio Optimization
+
+through the discrete selection stage and magnify into sub-            and therefore difficult to solve exactly for large asset uni-
+stantial utility losses.                                              verses (Garey & Johnson, 2002). Controlling portfolio car-
+                                                                      dinality has been studied extensively and can be broadly
+In this paper, we show that decision-focused learning (DFL)
+                                                                      categorized into three methodological directions. One line
+can be effectively applied to portfolio optimization with
+                                                                      induces sparsity indirectly through regularization or norm-
+explicit cardinality constraints (Mandi et al., 2024). Unlike
+                                                                      based penalties, trading exact asset selection for scalability
+conventional historical estimation or predict-then-optimize
+                                                                      (Brodie et al., 2009; Chen & Zhu, 2014; Kremer et al., 2020;
+pipelines, DFL trains predictive models by directly optimiz-
+                                                                      DeMiguel et al., 2009). Another line tackles the discrete
+ing downstream decision quality rather than intermediate
+                                                                      constraint more directly via exact or relaxation-based al-
+forecasting accuracy. We develop an end-to-end decision-
+                                                                      gorithms such as branch-and-cut and related formulations
+focused framework for sparse portfolio optimization that
+                                                                      (Bienstock, 1996; Li et al., 2006; Gao & Li, 2013; Kim &
+enables gradient-based learning through asset selection and
+                                                                      Lee, 2016; Lee et al., 2020). A third line relies on heuris-
+portfolio re-optimization. The proposed approach aligns the
+                                                                      tic methods that trade optimality guarantees for computa-
+learning objective with risk-adjusted portfolio performance
+                                                                      tional efficiency in large asset universes (Chang et al., 2000;
+under a fixed sparsity budget, allowing the predictive model
+                                                                      Maringer & Kellerer, 2003).
+to internalize the structure of the constrained optimization
+problem.                                                              Beyond mean-variance, portfolio optimization has been
+                                                                      studied under a variety of objectives, among which risk-
+Our main contributions are threefold. First, to the best of
+                                                                      adjusted performance metrics naturally motivate Sharpe ra-
+our knowledge, this is the first work to apply DFL to sparse
+                                                                      tio maximization as a single-objective formulation. Several
+tangent portfolio optimization with explicit cardinality con-
+                                                                      works study Sharpe ratio maximization under explicit spar-
+straints, bridging two research directions that have tradition-
+                                                                      sity requirements (Sharpe, 1966). The Sharpe ratio is a stan-
+ally evolved separately. Second, we propose a differentiable
+                                                                      dard risk-adjusted performance metric that normalizes ex-
+decision layer that combines a DPP-compliant convex re-
+                                                                      pected return by volatility, enabling comparisons across port-
+formulation of Sharpe ratio maximization with a smooth
+                                                                      folios with different risk levels. Representative approaches
+top-k asset selection operator, enabling end-to-end gradient
+                                                                      include SDP-based relaxations that yield tractable convex
+flow through prediction, asset selection, and re-optimization.
+                                                                      approximations of the sparse Sharpe problem (Kim et al.,
+Finally, we conduct experiments across four markets with
+                                                                      2016), as well as methods that reformulate the fractional
+different baselines: Historic, Prediction-focused Learning
+                                                                      objective and apply efficient first-order algorithms with the-
+(PFL), and DFL pipelines, showing that DFL achieves com-
+                                                                      oretical guarantees (Lin et al., 2024). Complementing these
+petitive or superior performance, with more gains in larger
+                                                                      optimization-centric approaches, OSCAR (Optimize, Se-
+asset universes.
+                                                                      lect with Cholesky, and Re-optimize) is a practical heuristic
+                                                                      pipeline that alternates between continuous optimization
+2. Related Works                                                      and discrete asset selection to obtain scalable, high-quality
+                                                                      sparse portfolios in large universes (Bae et al., 2025).
+2.1. Portfolio Optimization
+The portfolio optimization problem yields the optimal port-           2.2. Decision-focused Learning
+folio weights, which specify how capital is allocated across
+assets. Markowitz’s framework established portfolio con-              Traditional workflows that perform optimization after learn-
+struction as an optimization problem, and subsequent work             ing typically follow a PFL paradigm, often referred to
+expanded it in many directions: improved estimation of                as predict-then-optimize or two-stage learning (Lee et al.,
+returns and covariances, alternative risk measures, and prac-         2024). A predictive model is first trained to output point
+tical constraints that reflect portfolio management (Kim              estimates of unknown problem parameters using standard
+et al., 2024). In practice, holding many assets is costly and         statistical losses like mean squared error or cross-entropy.
+hard to manage, so managers often prefer sparse allocations           These predictions are then treated as fixed inputs to a down-
+that concentrate exposure on a small number of positions              stream constrained optimization model, which computes
+(Woodside-Oriakhi, 2011). A standard way to formalize                 the final decision. However, PFL does not account for the
+this preference is through a cardinality constraint, which            structure of the downstream decision problem. It implicitly
+explicitly caps the number of nonzero weights.                        assumes that minimizing prediction loss will lead to high-
+                                                                      quality decisions, an assumption that often fails in practice.
+While this constraint is conceptually straightforward, it fun-        Therefore, models trained purely on prediction loss may
+damentally changes the computational nature of the prob-              perform poorly in terms of the true task objective even when
+lem: incorporating asset-selection discreteness into objec-           their forecasts are statistically accurate.
+tives turns an otherwise smooth continuous optimization
+into a combinatorial search, which is NP-hard in general              DFL was introduced to address this mismatch by aligning
+
+
+                                                                  2
+                                    Decision-focused Sparse Tangent Portfolio Optimization
+
+model training directly with decision quality rather than            nents of w with sparsity budget k. As discussed in Sec-
+with intermediate prediction accuracy. In DFL, the predic-           tion 2.1, adding this constraint makes the problem combi-
+tion model and the optimization layer are integrated into a          natorial rather than smoothly continuous. Since cardinality-
+single end-to-end pipeline, and training minimizes a task            constrained portfolio selection is NP-hard in general, exact
+loss that depends on the realized decision instead of a pure         methods are typically impractical for large asset universes.
+prediction loss (Mandi et al., 2024). This paradigm has been
+                                                                     Recent work proposes OSCAR (Bae et al., 2025) as a fast
+applied to diverse tasks including network design, resource
+                                                                     heuristic for sparse tangent portfolio optimization in the clas-
+allocation, routing, portfolio optimization, and goal-based
+                                                                     sical mean-variance framework. It avoids the combinatorial
+investing, and typically yields substantial gains over PFL
+                                                                     complexity of cardinality-constrained portfolio optimiza-
+when decision quality is sensitive to structured errors in the
+                                                                     tion by separating asset selection from weight optimization,
+predictions.
+                                                                     while leveraging three key structural properties of the Sharpe
+A central technical challenge in DFL is computing gradients          ratio (Kim & Lee, 2016).
+of the task loss with respect to the prediction model parame-        Proposition 3.1. For any λ > 0, the Sharpe ratio is scale-
+ters. The main difficulty lies in differentiating through the        invariant with respect to w, i.e.,
+downstream optimization. One must characterize how the
+optimizer’s solution changes in response to perturbations in                          SR(w | µ, Σ) = SR(λw | µ, Σ).
+the predicted cost or parameters, even though the solution
+map is defined only implicitly as the argmin of an optimiza-
+tion problem and typically has no closed-form expression,            As a direct consequence, the budget constraint 1⊤ w = 1
+leading to zero or undefined gradients over large regions            in Eq. (2) can be removed without changing the optimal
+of the parameter space. Accordingly, prior DFL work typi-            Sharpe ratio value.
+cally obtains usable learning signals either by analytically         Proposition 3.2. Let w1 , w2 ∈ Rn be any two portfolios
+differentiating the optimizer’s optimality conditions when           on n assets, and let ŵ ∈ Rn be the tangent portfolio from
+the solution map is smooth (Shah et al., 2022), or by regu-          Eq. (1) based on the market expected excess return µ and
+larizing the optimization to create stable gradients (Brodie         the market covariance Σ. Then,
+et al., 2009; Chen & Zhu, 2014).
+                                                                                  SR(w1 | µ, Σ) ≥ SR(w2 | µ, Σ)
+3. Preliminaries                                                     if and only if
+3.1. Cardinality-constrained Portfolio Optimization                                              θ1 ≤ θ2
+
+A standard construction of portfolio optimization for maxi-          where
+                                                                                                (L⊤      ⊤  ⊤
+                                                                                                                  
+mizing the Sharpe ratio (Sharpe, 1966) can be written as:                                          Σ wi ) (LΣ ŵ)
+                                                                                 θi := arccos
+                                                                                               ∥L⊤          ⊤
+                                                                                                  Σ wi ∥2 ∥LΣ ŵ∥2
+                      µ⊤ w
+             maxn √              s.t.   1⊤ w = 1          (1)
+            w∈R       w⊤ Σw                                          which denotes the angle between L⊤            ⊤
+                                                                                                         Σ wi and LΣ ŵ where LΣ
+                                                                                                                 ⊤
+                                                                     is the Cholesky factor of Σ (i.e., Σ = LΣ LΣ ).
+where w ∈ Rn denotes the portfolio weight vector, µ ∈ Rn
+denotes the expected excess return vector, Σ ∈ Rn×n is               According to Proposition 3.2, we can alternatively compare
+the covariance matrix of asset returns, and 1 is the all-ones        portfolio Sharpe ratios via the angle θ to the tangency port-
+vector. Throughout this work, we allow short selling so              folio ŵ, where a smaller angle implies a larger Sharpe ratio.
+negative entries in w are permitted. The numerator repre-            Let K denote the collection of all k-subsets of {1, . . . , n}
+sents the portfolio’s expected return, while the denominator         and define:
+corresponds to its risk induced by Σ.
+To enhance practical interpretability and to reduce transac-                  PK (Rn ) = {w ∈ Rn | wi = 0, ∀i ∈
+                                                                                                              / K}.
+tion costs, one often restricts the number of assets held in
+the portfolio via a cardinality constraint. This leads to the        Then the original problem can be equivalently written as
+sparse Sharpe ratio maximization problem:                            minimizing this angle as:
+                                                                                                                        !
+                             µ⊤ w                                                                     (L⊤    ⊤   ⊤
+                                                                                                   
+                                                                                                           w)  (L  ŵ)
+                    maxn √                                            min         min      arccos
+                                                                                                         Σ       Σ
+                                                                                                                           (3)
+                    w∈R      w⊤ Σw                                    K∈K w∈P L⊤ (Rn )               ∥L ⊤ w∥ ∥L⊤ ŵ∥
+                                                                                 K                      Σ   2    Σ    2
+                            ⊤                             (2)                        Σ
+                    s.t.   1 w=1
+                           Card(w) ≤ k                               where
+
+where Card(w) counts the number of nonzero compo-                       PK (L⊤   n           n    ⊤
+                                                                             Σ (R )) = {w ∈ R | (LΣ w)i = 0, ∀i ∈
+                                                                                                                / K}.
+
+                                                                 3
+                                      Decision-focused Sparse Tangent Portfolio Optimization
+
+
+
+
+Figure 1. Overview of the proposed differentiable decision layer. Given predicted returns µ̂, the layer performs optimize → score
+transform → soft top-k selection → re-optimize to produce sparse tangent portfolio weights, which define the task loss. Backpropagation
+flows through all steps, enabling end-to-end DFL. A central technical challenge is differentiating the optimization-based decision layer
+with respect to the prediction µ̂.
+
+
+Proposition 3.3. Let K ∗ ∈ K be a subset corresponding to                gradient can be calculated via the chain rule as
+the indices of the k largest elements of |L⊤
+                                           Σ ŵ|, where |·| is
+the element-wise absolute value operator. Then K ∗ is an                                 ∂R    ∂R       ∂x⋆ (ĉ) ∂ĉ
+optimal solution to Eq. (3), i.e.,                                                          =   ⋆
+                                                                                                      ·         ·                      (4)
+                                                                                         ∂θ   ∂x (ĉ)     ∂ĉ     ∂θ
+
+                                                                       where θ denotes the parameters of the prediction model. The
+                                         ⊤   ⊤    ⊤
+                                                        
+                                      (L   w)  (L   ŵ)                  first and last terms in Eq. (4) are straightforward to differenti-
+K ∗ = arg min     min                   Σ        Σ
+                             arccos ∥L⊤ w∥ ∥L⊤ ŵ∥  .
+          K∈K
+               w∈PK L⊤ (Rn )
+                          Σ
+                                        Σ   2    Σ     2                 ate, whereas the middle term ∂x⋆ (ĉ)/∂ĉ poses a substantial
+                                                                         challenge, as the solution map is defined implicitly by an
+                                                                         optimization problem and often lacks a closed-form expres-
+It follows from Proposition 3.3 that the optimizer of Eq. (3)            sion. Moreover, for many practically relevant models, the
+selects the k largest components of |L⊤                                  mapping ĉ 7→ x⋆ (ĉ) can be non-smooth or even piecewise
+                                            Σ ŵ|. Overall, OS-
+CAR consists of three stages. It first solves the tangency               constant, leading to zero or undefined gradients on large
+portfolio in Eq. (1) to obtain ŵ. Using this solution, it identi-       regions of the parameter space.
+fies a sparse support by selecting the k assets corresponding            A common approach to addressing this challenge is the use
+to the k largest entries of |L⊤
+                              Σ ŵ|. Finally, it re-optimizes the        of differentiable convex optimization layers when the down-
+Sharpe ratio objective restricted to the selected assets and de-         stream problem is convex. Frameworks such as OptNet and
+rives the final optimal weight w∗ . Proofs of Propositions 3.2           CVXPYlayers provide principled gradients by differentiat-
+and 3.3 are provided in Appendix A for completeness.                     ing through the solver (Agrawal et al., 2019). To enable such
+                                                                         differentiation, the optimization problem must satisfy the
+3.2. Gradients for Decision-focused Learning                             rules of Disciplined Convex Programming (DCP), and when
+                                                                         problem data are treated as learnable inputs, the formula-
+A common formulation views the underlying decision prob-
+                                                                         tion must also obey Disciplined Parametrized Programming
+lem as a parametric constrained optimization problem,
+                                                                         (DPP), ensuring affine dependence on parameters and well-
+where a solution map x⋆ (c) returns the optimal decision
+                                                                         behaved solution maps.
+for parameters c. A standard example is regret R, which
+measures the suboptimality of the decision under    perfect in-
+                                              
+formation as R = f x⋆ (c), c − f x⋆ (ĉ), c , where f (x, c)             4. Methodologies
+denotes the task objective to be maximized for decision x
+                                                                         4.1. Differentiable Reformulation of Sharpe Ratio
+evaluated under the true parameters c, and ĉ is the prediction
+                                                                              Maximization
+produced by the model. By differentiating this loss through
+the optimization layer and updating the prediction model                 We now turn to the methodological core of our approach.
+accordingly, DFL learns to produce parameter estimates                   Our end-to-end decision framework follows a select-and-
+that are explicitly tuned for downstream performance. The                reoptimize pipeline, but is designed to be fully differentiable
+
+                                                                     4
+                                    Decision-focused Sparse Tangent Portfolio Optimization
+
+for learning. To embed Eq. (1) as a differentiable decision            Backward pass The mapping x 7→ p(x) is differentiable,
+layer, the optimization problem must satisfy the rules of              but pi (x) = σ(xi +t(x)) depends on x both directly through
+DPP. However, the standard Sharpe ratio formulation is non-            xi and indirectly through the shared shift t(x). For a fixed
+convex and cannot be expressed using valid DPP atoms,                  index j, the chain rule gives:
+preventing direct differentiation through a solver layer.                                                              
+                                                                                 ∂pi (x)     ′
+                                                                                                                 ∂t(x)
+To obtain a tractable optimization program that is com-                                  = σ xi + t(x) δij +                     (7)
+                                                                                  ∂xj                              ∂xj
+patible with DPP, we follow the classical homogenization
+technique (Iyengar & Kang, 2005). Introducing a scaling                where δij is the Kronecker delta. Thus, the only missing
+variable t ≥ 0 and defining y = tw, Eq. (1) can be equiv-              piece is ∂t(x)/∂xj . We obtain ∂t(x)/∂xj by differentiating
+alently rewritten as the convex Quadratically Constrained              the normalization constraint Eq. (6) with respect to xj . Then
+Quadratic Programming (QCQP) problem. Note that this                   we get:
+QCQP is convex, but still not DPP-compliant. The difficulty
+                                                                                      n                                        
+         p the problem data Σ appear inside the nonlin-
+arises because                                                                        X
+                                                                                             ′
+                                                                                                                       ∂t(x)
+                                                                                 0=         σ xi + t(x)           δij +             .         (8)
+ear term y ⊤ Σy, violating the requirement that parameters                                                               ∂xj
+                                                                                      i=1
+must enter the program affinely. Since the covariance matrix
+Σ is positive semidefinite, we apply its Cholesky factoriza-           Define:
+tion Σ = LΣ L⊤  Σ . Substituting this factorization into the                                                                  n
+QCQP yields a formulation that satisfies the requirements                 vi (x) := σ ′ xi + t(x)
+                                                                                                      
+                                                                                                          and      S(x) :=
+                                                                                                                              X
+                                                                                                                                    vi (x).
+of DPP, enabling reliable differentiation of the solution map                                                                 i=1
+through CVXPYlayers and allowing the optimization step
+to be embedded within DFL as shown in Eq. (5).                         Then Eq. (8) can be written as:
+        max     y⊤ µ               max      y⊤ µ                                                 ∂t(x)    vj (x)
+        y,t                         y,t                                                                =−        .                            (9)
+                                                                                                  ∂xj     S(x)
+         s.t.   1⊤ y = t             s.t.   1⊤ y = t
+                             =⇒                             (5)
+                                                                       Substituting Eq. (9) into Eq. (7) shows that the Jacobian has
+                p
+                  y ⊤ Σy ≤ 1                ∥LΣ y∥2 ≤ 1
+                                                                       a diagonal minus rank-one structure:
+                t≥0                         t≥0
+                                                                                                    v(x) v(x)⊤
+4.2. Differentiable Top-k Operator                                                 J(x) = diag v(x) −           .                         (10)
+                                                                                                        S(x)
+In the asset selection step, we classify assets in the Cholesky-
+                                                                       Backpropagation does not require the full matrix J(x). It
+transformed space by computing x = |L⊤                    n
+                                               Σ w| ∈ R and
+                                                                       only needs the vector–Jacobian product with an incoming
+selecting the top-k indices. A hard top-k produces a k-
+                                                                       gradient g ∈ Rn :
+hot mask but is discontinuous, and thus gradients do not
+flow through the selection step. To address this, we replace                                                    ⟨g, v(x)⟩
+it with a simple differentiable top-k operator that behaves                       g ⊤ J(x) = g ⊙ v(x) −                   v(x)            (11)
+                                                                                                                  S(x)
+like a soft k-hot mask and still enforces a strict sum–to–k
+constraint (Ahle, 2022).                                               where ⊙ denotes elementwise multiplication. This expres-
+                                                                       sion reuses the same shift t(x) computed in the forward pass,
+Forward pass Let x ∈ Rn be the vector whose top-k                      and can be implemented without explicitly forming any
+entries we want to select. In our model, x = |L⊤
+                                               Σ w|. Let               large matrices, making the backward pass both numerically
+σ : R → (0, 1) denote the logistic sigmoid, which is a                 stable and efficient. In our implementation, we further intro-
+smooth, monotone function. We then look for a scalar shift             duce a sharpness parameter β > 0 to control the hardness of
+t ∈ R such that:                                                       the soft top-k operator. Instead of using pi (x) = σ(xi + t),
+  Xn
+                                                                      we define:
+      pi (x) = k, pi (x) = σ xi + t i = 1, . . . , n. (6)
+  i=1                                                                       pi (x) = σ(β(xi + t(x))) ,              i = 1, . . . , n      (12)
+Because σ is monotone, the left-hand side of Eq. (6) is
+                                                                       where a larger value of β produces a steeper transition and
+monotone in t as well. The unique solution t∗ (x) can thus
+                                                                       approximates the hard top-k mask more closely.
+be obtained by a one-dimensional bisection search between
+two bounds at which the sigmoid is saturated. The result               This differentiable top-k operator has several properties that
+p(x) ∈ (0, 1)n behaves like a softened top-k mask: the k               make it well-suited for our framework. By construction,
+largest coordinates of x receive values close to 1, the others         it satisfies the cardinality constraint, ensuring that the soft
+close to 0, and the total mass is exactly k.                           mask always preserves the desired sparsity budget. It is
+
+                                                                   5
+                                    Decision-focused Sparse Tangent Portfolio Optimization
+
+also computationally efficient in both directions: the for-           Algorithm 1 Training predictive model fθ with a Differen-
+ward pass identifies the required shift via a lightweight one-        tiable Decision Layer
+dimensional bisection search, and the backward pass uses                Input: training set {(xi , yi )}N i=1 , where xi is the look-
+the closed-form vector-Jacobian product derived in Eq. (11),            back window of past returns and yi is the next-period
+enabling fast and stable gradient evaluation. These proper-             return; learning rate η, batch size B, cardinality k, mixing
+ties enable the asset-selection module to be easily integrated          weight α.
+into the end-to-end pipeline and allow the entire architecture          Compute rolling covariance matrix Σi from the look-back
+to be trained with standard gradient-based optimizers.                  window xi .
+We now describe how the proposed decision layer is em-                  for each training epoch do
+bedded into a DFL framework for cardinality-constrained                    for mini-batch B ⊂ {1, . . . , N } with |B| = B do
+Sharpe ratio maximization. Figure 1 provides an overview                     for each (xi , yi ) ∈ B do
+of the proposed framework. A predictive model fθ                                 µ̂i ← fθ (xi )
+                                                                                    (0)
+parametrized by θ takes as input a window of historical                          wi ← w∗ (µ̂i ; Σi ) by solving Eq. (5)
+market data and outputs the quantities required by the op-                                     (0)
+                                                                                 si ← L⊤ Σi wi
+timization layer, such as a predicted mean return vector                           ′
+                                                                                 µi ← SoftTop-k(µ̂i ; si , k)
+µ̂. These predictions are then passed to the differentiable                      wi∗ ← w∗ (µ′i ; Σi ) by solving Eq. (5)
+decision layer, which produces a sparse portfolio w⋆ (µ̂)                          (i)
+                                                                                 LDFL ← − yi⊤ wi∗
+that satisfies the relevant budget, risk, and k-asset selection                    (i)
+constraints.                                                                     LMSE ← ∥µ̂i − yi ∥22
+                                                                                             (i)                (i)
+                                                                                 L(i) ← αLDFL + (1 − α)LMSE
+The key role of the decision layer emerges during train-                     end for P
+ing: we define the learning objective directly in terms of                   L ← |B|   1          (i)
+                                                                                           i∈B L
+downstream portfolio quality. By backpropagating through                     θ ← θ − η∇θ L
+the differentiable decision mapping, the parameters θ are                  end for
+updated so that the predictive model learns to produce pre-             end for
+dictions aligned with the portfolio objective, rather than
+with a forecasting loss. As a result, the learned predictor
+is aligned with out-of-sample risk-adjusted performance               tion, we augment the regret loss with a standard prediction
+under explicit cardinality constraints. The overall training          term that penalizes the squared error between µ̂ and µ∗ .
+procedure is summarized in Algorithm 1.                               Concretely, we train the network using the task loss LTask :
+
+5. Experiments                                                                    LTask = αLDFL + (1 − α)LMSE                   (14)
+
+5.1. Loss Function                                                    where α ∈ [0, 1] controls the balance between decision
+We describe the training loss used when applying DFL to               quality and prediction accuracy.
+                                                                                              PN         Note that the MSE loss is
+Sharpe ratio maximization. The decision-focused compo-                defined as LMSE = N1 i=1 ∥µ∗i − µ̂i ∥22 . This combined
+nent is a regret-style loss based on the maximization prob-           loss leads to more stable training and encourages the model
+lem in the objective of Eq. (5). Given the true mean returns          to produce forecasts that are both accurate and well aligned
+µ∗ and the predicted mean returns µ̂, we compare the port-            with the downstream portfolio optimization task.
+folio w∗ (µ̂) that is optimal under the prediction with the
+portfolio w∗ (µ∗ ) that is optimal under the ground-truth pa-         5.2. Experimental Setup
+rameters. The resulting loss is:                                      We use a 10-year daily closing price dataset from Yahoo
+                                                                      Finance covering four markets: EuroStoxx50, FTSE100,
+         LDFL = R w∗ (µ̂), µ∗
+                                 
+                                                                      KOSPI200, and Nikkei225. The sample period spans from
+                = f w∗ (µ∗ ), µ∗ − f w∗ (µ̂), µ∗
+                                                 
+                                                         (13)         January 2016 to December 2025. We restrict attention to
+                = µ∗⊤ w∗ (µ∗ ) − µ∗⊤ w∗ (µ̂).                         constituents with stable index membership, omitting any
+                                                                      firms that enter or leave the index during the period.
+Since the first term on the right-hand side is constant with
+                                                                      For the prediction model, we first preprocess the time se-
+respect to the model parameters, we omit it from the loss to
+                                                                      ries into rolling windows of daily returns with a 100-day
+reduce computational cost.
+                                                                      look-back horizon. Each input feature vector Xt consists
+Purely decision-focused loss can suffer from noisy or vanish-         of the past 100 days of returns up to day t, and the network
+ing gradients, especially when the optimization landscape is          is trained to predict the one-step-ahead return µ̂t+1 . This
+relatively flat around the optimum. To alleviate this limita-         predicted mean vector is then passed to the optimization
+
+                                                                  6
+                                     Decision-focused Sparse Tangent Portfolio Optimization
+
+                                                                         1. Historic: In the historic baseline, we do not train a pre-
+                                                                            diction model and instead use the historical expected
+                                                                            return vector µ directly in the optimization problem,
+                                                                            i.e., the portfolio weights are obtained as w∗ (µ) from
+                                                                            the mean-variance objective.
+
+                                                                         2. PFL: In the PFL framework, we first learn a predictive
+                                                                            model fθ and use its output µ̂ = fθ (x) as the expected
+                                                                            return in the downstream optimization, yielding portfo-
+                                                                            lio weights w∗ (µ̂).
+
+                                                                       Optimization models For the optimization, we consider
+                                                                       three state-of-the-art models for cardinality-constrained
+                                                                       Sharpe ratio maximization:
+
+                                                                         1. OSCAR (Bae et al., 2025): A three-stage heuristic that
+                                                                            solves the tangency portfolio, selects the top-k assets
+                                                                            in the Cholesky-transformed space, and re-optimizes
+                                                                            weights over the selected support.
+
+                                                                         2. SD-relaxation (Kim et al., 2016): This approach re-
+Figure 2. Portfolio return time-series of FTSE100 on the test
+                                                                            laxes the cardinality-constrained Sharpe ratio maxi-
+set across three cardinality levels ρ ∈ {10%, 15%, 20%}. We
+compare our DFL framework with the PFL baselines. Across                    mization into a tractable semidefinite program by lift-
+most time periods, DFL attains higher returns than the competing            ing the portfolio weights to a positive semidefinite
+methods.                                                                    matrix and replacing the nonconvex sparsity structure
+                                                                            with a convex surrogate.
+
+                                                                         3. mSSRM-PGA (Lin et al., 2024): This method tackles
+layer, which solves the portfolio problem and outputs the
+                                                                            m-sparse Sharpe ratio maximization by first rewrit-
+corresponding optimal weights w∗ (µ̂t+1 ). The full dataset
+                                                                            ing the fractional objective into an equivalent m-
+is split chronologically into training and test sets with an
+                                                                            sparse quadratic program, and then running a proximal-
+80/20 ratio. Throughout all experiments, the input covari-
+                                                                            gradient algorithm whose proximal step simply keeps
+ance matrix is estimated in a rolling-window manner for
+                                                                            the largest positive entries (up to the sparsity budget)
+each sample, using the same historical look-back window
+                                                                            and truncates the rest to zero.
+that forms the model input. Once computed for a given
+sample, covariance is held fixed within the corresponding
+downstream optimization layer and is not learned or pre-               Evaluation metric Our primary evaluation metric is the
+dicted by the neural network. In other words, the covariance           out-of-sample Sharpe ratio computed from the realized port-
+structure varies across samples through the rolling window,            folio returns. For a given sequence of portfolio weights
+but remains exogenous with respect to the predictive model             {wt }Tt=1 and next-period realized returns {rt+1 }Tt=1 , we
+parameters. This design avoids feeding noisy model outputs             form the realized return series:
+into the risk constraints of the downstream optimization,
+which can otherwise lead to unstable or infeasible problem                         rp,t = wt⊤ rt+1 ,         t = 1, . . . , T.
+instances, while still allowing the risk estimate to reflect
+local market conditions.                                               The (daily) Sharpe ratio is then defined as:
+
+                                                                                                         1
+                                                                                                             PT
+5.3. Baselines and Evaluation Metric                                                  r̄p                T    t=1 rp,t
+                                                                                 SR =     =q
+                                                                                      sp            1
+                                                                                                         PT                   2
+We evaluate our proposed framework against two conven-                                            T −1       t=1 (rp,t − r̄p )
+tional learning-optimization frameworks and three state-
+of-the-art portfolio optimization models for cardinality-              where r̄p and sp denote the sample mean and sample stan-
+constrained Sharpe ratio maximization.                                 dard deviation of the realized portfolio returns. We report
+                                                                       this Sharpe ratio for every method and market as the main
+                                                                       measure of risk-adjusted performance. Higher Sharpe ratios
+Conventional frameworks                                                indicate better return–volatility trade-offs.
+
+                                                                   7
+                                      Decision-focused Sparse Tangent Portfolio Optimization
+
+Table 1. Out-of-sample Sharpe ratios on four equity markets. Values are reported as mean and standard deviation over five random seeds.
+The Historic results are estimated using the full training set and thus have zero standard deviation. The best-performing method for each
+market-cardinality pair is bold-lettered.
+
+                                              Historic                                          PFL                             DFL
+    Market      N     k      OSCAR         SD-relaxation      mSSRM           OSCAR         SD-relaxation     mSSRM             Ours
+                      5    0.156 ± 0.000    0.077 ± 0.000   0.148 ± 0.000   0.809 ± 0.025   0.982 ± 0.087   0.821 ± 0.074   0.955 ± 0.014
+ EuroStoxx50    47    7    0.198 ± 0.000   -0.037 ± 0.000   0.149 ± 0.000   0.827 ± 0.023   1.041 ± 0.066   0.846 ± 0.089   0.972 ± 0.016
+                      9    0.228 ± 0.000   -0.045 ± 0.000   0.152 ± 0.000   0.841 ± 0.020   1.116 ± 0.058   0.889 ± 0.081   0.983 ± 0.016
+                      9    0.269 ± 0.000   0.198 ± 0.000    0.167 ± 0.000   0.776 ± 0.025   0.931 ± 0.052   0.782 ± 0.044   0.983 ± 0.016
+   FTSE100      93    14   0.322 ± 0.000   0.245 ± 0.000    0.234 ± 0.000   0.853 ± 0.022   1.073 ± 0.061   0.841 ± 0.049   1.049 ± 0.034
+                      19   0.396 ± 0.000   0.254 ± 0.000    0.237 ± 0.000   0.888 ± 0.020   1.142 ± 0.057   0.873 ± 0.047   1.071 ± 0.021
+                      16   0.426 ± 0.000   0.727 ± 0.000    0.319 ± 0.000   0.887 ± 0.017   1.182 ± 0.042   1.372 ± 0.052   1.958 ± 0.022
+  KOSPI200      162   24   0.485 ± 0.000   0.814 ± 0.000    0.332 ± 0.000   0.918 ± 0.010   1.684 ± 0.037   1.491 ± 0.058   2.030 ± 0.062
+                      32   0.527 ± 0.000   0.845 ± 0.000    0.325 ± 0.000   0.935 ± 0.009   1.793 ± 0.118   1.586 ± 0.171   2.098 ± 0.016
+                      21   0.258 ± 0.000   0.198 ± 0.000    0.273 ± 0.000   0.567 ± 0.014   0.743 ± 0.103   0.614 ± 0.092   0.862 ± 0.060
+  Nikkei225     208   31   0.284 ± 0.000   0.243 ± 0.000    0.276 ± 0.000   0.620 ± 0.012   0.812 ± 0.111   0.662 ± 0.094   0.878 ± 0.040
+                      42   0.295 ± 0.000   0.248 ± 0.000    0.280 ± 0.000   0.649 ± 0.011   0.886 ± 0.126   0.721 ± 0.107   0.946 ± 0.130
+
+
+
+6. Results                                                              Figure 2 presents illustrative portfolio return time-series
+                                                                        results on FTSE100 across different cardinality levels. The
+Table 1 summarizes the out-of-sample Sharpe ratios ob-                  results show that our DFL framework consistently attains
+tained across the four equity markets and cardinality levels            higher portfolio returns than the PFL baselines across most
+ρ ∈ {10%, 15%, 20%}. Note that our objective is to max-                 time periods. Similar patterns are also observed in the other
+imize the Sharpe ratio. The cardinality k is derived by                 equity markets, as reported in Appendix C.3. At the same
+multiplying each level by the number of assets N and round-             time, because our current formulation allows short selling,
+ing to the nearest integer as k = round(ρ · N ). The Historic           higher Sharpe ratios may be accompanied by a more ag-
+baselines, which directly optimize on sample mean returns               gressive downside-risk profile. To examine this aspect, Ap-
+without any learning component, consistently underperform.              pendix C.2 reports additional Maximum Drawdown (MDD)
+This confirms that purely backward-looking estimates are                results and discusses the risk trade-off of the learned portfo-
+insufficient in non-stationary markets.                                 lios.
+PFL delivers substantial improvements over Historic, but its            Overall, the evidence shows that decision-focused training
+performance varies substantially depending on the optimiza-             can optimize predictions directly for the sparse Sharpe ratio
+tion model. In EuroStoxx50 and partly in FTSE100, the                   objective through a differentiable decision layer. This pro-
+SD-relaxation-based PFL baseline achieves slightly higher               duces sparse portfolios that outperform Historic and PFL
+average Sharpe ratios than the proposed framework. How-                 baselines, particularly in larger asset universes, while re-
+ever, our method remains highly competitive in these cases,             maining competitive in smaller markets.
+with only small performance gaps, while exhibiting smaller
+standard deviations across seeds. This suggests that al-
+though SD-relaxation can occasionally obtain strong aver-               7. Conclusion
+age performance, its results are relatively more sensitive to           We present a DFL framework for Sharpe ratio maximization
+training randomness.                                                    under cardinality constraints. Our approach enables end-to-
+In contrast, the advantage of the proposed framework be-                end training by differentiating through the sparse decision
+comes much clearer in larger asset universes. On KOSPI200               pipeline, allowing gradients to propagate through predic-
+and Nikkei225, the gap between our method and the PFL                   tion, soft top-k selection, and re-optimization. As a result,
+baselines widens noticeably across most cardinality levels,             the learning objective is directly aligned with downstream
+particularly for KOSPI200 where our framework consis-                   portfolio quality, in contrast to traditional PFL approaches
+tently achieves substantially higher Sharpe ratios than all             that rely on forecasting loss as a proxy.
+PFL variants. These results demonstrate that aligning pre-              Extensive experiments confirm that the proposed framework
+diction, selection, and re-optimization through end-to-end              provides an effective way to train predictive models for
+training is highly effective for Sharpe ratio maximization              sparse Sharpe ratio portfolio construction. Rather than treat-
+under sparsity constraints.                                             ing return prediction as a separate intermediate task, our
+In addition to the Sharpe ratio, we further compare the port-           approach aligns the predictor with the downstream selection
+folio returns achieved by each model over the test period.              and re-optimization procedure. The empirical results show
+
+                                                                    8
+                                   Decision-focused Sparse Tangent Portfolio Optimization
+
+that this DFL alignment leads to competitive and often su-           Bienstock, D. Computational study of a family of mixed-
+perior risk-adjusted performance, especially in larger asset           integer quadratic programming problems. Mathematical
+universes where the sparse selection problem becomes more              Programming, 74(2):121–140, 1996.
+challenging.
+                                                                     Brodie, J., Daubechies, I., De Mol, C., Giannone, D., and
+Despite these advantages, the framework has three main                 Loris, I. Sparse and stable markowitz portfolios. Pro-
+limitations. First, differentiating through the sparse selec-          ceedings of the National Academy of Sciences, 106(30):
+tion module, especially the soft top-k operator, introduces            12267–12272, 2009.
+computational overhead as the asset universe or the sparsity
+budget grows. Second, our framework allows short selling             Chang, T.-J., Meade, N., Beasley, J. E., and Sharaiha, Y. M.
+and does not impose practical constraints such as long-only            Heuristics for cardinality constrained portfolio optimisa-
+positions, leverage limits, or turnover penalties. Lastly, our         tion. Computers & Operations Research, 27(13):1271–
+approach is tailored to sparse tangent portfolio optimization,         1302, 2000.
+and extending it to other cardinality-constrained portfolio
+objectives with different downstream goals is nontrivial.            Chen, L. and Zhu, Y. Sparse portfolio selection via quasi-
+                                                                       norm regularization. IEEE Transactions on Signal Pro-
+Future work includes designing more efficient differentiable           cessing, 62(24):6554–6568, 2014.
+selection mechanisms to improve scalability, incorporating
+practical constraints to make the framework more realistic,          DeMiguel, V., Garlappi, L., Nogales, F. J., and Uppal, R.
+and exploring broader applications where DFL can improve               A generalized approach to portfolio optimization: Im-
+decision quality beyond sparse portfolio construction.                 proving performance by constraining portfolio norms.
+                                                                      Management Science, 55(5):798–812, 2009.
+Impact Statement                                                     Fabozzi, F. J., Kolm, P. N., Pachamanova, D. A., and Fo-
+This paper presents work whose goal is to advance the field            cardi, S. M. Robust portfolio optimization and manage-
+of Machine Learning in Finance. There are many potential               ment. John Wiley & Sons, 2007.
+societal consequences of our work, none of which we feel             Gao, J. and Li, D. Optimal cardinality constrained portfolio
+must be specifically highlighted here.                                 selection. Operations Research, 61(3):745–761, 2013.
+
+Acknowledgement                                                      Garey, M. R. and Johnson, D. S. Computers and intractabil-
+                                                                       ity, volume 29. wh freeman New York, 2002.
+This work was supported by the National Research Founda-
+tion (NRF) of Korea grant funded by the Ministry of Science          Hamilton, J. D. Time series analysis. Princeton university
+and ICT (MSIT) of Korea (No. RS-2022-NR068758, No.                     press, 2020.
+RS-2025-02216640, No. RS-2025-24803208) and the Insti-
+                                                                     Hwang, Y., Lee, Y., Lee, J., Zohren, S., Kim, J. H., Kim,
+tute of Information & Communications Technology Plan-
+                                                                      W. C., Lee, Y., and Fabozzi, F. J. Deep learning in asset
+ning & Evaluation (IITP) grant funded by the Ministry of
+                                                                      management: Architectures, applications, and challenges.
+Science and ICT (MSIT) of Korea (No. RS-2020-II201336,
+                                                                      The Journal of Portfolio Management, 52(2):233–271,
+Artificial Intelligence Graduate School Program (UNIST)).
+                                                                      2025.
+
+References                                                           Iyengar, G. and Kang, W. Inverse conic programming with
+                                                                       applications. Operations Research Letters, 33(3):319–
+Agrawal, A. et al. Differentiable convex optimization layers.          330, 2005.
+  In Advances in Neural Information Processing Systems,
+  volume 32, 2019.                                                   Jeon, H., Bae, H., Kim, C., Lee, Y., and Kim, W. C. Predic-
+                                                                       tion loss guided decision-focused learning. arXiv preprint
+Ahle, T. D.     A differentiable Top-k layer for                       arXiv:2509.08359, 2025.
+  PyTorch.    https://thomasahle.com/blog/
+                                                                     Kim, J. H., Lee, Y., Kim, W. C., and Fabozzi, F. J. Mean-
+  differentiable_topk.html, 2022. Accessed:
+                                                                       variance optimization for asset allocation. Journal of
+  2026-05-24.
+                                                                       Portfolio Management, 47(5):24–40, 2021.
+
+Bae, H., Jeon, H., Park, M., Lee, Y., and Kim, W. C. A               Kim, J. H., Lee, Y., Kim, W. C., Kang, T., and Fabozzi,
+  cholesky decomposition-based asset selection heuristic               F. J. An overview of optimization models for portfolio
+  for sparse tangent portfolio optimization. arXiv preprint,           management. Journal of Portfolio Management, 51(2):
+  2025.                                                                101–117, 2024.
+
+                                                                 9
+                                   Decision-focused Sparse Tangent Portfolio Optimization
+
+Kim, M. J. et al. Sparse tangent portfolio selection via semi-        Woodside-Oriakhi, M. Portfolio optimisation with transac-
+  definite relaxation. Operations Research Letters, 44(4):             tion cost. PhD thesis, Brunel University, School of Infor-
+  540–543, 2016.                                                       mation Systems, Computing and Mathematics, 2011.
+
+Kim, W. C. and Lee, Y. A uniformly distributed random
+  portfolio. Quantitative Finance, 16(2):297–307, 2016.
+
+Kremer, P. J., Lee, S., Bogdan, M., and Paterlini, S. Sparse
+  portfolio selection via the sorted ℓ1 -norm. Journal of
+  Banking & Finance, 110:105687, 2020.
+
+Lee, Y., Kim, M. J., Kim, J. H., Jang, J. R., and Kim, W. C.
+  Sparse and robust portfolio selection via semi-definite
+  relaxation. Journal of the Operational Research Society,
+  71(5):687–699, 2020.
+
+Lee, Y., Kim, J. H., Kim, W. C., and Fabozzi, F. J. An
+  overview of machine learning for portfolio optimization.
+  Journal of Portfolio Management, 51(2):131–148, 2024.
+
+Li, D., Sun, X., and Wang, J. Optimal lot solution to cardi-
+  nality constrained mean–variance formulation for portfo-
+  lio selection. Mathematical Finance: An International
+  Journal of Mathematics, Statistics and Financial Eco-
+  nomics, 16(1):83–101, 2006.
+
+Lin, Y., Lai, Z.-R., and Li, C. A globally optimal portfolio
+  for m-sparse sharpe ratio maximization. In Advances in
+  Neural Information Processing Systems, volume 37, pp.
+  17133–17160, 2024.
+
+Mandi, J. et al. Decision-focused learning: Foundations,
+ state of the art, benchmark and future opportunities. Jour-
+ nal of Artificial Intelligence Research, 80:1623–1701,
+ 2024.
+
+Maringer, D. and Kellerer, H. Optimization of cardinality
+ constrained portfolios with a hybrid local search algo-
+ rithm. OR Spectrum, 25(4):481–495, 2003.
+
+Markowitz, H. Portfolio selection. The Journal of
+ Finance, 7(1):77–91, 1952. doi: https://doi.org/10.
+ 1111/j.1540-6261.1952.tb01525.x.   URL https:
+ //onlinelibrary.wiley.com/doi/abs/10.
+ 1111/j.1540-6261.1952.tb01525.x.
+
+Schmitt, T. A., Chetalova, D., Schäfer, R., and Guhr, T. Non-
+  stationarity in financial time series: Generic features and
+  tail behavior. Europhysics Letters, 103(5):58003, 2013.
+
+Shah, S. et al. Decision-focused learning without decision-
+  making: Learning locally optimized decision losses. In
+  Advances in Neural Information Processing Systems, vol-
+  ume 35, pp. 1320–1332, 2022.
+
+Sharpe, W. F. Mutual fund performance. The Journal of
+  business, 39(1):119–138, 1966.
+
+                                                                 10
+                                   Decision-focused Sparse Tangent Portfolio Optimization
+
+A. Additional Proofs
+The following proofs are included to make the paper self-contained. They follow the geometric Sharpe ratio arguments of
+Kim & Lee (2016) and the OSCAR derivation of Bae et al. (2025), with notation adapted to the present paper.
+
+A.1. Proof of Proposition 3.2
+Let w∗ = ŵ denote the tangent portfolio. First note that the tangent portfolio is given by
+
+                                          w∗ = arg max SR(w | µ, Σ) = Σ−1 µ,
+                                                   w∈Rn
+
+up to a positive scaling factor, and the maximum Sharpe ratio is
+
+                                                                     µ⊤ w∗
+                                           SR(w∗ | µ, Σ) = √
+                                                               w∗⊤ Σw∗
+                                                                 µ⊤ (Σ−1 µ)
+                                                             =p
+                                                                µ⊤ Σ−1 ΣΣ−1 µ
+                                                               µ⊤ Σ−1 µ
+                                                             =p
+                                                                µ⊤ Σ−1 µ
+                                                              p
+                                                             = µ⊤ Σ−1 µ.
+
+Then,
+                                                        ⊤    ⊤ ∗
+                                               (L⊤
+                                                                   
+                                                  Σ w1 ) (LΣ w )
+                                θ1 = arccos
+                                              ∥L⊤ w1 ∥2 ∥L⊤      ∗
+                                                            Σ w ∥2
+                                             Σ                                             
+                                                                 ⊤     ⊤ ∗
+                                                              w1 LΣ LΣ w
+                                   = arccos  q                       q                     
+                                                 (LΣ w1 ) (L⊤
+                                                    ⊤     ⊤       w
+                                                                Σ 1 )  (L⊤ w ∗ )⊤ (L⊤ w ∗ )
+                                                                         Σ          Σ
+                                                                       !
+                                                        ⊤     ∗
+                                                     w1 Σw
+                                   = arccos p             √
+                                                   ⊤
+                                                w1 Σw1 w∗⊤ Σw∗
+                                                                       !
+                                                        w1⊤ µ
+                                   = arccos p             p
+                                                w1⊤ Σw1 µ⊤ Σ−1 µ
+                                                              
+                                              SR(w1 | µ, Σ)
+                                   = arccos                       ,
+                                              SR(w∗ | µ, Σ)
+and similarly,                                                                   
+                                                                SR(w2 | µ, Σ)
+                                             θ2 = arccos                              .
+                                                                SR(w∗ | µ, Σ)
+Since arccos(x) is a decreasing function of x, we have
+
+                                θ1 ≤ θ2    if and only if   SR(w1 | µ, Σ) ≥ SR(w2 | µ, Σ).
+
+This proves the proposition.                                                                                         □
+
+A.2. Proof of Proposition 3.3
+Let
+                                              L⊤                                 n
+                                               Σ ŵ = (x1 , x2 , . . . , xn ) ∈ R .
+
+Without loss of generality, assume
+                                                 |x1 | ≥ |x2 | ≥ · · · ≥ |xn |.
+         ∗
+Then, K = {1, 2, . . . , k}.
+
+                                                                11
+                                    Decision-focused Sparse Tangent Portfolio Optimization
+
+Since arccos is a monotonic decreasing function on [0, 1],
+                                                                                       !
+                                                                    (L⊤     ⊤   ⊤
+                                                                   
+                                                                       Σ w) (LΣ ŵ)
+                                   arg min     min        arccos
+                                    K∈K    w∈PK (L⊤   n
+                                                  Σ (R ))
+                                                                   ∥L⊤         ⊤
+                                                                      Σ w∥2 ∥LΣ ŵ∥2
+                                                                                !
+                                                               (L⊤   ⊤    ⊤
+                                                                 Σ w) (LΣ ŵ)
+                                   = arg max      max                             .
+                                       K∈K   w∈PK (L⊤     n
+                                                      Σ (R ))
+                                                              ∥L⊤         ⊤
+                                                                 Σ w∥2 ∥LΣ ŵ∥2
+
+
+
+Let (L⊤                                                  ⊤
+      Σ ŵ)K be a projection where the component of LΣ ŵ corresponding to the index not included in K is changed to 0.
+Then, we have
+                                                                           !
+                                                        (L⊤     ⊤    ⊤
+                                                           Σ w) (LΣ ŵ)
+                            arg max       max
+                              K∈K     w∈PK (L⊤     n
+                                              Σ (R ))
+                                                       ∥L⊤           ⊤
+                                                          Σ w∥2 ∥LΣ ŵ∥2
+                                                                              !
+                                                          (L⊤      ⊤   ⊤
+                                                             Σ w) (LΣ ŵ)K
+                            = arg max        max
+                                K∈K      w∈PK (L⊤     n
+                                                  Σ (R ))
+                                                          ∥L⊤           ⊤
+                                                              Σ w∥2 ∥LΣ ŵ∥2
+                                                                                               !
+                                                          ∥(L⊤               ⊤    ⊤   ⊤
+                                                               Σ ŵ)K ∥2 (LΣ w) (LΣ ŵ)K
+                            = arg max        max
+                                K∈K      w∈PK (L⊤     n
+                                                  Σ (R ))
+                                                            ∥L⊤ Σ ŵ∥2   ∥L⊤         ⊤
+                                                                            Σ w∥2 ∥(LΣ ŵ)K ∥2
+
+                                         ∥(L⊤                (L⊤     ⊤    ⊤
+                                                                                   
+                                             Σ ŵ)K ∥2          Σ ŵ)K (LΣ ŵ)K
+                            = arg max
+                                K∈K        ∥L⊤Σ ŵ∥2     ∥(L⊤              ⊤
+                                                             Σ ŵ)K ∥2 ∥(LΣ ŵ)K ∥2
+                                            ⊤ −1      ⊤                 ⊤
+                                 ∵ w = (LΣ ) (LΣ ŵ)K ∈ PK (LΣ (Rn ))
+                                                                               
+
+                                         ∥(L⊤
+                                                       
+                                             Σ ŵ)K ∥2
+                            = arg max
+                                K∈K        ∥L⊤Σ ŵ∥2
+                              = K ∗.
+
+Thus, K ∗ = {1, . . . , k} is the optimal solution.                                                                        □
+
+B. Experiment Settings Details
+B.1. Experimental Setup
+The experiments were implemented in Python, using PyTorch for the predictive model and CVXPYlayers for the optimization
+module (Agrawal et al., 2019), which enabled differentiation through the portfolio optimization step and thus an end-to-end
+decision-focused learning pipeline. The prediction network consists of two fully connected hidden layers with 512 and 256
+neurons, respectively, trained with a learning rate of 0.001 and a mini-batch size of 64. The combined loss uses a weighting
+parameter α = 0.5 to balance prediction accuracy and decision quality, which we found to improve training stability and
+efficiency. In the differentiable top-k selection layer, the bisection procedure is run for 32 iterations.
+Since the covariance matrix is estimated from rolling windows, it can occasionally become rank-deficient or numerically
+ill-conditioned. To ensure positive semidefiniteness and stable Cholesky factorization, we apply diagonal shrinkage to each
+rolling covariance matrix by shrinking it toward a scaled identity matrix, followed by a small eigenvalue-based jitter when
+necessary. Specifically, for each rolling covariance estimate Σ̂t , we use
+
+                                                                        tr(Σ̂t )
+                                                 Σ̃t = (1 − λ)Σ̂t + λ            I,
+                                                                           n
+with λ = 0.10, and add a small diagonal jitter if needed to guarantee a valid Cholesky factorization. In addition, because
+short selling is allowed in the portfolio optimization layer, the learned portfolio weights can exhibit extreme fluctuations
+during training. To mitigate this numerical instability, we add a small offset to the QCQP scaling variable c when recovering
+the portfolio weights. All experiments were carried out on a machine equipped with an Intel Xeon Silver 4310 CPU
+(@2.10GHz) and an NVIDIA RTX A6000 GPU with 48GB of memory, and repeated over 5 random seeds with mean
+and standard deviation reported, providing sufficient computational resources to train the model and solve the embedded
+optimization problems.
+
+                                                              12
+                                    Decision-focused Sparse Tangent Portfolio Optimization
+
+B.2. Details of the SD-relaxation baseline
+Kim et al. (2016) relax the k-sparse Sharpe ratio maximization by lifting the weight vector to a positive semidefinite matrix
+variable Y ⪰ 0 (a surrogate of ww⊤ ). With M := µµ⊤ , the squared numerator becomes a linear trace objective Tr(M Y ),
+while the risk normalization can be enforced by Tr(ΣY ) = 1. The auxiliary scalar z = Tr(Y ) captures the scale of the lifted
+variable, and sparsity is imposed via the convex surrogate 1⊤ |Y |1 ≤ kz (originating from ∥w∥21 ≤ k∥w∥22 for k-sparse
+vectors). This yields the following tractable SDP:
+
+                                                     max      Tr(M Y )
+                                                      Y,z
+
+                                                       s.t.   Tr(Y ) = z
+                                                              1⊤ |Y | 1 ≤ kz
+                                                              Tr(ΣY ) = 1
+                                                              Y ⪰ 0.
+
+Since this optimization does not strictly enforce the target cardinality, a single run can yield a portfolio whose realized
+number of selected assets differs from our proposed framework. To ensure a fair comparison, we repeat the SD-relaxation
+baseline experiment while adjusting the sparsity parameter used by the baseline until the obtained portfolio attains the same
+realized cardinality as our proposed method. This procedure may correspond to using a looser effective cardinality level
+than the nominal k in the baseline formulation, but it aligns the final number of selected assets across methods.
+
+B.3. Details of the mSSRM-PGA baseline
+Lin et al. (2024) solve the m-sparse Sharpe ratio maximization via a projected gradient (PGA) scheme that performs gradient
+ascent on the Sharpe ratio objective while enforcing sparsity at every step:
+
+                                                      µ̂⊤ w
+                                              max √               s.t.   ∥w∥0 ≤ k.                                          (15)
+                                                w     w⊤ Σw
+
+Starting from an initialization w(0) , the iterate is updated by a gradient step followed by a hard-thresholding projection onto
+the top-k support:                                                                
+                                               w(t+1) = Πk w(t) + η ∇SR w(t)                                                (16)
+
+where Πk (·) keeps the k largest entries in magnitude and sets the rest to zero.
+
+C. Additional Experiments and Results
+C.1. α Sensitivity
+In the main experiments, we use the mixed training objective
+
+                                              LTask = αLDFL + (1 − α)LMSE ,                                                 (17)
+
+with α = 0.5 as a default setting. Here, the MSE term is not introduced as a new loss function or as a separate methodological
+contribution. Rather, it is the standard prediction loss used as an auxiliary supervised signal to stabilize the decision-focused
+training procedure. Thus, the role of the mixed objective is not to claim a novel loss design, but to provide a stable default
+training formulation for the proposed differentiable sparse portfolio optimization pipeline.
+This choice is motivated by the fact that pure decision-focused learning can suffer from weak, noisy, or locally unstable
+gradients. In our setting, this issue can be more pronounced because the downstream pipeline contains both a differentiable
+sparse-selection step and a convex re-optimization layer. As a result, the decision loss may provide gradients that are small
+in magnitude or poorly informative in some regions of the training landscape. By contrast, the MSE term provides a direct
+predictive supervision signal on the expected returns. Recent studies on prediction-loss-guided decision-focused learning
+provide a related geometric motivation. In particular, Jeon et al. (2025) analyze the Hessian eigenvalue density of prediction,
+decision, and mixed losses, and show that the eigenvalues of the decision loss are highly concentrated near zero, indicating
+a largely flat decision-loss landscape. In contrast, the prediction loss exhibits a broader eigenvalue spectrum, including
+
+                                                                13
+                                    Decision-focused Sparse Tangent Portfolio Optimization
+
+  Table 2. α sensitivity case study on EuroStoxx50. Values are out-of-sample Sharpe ratios, reported as mean ± standard deviation.
+
+                                   α         ρ = 10%            ρ = 15%            ρ = 20%
+                                   0.0    0.809 ± 0.025      0.827 ± 0.023      0.841 ± 0.020
+                                   0.1    0.826 ± 0.025      0.852 ± 0.024      0.862 ± 0.013
+                                   0.5    0.955 ± 0.014      0.972 ± 0.016      0.983 ± 0.016
+                                   0.9    1.041 ± 0.081      1.084 ± 0.083      1.140 ± 0.154
+                                   1.0    1.165 ± 0.106      1.056 ± 0.125      0.940 ± 0.097
+
+
+negative eigenvalues and several larger positive eigenvalues, while the convex combination of prediction and decision losses
+yields a more balanced spectrum. This suggests that the prediction loss can enrich the curvature and gradient signal of
+decision-focused objectives, especially when the pure decision loss provides weak or unstable gradients. Therefore, the
+mixed objective is used as a practical compromise that preserves decision-level alignment while improving optimization
+stability.
+To examine the effect of α, we conduct a small case study on EuroStoxx50. We vary α ∈ {0, 0.1, 0.5, 0.9, 1.0} and evaluate
+three cardinality levels, ρ ∈ {10%, 15%, 20%}. Each setting is trained with five random seeds, using the same data split,
+model architecture, covariance estimation procedure, and optimization pipeline as in the main experiments. The case α = 0
+corresponds to pure prediction-focused training with MSE loss, whereas α = 1 corresponds to pure decision-focused
+training.
+Table 2 shows that the choice of α has a noticeable effect on performance. Very small values of α, such as α = 0 and
+α = 0.1, are dominated by the MSE term and consistently produce lower Sharpe ratios across all cardinality levels. This
+suggests that prediction accuracy alone is insufficient to fully capture the downstream sparse portfolio objective. As α
+increases, the average Sharpe ratio generally improves, indicating the benefit of incorporating the decision-focused objective.
+However, larger values of α also lead to noticeably higher variability across seeds. For example, α = 0.9 achieves the
+highest average Sharpe ratios for ρ = 15% and ρ = 20%, but its standard deviations are substantially larger than those of
+α = 0.5. Similarly, the pure DFL setting α = 1 achieves the best average performance at ρ = 10%, but its performance
+becomes less consistent as the cardinality level increases, and it underperforms α = 0.9 at ρ = 15% and both mixed settings
+at ρ = 20%.
+Overall, these results suggest that larger decision-focused weights can improve average decision quality, but may also
+make training more sensitive to random initialization and mini-batch sampling. In contrast, α = 0.5 provides a stable
+performance-variance trade-off: it consistently improves over the MSE-dominated settings while maintaining the smallest
+standard deviations across all cardinality levels. Therefore, we use α = 0.5 as a stable default rather than a validation-tuned
+optimum. More broadly, the gains should be interpreted as coming from the full mixed training formulation, rather than
+from the decision-focused loss term in isolation.
+
+C.2. Additional Risk Metrics
+The main experiments focus on the out-of-sample Sharpe ratio because our downstream objective is sparse Sharpe ratio
+maximization. However, the Sharpe ratio alone does not fully characterize the practical risk profile of the learned portfolios.
+In particular, it does not directly measure downside risk or the severity of cumulative losses over the investment horizon. To
+provide an additional diagnostic, we report Maximum Drawdown (MDD) for the learned portfolios.
+Since our current formulation allows short-selling, the learned portfolios may take both long and short positions. Therefore,
+we compare DFL and PFL under the same OSCAR-based portfolio construction pipeline and examine whether decision-
+focused training leads to portfolios with a larger downside-risk profile. For each market and cardinality level, we report the
+MDD evaluated on the test period.
+Table 3 shows that although DFL improves the downstream Sharpe ratio objective in the main experiments, it often leads
+to larger MDD values than PFL. This suggests that the DFL portfolios can be more aggressive under the current short-
+selling-allowed formulation. Therefore, the higher Sharpe ratios of DFL should be interpreted together with its increased
+drawdown risk. Overall, this analysis highlights an important limitation of the current formulation. Our contribution is
+primarily methodological: we show that decision-focused learning can be successfully applied to cardinality-constrained
+sparse Sharpe ratio optimization. Incorporating more practical constraints, such as long-only positions, leverage limits,
+
+                                                                14
+                                    Decision-focused Sparse Tangent Portfolio Optimization
+
+Table 3. Additional MDD metrics across four equity markets. MDD is evaluated on the test period. Values are reported as mean ±
+standard deviation over five random seeds.
+
+                        Market           Method       ρ = 10%           ρ = 15%           ρ = 20%
+                                         PFL        0.474 ± 0.257     0.340 ± 0.079    0.317 ± 0.113
+                        EuroStoxx50
+                                         DFL        0.310 ± 0.105     0.403 ± 0.109    0.390 ± 0.055
+                                         PFL        0.497 ± 0.095     0.495 ± 0.099    0.497 ± 0.102
+                        FTSE100
+                                         DFL        0.710 ± 0.100     0.605 ± 0.209    0.607 ± 0.129
+                                         PFL        0.775 ± 0.109     0.790 ± 0.121    0.796 ± 0.128
+                        KOSPI200
+                                         DFL        0.952 ± 0.021     0.945 ± 0.033    0.925 ± 0.055
+                                         PFL        0.484 ± 0.192     0.528 ± 0.199    0.558 ± 0.202
+                        Nikkei225
+                                         DFL        0.543 ± 0.095     0.559 ± 0.100    0.599 ± 0.136
+
+
+turnover penalties, or margin constraints, remains an important direction for future work.
+
+C.3. Additional Time-series Results
+We provide three additional equity markets (EuroStoxx50, KOSPI200, and Nikkei225) comparisons across three cardinality
+levels 10%, 15%, and 20% in Figure 3, 4, and 5, reporting the portfolio return at each time step for our DFL framework and
+PFL baselines: OSCAR and mSSRM-PGA. The SD-relaxation baseline shows markedly higher volatility and occasional
+extreme swings depending on training, which is also reflected in the larger variability summarized in Table 1. Due to this
+excessive instability, we exclude SD-relaxation from the remaining three markets reported in the subsequent appendix
+results. Notably, the performance gap tends to widen as k increases, suggesting that our decision-focused training becomes
+particularly effective when the allocation space is less restrictive, and the model can better exploit improved mean estimates
+for downstream risk-adjusted performance.
+
+
+
+
+                                                             15
+                                   Decision-focused Sparse Tangent Portfolio Optimization
+
+
+
+
+Figure 3. Portfolio return time-series of EuroStoxx50 on the test set for ρ = 10%, 15%, and 20%. We report our DFL framework and
+PFL baselines: OSCAR and mSSRM-PGA.
+
+
+
+
+                                                              16
+                                    Decision-focused Sparse Tangent Portfolio Optimization
+
+
+
+
+Figure 4. Portfolio return time-series of KOSPI200 on the test set for ρ = 10%, 15%, and 20%. We report our DFL framework and PFL
+baselines: OSCAR and mSSRM-PGA.
+
+
+
+
+                                                               17
+                                    Decision-focused Sparse Tangent Portfolio Optimization
+
+
+
+
+Figure 5. Portfolio return time-series of Nikkei225 on the test set for ρ = 10%, 15%, and 20%. We report our DFL framework and PFL
+baselines: OSCAR and mSSRM-PGA.
+
+
+
+
+                                                               18
+

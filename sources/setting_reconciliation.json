@@ -1,0 +1,13 @@
+{
+  "target": "Final published PMLR306 jeon26a Table1/2/3, not initial-submission numbers",
+  "public_forum": "https://openreview.net/forum?id=KV7XHF0IbK",
+  "public_forum_access": "Browser verification completed automatically;17 public replies read without account login",
+  "original_submission_pdf": "https://openreview.net/attachment?id=KV7XHF0IbK&name=originally_submitted_PDF",
+  "initial_submission": {"hidden_dims":[256,128],"covariance":"Fixed on training history, confirmed by Algorithm1 and author rebuttal W1","euro_DFL_10_percent":1.818,"uncertainty_label":"standard error"},
+  "final_publication": {"hidden_dims":[512,256],"covariance":"Rolling per input window","euro_DFL_10_percent":0.955,"uncertainty_label":"standard deviation over five seeds"},
+  "run_choice": "Use final512/256 and rolling covariance plus declared released defaults for unreported settings; never mix initial submission targets with final settings",
+  "original_anonymous_repository": "https://anonymous.4open.science/r/Diffble-card-SR-CD23/",
+  "anonymous_repository_result": "The repository is expired; live browser message saved in anonymous-repository-status.txt",
+  "supplementary_data_observation": "Observed public forum links include original submitted PDF and GitHub code; no original financial CSV snapshot found among links. This does not prove no private snapshot exists.",
+  "additional_data_issue": "Released FTSE generator retains valid bare-ticker US collisions; observed AAL is American Airlines while AAL.L is Anglo American. Frozen financial source is retained with explicit report warning."
+}

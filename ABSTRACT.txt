@@ -1,0 +1,9 @@
+Decision-focused Sparse Tangent Portfolio Optimization
+
+Condensed abstract
+
+Trains prediction, asset selection, and portfolio optimization jointly to improve sparse
+tangency portfolios. A differentiable convex layer handles the allocation objective,
+while a smooth top-k operator enforces portfolio cardinality. Experiments across four
+equity markets report competitive or improved out-of-sample Sharpe ratios, particularly
+in larger universes.

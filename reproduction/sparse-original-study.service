@@ -1,0 +1,20 @@
+[Unit]
+Description=Sparse Tangent original-market release replay, resumable, RAM cap removed
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=simple
+WorkingDirectory=/home/jkp/data/sparse-tangent-original-reproduction
+ExecStart=/home/jkp/data/sparse-tangent-original-reproduction/.venv/bin/python -u reproduction/study.py
+Environment=OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 MKL_NUM_THREADS=2 NUMEXPR_NUM_THREADS=2
+MemoryAccounting=yes
+MemoryHigh=infinity
+MemoryMax=infinity
+MemorySwapMax=infinity
+CPUQuota=400%
+Restart=on-failure
+RestartSec=30
+TimeoutStopSec=30
+StandardOutput=append:/home/jkp/data/sparse-tangent-original-reproduction/runtime/study.log
+StandardError=append:/home/jkp/data/sparse-tangent-original-reproduction/runtime/study.log

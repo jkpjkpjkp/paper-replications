@@ -1,0 +1,20 @@
+{
+  "phase": "production running",
+  "official_commit": "8bc1e802b834bf82fe144e98cdd9e2227607c3e7",
+  "sha256": {
+    "reproduction/acquire.py": "a91e09da8800bdb2e96fd57e2276beb588286456c60678e8165c18aa181def43",
+    "reproduction/acquire_remaining.py": "d9a4e1086583b21399f2392f85f06c3e891bfc7c1049e0f35784d29ec2f745bc",
+    "reproduction/native_runtime.py": "bf93c61d84d8f71a4e453a2d7c7326e17bed06cdaee76c11661798197ec8f916",
+    "reproduction/run_native.py": "36200bc48d6935cbd382e004e9463d37737ff6c9eac447d56d5c3d31fc5d48b5",
+    "reproduction/verify_runtime.py": "3f15fee6865faeb6ffa5e3ecb4c13ed6d2178b94799e54992f1ebd1a846172b0",
+    "reproduction/acquire_korea.py": "170eb0c94b1253e6243c38a5652757a638ffce4faa076814b6223bad4dcf4bdf",
+    "reproduction/compare_published.py": "fc14374f6d55e6b1a0125e249cdcba98cb70d9c9a442ac025b08efdd1aee116e",
+    "reproduction/test_compare_published.py": "79fbcdd2c5a01811ccd18fe5c8dba2cb7ae323eba21622bb7b847039ff226d63",
+    "reproduction/resumable_sdr.py": "c369d3261a9d1dda09c36f25980c1ffbcceed828f40015bc7109f14d23b48a06",
+    "reproduction/study.py": "6cadfeaaa42b8be57b4d50a3156bd9d8e5534e21fa627f79049f3f53ed55b302",
+    "reproduction/verify_sdr_runtime.py": "641ff01a8100b254f7c0913ee80e67f9773aadeece14635dedaed0aa6eca617f",
+    "sources/paper.pdf": "35f40a9df34232d0d5386d8be00ff0c0d7a759fa8e6a572590eeaffe93abef82",
+    "sources/original-submission.pdf": "3889a8c1ed0272bbab2eed9967e8ccd2ed1187dab20c37d28108595eec4bb62a",
+    "sources/setting_reconciliation.json": "4ac0ee0cf88107b3a50f5db5b688917459d36a534c22843e61c1899190c0e95e"
+  }
+}

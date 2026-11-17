@@ -1,0 +1,461 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "sparse-tangent",
+  "title": "Decision-focused Sparse Tangent Portfolio Optimization",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "sources/paper.pdf",
+    "path_relative_to_collection": "sparse-tangent/sources/paper.pdf",
+    "sha256": "35f40a9df34232d0d5386d8be00ff0c0d7a759fa8e6a572590eeaffe93abef82",
+    "bytes": 4655884,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 18,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 88
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 89,
+      "line_end": 172
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 173,
+      "line_end": 327
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 328,
+      "line_end": 427
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 428,
+      "line_end": 618
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 619,
+      "line_end": 735
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 736,
+      "line_end": 822
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 823,
+      "line_end": 1054
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1055,
+      "line_end": 1152
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1153,
+      "line_end": 1197
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1198,
+      "line_end": 1304
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1305,
+      "line_end": 1452
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1453,
+      "line_end": 1524
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1525,
+      "line_end": 1600
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1601,
+      "line_end": 1683
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1684,
+      "line_end": 1691
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1692,
+      "line_end": 1699
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1700,
+      "line_end": 1707
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 79
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 80,
+      "line_end": 167
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 168,
+      "line_end": 250
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 251,
+      "line_end": 317
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 318,
+      "line_end": 403
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 404,
+      "line_end": 476
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 477,
+      "line_end": 549
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 550,
+      "line_end": 611
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 612,
+      "line_end": 679
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 680,
+      "line_end": 742
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 743,
+      "line_end": 821
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 822,
+      "line_end": 918
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 919,
+      "line_end": 977
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 978,
+      "line_end": 1034
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1035,
+      "line_end": 1072
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1073,
+      "line_end": 1086
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1087,
+      "line_end": 1100
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1101,
+      "line_end": 1114
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 19,
+      "text": "Abstract"
+    },
+    {
+      "line": 58,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 140,
+      "text": "2. Related Works"
+    },
+    {
+      "line": 141,
+      "text": "2.1. Portfolio Optimization"
+    },
+    {
+      "line": 153,
+      "text": "2.2. Decision-focused Learning"
+    },
+    {
+      "line": 219,
+      "text": "3. Preliminaries"
+    },
+    {
+      "line": 224,
+      "text": "3.1. Cardinality-constrained Portfolio Optimization"
+    },
+    {
+      "line": 407,
+      "text": "3.2. Gradients for Decision-focused Learning"
+    },
+    {
+      "line": 421,
+      "text": "4. Methodologies"
+    },
+    {
+      "line": 422,
+      "text": "4.1. Differentiable Reformulation of Sharpe Ratio"
+    },
+    {
+      "line": 554,
+      "text": "4.2. Differentiable Top-k Operator"
+    },
+    {
+      "line": 686,
+      "text": "5. Experiments"
+    },
+    {
+      "line": 690,
+      "text": "5.1. Loss Function"
+    },
+    {
+      "line": 714,
+      "text": "5.2. Experimental Setup"
+    },
+    {
+      "line": 743,
+      "text": "2. PFL: In the PFL framework, we first learn a predictive"
+    },
+    {
+      "line": 749,
+      "text": "1. OSCAR (Bae et al., 2025): A three-stage heuristic that"
+    },
+    {
+      "line": 798,
+      "text": "5.3. Baselines and Evaluation Metric"
+    },
+    {
+      "line": 998,
+      "text": "6. Results"
+    },
+    {
+      "line": 1030,
+      "text": "7. Conclusion"
+    },
+    {
+      "line": 1124,
+      "text": "References"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1708
+    }
+  ],
+  "line_count": 1708,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "d929aeb948e0eada2f11d1022b67f07a4acc8fc1bdc3587649edb823169bac5b",
+      "bytes": 60269
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "41fb99a123df8a761abb986d864611784d5008cb2b99a5c2cb289c101463512a",
+      "bytes": 91928
+    }
+  }
+}

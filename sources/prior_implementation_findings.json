@@ -1,0 +1,72 @@
+{
+  "paper_id": 38,
+  "created_at": "2026-11-06T13:50:40.911985+00:00",
+  "source_text": "/home/jkp/data/paper-reproduction-audit/workspaces/038-original-audit/sources/jeon26a-pmlr.txt",
+  "findings": [
+    {
+      "id": "soft_mass_not_cardinality",
+      "severity": "essential_method",
+      "published_specification": "Section 4.2 uses logistic masks strictly in (0,1) summing to k; Algorithm 1 masks means and resolves the unrestricted portfolio.",
+      "released_behavior": "Every weight remains a free variable in the second n-asset QCQP.",
+      "diagnostic": "Training-window real-data soft OSCAR portfolios are dense even while mask mass equals k. Exact nonzero cardinality cannot be inferred from gate mass.",
+      "code": "src/oscar.py:DiffbleOSCAR.run; src/selector.py",
+      "proposed_correction": "Hard support restriction would change the end-to-end optimization/gradient; existing corrected adaptation already implements its own separately labeled choice."
+    },
+    {
+      "id": "cholesky_orientation",
+      "severity": "published_and_released_risk_bug",
+      "published_specification": "Eq. (5) says covariance = L L.T, but uses norm(L y) as the risk norm.",
+      "identity": "The quadratic portfolio variance is y.T @ covariance @ y = norm(L.T @ y)^2; norm(L @ y)^2 uses L.T @ L instead.",
+      "code": "src/oscar.py:QCQPlayer",
+      "evidence": "Existing synthetic audit upstream_audit.json plus exact matrix identity; this bug is also in the publication, rather than only a release/paper discrepancy."
+    },
+    {
+      "id": "scale_constraint",
+      "severity": "release_paper_difference",
+      "published_specification": "Eq. (5): t >= 0",
+      "released_behavior": "QCQPlayer constrains t >= 1",
+      "code": "src/oscar.py:QCQPlayer",
+      "implication": "Changes the feasible conic set and potential infeasibility behavior; do not silently equate the two formulations."
+    },
+    {
+      "id": "mse_reduction",
+      "severity": "release_paper_difference",
+      "published_specification": "Algorithm 1 per-sample squared Euclidean norm; Eq. (14) averages squared-vector norms over samples.",
+      "released_behavior": "losses.MSE averages squared errors over assets inside each sample.",
+      "code": "src/losses.py:MSE",
+      "implication": "The effective mixed-loss relative scaling differs by the number of assets, in addition to undocumented return standardization choices."
+    },
+    {
+      "id": "historic_definition",
+      "severity": "paper_ambiguity",
+      "published_specification": "Table 1 caption states Historic estimates use the full training set; rolling covariance is specified elsewhere.",
+      "released_behavior": "Historic mean uses each look-back window, which changes over the test period.",
+      "code": "src/problem.py:historic_mu",
+      "implication": "Which Historic specification produced the published table is unresolved."
+    },
+    {
+      "id": "sdr_cardinality_matching",
+      "severity": "missing_released_procedure",
+      "published_specification": "Appendix B.2 repeatedly adjusts the SDP sparsity parameter to match actual selected cardinality.",
+      "released_behavior": "Uses fixed nominal k and leading eigenvector; no matching search or selection threshold is released.",
+      "code": "src/baseline.py:SDR_revised; src/main.py:run_historic/run_pfl",
+      "diagnostic": "All completed first-window SDR checks return dense rounded portfolios.",
+      "missing": "Search range, update rule, numerical nonzero threshold, convergence/failure policy, and resulting per-case sparsity parameters."
+    },
+    {
+      "id": "normalization_and_units",
+      "severity": "leakage_and_method_ambiguity",
+      "released_behavior": "Fits StandardScaler on the entire panel before chronological split; estimates covariance/forecasts in standardized security units, then applies weights to raw returns.",
+      "code": "src/data.py:normalize_returns/build_splits; src/evaluate.py:evaluate_split",
+      "implication": "Release behavior has test-distribution leakage and different risk units; correcting it changes the target computation. The paper does not specify the full preprocessing choice."
+    },
+    {
+      "id": "training_protocol",
+      "severity": "unreleased_information",
+      "published_specification": "512/256 hidden layers, batch64, lr=.001, alpha=.5, five repeated runs. Algorithm 1 has a loop over batches inside each epoch.",
+      "released_behavior": "Defaults are 256/128 and batch32; one batch per so-called epoch, default300 updates.",
+      "code": "src/train.py:train_model; src/main.py:build_argparser",
+      "missing": "Actual paper epoch/update count, exact five seeds, activation/dropout/weight decay choices, and whether all training windows are traversed per epoch."
+    }
+  ]
+}

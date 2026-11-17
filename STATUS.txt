@@ -1,0 +1,28 @@
+1: Sparse Tangent Euro50 DFL, 10% cardinality, daily Sharpe: rerun 0.081413 +/- 0.032546 seed SD; paper 0.955 +/- 0.014 seed SD.
+
+
+
+Scope: Current-snapshot original-market source replay; supersedes earlier source-only blocker.
+
+Evidence and explanation:
+The current queue records 77 completed and 11 failed jobs out of 88. Euro DFL at 10%
+cardinality gives daily Sharpe 0.081413 +/- 0.032546 sample seed SD versus displayed
+paper 0.955 +/- 0.014. Under the separately requested annualized interpretation it
+becomes 1.292399 +/- 0.516649, still not a mean/SD match. PFL replay verifies 120 traces
+and 24 complete cells, with 0 mean-and-SD matches; mean absolute annualized-Sharpe gap
+is 0.28573. The paper explicitly says daily Sharpe, so its annualized interpretation is
+unverified.
+
+Limits / next requirement:
+Author snapshots/cohorts and SDR cardinality matching remain unresolved;
+FTSE/Nikkei/Korea counts differ. DFL soft gates exceed intended support and gross
+exposure, and source mathematical/unit discrepancies remain. Finished current-data runs
+demonstrate mismatches but do not identify the original paper's implementation.
+
+Evidence paths (relative to this STATUS.txt):
+- runtime/status.json
+- results/published_comparison/table1_comparison.csv
+- results/pfl_replay/verification.json
+- README.txt
+
+Scale and update instructions: ../../AGENTS.md

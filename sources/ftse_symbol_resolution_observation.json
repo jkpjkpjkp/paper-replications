@@ -1,0 +1,27 @@
+{
+  "observed_date_utc": "2026-11-10",
+  "scope": "Read-only audit of current author-generator data; not a claim about the unpublished paper matrix",
+  "released_generator": "upstream/src/data_generator.py: FTSE100 downloads bare Wikipedia symbols first and adds .L only to failed/incomplete symbols",
+  "retained_csv_column": "AAL",
+  "current_panel": "data/daily/ftse100_160101_251231.csv",
+  "provider_observations": [
+    {
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/AAL?interval=1d&range=1d",
+      "symbol": "AAL",
+      "longName": "American Airlines Group Inc.",
+      "currency": "USD",
+      "fullExchangeName": "NasdaqGS",
+      "exchangeTimezoneName": "America/New_York"
+    },
+    {
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/AAL.L?interval=1d&range=1d",
+      "symbol": "AAL.L",
+      "longName": "Anglo American plc",
+      "currency": "GBp",
+      "fullExchangeName": "LSE",
+      "exchangeTimezoneName": "Europe/London"
+    }
+  ],
+  "conclusion": "A valid US ticker collision survives the released FTSE generator. The resulting current panel is not a verified London-only FTSE universe.",
+  "action": "Preserve and label the literal released-code replay. Any fully qualified London-symbol input correction must be a separate data lane, not an overwrite of the frozen input."
+}
