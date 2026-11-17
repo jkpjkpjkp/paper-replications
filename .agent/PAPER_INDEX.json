@@ -1,0 +1,745 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "vision-to-value-evaluation",
+  "title": "From vision to value: Stock chart image-driven factors and their pricing power",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "sources/paper.pdf",
+    "path_relative_to_collection": "vision-to-value-evaluation/sources/paper.pdf",
+    "sha256": "a357cdcca59e52b1ee276a614409cb34c86c166791f0fead52b8e1508934f31f",
+    "bytes": 13087653,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 30,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 73
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 74,
+      "line_end": 214
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 215,
+      "line_end": 342
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 343,
+      "line_end": 478
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 479,
+      "line_end": 614
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 615,
+      "line_end": 745
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 746,
+      "line_end": 866
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 867,
+      "line_end": 992
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 993,
+      "line_end": 1127
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1128,
+      "line_end": 1228
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1229,
+      "line_end": 1328
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1329,
+      "line_end": 1719
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1720,
+      "line_end": 1768
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1769,
+      "line_end": 1887
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1888,
+      "line_end": 1912
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1913,
+      "line_end": 1941
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1942,
+      "line_end": 1971
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1972,
+      "line_end": 2006
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 2007,
+      "line_end": 2058
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 2059,
+      "line_end": 2207
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 2208,
+      "line_end": 2327
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 2328,
+      "line_end": 2416
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 2417,
+      "line_end": 2784
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 2785,
+      "line_end": 2948
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 2949,
+      "line_end": 2982
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 2983,
+      "line_end": 3017
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 3018,
+      "line_end": 3140
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 3141,
+      "line_end": 3254
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 3255,
+      "line_end": 3368
+    },
+    {
+      "page": 30,
+      "segment": 30,
+      "line_start": 3369,
+      "line_end": 3429
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 97
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 98,
+      "line_end": 257
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 258,
+      "line_end": 402
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 403,
+      "line_end": 523
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 524,
+      "line_end": 668
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 669,
+      "line_end": 815
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 816,
+      "line_end": 947
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 948,
+      "line_end": 1080
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1081,
+      "line_end": 1219
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1220,
+      "line_end": 1327
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1328,
+      "line_end": 1424
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1425,
+      "line_end": 1470
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1471,
+      "line_end": 1516
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1517,
+      "line_end": 1612
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1613,
+      "line_end": 1639
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1640,
+      "line_end": 1666
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1667,
+      "line_end": 1695
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1696,
+      "line_end": 1731
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1732,
+      "line_end": 1782
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1783,
+      "line_end": 1923
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1924,
+      "line_end": 2018
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 2019,
+      "line_end": 2119
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 2120,
+      "line_end": 2386
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 2387,
+      "line_end": 2497
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 2498,
+      "line_end": 2531
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 2532,
+      "line_end": 2564
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 2565,
+      "line_end": 2697
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 2698,
+      "line_end": 2830
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 2831,
+      "line_end": 2966
+    },
+    {
+      "page": 30,
+      "segment": 30,
+      "line_start": 2967,
+      "line_end": 3032
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 26,
+      "text": "Abstract"
+    },
+    {
+      "line": 70,
+      "text": "25 January 2026"
+    },
+    {
+      "line": 80,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 235,
+      "text": "2. Methods"
+    },
+    {
+      "line": 239,
+      "text": "2.1. Image-driven factors"
+    },
+    {
+      "line": 335,
+      "text": "1 All common stocks (share codes 10 and 11) listed on NYSE, AMEX, and NASDAQ from the Center for"
+    },
+    {
+      "line": 387,
+      "text": "2.2. Double-selection LASSO"
+    },
+    {
+      "line": 462,
+      "text": "2 Global Factor Data (https://jkpfactors.com), compiled by Jensen et al. (2023), provides extensive cross-"
+    },
+    {
+      "line": 469,
+      "text": "3 The analysis employs 1,958 monthly value-weighted portfolios sorted by anomaly signals following Hou et al."
+    },
+    {
+      "line": 534,
+      "text": "3. Results and Discussions"
+    },
+    {
+      "line": 538,
+      "text": "3.1. Portfolio analysis"
+    },
+    {
+      "line": 605,
+      "text": "4 Following Bryzgalova (2015), all inputs are standardized by their univariate betas to mitigate spurious"
+    },
+    {
+      "line": 609,
+      "text": "6 Benchmarks include the identical Big and Small universes as the signal portfolios."
+    },
+    {
+      "line": 764,
+      "text": "3.2. SDF loading analysis"
+    },
+    {
+      "line": 847,
+      "text": "7 In each stage, the penalty parameter λ is chosen from a fixed exponential grid of 100 values between e0 and"
+    },
+    {
+      "line": 975,
+      "text": "10 Frequencies are computed from the 200-seed resampling summarized in Figure C.2; factors with selection"
+    },
+    {
+      "line": 1041,
+      "text": "3.3. Visualizing the economic mechanism"
+    },
+    {
+      "line": 1146,
+      "text": "4. Conclusion"
+    },
+    {
+      "line": 1842,
+      "text": "R ROE"
+    },
+    {
+      "line": 2504,
+      "text": "R ME"
+    },
+    {
+      "line": 2588,
+      "text": "R IA"
+    },
+    {
+      "line": 2722,
+      "text": "R ROE"
+    },
+    {
+      "line": 2852,
+      "text": "R ME"
+    },
+    {
+      "line": 2853,
+      "text": "R ROE"
+    },
+    {
+      "line": 3089,
+      "text": "References"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2757
+    },
+    {
+      "id": 39,
+      "line_start": 2750,
+      "line_end": 2829
+    },
+    {
+      "id": 40,
+      "line_start": 2822,
+      "line_end": 2901
+    },
+    {
+      "id": 41,
+      "line_start": 2894,
+      "line_end": 2973
+    },
+    {
+      "id": 42,
+      "line_start": 2966,
+      "line_end": 3045
+    },
+    {
+      "id": 43,
+      "line_start": 3038,
+      "line_end": 3117
+    },
+    {
+      "id": 44,
+      "line_start": 3110,
+      "line_end": 3189
+    },
+    {
+      "id": 45,
+      "line_start": 3182,
+      "line_end": 3261
+    },
+    {
+      "id": 46,
+      "line_start": 3254,
+      "line_end": 3333
+    },
+    {
+      "id": 47,
+      "line_start": 3326,
+      "line_end": 3405
+    },
+    {
+      "id": 48,
+      "line_start": 3398,
+      "line_end": 3430
+    }
+  ],
+  "line_count": 3430,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "d2645cc3d3c6cab5d7969c7ca5f99ae6c41f97e53a89b86bf142e56d20507080",
+      "bytes": 53157
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "7d910d611050e0185b653c3adc60d1d2f9d2a27d0f062e91539acb82f936f18b",
+      "bytes": 120420
+    }
+  }
+}

@@ -1,0 +1,24 @@
+2: at least one representative experiment matches the paper's claim
+
+
+
+Scope: Representative Table 1 numerical analysis from released portfolio returns.
+
+Evidence and explanation:
+All 48 Table 1 mean-return and Newey-West t-statistic cells match at three decimals, for
+ViT/CNN, three size groups and four portfolios over 288 months. Thus the printed-value
+tolerance is rounding to 0.001 in each reported unit, not a new training error bar.
+Earlier archived work also reconstructs Table 2 and conditional Table 3 values, but the
+current directly documented Table 1 calculation suffices for level 2.
+
+Limits / next requirement:
+This is downstream return-series analysis. It does not retrain image models or
+independently rebuild portfolio construction, fees or raw-data sorting. Full penalty/CV
+selection, pricing inference and original model provenance remain unresolved; do not
+call it full end-to-end replication.
+
+Evidence paths (relative to this STATUS.txt):
+- README.md
+- src/vision_to_value/table1_expected.csv
+- outputs/table1
+

@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use these replication scripts, cite the paper and identify this package version and upstream commit."
+type: software
+title: "From vision to value: Table 1 replication"
+version: 0.1.0
+license: MIT
+authors:
+  - name: "vision-to-value replication contributors"
+preferred-citation:
+  type: article
+  title: "From vision to value: Stock chart image-driven factors and their pricing power"
+  authors:
+    - family-names: Byun
+      given-names: Jun Young
+    - family-names: Na
+      given-names: Yosep
+    - family-names: Song
+      given-names: Jae Wook
+  year: 2026
+  url: "https://ssrn.com/abstract=5407028"
+  notes: "Comparison uses the January 25, 2026 SSRN preprint, Table 1, page 11."

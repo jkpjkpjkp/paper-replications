@@ -1,0 +1,3430 @@
+From vision to value: Stock chart image-driven factors and their pricing power
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: sources/paper.pdf
+Source SHA-256: a357cdcca59e52b1ee276a614409cb34c86c166791f0fead52b8e1508934f31f
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+iew
+ed
+
+From vision to value: Stock chart image-driven factors and their
+pricing power
+Jun Young Byuna , Yosep Naa , Jae Wook Songa,∗
+
+a Department of Industrial Engineering, Hanyang University, Seoul 04763, Republic of Korea
+
+ev
+
+Abstract
+
+This study investigates whether visual information embedded in stock charts contains economi-
+
+er
+r
+
+cally meaningful signals for asset pricing. Using deep learning models trained on candlestick images, we construct predictive factors via convolutional neural networks (CNN) and vision transformers (ViT). The models generate monthly probabilities of future returns, transformed into
+double-sorted, value-weighted portfolios, and evaluated within a high-dimensional asset pricing
+
+pe
+
+framework. Employing the double-selection LASSO, we assess whether these image-driven factors contribute incremental pricing power beyond 161 established risk factors. The ViT-derived
+factor exhibits robust and statistically significant stochastic discount factor loadings, indicating that it captures a novel priced dimension of risk associated with visual market heuristics
+
+ot
+
+and trend saliency. It consistently delivers positive and economically meaningful return spreads
+across firm sizes, with superior Sharpe and Sortino ratios relative to standard benchmarks. In
+contrast, the CNN-based factor shows weaker performance, particularly among large-cap stocks,
+
+tn
+
+suggesting limited economic relevance despite statistical significance. Factor selection patterns
+reveal that ViT signals are linked to multiple economic channels (low-risk, profitability, and financing), while CNN signals primarily align with quality and safety characteristics. Overall, the
+
+rin
+
+results demonstrate that advanced deep learning can extract interpretable, orthogonal source of
+priced risk from chart images, enriching the empirical asset pricing landscape and highlighting
+
+ep
+
+the potential of computer vision as a tool for understanding market dynamics.
+Keywords: Vision transformer, Stock charts, Asset pricing, Factor models, Deep learning
+
+Pr
+
+∗ Corresponding author
+
+Email address: jwsong@hanyang.ac.kr (Jae Wook Song)
+
+Preprint submitted to Finance Research Letters
+
+25 January 2026
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 2 ===
+iew
+ed
+
+1
+
+1. Introduction
+
+Empirical finance has advanced in return prediction through machine learning. Seminal stud-
+
+3
+
+ies (Gu et al., 2020, 2021; Giglio et al., 2022; Chen et al., 2024) and more recent works (Salisu
+
+4
+
+and Tchankam, 2022; Son and Lee, 2022; Wang et al., 2024) show that machine learning captures
+
+5
+
+complex interactions among financial predictors in tabular data. Yet, the potential of visually
+
+6
+
+derived information from stock charts remains underexplored in asset pricing.
+
+ev
+
+2
+
+Jiang et al. (2023) first employed convolutional neural network (CNN) to predict return
+
+8
+
+directions from chart images. Extending this idea, Byun et al. (2025) applied a vision Trans-
+
+9
+
+former (ViT), a state-of-the-art model that uses self-attention to extract price-volume dynamics
+
+10
+
+from candlestick charts. Both CNN and ViT models yield predictive probabilities of future price
+
+11
+
+changes, which can be converted into decile portfolios ranked by expected returns. The theoret-
+
+12
+
+ical motivation for applying computer vision to asset pricing is rooted in the cognitive role of
+
+13
+
+visual information in financial markets. As noted by Lo et al. (2000), technical analysis has per-
+
+14
+
+sisted because its visual mode of analysis is more conducive to human cognition than numerical
+
+15
+
+summaries. In behavioral finance, investors with limited attention rely on simplified heuristics to
+
+16
+
+process complex market information efficiently (Hirshleifer and Teoh, 2003). Within this frame-
+
+17
+
+work, by visualizing price volatility and trading intensity, stock charts serve as highly salient
+
+18
+
+signals that capture investor interest and drive trading behavior (Barber and Odean, 2008). By
+
+19
+
+training deep learning models on these images, we aim to capture these non-linear, behaviorally
+
+20
+
+induced price dynamics that linear factor models miss.
+
+tn
+
+ot
+
+pe
+
+er
+r
+
+7
+
+In this context, this paper examines whether stock chart image-based predictive signals
+
+22
+
+represent genuinely priced risks or simply restate known factors. Factor-sorted, value-weighted
+
+23
+
+portfolios are constructed, and asset pricing tests assess their contribution to the stochastic
+
+24
+
+discount factor (SDF). To ensure robust inference, the double-selection LASSO framework of
+
+25
+
+Feng et al. (2020) is used, addressing omitted variable bias in high-dimensional settings (Liu
+
+26
+
+et al., 2020; Bang and Ryu, 2024; Bang et al., 2024; Lashkaripour, 2024; Ouyang and Long,
+
+27
+
+2025). The empirical design follows Bang and Ryu (2024), who evaluated ESG-related signals
+
+28
+
+using the same approach. This study compares image-driven factors against 161 established risk
+
+29
+
+factors from leading libraries (e.g., Hou et al., 2015; Fama and French, 2015; Jensen et al., 2023).
+
+Pr
+
+ep
+
+rin
+
+21
+
+2
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 3 ===
+iew
+ed
+
+Empirical results show that the ViT-based factor delivers economically and statistically sig-
+
+31
+
+nificant return spreads across firm sizes, with strong SDF loadings indicating incremental pricing
+
+32
+
+power beyond standard factors. In contrast, the CNN-based factor exhibits weaker performance,
+
+33
+
+particularly for large-cap stocks, suggesting limited asset pricing relevance.
+
+34
+
+2. Methods
+
+35
+
+2.1. Image-driven factors
+
+ev
+
+30
+
+This study examines whether stock chart image-based predictions from deep learning models
+
+37
+
+contain priced information beyond established asset pricing factors. Two architectures are con-
+
+38
+
+sidered: a CNN following Jiang et al. (2023) and a ViT from Byun et al. (2025). Figure 1 outlines
+
+39
+
+the framework for deriving factor returns from model outputs. Both models are binary classi-
+
+40
+
+fiers predicting 20-day return directions, with monthly updated predicted probabilities serving
+
+41
+
+as return prediction signals. These are used to construct standard factor-sorted portfolios and
+
+42
+
+are evaluated through high-dimensional pricing tests.
+
+pe
+
+er
+r
+
+36
+
+[Insert Figure 1 here]
+
+43
+
+At first, daily stock data are obtained from the CRSP.1 These data are used both to generate
+
+45
+
+input images for model training and to compute returns for portfolio construction and to rank
+
+46
+
+predictive signals.
+
+ot
+
+44
+
+The CNN model processes grayscale bar chart images of 20 trading days, while the ViT uses
+
+48
+
+25-day RGB candlestick charts. Each model outputs a probability of positive 20-day returns,
+
+49
+
+updated monthly and used for portfolio formation and factor construction.
+At the end of each month, stocks are double-sorted into 3-by-3 portfolios by firm size and
+
+rin
+
+50
+
+tn
+
+47
+
+predicted return probability. Size groups follow NYSE market equity breakpoints, updated an-
+
+52
+
+nually in June: firms below the 20th percentile are M icro, those between the 20th and 50th
+
+53
+
+percentiles are Small, and those above the 50th are Big. This classification, validated by Fama
+
+54
+
+and French (2008) and Hou et al. (2020), controls for size effects and ensures comparability.
+
+ep
+
+51
+
+Pr
+
+1 All common stocks (share codes 10 and 11) listed on NYSE, AMEX, and NASDAQ from the Center for
+Research in Security Prices (CRSP). The code for generating stock chart images, pre-trained model weights, and
+the SDF analysis is available at https://github.com/finxlab/vit-sdf-lasso.
+
+3
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 4 ===
+iew
+ed
+
+Within each size group, stocks are sorted into terciles (Low, N eutral, High) by predicted
+
+56
+
+return probabilities. To ensure robust thresholds not skewed by smaller firms, the 30%-40%-
+
+57
+
+30% breakpoints for these terciles are determined using only the universe of NYSE non-Micro
+
+58
+
+stocks. These established breakpoints are then applied to all firms, including Micro-caps, to
+
+59
+
+form the final nine double-sorted portfolios. Portfolios are rebalanced monthly, value-weighted,
+
+60
+
+and individual weights are capped at the 80th percentile of NYSE market equity, following the
+
+61
+
+Global Factor Data convention.2
+
+Model-based factors are constructed as the average return spread between High and Low
+
+62
+
+portfolios across Big and Small groups :
+
+F actorM =
+
+1
+1
+(Big HighM + Small HighM ) − (Big LowM + Small LowM ), M ∈ {V iT, CN N },
+2
+2
+
+2.2. Double-selection LASSO
+
+(1)
+
+pe
+
+64
+
+er
+r
+
+63
+
+ev
+
+55
+
+While portfolio sorts are designed to capture the return spreads generated by visual signals,
+
+66
+
+they do not verify whether this information is unique. To determine whether the image-driven
+
+67
+
+factors in Eq. (1) contribute incremental pricing power beyond established risks, we employ the
+
+68
+
+double-selection LASSO framework of Feng et al. (2020).3
+
+ot
+
+65
+
+Let h ∈ R161 denote the vector of control factors. In the first stage, a subset K1 is selected
+
+70
+
+by regressing the average return R̄i of each test portfolio on its covariances with h under an ℓ1
+
+71
+
+penalty:
+
+tn
+
+69
+
+R̄i = α1 +
+
+K
+X
+
+β1,k Cov(hk , Ri ) + ϵ1,i ,
+
+72
+
+K
+X
+
+|β1,k | ≤ τ1 .
+
+(2)
+
+k=1
+
+rin
+
+k=1
+
+s.t.
+
+In the second stage, another subset K2 is selected by regressing the covariance between the
+
+2 Global Factor Data (https://jkpfactors.com), compiled by Jensen et al. (2023), provides extensive cross-
+
+Pr
+
+ep
+
+sectional anomaly data and factor returns.
+3 The analysis employs 1,958 monthly value-weighted portfolios sorted by anomaly signals following Hou et al.
+(2020). The test portfolios are available at https://global-q.org. To control for known sources of priced risk, 161
+candidate factors are included: 153 from the Global Factor Data and eight factors from Hou et al. (2015) and
+Fama and French (2015), including size, investment, profitability, and the Fama-French five factors. For the full
+list, see Appendix A.
+
+4
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 5 ===
+Cov(g, Ri ) = α2 +
+
+K
+X
+
+β2,k Cov(hk , Ri ) + ϵ2,i ,
+
+k=1
+
+s.t.
+
+K
+X
+k=1
+
+|β2,k | ≤ τ2 .
+
+(3)
+
+Finally, an ordinary least squares (OLS) regression evaluates whether g significantly con-
+
+74
+
+75
+
+iew
+ed
+
+candidate factor g (F actorViT , F actorCNN ) and each test portfolio on the covariances with hk :
+
+tributes to the SDF conditional on K3 = K1 ∪ K2 :
+
+R̄i = α3 + βg Cov(g, Ri ) +
+
+X
+
+ev
+
+73
+
+β3,k Cov(hk , Ri ) + ϵ3,i ,
+
+k∈K3
+
+(4)
+
+where βg and its t-statistic capture the marginal contribution of the image-driven factor after
+
+77
+
+controlling for established risks.4
+
+78
+
+3. Results and Discussions
+
+79
+
+3.1. Portfolio analysis
+
+pe
+
+er
+r
+
+76
+
+The economic value of the ViT- and CNN-derived signals is assessed via double-sorted port-
+
+81
+
+folios based on firm size and model-predicted signal strength.5 Performance is compared with
+
+82
+
+three benchmarks: value-weighted (VW), equal-weighted (EW), and a capped VW (CAP-VW)
+
+83
+
+portfolios constructed analogously to the signal portfolios using monthly rebalancing over 288
+
+84
+
+months (January 2001-December 2024).6
+
+ot
+
+80
+
+Table 1 shows a clear monotonic relation between ViT signal strength and subsequent returns
+
+86
+
+across M icro, Small, and Big. For example, within M icro, average monthly returns rise from
+
+87
+
+0.391% (Low) to 1.190% (High), producing an H−L spread of 0.799% (t = 3.055). The pattern
+
+88
+
+persists in Small (H −L = 0.262%, t = 2.060) and Big (H −L = 0.179%, t = 1.718), indicating
+
+89
+
+economically meaningful pricing power for the ViT signal across sizes. In contrast, CNN shows
+
+90
+
+weaker economic significance, especially for larger firms. Although the M icro spread is significant
+
+91
+
+(H −L = 0.404%, t = 2.483), it diminishes in Small (0.234%, t = 1.682) and vanishes in Big
+
+ep
+
+rin
+
+tn
+
+85
+
+Pr
+
+4 Following Bryzgalova (2015), all inputs are standardized by their univariate betas to mitigate spurious
+correlations. Covariances are computed from 288 monthly observations.
+5 A transaction cost of 10 bps is applied at each rebalancing under full turnover to conservatively account for
+liquidity and execution costs.
+6 Benchmarks include the identical Big and Small universes as the signal portfolios.
+
+5
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 6 ===
+iew
+ed
+
+92
+
+(−0.002%, t = −0.012). Thus, ViT better captures cross-sectional return differences, particularly
+
+93
+
+among large-cap stocks where CNN detects limited signal.
+[Insert Table 1 here]
+
+94
+
+Figure 2 plots cumulative log returns for High, Low, and the F actor portfolios alongside
+
+96
+
+benchmarks. Panel (a) shows a steady widening of the ViT H−L spread, with Big High tracking
+
+97
+
+EW and outperforming CAP-VW and VW. Panel (b) indicates CNN’s weak differentiation
+
+98
+
+among Big stocks, as High and Low co-move closely. While F actorViT is flat in some intervals
+
+99
+
+(e.g., 2009-2016), the long-run High-Low divergence is evident; F actorCNN fluctuates around
+
+100
+
+zero, indicating limited economic relevance.
+
+er
+r
+
+ev
+
+95
+
+[Insert Figure 2 here]
+
+101
+
+Table 2 reports the risk and return characteristics for the image-driven factors and their
+
+103
+
+double-sorted portfolios. Economic relevance is best judged from long portfolios. The ViT signal
+
+104
+
+consistently identifies outperformers: the investable Small High portfolio attains a Sharpe ratio
+
+105
+
+of 0.456, above all market benchmarks, and a Sortino ratio of 0.684 that markedly exceeds
+
+106
+
+benchmark values. Downside risk is lower as well, with a maximum drawdown of 43.503% versus
+
+107
+
+53–55% for the indices. Strength extends to large caps: the Big High portfolio posts the Sharpe
+
+108
+
+of 0.433 and Sortino of 0.594, both surpassing benchmarks. In contrast, the CNN signal is weak
+
+109
+
+for larger firms; the Big High Sharpe of 0.380 only marginally exceeds CAP-VW (0.367).
+
+tn
+
+ot
+
+pe
+
+102
+
+110
+
+[Insert Table 2 here]
+
+Discriminatory power on the short side further differentiates the signals. The ViT Big Low
+
+112
+
+portfolio earns an annualized 5.43%, which is below all benchmarks and well under the 6.66%
+
+113
+
+of CNN, indicating a stronger separation between future winners and losers. The wider, more
+
+114
+
+persistent gap between High and Low portfolios, especially among large caps where the CNN
+
+ep
+
+rin
+
+111
+
+115
+
+spread is negligible, drives ViT’s superior performance.
+These properties translate into the long-short factor. F actorViT delivers a Sharpe of 0.513
+
+117
+
+with only 5.13% annualized volatility, consistent with a well-constructed, largely market-neutral
+
+Pr
+
+116
+
+118
+
+spread. Furthermore, its maximum drawdown of 23.11% is less than half that of the market
+
+6
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 7 ===
+iew
+ed
+
+119
+
+indices. In contrast, F actorCNN , built on a narrower spread, produces a lower Sharpe of 0.220.
+
+120
+
+Overall, the ViT framework yields a stable pricing signal that converts predictive accuracy into
+
+121
+
+persistent, economically meaningful performance.
+
+122
+
+3.2. SDF loading analysis
+
+The pricing relevance of the image-driven factors is evaluated using the double-selection
+
+124
+
+LASSO.7 Table 3 reports the selected penalties and post-double-selection OLS SDF loading
+
+125
+
+estimates. The first-stage LASSO selects log(λ) = −2.828; the second-stage choices are −2.828
+
+126
+
+(ViT) and −2.121 (CNN). Both factors load significantly positive coefficients: ViT with 0.052
+
+127
+
+(t = 2.948) and CNN with 0.054 (t = 4.458), demonstrating statistically significant incremental
+
+128
+
+pricing power relative to the 161-factor control set.
+
+er
+r
+
+ev
+
+123
+
+[Insert Table 3 here]
+
+129
+
+Figure 3 illustrates the local sensitivity of the estimates to penalty selection. Panel (a) shows
+
+131
+
+that sensitivity is primarily along the second-stage penalty.8 In contrast, Panel (b) shows that
+
+132
+
+the CNN factor is essentially invariant.9 Overall, both ViT and CNN exhibit robust SDF loadings
+
+133
+
+over a wide range of penalties, indicating that the observed pricing power in Table 3 is not an
+
+134
+
+artifact of parameter choice.
+
+ot
+
+pe
+
+130
+
+[Insert Figure 3 here]
+
+135
+
+A notable result is the contrast between the statistical strength of the CNN factor in SDF
+
+137
+
+tests and its economic weakness. As emphasized by Feng et al. (2020), SDF loading quanti-
+
+138
+
+fies pricing relevance, whereas the risk premium reflects compensation for bearing that risk.
+
+rin
+
+tn
+
+136
+
+Pr
+
+ep
+
+7 In each stage, the penalty parameter λ is chosen from a fixed exponential grid of 100 values between e0 and
+e−35 . To determine λ, 10-fold cross-validation is performed over 200 independent random seeds, following the
+resampling design in Feng et al. (2020). For each seed, the fold-averaged cross-validated mean squared error (CV
+MSE) is computed across the grid and then averaged across seeds to obtain an overall mean CV MSE curve.
+The 1-SE rule is applied to this curve, selecting the largest λ whose mean error lies within one standard error
+(SE) of the minimum. The SE is estimated from the between-seed variation, mitigating the downward bias in
+CV SEs caused by correlations across folds (Bates et al., 2024). See Figure C.1 for an illustration of how the
+number of selected controls varies across penalty grids and seed. To evaluate stability, a local sensitivity analysis
+is conducted by varying log(λ) in a narrow neighborhood around the selected value (±0.30 in increments of 0.05).
+The estimated SDF loadings remain stable under these perturbations.
+8 t-statistics rises from roughly 0.7-2.1 under weak regularization to about 3.5-4.3 under strong, with little
+dependence on the first-stage penalty. Statistical significance is retained for nearly all cells. Only a few extreme
+upper-left combinations fall below conventional thresholds.
+9 t-statistics are nearly constant across the grid, with almost all cells above 4 and a minimum near 3.1 at the
+weakest second-stage penalty.
+
+7
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 8 ===
+iew
+ed
+
+139
+
+The CNN factor’s significant loading, conditional on 161 controls, confirms marginal pricing
+
+140
+
+power; yet, weak portfolio performance implies negligible compensation, consistent with a noisy
+
+141
+
+proxy for other, stronger priced risks. By comparison, the ViT factor is more robust, combining
+
+142
+
+significant loadings with a meaningful risk premium.
+
+To strengthen identification beyond loadings, Table 4 reports the controls selected under
+
+144
+
+the 1-SE rule at each stage and their selection frequencies.10 Presenting both the single-path
+
+145
+
+selections and their frequencies reveals which variables enter under the tuning rule and how
+
+146
+
+stable these inclusions are across repeated cross-validation draws.
+[Insert Table 4 here]
+
+er
+r
+
+147
+
+ev
+
+143
+
+148
+
+The first-stage LASSO selects a parsimonious set of broad pricing controls. In this sample,
+
+149
+
+niq be enters with a rate of 0.545. Sparse selection aligns with the notion that few characteristics
+
+150
+
+display persistent pricing power in high dimensions.11
+
+Second-stage selections, which capture controls correlated with the image-based signals, show
+
+152
+
+a clear distinction. For CNN, profitability and quality dominate: qmj safety (1.000) universally
+
+153
+
+enters, ebit sale (0.840) is frequent, and R ROE (0.565) is moderately stable, indicating heavy
+
+154
+
+overlap with conventional quality-profitability themes. ViT exhibits broader channels: low risk
+
+155
+
+(beta dimson 21d, 0.860), profitability/robustness (f score, 0.850; ebit sale, 0.670), and financing
+
+156
+
+(debt gr3, 0.685), with occasional proxies (age, seas 6 10na). This result suggests that the ViT
+
+157
+
+signal interacts with multiple economic channels rather than collapsing to a single classical
+
+158
+
+theme.12
+
+tn
+
+ot
+
+pe
+
+151
+
+Consistent with these selection patterns, portfolio evidence in Byun et al. (2025) shows that
+
+160
+
+the top ViT decile earns the highest returns while tilting toward larger, lower-volatility firms rel-
+
+rin
+
+159
+
+Pr
+
+ep
+
+10 Frequencies are computed from the 200-seed resampling summarized in Figure C.2; factors with selection
+probability ≥ 0.5 appear in Table C.2.
+11 Relative to the four-factor set in Feng et al. (2020), the limited first-stage outcome likely reflects a shorter
+sample and a larger cross-section of test portfolios, which increases the effective dimensionality and noise of the
+covariance matrix, leading the cross-validated LASSO to favor more concentrated models.
+12 Interpretation should reflect the magnitudes of selection. High-frequency inclusions (e.g., CNN’s qmj safety
+and ViT’s beta dimson 21d) signal durable associations and merit core status. Moderate frequencies (roughly
+0.5-0.7) support interpretation but suggest substitutability within correlated clusters. Low-frequency selections
+(e.g., age, seas 6 10na) warrant caution as occasional proxies. Accordingly, the single 1-SE path should not be
+viewed as definitive. The more reliable evidence comes from persistent, high-frequency controls: CNN draws
+primarily on profitability and quality, whereas ViT engages a broader constellation spanning profitability, low
+risk, and financing. This perspective complements the SDF results and indicates that ViT’s incremental pricing
+power reflects stable, interpretable patterns rather than tuning artifacts.
+
+8
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 9 ===
+iew
+ed
+
+ative to the spread. This outcome aligns with the frequent inclusion of beta dimson 21d, which
+
+162
+
+corrects the standard beta for non-synchronous trading and links ViT to a low-risk dimension.
+
+163
+
+A stable selection of Piotroski’s f score, a composite of profitability and financial strength, in-
+
+164
+
+dicates that ViT also captures firm robustness. Together, these selections explain why the ViT
+
+165
+
+signal systematically emphasizes large, profitable, relatively low-risk firms. For CNN, decile re-
+
+166
+
+sults show a similar but weaker profile: spreads concentrate in top-signal deciles with modest
+
+167
+
+volatility differentiation. This pattern matches the near-universal selection of qmj safety, which
+
+168
+
+primarily captures low-volatility and low-beta characteristics. Although both signals highlight
+
+169
+
+larger, safer firms, the LASSO selects different controls: CNN aligns more strongly with QMJ’s
+
+170
+
+safety, whereas ViT maps to both systematic risk (Dimson beta) and quality-related fundamen-
+
+171
+
+tals (F-score).
+
+172
+
+3.3. Visualizing the economic mechanism
+
+er
+r
+
+ev
+
+161
+
+While the LASSO analysis indicates that image-driven factors share information with es-
+
+174
+
+tablished fundamental characteristics, it does not explain the specific visual patterns that the
+
+175
+
+models utilize to capture these signals. To bridge this gap and examine the architectural per-
+
+176
+
+formance differences, Figure 4 visualizes the learned feature representations via t-SNE (Maaten
+
+177
+
+and Hinton, 2008), projecting high-dimensional features into a two-dimensional space.
+
+ot
+
+pe
+
+173
+
+[Insert Figure 4 here]
+
+tn
+
+178
+
+The ViT successfully disentangles price patterns into distinct visual archetypes. High-ranking
+
+180
+
+(bullish) samples cluster into a cohesive manifold defined by visually smooth, sustained trends,
+
+181
+
+whereas low-ranking (bearish) samples segregate into volatile patterns and trend breakdowns.
+
+182
+
+This separation aligns with the economic drivers identified in the LASSO analysis; the visual
+
+183
+
+stability of the high-rank group corresponds to the low-risk and quality factors, suggesting that
+
+184
+
+the ViT associates stable price structures with financial soundness.
+
+ep
+
+rin
+
+179
+
+185
+
+In contrast, Panel (b) reveals the CNN’s limitations. While it correctly identifies simple
+
+186
+
+linear trends, it entangles complex textures. As shown in the Choppy Consolidation and Sharp
+
+187
+
+Reversal examples, the CNN assigns opposite extreme probabilities (Top 10% vs. Bottom 10%)
+to visually indistinguishable charts. This implies overfitting to local noise, driven by max-pooling
+
+Pr
+188
+
+9
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 10 ===
+iew
+ed
+
+189
+
+operations that downsample spatial details. Unlike the ViT, whose patch-based self-attention
+
+190
+
+preserves global context, the CNN’s loss of resolution obscures price sequences, preventing it
+
+191
+
+from distinguishing meaningful structural breaks from random volatility.
+
+192
+
+4. Conclusion
+
+This study demonstrates that stock chart image-based deep learning models extract econom-
+
+194
+
+ically meaningful risk factors that complement the existing factor zoo. Specifically, ViT factors
+
+195
+
+exhibit significant incremental pricing power and robust size-agnostic risk-adjusted returns. In
+
+196
+
+contrast, CNN factors, while statistically significant within the SDF, provide limited portfolio
+
+197
+
+value, largely confined to micro- and small-cap segments. The ViT factor’s superior performance
+
+198
+
+stems from its ability to encode complex visual price-volume dynamics into predictive representa-
+
+199
+
+tions that align with multiple economic channels, including low-risk, profitability, and financing
+
+200
+
+dimensions. This multidimensional linkage differentiates ViT signals from conventional quality
+
+201
+
+or profitability proxies and suggests that advanced deep learning-driven visual pattern recogni-
+
+202
+
+tion captures a novel, priced aspect of market behavior. Furthermore, our findings support the
+
+203
+
+behavioral finance hypothesis that visual price patterns serve as salient proxies for investor at-
+
+204
+
+tention and sentiment, containing predictive information orthogonal to standard fundamentals.
+
+205
+
+The evidence collectively supports the notion that chart-based signals, when extracted through
+
+206
+
+modern computer vision architectures, enrich the empirical asset pricing landscape by offering
+
+207
+
+an orthogonal and interpretable source of risk premia.
+
+Pr
+
+ep
+
+rin
+
+tn
+
+ot
+
+pe
+
+er
+r
+
+ev
+
+193
+
+10
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 11 ===
+iew
+ed
+ev
+er
+r
+
+Table 1: Performance of portfolios double-sorted on size and image-driven signal-based
+predictions
+
+Small
+Big
+
+N eutral
+0.785**
+(2.083)
+0.669**
+(2.139)
+0.540**
+(2.023)
+
+ViT
+High
+1.190**
+(2.491)
+0.782***
+(2.686)
+0.632**
+(2.393)
+
+H −L
+0.799***
+(3.055)
+0.262**
+(2.060)
+0.179*
+(1.718)
+
+Low
+0.423
+(1.078)
+0.553*
+(1.673)
+0.555*
+(1.771)
+
+pe
+
+M icro
+
+Low
+0.391
+(1.011)
+0.521
+(1.592)
+0.452
+(1.490)
+
+CNN
+N eutral High
+0.892**
+0.826**
+(2.272)
+(2.399)
+0.633**
+0.787***
+(2.038)
+(2.718)
+0.539*
+0.553**
+(1.941)
+(2.253)
+
+H −L
+0.404**
+(2.483)
+0.234*
+(1.682)
+-0.002
+(-0.012)
+
+Pr
+
+ep
+
+rin
+
+tn
+
+ot
+
+Note: Average monthly value-weighted returns in percent for portfolios sorted by firm size and
+predicted return probabilities from ViT and CNN. t-statistics, shown in parentheses, are computed
+using Newey-West standard errors with six lags (Newey and West, 1987). Asterisks ***, **, and *
+indicate significance at the 1%, 5%, and 10% levels, respectively.
+
+11
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 12 ===
+5.426
+18.842
+0.287
+13.375
+0.404
+60.874
+0.089
+640.901
+-510.684
+1.255
+17
+7
+
+9.388
+20.558
+0.456
+13.704
+0.684
+43.503
+0.216
+760.889
+-535.586
+1.421
+18
+6
+
+0.782
+5.935
+0.350
+-24.873
+-2.739
+1.026
+4.374
+21.117
+-0.122
+4.887
+
+0.452
+5.439
+0.321
+-20.588
+-2.416
+0.850
+3.459
+23.327
+-0.072
+5.584
+6.249
+22.396
+0.278
+14.363
+0.434
+55.263
+0.113
+776.365
+-626.385
+1.239
+16
+8
+
+0.521
+6.465
+0.381
+-22.850
+-3.756
+0.795
+4.363
+28.457
+0.135
+4.965
+1.396
+6.269
+0.220
+3.666
+0.376
+33.640
+0.041
+212.462
+-178.961
+1.187
+12
+12
+
+0.116
+1.810
+0.107
+-5.054
+-0.929
+0.150
+1.078
+7.217
+0.398
+4.313
+
+F actor
+
+CNN
+
+0.555
+5.475
+0.323
+-21.315
+-2.145
+0.680
+3.466
+19.040
+-0.182
+5.421
+
+Big Low
+
+6.640
+17.419
+0.380
+12.556
+0.528
+49.729
+0.134
+613.686
+-454.329
+1.351
+19
+5
+
+6.659
+18.965
+0.350
+13.866
+0.479
+59.009
+0.113
+656.019
+-496.197
+1.322
+18
+6
+
+9.448
+20.618
+0.457
+14.018
+0.673
+47.501
+0.199
+766.214
+-539.461
+1.420
+18
+6
+
+6.637
+22.238
+0.298
+14.195
+0.466
+53.534
+0.124
+778.408
+-619.121
+1.257
+16
+8
+
+0.553
+6.419
+0.378
+-21.343
+-3.665
+0.849
+4.216
+27.150
+0.127
+4.670
+
+Small Low
+
+ev
+
+0.787
+5.952
+0.351
+-26.297
+-2.614
+1.174
+4.299
+21.917
+-0.184
+5.128
+
+Small High
+
+er
+r
+
+0.553
+5.028
+0.296
+-22.358
+-2.156
+0.825
+3.227
+21.767
+-0.206
+6.030
+
+Big High
+
+pe
+
+Small Low
+
+ot
+
+Small High
+
+Big Low
+
+tn
+6.700
+18.208
+0.367
+12.869
+0.519
+53.818
+0.124
+644.060
+-483.269
+1.333
+19
+5
+
+0.558
+5.256
+0.310
+-21.253
+-2.154
+0.912
+3.447
+21.251
+-0.146
+5.500
+
+CAP-VW
+
+Market
+
+5.575
+15.971
+0.348
+11.526
+0.482
+53.992
+0.103
+567.908
+-434.106
+1.308
+18
+6
+
+0.465
+4.610
+0.272
+-16.968
+-1.965
+0.843
+3.171
+18.780
+-0.254
+4.968
+
+VW
+
+7.809
+21.493
+0.363
+14.112
+0.552
+55.574
+0.141
+747.976
+-560.553
+1.334
+18
+6
+
+0.651
+6.204
+0.366
+-24.391
+-2.963
+0.900
+3.762
+27.293
+0.216
+5.870
+
+EW
+
+iew
+ed
+
+Note: Panel (a) reports summary statistics of monthly returns. Panel (b) reports annualized risk-adjusted metrics. Monthly and annualized returns
+are expressed in percent. Definitions of Sharpe, Sortino, maximum drawdown, Calmar ratio, and other measures follow standard conventions and
+are provided in Appendix B.
+
+F actor
+Big High
+(a) Monthly return summary statistics
+Mean
+0.220
+0.632
+Standard deviation
+1.480
+5.047
+Standard error
+0.087
+0.297
+Min
+-5.991
+-23.215
+25%
+-0.611
+-2.099
+50%
+0.141
+0.969
+75%
+1.077
+3.345
+Max
+5.928
+19.054
+Skew
+0.009
+-0.302
+Kurtosis
+5.453
+6.005
+(b) Annualized risk-adjusted metrics
+Annualized return
+2.646
+7.579
+Annualized volatility
+5.127
+17.482
+Sharpe ratio
+0.513
+0.433
+Downside deviation
+3.424
+12.739
+Sortino ratio
+0.768
+0.594
+Maximum drawdown
+23.113
+50.871
+Calmar ratio
+0.114
+0.149
+Gross profit
+186.648
+632.150
+Gross loss
+-123.150
+-450.262
+Profit factor
+1.516
+1.404
+Profitable years
+16
+17
+Unprofitable years
+8
+7
+
+ViT
+
+Table 2: Risk and return characteristics of stock chart image-driven factors and portfolios
+
+rin
+
+ep
+
+Pr
+
+12
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 13 ===
+iew
+ed
+ev
+er
+r
+
+Table 3: Selected penalties and SDF loadings for ViT and CNN factors
+log(λ)
+-2.828
+-2.828
+-2.121
+
+Coefficient
+
+pe
+
+First LASSO
+Second LASSO (ViT)
+Second LASSO (CNN)
+
+0.052
+0.054
+
+t-statistic
+
+2.948***
+4.458***
+
+Pr
+
+ep
+
+rin
+
+tn
+
+ot
+
+Note: The table reports the selected penalty parameters log(λ) for the first- and second-stage LASSO,
+along with the corresponding SDF loading estimates obtained from the final OLS regression after
+double-selection. Reported coefficients represent the marginal contribution of the image-driven factors
+(ViT and CNN) to the SDF, and the associated t-statistics measure their statistical significance.
+Asterisks ***, **, and * indicate significance at the 1%, 5%, and 10% levels, respectively.
+
+13
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 14 ===
+iew
+ed
+ev
+
+Selection rate
+
+Description
+
+0.545
+
+Quarterly return
+on equity
+
+Profitability
+
+Hou et al. (2015)
+
+Firm age
+Dimson beta
+Growth in book
+debt (3 years)
+Profit margin
+Pitroski F-score
+Years 6-10 lagged
+returns, nonannual
+
+Low leverage
+Low risk
+Debt issuance
+
+Jiang et al. (2005)
+Dimson (1979)
+Lyandres et al. (2008)
+
+Profitability
+Profitability
+Low risk
+
+Soliman (2008)
+Piotroski (2000)
+Heston and Sadka (2008)
+
+Profit margin
+Quality
+minus
+junk: safety
+Return on equity
+
+Profitability
+Quality
+
+Soliman (2008)
+Asness et al. (2019)
+
+Profitability
+
+Hou et al. (2015)
+
+(b) Second LASSO (ViT)
+age
+0.285
+beta dimson 21d 0.860
+debt gr3
+0.685
+ebit sale
+f score
+seas 6 10na
+
+0.670
+0.850
+0.335
+
+R ROE
+
+ot
+
+(c) Second LASSO (CNN)
+ebit sale
+0.840
+qmj safety
+1.000
+
+0.565
+
+Theme
+
+Citation
+
+er
+r
+
+Variable name
+(a) First LASSO
+niq be
+
+pe
+
+Table 4: Factors Selected by the Double-Selection LASSO Procedure
+
+Pr
+
+ep
+
+rin
+
+tn
+
+Note: This table reports the control factors selected by the double-selection LASSO and their
+stage-specific selection rates, defined as the proportion of times each factor is selected across 200
+random seeds. Panel (a) lists first-stage factors (K1 ). Panels (b) and (c) show second-stage factors
+(K2 ) for the ViT and CNN tests, respectively. The final control set (K3 ) is the union of K1 and the
+respective K2 . Factor information is primarily from the Global Factor Data of Jensen et al. (2023),
+supplemented with eight factors from Fama and French (2015) and Hou et al. (2015).
+
+14
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 15 ===
+iew
+ed
+ev
+er
+r
+pe
+ot
+
+Pr
+
+ep
+
+rin
+
+tn
+
+Figure 1: Framework for constructing factor returns. ViT and CNN classify stock chart images
+to generate monthly predictive signals. These signals are used to sort stocks into double-sorted
+(size × signal) value-weighted portfolios to construct the final long-short factors.
+
+15
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 16 ===
+iew
+ed
+ev
+er
+r
+
+tn
+
+ot
+
+pe
+
+(a) ViT
+
+(b) CNN
+
+Pr
+
+ep
+
+rin
+
+Figure 2: Cumulative performance of image-driven factors and sorted portfolios
+
+16
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 17 ===
+iew
+ed
+ev
+er
+r
+pe
+ot
+
+(a) ViT
+
+(b) CNN
+
+Pr
+
+ep
+
+rin
+
+tn
+
+Figure 3: Local robustness of t-statistics to ∆ log(λ). The heatmaps display the t-statistic of
+the SDF loading when varying the first- and second-stage penalties in a neighborhood of the
+selected values: ∆ log(λ) ∈ [−0.30, 0.30] in 0.05 steps. The center cell corresponds to the
+selected penalties (0, 0). The color scale is truncated at ±3 for display.
+
+17
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 18 ===
+iew
+ed
+ev
+er
+r
+
+rin
+
+tn
+
+ot
+
+pe
+
+(a) ViT
+
+(b) CNN
+
+Pr
+
+ep
+
+Figure 4: t-SNE visualization of latent feature spaces. This figure displays two-dimensional
+t-SNE embeddings of the latent features extracted from the (a) ViT and (b) CNN models,
+using the full 2024 test sample. Dimensionality was reduced using PCA (50 components) prior
+to t-SNE projection. The color gradient reflects the daily percentile rank of predicted
+probabilities, ranging from blue (lowest rank) to red (highest rank). The insets display
+representative price charts selected from these deciles to illustrate the distinct visual patterns
+associated with the most bullish and bearish predictions.
+
+18
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 19 ===
+iew
+ed
+
+208
+
+Appendix A. Factor Identification
+
+Table A.1 lists the 161 candidate risk factors employed in the analysis, each identified by a
+
+210
+
+unique ID and variable name. The complete factor library is drawn from three primary sources:
+
+211
+
+(i) 153 factors from the Global Factor Data of Jensen et al. (2023) (IDs 1-153); (ii) the five-factor
+
+212
+
+model of Fama and French (2015) (IDs 154-158); and (iii) the three factors from the q-factor
+
+213
+
+model of Hou et al. (2015) (IDs 159-161).
+[Insert Table A.1 here]
+
+Pr
+
+ep
+
+rin
+
+tn
+
+ot
+
+pe
+
+er
+r
+
+214
+
+ev
+
+209
+
+19
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 20 ===
+iew
+ed
+
+215
+
+Appendix B. Risk-adjusted performance metrics
+
+Quantitative measures used to evaluate the return and risk characteristics of the model-
+
+217
+
+based factors (ViT and CNN) and benchmark portfolios follow standard empirical asset pricing
+
+218
+
+conventions. The Sharpe ratio, Sortino ratio, maximum drawdown, and Calmar ratio jointly
+
+219
+
+capture different aspects of performance, volatility, and downside risk, ensuring a transparent
+
+220
+
+and reproducible evaluation framework.
+
+ev
+
+216
+
+221
+
+Let rm and rfm denote the monthly return and the one-month Treasury bill rate for month
+
+222
+
+m, respectively, and let Tm be the total number of monthly observations. Annualized returns
+
+223
+
+are computed as
+Annualized Return =
+
+× 12.
+
+(B.1)
+
+Similarly, annualized excess return is defined as
+
+224
+
+Annualized volatility is
+
+225
+
+!
+Tm
+1 X
+(rm − rfm ) × 12.
+Tm m=1
+
+pe
+
+Annualized Excess Return =
+
+ot
+
+v
+u
+u
+√
+Annualized Volatility = 12 × t
+
+(B.2)
+
+T
+m
+X
+1
+(rm − r̄)2 ,
+Tm − 1 m=1
+
+(B.3)
+
+X
+1
+(rm − r̄− )2 ,
+N − 1 m:r <0
+
+(B.4)
+
+where r̄ denotes the average monthly return.
+
+tn
+
+226
+
+!
+
+er
+r
+
+Tm
+1 X
+rm
+Tm m=1
+
+Downside deviation is
+
+227
+
+√
+
+s
+12 ×
+
+m
+
+rin
+
+Downside Deviation =
+
+228
+
+where N is the number of months with rm < 0, and r̄− is the average of negative monthly
+
+229
+
+returns.
+
+The Sharpe and Sortino ratios are
+
+ep
+Pr
+
+230
+
+Sharpe Ratio =
+
+Annualized Excess Return
+,
+Annualized Volatility
+
+(B.5)
+
+20
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 21 ===
+Sortino Ratio =
+
+Annualized Excess Return
+.
+Downside Deviation
+
+Maximum drawdown (MDD) is computed as
+
+232
+
+
+MDD = max
+t∈[0,Tm ]
+
+Pmax (t) − P (t)
+Pmax (t)
+
+
+,
+
+iew
+ed
+
+231
+
+(B.6)
+
+(B.7)
+
+where P (t) denotes the portfolio value at time t, and Pmax (t) = max P (u) represents the
+
+234
+
+highest portfolio value observed up to time t.
+
+ev
+
+233
+
+0≤u≤t
+
+The Calmar ratio is
+Calmar Ratio =
+
+Annualized Return
+.
+MDD
+
+er
+r
+
+235
+
+(B.8)
+
+Gross profit is the sum of positive returns,
+
+236
+
+Gross Profit =
+
+X
+
+rm ,
+
+(B.9)
+
+rm .
+
+(B.10)
+
+237
+
+pe
+
+m:rm >0
+
+while gross loss is the sum of negative returns,
+
+Gross Loss =
+
+X
+
+The profit factor is
+
+238
+
+ot
+
+m:rm <0
+
+tn
+
+Profit Factor =
+
+(B.11)
+
+Profitable and unprofitable years are determined by aggregating monthly returns to annual
+
+239
+
+levels and counting the years with positive and negative total returns, respectively.
+
+Pr
+
+ep
+
+rin
+
+240
+
+Gross Profit
+.
+|Gross Loss|
+
+21
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 22 ===
+Appendix C. Double-Selection LASSO: Control Selection and Robustness
+
+Robustness analyses of the double-selection LASSO assess sensitivity to penalty-grid choices
+
+242
+
+243
+
+iew
+ed
+
+241
+
+and stability of control selection across random resampling.
+
+Figure C.1 illustrates the number of control factors selected under varying combinations
+
+245
+
+of first- and second-stage penalty parameters. Model complexity varies smoothly with penalty
+
+246
+
+strength, indicating that the chosen regularization under the 1-SE rule achieves a balanced and
+
+247
+
+parsimonious specification.
+
+ev
+
+244
+
+er
+r
+
+[Insert Figure C.1 here]
+
+248
+
+249
+
+Figure C.2 shows the selection frequencies of all 161 candidate factors across 200 random
+
+250
+
+seeds. Only a small subset of factors is consistently selected, validating the sparsity assumption
+
+251
+
+underlying double-selection LASSO.
+
+[Insert Figure C.2 here]
+
+pe
+
+252
+
+Table C.1 summarizes factors with selection rates of 0.5 or higher. The table highlights that
+
+254
+
+a small number of controls dominate across resampling iterations, confirming the stability of the
+
+255
+
+selected conditioning variables.
+
+ot
+
+253
+
+[Insert Table C.1 here]
+
+Pr
+
+ep
+
+rin
+
+tn
+
+256
+
+22
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 23 ===
+iew
+ed
+
+Table A.1: List of Factor Identifiers and Variable Names
+ID
+3
+7
+11
+15
+19
+23
+27
+31
+35
+39
+43
+47
+51
+55
+59
+63
+67
+71
+75
+79
+83
+87
+91
+95
+99
+103
+107
+111
+115
+119
+123
+127
+131
+135
+139
+143
+147
+151
+155
+159
+
+Variable name
+aliq mat
+at me
+beta 60m
+bev mev
+capx gr2
+coa gr1a
+corr 1260d
+debt gr3
+dolvol 126d
+dsale dsga
+ebitda mev
+eqnpo 12m
+fcf me
+inv gr1
+iskew hxz4 21d
+ivol ff3 21d
+lti gr1a
+ncoa gr1a
+nfna gr1a
+ni ivol
+niq be
+noa at
+oaccruals ni
+ocfq saleq std
+ope bel1
+prc
+qmj prof
+rd sale
+ret 12 7
+ret 6 1
+rmax5 rvol 21d
+sale emp gr1
+saleq gr1
+seas 16 20an
+seas 2 5an
+sti gr1a
+tax gr1a
+zero trades 126d
+SMB
+R ME
+
+ID
+4
+8
+12
+16
+20
+24
+28
+32
+36
+40
+44
+48
+52
+56
+60
+64
+68
+72
+76
+80
+84
+88
+92
+96
+100
+104
+108
+112
+116
+120
+124
+128
+132
+136
+140
+144
+148
+152
+156
+160
+
+Variable name
+ami 126d
+at turnover
+beta dimson 21d
+bidaskhl 21d
+capx gr3
+col gr1a
+coskew 21d
+debt me
+dolvol var 126d
+earnings variability
+emp gr1
+eqnpo me
+fnl gr1a
+inv gr1a
+ival me
+ivol hxz4 21d
+market equity
+ncol gr1a
+ni ar1
+ni me
+niq be chg1
+noa gr1a
+ocf at
+op at
+opex at
+prc highprc 252d
+qmj safety
+resff3 12 1
+ret 1 0
+ret 9 1
+rskew 21d
+sale gr1
+saleq su
+seas 16 20na
+seas 2 5na
+taccruals at
+turnover 126d
+zero trades 21d
+HML
+R IA
+
+ev
+
+Variable name
+aliq at
+at gr1
+be me
+betadown 252d
+capx gr1
+chcsho 12m
+cop atl1
+dbnetis at
+div12m me
+dsale drec
+ebit sale
+eqnetis at
+f score
+gp atl1
+iskew ff3 21d
+ivol capm 252d
+lnoa gr1a
+mispricing perf
+netis at
+ni inc8q
+niq at chg1
+nncoa gr1a
+oaccruals at
+ocf me
+ope be
+ppeinv gr1a
+qmj growth
+rd me
+ret 12 1
+ret 60 12
+rmax5 21d
+sale bev
+sale me
+seas 11 15na
+seas 1 1na
+seas 6 10na
+tangibility
+z score
+Mkt-RF
+CMA
+
+er
+r
+
+ID
+2
+6
+10
+14
+18
+22
+26
+30
+34
+38
+42
+46
+50
+54
+58
+62
+66
+70
+74
+78
+82
+86
+90
+94
+98
+102
+106
+110
+114
+118
+122
+126
+130
+134
+138
+142
+146
+150
+154
+158
+
+pe
+
+Variable name
+age
+at be
+be gr1a
+betabab 1260d
+capex abn
+cash at
+cop at
+cowc gr1a
+dgp dsale
+dsale dinv
+ebit bev
+eq dur
+eqpo me
+gp at
+iskew capm 21d
+ivol capm 21d
+kz index
+mispricing mgmt
+netdebt me
+ni be
+niq at
+niq su
+o score
+ocf at chg1
+op atl1
+pi nix
+qmj
+rd5 at
+resff3 6 1
+ret 3 1
+rmax1 21d
+rvol 21d
+sale gr3
+seas 11 15an
+seas 1 1an
+seas 6 10an
+taccruals ni
+turnover var 126d
+zero trades 252d
+RMW
+R ROE
+
+ot
+
+ID
+1
+5
+9
+13
+17
+21
+25
+29
+33
+37
+41
+45
+49
+53
+57
+61
+65
+69
+73
+77
+81
+85
+89
+93
+97
+101
+105
+109
+113
+117
+121
+125
+129
+133
+137
+141
+145
+149
+153
+157
+161
+
+Pr
+
+ep
+
+rin
+
+tn
+
+Note: This table reports the full list of candidate risk factors used in the analysis. Variable names
+follow the conventions of Jensen et al. (2023), supplemented with additional factors from the
+five-factor model of Fama and French (2015) and the q-factor model of Hou et al. (2015).
+
+23
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 24 ===
+iew
+ed
+
+Table C.1: Factors with Selection Rate of 0.5 or Higher
+Second LASSO (ViT)
+Selection Rate
+0.805
+0.805
+0.805
+0.800
+0.785
+0.755
+0.755
+0.715
+0.685
+0.630
+0.610
+0.610
+0.610
+0.610
+0.555
+0.555
+0.545
+0.535
+
+Variable name
+beta dimson 21d
+f score
+tangibility
+Mkt-RF
+taccruals ni
+zero trades 126d
+debt gr3
+ebit sale
+earnings variability
+corr 1260d
+
+Second LASSO (CNN)
+Selection Rate
+0.860
+0.850
+0.785
+0.775
+0.745
+0.685
+0.685
+0.670
+0.565
+0.535
+
+Variable name
+qmj safety
+tangibility
+ebit sale
+seas 6 10na
+taccruals ni
+corr 1260d
+ivol hxz4 21d
+RMW
+ret 1 0
+prc highprc 252d
+ni ivol
+sale emp gr1
+debt gr3
+resff3 6 1
+beta 60m
+R ME
+R ROE
+rskew 21d
+ni ar1
+ni be
+niq be chg1
+ocf at
+betadown 252d
+emp gr1
+iskew capm 21d
+prc
+Mkt-RF
+ope be
+qmj
+rmax5 21d
+niq at
+
+pe
+
+er
+r
+
+Variable name
+zero trades 126d
+eqnetis at
+prc
+ni inc8q
+tangibility
+mispricing perf
+rd me
+Mkt-RF
+RMW
+taccruals ni
+ni ar1
+sale bev
+resff3 12 1
+earnings variability
+seas 6 10na
+oaccruals at
+niq be
+qmj
+
+ev
+
+First LASSO
+
+Selection Rate
+1.000
+0.865
+0.840
+0.800
+0.800
+0.750
+0.750
+0.750
+0.700
+0.615
+0.605
+0.605
+0.605
+0.585
+0.585
+0.575
+0.565
+0.540
+0.530
+0.530
+0.530
+0.530
+0.530
+0.530
+0.530
+0.520
+0.505
+0.500
+0.500
+0.500
+0.500
+
+Pr
+
+ep
+
+rin
+
+tn
+
+ot
+
+Note: This table shows stage-specific selection rates (proportion of selections across 200 random seeds)
+of 0.5 or higher from the double-selection LASSO procedure. Columns correspond to the first-stage
+factors (K1 ) and the second-stage factors (K2 ) for ViT and CNN.
+
+24
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 25 ===
+iew
+ed
+ev
+
+(a) ViT
+
+(b) CNN
+
+Pr
+
+ep
+
+rin
+
+tn
+
+ot
+
+pe
+
+er
+r
+
+Figure C.1: Heatmaps of the number of controls selected across grids of first- and second-stage
+LASSO penalties for (a) ViT and (b) CNN. The x- and y-axes represent log(λ) for the firstand second-stage penalties, respectively. Color intensity indicates the size of the final control
+set, capped at 161 (the full candidate library). Black dots mark representative cross-validation
+draws, and the red cross denotes the penalty choice selected under the 1-SE rule based on the
+mean CV-MSE curve.
+
+25
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 26 ===
+iew
+ed
+
+er
+r
+
+ev
+
+(a) First LASSO
+
+ot
+
+pe
+
+(b) Second LASSO (ViT)
+
+(c) Second LASSO (CNN)
+
+Pr
+
+ep
+
+rin
+
+tn
+
+Figure C.2: Selection rates of 161 candidate factors, defined as the proportion of times each
+factor is selected across 200 random seeds in the double-selection LASSO. Factor IDs and their
+ordering on the x-axis correspond to the mapping in Appendix A.
+
+26
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 27 ===
+iew
+ed
+
+257
+
+Data Availability
+
+Data are sourced from the Center for Research in Security Prices (CRSP) US Stock Databases.
+
+259
+
+These data are proprietary but are available to qualified researchers through CRSP (https:
+
+260
+
+//www.crsp.org/research/crsp-us-stock-databases/). The analysis code is publicly available at
+
+261
+
+Github (https://github.com/finxlab/vit-sdf-lasso).
+
+262
+
+CRediT authorship contribution statement
+
+ev
+
+258
+
+Jun Young Byun: Conceptualization, Methodology, Software, Formal Analysis, Data Cu-
+
+264
+
+ration, Writing - Original Draft, Visualization; Yosep Na: Conceptualization, Validation, Vi-
+
+265
+
+sualization; Jae Wook Song: Conceptualization, Methodology, Validation, Investigation, Re-
+
+266
+
+sources, Writing - Review & Editing, Supervision, Project Administration, Funding Acquisition.
+
+267
+
+Acknowledgement
+
+pe
+
+er
+r
+
+263
+
+This work was supported by the National Research Foundation of Korea (NRF) grant funded
+
+269
+
+by the Korea government(MSIT)(RS-2024-00407803). Our experiments were mainly conducted
+
+270
+
+on an HPC (DELL DSS8440) equipped with 8 NVIDIA RTX3090 GPUs at the Biospecimen-
+
+271
+
+Multiomics Digital Bioanalysis Core Facility of Hanyang University.
+
+272
+
+References
+
+273
+
+Asness, C.S., Frazzini, A., Pedersen, L.H., 2019. Quality minus junk. Review of Accounting
+
+275
+
+276
+
+tn
+
+Bang, J., Kang, Y., Ryu, D., 2024. Potential pricing factors in the korean market. Finance
+Research Letters 67, 105946.
+
+Bang, J., Ryu, D., 2024. Esg factors and the cross-section of expected stock returns: A lasso-
+
+ep
+
+277
+
+Studies 24, 34–112.
+
+rin
+
+274
+
+ot
+
+268
+
+278
+
+based approach. Finance Research Letters 65, 105482.
+
+Barber, B.M., Odean, T., 2008. All that glitters: The effect of attention and news on the
+
+280
+
+buying behavior of individual and institutional investors. The Review of Financial Studies
+
+Pr
+
+279
+
+281
+
+21, 785–818.
+27
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 28 ===
+283
+
+iew
+ed
+
+282
+
+Bates, S., Hastie, T., Tibshirani, R., 2024. Cross-validation: what does it estimate and how well
+does it do it? Journal of the American Statistical Association 119, 1434–1445.
+
+284
+
+Bryzgalova, S., 2015. Spurious factors in linear asset pricing models. LSE manuscript 1, 6.
+
+285
+
+Byun, J.Y., Na, Y., Song, J.W., 2025. Learning stock price signals from candlestick chart via
+
+288
+
+289
+
+290
+
+Chen, L., Pelger, M., Zhu, J., 2024. Deep learning in asset pricing. Management Science 70,
+
+ev
+
+287
+
+vision transformer. Available at SSRN 5224805 .
+
+714–750.
+
+Dimson, E., 1979. Risk measurement when shares are subject to infrequent trading. Journal of
+
+er
+r
+
+286
+
+Financial Economics 7, 197–226.
+
+Fama, E.F., French, K.R., 2008. Dissecting anomalies. The Journal of Finance 63, 1653–1678.
+
+292
+
+Fama, E.F., French, K.R., 2015. A five-factor asset pricing model. Journal of Financial Eco-
+
+296
+
+297
+
+298
+
+299
+
+300
+
+301
+
+302
+
+Giglio, S., Kelly, B., Xiu, D., 2022. Factor models, machine learning, and asset pricing. Annual
+Review of Financial Economics 14, 337–368.
+Gu, S., Kelly, B., Xiu, D., 2020. Empirical asset pricing via machine learning. The Review of
+Financial Studies 33, 2223–2273.
+Gu, S., Kelly, B., Xiu, D., 2021. Autoencoder asset pricing models. Journal of Econometrics
+222, 429–450.
+
+Heston, S.L., Sadka, R., 2008. Seasonality in the cross-section of stock returns. Journal of
+Financial Economics 87, 418–445.
+
+ep
+
+303
+
+of Finance 75, 1327–1370.
+
+ot
+
+295
+
+Feng, G., Giglio, S., Xiu, D., 2020. Taming the factor zoo: A test of new factors. The Journal
+
+tn
+
+294
+
+nomics 116, 1–22.
+
+rin
+
+293
+
+pe
+
+291
+
+304
+
+porting. Journal of Accounting and Economics 36, 337–386.
+
+Pr
+
+305
+
+Hirshleifer, D., Teoh, S.H., 2003. Limited attention, information disclosure, and financial re-
+
+28
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 29 ===
+310
+
+311
+
+312
+
+313
+
+314
+
+315
+
+316
+
+317
+
+318
+
+319
+
+iew
+ed
+
+309
+
+Hou, K., Xue, C., Zhang, L., 2020. Replicating anomalies. The Review of Financial Studies 33,
+2019–2133. doi:10.1093/rfs/hhy131.
+
+Jensen, T.I., Kelly, B., Pedersen, L.H., 2023. Is there a replication crisis in finance? The Journal
+of Finance 78, 2465–2518.
+
+ev
+
+308
+
+of Financial Studies 28, 650–705.
+
+Jiang, G., Lee, C.M., Zhang, Y., 2005. Information uncertainty and expected returns. Review
+of Accounting Studies 10, 185–221.
+
+er
+r
+
+307
+
+Hou, K., Xue, C., Zhang, L., 2015. Digesting anomalies: An investment approach. The Review
+
+Jiang, J., Kelly, B., Xiu, D., 2023. (re-) imag (in) ing price trends. The Journal of Finance 78,
+3193–3249.
+
+Lashkaripour, M., 2024. Some stylized facts about bitcoin halving. Finance Research Letters
+69, 106198.
+
+pe
+
+306
+
+Liu, C.H., Nowak, A.D., Smith, P.S., 2020. Asymmetric or incomplete information about asset
+values? The Review of Financial Studies 33, 2898–2936.
+Lo, A.W., Mamaysky, H., Wang, J., 2000. Foundations of technical analysis: Computational
+
+321
+
+algorithms, statistical inference, and empirical implementation. The Journal of Finance 55,
+
+322
+
+1705–1765.
+
+325
+
+326
+
+explanation. The Review of Financial Studies 21, 2825–2855.
+Maaten, L.v.d., Hinton, G., 2008. Visualizing data using t-sne. Journal of Machine Learning
+Research 9, 2579–2605.
+
+Newey, W.K., West, K.D., 1987. A simple, positive semi-definite, heteroskedasticity and auto-
+
+ep
+
+327
+
+tn
+
+324
+
+Lyandres, E., Sun, L., Zhang, L., 2008. The new issues puzzle: Testing the investment-based
+
+rin
+
+323
+
+ot
+
+320
+
+328
+
+329
+
+Ouyang, H., Long, T., 2025. Debt risk spillover and driving mechanism of china’s local government financing platforms. Finance Research Letters 81, 107548.
+
+Pr
+
+330
+
+correlation consistent covariance matrix. Econometrica 55, 703–708.
+
+29
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== PDF PAGE 30 ===
+334
+
+335
+
+336
+
+337
+
+338
+
+339
+
+Salisu, A.A., Tchankam, J.P., 2022. Us stock return predictability with high dimensional models.
+Finance Research Letters 45, 102194.
+
+Soliman, M.T., 2008. The use of dupont analysis by market participants. The Accounting
+Review 83, 823–853.
+
+Son, B., Lee, J., 2022. Graph-based multi-factor asset pricing model. Finance Research Letters
+44, 102032.
+
+Wang, N., Zhang, M., Zhang, Y., 2024. Return prediction: A tree-based conditional sort approach
+with firm characteristics. Finance Research Letters 60, 104826.
+
+Pr
+
+ep
+
+rin
+
+tn
+
+ot
+
+pe
+
+340
+
+iew
+ed
+
+333
+
+separate winners from losers. Journal of Accounting Research 38, 1–41.
+
+ev
+
+332
+
+Piotroski, J.D., 2000. Value investing: The use of historical financial statement information to
+
+er
+r
+
+331
+
+30
+
+This preprint research paper has not been peer reviewed. Electronic copy available at: https://ssrn.com/abstract=5407028
+
+=== END SOURCE TEXT ===

@@ -1,0 +1,9 @@
+From vision to value: Stock chart image-driven factors and their pricing power
+
+Condensed abstract
+
+Constructs investment factors from candlestick images using convolutional networks and
+vision transformers, then tests their pricing power against 161 established factors.
+Vision-transformer signals exhibit stronger portfolio performance and incremental
+pricing information, while convolutional signals show weaker economic relevance. The
+findings suggest chart images can encode additional asset-pricing information.

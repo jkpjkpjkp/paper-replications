@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/finxlab/vit-sdf-lasso",
+  "commit": "bde5d07442fdea2c230641ebfbdd0ea00b5021fc",
+  "files": [
+    {
+      "model": "vit",
+      "path": "sdf_analysis/sorted_portfolio/vit_3by3.csv",
+      "bytes": 201012,
+      "sha256": "deaa6a851c5d777d64bb2e91a46295e8ee27017860cdf22db1b35ae59c9724bf"
+    },
+    {
+      "model": "cnn",
+      "path": "sdf_analysis/sorted_portfolio/cnn_3by3.csv",
+      "bytes": 200982,
+      "sha256": "de19fefe8a4027d49c12df0900c97e46fdea4830f0e05f7de9bd8b090aeb8c12"
+    }
+  ]
+}
