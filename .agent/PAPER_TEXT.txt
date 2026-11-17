@@ -1,0 +1,4021 @@
+FraudGNAM: Inherently Interpretable Spectral GNN for Graph Fraud Detection
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/artifacts/paper-reproduction-audit/workspaces/429-fraudgnam/sources/paper.pdf
+Source SHA-256: d8f2649462b109a16fb9857c67ca1ac4791ffc8f0f8892f2af4551f147705af5
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+FraudGNAM: Inherently Interpretable Spectral GNN
+for Graph Fraud Detection
+
+Suan Lee1
+
+Jinho Kim2
+
+1
+
+2
+
+School of Computer Science, Semyung University, Jecheon, Republic of Korea
+AI Research Lab, Korea Information Systems Consulting & Audit Co., Ltd., Republic of Korea
+
+Abstract
+Graph neural networks for fraud detection face a
+fundamental tension: spectral methods that capture heterophilic patterns sacrifice interpretability, while interpretable models lack the spectral
+capacity to detect sophisticated fraud. We introduce FraudGNAM (Fraud Graph Neural Additive
+Model), the first component-level inherently interpretable spectral GNN with learnable multiscale filters that resolves this tension. FraudGNAM
+decomposes the fraud score into individually auditable components at three interpretability tiers:
+component-level and per-band spectral (universally available and exact), and per-feature via neural additive shape functions (when feature dimensionality d ≤ 40). Components include per-feature
+contributions, pairwise feature interactions, multiscale spectral band responses via learnable polynomial filters, and explicit feature-spectrum interactions, all combined through a transparent scalarsum architecture. Each component’s contribution
+to the final prediction is independently quantifiable,
+unlike post-hoc explanation methods that approximate black-box decisions. On seven GADBench
+datasets spanning homophily ratios from 0.60 to
+0.98, a refined theory-guided adaptive rule lets
+FraudGNAM win AUROC on all seven datasets
+against SEC-GFD, the strongest black-box baseline, taking 20 of 21 metric-dataset comparisons
+(paired Wilcoxon, exact binomial p = 4.6 × 10−5 ).
+A deterministic, theory-guided adaptive configuration mechanism selects spectral order, high-pass
+filter count, and contrastive regularization based
+on measurable graph properties, eliminating perdataset hyperparameter search.
+
+1
+
+INTRODUCTION
+
+Financial fraud detection in transaction and social networks
+is a high-stakes application where graph structure can reveal
+suspicious relational patterns [Wang et al., 2019]. A key
+challenge is that fraud graphs exhibit heterophily: fraudsters
+strategically connect to normal users to camouflage their
+behavior, violating the homophily assumption underlying
+standard GNNs [Dou et al., 2020].
+Recent spectral approaches address heterophily by decomposing graph signals across frequency bands. BWGNN
+[Tang et al., 2022] uses Beta wavelet filters, and SEC-GFD
+[Xu et al., 2024] combines high-pass filtering with contrastive learning. These methods achieve strong performance
+but operate as black boxes: practitioners cannot inspect why
+a node is flagged as fraud or which spectral patterns and
+features contribute to the decision.
+Post-hoc explanation methods like GNNExplainer [Ying
+et al., 2019] approximate black-box decisions but suffer
+from faithfulness issues: explanations may not reflect the
+model’s true reasoning [Luo et al., 2020]. In high-stakes
+domains like fraud detection, where regulatory compliance
+often demands audit trails, inherent interpretability—where
+the model architecture itself ensures decomposability—is
+more appropriate.
+Neural Additive Models (NAMs) [Agarwal et al., 2021]
+achieve inherent interpretability for tabular data by decomposingPpredictions into per-feature contributions f (x) =
+β0 + i fi (xi ). GA2 Ms [Lou et al., 2013] extend this with
+pairwise interactions. However, neither framework incorporates graph structure, leaving an open problem for interpretable graph learning. In fraud detection, graph topology
+carries critical information—yet current approaches force a
+binary choice between spectral power and interpretability.
+We introduce FraudGNAM, which combines NAM/GA2 Mstyle decomposition with spectral graph filtering in a single
+architecture. Our contributions are:
+
+Proceedings of the 42nd Conference on Uncertainty in Artificial Intelligence (UAI 2026), PMLR 337:3398–3428.
+
+=== PDF PAGE 2 ===
+1. Inherently interpretable spectral GNN architecture
+that decomposes fraud predictions into independently
+auditable components: feature contributions, pairwise
+interactions, spectral band responses, feature-spectrum
+interactions, and high-pass filter responses, all combined via a transparent scalar-sum (Section 4).
+2. Theory-guided deterministic adaptive spectral
+configuration: a homophily-order design guideline
+(Guideline 1) selects polynomial order, high-pass filter
+count, and contrastive regularization from four measurable graph statistics, eliminating per-dataset hyperparameter search. The configuration rules pass leaveone-dataset-out validation (Appendix M) and threshold
+sensitivity sweeps (Appendix L, Section 5.5).
+3. State-of-the-art performance with interpretability:
+on seven GADBench datasets [Tang et al., 2023],
+FraudGNAM outperforms SEC-GFD [Xu et al., 2024]
+in AUROC on all seven datasets under a refined adaptive rule (Section 5.5, Appendix V), winning 20 of
+21 dataset-metric comparisons (paired Wilcoxon, exact binomial p = 4.6 × 10−5 ) while maintaining full
+component decomposability.
+
+2
+
+RELATED WORK
+
+Spectral GNNs. GCN [Kipf and Welling, 2017] implements a first-order Chebyshev approximation of spectral filters. ChebNet [Defferrard et al., 2016] generalizes to orderK Chebyshev polynomials but with fixed basis functions.
+BernNet [He et al., 2021] uses Bernstein polynomials with
+learnable coefficients, achieving arbitrary filter shapes while
+maintaining non-negativity. GPR-GNN [Chien et al., 2021]
+learns generalized PageRank weights for adaptive frequency
+response. BWGNN [Tang et al., 2022] applies Beta wavelet
+bases specifically for fraud detection, demonstrating that
+multi-scale spectral decomposition captures fraudster camouflage patterns. S2 GNN [Geisler et al., 2024] combines
+spatial and spectral filters for global propagation. None of
+these methods adapt polynomial order to graph properties,
+and all lack interpretable prediction decomposition.
+Heterophilic GNNs. H2 GCN [Zhu et al., 2020] separates ego- and neighbor-embeddings for heterophilic graphs.
+FAGCN [Bo et al., 2021] uses signed attention for adaptive
+frequency selection. SEC-GFD [Xu et al., 2024] combines
+element-wise spectral convolutions with high-pass filtering
+and NCE contrastive loss, achieving strong fraud detection
+performance. GAGA [Wang et al., 2023] converts the graph
+into label-group-aggregated feature sequences processed by
+a Transformer encoder. PMP [Zhuo et al., 2024] partitions
+message passing by source-node pseudo-labels to avoid mixing signals from different classes. Orthogonal data-centric
+approaches (graph contrastive pretraining, label denoising)
+address label scarcity; FraudGNAM’s training-only NCE
+
+provides a lightweight alternative without requiring pretraining. All of the above operate as black boxes: they entangle
+all components before classification, making individual predictions opaque.
+Interpretable models. NAMs [Agarwal
+et al., 2021] deP
+compose predictions as f (x) = β0 + i fi (xi ), where each
+fi is a neural network processing a single feature. GA2 Ms
+[Lou et al., 2013] add pairwise terms fij (xi , xj ) for capturing feature interactions. NODE-GAM [Chang et al., 2022]
+replaces neural networks with oblivious decision trees for
+sharper shape functions. GNAN [Bechler-Speicher et al.,
+2024] extends additive models to graph data by decomposing GNN predictions into per-feature terms with message
+passing, but uses a fixed aggregation scheme without spectral filtering. These approaches achieve interpretability competitive with black-box models on tabular data but either
+cannot incorporate graph structure (NAM, GA2 M) or lack
+spectral capacity for heterophilic fraud patterns (GNAN).
+L2XGNN [Serra and Niepert, 2024] learns to select explanatory subgraphs but does not decompose predictions
+into per-feature contributions. Post-hoc GNN explanations
+[Ying et al., 2019, Luo et al., 2020] can identify important
+subgraphs or edges but cannot guarantee faithfulness.
+Our position. FraudGNAM is, to our knowledge, the
+first GNN that achieves inherent interpretability via
+NAM/GA2 M-style scalar-sum decomposition while incorporating learnable spectral graph filtering with adaptive
+configuration. Unlike GNAN’s fixed aggregation, FraudGNAM uses multi-scale polynomial filters that adapt to each
+graph’s spectral characteristics. Unlike GAGA and PMP,
+FraudGNAM produces individually auditable component
+contributions while remaining competitive in accuracy.
+
+3
+
+PRELIMINARIES
+
+Let G = (V, E) be a graph with n = |V| nodes, adjacency
+matrix A, degree matrix D, and node features X ∈ Rn×d .
+The normalized Laplacian is L̂ = I − D−1/2 AD−1/2 with
+eigendecomposition L̂ = UΛU⊤ , where eigenvalues λi ∈
+[0, 2].
+Definition 1 (Edge Homophily). The homophily ratio h =
+|{(u, v) ∈ E : yu = yv }|/|E| measures the fraction of edges
+connecting same-class nodes.
+A polynomial spectral filter of order K applies gθ (L̂) =
+PK
+k
+k=0 θk L̂ to node features. In the spectral domain,
+this corresponds to the frequency response gθ (λ) =
+PK
+k
+k=0 θk λ , where low eigenvalues (λ → 0) encode
+smooth (homophilic) signals and high eigenvalues (λ → 2)
+encode non-smooth (heterophilic) signals [Shuman et al.,
+2013]. This connects directly to fraud detection: in homophilic graphs (h → 1), fraudsters are detectable via
+
+3399
+
+=== PDF PAGE 3 ===
+4.2
+
+xv , G
+via L̂kX
+
+Feature Net
+
+Pairwise Net
+
+αF
+
+αP
+
+via L̂tX
+
+EFI Nets
+
+Band Nets
+αB
+
+s(v) = β0 +
+
+P
+
+αE
+
+FEATURE COMPONENT
+
+For low-dimensional features (d ≤ 40), we follow NAM
+[Agarwal et al., 2021] with individual feature networks:
+
+HP Nets
+
+αH
+
+F (v) =
+c αc · ψc (v)
+
+d
+X
+
+fi (xv,i ),
+
+Figure 1: FraudGNAM architecture. Node features and
+graph structure are processed by independent component
+families, each producing a scalar output. The fraud score is
+a weighted sum of all components, enabling direct interpretation of each contribution.
+
+low-frequency anomalies; in heterophilic graphs (h ≪ 1),
+fraud signal concentrates in high frequencies.
+
+METHOD
+
+4.1
+
+ARCHITECTURE OVERVIEW
+
+For high-dimensional features (d > 40), individual networks become parameter-inefficient (e.g., 400 separate
+MLPs for Weibo) and lose cross-feature interactions that
+may be essential. We use a grouped architecture:
+
+bias
+
+X
+
+αc · ψc (v)
+
+(1)
+
+c∈C
+
+|
+
+{z
+
+g : Rd → R
+
+(3)
+
+where g is a single MLP processing all features jointly.
+While this sacrifices per-feature decomposition, it preserves
+the overall additive structure of Eq. (1): the feature component’s total contribution αF · F (v) remains independently
+auditable.
+
+FraudGNAM computes a fraud logit for each node as a
+transparent scalar sum of component families:
+s(v) = β0 +
+|{z}
+
+(2)
+
+where each fi is a small MLP with LayerNorm and
+LeakyReLU activations. This preserves per-feature interpretability: the shape function fi can be visualized to understand how each feature influences fraud risk.
+
+F (v) = g(xv ),
+
+4
+
+fi : R → R
+
+i=1
+
+4.3
+
+PAIRWISE COMPONENT
+
+Following GA2 Ms [Lou et al., 2013], we model the top-M
+pairwise feature interactions:
+
+}
+
+component contributions
+
+P (v) =
+where β0 is a learnable bias, αc are learnable scalar weights,
+and each ψc (v) ∈ R is computed by a dedicated neural
+network. The component set C includes:
+• Feature component F : per-feature or grouped feature
+contributions
+• Pairwise component P : feature interaction terms
+• Spectral bands B0 , . . . , BK : multi-scale frequency
+responses
+• EFI terms E0 , . . . , EK : feature-spectrum interactions
+• High-pass terms H1 , . . . , HT : heterophilic signal responses
+The class logits are [−s(v)/(2τ ), s(v)/(2τ )], where τ is a
+learnable temperature (initialized to 1) that controls prediction sharpness—smaller τ produces more confident classifications, and each component’s contribution to the fraud
+decision is directly readable as αc ·ψc (v). Figure 1 illustrates
+the architecture.
+
+M
+X
+
+pm (xv,im , xv,jm ),
+
+pm : R3 → R
+
+(4)
+
+m=1
+
+where each pm receives [xi , xj , xi · xj ] and outputs a scalar
+interaction score. The multiplicative term xi · xj captures
+the interaction directly. Feature pairs (im , jm ) are selected
+as the M pairs with highest absolute Pearson correlation
+between each feature pair’s product and the training fraud labels, following Lou et al. [2013]. This component is enabled
+for datasets with d ≤ 30 where the number of candidate
+pairs is manageable.
+4.4
+
+SPECTRAL BAND COMPONENT
+
+We decompose graph signals into K + 1 frequency bands
+using learnable polynomial filters initialized from Beta
+wavelet coefficients [Tang et al., 2022]:
+!
+K
+K
+ k
+X
+X
+(k) L̂
+B(v) =
+wj · bj
+θj
+X
+(5)
+2
+j=0
+(k)
+
+k=0
+
+v
+
+where θj are learnable spectral coefficients initialized
+from the Beta(j + 1, K − j + 1) wavelet basis, wj =
+softmax(w)j · (K + 1) are normalized band weights, and
+
+3400
+
+=== PDF PAGE 4 ===
+each bj : Rd → R is a band-processing MLP. With equal
+logits, softmax(w)j = 1/(K+1); multiplying by (K+1)
+yields wj = 1, so the model defaults to the unweighted sum
+before learning.
+(k)
+
+The coefficients θj are learnable parameters that adapt
+during training. This distinguishes FraudGNAM from
+BWGNN, which uses fixed Beta wavelet coefficients. Learnable coefficients allow the filter to shift its frequency response to match the dataset’s spectral characteristics:
+(k)
+
+Remark 1 (Spectral Adaptivity). With learnable θj and
+P (k)
+order K, the frequency response gj (λ) = k θj (λ/2)k
+spans all polynomials of degree ≤ K on [0, 2], including
+band-pass, low-pass, and high-pass shapes that the fixed
+Beta wavelet basis cannot represent.
+Adaptive order selection. The polynomial order K controls the spectral resolution of the filter bank. Higher K
+enables finer frequency discrimination but risks overfitting
+on homophilic graphs where class information is concentrated in low frequencies. We set K adaptively based on
+graph homophily:
+Design Guideline 1 (Homophily-Order Design Guideline).
+On heterophilic graphs (h < 0.85), discriminative class
+information has significant energy at high
+eigenfrequenPK
+cies λ > 1. A polynomial filter g(λ) = k=0 θk (λ/2)k
+with K ≥ 4 provides the necessary expressiveness, as a
+degree-K polynomial has at most K − 1 turning points,
+and simultaneously fitting band-pass responses for both low
+and high frequencies requires at least 3 turning points. For
+homophilic graphs (h > 0.95), K = 2 suffices. This is a
+theory-motivated, empirically calibrated guideline rather
+than a strict spectral bound; threshold robustness and configuration stability are validated in Appendices L and M.
+
+(j)
+
+where x̃v is the spectrally-filtered feature vector for band
+j (reused from Eq. 5), ⊙ denotes element-wise product, and
+(j)
+ej : Rd → R is an MLP. The Hadamard product x̃v ⊙ xv
+explicitly models how each feature’s spectral response at
+frequency band j interacts with its raw value, providing a
+richer signal than either alone.
+4.6
+
+For heterophilic graphs where fraudsters connect to dissimilar nodes, the polynomial filter bank may not have sufficient
+resolution to capture sharp high-frequency signals. We add
+an explicit iterative high-pass filter that extracts non-smooth
+signals via repeated Laplacian application:
+h(t) = h(t−1) − D−1/2 AD−1/2 h(t−1) ,
+
+4.5
+
+EXPLICIT FEATURE-SPECTRUM
+INTERACTION (EFI)
+
+Standard spectral filtering applies the same frequency response to all features. However, in fraud detection, different
+features exhibit different spectral signatures—e.g., account
+age may be smooth across the graph while transaction velocity shows sharp discontinuities at fraud nodes. We introduce
+Explicit Feature-spectrum Interaction (EFI):
+E(v) =
+
+K
+X
+j=0
+
+
+
+wj · ej x̃(j)
+v ⊙ xv
+
+(6)
+
+h(0) = xv (7)
+
+Each iteration subtracts the local average, retaining only
+components that differ from neighbors. After t iterations,
+h(t) retains only high-frequency components, analogous to
+applying L̂t to the input. We process these through dedicated
+band and EFI networks:
+s(v) += αH
+
+T
+X
+
+(H)
+
+wt
+
+h
+
+i
+(H)
+(H) (t)
+bt (h(t)
+v ) + et (hv ⊙ xv )
+
+t=1
+
+(8)
+The number of high-pass filters T is set adaptively: T =2 for
+strongly heterophilic graphs (h < 0.85), T =1 for moderate
+heterophily (0.85 ≤ h < 0.95), and T =0 for homophilic
+graphs (h ≥ 0.95). This preserves the scalar-sum structure: each high-pass band’s contribution is independently
+quantifiable.
+4.7
+
+See Appendix B for a proof sketch. We validate empirically in Section 5.4: on heterophilic Yelp (h=0.774), fixed
+order-2 reduces AUROC by −0.4pp (Table 4), while on
+sparse Reddit (k̄=15.3) with very few training fraud nodes
+(∼146), order-2 substantially outperforms order-3 (+3.9pp),
+suggesting lower orders generalize better with limited supervision.
+
+HIGH-PASS SPECTRAL BRANCH
+
+TRAINING
+
+The primary loss is weighted cross-entropy with class
+weights inversely proportional to class frequency. For rare
+fraud (< 5%), we set the fraud class weight to 1/(2 ·
+fraud_ratio). We optionally apply focal loss [Lin et al.,
+2017] with γ > 0 for datasets with sufficient training fraud;
+for very small fraud sets (< 500 training fraud nodes), we
+find focal loss causes overfitting and disable it (γ = 0).
+For datasets with sufficient fraud signal (≥ 500 training
+fraud nodes) and heterophilic structure (h < 0.95), we add
+an NCE contrastive loss [Xu et al., 2024] using a lightweight
+2-layer GCN encoder ϕ:
+L = LCE + λ · LNCE
+
+(9)
+
+where LNCE pushes normal-node embeddings toward their
+original features and pulls fraud-node embeddings away,
+with λ ∈ {0.05, 0.1}.
+The NCE branch is training-only: the GCN encoder ϕ is
+discarded at inference. The model’s predictions remain fully
+
+3401
+
+=== PDF PAGE 5 ===
+decomposable via Eq. (1)—the contrastive loss only shapes
+the learned parameters of the interpretable components.
+4.8
+
+Table 1: Dataset statistics. Homophily h is the edge homophily ratio.
+
+INTERPRETABILITY GUARANTEE
+
+Theorem 1 (Additive Decomposability). For any node v,
+the FraudGNAM fraud score admits the exact decomposition:
+X
+s(v) = β0 +
+αc · ψc (v)
+c∈C
+
+where C indexes all components, each αc ∈ R is a learnable
+scalar, and each ψc (v) ∈ R is computed by a dedicated network whose scoring parameters are disjoint from those of
+other components. The contribution of component c to the
+fraud decision is exactly αc · ψc (v), requiring no approximation or perturbation analysis.
+
+5
+
+EXPERIMENTS
+
+5.1
+
+SETUP
+
+Datasets. We evaluate on seven GADBench [Tang et al.,
+2023] datasets spanning diverse graph properties (Table 1).
+Homophily ranges from 0.604 (tolokers) to 0.977 (Weibo),
+fraud ratios from 3.0% (questions) to 21.8% (tolokers),
+and feature dimensions from 10 to 400. Homophily and
+edge counts are computed directly from the GADBenchprocessed graphs.
+Baselines. We compare against eleven methods: GCN
+[Kipf and Welling, 2017], GraphSAGE [Hamilton et al.,
+2017], GAT [Veličković et al., 2018], GIN [Xu et al., 2019],
+PCGNN [Liu et al., 2021], BWGNN [Tang et al., 2022],
+GHRN [Gao et al., 2023], BernNet [He et al., 2021], SECGFD [Xu et al., 2024], GAGA [Wang et al., 2023], and
+PMP [Zhuo et al., 2024]. All results use the GADBench
+evaluation protocol: 10 random 40/20/40 train/val/test splits,
+reporting mean and standard deviation.
+
+Nodes
+
+Edges
+
+d
+
+h
+
+Fraud%
+
+Yelp
+tolokers
+Reddit
+Amazon
+Weibo
+tfinance
+questions
+
+45,954
+11,758
+10,984
+11,944
+8,405
+39,357
+48,921
+
+3.85M
+519K
+168K
+4.40M
+408K
+42.0M
+202K
+
+32
+10
+64
+25
+400
+10
+301
+
+0.774
+0.604
+0.950
+0.954
+0.977
+0.971
+0.878
+
+14.5%
+21.8%
+3.3%
+6.9%
+10.3%
+4.6%
+3.0%
+
+Table 2: FraudGNAM vs. recent black-box baselines (AUROC, Mean ± Std, 10 trials), under the submitted adaptive
+rule. Best in bold. FraudGNAM achieves the best AUROC
+among all methods on 4 of 7 datasets and outperforms SECGFD on 5 of 7; the refined rule (§5.5) converts the remaining two into wins (7 of 7, Appendix V). Full metrics in
+Appendix K.
+
+Proof sketch. Each component network takes disjoint inputs (raw features, filtered features, interaction terms)
+through independent parameters. The scalar weights αc
+directly multiply the component outputs. The high-pass
+branch (Eq. 8) preserves this structure. The NCE loss (Eq. 9)
+is training-only and does not appear in the inference computation. See Appendix A for the full proof.
+Unlike post-hoc methods, in FraudGNAM the decomposition is the model, not an approximation of it. Practitioners
+can audit individual component contributions to understand
+why a node is flagged, which spectral bands contributed
+most, and whether the decision relies on features, graph
+structure, or their interaction.
+
+Dataset
+
+Dataset
+
+FraudGNAM
+
+SEC-GFD
+
+GAGA
+
+PMP
+
+Yelp
+Amazon
+Weibo
+tfinance
+questions
+Reddit
+tolokers
+
+.882 ± .003
+.980 ± .003
+.979 ± .004
+.959 ± .005
+.725 ± .007
+.656 ± .049
+.800 ± .006
+
+.871 ± .005
+.972 ± .008
+.972 ± .008
+.938 ± .042
+.699 ± .027
+.664 ± .045
+.802 ± .007
+
+.708 ± .058
+.902 ± .024
+.982 ± .005
+.641 ± .116
+.638 ± .021
+.558 ± .042
+.705 ± .008
+
+.745 ± .066
+.866 ± .011
+.916 ± .017
+.880 ± .038
+.681 ± .017
+.492 ± .052
+.755 ± .012
+
+Metrics. AUROC, AUPRC (area under precision-recall
+curve), and Recall@K (RecK) where K equals the number
+of fraud nodes in the test set.
+Implementation. FraudGNAM uses AdamW with learning rate 0.01, weight decay 10−5 , cosine annealing scheduler, and early stopping with patience 50. All configuration
+decisions are deterministic functions of measurable graph
+properties (Table 6), requiring no per-dataset hyperparameter search. We evaluate on homogeneous graph benchmarks
+following the GADBench protocol [Tang et al., 2023]; extension to heterogeneous graphs with typed edges is future
+work.
+5.2
+
+MAIN RESULTS
+
+Table 2 compares FraudGNAM against the three strongest
+recent baselines—SEC-GFD, GAGA, and PMP—across all
+seven datasets.
+FraudGNAM leads all four methods on Yelp, Amazon, tfinance, and questions. GAGA achieves the highest AUROC
+on Weibo (h=0.977), where its label-based group aggregation benefits from extreme homophily. SEC-GFD slightly
+leads on Reddit and tolokers in the submitted rule; a refined
+adaptive rule (§5.5) grounded in our ablations converts both
+into wins (Reddit +3.43pp, tolokers +0.33pp vs SEC-GFD;
+
+3402
+
+=== PDF PAGE 6 ===
+per-dataset analysis in Appendix V).
+FraudGNAM also provides stability: both GAGA and
+PMP exhibit high variance (Yelp AUROC std .058 and
+.066), while FraudGNAM maintains consistent performance
+(std .003). SEC-GFD shows extreme variance on tfinance
+(AUPRC std 0.259 due to occasional NaN losses).
+
+5.3
+
+FULL BASELINE COMPARISON
+
+5.5
+
+Table 3 compares FraudGNAM against all eleven baselines
+on the four core GADBench datasets.
+FraudGNAM achieves the best AUROC on Yelp (+1.1pp
+over SEC-GFD) and the best AUPRC on Yelp and Amazon.
+On Weibo (h=0.977), GAGA leads in AUROC (.982) via
+label-based group aggregation, while GCN leads in AUPRC
+and RecK—consistent with extreme homophily where simple low-pass filtering suffices.
+
+5.4
+
+Multi-metric ablation. Table 5 extends ablation to
+AUPRC and Recall@K. Component impacts are consistently larger on precision-oriented metrics: NCE removal reduces Yelp AUPRC by −3.5pp (twice AUROC impact), EFI
+removal by −2.0pp, and pairwise removal reduces Amazon
+AUPRC by −1.6pp—confirming these components primarily sharpen fraud ranking precision.
+
+ABLATION STUDY
+
+Table 4 ablates each component on four datasets representing different homophily regimes.
+NCE contrastive loss is the most impactful component on
+Yelp. Removing NCE reduces Yelp AUROC by −1.7pp
+and AUPRC by −3.5pp, the largest single-component effect.
+Since NCE is training-only, the inference model remains
+fully decomposable—this component improves learned parameters without affecting interpretability. NCE has no effect on Amazon, Weibo, or Reddit where it is automatically
+disabled.
+High-pass filtering has a modest effect. Removing highpass reduces Yelp AUROC by only −0.2pp. The effect is
+near-zero on Amazon and Weibo (automatically disabled)
+and Reddit (h=0.95), confirming the adaptive gating functions correctly.
+EFI and pairwise components contribute differently
+across datasets. EFI removal reduces Yelp by −0.7pp
+and Amazon by −0.2pp. Pairwise interactions are only enabled for Amazon (d=25, k̄=740.7), where their removal
+strongly degrades performance (−1.1pp AUROC), suggesting that feature-pair interactions are critical for this dense,
+low-dimensional graph.
+Order selection reveals dataset-dependent tradeoffs.
+Fixed order-2 improves Reddit by +3.9pp (sparse fraud,
+∼146 labels), while order-4 improves Weibo by +0.4pp,
+suggesting refinement opportunities for extreme regimes.
+On Yelp, order-4 matches the full model, validating K=4
+for heterophilic graphs.
+
+ADAPTIVE CONFIGURATION ANALYSIS
+
+FraudGNAM’s configuration is fully determined by four
+measurable graph properties: feature dimension d, average
+degree k̄, homophily h, and training fraud count nf . Table 6
+shows the auto-selected configuration for each dataset.
+The configuration rules follow simple thresholds grounded
+in spectral theory: heterophilic datasets (h < 0.85) receive
+higher-order filters and more high-pass branches; NCE
+contrastive loss is enabled only when sufficient labeled
+fraud exists (nf ≥ 500) and heterophilic edges are present
+(h < 0.95); focal loss is disabled (γ=0) for very rare fraud
+(nf < 500) where it causes overfitting. The complete rule
+set is in Appendix D.
+This eliminates per-dataset hyperparameter search. Given a
+new graph, FraudGNAM’s configuration is determined from
+four computable statistics. We show that these thresholds
+are robust to perturbation (Appendix L) and that leave-onedataset-out analysis confirms no dataset-specific overfitting
+(Appendix M).
+
+5.6
+
+REFINED ADAPTIVE RULE
+
+The submitted rule left two boundary cases—Reddit and
+tolokers—where SEC-GFD narrowly led (Table 2). Analyzing these cases motivates three additional cutoffs, each
+grounded in our ablations and expressed over the same four
+statistics: R1 (nf < 200 ⇒ Order=2) for sparse-fraud
+graphs like Reddit, where a lower order avoids overfitting
+the few labeled fraud nodes; R2 (h > 0.97 ∧ d ≥ 300 ⇒
+Order=4) for high-dimensional extreme-homophily graphs
+like Weibo; and R3 (h < 0.70 ⇒ high-pass off) for extreme heterophily like tolokers, where the high-pass branch
+is empirically redundant. Each cutoff changes only its target dataset’s configuration; leave-one-dataset-out validation
+leaves all seven unchanged (Appendix M).
+Under the refined rule, FraudGNAM wins AUROC on all
+seven datasets against SEC-GFD on matched seeds (Table 7): the two submitted-rule losses become wins (Reddit
++3.43pp, tolokers +0.33pp), for 20 of 21 dataset-metric
+wins (exact binomial p = 4.6 × 10−5 ). Because the cutoffs
+are deterministic functions of measurable statistics, this preserves the zero-search property—no validation-based tuning
+is introduced.
+
+3403
+
+=== PDF PAGE 7 ===
+Table 3: Full results on four core datasets (Mean, 10 trials). Best in bold, second underlined.
+Yelp (h=0.774)
+
+Amazon (h=0.954)
+
+Weibo (h=0.977)
+
+Reddit (h=0.950)
+
+Method
+
+AUC
+
+PRC
+
+RecK
+
+AUC
+
+PRC
+
+RecK
+
+AUC
+
+PRC
+
+RecK
+
+AUC
+
+PRC
+
+RecK
+
+GCN
+SAGE
+GAT
+GIN
+PCGNN
+BernNet
+BWGNN
+GHRN
+SEC-GFD
+GAGA
+PMP
+FraudGNAM
+
+.579
+.856
+.808
+.775
+.802
+.828
+.853
+.855
+.871
+.708
+.745
+.882
+
+.216
+.552
+.462
+.370
+.450
+.495
+.563
+.571
+.614
+.300
+.365
+.635
+
+.233
+.521
+.458
+.388
+.453
+.484
+.524
+.532
+.564
+.327
+.385
+.590
+
+.823
+.874
+.963
+.941
+.971
+.967
+.982
+.981
+.972
+.902
+.866
+.980
+
+.356
+.626
+.859
+.787
+.880
+.870
+.894
+.892
+.876
+.803
+.688
+.911
+
+.375
+.647
+.823
+.711
+.836
+.833
+.864
+.865
+.829
+.784
+.754
+.856
+
+.980
+.944
+.945
+.957
+.890
+.944
+.974
+.967
+.972
+.982
+.916
+.979
+
+.946
+.850
+.903
+.913
+.814
+.883
+.928
+.923
+.926
+.924
+.818
+.916
+
+.905
+.824
+.862
+.879
+.759
+.837
+.866
+.868
+.877
+.870
+.828
+.849
+
+.651
+.630
+.659
+.657
+.531
+.671
+.655
+.665
+.664
+.558
+.492
+.656
+
+.062
+.058
+.061
+.059
+.041
+.074
+.067
+.070
+.075
+.041
+.034
+.069
+
+.083
+.069
+.068
+.082
+.052
+.110
+.101
+.107
+.111
+.043
+.029
+.114
+
+Table 4: Ablation study (AUROC, 10 trials). Each row removes one component from the full model.
+Variant
+
+Yelp
+h=0.77
+
+Amazon
+h=0.95
+
+Weibo
+h=0.98
+
+Reddit
+h=0.95
+
+FraudGNAM (full)
+w/o high-pass
+w/o NCE loss
+w/o EFI
+w/o pairwise
+order 2 (fixed)
+order 4 (fixed)
+
+.882
+.880
+.865
+.875
+—
+.878
+.882
+
+.979
+.979
+.980
+.977
+.968
+.979
+.980
+
+.979
+.979
+.979
+.979
+—
+.979
+.983
+
+.654
+.656
+.656
+.654
+—
+.693
+.647
+
+Table 5: Multi-metric ablation (AUPRC and Recall@K,
+10 trials). Precision-oriented metrics amplify component
+impacts relative to AUROC.
+AUPRC
+
+Per-dataset analysis. The two boundary cases are instructive. Reddit has the fewest labeled fraud nodes (nf ≈146);
+its discriminative signal is low-rank, so the submitted order3 filter overfits, and R1 lowering the order to 2 recovers
++3.9pp over the submitted rule. tolokers is the most heterophilic graph (h=0.60); there the high-pass branch and
+the order-4 bank become redundant, and R3 disabling highpass removes the redundancy at no accuracy cost. Weibo
+sits at the opposite extreme (h=0.98, d=400) yet benefits
+from a higher order-4 filter (R2), because its high feature dimension supplies enough signal to exploit the additional
+spectral turning points. In each case the corrective cutoff is a monotone function of a single statistic, and no
+other dataset crosses the new threshold—consistent with
+the leave-one-dataset-out stability in Appendix M. This pattern also clarifies why extreme-homophily graphs (Amazon, Weibo) are where the closest inherently interpretable
+baseline, GNAN [Bechler-Speicher et al., 2024], remains
+competitive, while FraudGNAM’s advantage widens on heterophilic graphs (Yelp +11.14pp, Reddit +17.89pp; Appendix V): the spectral bank is precisely what pure additive
+models lack.
+
+Recall@K
+
+Variant
+
+Yelp
+
+Amazon
+
+Yelp
+
+Amazon
+
+FraudGNAM (full)
+w/o high-pass
+w/o NCE loss
+w/o EFI
+w/o pairwise
+order 2 (fixed)
+order 4 (fixed)
+
+.634
+.632
+.599
+.614
+—
+.628
+.635
+
+.905
+.905
+.907
+.908
+.889
+.905
+.906
+
+.589
+.587
+.562
+.575
+—
+.585
+.591
+
+.848
+.846
+.852
+.842
+.827
+.849
+.849
+
+Table 6: Adaptive configuration. All decisions are deterministic functions of graph properties—no validation-based
+search needed.
+
+5.7
+
+Dataset
+
+h
+
+nf
+
+Order
+
+HP
+
+NCE
+
+γ
+
+Yelp
+tolokers
+questions
+Reddit
+tfinance
+Amazon
+Weibo
+
+0.77
+0.60
+0.88
+0.95
+0.97
+0.95
+0.98
+
+∼4700
+∼1283
+∼730
+∼146
+∼720
+∼570
+∼347
+
+4
+4
+3
+3
+2
+2
+2
+
+2
+2
+1
+—
+—
+—
+—
+
+λ=0.1
+λ=0.1
+λ=0.05
+—
+—
+—
+—
+
+1.0
+1.0
+2.0
+0
+2.0
+1.5
+0
+
+INTERPRETABILITY CASE STUDY
+
+Figure 2 illustrates FraudGNAM’s component decomposition on the Yelp dataset for two representative nodes extracted from a trained model (trial 0): a correctly identified
+fraud node (node 6486, p̂=0.998) and a normal node (node
+26615, p̂=0.007).
+Beyond component-level decomposition, FraudGNAM provides feature-level transparency via its neural additive backbone. Figure 3 shows how single-feature effects change
+nonlinearly across value ranges, revealing explicit threshold
+
+3404
+
+=== PDF PAGE 8 ===
+Refined
+
+SEC-GFD
+
+∆
+
+pW
+
+Wins
+
+Yelp
+Amazon
+Weibo
+tfinance
+Reddit
+tolokers
+questions
+
+.882
+.981
+.983
+.959
+.697
+.805
+.726
+
+.871
+.974
+.972
+.939
+.663
+.802
+.702
+
++1.14
++0.75
++1.08
++2.03
++3.43
++0.33
++2.33
+
+.002
+.006
+.002
+.492
+.160
+.084
+.010
+
+10/10
+9/10
+10/10
+5/10
+6/10
+7/10
+8/10
+
+Yelp
+
+Amazon
+
+Weibo
+
+Reddit
+
+GCN
+BWGNN
+SEC-GFD
+GAGA
+PMP
+FraudGNAM
+
+2.6
+4.8
+29.2
+65.7
+6.8
+56.6
+
+0.9
+3.4
+19.6
+26.0
+1.6
+18.0
+
+0.9
+1.2
+5.0
+8.5
+2.4
+4.4
+
+1.8
+1.8
+6.5
+9.7
+1.4
+4.0
+
+4
+1.74
+
+2
+0.19
+
+0.15
+0
+−0.89
+
+Feat
+
+Band
+
+EFI
+
+HP
+
+HP-E
+
+(a) Fraud node 6486 (s/T =6.0, p̂=0.998). HP-EFI and HP dominate.
+
+Table 8: Training time per trial (seconds). FraudGNAM is
+faster than SEC-GFD on 3 of 4 datasets.
+
+Method
+
+6
+
+Contribution (logit)
+
+Dataset
+
+6.30
+
+Contribution (logit)
+
+Table 7: Refined FraudGNAM vs SEC-GFD (AUROC,
+matched 10 seeds). SEC-GFD reproduced with GADBench
+defaults (Yelp .871 matches the original). ∆ in pp; pW :
+paired Wilcoxon; Wins: per-seed. Refined best in bold.
+
+0.20
+
+0.10
+0
+
+−0.21
+−2
+−2.34
+−4
+−4.02
+
+Feat
+
+Band
+
+EFI
+
+HP
+
+HP-E
+
+(b) Normal node 26615 (s/T =−5.0, p̂=0.007). Band and HP
+contribute negatively.
+
+Figure 2: Component decomposition on Yelp (actual model
+output, trial 0). Each bar shows a component group’s
+summed contribution to the fraud logit s(v), divided by
+learned temperature T =1.25. (a) HP-EFI (high-pass × edgefeature interaction) and HP dominate the fraud decision, consistent with Yelp’s heterophilic structure (h=0.774). (b) For
+the normal node, spectral bands and HP contribute strongly
+negative (anti-fraud), overwhelming the small positive EFI.
+
+behavior rather than monotonic trends.
+For the fraud node, the high-pass filter and high-frequency
+spectral band (B3 ) contribute most strongly, consistent with
+heterophilic fraud patterns—this node connects predominantly to dissimilar neighbors. The feature and EFI components provide moderate supporting evidence. For the normal
+node, contributions are predominantly negative (anti-fraud),
+with the high-pass filter providing the strongest evidence
+against fraud: this node’s local neighborhood is homophilic.
+Black-box spectral GNNs like SEC-GFD cannot provide
+this component-wise transparency.
+Additional interpretability visualizations—pairwise interaction heatmaps and fraud-vs-normal component
+distributions—appear in Appendix H.
+
+5.8
+
+COMPUTATIONAL EFFICIENCY
+
+Table 8 reports wall-clock training time per trial (seconds,
+single GPU) for spectral methods across four datasets.
+FraudGNAM is faster than SEC-GFD on Amazon (1.1×),
+Weibo (1.1×), and Reddit (1.6×), but 1.9× slower on Yelp
+where the full component suite is activated (order-4, 2 highpass, NCE, EFI). Ablation timing (Appendix G) confirms
+adaptive gating controls cost. Interpretability incurs zero
+inference overhead: the decomposition is the forward pass.
+Memory usage is in Appendix O.
+
+5.9
+
+DISCUSSION
+
+Faithfulness of explanations. FraudGNAM’s decomposition is exact by Theorem 1: each αc · ψc (v) sums to the
+fraud score with no residual. LOCO MAE < 10−6 across
+all seven datasets (Table 14), and a single top component
+retains ≥94% of full AUROC. GNNExplainer [Ying et al.,
+2019] achieves near-zero comprehensiveness (≤0.001; Table 15), confirming post-hoc masks fail to capture model
+reasoning [Luo et al., 2020]. Figure 2 additionally reveals a
+spectral “fingerprint” for camouflaged fraud on heterophilic
+Yelp: high-frequency components (H, B3 ) dominate fraud
+scores while B0 contributes weakly, with the pattern reversed for normal nodes.
+Interpretability granularity. FraudGNAM provides
+three levels of interpretability: (1) component-level, always
+available, where each component family’s scalar contribution αc · ψc (v) is directly readable; (2) per-feature, available when d ≤ 40 via individual NAM-style shape functions fi (xi ); and (3) per-band spectral, always available,
+decomposing the frequency response into K+1 individually
+weighted bands. When d > 40, grouped MLPs sacrifice
+per-feature shape functions but preserve component-level
+and spectral decomposability. Learned spectral coefficients
+adapt selectively—deviating most from the Beta-wavelet
+
+3405
+
+=== PDF PAGE 9 ===
+6
+
+Figure 3: Learned shape functions fi (xi ) for six influential
+Amazon features. Feature 6 and Feature 5 show sharp nonlinear transitions that indicate fraud-predictive thresholds.
+Table 9: FraudGNAM vs the closest inherently interpretable
+graph baseline, GNAN [Bechler-Speicher et al., 2024] (AUROC, matched 10 seeds; ∆ in pp, ordered by heterophily).
+GNAN ties only on extreme-homophily graphs where pure
+additive aggregation suffices; FraudGNAM’s spectral bank
+dominates under heterophily. Column winner in bold.
+
+Dataset
+
+FraudGNAM
+
+GNAN
+
+∆AUROC
+
+Yelp
+Reddit
+tolokers
+questions
+tfinance
+Amazon
+Weibo
+
+.882
+.697
+.805
+.726
+.959
+.981
+.983
+
+.771
+.518
+.761
+.702
+.947
+.981
+.989
+
++11.14
++17.89
++4.42
++2.32
++1.22
+0.00
+−0.66
+
+initialization in the highest-frequency band where neighborhood inconsistency lives (Figure 4, Appendix H); rule-based
+configuration achieves ≥99.6% of best-variant AUROC on
+3 of 4 datasets (Appendix N) and the four graph statistics determine the full architecture in seconds without any
+training-data-based search.
+Quantitative validation. On matched-seed paired tests,
+refined-FraudGNAM wins 20 of 21 dataset-metric comparisons against SEC-GFD (Wilcoxon p < 0.005 on
+Yelp’s three metrics, Amazon-AUROC, Weibo-AUROC,
+Questions-AUROC; only loss is Weibo-RecK by 0.003pp).
+Against the closest inherently interpretable graph baseline
+GNAN [Bechler-Speicher et al., 2024], FraudGNAM wins
+18 of 21 (binomial p = 7.5×10−4 ; Table 9), confirming that
+adding spectral capacity to inherent interpretability is the
+operative gain. Threshold sensitivity over 14 perturbed cells
+leaves 13 within ±0.5pp (Appendix V); NCE decreases
+component-mass Gini (Yelp −0.013, Tolokers −0.052)—
+redistributing rather than collapsing branches.
+
+CONCLUSION
+
+FraudGNAM decomposes fraud predictions into auditable
+components via a scalar-sum architecture with theoryguided deterministic adaptive spectral configuration. The
+Homophily-Order Design Guideline maps four measurable
+graph statistics to a complete configuration, eliminating perdataset hyperparameter search. Across seven GADBench
+datasets, refined-rule FraudGNAM wins AUROC on all
+seven datasets and 20 of 21 dataset-metric comparisons
+against SEC-GFD on matched seeds (paired Wilcoxon, exact binomial p = 4.6 × 10−5 ). FraudGNAM is the first
+method to combine spectral fraud detection with provably
+exact, component-wise inherently interpretable explanations
+at no additional inference cost.
+Outlook. Inherent, component-wise interpretability is
+most valuable precisely where fraud decisions must be defended: an analyst can read off which spectral bands, features, and feature–spectrum interactions drove a given flag,
+and audit the exact scalar each contributed—an audit trail
+that post-hoc explainers cannot guarantee. The same decomposition supports operational monitoring, since shifts in the
+per-component contribution distribution over time signal
+concept drift before headline accuracy degrades, and the deterministic configuration means a redeployed model needs
+no re-tuning. Natural extensions—time-indexed Laplacians
+for dynamic graphs and relation-specific filter banks for heterogeneous graphs (Appendix S)—preserve the scalar-sum
+structure and therefore the exactness guarantee of Theorem 1, suggesting that spectral capacity and inherent interpretability need not be traded off as graph settings grow
+more complex.
+Limitations & reproducibility. Training cost is
+configuration-dependent (up to 1.9× SEC-GFD on
+Yelp when the full suite fires; comparable on the four
+homophilic datasets); per-feature shape functions are
+conditional on d ≤ 40 (5 of 7 benchmarks). Extending
+to heterogeneous and dynamic graphs is future work
+(Appendix S). All experiments use the GADBench seed
+list {3407 + 10t : t = 0, . . . , 9} and the 40/20/40 split
+protocol; hyperparameters are deterministic functions
+of measurable graph statistics (Table 6). Full source
+code and per-trial results (≈ 410 trials) are available at
+https://github.com/suanlab/FraudGNAM.
+Acknowledgements
+This work was supported by the Ministry of Science and
+ICT and the National Research Foundation of Korea (NRF)
+grant funded by the Korean government (MSIT) (No. RS2026-25498341).
+
+3406
+
+=== PDF PAGE 10 ===
+References
+Rishabh Agarwal, Levi Melnick, Nicholas Frosst, Xuezhou
+Zhang, Ben Lengerich, Rich Caruana, and Geoffrey E.
+Hinton. Neural additive models: Interpretable machine
+learning with neural nets. In Advances in Neural Information Processing Systems, volume 34, pages 4699–4711.
+Curran Associates, Inc., 2021.
+Kenza Amara, Zhitao Ying, Zitao Zhang, Zhichao Han,
+Yang Zhao, Yinan Shan, Ulrik Brandes, Sebastian
+Schemm, and Ce Zhang. GraphFramEx: Towards systematic evaluation of explainability methods for graph
+neural networks. In Proceedings of the First Learning
+on Graphs Conference, volume 198 of Proceedings of
+Machine Learning Research, pages 44:1–44:23. PMLR,
+2022. URL https://proceedings.mlr.press/
+v198/amara22a.html.
+Maya Bechler-Speicher, Amir Globerson, and Ran GiladBachrach. The intelligible and effective graph neural
+additive network. In Advances in Neural Information Processing Systems, volume 37, pages 90552–90578. Curran
+Associates, Inc., 2024. doi: 10.52202/079017-2874.
+Deyu Bo, Xiao Wang, Chuan Shi, and Huawei Shen.
+Beyond low-frequency information in graph convolutional networks. Proceedings of the AAAI Conference
+on Artificial Intelligence, 35(5):3950–3957, 2021. doi:
+10.1609/aaai.v35i5.16514. URL https://doi.org/
+10.1609/aaai.v35i5.16514.
+Chun-Hao Chang, Rich Caruana, and Anna Goldenberg.
+NODE-GAM: Neural generalized additive model for
+interpretable deep learning. In International Conference on Learning Representations, 2022. URL https:
+//openreview.net/forum?id=g8NJR6fCCl8.
+Eli Chien, Jianhao Peng, Pan Li, and Olgica Milenkovic.
+Adaptive universal generalized PageRank graph neural
+network. In International Conference on Learning Representations, 2021. URL https://openreview.
+net/forum?id=n6jl7fLxrP.
+Michaël Defferrard, Xavier Bresson, and Pierre Vandergheynst. Convolutional neural networks on graphs
+with fast localized spectral filtering. In Advances in Neural Information Processing Systems, volume 29, pages
+3844–3852. Curran Associates, Inc., 2016.
+Yingtong Dou, Zhiwei Liu, Li Sun, Yutong Deng, Hao
+Peng, and Philip S. Yu. Enhancing graph neural
+network-based fraud detectors against camouflaged fraudsters.
+In Proceedings of the 29th ACM International Conference on Information & Knowledge Management, pages 315–324. ACM, 2020. doi: 10.1145/
+3340531.3411903. URL https://doi.org/10.
+1145/3340531.3411903.
+
+Yuan Gao, Xiang Wang, Xiangnan He, Zhenguang Liu,
+Huamin Feng, and Yongdong Zhang. Addressing heterophily in graph anomaly detection: A perspective of
+graph spectrum. In Proceedings of the ACM Web Conference 2023, pages 1528–1538. ACM, 2023. doi: 10.
+1145/3543507.3583268. URL https://doi.org/
+10.1145/3543507.3583268.
+Simon Geisler, Arthur Kosmala, Daniel Herbst, and Stephan
+Günnemann. Spatio-spectral graph neural networks. In
+Advances in Neural Information Processing Systems, volume 37, pages 49022–49080. Curran Associates, Inc.,
+2024. doi: 10.52202/079017-1554.
+Will Hamilton, Zhitao Ying, and Jure Leskovec. Inductive
+representation learning on large graphs. In Advances
+in Neural Information Processing Systems, volume 30.
+Curran Associates, Inc., 2017.
+Mingguo He, Zhewei Wei, Zengfeng Huang, and Hongteng
+Xu. BernNet: Learning arbitrary graph spectral filters
+via Bernstein approximation. In Advances in Neural
+Information Processing Systems, volume 34, pages 14239–
+14251. Curran Associates, Inc., 2021.
+Thomas N. Kipf and Max Welling. Semi-supervised classification with graph convolutional networks. In International Conference on Learning Representations,
+2017. URL https://openreview.net/forum?
+id=SJU4ayYgl.
+Tsung-Yi Lin, Priya Goyal, Ross Girshick, Kaiming He,
+and Piotr Dollár. Focal loss for dense object detection.
+In 2017 IEEE International Conference on Computer
+Vision (ICCV), pages 2999–3007. IEEE, 2017. doi: 10.
+1109/ICCV.2017.324. URL https://doi.org/10.
+1109/ICCV.2017.324.
+Yang Liu, Xiang Ao, Zidi Qin, Jianfeng Chi, Jinghua
+Feng, Hao Yang, and Qing He. Pick and choose: A
+GNN-based imbalanced learning approach for fraud
+detection. In Proceedings of the Web Conference
+2021, pages 3168–3177. ACM, 2021. doi: 10.1145/
+3442381.3449989. URL https://doi.org/10.
+1145/3442381.3449989.
+Yin Lou, Rich Caruana, Johannes Gehrke, and Giles
+Hooker. Accurate intelligible models with pairwise interactions. In Proceedings of the 19th ACM SIGKDD
+International Conference on Knowledge Discovery and
+Data Mining, pages 623–631. ACM, 2013. doi: 10.
+1145/2487575.2487579. URL https://doi.org/
+10.1145/2487575.2487579.
+Dongsheng Luo, Wei Cheng, Dongkuan Xu, Wenchao Yu,
+Bo Zong, Haifeng Chen, and Xiang Zhang. Parameterized explainer for graph neural network. In Advances
+in Neural Information Processing Systems, volume 33,
+pages 19620–19631. Curran Associates, Inc., 2020.
+
+3407
+
+=== PDF PAGE 11 ===
+Claude Nadeau and Yoshua Bengio. Inference for the
+generalization error. Machine Learning, 52(3):239–281,
+2003. doi: 10.1023/A:1024068626366. URL https:
+//doi.org/10.1023/A:1024068626366.
+Giuseppe Serra and Mathias Niepert. L2XGNN: Learning to explain graph neural networks.
+Machine
+Learning, 113(9):6787–6809, 2024. doi: 10.1007/
+s10994-024-06576-1. URL https://doi.org/10.
+1007/s10994-024-06576-1.
+David I. Shuman, Sunil K. Narang, Pascal Frossard, Antonio
+Ortega, and Pierre Vandergheynst. The emerging field of
+signal processing on graphs: Extending high-dimensional
+data analysis to networks and other irregular domains.
+IEEE Signal Processing Magazine, 30(3):83–98, 2013.
+doi: 10.1109/MSP.2012.2235192. URL https://doi.
+org/10.1109/MSP.2012.2235192.
+Jianheng Tang, Jiajin Li, Ziqi Gao, and Jia Li. Rethinking graph neural networks for anomaly detection. In
+Proceedings of the 39th International Conference on
+Machine Learning, volume 162 of Proceedings of Machine Learning Research, pages 21076–21089. PMLR,
+2022. URL https://proceedings.mlr.press/
+v162/tang22b.html.
+Jianheng Tang, Fengrui Hua, Ziqi Gao, Peilin Zhao, and Jia
+Li. GADBench: Revisiting and benchmarking supervised
+graph anomaly detection. In Advances in Neural Information Processing Systems, volume 36, pages 29628–29653.
+Curran Associates, Inc., 2023. Datasets and Benchmarks
+Track.
+
+Fan Xu, Nan Wang, Hao Wu, Xuezhi Wen, Xibin Zhao, and
+Hai Wan. Revisiting graph-based fraud detection in sight
+of heterophily and spectrum. Proceedings of the AAAI
+Conference on Artificial Intelligence, 38(8):9214–9222,
+2024. doi: 10.1609/aaai.v38i8.28773. URL https:
+//doi.org/10.1609/aaai.v38i8.28773.
+Keyulu Xu, Weihua Hu, Jure Leskovec, and Stefanie
+Jegelka. How powerful are graph neural networks? In
+International Conference on Learning Representations,
+2019. URL https://openreview.net/forum?
+id=ryGs6iA5Km.
+Zhitao Ying, Dylan Bourgeois, Jiaxuan You, Marinka Zitnik,
+and Jure Leskovec. GNNExplainer: Generating explanations for graph neural networks. In Advances in Neural
+Information Processing Systems, volume 32. Curran Associates, Inc., 2019.
+Jiong Zhu, Yujun Yan, Lingxiao Zhao, Mark Heimann, Leman Akoglu, and Danai Koutra. Beyond homophily in
+graph neural networks: Current limitations and effective
+designs. In Advances in Neural Information Processing Systems, volume 33, pages 7793–7804. Curran Associates, Inc., 2020.
+Wei Zhuo, Zemin Liu, Bryan Hooi, Bingsheng He, Guang
+Tan, Rizal Fathony, and Jia Chen. Partitioning message
+passing for graph fraud detection. In International Conference on Learning Representations, pages 34329–34347,
+2024.
+
+Petar Veličković, Guillem Cucurull, Arantxa Casanova,
+Adriana Romero, Pietro Liò, and Yoshua Bengio. Graph
+attention networks. In International Conference on
+Learning Representations, 2018. URL https://
+openreview.net/forum?id=rJXMpikCZ.
+Daixin Wang, Jianbin Lin, Peng Cui, Quanhui Jia, Zhen
+Wang, Yanming Fang, Quan Yu, Jun Zhou, Shuang Yang,
+and Yuan Qi. A semi-supervised graph attentive network for financial fraud detection. In 2019 IEEE International Conference on Data Mining (ICDM), pages
+598–607. IEEE, 2019. doi: 10.1109/ICDM.2019.00070.
+URL https://doi.org/10.1109/ICDM.2019.
+00070.
+Yuchen Wang, Jinghui Zhang, Zhengjie Huang, Weibin Li,
+Shikun Feng, Ziheng Ma, Yu Sun, Dianhai Yu, Fang
+Dong, Jiahui Jin, Beilun Wang, and Junzhou Luo. Label information enhanced fraud detection against low
+homophily in graphs. In Proceedings of the ACM Web
+Conference 2023, pages 406–416. ACM, 2023. doi: 10.
+1145/3543507.3583373. URL https://doi.org/
+10.1145/3543507.3583373.
+3408
+
+=== PDF PAGE 12 ===
+FraudGNAM: Inherently Interpretable Spectral GNN for Graph Fraud
+Detection
+(Supplementary Material)
+
+Suan Lee1
+
+Jinho Kim2
+
+1
+
+2
+
+A
+
+School of Computer Science, Semyung University, Jecheon, Republic of Korea
+AI Research Lab, Korea Information Systems Consulting & Audit Co., Ltd., Republic of Korea
+
+PROOF OF THEOREM 1
+
+Proof. By construction, the fraud score s(v) in Eq. (1) is a sum of bias β0 and terms αc · ψc (v) for each component c ∈ C.
+We verify that each ψc (v) is computed by a dedicated neural network that does not share parameters with other components:
+• The feature component F (v) uses its own MLP(s) with parameters θF .
+• Each pairwise component Pm (v) uses its own MLP with parameters θPm .
+(k)
+
+• Each spectral band component Bj (v) applies a shared spectral filter (parameters θj ) followed by a dedicated band
+MLP (parameters θBj ).
+• Each EFI component Ej (v) reuses the filtered features from band j but applies its own MLP (parameters θEj ).
+• Each high-pass component uses a parameter-free iterative Laplacian filter (Eq. 7) followed by dedicated band and EFI
+MLPs.
+The scalar coefficients αc are learnable scalar parameters. Therefore, the contribution of component c is exactly αc · ψc (v)—
+no approximation or perturbation analysis is needed.
+The high-pass branch (Eq. 8) adds additional terms of the same form, preserving the additive structure. The NCE loss (Eq. 9)
+affects only training gradients via a separate GCN encoder ϕ that is discarded at inference. Since ϕ does not appear in the
+fraud score computation, the decomposition holds for all predictions.
+
+B
+
+JUSTIFICATION OF DESIGN GUIDELINE 1
+
+Proof sketch. Consider a graph G with homophily h and normalized Laplacian eigenvalues λ1 ≤ · · · ≤ λn . The spectral
+energy of class labels y at frequency λi is ŷi2 = (u⊤
+y)2 . For homophilic graphs (h → 1), y is smooth, so ŷi2 concentrates
+PK i
+on small λi . A low-order polynomial g(λ) = k=0 θk λk with K = 2 can approximate the ideal low-pass filter well.
+For heterophilic graphs (h < 0.85), the label signal has significant energy at high frequencies λi > 1. To discriminate
+between the low-frequency (benign structure) and high-frequency (fraud signal) components, the filter g(λ) must have
+a non-monotonic shape—e.g., suppressing mid-range frequencies while amplifying both extremes. By the fundamental
+theorem of algebra, a polynomial of degree K has at most K − 1 turning points. Achieving the required band-pass or
+notch-filter shapes that simultaneously capture low-frequency homophilic structure and high-frequency heterophilic fraud
+signals necessitates at least 3 turning points, hence K ≥ 4.
+For intermediate homophily (0.85 ≤ h ≤ 0.95), K = 3 provides a balance: sufficient to capture moderate frequency
+variation without overfitting. We observe empirically that K = 3 also benefits sparse graphs (k̄ < 30) regardless of
+homophily, as the limited neighborhood size concentrates information in fewer spectral modes.
+
+3409
+
+=== PDF PAGE 13 ===
+C
+
+EXTENDED RESULTS
+
+Table 10 shows full results on the three additional datasets with all available baselines.
+Table 10: Extended results on three additional datasets (Mean ± Std, 10 trials). Best in bold.
+tfinance (h=0.971)
+
+tolokers (h=0.604)
+
+questions (h=0.878)
+
+Method
+
+AUC
+
+PRC
+
+RecK
+
+AUC
+
+PRC
+
+RecK
+
+AUC
+
+PRC
+
+RecK
+
+GCN
+SAGE
+GAT
+BernNet
+BWGNN
+GHRN
+SEC-GFD
+GAGA
+PMP
+FraudGNAM
+
+.923
+.830
+.939
+.927
+.961
+.961
+.938
+.641
+.880
+.959
+
+.737
+.339
+.672
+.722
+.866
+.867
+.735
+.110
+.635
+.848
+
+.700
+.459
+.687
+.720
+.812
+.814
+.702
+.115
+.745
+.789
+
+.756
+.793
+.794
+.770
+.805
+.804
+.802
+.705
+.755
+.800
+
+.445
+.476
+.466
+.437
+.500
+.499
+.491
+.356
+.432
+.490
+
+.429
+.466
+.466
+.435
+.495
+.489
+.485
+.375
+.429
+.481
+
+.709
+.717
+.715
+.691
+.710
+.711
+.699
+.638
+.681
+.725
+
+.125
+.166
+.160
+.150
+.167
+.163
+.170
+.102
+.107
+.186
+
+.165
+.212
+.200
+.190
+.208
+.210
+.214
+.139
+.180
+.220
+
+On tfinance, FraudGNAM matches BWGNN/GHRN in AUROC (.959-.961) while substantially outperforming SECGFD (+2.1pp). GAGA struggles severely on tfinance (.641 AUROC with very high variance), likely due to numerical
+instability from the graph’s extremely high average degree (k̄=1080). PMP achieves .880 on tfinance, competitive but well
+below FraudGNAM. On questions (d=301, sparse), FraudGNAM achieves the best performance across all three metrics,
+substantially outperforming both GAGA (.638) and PMP (.681). On tolokers, FraudGNAM trails BWGNN by ∼0.5pp
+AUROC.
+
+D
+
+ADAPTIVE CONFIGURATION RULES
+
+FraudGNAM’s configuration is fully determined by four measurable graph properties: feature dimension d, average degree
+k̄, homophily h, and training fraud count nf . The complete rule set is:
+• Spectral order: K = 4 if h < 0.85; K = 3 if k̄ < 30; K = 2 otherwise.
+• High-pass filters: T = 2 if h < 0.85; T = 1 if h < 0.95; T = 0 otherwise.
+• NCE loss: enabled if nf ≥ 500 and h < 0.95; λ = 0.05 if fraud rate < 5%, else λ = 0.1.
+• Feature network: grouped MLP if d > 40; individual NAM-style networks if d ≤ 40.
+• Pairwise interactions: enabled if d ≤ 30 and k̄ ≥ 30; M = 15 pairs.
+• EFI: enabled if nf ≥ 500.
+• Hidden dimension: hfeats = 32 if nf < 500; hfeats = 64 otherwise.
+• Focal loss: γ = 0 if nf < 500; γ = 2.0 if fraud rate < 5%; γ = 1.5 if < 10%; γ = 1.0 otherwise.
+• Learning rate warmup: 10 epochs linear warmup (0.1× → 1.0×) when both high-pass and NCE are active.
+• Gradient clipping: max norm 1.5 when NCE is active; 2.0 otherwise.
+These rules require no validation-based search and can be applied to any new dataset automatically by computing d, k̄, h,
+and nf from the training graph.
+
+E
+
+FULL ABLATION RESULTS
+
+Table 11 presents the complete ablation results across all three metrics (AUROC, AUPRC, Recall@K) with standard
+deviations over 10 trials. This extends Table 4 and Table 5 in the main text.
+Several patterns emerge from the full results:
+3410
+
+=== PDF PAGE 14 ===
+Table 11: Complete ablation results (Mean ± Std, 10 trials) across four datasets and three metrics. Best per column in bold.
+“—” indicates the component is not applicable to that dataset.
+Yelp (h=0.774)
+
+Amazon (h=0.954)
+
+Variant
+
+AUROC
+
+AUPRC
+
+RecK
+
+AUROC
+
+AUPRC
+
+RecK
+
+Full
+w/o high-pass
+w/o NCE
+w/o EFI
+w/o pairwise
+order 2
+order 4
+
+.882 ± .003
+.880 ± .005
+.865 ± .004
+.875 ± .005
+—
+.878 ± .003
+.882 ± .003
+
+.634 ± .008
+.632 ± .012
+.599 ± .011
+.614 ± .012
+—
+.628 ± .010
+.635 ± .008
+
+.589 ± .008
+.587 ± .007
+.562 ± .011
+.575 ± .009
+—
+.585 ± .010
+.591 ± .007
+
+.979 ± .001
+.979 ± .002
+.980 ± .002
+.977 ± .003
+.968 ± .003
+.979 ± .001
+.980 ± .002
+
+.905 ± .005
+.905 ± .004
+.907 ± .003
+.908 ± .005
+.889 ± .005
+.905 ± .004
+.906 ± .006
+
+.848 ± .011
+.846 ± .010
+.852 ± .008
+.842 ± .010
+.827 ± .007
+.849 ± .008
+.849 ± .011
+
+Weibo (h=0.977)
+
+Reddit (h=0.950)
+
+Variant
+
+AUROC
+
+AUPRC
+
+RecK
+
+AUROC
+
+AUPRC
+
+RecK
+
+Full
+w/o high-pass
+w/o NCE
+w/o EFI
+w/o pairwise
+order 2
+order 4
+
+.979 ± .004
+.979 ± .004
+.979 ± .004
+.979 ± .004
+—
+.979 ± .004
+.983 ± .003
+
+.916 ± .011
+.916 ± .010
+.916 ± .010
+.916 ± .010
+—
+.916 ± .011
+.929 ± .011
+
+.849 ± .016
+.849 ± .015
+.849 ± .015
+.849 ± .015
+—
+.849 ± .016
+.872 ± .015
+
+.654 ± .048
+.656 ± .050
+.656 ± .050
+.654 ± .048
+—
+.693 ± .043
+.647 ± .040
+
+.070 ± .016
+.072 ± .019
+.071 ± .016
+.072 ± .020
+—
+.086 ± .021
+.075 ± .019
+
+.113 ± .023
+.113 ± .024
+.110 ± .020
+.110 ± .021
+—
+.127 ± .026
+.119 ± .030
+
+NCE impact is concentrated on Yelp. On Yelp, NCE removal causes the largest single-component degradation across
+all metrics: −1.7pp AUROC, −3.5pp AUPRC, −2.7pp RecK. The AUPRC and RecK impacts are proportionally larger
+than AUROC, indicating that NCE particularly improves the model’s ranking of high-confidence fraud predictions. On the
+remaining three datasets, NCE is automatically disabled, and removing it produces near-identical results (within noise),
+confirming that the adaptive gating correctly identifies when NCE is beneficial.
+Pairwise interactions are critical for Amazon. Removing pairwise interactions reduces Amazon AUROC by −1.1pp,
+AUPRC by −1.6pp, and RecK by −2.1pp. Amazon is the only dataset among these four where pairwise is enabled
+(d=25 ≤ 30, k̄=740.7 ≥ 30), and the strong degradation across all metrics confirms that feature-pair interactions capture
+important fraud patterns in this dense, low-dimensional graph.
+Order 2 is optimal for Reddit across all metrics. Fixed order-2 improves Reddit AUROC by +3.9pp, AUPRC by +1.6pp,
+and RecK by +1.4pp over the adaptive order-3. This consistent improvement across metrics confirms that lower-order
+polynomials generalize better with limited supervision (nf ≈146), rather than being a metric-specific artifact.
+Order 4 substantially improves Weibo. Fixed order-4 improves Weibo AUROC by +0.4pp, AUPRC by +1.3pp, and
+RecK by +2.3pp. The AUPRC and RecK gains are larger than the AUROC gain, suggesting that finer spectral resolution
+helps rank borderline cases more precisely on this high-homophily (h=0.977), high-dimensional (d=400) dataset. The
+current adaptive rule assigns K=2 for Weibo; incorporating feature dimensionality into the order rule could improve
+performance.
+
+F
+
+TRAINING TIME COMPARISON
+
+Table 12 reports wall-clock training time per trial (seconds, single GPU) for all methods across seven datasets. Timing
+includes the full training loop (forward, backward, validation).
+FraudGNAM vs. SEC-GFD. On the four core datasets, FraudGNAM is faster than SEC-GFD on 3 of 4: Amazon (1.1×),
+Weibo (1.1×), and Reddit (1.6×). On Yelp, FraudGNAM is 1.9× slower because it activates the full component suite (order
+4, 2 high-pass filters, NCE, pairwise). On the three additional datasets, FraudGNAM is faster on tfinance (1.5×) where
+SEC-GFD suffers from training instability, comparable on questions (1.6× slower), and substantially slower on tolokers
+(5.6×). The tolokers slowdown reflects the overhead of order-4 spectral filters and 2 high-pass filters triggered by extreme
+3411
+
+=== PDF PAGE 15 ===
+Table 12: Training time per trial (seconds) for all methods across seven datasets. Methods ordered by complexity.
+Method
+
+Yelp
+
+Amazon
+
+Weibo
+
+Reddit
+
+tfinance
+
+tolokers
+
+questions
+
+PCGNN
+GCN
+GIN
+SAGE
+BernNet
+BWGNN
+GHRN
+GAT
+SEC-GFD
+GAGA
+PMP
+FraudGNAM
+
+2.5
+2.6
+3.0
+3.1
+4.0
+4.8
+5.0
+8.2
+29.2
+65.7
+6.8
+56.6
+
+1.5
+0.9
+1.6
+1.8
+2.1
+3.4
+3.5
+7.4
+19.6
+26.0
+1.6
+18.0
+
+1.4
+0.9
+1.5
+1.1
+1.7
+1.2
+1.6
+2.0
+5.0
+8.5
+2.4
+4.4
+
+0.8
+1.8
+1.1
+1.2
+1.8
+1.8
+2.1
+1.6
+6.5
+9.7
+1.4
+4.0
+
+—
+8.6
+—
+6.2
+8.1
+15.4
+16.0
+38.4
+65.7
+37.9
+5.6
+43.0
+
+—
+3.5
+—
+2.2
+2.3
+2.6
+2.5
+2.8
+7.8
+18.7
+3.9
+43.7
+
+—
+2.5
+—
+2.7
+1.7
+1.7
+1.7
+2.8
+7.3
+35.8
+3.9
+11.7
+
+heterophily (h=0.604), despite the small graph size (11.7K nodes).
+Relative to simple baselines. FraudGNAM is 3−20× slower than GCN, which reflects the cost of multiple specialized
+component networks. However, FraudGNAM provides inherent interpretability that GCN lacks entirely.
+
+G
+
+ABLATION COMPONENT COST ANALYSIS
+
+Table 13 reports training time per trial for each ablation variant, enabling estimation of each component’s computational
+cost.
+Table 13: Training time per trial (seconds) for ablation variants. ∆ shows the cost of removing each component relative to
+the full model.
+Yelp
+
+Amazon
+
+Weibo
+
+Reddit
+
+Variant
+
+Time
+
+∆
+
+Time
+
+∆
+
+Time
+
+∆
+
+Time
+
+∆
+
+Full
+w/o high-pass
+w/o NCE
+w/o EFI
+w/o pairwise
+order 2
+order 4
+
+24.0
+21.5
+22.9
+21.2
+—
+21.3
+24.0
+
+—
+−2.5
+−1.1
+−2.8
+—
+−2.7
+0.0
+
+8.7
+8.8
+8.7
+7.3
+5.9
+8.5
+10.4
+
+—
++0.1
+0.0
+−1.4
+−2.8
+−0.2
++1.7
+
+2.8
+2.6
+2.6
+2.7
+—
+2.6
+2.7
+
+—
+−0.2
+−0.2
+−0.1
+—
+−0.2
+−0.1
+
+3.0
+2.8
+3.1
+2.8
+—
+2.6
+3.9
+
+—
+−0.2
++0.1
+−0.2
+—
+−0.4
++0.9
+
+Component cost breakdown on Yelp (full suite). On Yelp—where high-pass, NCE, and EFI are all active—the component
+costs are approximately: EFI ∼2.8s (EFI networks process d-dimensional Hadamard products for each band), high-pass
+∼2.5s (2 iterative Laplacian filters plus band/EFI networks), order reduction from 4 to 2 saves ∼2.7s (fewer Laplacian power
+computations and band networks), and NCE ∼1.1s (2-layer GCN encoder). Pairwise is not enabled on Yelp (d=32 > 30).
+Pairwise is the dominant cost on Amazon. On Amazon, removing pairwise saves 2.8s—the largest single-component
+saving. Amazon activates pairwise (d=25, k̄=740.7) but not NCE or high-pass (h=0.954), so pairwise is the primary
+additional component. Since pairwise is the only additional component active on Amazon, its 2.8s cost dominates the
+per-epoch overhead.
+Order 4 adds cost on Reddit but not Yelp. Increasing from order 3 to 4 adds 0.9s on Reddit but 0.0s on Yelp, likely
+because Reddit’s sparse graph (k̄=15.3) has faster Laplacian power computation, making the marginal cost of an extra order
+relatively larger as a fraction of total time.
+Note: Ablation timing (Table 13) and the main timing comparison (Table 12) were collected from separate experimental runs
+under different GPU conditions, accounting for the absolute time differences (e.g., Yelp: 56.6s vs. 24.0s). All methods within
+3412
+
+=== PDF PAGE 16 ===
+Figure 4: Initial and learned spectral coefficients on Amazon (order 2, 3 bands). Band 2 shows the largest coefficient shift
+after training, especially at the first-order term.
+each table were benchmarked under identical conditions, so the relative comparisons—both across methods in Table 12 and
+the ∆ column in Table 13—remain valid.
+
+H
+
+INTERPRETABILITY VISUALIZATIONS
+
+I
+
+IMPLEMENTATION DETAILS
+
+Architecture details. FraudGNAM’s components use the following neural network architectures:
+• Individual feature networks (d ≤ 40): Each fi is a 2–3 layer MLP with LayerNorm and LeakyReLU. For d ≤ 15
+(tfinance, tolokers): hidden dims [64, 64, 32]; for 15 < d ≤ 40 (Yelp, Amazon): hidden dims [64, 32].
+• Grouped feature network (d > 40): For 40 < d ≤ 100 (Reddit, d=64): group size 16; for 100 < d ≤ 200: group
+size 5; for d > 200 (Weibo d=400, questions d=301): group size 8.
+• Band networks: 2-layer MLP Rd → Rhfeats → R with ReLU and dropout.
+• EFI networks: 2-layer MLP Rd → Rhfeats → R processing x̃(j) ⊙ x.
+• Pairwise networks: MLP R3 → Rhfeats /2 → R processing [xi , xj , xi · xj ].
+• NCE encoder (training only): 2-layer GCN Rd → Rhfeats → Rd .
+• High-pass filter: Parameter-free iterative Laplacian: h(t) = h(t−1) − D−1/2 AD−1/2 h(t−1) .
+(k)
+
+Spectral filter initialization. Spectral coefficients θj for band j are initialized from the Beta(j+1, K−j+1) wavelet
+basis following BWGNN [Tang et al., 2022], then registered as learnable nn.Parameters. During training, gradient
+descent adapts the coefficients to the dataset’s spectral characteristics. The Laplacian is scaled by 1/2 to map eigenvalues
+from [0, 2] to [0, 1] for numerical stability.
+Training protocol. All experiments use: AdamW optimizer with base learning rate 0.01 and weight decay 10−5 ; cosine
+annealing learning rate schedule; early stopping with patience 50 on validation AUPRC; maximum 200 epochs. When both
+high-pass filters and NCE loss are active (Yelp, tolokers), a 10-epoch linear warmup from 0.1× to 1.0× base learning rate
+prevents early instability. Gradient clipping at max norm 1.5 is applied when NCE is active, max norm 2.0 otherwise.
+Class weighting. The fraud class weight is set to 1/(2 · fraud_ratio). Combined with focal loss (γ > 0 when nf ≥ 500),
+this addresses class imbalance without oversampling.
+3413
+
+=== PDF PAGE 17 ===
+Figure 5: Top-3 pairwise interaction heatmaps on Amazon. The (0, 19) pair shows a dominant positive region, while the
+other two pairs exhibit weaker but structured nonlinear interactions.
+Feature pair selection. For datasets with pairwise interactions enabled (d ≤ 30, k̄ ≥ 30), we select the top-M =15
+feature pairs by absolute Pearson correlation with the training labels. Pair indices are fixed before training and stored as
+non-learnable parameters.
+Evaluation protocol. Following GADBench [Tang et al., 2023], all experiments use 10 random 40/20/40
+train/validation/test splits with different seeds. We report mean and standard deviation over the 10 trials. The validation metric for early stopping is AUPRC, as it better captures ranking quality for imbalanced fraud detection.
+Hardware and software. All experiments were conducted on NVIDIA RTX 3090 GPUs (24 GB). Software: PyTorch 2.4,
+DGL 2.4, Python 3.8, CUDA 12.1. The GADBench framework handles graph loading and split generation.
+
+J
+
+FAITHFULNESS EVALUATION
+
+We evaluate FraudGNAM’s explanation faithfulness using three complementary metrics. All experiments use a single trained
+model per dataset (trial 0).
+LOCO Faithfulness. For each active component c, we compute the predicted logit change ∆pred (v) = αc · ψc (v) and
+the actual logit change ∆actual (v) = s(v) − s−c (v) where s−c is the fraud score with component c zeroed out. A perfectly
+faithful decomposition yields ∆pred = ∆actual for all nodes.
+Top-k Sufficiency. We rank components by their mean absolute contribution |αc · ψ̄c | across test nodes and compute
+AUROC using only the top-k components (zeroing out the rest). Retention is the ratio of top-k AUROC to full AUROC.
+Top-k Comprehensiveness.
+from the full model.
+
+The complement of sufficiency: we remove the top-k components and measure AUROC drop
+
+Analysis. All seven datasets achieve LOCO MAE below 10−6 with r=1.0000, confirming that FraudGNAM’s scalar-sum
+decomposition is exactly faithful up to floating-point precision across diverse graph structures. The top-1 sufficiency ranges
+from 94.2% (Yelp) to 100.0% (Reddit), showing that a single component captures most of the fraud signal. The top-1
+comprehensiveness varies more widely: Yelp’s 0.239 drop reflects domination by a single spectral signature (high-frequency),
+while questions’ 0.033 drop indicates a more distributed signal.
+GNNExplainer comparison. GNNExplainer’s feature masks achieve near-zero comprehensiveness (≤0.001 on Amazon,
+negative on Yelp), indicating that the identified “important” features have negligible impact on the GCN’s predictions.
+3414
+
+=== PDF PAGE 18 ===
+Figure 6: Node-level component contribution distributions for fraud vs. normal nodes. Amazon shows strong separation in
+pairwise and band components, while Yelp is driven primarily by high-pass and band responses.
+Table 14: LOCO faithfulness and top-k sufficiency across all seven datasets. MAE and correlation r are averaged over active
+components. Sufficiency reports AUROC retention (%) for k=1.
+Dataset
+Amazon
+Yelp
+Weibo
+tfinance
+questions
+Reddit
+tolokers
+
+Mean MAE
+−7
+
+1.18×10
+6.73×10−8
+6.74×10−7
+5.36×10−8
+1.17×10−7
+4.84×10−8
+7.58×10−8
+
+r
+
+Top-1 Suff.
+
+Top-1 Comp.
+
+1.0000
+1.0000
+1.0000
+1.0000
+1.0000
+1.0000
+1.0000
+
+98.6%
+94.2%
+99.8%
+98.0%
+96.5%
+100.0%
+95.7%
+
+0.052
+0.239
+0.096
+0.125
+0.033
+0.210
+0.092
+
+By contrast, FraudGNAM’s top component removal causes substantial AUROC drops (0.052 on Amazon, 0.239 on
+Yelp), confirming that its explanations capture the true decision-making process. The negative Fidelity+ on Yelp for
+GNNExplainer suggests that removing the masked features actually improves the GCN’s fraud predictions—a pathological
+result indicating unfaithful explanations. Note that the GCN itself achieves only 0.568 AUROC on Yelp (vs. 0.827 on
+Amazon), reflecting the well-known difficulty of homophily-based models on heterophilic graphs; GNNExplainer cannot
+produce faithful explanations for a model that has not learned the task. FraudGNAM’s perfect LOCO MAE (< 10−7 )
+provides a mathematical guarantee absent from any post-hoc method.
+
+K
+
+FULL RESULTS WITH STANDARD DEVIATIONS
+
+Tables 16 and 17 present complete results with standard deviations for all methods across all seven datasets.
+Variance analysis. FraudGNAM has low variance across most datasets. On Yelp, Amazon, and questions, FraudGNAM’s
+AUROC standard deviation is among the lowest of all methods (.003, .002, .007 respectively). The exception is Reddit
+(std .049), where all methods show high variance due to the extremely small test fraud set (∼146 nodes). SEC-GFD shows
+extreme variance on tfinance (AUPRC std .259, RecK std .224), indicating occasional training failures (NaN losses), while
+FraudGNAM maintains stable performance (AUPRC std .015).
+SAGE instability on Amazon. GraphSAGE exhibits unusually high variance on Amazon (AUROC std .068, AUPRC
+std .154), likely due to sampling instability on this very dense graph (k̄=740.7). In contrast, spectral methods (BWGNN,
+3415
+
+=== PDF PAGE 19 ===
+Table 15: Fidelity comparison: FraudGNAM (inherent) vs. GNNExplainer [Ying et al., 2019] (post-hoc), following the
+evaluation protocol of Amara et al. [2022]. GNNExplainer is applied to a 2-layer GCN trained on the same data (GCN
+AUROC: Amazon 0.827, Yelp 0.568). Fidelity+ (comprehensiveness): higher is better. Fidelity− (sufficiency gap): lower is
+better. Values averaged over 50 test nodes with top-20% feature mask.
+Amazon
+
+Yelp
+
+GCN + GNNExplainer
+
+Fidelity+
+Fidelity−
+
+0.000
+0.002
+
+−0.005
+0.004
+
+FraudGNAM (inherent)
+
+Fidelity+
+Fidelity−
+
+0.052
+0.014
+
+0.239
+0.051
+
+LOCO MAE
+
+1.2×10−7
+
+6.7×10−8
+
+GHRN, FraudGNAM) that process the full graph maintain low variance.
+
+L
+
+THRESHOLD SENSITIVITY ANALYSIS
+
+FraudGNAM uses two homophily-based thresholds to configure model components: τorder =0.85 (spectral filter order) and
+τnce =0.95 (NCE loss and high-pass activation). We verify robustness by sweeping each threshold while holding the other at
+its default.
+Spectral order threshold (τorder ). Table 18 shows AUROC when varying τorder ∈ {0.80, 0.85, 0.90}. This threshold
+determines whether a dataset receives order-4 (finer spectral resolution) or order-2/3 filters.
+The only dataset affected by τorder changes is questions (h=0.878), which falls between the swept values. At τorder =0.90,
+questions gains order-4 filters (from order-3), yielding AUROC .727 vs. .725 (+0.2pp). At τorder =0.80, the configuration is
+also unchanged (questions’ h=0.878 > 0.80). All six other datasets have homophily far from any tested threshold (h < 0.78
+or h > 0.88), so their configuration is invariant across the entire sweep range.
+NCE/high-pass threshold (τnce ). Table 19 shows AUROC when varying τnce ∈ {0.90, 0.95, 1.00}. This threshold controls
+both high-pass filter activation (h < τnce ) and NCE loss (h < τnce and nf ≥ 500).
+Lowering τnce to 0.90 has no effect on any dataset: all seven datasets’ homophily values fall outside the [0.90, 0.95) band
+where configurations would change. Raising it to 1.00 activates high-pass filters and NCE on five datasets that currently lack
+them. The largest impact is on Amazon, which drops 0.4pp when receiving an unnecessary high-pass branch and NCE loss
+(h=0.954 provides little heterophilic signal). The remaining changes are ≤0.3pp.
+Summary. Across both threshold sweeps, the maximum AUROC change is 0.4pp (Amazon under τnce =1.00). Most
+datasets are completely unaffected because their homophily values fall far from either threshold. The thresholds sit in natural
+gaps of the homophily distribution (0.774 → 0.878 gap for τorder ; 0.878 → 0.950 gap for τnce ), making the configuration
+robust to perturbation.
+
+M
+
+LEAVE-ONE-DATASET-OUT CONFIGURATION VALIDATION
+
+To verify that FraudGNAM’s configuration rules are not overfit to any single dataset, we perform a leave-one-dataset-out
+(LODO) analysis. For each of the seven datasets, we remove it from consideration and ask: would the same thresholds
+(τorder =0.85, τnce =0.95) still be chosen based on the remaining six?
+Analysis. In all seven leave-one-out scenarios, the same thresholds remain optimal because:
+1. The τorder =0.85 threshold separates two natural clusters: {Yelp (0.774), tolokers (0.604)} vs. {questions (0.878),
+Reddit (0.950), Amazon (0.954), tfinance (0.971), Weibo (0.977)}. The gap between clusters (0.774 → 0.878) spans
+0.10 units, so any threshold in [0.78, 0.87] yields identical configurations.
+2. The τnce =0.95 threshold separates {Yelp, tolokers, questions} (all h < 0.88) from {Reddit (0.950), Amazon (0.954),
+tfinance (0.971), Weibo (0.977)}. Reddit and Amazon sit right at h ≈ 0.95, receiving exactly 1 high-pass branch—a
+3416
+
+=== PDF PAGE 20 ===
+Table 16: Full results with standard deviations on four core datasets (Mean ± Std, 10 trials). Best in bold, second underlined.
+Yelp (h=0.774)
+
+Amazon (h=0.954)
+
+Method
+
+AUROC
+
+AUPRC
+
+RecK
+
+AUROC
+
+AUPRC
+
+RecK
+
+GCN
+SAGE
+GAT
+GIN
+PCGNN
+BernNet
+BWGNN
+GHRN
+SEC-GFD
+GAGA
+PMP
+FraudGNAM
+
+.579 ± .006
+.856 ± .002
+.808 ± .018
+.775 ± .009
+.802 ± .018
+.828 ± .003
+.853 ± .006
+.855 ± .004
+.871 ± .005
+.708 ± .058
+.745 ± .066
+.882 ± .003
+
+.216 ± .006
+.552 ± .005
+.462 ± .040
+.370 ± .016
+.450 ± .028
+.495 ± .010
+.563 ± .012
+.571 ± .010
+.614 ± .010
+.300 ± .055
+.365 ± .059
+.635 ± .008
+
+.233 ± .006
+.521 ± .006
+.458 ± .024
+.388 ± .014
+.453 ± .026
+.484 ± .003
+.524 ± .009
+.532 ± .009
+.564 ± .009
+.327 ± .052
+.385 ± .064
+.590 ± .008
+
+.823 ± .005
+.874 ± .068
+.963 ± .011
+.941 ± .011
+.971 ± .009
+.967 ± .015
+.982 ± .002
+.981 ± .004
+.972 ± .008
+.902 ± .024
+.866 ± .011
+.980 ± .003
+
+.356 ± .013
+.626 ± .154
+.859 ± .019
+.787 ± .015
+.880 ± .021
+.870 ± .030
+.894 ± .008
+.892 ± .008
+.876 ± .015
+.803 ± .031
+.688 ± .018
+.911 ± .006
+
+.375 ± .014
+.647 ± .115
+.823 ± .018
+.711 ± .033
+.836 ± .022
+.833 ± .036
+.864 ± .015
+.865 ± .007
+.829 ± .021
+.784 ± .014
+.754 ± .021
+.856 ± .008
+
+Weibo (h=0.977)
+
+Reddit (h=0.950)
+
+Method
+
+AUROC
+
+AUPRC
+
+RecK
+
+AUROC
+
+AUPRC
+
+RecK
+
+GCN
+SAGE
+GAT
+GIN
+PCGNN
+BernNet
+BWGNN
+GHRN
+SEC-GFD
+GAGA
+PMP
+FraudGNAM
+
+.980 ± .003
+.944 ± .011
+.945 ± .013
+.957 ± .009
+.890 ± .016
+.944 ± .021
+.974 ± .008
+.967 ± .007
+.972 ± .008
+.982 ± .005
+.916 ± .017
+.979 ± .004
+
+.946 ± .008
+.850 ± .028
+.903 ± .002
+.913 ± .008
+.814 ± .013
+.883 ± .014
+.928 ± .015
+.923 ± .007
+.926 ± .016
+.924 ± .018
+.818 ± .026
+.916 ± .010
+
+.905 ± .010
+.824 ± .025
+.862 ± .006
+.879 ± .007
+.759 ± .028
+.837 ± .021
+.866 ± .019
+.868 ± .009
+.877 ± .022
+.870 ± .022
+.828 ± .026
+.849 ± .015
+
+.651 ± .043
+.630 ± .061
+.659 ± .030
+.657 ± .033
+.531 ± .018
+.671 ± .040
+.655 ± .030
+.665 ± .036
+.664 ± .045
+.558 ± .042
+.492 ± .052
+.656 ± .049
+
+.062 ± .012
+.058 ± .012
+.061 ± .012
+.059 ± .011
+.041 ± .005
+.074 ± .016
+.067 ± .013
+.070 ± .014
+.075 ± .018
+.041 ± .005
+.034 ± .004
+.069 ± .014
+
+.083 ± .028
+.069 ± .022
+.068 ± .024
+.082 ± .023
+.052 ± .031
+.110 ± .030
+.101 ± .025
+.107 ± .028
+.111 ± .035
+.043 ± .019
+.029 ± .017
+.114 ± .023
+
+conservative choice that the sensitivity analysis (Appendix L) validates.
+3. No single dataset is the sole representative of any region. Removing any dataset always leaves at least one other in the
+same region.
+This confirms that FraudGNAM’s rules capture natural structure in graph properties rather than being tuned to specific
+benchmark datasets.
+
+N
+
+RULE-BASED VS. VALIDATION-BASED CONFIGURATION
+
+A natural question is whether the deterministic rule-based configuration (Table 6) sacrifices performance compared to
+validation-based hyperparameter search. We compare the rule-based AUROC to the best AUROC achieved by any ablation
+variant (Tables 4–11), which serves as an upper bound on what validation-based selection could achieve within our
+architecture.
+On Yelp, the rule-based configuration already matches the best variant. On Amazon and Weibo, the gap is ≤0.4pp—within
+noise for 10-trial evaluation. The only substantial gap is Reddit (−3.9pp), where the rule selects order-3 but order-2
+generalizes better with only ∼146 training fraud nodes. This suggests incorporating training set size into the order rule as a
+refinement opportunity, noted in Limitations. Overall, the rule-based configuration achieves ≥99.6% of the best-variant
+AUROC on 3 of 4 datasets, confirming that deterministic rules are a practical alternative to validation-based search.
+
+O
+
+PEAK GPU MEMORY
+
+Table 22 reports peak GPU memory allocation during a single training trial for key methods across all seven datasets.
+3417
+
+=== PDF PAGE 21 ===
+Table 17: Full results with standard deviations on three additional datasets (Mean ± Std, 10 trials). Best in bold.
+tfinance (h=0.971)
+Method
+GCN
+SAGE
+GAT
+BernNet
+BWGNN
+GHRN
+SEC-GFD
+GAGA
+PMP
+FraudGNAM
+
+tolokers (h=0.604)
+
+questions (h=0.878)
+
+AUC
+
+PRC
+
+RecK
+
+AUC
+
+PRC
+
+RecK
+
+AUC
+
+PRC
+
+RecK
+
+.923 ± .024
+.830 ± .032
+.939 ± .013
+.927 ± .017
+.961 ± .005
+.961 ± .008
+.938 ± .042
+.641 ± .116
+.880 ± .038
+.959 ± .005
+
+.737 ± .053
+.339 ± .111
+.672 ± .096
+.722 ± .067
+.866 ± .008
+.867 ± .016
+.735 ± .259
+.110 ± .081
+.635 ± .068
+.848 ± .015
+
+.700 ± .053
+.459 ± .154
+.687 ± .058
+.720 ± .057
+.812 ± .007
+.814 ± .017
+.702 ± .224
+.115 ± .112
+.745 ± .048
+.789 ± .013
+
+.756 ± .012
+.793 ± .008
+.794 ± .011
+.770 ± .006
+.805 ± .009
+.804 ± .008
+.802 ± .007
+.705 ± .008
+.755 ± .012
+.800 ± .006
+
+.445 ± .023
+.476 ± .017
+.466 ± .021
+.437 ± .013
+.500 ± .021
+.499 ± .022
+.491 ± .016
+.356 ± .012
+.432 ± .014
+.490 ± .016
+
+.429 ± .019
+.466 ± .016
+.466 ± .019
+.435 ± .016
+.495 ± .022
+.489 ± .017
+.485 ± .015
+.375 ± .018
+.429 ± .017
+.481 ± .013
+
+.709 ± .013
+.717 ± .018
+.715 ± .017
+.691 ± .027
+.710 ± .027
+.711 ± .028
+.699 ± .027
+.638 ± .021
+.681 ± .017
+.725 ± .007
+
+.125 ± .014
+.166 ± .010
+.160 ± .013
+.150 ± .012
+.167 ± .014
+.163 ± .013
+.170 ± .014
+.102 ± .008
+.107 ± .013
+.186 ± .011
+
+.165 ± .020
+.212 ± .020
+.200 ± .017
+.190 ± .018
+.208 ± .023
+.210 ± .023
+.214 ± .023
+.139 ± .012
+.180 ± .018
+.220 ± .019
+
+Table 18: AUROC (mean ± std, 10 trials) under spectral order threshold sweep. Default τorder =0.85 in bold. “=” indicates
+configuration is unchanged from default (homophily falls outside the swept boundary).
+Dataset
+
+τorder =0.80
+
+τorder =0.85
+
+τorder =0.90
+
+Yelp (h=0.774)
+Amazon (h=0.954)
+Weibo (h=0.977)
+Reddit (h=0.950)
+tfinance (h=0.971)
+tolokers (h=0.604)
+questions (h=0.878)
+
+=
+=
+=
+=
+=
+=
+.726 ± .007
+
+.882 ± .003
+.980 ± .003
+.979 ± .004
+.656 ± .049
+.959 ± .005
+.800 ± .006
+.725 ± .007
+
+=
+=
+=
+=
+=
+=
+.727 ± .009
+
+Analysis. FraudGNAM’s memory usage scales with the number of active components. On Yelp, where the full spectral
+suite is activated (order-4, 2 high-pass filters, NCE, EFI), FraudGNAM uses more memory than simpler configurations. On
+homophilic datasets like Weibo and Reddit, where most components are disabled, memory usage drops significantly. GAGA
+requires substantial memory for precomputed group-aggregated feature sequences and suffers numerical instability on the
+high-degree tfinance graph (d¯ = 1080). PMP’s partitioned adjacency matrices add modest overhead compared to standard
+GNNs, making it the most memory-efficient specialized fraud detector.
+
+P
+
+EXPLANATION STABILITY UNDER FEATURE PERTURBATION
+
+While the LOCO analysis (Table 14) demonstrates exact decomposition faithfulness, a complementary question is whether
+FraudGNAM’s component attributions are stable under small input perturbations—i.e., whether semantically similar inputs
+receive similar explanations.
+Setup. For each test node v in Yelp and Amazon, we add Gaussian noise ϵ ∼ N (0, σ 2 I) with σ ∈ {0.01, 0.05, 0.10} to
+the input features xv and measure the Spearman rank correlation between the original and perturbed component contribution
+vectors [αc · ψc (v)]c∈C .
+Rationale. In inherently interpretable models, stability follows from the smoothness of each component network. Since
+FraudGNAM’s component MLPs use LayerNorm and LeakyReLU—both Lipschitz continuous—small input perturbations
+produce bounded output changes. This is a structural advantage over post-hoc methods, where explanation stability depends
+on the optimization landscape of the explanation algorithm rather than the model itself.
+Expected behavior. For σ = 0.01 (sub-percent noise relative to typical feature magnitudes), we expect near-perfect rank
+correlation (ρ > 0.99), as the perturbation is well within the Lipschitz ball of each component MLP. At σ = 0.10, some
+rank changes may occur for components with similar magnitudes, but the dominant component should remain stable. The
+ablation results (Table 4) provide indirect evidence: removing single components produces consistent effects across 10
+random splits, suggesting the learned component attributions are robust to data variation.
+3418
+
+=== PDF PAGE 22 ===
+Table 19: AUROC (mean ± std, 10 trials) under NCE/high-pass threshold sweep. Default τnce =0.95 in bold. “=” indicates
+configuration unchanged from default.
+Dataset
+Yelp (h=0.774)
+Amazon (h=0.954)
+Weibo (h=0.977)
+Reddit (h=0.950)
+tfinance (h=0.971)
+tolokers (h=0.604)
+questions (h=0.878)
+
+τnce =0.90
+
+τnce =0.95
+
+τnce =1.00
+
+=
+=
+=
+=
+=
+=
+=
+
+.882 ± .003
+.981 ± .002
+.979 ± .004
+.654 ± .048
+.959 ± .005
+.800 ± .006
+.725 ± .007
+
+=
+.977 ± .001
+.979 ± .004
+.652 ± .041
+.958 ± .005
+=
+.728 ± .010
+
+Table 20: Leave-one-dataset-out analysis. For each held-out dataset, we show the homophily distribution of the remaining
+six across the three configuration regions. The “Config change?” column indicates whether removing the dataset would alter
+the threshold choice.
+Held-out
+
+h < 0.85
+
+0.85
+≤
+h < 0.95
+
+h ≥ 0.95
+
+Yelp
+
+tolokers
+
+questions
+
+Amazon
+
+Yelp, tolokers
+Yelp, tolokers
+Yelp, tolokers
+Yelp, tolokers
+Yelp
+
+questions
+
+Yelp, tolokers
+
+(none)
+
+Reddit, Amazon, tfinance,
+Weibo
+Reddit, tfinance,
+Weibo
+Reddit, Amazon, tfinance
+Amazon,
+tfinance, Weibo
+Reddit, Amazon, Weibo
+Reddit, Amazon, tfinance,
+Weibo
+Reddit, Amazon, tfinance,
+Weibo
+
+Weibo
+Reddit
+tfinance
+tolokers
+
+questions
+
+Q
+
+questions
+questions
+questions
+questions
+
+Change?
+No
+
+No
+No
+No
+No
+No
+
+No
+
+MODEL COMPLEXITY AND PARAMETER COUNT
+
+Table 23 compares the learnable parameter counts of FraudGNAM against key baselines. Parameter counts depend on
+dataset-specific configuration; we report counts for Yelp (full suite: order-4, 2 high-pass, NCE, EFI) and Amazon (minimal:
+order-2, pairwise, no HP/NCE) to illustrate the range.
+
+Analysis. FraudGNAM’s parameter count is 3–4× that of SEC-GFD. The overhead arises from (1) per-feature or
+grouped feature networks that provide interpretable shape functions, (2) dedicated per-band EFI MLPs that model featurespectrum interactions, and (3) pairwise interaction networks when enabled. Critically, each additional parameter serves
+an interpretability purpose: every component network produces an independently readable scalar contribution. SEC-GFD
+and BWGNN entangle all spectral bands into a shared hidden representation, requiring fewer parameters but sacrificing
+decomposability. Despite the larger model, FraudGNAM does not overfit: AUROC standard deviations are comparable
+to or lower than baselines across all seven datasets (Tables 16–17), and the adaptive configuration disables unnecessary
+components on simpler graphs, reducing effective parameter count (e.g., Weibo uses only ∼50K parameters with grouped
+features and order-2).
+3419
+
+=== PDF PAGE 23 ===
+Table 21: Rule-based vs. best-variant AUROC. ∆ is the gap between the rule-based configuration and the best variant.
+Negative ∆ indicates the rule-based choice is suboptimal.
+Dataset
+
+Rule-based
+
+Best variant
+
+∆
+
+Best variant identity
+
+Yelp
+Amazon
+Weibo
+Reddit
+
+.882
+.979
+.979
+.654
+
+.882
+.980
+.983
+.693
+
+0.0
+−0.1
+−0.4
+−3.9
+
+Full (= order 4)
+w/o NCE or order 4
+order 4
+order 2
+
+Table 22: Peak GPU memory (MB) during training. FraudGNAM’s memory scales with the number of active components
+(spectral order, high-pass filters, NCE).
+
+R
+
+Method
+
+Yelp
+
+Amazon
+
+Weibo
+
+Reddit
+
+tfinance
+
+tolokers
+
+questions
+
+GCN
+BWGNN
+SEC-GFD
+GAGA
+PMP
+FraudGNAM
+
+547
+727
+1608
+3979
+533
+5556
+
+632
+779
+1691
+1151
+582
+1351
+
+65
+74
+183
+822
+128
+229
+
+36
+46
+101
+949
+88
+119
+
+2948
+3636
+7939
+fail
+3025
+4088
+
+41
+58
+117
+998
+93
+1032
+
+165
+135
+599
+4512
+489
+2927
+
+EFI DIAGNOSTIC OUTPUTS
+(j)
+
+Practical EFI interpretability. Each EFI component Ej (v) = ej (x̃v ⊙ xv ) captures how feature i’s raw value interacts
+with its spectral response in band j. In practice, three diagnostic outputs are available to practitioners:
+(j)
+
+1. Per-band EFI contribution: The scalar αE · wj · ej (x̃v ⊙ xv ) is directly readable for each band j, showing which
+frequency range’s feature interaction most influences the fraud decision.
+(j)
+2. Input-level attribution: Since each ej is a small MLP, standard gradient-based attribution (∂Ej /∂(x̃v,i · xv,i ))
+identifies which specific feature-band pairs drive the EFI signal. Unlike post-hoc methods on black-box models, these
+gradients are computed on a dedicated interpretable sub-network, maintaining faithfulness.
+3. Aggregated feature importance: Summing |Ej (v)| across bands for each feature index i yields a feature-level
+“spectral interaction importance” score, complementing the per-feature shape functions from the NAM component.
+When d > 40 (grouped features), per-feature EFI attribution requires gradient computation rather than direct readout, but
+the band-level EFI contributions (Ej per band) remain directly interpretable without any approximation.
+
+S
+
+EXTENSIONS TO HETEROGENEOUS AND DYNAMIC GRAPHS
+
+Heterogeneous graphs. FraudGNAM currently operates on homogeneous graphs following the GADBench protocol.
+Extension to heterogeneous graphs with typed edges (e.g., user-product-review tripartite graphs) is feasible via relationspecific spectral filters: each edge type r would use a separate normalized Laplacian L̂r , and the spectral band component
+P P
+P (k)
+would become B(v) = r j wr,j · br,j ( k θr,j (L̂r /2)k X)v . The additive structure is preserved—each relation-band
+pair contributes an independently auditable scalar—but the number of components scales with the number of edge types,
+increasing both parameter count and interpretation complexity. The adaptive configuration rules would need extension:
+per-relation homophily hr could determine per-relation spectral order, though the interaction between relation types requires
+further investigation.
+Dynamic graphs. Real-world fraud graphs evolve over time as new transactions and accounts appear. FraudGNAM’s
+current architecture processes static snapshots. Two extension paths are natural: (1) sliding-window retraining, where
+FraudGNAM is periodically retrained on recent graph snapshots with the same adaptive configuration rules recomputed from
+current graph statistics; and (2) temporal spectral decomposition, where time-indexed graph Laplacians L̂t enable spectral
+filtering across both frequency and time dimensions. The scalar-sum structure extends naturally to temporal components,
+but efficient incremental computation of Laplacian powers on evolving graphs remains an open challenge. FraudGNAM’s
+interpretability is particularly valuable in dynamic settings: practitioners can monitor how component contributions shift
+3420
+
+=== PDF PAGE 24 ===
+Table 23: Approximate learnable parameter counts (thousands). FraudGNAM’s count scales with the number of active
+components. d: feature dimension; h: hidden dimension (64); K: spectral order.
+Model
+
+Params (K)
+
+GCN
+BWGNN
+SEC-GFD
+FraudGNAM (Amazon)
+FraudGNAM (Yelp)
+
+∼4–8
+∼15–20
+∼40–50
+∼90
+∼165
+
+Scaling
+O(dh + h · 2)
+O(dh + (K+1)h2 )
+O(dh + (K+1)h2 + h2 ·nf )
+Order-2, pairwise, no HP/NCE
+Order-4, 2 HP, NCE, EFI
+
+over time, detecting concept drift (e.g., a sudden increase in high-pass contribution may signal new camouflage strategies).
+
+T
+
+ETHICAL CONSIDERATIONS
+
+Fairness and disparate impact. Fraud detection systems risk disparate impact across demographic groups—e.g., flagging
+users from certain regions or age brackets disproportionately. FraudGNAM’s component-level decomposition provides a
+structural advantage for fairness auditing: practitioners can examine whether specific components (e.g., the feature NAM
+for account age, or spectral bands capturing neighborhood patterns) contribute differently across protected groups. If the
+feature component αF · F (v) shows systematic bias for a protected attribute, it can be identified and addressed without
+retraining the entire model—for instance, by constraining or removing the offending feature network while preserving other
+components.
+Limitations of current evaluation. We do not evaluate FraudGNAM for fairness in this work because the GADBench
+datasets lack demographic annotations. A comprehensive fairness analysis would require: (1) datasets with protected
+attribute labels, (2) per-group AUROC and false positive rate analysis, and (3) counterfactual fairness tests examining
+whether changing a protected attribute alters the fraud prediction. We note that inherent interpretability is a necessary but not
+sufficient condition for fairness: decomposability enables auditing but does not guarantee equitable outcomes. We encourage
+practitioners deploying FraudGNAM to conduct per-group impact assessments using the component decomposition as a
+diagnostic tool.
+
+U
+
+STATISTICAL TESTING
+
+Approach. We report two complementary forms of paired statistical analysis on matched seeds (the GADBench seed
+list {3407 + 10t : t = 0, . . . , 9} shared across all methods): (1) Wilcoxon signed-rank test on per-trial paired differences
+(rank-based, robust to non-normal differences). (2) Nadeau–Bengio corrected paired t-test [Nadeau and Bengio, 2003],
+which inflates the variance estimate by 1/n + ntest /ntrain to account for cross-fold training-set overlap; for our 40/20/40
+splits this factor is 1/n + 1. We report Wilcoxon as the primary test (no independence assumption) and Nadeau–Bengio as a
+conservative supplement.
+Significance summary. Refined-FraudGNAM vs SEC-GFD on matched seeds: Wilcoxon p < 0.005 on Yelp (3 metrics),
+Amazon AUROC, Weibo AUROC, Questions AUROC; the only metric-dataset loss across 21 comparisons is Weibo RecK
+(−0.003pp). Exact binomial test under H0 that win probability is 0.5: p = 4.6 × 10−5 (one-sided). Reddit and Tolokers,
+which were the submitted-paper boundary cases, become wins under the refined rule (+3.43pp and +0.33pp); the Reddit
+refinement itself is paired-Wilcoxon significant (p = 0.049). See Appendix V for full numbers.
+
+V
+
+REBUTTAL EVIDENCE PACKAGE
+
+This appendix collects the additional empirical evidence collected after the initial submission, organised as six numbered
+tables.
+Rebuttal Table 24 — Refined adaptive rule. We codify three new cutoffs grounded in our round-1 ablations: R1
+(nf <200 ⇒ K=2, Reddit-style sparse fraud); R2 (h>0.97 ∧ d≥300 ⇒ K=4, Weibo-style high-dim homophilic); R3
+(h<0.70 ⇒ THP =0, Tolokers-style extreme heterophily). All three rule changes are paired-Wilcoxon significant or
+3421
+
+=== PDF PAGE 25 ===
+Table 24: Rebuttal Table R1. Effect of three new rule cutoffs on datasets where the rule changes (paired Wilcoxon, matched
+10 seeds).
+Dataset
+
+Submitted AUROC
+
+Refined AUROC
+
+∆AUROC
+
+Wilcoxon p
+
+Weibo
+Reddit
+Tolokers
+
+0.9794±0.004
+0.6536±0.047
+0.8000±0.007
+
+0.9826±0.003
+0.6970±0.044
+0.8050±0.008
+
++0.32pp
++4.33pp
++0.50pp
+
+0.014∗
+0.049∗
+0.064†
+
+R1: nf < 200⇒K=2 (Reddit). R2: h > 0.97 ∧ d≥300⇒K=4 (Weibo). R3: h < 0.70⇒THP =0 (Tolokers).
+
+Table 25: Rebuttal Table R2. Refined FraudGNAM vs SEC-GFD on matched 10 seeds. SEC-GFD reproduced with
+GADBench default config (hfeats =64); Yelp reproduction 0.8707 matches paper 0.871. Wilcoxon (pW ) and Nadeau–Bengio
+(pN B ) paired tests.
+Dataset
+Yelp
+Amazon
+Weibo
+Tfinance
+Reddit
+Tolokers
+Questions
+
+Refined AUROC
+0.8821±0.003
+0.9813±0.002
+0.9826±0.003
+0.9592±0.005
+0.6970±0.044
+0.8050±0.008
+0.7255±0.007
+
+SEC-GFD AUROC
+0.8707±0.005
+0.9738±0.006
+0.9719±0.008
+0.9389±0.042
+0.6626±0.045
+0.8017±0.007
+0.7022±0.024
+
+∆AUROC
++1.14pp
++0.75pp
++1.08pp
++2.03pp
++3.43pp
++0.33pp
++2.33pp
+
+pW
+
+pN B
+∗∗
+
+0.002
+0.006∗∗
+0.002∗∗
+0.492
+0.160
+0.084†
+0.010∗∗
+
+Wins
+†
+
+0.063
+0.353
+0.184
+0.671
+0.643
+0.497
+0.316
+
+10/10
+9/10
+10/10
+5/10
+6/10
+7/10
+8/10
+
+Global: 7 of 7 AUROC mean wins; 20 of 21 (dataset×metric) wins; exact binomial p=4.6×10−5 .
+
+near-significant (Reddit p=0.049, Weibo p=0.014, Tolokers p=0.065). The rules pass leave-one-dataset-out validation:
+configurations remain unchanged in all 7 LODO scenarios (Appendix M).
+Rebuttal Table 25 — vs SEC-GFD. Refined-FraudGNAM achieves +0.33 to +3.43pp AUROC over SEC-GFD on
+matched seeds. Five of seven dataset-AUROC comparisons reach Wilcoxon p < 0.02. Globally 20 of 21 (dataset-metric)
+comparisons are wins, exact binomial p = 4.6 × 10−5 . SEC-GFD is reproduced with GADBench default config (hfeats =64);
+reproduced AUROC matches paper-reported within ±0.005 on every dataset.
+Rebuttal Table 26 — vs interpretable baseline GNAN. We implement and evaluate GNAN [Bechler-Speicher et al.,
+2024], the closest inherently-interpretable graph baseline (NAM-style per-feature shape functions plus multi-hop graph
+aggregation), on matched seeds. FraudGNAM beats GNAN on 18 of 21 metric-dataset comparisons (binomial p =
+7.5 × 10−4 ), with massive gaps on heterophilic datasets (Yelp +11.14pp, Reddit +17.89pp). Increasing GNAN’s depth
+from K=2 to K=3 does not close the gap, confirming the bottleneck is spectral expressiveness rather than aggregation
+depth. This validates the central thesis: interpretability + spectral capacity is the right combination; neither alone suffices.
+Rebuttal Table 27 — Threshold sensitivity. We re-train refined-FraudGNAM under tight (τorder =0.80, τNCE =0.90,
+nf,R1 =100, hR3 =0.65) and loose (0.90, 1.00, 300, 0.75) cutoffs on all 7 datasets. The median AUROC change across
+14 perturbed cells is 0.08pp; 13 of 14 cells stay within ±0.5pp. The single −3.25pp change occurs on Reddit when tight
+nf,R1 =100 disables the new R1 rule on Reddit (nf =146) — confirming the cutoff at 200 is correctly placed in the natural
+gap (Reddit 146 vs Weibo 347).
+Rebuttal Table 28 — NCE gradient flow. Per-component contribution mass Ev |αc ψc (v)| and Gini concentration with
+and without NCE. On the two datasets where NCE matters most, NCE decreases Gini (Yelp −0.013, Tolokers −0.052) —
+meaning mass is more evenly distributed across components, the opposite of branch collapse. Every component retains
+> 0.05 of total mass on every dataset; LOCO MAE < 10−6 remains in both conditions. The interpretable-backbone-only
+model (NCE removed) still beats SEC-GFD on Yelp by +0.3pp (App E).
+Rebuttal Table 29 — Per-variant memory. Our measurement reproduces the reviewer-quoted Yelp peak (5556 MB) at
+5561 MB. Disabling EFI alone recovers 14% of memory at the price of −0.7pp Yelp AUROC; disabling high-pass recovers
+8% at −0.2pp. On the four homophilic datasets where adaptive gating disables HP and NCE, parameter count drops from
+3422
+
+=== PDF PAGE 26 ===
+Table 26: Rebuttal Table R3. FraudGNAM vs GNAN [Bechler-Speicher et al., 2024] (interpretable GNN baseline
+implemented in our framework, NAM-style per-feature shape functions + multi-hop graph aggregation). Matched 10 seeds.
+18 of 21 metric-dataset wins for FraudGNAM.
+Dataset
+
+FraudGNAM AUROC
+
+Yelp
+Amazon
+Weibo
+Tfinance
+Reddit
+Tolokers
+Questions
+
+0.8821±0.003
+0.9813±0.002
+0.9826±0.003
+0.9592±0.005
+0.6970±0.044
+0.8050±0.008
+0.7255±0.007
+
+GNAN K=2
+
+GNAN K=3
+
+0.7708±0.008
+0.9812±0.003
+0.9892±0.002
+0.9470±0.005
+0.5180±0.019
+0.7608±0.009
+0.7023±0.011
+
+0.7684
+0.9840
+—
+—
+0.5226
+0.7673
+—
+
+∆AUROC vs K=2
++11.14pp
++0.00pp
+−0.66pp
++1.22pp
++17.89pp
++4.42pp
++2.32pp
+
+pN B
+∗∗
+
+0.000
+0.987
+0.102
+0.011∗
+0.020∗
+0.010∗∗
+0.075†
+
+pW
+0.002∗∗
+0.846
+0.002∗∗
+0.002∗∗
+0.002∗∗
+0.002∗∗
+0.004∗∗
+
+Global: FraudGNAM wins 18 of 21 (dataset×metric) comparisons; exact binomial p=7.5×10−4 .
+Table 27: Rebuttal Table R4. Threshold sensitivity grid. Tight: (τorder , τNCE , nf,R1 , hR3 )=(0.80, 0.90, 100, 0.65). Loose:
+(0.90, 1.00, 300, 0.75). Median AUROC change 0.08pp; 13 of 14 cells |∆|<0.5pp.
+Dataset
+
+Refined AUROC
+
+Tight ∆
+
+Loose ∆
+
+Max |∆|
+
+Yelp
+Amazon
+Weibo
+Tfinance
+Reddit
+Tolokers
+Questions
+
+0.8821
+0.9813
+0.9826
+0.9592
+0.6970
+0.8050
+0.7255
+
+−0.02pp
+−0.01pp
++0.03pp
++0.00pp
+−3.25pp
++0.02pp
++0.01pp
+
+−0.02pp
+−0.44pp
++0.09pp
+−0.08pp
+−2.23pp
+−0.04pp
++0.08pp
+
+0.02pp
+0.44pp
+0.09pp
+0.08pp
+3.25pp
+0.04pp
+0.08pp
+
+Reddit’s 3.25pp drop occurs precisely when tight nf,R1 =100 disables the new R1 rule on Reddit (nf =146),
+confirming the cutoff at 200 is well-placed in the natural gap (Reddit 146 vs Weibo 347).
+
+143K to ∼50K. The architecture cost is therefore configuration-dependent and operator-tunable; we do not claim uniform
+efficiency advantage.
+Multi-trial perturbation stability. Beyond the single-trial Spearman ρ in Appendix P, we measured 3-trial averaged
+stability on 4 datasets (Yelp, Amazon, Tolokers, Reddit) using 200 test nodes × 3 noise draws per trial. Amazon ρ =
+0.996 ± 0.001 at σ=0.01 (99 ± 1% top-component match); Tolokers ρ = 0.991 ± 0.003 (97 ± 1%); Yelp ρ = 0.982 ± 0.001
+(95 ± 1%); Reddit ρ = 0.574 ± 0.282 (high variance reflecting sparse-fraud regime).
+Collapsed-MLP control. To test whether the scalar-sum constraint limits capacity under low supervision, we trained a
+2-layer MLP over [X, L̂X, (L̂/2)2 X] (same input information, no decomposition). On Reddit, FraudGNAM-refined (0.697)
+matches the unconstrained MLP (0.664); on Tolokers, FraudGNAM (0.805) beats the MLP (0.794). The bottleneck for
+low-supervision regimes is the supervision signal, not the additive decomposability constraint.
+Rebuttal Table 30 — Full 7-dataset ablation. We extend the original 4-dataset ablation (Yelp, Amazon, Weibo, Reddit)
+to all 7 GADBench datasets by completing tolokers, questions, and tfinance under each of the 6 ablation variants (full,
+no_HP, no_NCE, no_EFI, order-2, order-4). The key observations are: (a) adaptive gating works correctly — tfinance shows
+bit-identical AUROC across full / no_HP / no_NCE because HP and NCE are auto-disabled by the rule; (b) no_HP improves
+AUROC on tolokers (+0.65pp), motivating the new R3 cutoff; (c) order-2 improves AUROC on Reddit (+3.9pp), motivating
+R1.
+Rebuttal Figure 7 — Adaptive rule decision tree. For accessibility we render the full deterministic configuration as a
+decision tree (Figure 7). The three new cutoffs (R1, R2, R3) introduced in this rebuttal are highlighted; all decisions remain
+deterministic functions of the four measurable graph statistics (h, k̄, d, nf ) and require no validation-based search.
+3423
+
+=== PDF PAGE 27 ===
+Table 28: Rebuttal Table R5. NCE gradient-flow analysis. Per-component contribution mass Ev |αc ψc (v)| and Gini
+concentration. NCE decreases concentration (more even distribution) on Yelp/Tolokers → no branch collapse.
+Dataset
+
+AUROC w/NCE
+
+AUROC w/o NCE
+
+Gini w/NCE
+
+Gini w/o NCE
+
+∆Gini
+
+Min component mass
+
+Yelp
+Tolokers
+Questions
+Amazon
+
+0.8768
+0.7981
+0.7232
+0.9834
+
+0.8755
+0.7940
+0.7067
+0.9817
+
+0.314
+0.181
+0.579
+0.612
+
+0.327
+0.233
+0.532
+0.603
+
+−0.013
+−0.052
++0.047
++0.009
+
+0.270
+0.388
+0.011
+0.160 (NCE inactive)
+
+Min component mass > 0.05 on every dataset → no single branch monopolizes prediction.
+
+Table 29: Rebuttal Table R6. Per-variant peak GPU memory. Reviewer’s quoted Yelp peak (5556 MB) reproduced (5561
+MB). Disabling EFI alone recovers 14% at −0.7pp Yelp AUROC; HP recovers 8% with −0.2pp. Adaptive gating disables
+HP/NCE on 4 of 7 homophilic datasets.
+Variant
+full
+no highpass
+no nce
+no efi
+order2
+order4
+
+Yelp
+Params (k) Peak (MB)
+143.0
+125.6
+138.8
+112.6
+125.6
+143.0
+
+5561
+5121
+5426
+4785
+5095
+5558
+
+Tolokers
+Params (k) Peak (MB)
+120.9
+109.1
+119.5
+100.3
+109.1
+120.9
+
+1034
+934
+1021
+858
+932
+1033
+
+Parameter efficiency landscape (Figure 8). We compare FraudGNAM against 7 baselines (GCN, BernNet, BWGNN,
+SEC-GFD, GAGA, PMP, GNAN) by parameter count vs AUROC across 5 datasets. FraudGNAM occupies the high-AUROC,
+mid-parameter region: 3–4× SEC-GFD’s parameter count, but each additional parameter serves an interpretability purpose
+(per-feature/grouped feature networks, per-band EFI MLPs, pairwise interaction networks).
+(k)
+
+Spectral filter coefficients (Figure 9). Heatmap of the learned polynomial coefficients θj for the spectral filter bank.
+Yelp (K = 4, heterophilic) and Tolokers (K = 4) show non-monotonic coefficient patterns across bands consistent with
+band-pass shapes; Weibo (K = 2, homophilic) shows simpler low-frequency-concentrated coefficients.
+Label-noise robustness (Figure 10). We measure FraudGNAM and SEC-GFD’s test AUROC on Yelp under 0%, 5%,
+10%, and 20% random training-label flips (5 trials each). FraudGNAM (refined) maintains higher AUROC than SEC-GFD
+at every noise level ≤ 10% and ties at 20%. The absolute degradation rates are similar (FraudGNAM −6.83pp at 20%;
+SEC-GFD −5.47pp), so the additive scalar-sum decomposition does not amplify noise relative to the entangled black-box
+baseline. This addresses R2’s concern about adversarial/noise failure modes.
+Yelp per-feature shape functions (Figure 11). Top-12 features by output range. Each panel shows fi (xi ) over the
+empirical input range; positive (red shaded) regions push toward fraud, negative (blue) regions push away. Several features
+show sharp threshold-style behaviour, allowing fraud analysts to read off “alarm levels” from a single value.
+FraudGNAM vs GNAN explanation comparison (Figure 12). For the same Yelp fraud node, FraudGNAM produces a
+6-component breakdown (Feature, Pairwise, Band, EFI, HP, HP-EFI) revealing the spectral signature of the fraud, while
+GNAN produces only per-hop aggregations. The spectral-band and HP-EFI contributions in FraudGNAM are the primary
+drivers — information that GNAN cannot expose.
+Filter response visualisation. Figure 13 plots learned polynomial-bank frequency responses alongside the high-pass
+branch response on [0, 2] for two heterophilic datasets. The polynomial bank’s response at λ → 2 is bounded by |θK |(λ/2)K :
+reaching a sharp boundary requires large |θK |, which entangles the response across the whole band. The high-pass branch’s
+response ∝ λt reaches the boundary efficiently with two iterations, providing dedicated boundary-frequency capacity that
+the polynomial bank does not. On the homophilic Weibo (Figure 14) the high-pass branch is automatically disabled by the
+rule (THP = 0 for h ≥ 0.95), and the polynomial bank concentrates response in the low frequencies, consistent with the
+3424
+
+=== PDF PAGE 28 ===
+Table 30: Rebuttal Table R7. Full ablation across all 7 GADBench datasets (AUROC mean over 10 trials). Bold =
+best; italics = worst within row. Original paper covered yelp/amazon/weibo/reddit; rebuttal completes the matrix on
+tolokers/questions/tfinance. “—” = component not active under the rule (e.g., HP/NCE auto-disabled on homophilic graphs).
+Variant
+
+Yelp
+
+Amazon
+
+Weibo
+
+Reddit
+
+Tolokers
+
+Questions
+
+tfinance
+
+full
+w/o high-pass
+w/o NCE
+w/o EFI
+order K = 2
+order K = 4
+
+0.882
+0.880
+0.865
+0.875
+0.878
+0.882
+
+0.979
+0.979
+0.980
+0.977
+0.979
+0.980
+
+0.979
+0.979
+0.979
+0.979
+0.979
+0.983
+
+0.654
+0.656
+0.656
+0.654
+0.693
+0.647
+
+0.801
+0.807
+0.799
+0.801
+0.793
+—
+
+0.726
+0.719
+0.724
+0.723
+0.712
+—
+
+0.959
+0.959
+0.959
+0.958
+0.959
+—
+
+refined
+
+0.882
+
+0.981
+
+0.983
+
+0.697
+
+0.805
+
+0.725
+
+0.959
+
+Compute graph stats:
+h, k̄, d, nf
+Spectral order K
+
+h < 0.85?
+
+else: h > 0.97
+∧ d ≥ 300?
+
+else: k̄ < 30?
+
+Yes
+Yes (R2)
+Yes
+
+Yes: nf < 200?
+Yes (R1)
+
+No
+
+K=3
+
+No
+
+Yes: K=4
+
+K=2
+
+No: default K
+
+No
+
+K=2
+
+K=4
+High-pass filters THP
+
+NCE contrastive loss
+
+nf ≥ 500
+∧ h < 0.95?
+Yes
+
+Yes: NCE on
+
+h < 0.70?
+Yes (R3)
+
+No
+
+No: NCE off
+
+No
+
+Yes: THP =0
+
+else: h < 0.85?
+Yes
+
+Yes: THP =2
+
+No
+
+else: h < 0.95?
+Yes
+
+Yes: THP =1
+
+No
+
+No: THP =0
+
+Figure 7: Rebuttal Figure F1. Refined adaptive rule decision tree. Three new cutoffs (R1, R2, R3) are highlighted; the rest
+is unchanged from the submitted rule. All decisions are deterministic functions of four measurable graph statistics (h, k̄, d,
+nf ); no validation-based search is needed.
+regime requirement.
+
+3425
+
+=== PDF PAGE 29 ===
+Figure 8: Parameter count (log axis, in thousands) vs AUROC across 5 GADBench datasets. FraudGNAM (red star)
+consistently in the high-AUROC region; GNAN (green) is parameter-efficient but loses on heterophilic datasets where
+spectral filtering is required.
+
+(k)
+
+Figure 9: Learned spectral filter coefficients θj on three datasets. Each row is band j’s polynomial; deeper rows correspond
+to higher-frequency bands. Color encodes magnitude (red positive, blue negative).
+
+Figure 10: Yelp test AUROC vs train-label flip rate (5 trials, mean ± std). FraudGNAM-refined matches or beats SEC-GFD
+up to 10% noise; degradation rates are similar.
+
+3426
+
+=== PDF PAGE 30 ===
+Figure 11: Yelp learned NAM shape functions for the top-12 most-influential features. The model is the trained refinedFraudGNAM (test AUROC = 0.878 on this trial 0).
+
+Figure 12: Same Yelp fraud node, two interpretable models. FraudGNAM (left) provides a fine-grained spectral + featureinteraction breakdown; GNAN (right) only provides per-hop aggregation and cannot expose which spectral band or
+feature-spectrum interaction drove the prediction.
+
+3427
+
+=== PDF PAGE 31 ===
+(a) Yelp (h=0.774, THP =2 active).
+
+(b) Tolokers (h=0.604; refined rule disables HP, but the trained
+model in this figure has THP =2 for visualisation).
+
+Figure 13: Learned polynomial-bank vs. high-pass branch frequency responses on heterophilic datasets. The polynomial
+bank cannot reach a sharp boundary at λ → 2 without entangling its mid-band response, motivating the dedicated high-pass
+branch on moderately heterophilic graphs.
+
+Figure 14: Weibo (h=0.977, refined rule auto-disables HP). Polynomial bank concentrates response in low frequencies,
+consistent with extreme homophily.
+
+3428
+
+=== END SOURCE TEXT ===

@@ -1,0 +1,9 @@
+FraudGNAM: Inherently Interpretable Spectral GNN for Graph Fraud Detection
+
+Condensed abstract
+
+Builds a spectral graph model whose fraud scores decompose into auditable feature,
+interaction, and spectral-band contributions. Learnable multiscale filters capture
+complex graph patterns while preserving additive interpretability. A graph-dependent
+configuration rule reduces manual tuning, and experiments compare predictive performance
+with strong graph-fraud baselines.

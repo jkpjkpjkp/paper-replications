@@ -1,0 +1,749 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "fraudgnam",
+  "title": "FraudGNAM: Inherently Interpretable Spectral GNN for Graph Fraud Detection",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/paper-reproduction-audit/workspaces/429-fraudgnam/sources/paper.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/paper-reproduction-audit/workspaces/429-fraudgnam/sources/paper.pdf",
+    "sha256": "d8f2649462b109a16fb9857c67ca1ac4791ffc8f0f8892f2af4551f147705af5",
+    "bytes": 1642083,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 31,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 83
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 84,
+      "line_end": 179
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 180,
+      "line_end": 360
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 361,
+      "line_end": 501
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 502,
+      "line_end": 694
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 695,
+      "line_end": 790
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 791,
+      "line_end": 1205
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 1206,
+      "line_end": 1429
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1430,
+      "line_end": 1538
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1539,
+      "line_end": 1626
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1627,
+      "line_end": 1696
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1697,
+      "line_end": 1754
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1755,
+      "line_end": 1931
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1932,
+      "line_end": 2113
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 2114,
+      "line_end": 2360
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 2361,
+      "line_end": 2398
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 2399,
+      "line_end": 2434
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 2435,
+      "line_end": 2511
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 2512,
+      "line_end": 2589
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 2590,
+      "line_end": 2836
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 2837,
+      "line_end": 3042
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 3043,
+      "line_end": 3171
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 3172,
+      "line_end": 3326
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 3327,
+      "line_end": 3400
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 3401,
+      "line_end": 3535
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 3536,
+      "line_end": 3685
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 3686,
+      "line_end": 3811
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 3812,
+      "line_end": 3982
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 3983,
+      "line_end": 3997
+    },
+    {
+      "page": 30,
+      "segment": 30,
+      "line_start": 3998,
+      "line_end": 4005
+    },
+    {
+      "page": 31,
+      "segment": 31,
+      "line_start": 4006,
+      "line_end": 4020
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 73
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 74,
+      "line_end": 139
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 140,
+      "line_end": 210
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 211,
+      "line_end": 281
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 282,
+      "line_end": 354
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 355,
+      "line_end": 419
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 420,
+      "line_end": 489
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 490,
+      "line_end": 577
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 578,
+      "line_end": 637
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 638,
+      "line_end": 708
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 709,
+      "line_end": 776
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 777,
+      "line_end": 832
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 833,
+      "line_end": 890
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 891,
+      "line_end": 951
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 952,
+      "line_end": 1011
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1012,
+      "line_end": 1051
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1052,
+      "line_end": 1095
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1096,
+      "line_end": 1137
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1138,
+      "line_end": 1199
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1200,
+      "line_end": 1260
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1261,
+      "line_end": 1323
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 1324,
+      "line_end": 1386
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 1387,
+      "line_end": 1451
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 1452,
+      "line_end": 1510
+    },
+    {
+      "page": 25,
+      "segment": 25,
+      "line_start": 1511,
+      "line_end": 1570
+    },
+    {
+      "page": 26,
+      "segment": 26,
+      "line_start": 1571,
+      "line_end": 1630
+    },
+    {
+      "page": 27,
+      "segment": 27,
+      "line_start": 1631,
+      "line_end": 1690
+    },
+    {
+      "page": 28,
+      "segment": 28,
+      "line_start": 1691,
+      "line_end": 1748
+    },
+    {
+      "page": 29,
+      "segment": 29,
+      "line_start": 1749,
+      "line_end": 1771
+    },
+    {
+      "page": 30,
+      "segment": 30,
+      "line_start": 1772,
+      "line_end": 1787
+    },
+    {
+      "page": 31,
+      "segment": 31,
+      "line_start": 1788,
+      "line_end": 1806
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 29,
+      "text": "Abstract"
+    },
+    {
+      "line": 85,
+      "text": "1. Inherently interpretable spectral GNN architecture"
+    },
+    {
+      "line": 90,
+      "text": "2. Theory-guided deterministic adaptive spectral"
+    },
+    {
+      "line": 95,
+      "text": "3. State-of-the-art performance with interpretability:"
+    },
+    {
+      "line": 1498,
+      "text": "CONCLUSION"
+    },
+    {
+      "line": 1540,
+      "text": "References"
+    },
+    {
+      "line": 1552,
+      "text": "2022. URL https://proceedings.mlr.press/"
+    },
+    {
+      "line": 1577,
+      "text": "3340531.3411903. URL https://doi.org/10."
+    },
+    {
+      "line": 1597,
+      "text": "14251. Curran Associates, Inc., 2021."
+    },
+    {
+      "line": 1599,
+      "text": "2017. URL https://openreview.net/forum?"
+    },
+    {
+      "line": 1612,
+      "text": "3442381.3449989. URL https://doi.org/10."
+    },
+    {
+      "line": 1647,
+      "text": "2022. URL https://proceedings.mlr.press/"
+    },
+    {
+      "line": 1664,
+      "text": "2019. URL https://openreview.net/forum?"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2757
+    },
+    {
+      "id": 39,
+      "line_start": 2750,
+      "line_end": 2829
+    },
+    {
+      "id": 40,
+      "line_start": 2822,
+      "line_end": 2901
+    },
+    {
+      "id": 41,
+      "line_start": 2894,
+      "line_end": 2973
+    },
+    {
+      "id": 42,
+      "line_start": 2966,
+      "line_end": 3045
+    },
+    {
+      "id": 43,
+      "line_start": 3038,
+      "line_end": 3117
+    },
+    {
+      "id": 44,
+      "line_start": 3110,
+      "line_end": 3189
+    },
+    {
+      "id": 45,
+      "line_start": 3182,
+      "line_end": 3261
+    },
+    {
+      "id": 46,
+      "line_start": 3254,
+      "line_end": 3333
+    },
+    {
+      "id": 47,
+      "line_start": 3326,
+      "line_end": 3405
+    },
+    {
+      "id": 48,
+      "line_start": 3398,
+      "line_end": 3477
+    },
+    {
+      "id": 49,
+      "line_start": 3470,
+      "line_end": 3549
+    },
+    {
+      "id": 50,
+      "line_start": 3542,
+      "line_end": 3621
+    },
+    {
+      "id": 51,
+      "line_start": 3614,
+      "line_end": 3693
+    },
+    {
+      "id": 52,
+      "line_start": 3686,
+      "line_end": 3765
+    },
+    {
+      "id": 53,
+      "line_start": 3758,
+      "line_end": 3837
+    },
+    {
+      "id": 54,
+      "line_start": 3830,
+      "line_end": 3909
+    },
+    {
+      "id": 55,
+      "line_start": 3902,
+      "line_end": 3981
+    },
+    {
+      "id": 56,
+      "line_start": 3974,
+      "line_end": 4021
+    }
+  ],
+  "line_count": 4021,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "00cce346abfbddbebeefe25496d63e2b3719931a00a7cac282650de0cd0bdf24",
+      "bytes": 106448
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "ff7f0b5a8cd3fc4566838be0196492c5c4264fae4b65a94584c634b2a7656dc0",
+      "bytes": 147711
+    }
+  }
+}

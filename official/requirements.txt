@@ -1,0 +1,15 @@
+# FraudGNAM dependencies.
+# Install PyTorch and DGL separately, matched to your CUDA version, BEFORE this file:
+#   conda install pytorch==1.13.1 pytorch-cuda=11.7 -c pytorch -c nvidia
+#   conda install -c dglteam/label/cu117 dgl
+# (torch and dgl are intentionally not pinned here to avoid clobbering a CUDA build.)
+
+numpy
+scipy
+pandas
+scikit-learn
+sympy
+matplotlib
+tqdm
+psutil
+catboost

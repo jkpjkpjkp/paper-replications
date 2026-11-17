@@ -1,0 +1,24 @@
+2: at least one representative experiment matches the paper's claim
+
+
+
+Scope: Completed ten-seed T-Finance main-model rerun; later aggregate supersedes old running report.
+
+Evidence and explanation:
+All ten trials completed. AUROC 0.95938068 +/- 0.00457184 population seed SD versus
+released 0.95924995 (gap +0.00013073, 0.029 SD); AUPRC 0.84746438 +/- 0.01234677 versus
+0.84746415 (gap 2.33e-7); Recall@k 0.79056865 +/- 0.01340412 versus 0.78904300
+(+0.00152566, 0.114 SD). The aggregate includes independently recomputed trial metrics.
+The old report's one-seed/running statement is stale.
+
+Limits / next requirement:
+Only the main T-Finance experiment is credited. Baselines, ablations, sensitivities,
+explanations, runtime and six auxiliary datasets are incomplete. Author all-label
+configuration and paper/code class-weight differences remain; numerical agreement is not
+certification of a leak-free method.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/429-fraudgnam/results/local-main/summary.json
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/429-fraudgnam/results/local-main/progress.json
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/429-fraudgnam/report.txt
+
