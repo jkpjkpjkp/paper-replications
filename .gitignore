@@ -12,7 +12,7 @@ CRYPTO/
 .replication-local/
 .venv*/
 venv/
-env/
+/env/
 __pycache__/
 .pytest_cache/
 .mypy_cache/
@@ -102,4 +102,5 @@ secrets.yaml
 *.blg
 *.out
 *.synctex.gz
+!/upstream/
 # END managed upload rules
