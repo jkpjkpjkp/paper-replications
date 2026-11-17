@@ -1,0 +1,1608 @@
+Healthcare Insurance Fraud Detection via Continual Fiedler Vector Graph Model
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/artifacts/paper-reproduction-audit/workspaces/103-healthcare-insurance-fraud/sources/paper.pdf
+Source SHA-256: c7280301b700e38aed3896e5cf2d3572197f210558b995cefd65c2a04c517de9
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+Published as a conference paper at ICLR 2026
+
+H EALTHCARE I NSURANCE F RAUD D ETECTION VIA
+C ONTINUAL F IEDLER V ECTOR G RAPH M ODEL
+Yehan Zhang1 Huaidong Zhang1,∗ Xuandi Luo1 Shengfeng He2
+South China University of Technology, 2 Singapore Management University
+{yehanzhang,ftxuandi.luo}@mail.scut.edu.cn, huaidongz@scut.edu.cn,
+shengfenghe@smu.edu.sg
+
+1
+
+A BSTRACT
+Healthcare insurance fraud detection presents unique machine learning challenges: labeled data are scarce due to delayed verification processes, and fraudulent behaviors evolve rapidly, often manifesting in complex, graph-structured
+interactions. Existing methods struggle in such settings. Pretraining routines
+typically overlook structural anomalies under limited supervision, while online
+models often fail to adapt to changing fraud patterns without labeled updates. To
+address these issues, we propose the Continual Fiedler Vector Graph model (ConFVG), a fraud detection framework designed for label-scarce and non-stationary
+environments. The framework comprises two key components. To mitigate label scarcity, we develop a Fiedler Vector-guided graph autoencoder that leverages spectral graph properties to learn structure-aware node representations. The
+Fiedler Vector, derived from the second smallest eigenvalue of the graph Laplacian, captures global topological signals such as community boundaries and connectivity bottlenecks, which are patterns frequently associated with collusive
+fraud. This enables the model to identify structurally anomalous nodes without
+relying on labels. To handle evolving graph streams, we propose a Subgraph Attention Fusion (SAF) module that constructs neighborhood subgraphs and applies
+attention-based reweighting to emphasize emerging high-risk structures. This design allows the model to adapt to new fraud patterns in real time. A Mean Teacher
+mechanism further stabilizes online updates and prevents forgetting of previously
+acquired knowledge. Experiments on real-world medical fraud datasets demonstrate that the Continual Fiedler Vector Graph model outperforms state-of-the-art
+baselines in both low-label and distribution-shift scenarios, offering a scalable
+and structure-sensitive solution for real-time fraud detection. Codes are available
+at https://github.com/yhzhang1309/ConFVG.
+
+1
+
+I NTRODUCTION
+
+Healthcare insurance fraud has become a critical issue in social healthcare systems, with increasingly
+sophisticated and large-scale fraudulent schemes causing substantial financial losses. According to
+the 2024 Medicaid Fraud Control Units Annual Report (U.S. Department of Health and Human Services, Office of Inspector General, 2024), Federal Medicare fraud in the U.S. reached approximately
+$61 billion, accounting for around 7% of total federal healthcare spending. These fraudulent claims
+not only undermine patients’ access to rightful medical services but also strain healthcare budgets
+and obstruct the path toward universal healthcare. This pressing societal issue calls for more intelligent and scalable fraud detection solutions.
+Machine learning has shown promise in identifying fraud patterns by leveraging the complex relationships between entities such as patients, providers, and claims. In particular, graph-based methods have demonstrated strong performance in capturing structural dependencies within healthcare
+data. For instance, Dou et al. (2020) introduced a graph neural network (GNN) model with selective
+neighbor aggregation for offline fraud detection. Building on this, Sadreddin and Sadaoui (2022)
+∗
+
+Corresponding Author.
+
+1
+
+=== PDF PAGE 2 ===
+Published as a conference paper at ICLR 2026
+
+Figure 1: The visualization of fraud pattern evolution in the medical insurance fraud dataset. We use
+t-SNE to visualize the node distribution of features. The red node denotes fraudulent nodes, whereas
+blue denotes normal nodes
+developed an adaptive learning method that combines transfer and incremental learning. In the online setting, Zhang et al. (2024) applied contrastive learning with parameter-level continual updates
+to mitigate knowledge forgetting.
+Despite these advancements, existing methods remain limited in real-world fraud detection scenarios due to two major challenges: 1) Label scarcity during model pretraining. In practice, labeled
+fraud cases are rare due to the high cost and time required for manual verification (Palacio, 2019),
+especially in health care systems in some cases where only 0.062% are identified as fraud (Bauder
+et al., 2018). Most prior methods assume access to fully labeled data during pretraining or rely on
+supervised objectives, which suffer a decline in performance when labeled supervision is limited.
+Although some self-supervised approaches employ the autoencoder to catch inner semantic representations(Hou et al., 2022), they often fail to emphasize structurally meaningful fraud patterns such
+as collusive groups or community anomalies.
+2) Lack of adaptability in non-stationary graph streams. Fraud patterns are not static as shown in
+Figure 1. They evolve over time, often emerging in new relational structures. Traditional static
+fraud detection cannot catch the progressive evolution of fraudulent behaviors, causing performance
+degradation over time. Meanwhile, labeled data are rarely available in online testing (Pereira and
+Silveira, 2019), which makes supervised updates impractical. Models based on static presentations
+or ground-truth label update strategies struggle to detect new fraudulent patterns.
+To address these challenges, we propose the Continual Fiedler Vector Graph model (ConFVG), a
+fraud detection model designed for label-scarce and non-stationary environments. ConFVG (shown
+in Figure 2) consists of two core modules. 1) To handle label scarcity, we develop a Fiedler Vectorguided graph autoencoder that incorporates spectral information from the second smallest eigenvector of the graph Laplacian (Fiedler, 1973). This vector captures global structural properties, such
+as community boundaries and connectivity bottlenecks, which are often associated with collusive
+fraud. By integrating these signals into the autoencoder, the model learns structure-aware node
+representations that highlight fraud-relevant patterns without requiring labeled data. 2) To adapt to
+evolving fraud behaviors, we introduce a Subgraph Attention Fusion (SAF) module that dynamically
+augments and reweights local subgraphs based on attention. This enables the model to prioritize
+emerging high-risk structures, such as unusually dense clusters or temporally synchronized activity.
+A Mean Teacher architecture is used to stabilize updates and prevent catastrophic forgetting during
+online training. Experiments on real-world datasets, including but not limited to insurance fraud,
+demonstrate that the ConFVG consistently outperforms state-of-the-art baselines in both low-label
+and distribution-shift scenarios, providing a scalable and structure-aware solution for real-time fraud
+detection and beyond.
+Our main contributions are as follows:
+• We propose the Continual Fiedler Vector Graph model (ConFVG) for fraud detection under labelscarce and non-stationary conditions, integrating spectral self-supervision with adaptive online
+learning.
+• We develop a Fiedler Vector-guided graph autoencoder that leverages global topological signals
+to learn structure-aware representations in the absence of labels.
+• We introduce a Subgraph Attention Fusion (SAF) module for unsupervised online learning, enabling dynamic risk representation and continual adaptation to evolving fraud patterns.
+2
+
+=== PDF PAGE 3 ===
+Published as a conference paper at ICLR 2026
+
+2
+
+R ELATED W ORK
+
+Fraud Detection. Fraud detection has become an active area of research across various domains,
+including credit card transactions, insurance claims, and online payments (Cheng et al., 2025). Early
+systems were largely rule-based or built upon conventional machine learning techniques (Chan et al.,
+2002; Srivastava et al., 2008; Maes et al., 2002), which proved insufficient for capturing the complex
+and evolving nature of modern fraud patterns. More recently, deep learning approaches, particularly
+Graph Neural Networks (GNNs), Long Short-Term Memory (LSTM) networks, and Large Language Models (LLMs), have been widely adopted for fraud detection. Among them, GNNs have
+emerged as the most effective for modeling the relational structure inherent in fraud data. GNNbased fraud detection methods can be broadly categorized into three scenarios: fully supervised
+GNNs, semi-supervised GNNs, and online GNNs. Fully supervised models assume access to largescale labeled datasets, allowing for comprehensive pretraining. For example, CARE-GNN (Dou
+et al., 2020) and PC-GNN (Liu et al., 2021) use label-aware node selection strategies to improve
+fraud detection performance. Semi-supervised GNNs operate under the more realistic assumption
+of label scarcity. They exploit graph structure through self-supervision and pseudo-labeling. For instance, SemiGNN (Wang et al., 2019) incorporates hierarchical attention, and GTAN (Xiang et al.,
+2023) uses gated temporal attention to improve fraud representation learning. Online GNNs are
+designed for dynamic environments where fraud patterns evolve over time, requiring continual updates post-pretraining. POCL (Zhang et al., 2024), for example, adjusts parameters based on their
+contribution to previous tasks.
+Although prior studies have explored either label-efficient pretraining or adaptive fraud detection
+in evolving environments, these directions have largely been treated in isolation. In real-world
+medical insurance streams, however, extreme label scarcity and shifting fraud patterns often occur
+simultaneously. What remains missing is a unified approach that can both generalize from limited
+supervision and adapt continuously to unseen behaviors. Our work addresses this gap by jointly
+tackling the structural complexity of fraud graphs and the temporal dynamics of fraud evolution,
+providing a more realistic and robust solution for fraud detection under deployment constraints.
+Online Learning. Online learning addresses the challenge of training models on continuously arriving data while mitigating catastrophic forgetting (Hoi et al., 2021). Existing approaches can be
+broadly classified into three categories: parameter regularization, data rehearsal, and dynamic architecture. Parameter regularization methods constrain model updates to preserve previously learned
+knowledge. Techniques such as EWC (Li et al., 2020) and EVCL (Batra and Clark, 2024) apply regularization penalties to sensitive parameters, balancing plasticity and stability across tasks.
+Data rehearsal strategies, including iCaRL (Rebuffi et al., 2017) and GEM (Lopez-Paz and Ranzato, 2017), maintain a buffer of past samples or prototypes to reduce forgetting. Dynamic network
+approaches adapt the model structure itself to accommodate new knowledge. Notable examples include DEN (Yoon et al., 2017) and BC-DEN (Yang et al., 2022), which expand network capacity
+based on task complexity. Several methods have applied these ideas to GNNs. For instance, ContinualGNN (Wang et al., 2020) and SGNN-GR (Wang et al., 2022b) combine parameter regularization
+with data replay for online fraud detection. However, most of these approaches assume access to
+ground-truth labels during online updates, which is rarely the case in real-world fraud detection
+scenarios. To address this, we adopt a Mean Teacher framework in combination with our SAF module, enabling unsupervised, structure-aware updates that integrate new information while preserving
+previously learned representations.
+
+3
+
+P ROPOSED M ETHOD
+
+3.1
+
+P ROBLEM D EFINITION
+
+In online fraud detection scenario, we generate graph series G = (G0 , G1 , G2 , . . . , G|G| ) from raw
+dataset where each graph Gi represents the graph composed of claims in time periods. In medical
+insurance claim graph G(X , E, Y), each node Vi has its features represented by Fi ∈ R1×d , constituting the node feature matrix X ∈ Rn×d . E ∈ Rn×n denotes the edges between claim nodes,
+where claims have the same medical provider or beneficiary get connected. Node label Y ∈ Rn×1
+denotes the label of each node: fraud (1), not fraud (0), or none (-1).
+3
+
+=== PDF PAGE 4 ===
+Published as a conference paper at ICLR 2026
+
+Fiedler Vector-guided graph autoencoder
+1
+2
+
+Node Features
+
+7
+8
+
+(a) Pretrain Stage
+
+4
+
+2
+
+3
+
+6
+
+10
+
+5
+
+9
+
+10
+
+8
+
+Decomposition
+
+Initialize
+
+Mask
+
+1
+
+3
+6
+
+5
+
+Pretrain
+model
+
+4
+
+Graph Fraud Degree
+
+Graph Structure
+
+Subgraph Attention Fusion
+
++
+
+Projection
+
+Fiedler Vector
+
+Auto Encoder
+
+Outputs
+Teacher
+Model
+
+Original Graph
+
+EMA
+Concate
+Student
+Encoder
+
+Get Top K
+Component
+
+(b) Online Stage
+
++
+
+Complement Graph
+
+Student
+Classifier
+
+Feature Embedding
+
+Figure 2: The illustration of our Continual Fiedler Vector Graph model (ConFVG). (a) Pretrain Stage
+employs Fiedler Vector-guided graph autoencoder to learn structure-aware node representations. (b)
+Online learning stage utilizes Subgraph Attention Fusion (SAF) module to construct neighborhood
+subgraphs and apply attention-based reweighting to emphasize high-risk structures.
+To demonstrate the continual learning problem, we divide the whole dataset into the historical
+dataset Gh = (Gh0 , Gh1 , Gh2 , . . .) and the online dataset Go = (Go0 , Go1 , Go2 , . . .). In the pretrain stage,
+the model can only access the historical dataset Gh to train the parameter θhistory . While in the
+online learning stage, tasks come as a long sequence Go and the model can only access the current
+task Goi without access to the previous dataset. We update the parameters θi of the model after the
+new incoming task Goi to adapt to the ever-changing environment.
+However, in real-world scenarios, historical datasets are scarce, and labeled samples only occupy
+a small portion (Lebichot et al., 2016), the model accesses only unlabeled samples in the online
+learning phase. To simplify the problems above, we design a new challenging scenario with a
+partially labeled dataset in the pretrain stage and an unlabeled dataset in the online stage, as detailed
+in the experiment.
+3.2
+
+F IEDLER V ECTOR - GUIDED G RAPH AUTOENCODER
+
+In semi-supervised scenarios, the autoencoder is commonly used for providing additional information to the supervised learning process. Given the model encoder E and decoder D, our goal is to
+regenerate node features X from the feature embeddings E (G) to force the model encoder to learn
+the deeper feature representation of the graph. For the purpose of node classification, we use feature
+mask (Li et al., 2023) to randomly mask a part of the node features and reconstruct the masked
+features by comparing them to the real ones.
+For the vanilla random masking method (Hou et al., 2022), given a graph G(X , E, Y) and mask
+ratio r, we obtain the masked node features Xmask by applying the mask matrix M ∈ {0, 1}n×d
+to X , where Mif ∼ Bernoulli(1 − r), i ∈ {1, 2, . . . , n}, f ∈ {1, 2, . . . , d}. After obtaining the
+reconstruction features X̂ = D(E (G(Xmask , E, Y)) , we use a mean squared error (MSE) loss
+Lmask to pull closer X and X̂ as follows
+n
+
+Lmask =
+
+d
+
+1 XX
+(1 − Mif ) · (Xif − X̂if )2 , where I = {(i, f ) | Mif = 0}.
+|I| i=1
+
+(1)
+
+f =1
+
+However, the vanilla random mask is not solid and may mask some of the fruitless features or
+fail to mask important features (Liu et al., 2024), which may cause information loss and semantic
+4
+
+=== PDF PAGE 5 ===
+Published as a conference paper at ICLR 2026
+
+irrelevance. To address the limitations of the above masking techniques, we incorporate the global
+structural information with node features to take into account the fraud importance to the masking
+strategies.
+In the context of graph representation for fraud detection, fraudulent nodes often exhibit significant
+anomalous connectivity patterns (Pourhabibi et al., 2020), such as isolated nodes or abnormally
+dense local subgraphs. These structural deviations disrupt the global homophily of the graph, leading
+to sharp increases in feature or label discrepancies among node neighborhoods. From the perspective
+of spectral graph theory, such anomalous connectivity can be interpreted as ‘non-smooth’ signals:
+normal nodes tend to maintain smooth representations within communities, while fraudulent nodes
+introduce strong ’non-smooth’ values and high local gradients. This phenomenon is illustrated in
+Appendix A.1.
+To capture these non-smooth nodes and find out the fraud features, given a graph G(X , E, Y), we
+calculate its degree matrix D, adjacency matrix A, and laplacian matrix L = D − A with the edge
+set E. To better quantify the smoothness of the node, we denote each node i has its smoothness
+value qi , which constitutes the smoothness vector q ∈ Rn×1 . We defined the global smoothness
+Graphsmooth as follows
+X
+(qi − qj )2 .
+(2)
+Graphsmooth =
+(i,j)∈E
+
+To better optimize the smoothness of each node, we hypothesize that the connected nodes share
+similar smoothness values, while the disconnected nodes have dissimilar values. Therefore, we aim
+to minimize Graphsmooth as follows
+min
+
+X
+
+(qi − qj )2 = min qT Lq = min
+
+n
+X
+
+λi zi2 ,
+
+(3)
+
+i=1
+
+(i,j)∈E
+
+where λi denotes the eigenvalue of L, and zi is the projection of q on eigenvector i. To ensure the
+Eq. 3 is minimized and meaningful, we make z1 = 0, z2 = 1, z3 = · · · = zn = 0. So qT Lq = λ2 ,
+where q is the eigenvector u2 corresponding to λ2 , as the Fiedler vector vf = u2 indicating the
+fraudulent probability of each node.
+In the medical insurance fraud scenario, graphs are not always connected and may even have multiple connected components. Because of that, the Laplacian spectral decomposition in Eq. 3 degenerates, and the Fiedler vector loses its ability to capture anomalies. To address this problem, we
+add a fully connected perturbation to the original matrix, weakly connecting the multiple connected
+components into a single connected graph as follows
+A′ = A + ϵ · (J − I),
+
+(4)
+
+where A′ is the perturbed adjacency matrix, ϵ is the perturbation parameter, J is a matrix of all ones,
+and I is the identity matrix. The bound of perturbation is discussed in Appendix, A.2.
+While the smoothness values of a node solely represent the inner graph structure, we combine that
+with the semantic features of nodes to show the contribution of each feature. We normalize the node
+feature matrix and make a linear projection with x to get the mask probability sj as follows
+sj =
+
+n
+X
+
+vf,i · Xnorm,ij ,
+
+j = 1, 2, . . . , d.
+
+(5)
+
+i=1
+
+With the mask weight s, we can reformulate the mask matrix M in Eq. 1 with sampling probability
+equal to s, incorporating the fraud importance to the masking strategies.
+To summarize, the total loss in the pretrain stage Lpretrain is defined as follows
+Lpretrain = Lcls + αmask Lmask ,
+where αmask is a hyperparameter of reconstruction loss.
+5
+
+(6)
+
+=== PDF PAGE 6 ===
+Published as a conference paper at ICLR 2026
+
+3.3
+
+S UBGRAPH ATTENTION F USION M ODULE
+
+3.3.1
+
+S UBGRAPH C OMPLEMENT S TRATEGY
+
+Traditional graph models, i.e., GraphSAGE(Hamilton and Ying, 2017), GAT(Veličković et al., 2017)
+use top-k neighbors to transfer information between convolutional layers as follows
+
+hkN (v) ← AGGREGATEk {hk−1
+(7)
+u , ∀u ∈ N (v)} ,
+where h, N (v) denotes the feature vector and neighbor nodes of node v, respectively, and k denotes
+the k th layer of the model. These methods only focus on the subgraph that is fully connected in
+the graph, which overlooks the correlation between each connected part. The performance of the
+model becomes highly dependent on the initial graph connection, resulting in weaker generalization
+capability. In addition, focusing solely on single connected graph may weaken the model ability
+to capture similar fraudulent patterns from the entire graph, especially when the environment is
+dynamic and fraudulent activities are ever-changing.
+Therefore, we propose a subgraph attention-fused complement strategy to combine the original
+graph with its subgraph complement to capture evolving fraudulent behavior. Suppose G(X , V, Y)
+is a graph with m connected components, denoted as C1 , C2 , . . . , Cm . Each connected component
+Ci = (Xi , Vi ) consists of a node feature matrix set Xi ⊆ X and a node set Vi ⊆ V. We can get the
+graph complement Gcomp from the selected connected components as follows
+
+
+Gcomp = {0, 1, . . . , |V| − 1}, (ϕ(i), ϕ(j)) | i ̸= j, i, j ∈ V, (i, j) ∈
+/E
+(8)
+Sk
+where V = i=1 Ci , ϕ() is the index projection function, and k denotes the top-k largest components. The value of k is discussed in Appendix, A.3.Then we can obtain the original graph embeddings zorig = E(G) and the complement graph embeddings zcomp = E(Gcomp ). So our attentionfused embedding z is defined as follows
+z = σ(W2 ReLU(W1 [zorig ; zcomp ] + b1 ) + b2 ),
+
+(9)
+
+where W1 and W2 are parameter matrix for attention-fused, b1 and b2 are bias value, and σ is
+the sigmoid active function. To force the model to adaptively capture the fraudulent pattern in the
+online learning stage, we use the attention loss Lattn to control its weights on the complement graph
+as follows,
+
+
+X
+X
+1
+1
+Lattn = ReLU 
+ai −
+ai  ,
+(10)
+|V \ VG |
+|VG |
+i∈V\VG
+
+i∈VG
+
+where G = (VG , EG ) is the subgraph induced by the selected nodes VG ⊆ V, V \ VG is the set of
+unselected nodes, a ∈ Rn is the attention weight vector with ai for node i.
+3.3.2
+
+M EAN T EACHER S TRUCTURE
+
+In the online learning scenario where labels are inaccessible, we utilize the mean-teacher structure
+(Tarvainen and Valpola, 2017) with Lattn from Eq. 10 to update its parameter in data streams. We
+denote the teacher model as Mt , and the student model as Ms , with their parameter θt and θs ,
+respectively. The task sequence is denoted by task = (t0 , t1 , t2 , . . .), where ti denotes the graph
+Gi . When a new task ti comes, the teacher model predicts the outputs, and the student model uses
+the outputs to update its parameters. We use the KL divergence to restrict the outputs of the teacher
+model and student model as follows
+
+Lsim = KL Softmax(zs ) Softmax(zt ) .
+(11)
+So the total loss in the online learning scenario Lonline is
+Lonline = Lsim + αattn Lattn ,
+th
+
+(12)
+
+where αsim is a hyperparameter. After i task, the parameter of the student model gets updated by
+Lonline , while the parameter of the teacher model gets updated using exponential moving average
+(EMA) as follows
+(i)
+(i−1)
+θt = α θ t
++ (1 − α) θs(i) .
+(13)
+6
+
+=== PDF PAGE 7 ===
+Published as a conference paper at ICLR 2026
+
+In summary, the pseudocode of the proposed Continual Fiedler Vector Graph Model is presented in
+Algorithm 1.
+Algorithm 1 Continual Fiedler Vector Graph Model
+1: Input: Historical graph Gh , online graph dataset Go
+2: Output: Model Ms with parameter θs
+3: Initialize: Model Ms , decoder D
+4: Compute graph laplacian matrix
+PnL ,get vf from decomposition
+5: Compute mask weight sj = | i=1 vf,i · Xnorm,ij |, get mask matrix M
+6: Compute Lmask , Lcls
+7: Update θs with Lpretrain = Lcls + αmask Lmask , set θt ← θs
+8: for each online graph G0i , i = 1, 2, 3, . . . do
+9:
+Make top k component graph complement Gcomp
+10:
+Fuse attention z = σ(W2 ReLU(W1 [zorig ; zcomp ] + b1 ) + b2 )
+11:
+Compute Lsim , Lattn
+12:
+Update θs with Lonline = Lsim + αattn Lattn
+13:
+Update θt ← αθt + (1 − α)θs
+14: end for
+
+4
+
+E XPERIMENTS
+
+In scenarios with various proportions of scarce labels, we conduct experiments on the medical health
+insurance dataset and other real-world fraud datasets. We first introduce the datasets and experimental settings, then validate the model’s exceptional performance and generalization capability under
+real-world scenarios. Subsequently, we perform ablation studies to demonstrate the importance of
+each component. Finally, we analyze the role of the autoencoder and subgraph complement strategy
+through case studies.
+4.1
+
+DATASET A ND E XPERIMENT S ETUP
+
+Dataset and metrics. To evaluate the performance of our model on real-world datasets, we utilized
+a large-scale medical insurance dataset (Ma et al., 2023). This dataset comprises over 100,000
+unique beneficiaries with a total of 517,737 distinct claims. All samples in the dataset are labeled
+and timestamped, facilitating temporal grouping and validation. In the experiments, we select one
+year of the data and construct daily medical diagnosis graphs. The initial 15 days were designated as
+the historical dataset, while the remaining served as the online learning dataset. To better simulate
+real-world scenarios, we randomly retain labels in the historical dataset with probabilities of 1%,
+10%, while removing all labels from the online learning dataset. To demonstrate the generalizability
+of our model across different scenarios, we conducted additional experiments using two widely
+used datasets: Amazon (McAuley and Leskovec, 2013) and YelpChi (Rayana and Akoglu, 2015).
+As the evaluation metric, we use the average accuracy, F1 score, and AUC to measure the model’s
+performance in online learning scenarios.
+Baseline. We compare our method with the state-of-the-art (SOTA) GNN models in fraud detection, including well-established baselines: CAREGNN(Dou et al., 2020), PCGNN (Liu et al., 2021),
+SAD(Tian et al., 2023), GTAN(Xiang et al., 2023), GAD (Chen et al., 2024), ContinuesGNN(Wang
+et al., 2020), FGN(Wang et al., 2022a), POCL(Zhang et al., 2024). CAREGNN and PCGNN are
+traditional offline models, while SAD, GTAN, and GAD are designed for the semi-supervised scenario. FGN and POCL are online models with parameter updates. In light of previous work not
+applicable to the unsupervised learning scenario, we utilize their pre-trained model to complete the
+subsequent online learning. To ensure the fairness of comparison, we make extra experiments on a
+traditional online learning scenario where labels are abundant, denoted as 100%* label rate.
+4.2
+
+E XPERIMENTAL R ESULTS
+
+We conduct extensive experiments to compare our model against SOTA baseline methods. As shown
+in Table 1, our model demonstrates superior performance, achieving the highest AUC and F1-score
+across real-world scenarios with different label ratios. With a 10% label rate, a fully supervised
+7
+
+=== PDF PAGE 8 ===
+Published as a conference paper at ICLR 2026
+
+Table 1: Performance comparison of different models on medical insurance dataset at different label
+rates. 100% * label rate denotes the traditional online scenario.
+Model Type
+
+Model
+
+1% label rate
+AUC
+
+Traditional Offline
+
+CAREGNN
+PCGNN
+
+SAD
+Semi-Supervised Offline GTAN
+GAD
+
+F1 Score
+
+10% label rate
+AUC
+
+F1 Score
+
+100% * label rate
+AUC
+
+F1 Score
+
+62.08 ± 1.31 40.58 ± 3.05 67.35 ± 1.20 49.61 ± 1.50 75.12 ± 0.78 54.23 ± 0.24
+63.75 ± 1.72 50.16 ± 2.14 69.38 ± 0.55 54.25 ± 0.91 78.11 ± 0.33 60.10 ± 0.55
+72.58 ± 1.29 55.40 ± 1.95 76.12 ± 1.23 62.30 ± 2.24 78.56 ± 0.21 62.04 ± 0.41
+72.43 ± 1.30 57.33 ± 1.71 75.60 ± 1.12 61.38 ± 2.57 76.54 ± 0.53 61.29 ± 0.67
+73.29 ± 1.11 56.81 ± 2.19 76.54 ± 0.83 61.73 ± 1.88 77.56 ± 0.18 62.35 ± 0.28
+
+Traditional Online
+
+ContinuesGNN 63.14 ± 1.07 49.22 ± 2.83 69.52 ± 1.97 53.26 ± 1.36 78.60 ± 0.10 57.32 ± 0.22
+FGN
+62.83 ± 1.21 43.30 ± 3.21 65.71 ± 1.01 50.11 ± 1.92 73.91 ± 0.25 56.42 ± 0.51
+POCL
+70.64 ± 1.34 52.45 ± 2.57 74.76 ± 1.12 60.31 ± 1.88 80.32 ± 0.21 63.56 ± 0.28
+
+Proposed
+
+Ours
+
+76.13 ± 1.05 62.24 ± 2.26 80.48 ± 0.86 64.48 ± 1.24 80.61 ± 0.08 63.24 ± 0.16
+
+Table 2: Performance comparison of models across different real-world datasets at 10% label rate.
+Model Type
+
+Medical
+
+Model
+AUC
+
+Traditional Offline
+
+CAREGNN
+PCGNN
+
+SAD
+Semi-Supervised Offline GTAN
+GAD
+
+Yelpchi
+
+F1 Score
+
+AUC
+
+F1 Score
+
+Amazon
+AUC
+
+F1 Score
+
+67.35 ± 1.20 49.61 ± 1.50 71.12 ± 1.83 61.05 ± 2.12 87.31 ± 0.06 84.24 ± 0.26
+69.38 ± 0.55 54.25 ± 0.91 73.45 ± 1.17 61.21 ± 1.60 88.58 ± 0.12 86.12 ± 0.35
+76.12 ± 1.23 62.30 ± 2.24 73.17 ± 0.59 61.01 ± 2.23 87.53 ± 0.62 84.16 ± 0.99
+75.60 ± 1.00 61.38 ± 2.57 74.74 ± 1.01 62.22 ± 2.01 88.67 ± 0.20 83.16 ± 0.77
+76.54 ± 0.83 61.73 ± 1.70 75.22 ± 0.96 62.61 ± 1.93 89.56 ± 0.18 85.05 ± 0.31
+
+Traditional Online
+
+ContinuesGNN 69.52 ± 1.97 53.26 ± 1.36 71.62 ± 1.68 60.95 ± 2.05 81.28 ± 0.14 73.52 ± 0.35
+FGN
+65.71 ± 1.01 50.11 ± 1.92 70.37 ± 2.01 56.41 ± 2.57 81.12 ± 1.14 74.56 ± 1.55
+POCL
+74.76 ± 1.12 60.31 ± 1.88 73.18 ± 0.92 61.60 ± 2.11 87.57 ± 0.38 80.12 ± 1.53
+
+Proposed
+
+Ours
+
+80.48 ± 0.86 64.48 ± 1.24 76.85 ± 0.12 64.53 ± 1.92 91.07 ± 0.04 87.32 ± 0.52
+
+model like CAREGNN requires full labels for pretraining and updating, which presents a challenge.
+Although POCL is a fully supervised model, it utilizes the contrastive learning method to enhance
+its discriminative capability between positive and negative samples, as seen in the pre-training stage,
+which performs stably when the source dataset is scarce. Semi-supervised models apparently present
+better performance for their data augmentation mechanics. When the label rate drops to 1%, traditional methods perform much worse with infeasible supervised information. And semi-supervised
+methods drop less. In contrast, our model shows excellent performance when the label rate drops
+from 10% to 1% with minimal degradation, which highlights the superiority of our approach.
+Besides, we also make an experiment on a traditional scenario denoted as 100% * label rate, where
+the pretrain and online datasets are fully labeled. We can see that the traditional offline model is
+the worst, while the semi-supervised model performs a little better at catching the inner pattern for
+fraud activities, which is a good backbone for the upcoming task. But they cannot update themselves
+to adapt to the dynamic environment. Traditional online models update themselves in the online
+learning stage and perform better. Interestingly, our model still presents its SOTA performance
+compared to the traditional online model (despite the minimal difference in F1 score). We think that
+in the historical dataset, our graph autoencoder has already learned nearly complete fraud patterns.
+Furthermore, the subgraph completion strategy in the online learning phase accurately captures and
+translates domain shifts in fraudulent behavior, which boosts our model performance in a traditional
+scenario.
+To better visualize the performance of the methods above during the online learning stage, we employ the monthly average accuracy to measure the performance. As shown in Figure 3, in the 10%
+labeled data scenario, our model and semi-supervised model achieve a relatively high initial accuracy. During the online learning process, our model stays solid in accuracy by adapting to fraudulent
+domain shifts. Other models have a certain degree of accuracy reduction, especially for traditional
+ones. With 1% labeled data, our model still demonstrates a notably high initial accuracy and better
+adapts to the environment with higher accuracy, while other models exhibit larger fluctuations in
+accuracy. Most of the methods suffer from a continual decrease over time. To further validate our
+method on real-world scenarios, we conduct extensive experiments on Yelpchi and Amazon datasets.
+As shown in Table 2, our model greatly outperforms other methods.
+8
+
+=== PDF PAGE 9 ===
+Published as a conference paper at ICLR 2026
+
+(a) Average monthly accuracy on 10% label rate
+
+(b) Average monthly accuracy on 1% label rate
+
+Figure 3: Performance comparison of different fraud detection methods with different label rates on
+average monthly accuracy and average accuracy decline rate for online learning within a year in the
+medical fraud dataset.
+Table 3: Ablation study on medical insurance fraud dataset with different component combinations.
+Autoencoder
+
+Graph Complement
+
+×
+×
+×
+✓
+✓
+×
+✓
+✓
+
+4.3
+
+×
+×
+✓
+×
+✓
+✓
+×
+✓
+
+Medical Dataset
+
+Mean-Teacher
+×
+✓
+×
+×
+×
+✓
+✓
+✓
+
+AUC
+
+F1-Score
+
+Accuracy
+
+67.21 ± 2.41
+67.43 ± 2.12
+68.35 ± 2.06
+76.13 ± 0.88
+78.21 ± 1.23
+72.08 ± 1.78
+77.35 ± 1.54
+80.48 ± 0.86
+
+39.13 ± 5.62
+40.52 ± 4.03
+46.41 ± 3.47
+61.56 ± 1.10
+63.11 ± 1.52
+60.24 ± 2.11
+64.25 ± 2.53
+64.48 ± 1.24
+
+63.43 ± 2.12
+63.21 ± 2.01
+64.55 ± 2.31
+74.29 ± 1.05
+74.12 ± 1.11
+66.56 ± 1.75
+73.81 ± 1.92
+76.45 ± 0.62
+
+A BLATION S TUDY
+
+4.3.1
+
+C OMPONENT A NALYSIS
+
+To evaluate the role of each component in the medical insurance fraud model, we conduct a series
+of ablation studies on the label rate 10% scenario.
+As shown in Table 3, we observe that the model performs weakly with only one component for a
+poor pretrain model or online parameter update. Combining the graph autoencoder with the meanteacher framework yields better results, yet the addition of the graph completion mechanism is still
+necessary to enhance the learning of fraudulent representation. Without the graph autoencoder, the
+model has suboptimal performance due to the weak backbone. Finally, the integration of all three
+components shows the best performance. This whole model not only strengthens the generalization
+of fraud patterns from the pretrain model but also leverages the advantages of the graph completion
+strategy during online learning, enabling effective dynamic adaptation to evolving environments.
+4.3.2
+
+A NALYSIS ON D IFFERENT M ASK S TRATEGY
+
+To prove our extraordinary performance of mask strategy, we compare our proposed Fiedler Vectorbased feature masking approach with existing advanced methods, including random masking (Hou
+et al., 2022), edge-based masking (Tan et al., 2023), and subgraph masking (Jiao et al., 2024), as
+well as VGAE (Kipf and Welling, 2016). As shown in Table 4, the Fiedler vector-based graph
+autoencoder selectively reconstructs the core features to capture deeper fraudulent representation,
+outperforming the other baseline methods.
+
+5
+
+C ONCLUSION A ND F UTURE W ORK
+
+In this paper, we introduce ConFVG, which integrates a Fiedler Vector-guided graph encoder and
+a Subgraph Attention Fusion module to address the challenges of pre-training label scarcity and
+9
+
+=== PDF PAGE 10 ===
+Published as a conference paper at ICLR 2026
+
+Table 4: Performance comparison of different mask strategies on medical insurance fraud dataset
+with label ratio of 10%.
+Mask Strategies
+
+AUC
+
+F1-score
+
+Accuracy
+
+Random Mask(Hou et al., 2022)
+Edge Mask(Tan et al., 2023)
+Subgraph Mask(Jiao et al., 2024)
+VGAE(Kipf and Welling, 2016)
+
+74.14 ± 0.68
+73.25 ± 1.23
+75.24 ± 0.93
+77.87 ± 1.86
+
+59.23 ± 1.28
+58.36 ± 2.13
+56.15 ± 1.23
+63.24 ± 1.02
+
+68.46 ± 1.50
+67.15 ± 1.31
+69.59 ± 1.78
+74.25 ± 0.24
+
+Fiedler-vector Mask
+
+80.48 ± 0.86
+
+64.48 ± 1.24
+
+76.45 ± 0.62
+
+unlabeled online learning in real-world scenarios. Our model leverages the graph encoder to learn
+robust representations of fraudulent patterns, while incorporating a subgraph complement strategy
+to enrich fraud representations during the online learning phase. We conduct extensive experiments
+on multiple real-world datasets under two semi-supervised settings. The results demonstrate that
+our model significantly outperforms existing methods in semi-supervised scenarios while remaining competitive in traditional settings. In the future, we aim to extend our approach to other graph
+anomaly detection tasks, such as network security intrusion detection and abnormal behavior identification in social networks. We also plan to explore the integration of multimodal graph data to
+further enhance feature extraction and graph representation learning capabilities.
+
+ACKNOWLEDGMENTS
+This work was supported by the National Natural Science Foundation of China (Grant
+No. 62302170), Guangdong Basic and Applied Basic Research Foundation (Grant
+No. 2024A1515010187), Guangdong Natural Science Funds for Distinguished Young Scholars (Grant No. 2023B1515020097), the National Research Foundation, Singapore under its AI
+Singapore Programme (AISG Awards No. AISG3-GV-2023-011 and AISG4-TC-2025-018-SGKR),
+and the Lee Kong Chian Fellowships.
+
+R EFERENCES
+Hunar Batra and Ronald Clark. Evcl: Elastic variational continual learning with weight consolidation. arXiv preprint arXiv:2406.15972, 2024. 3
+Richard A Bauder, Taghi M Khoshgoftaar, and Tawfiq Hasanin. Data sampling approaches with
+severely imbalanced big data for medicare fraud detection. In 2018 IEEE 30th international
+conference on tools with artificial intelligence (ICTAI), pages 137–142. IEEE, 2018. 2
+Philip K Chan, Wei Fan, Andreas L Prodromidis, and Salvatore J Stolfo. Distributed data mining in
+credit card fraud detection. IEEE Intelligent Systems and Their Applications, 14(6):67–74, 2002.
+3
+Nan Chen, Zemin Liu, Bryan Hooi, Bingsheng He, Rizal Fathony, Jun Hu, and Jia Chen. Consistency training with learnable data augmentation for graph anomaly detection with limited supervision. In The twelfth international conference on learning representations, 2024. 7
+Dawei Cheng, Yao Zou, Sheng Xiang, and Changjun Jiang. Graph neural networks for financial
+fraud detection: a review. Frontiers of Computer Science, 19(9):199609, 2025. 3
+Chandler Davis and William Morton Kahan. The rotation of eigenvectors by a perturbation. iii.
+SIAM Journal on Numerical Analysis, 7(1):1–46, 1970. 15
+Yingtong Dou, Zhiwei Liu, Li Sun, Yutong Deng, Hao Peng, and Philip S Yu. Enhancing graph
+neural network-based fraud detectors against camouflaged fraudsters. In Proceedings of the 29th
+ACM international conference on information & knowledge management, pages 315–324, 2020.
+1, 3, 7
+Miroslav Fiedler. Algebraic connectivity of graphs. Czechoslovak mathematical journal, 23(2):
+298–305, 1973. 2
+10
+
+=== PDF PAGE 11 ===
+Published as a conference paper at ICLR 2026
+
+W Hamilton and R Ying. Graphsage: Representation learning on large graphs, 2017. 6
+Steven CH Hoi, Doyen Sahoo, Jing Lu, and Peilin Zhao. Online learning: A comprehensive survey.
+Neurocomputing, 459:249–289, 2021. 3
+Zhenyu Hou, Xiao Liu, Yukuo Cen, Yuxiao Dong, Hongxia Yang, Chunjie Wang, and Jie Tang.
+Graphmae: Self-supervised masked graph autoencoders. In Proceedings of the 28th ACM
+SIGKDD conference on knowledge discovery and data mining, pages 594–604, 2022. 2, 4, 9,
+10
+Pengfei Jiao, Xinxun Zhang, Mengzhou Gao, Tianpeng Li, and Zhidong Zhao. Informative subgraphs aware masked auto-encoder in dynamic graphs. In 2024 IEEE International Conference
+on Data Mining (ICDM), pages 161–170. IEEE, 2024. 9, 10
+Thomas N. Kipf and Max Welling. Variational graph auto-encoders, 2016.
+//arxiv.org/abs/1611.07308. 9, 10
+
+URL https:
+
+Bertrand Lebichot, Fabian Braun, Olivier Caelen, and Marco Saerens. A graph-based, semisupervised, credit card fraud detection system. In International Workshop on Complex Networks
+and their Applications, pages 721–733. Springer, 2016. 4
+Jintang Li, Ruofan Wu, Wangbin Sun, Liang Chen, Sheng Tian, Liang Zhu, Changhua Meng, Zibin
+Zheng, and Weiqiang Wang. What’s behind the mask: Understanding masked graph modeling
+for graph autoencoders. In Proceedings of the 29th ACM SIGKDD Conference on Knowledge
+Discovery and Data Mining, pages 1268–1279, 2023. 4
+Yijun Li, Richard Zhang, Jingwan Lu, and Eli Shechtman. Few-shot image generation with elastic
+weight consolidation. arXiv preprint arXiv:2012.02780, 2020. 3
+Chuang Liu, Yuyao Wang, Yibing Zhan, Xueqi Ma, Dapeng Tao, Jia Wu, and Wenbin Hu.
+Where to mask: Structure-guided masking for graph masked autoencoders. arXiv preprint
+arXiv:2404.15806, 2024. 4
+Yang Liu, Xiang Ao, Zidi Qin, Jianfeng Chi, Jinghua Feng, Hao Yang, and Qing He. Pick and
+choose: a gnn-based imbalanced learning approach for fraud detection. In Proceedings of the
+web conference 2021, pages 3168–3177, 2021. 3, 7
+David Lopez-Paz and Marc’Aurelio Ranzato. Gradient episodic memory for continual learning.
+Advances in neural information processing systems, 30, 2017. 3
+Jiacheng Ma, Fan Li, Rui Zhang, Zhikang Xu, Dawei Cheng, Yi Ouyang, Ruihui Zhao, Jianguang
+Zheng, Yefeng Zheng, and Changjun Jiang. Fighting against organized fraudsters using risk
+diffusion-based parallel graph neural network. In IJCAI, pages 6138–6146, 2023. 7
+Sam Maes, Karl Tuyls, Bram Vanschoenwinkel, and Bernard Manderick. Credit card fraud detection
+using bayesian and neural networks. In Proceedings of the 1st international naiso congress on
+neuro fuzzy technologies, volume 261, page 270, 2002. 3
+Julian McAuley and Jure Leskovec. Hidden factors and hidden topics: understanding rating dimensions with review text. In Proceedings of the 7th ACM conference on Recommender systems,
+pages 165–172, 2013. 7
+Sebastián M Palacio. Abnormal pattern prediction: Detecting fraudulent insurance property claims
+with semi-supervised machine-learning. Data Science Journal, 18:35–35, 2019. 2
+Joao Pereira and Margarida Silveira. Learning representations from healthcare time series data for
+unsupervised anomaly detection. In 2019 IEEE international conference on big data and smart
+computing (BigComp), pages 1–7. IEEE, 2019. 2
+Tahereh Pourhabibi, Kok-Leong Ong, Booi H Kam, and Yee Ling Boo. Fraud detection: A systematic literature review of graph-based anomaly detection approaches. Decision Support Systems,
+133:113303, 2020. 5
+11
+
+=== PDF PAGE 12 ===
+Published as a conference paper at ICLR 2026
+
+Shebuti Rayana and Leman Akoglu. Collective opinion spam detection: Bridging review networks
+and metadata. In Proceedings of the 21th acm sigkdd international conference on knowledge
+discovery and data mining, pages 985–994, 2015. 7
+Sylvestre-Alvise Rebuffi, Alexander Kolesnikov, Georg Sperl, and Christoph H Lampert. icarl:
+Incremental classifier and representation learning. In Proceedings of the IEEE conference on
+Computer Vision and Pattern Recognition, pages 2001–2010, 2017. 3
+Armin Sadreddin and Samira Sadaoui. Incremental feature learning for fraud data stream. In
+ICAART (3), pages 268–275, 2022. 1
+Abhinav Srivastava, Amlan Kundu, Shamik Sural, and Arun Majumdar. Credit card fraud detection
+using hidden markov model. IEEE Transactions on dependable and secure computing, 5(1):
+37–48, 2008. 3
+Qiaoyu Tan, Ninghao Liu, Xiao Huang, Soo-Hyun Choi, Li Li, Rui Chen, and Xia Hu. S2gae: Selfsupervised graph autoencoders are generalizable learners with graph masking. In Proceedings
+of the sixteenth ACM international conference on web search and data mining, pages 787–795,
+2023. 9, 10
+Antti Tarvainen and Harri Valpola. Mean teachers are better role models: Weight-averaged consistency targets improve semi-supervised deep learning results. Advances in neural information
+processing systems, 30, 2017. 6
+Sheng Tian, Jihai Dong, Jintang Li, Wenlong Zhao, Xiaolong Xu, Bowen Song, Changhua Meng,
+Tianyi Zhang, Liang Chen, et al. Sad: Semi-supervised anomaly detection on dynamic graphs.
+arXiv preprint arXiv:2305.13573, 2023. 7
+U.S. Department of Health and Human Services, Office of Inspector General.
+Medicaid fraud control units annual report: Fiscal year 2024.
+Technical report, U.S. Department of Health and Human Services, Office of Inspector General,
+2024.
+URL https://oig.hhs.gov/reports/all/2025/
+medicaid-fraud-control-units-annual-report-fiscal-year-2024/.
+Accessed: September 18, 2025. 1
+Petar Veličković, Guillem Cucurull, Arantxa Casanova, Adriana Romero, Pietro Lio, and Yoshua
+Bengio. Graph attention networks. arXiv preprint arXiv:1710.10903, 2017. 6
+Chen Wang, Yuheng Qiu, Dasong Gao, and Sebastian Scherer. Lifelong graph learning. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, pages 13719–
+13728, 2022a. 7
+Daixin Wang, Jianbin Lin, Peng Cui, Quanhui Jia, Zhen Wang, Yanming Fang, Quan Yu, Jun Zhou,
+Shuang Yang, and Yuan Qi. A semi-supervised graph attentive network for financial fraud detection. In 2019 IEEE international conference on data mining (ICDM), pages 598–607. IEEE,
+2019. 3
+Junshan Wang, Guojie Song, Yi Wu, and Liang Wang. Streaming graph neural networks via continual learning. In Proceedings of the 29th ACM international conference on information &
+knowledge management, pages 1515–1524, 2020. 3, 7
+Junshan Wang, Wenhao Zhu, Guojie Song, and Liang Wang. Streaming graph neural networks with
+generative replay. In Proceedings of the 28th ACM SIGKDD conference on knowledge discovery
+and data mining, pages 1878–1888, 2022b. 3
+Sheng Xiang, Mingzhi Zhu, Dawei Cheng, Enxia Li, Ruihui Zhao, Yi Ouyang, Ling Chen, and
+Yefeng Zheng. Semi-supervised credit card fraud detection via attribute-driven graph representation. In Proceedings of the AAAI conference on artificial intelligence, volume 37, pages 14557–
+14565, 2023. 3, 7
+Yang Yang, Bo Chen, and Hongwei Liu. Bayesian compression for dynamically expandable networks. Pattern Recognition, 122:108260, 2022. 3
+12
+
+=== PDF PAGE 13 ===
+Published as a conference paper at ICLR 2026
+
+Jaehong Yoon, Eunho Yang, Jeongtae Lee, and Sung Ju Hwang. Lifelong learning with dynamically
+expandable networks. arXiv preprint arXiv:1708.01547, 2017. 3
+Rui Zhang, Dawei Cheng, Jie Yang, Yi Ouyang, Xian Wu, Yefeng Zheng, and Changjun Jiang.
+Pre-trained online contrastive learning for insurance fraud detection. In Proceedings of the AAAI
+Conference on Artificial Intelligence, volume 38, pages 22511–22519, 2024. 2, 3, 7
+
+A
+
+A PPENDIX
+
+A.1
+
+S TUDY ON F IEDLER V ECTOR
+
+To better explain the relationship between fraudulent nodes and Fiedler vector, we choose four slices
+medical insurance claim graph and visualize the distribution of the Fiedler value (smoothness value
+) in each node. The results are shown in Figure 4.
+
+Figure 4: The visualization of Fiedler value in four medical insurance claim graphs. We use spring
+layout to visualize the node distribution, where connected nodes are put closer while disconnected
+nodes are put further. The fraudulent nodes are circled in red.
+From Figure 4, we can easily conclude: 1) Connected nodes share similar Fiedler value (smoothness
+value) in analogous colors. 2) Fraudulent nodes always exhibit isolated nodes or dense local subgraphs like little clusters in the center of the graph, which are identified by the Fiedler vector with a
+higher Fiedler value. Additionally, we conduct a statistical analysis on the same dataset. The results
+shown in Table 5 also demonstrate the strong guidance of the Fiedler vector.
+A.2
+
+B OUND O F P ERTURBATION
+
+In our fraud detection framework, the difference between the original null space U and the perturbed
+subspace U ′ arises from added noise via the perturbation E = ϵ(nI − J). To assess whether
+the perturbed Fiedler vector v2′ retains indicative significance for anomaly detection, we need to
+evaluate its closeness to the original null space U , measured by the projection error eproj = ∥v2′ −
+13
+
+=== PDF PAGE 14 ===
+Published as a conference paper at ICLR 2026
+
+Table 5: Statistics of nodes in the medical insurance dataset across days. We use ratio = mean fraud
+node Fiedler value / mean normal node Fiedler value to measure the detection ability.
+Day All Nodes Fraud Nodes Normal Nodes
+Edges
+Ratio (Fraud / Normal)
+1
+50
+100
+150
+200
+250
+300
+All
+
+1596
+1608
+1599
+1608
+1555
+1467
+1440
+554407
+
+599
+616
+602
+586
+577
+602
+573
+211270
+
+997
+992
+997
+1022
+978
+865
+867
+343137
+
+3616
+3996
+3664
+4014
+3292
+3218
+2970
+1255698
+
+1.864
+2.017
+1.857
+2.141
+1.922
+1.837
+2.032
+1.924
+
+PU v2′ ∥2 . A smaller error eproj indicates closer alignment with U , preserving the soft indicator
+function structure.
+To measure the error, we make an orthogonal decomposition of the Fiedler vector v2′ ∈ U ′ with
+respect to the subspace U as follows
+v2′ = PU v2′ + (I − PU )v2′ ,
+
+(14)
+
+where PU v2′ ∈ U is the orthogonal projection of v2′ onto the null space U , and (I − PU )v2′ ∈ U ⊥ is
+the component of v2′ in the orthogonal complement of U . So the Eproj can be derived as follows
+eproj = ∥v2′ − PU v2′ ∥2 = ∥(I − PU )v2′ ∥2 ,
+
+(15)
+
+Given that v2′ is a unit vector, ∥v2′ ∥2 = 1, it follows that
+eproj = ∥(I − PU )v2′ ∥2 =
+
+q
+1 − ∥PU v2′ ∥22 .
+
+(16)
+
+We denote the angle θ(v2′ , U ) as the angle between v2′ and the subspace U , given by the angle to the
+closest vector u in U . So we can conclude that
+cos θ(v2′ , U ) =
+
+max
+u∈U,∥u∥2 =1
+
+|⟨v2′ , u⟩|.
+
+(17)
+
+P v′
+
+Apparently, u is equal to the unit vector ∥PUUv′2∥2 of the projection of v2′ onto U , so we can conclude
+2
+that
+PU v2′
+cos θ(v2′ , U ) = ⟨v2′ ,
+⟩ = ∥PU v2′ ∥2 .
+(18)
+∥PU v2′ ∥2
+Using the trigonometric identity:
+q
+q
+(19)
+sin θ(v2′ , U ) = 1 − cos2 θ(v2′ , U ) = 1 − ∥PU v2′ ∥22 .
+Comparing the projection error and the angle:
+q
+eproj = 1 − ∥PU v2′ ∥22 = sin θ(v2′ , U ).
+
+(20)
+
+Table 6: Performance comparison of different nc on medical insurance fraud dataset on label ratio
+of 10% with time consumption (seconds).
+nc
+AUC
+F1-score
+Accuracy
+Time
+0.01
+0.05
+0.1
+0.2
+0.3
+
+79.32 ± 1.06
+80.48 ± 0.86
+80.51 ± 0.76
+80.05 ± 0.94
+78.08 ± 1.27
+
+63.23 ± 1.73
+64.48 ± 1.24
+64.42 ± 1.10
+64.10 ± 1.02
+62.70 ± 1.56
+
+14
+
+75.22 ± 1.50
+76.45 ± 0.62
+76.22 ± 0.45
+74.25 ± 1.23
+73.45 ± 1.60
+
+309.22 ± 2.41
+328.14 ± 2.85
+384.50 ± 2.73
+470.62 ± 3.59
+612.05 ± 5.17
+
+=== PDF PAGE 15 ===
+Published as a conference paper at ICLR 2026
+
+By the Davis-Kahan theorem(Davis and Kahan, 1970) in its single-vector form, for any v ∈ U ′ , the
+projection error is bounded by the maximum canonical angle between U and U ′ :
+sin θ(v, U ) = ∥(I − PU )v∥2 ≤ ∥ sin Θ(U, U ′ )∥2
+
+(21)
+
+Furthermore, the 2-norm of the sine of the angles satisfies:
+∥ sin Θ(U, U ′ )∥2 ≤ ∥ sin Θ(U, U ′ )∥F ≤
+
+∥E∥2
+.
+δ
+
+(22)
+
+Thus, for v2′ ∈ U ′ , we obtain:
+∥v2′ − PU v2′ ∥2 = sin θ(v2′ , U ) ≤ ∥ sin Θ(U, U ′ )∥2 ≤ ∥ sin Θ(U, U ′ )∥F ≤
+
+∥E∥2
+.
+δ
+
+(23)
+
+As ∥E∥2 = ϵn is the spectral norm of the perturbation and δ = min(λk+1 (L), λ1 (L′ )) ≈ λk+1 (L),
+we can derive the upper bound of eproj as follows,
+Eproj = ∥v2′ − PU v2′ ∥2 ≤
+
+∥E∥2
+ϵn
+=
+.
+δ
+λk+1 (L)
+
+(24)
+
+This bound, approximately 0.04 for medical insurance claim networks (n = 2000, ϵ = 10−5 ,
+λk+1 (L) ≈ 0.5), ensures that v2′ remains close to U , retaining its ability to capture anomalies
+via projections like |X T v2′ |.
+To prove our assumption above, We test our model with different ϵ values. The results are shown in
+Table 7.
+Table 7: Performance of the model under different pertubation ϵ values.
+Perturbation ϵ
+AUC
+F1-score
+
+1e-6
+
+1e-5
+
+5e-5
+
+1e-4
+
+1e-3
+
+1e-2
+
+78.72 ± 0.53
+64.02 ± 1.29
+
+80.48 ± 0.86
+64.48 ± 1.24
+
+80.46 ± 0.78
+64.52 ± 1.33
+
+80.33 ± 1.02
+63.67 ± 1.67
+
+78.30 ± 1.22
+63.08 ± 1.93
+
+76.05 ± 1.53
+61.22 ± 1.86
+
+From Table 7, we can see that when ϵ is very small (ϵ < 1e − 6), the pertubation matrix is too
+weak to overcome the sparsity of the original graph, resulting in an insufficient correction effect
+on the Fiedler vector. When ϵ is in the range of 1e − 5 to 1e − 4, the subtle global connections
+optimally strengthen the connectivity within communities without altering the macroscopic community structure, thereby sharpening the boundaries between communities and better reflecting the
+true community structure. However, when ϵ becomes too large (ϵ > 1e − 3), the global pertubation
+matrix overwhelms the original community structure, leading to a decline in performance.
+A.3
+
+S TUDY O N T OP K C OMPONENT
+
+We conduct a series of experiments to test the best k value for the connected component. Concerning
+sel
+that the number of nodes in each component may be different, we use the indicator nc = node
+nodeall
+to measure our selection, where nodesel denotes the number of nodes in our selected component,
+nodeall denotes the number of nodes in the whole graph. Our experiment result is as follows,
+As shown in Table 6, the value of nc achieves a balance between accuracy and efficiency at 0.05.
+When nc is lower, the number of selected nodes is too small for the model to effectively utilize
+attention information during online learning. Conversely, when nc is higher, excessively noisy and
+potentially meaningless edges may be introduced, leading to performance degradation. So the value
+of k depends on nc to approximate.
+
+B
+
+I MPLETION D ETAILS
+
+For hyperparameters, we choose mask ratio r = 0.2, αmask = 10, αattn = 0.1, pertubation ϵ = 1e−5.
+We use Adam as the optimizer with pretrain learning rate = 1e-3 and online learning rate encoder =
+3e-3. The implementation details are shown in Table 8.
+15
+
+=== PDF PAGE 16 ===
+Published as a conference paper at ICLR 2026
+
+Table 8: Training and hyper-parameter settings of ConFVG. All experiments are run with a single
+NVIDIA 4090 GPU.
+Setting
+
+Medical Insurance
+
+YelpChi
+
+Amazon
+
+Optimizer
+Learning rate (pretrain)
+Learning rate (online)
+Pre-training epochs
+Number of pretrain tasks
+Number of online tasks
+Epochs per online task
+Dropout
+Feature mask ratio r
+
+Adam
+1e-3
+3e-3
+100
+14
+351
+10
+0.5
+0.2
+
+Adam
+1e-3
+3e-3
+100
+14
+351
+10
+0.5
+0.2
+
+Adam
+1e-3
+3e-3
+100
+14
+351
+10
+0.5
+0.2
+
+αmask
+αattn
+Perturbation ϵ
+Top-k components nc
+EMA decay α
+
+10
+0.1
+1e-5
+0.05
+0.99
+
+10
+0.1
+1e-5
+0.05
+0.99
+
+10
+0.1
+1e-5
+0.05
+0.99
+
+Table 9: Comparison of scalability and complexity among different models. We compare the whole
+online learning time and trainable parameters with proposed models. CAREGNN, PCGNN, GTAN
+are static models without online learning period.
+Method
+Online learning time (Minutes) # Trainable Parameters
+CAREGNN
+PCGNN
+GTAN
+ContinuesGNN
+POCL
+ConFVG (Ours)
+
+C
+
+/
+/
+/
+8.52
+1.35
+5.46
+
+2.2K
+2.7K
+61K
+12K
+7.6K
+11.8K
+
+C OMPLEXITY AND S CALABILITY A NALYSIS
+
+As shown in Table 9, we can see that our model has a relatively large number of parameters due
+to the autoencoder and mean-teacher architecture, yet it demonstrates better speed compared to
+ContinuesGNN during the online learning phase.
+
+D
+
+S ENSITIVITY A NALYSIS
+Table 10: Hyperparameter sensitivity analysis.
+αmask
+
+Value
+
+αattn
+
+Metric
+
+1
+
+2
+
+5
+
+10
+
+15
+
+20
+
+0.01
+
+0.1
+
+0.2
+
+0.5
+
+1
+
+2
+
+AUC
+F1-score
+
+78.44 ± 0.60
+62.36 ± 1.66
+
+79.48 ± 0.86
+63.50 ± 1.57
+
+80.02 ± 0.90
+64.12 ± 1.20
+
+80.48 ± 0.86
+64.48 ± 1.24
+
+80.28 ± 0.94
+64.28 ± 1.53
+
+80.02 ± 1.27
+63.78 ± 1.44
+
+78.22 ± 0.72
+64.25 ± 1.54
+
+80.48 ± 0.86
+64.48 ± 1.24
+
+80.10 ± 0.76
+64.01 ± 1.33
+
+79.33 ± 1.02
+63.35 ± 1.62
+
+78.30 ± 1.22
+62.28 ± 1.53
+
+76.22 ± 1.24
+61.34 ± 1.82
+
+Metric
+
+0.9
+
+0.95
+
+0.97
+
+0.99
+
+0.995
+
+0.999
+
+1e-6
+
+1e-5
+
+5e-5
+
+1e-4
+
+1e-3
+
+1e-2
+
+AUC
+F1-score
+
+77.36 ± 1.55
+61.46 ± 1.94
+
+79.35 ± 1.16
+63.31 ± 1.37
+
+80.00 ± 1.03
+64.48 ± 1.30
+
+80.48 ± 0.86
+64.48 ± 1.24
+
+79.32 ± 1.34
+64.17 ± 1.15
+
+78.82 ± 1.26
+63.54 ± 1.72
+
+78.72 ± 0.53
+64.02 ± 1.29
+
+80.48 ± 0.86
+64.48 ± 1.24
+
+80.46 ± 0.78
+64.52 ± 1.33
+
+80.33 ± 1.02
+63.67 ± 1.67
+
+78.30 ± 1.22
+63.08 ± 1.93
+
+76.05 ± 1.53
+61.22 ± 1.86
+
+EMA α
+
+Value
+
+Perturbation ε
+
+We systematically evaluate the sensitivity of our model to key hyperparameters, with results presented in Table 10. The model exhibits strong robustness across a reasonably wide range of values.
+Performance consistently improves as the mask loss weight αmask increases from 1 to 10, peaking
+at αmask = 10 with the highest AUC of 80.48 ± 0.86 and F1-score of 64.48 ± 1.24; further increasing αmask beyond 10 leads to slight degradation and higher variance. The attention regularization
+coefficient αattn achieves optimal results at 0.1, while values ≥ 0.5 excessively suppress meaningful fraud-normal interaction patterns, causing a sharp performance drop. The EMA decay rate α
+performs best around 0.99. Perturbation parameter ε shows excellent stability in the [10−5 , 10−4 ]
+range. Overall, the proposed approach maintains stable and superior performance across broad
+16
+
+=== PDF PAGE 17 ===
+Published as a conference paper at ICLR 2026
+
+hyperparameter intervals, fully demonstrating its robustness and practicality for real-world fraud
+detection deployment.
+
+E
+
+ROBUSTNESS A NALYSIS
+
+In addition to the scenarios we mentioned earlier, fraudsters may deliberately connect with normal
+users to conceal malicious activities, which would lead to significant attribute discrepancies between
+connected nodes. To evaluate our model robustness against adversarial fraud, we performed a controlled test by connecting 1%, 10%, 30%, 50% of fraud nodes to random normal nodes with 1 or 3
+camouflage edges connected in medical insurance dataset with 10% label rate.
+Table 11: Robustness of ConFVG with 1 or 3 camouflage edge connected.
+Camouflage edge Proportion of fraud nodes
+AUC
+F1-score
+
+1
+
+0% (original graph)
+1%
+10%
+30%
+50%
+
+80.48 ± 0.86
+80.12 ± 0.72
+79.39 ± 1.10
+79.30 ± 1.35
+78.70 ± 1.44
+
+64.48 ± 1.24
+64.50 ± 1.52
+64.12 ± 1.48
+63.29 ± 1.32
+62.57 ± 0.71
+
+3
+
+0% (original graph)
+1%
+10%
+30%
+50%
+
+80.48 ± 0.86
+79.71 ± 0.77
+78.84 ± 1.02
+78.82 ± 1.48
+77.63 ± 1.65
+
+64.48 ± 1.24
+65.10 ± 1.16
+63.70 ± 1.64
+63.56 ± 1.57
+63.14 ± 1.48
+
+As shown in Table 11, ConFVG demonstrates remarkable robustness against deliberate camouflage
+attacks. When fraudsters randomly connect to only 1 normal node, even if 50% of fraud nodes
+perform such behavior, AUC drops merely from 80.48 to 78.70 (∆ = 1.78). When the attack intensity is increased to 3 camouflage edges per fraud node, the performance decline is still gracefully
+controlled. These results indicate that the artificially injected camouflage edges, although intended
+to help fraudsters blend into normal communities, may inevitably create locally abnormal dense
+subgraphs or spectral perturbations. The Fiedler vector is highly sensitive to such structural irregularities and successfully captures them as useful guiding signals for community-aware learning,
+thereby suffering less from adversarial fraud.
+
+F
+
+LLM U SAGE
+
+We utilized large language models (LLMs) to assist in drafting and refining this manuscript. Specifically, LLMs helped optimize language expression, enhance readability, and ensure clarity across
+sections. They assisted with tasks such as sentence restructuring, grammar checking, and improving
+the overall fluency of the text.
+It should be noted that LLMs were not involved in the conceptualization, research design, or experimental planning. All research concepts, ideas, and analyses were independently developed and
+implemented by the authors. The contribution of LLMs was limited to enhancing the linguistic
+quality of the manuscript and did not involve scientific content or data analysis.
+The authors take full responsibility for the integrity of the manuscript’s content, including any text
+generated or refined by LLMs. We have ensured that the content produced by LLMs adheres to
+ethical standards and is free from plagiarism or academic misconduct.
+
+17
+
+=== END SOURCE TEXT ===

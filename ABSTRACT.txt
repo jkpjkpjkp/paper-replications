@@ -1,0 +1,9 @@
+Healthcare Insurance Fraud Detection via Continual Fiedler Vector Graph Model
+
+Condensed abstract
+
+Detects evolving healthcare fraud with limited labels using a Fiedler-vector-guided
+graph autoencoder. Spectral structure identifies anomalous relationships, while subgraph
+attention and a mean-teacher mechanism adapt to incoming graphs and stabilize learning.
+Medical-fraud experiments evaluate performance under label scarcity and distribution
+shifts.

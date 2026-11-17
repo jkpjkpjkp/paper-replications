@@ -1,0 +1,25 @@
+2: at least one representative experiment matches the paper's claim
+
+
+
+Scope: Full released 10% medical timeline, single seed 10; proposed ConFVG model.
+
+Evidence and explanation:
+All 350 online evaluations completed. AUC 80.455614% versus paper 80.48 +/- 0.86% (gap
+-0.024386 percentage points); F1 65.004215% versus 64.48 +/- 1.24% (+0.524215 points);
+accuracy 77.124405% versus 76.45 +/- 0.62% (+0.674405 points). AUC/F1 lie within one
+reported deviation; accuracy is about 1.09 deviations higher. Independent
+predictions/metrics reconcile to 1e-12. One local seed does not reproduce the paper's
+repeat uncertainty.
+
+Limits / next requirement:
+Other label fractions, auxiliary datasets, baselines, ablations and sensitivities are
+missing. Architecture/pretraining/eigenvector and evaluation-dropout differences are
+documented. This is a close representative released-code result, not certification of
+the unreleased full method.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/103-healthcare-insurance-fraud/report.txt
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/103-healthcare-insurance-fraud/results/released-seed10-cpu/result.json
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/103-healthcare-insurance-fraud/results/released-seed10-cpu/validation.json
+

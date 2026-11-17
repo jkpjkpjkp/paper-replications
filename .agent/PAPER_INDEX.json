@@ -1,0 +1,476 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "healthcare-insurance-fraud",
+  "title": "Healthcare Insurance Fraud Detection via Continual Fiedler Vector Graph Model",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/paper-reproduction-audit/workspaces/103-healthcare-insurance-fraud/sources/paper.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/paper-reproduction-audit/workspaces/103-healthcare-insurance-fraud/sources/paper.pdf",
+    "sha256": "c7280301b700e38aed3896e5cf2d3572197f210558b995cefd65c2a04c517de9",
+    "bytes": 6821865,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 17,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 61
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 62,
+      "line_end": 104
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 105,
+      "line_end": 158
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 159,
+      "line_end": 294
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 295,
+      "line_end": 377
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 378,
+      "line_end": 469
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 470,
+      "line_end": 537
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 538,
+      "line_end": 668
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 669,
+      "line_end": 781
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 782,
+      "line_end": 858
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 859,
+      "line_end": 908
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 909,
+      "line_end": 955
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 956,
+      "line_end": 993
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 994,
+      "line_end": 1148
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1149,
+      "line_end": 1259
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1260,
+      "line_end": 1524
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1525,
+      "line_end": 1607
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 80
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 81,
+      "line_end": 137
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 138,
+      "line_end": 204
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 205,
+      "line_end": 295
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 296,
+      "line_end": 364
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 365,
+      "line_end": 434
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 435,
+      "line_end": 501
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 502,
+      "line_end": 570
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 571,
+      "line_end": 626
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 627,
+      "line_end": 686
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 687,
+      "line_end": 758
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 759,
+      "line_end": 816
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 817,
+      "line_end": 861
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 862,
+      "line_end": 926
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 927,
+      "line_end": 990
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 991,
+      "line_end": 1060
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1061,
+      "line_end": 1118
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 17,
+      "text": "H EALTHCARE I NSURANCE F RAUD D ETECTION VIA"
+    },
+    {
+      "line": 18,
+      "text": "C ONTINUAL F IEDLER V ECTOR G RAPH M ODEL"
+    },
+    {
+      "line": 26,
+      "text": "A BSTRACT"
+    },
+    {
+      "line": 45,
+      "text": "I NTRODUCTION"
+    },
+    {
+      "line": 92,
+      "text": "A Mean Teacher architecture is used to stabilize updates and prevent catastrophic forgetting during"
+    },
+    {
+      "line": 110,
+      "text": "R ELATED W ORK"
+    },
+    {
+      "line": 146,
+      "text": "P ROPOSED M ETHOD"
+    },
+    {
+      "line": 150,
+      "text": "P ROBLEM D EFINITION"
+    },
+    {
+      "line": 265,
+      "text": "F IEDLER V ECTOR - GUIDED G RAPH AUTOENCODER"
+    },
+    {
+      "line": 283,
+      "text": "1 XX"
+    },
+    {
+      "line": 383,
+      "text": "S UBGRAPH ATTENTION F USION M ODULE"
+    },
+    {
+      "line": 387,
+      "text": "S UBGRAPH C OMPLEMENT S TRATEGY"
+    },
+    {
+      "line": 442,
+      "text": "M EAN T EACHER S TRUCTURE"
+    },
+    {
+      "line": 499,
+      "text": "E XPERIMENTS"
+    },
+    {
+      "line": 531,
+      "text": "E XPERIMENTAL R ESULTS"
+    },
+    {
+      "line": 749,
+      "text": "A BLATION S TUDY"
+    },
+    {
+      "line": 753,
+      "text": "C OMPONENT A NALYSIS"
+    },
+    {
+      "line": 766,
+      "text": "A NALYSIS ON D IFFERENT M ASK S TRATEGY"
+    },
+    {
+      "line": 776,
+      "text": "C ONCLUSION A ND F UTURE W ORK"
+    },
+    {
+      "line": 838,
+      "text": "R EFERENCES"
+    },
+    {
+      "line": 862,
+      "text": "W Hamilton and R Ying. Graphsage: Representation learning on large graphs, 2017. 6"
+    },
+    {
+      "line": 967,
+      "text": "A PPENDIX"
+    },
+    {
+      "line": 971,
+      "text": "S TUDY ON F IEDLER V ECTOR"
+    },
+    {
+      "line": 986,
+      "text": "B OUND O F P ERTURBATION"
+    },
+    {
+      "line": 1237,
+      "text": "S TUDY O N T OP K C OMPONENT"
+    },
+    {
+      "line": 1253,
+      "text": "I MPLETION D ETAILS"
+    },
+    {
+      "line": 1365,
+      "text": "C OMPLEXITY AND S CALABILITY A NALYSIS"
+    },
+    {
+      "line": 1373,
+      "text": "S ENSITIVITY A NALYSIS"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1608
+    }
+  ],
+  "line_count": 1608,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "35ecfbae151ba9f69ac0fb0d182c8f50c63a26602cf692f353694ce48dd82621",
+      "bytes": 59405
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "3fc6e9808e974b9656d152cebaa8d9d44e908d382960df6ee666e69f4672325e",
+      "bytes": 73582
+    }
+  }
+}
