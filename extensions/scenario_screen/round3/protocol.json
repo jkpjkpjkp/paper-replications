@@ -1,0 +1,82 @@
+{
+  "stage": "discovery only",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "n": 3000,
+  "burn": 300,
+  "alphas": [
+    0.0001,
+    0.00025,
+    0.0005,
+    0.001,
+    0.002,
+    0.003,
+    0.004,
+    0.005,
+    0.0075,
+    0.01,
+    0.015,
+    0.02,
+    0.025,
+    0.03,
+    0.035,
+    0.04,
+    0.045,
+    0.05,
+    0.06,
+    0.075,
+    0.1,
+    0.125,
+    0.15,
+    0.2,
+    0.25
+  ],
+  "sfogd_lrs": [
+    0.01,
+    0.1,
+    1,
+    10,
+    25,
+    100,
+    300,
+    1000,
+    3000
+  ],
+  "p_lrs": [
+    0.005,
+    0.01,
+    0.025,
+    0.05,
+    0.1,
+    0.25,
+    0.5,
+    1,
+    2
+  ],
+  "p_window": 100,
+  "initialization": "All methods initialized at t=0; evaluate t=300..2999",
+  "comparisons": "Each method's minimum mean width among grid configurations with average empirical coverage >= target; no interpolation.",
+  "targets": [
+    0.9,
+    0.95,
+    0.99
+  ],
+  "scenarios": [
+    "period_50",
+    "period_100",
+    "period_200",
+    "period_400",
+    "period_800",
+    "period_grows_100_600",
+    "period_shrinks_600_100",
+    "period_regime_100_600",
+    "amplitude_period_grow",
+    "amplitude_period_shrink"
+  ],
+  "caveat": "All alpha/lr choices are oracle discovery choices. They must be locked and evaluated on disjoint seeds for confirmation."
+}

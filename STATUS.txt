@@ -1,0 +1,22 @@
+2: at least one representative experiment matches the paper's claim
+
+
+
+Scope: Original cached-prediction conformal stock experiments; radii independently recomputed.
+
+Evidence and explanation:
+All 147/147 checked numbers for four stocks, five public methods and the AXP corrected-
+UP row match at the paper's three-significant-digit precision. This is a representative
+numerical reproduction of the conformal stage using authors' base forecasts, not a fresh
+base-model training run. The stock series are single trajectories, so there is no seed
+error bar for those matches; printed precision is the comparison tolerance.
+
+Limits / next requirement:
+The reconstructed PI implementation, electricity results and several synthetic cells do
+not match. Base models were not retrained. Consequently the full paper is not level 3.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/liu26y/RESULTS.md
+- ../.replication-local/artifacts/liu26y/results/paper_comparison.csv
+- ../.replication-local/artifacts/liu26y/VALIDATION.json
+

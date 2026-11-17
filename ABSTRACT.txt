@@ -1,0 +1,8 @@
+Online Conformal Prediction via Universal Portfolio Algorithms
+
+Condensed abstract
+
+Develops a general connection between online-learning regret and prediction-interval
+coverage for arbitrary data streams. A reduction to two-asset portfolio selection yields
+UP-OCP, a parameter-free method with finite-time miscoverage bounds. Experiments show
+improved interval-size and coverage trade-offs without manually tuning a learning rate.

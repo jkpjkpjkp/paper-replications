@@ -1,0 +1,25 @@
+{
+  "alpha": 0.05,
+  "alpha_grid": {"start": 0.05, "stop": 0.25, "count": 50},
+  "evaluation_offset_after_burnin": 51,
+  "evaluation_source": "upstream/tests/inset_plot.py: T_burnin + 1; upstream/tests/make_plots.sh: coverage_average_burnin=50",
+  "synthetic_seeds": [0,1,2,3,4,5,6,7,8,9],
+  "synthetic_rng": "numpy.random.default_rng / PCG64",
+  "sfogd_grid": [0.01,0.1,0.25,1,10,25,100],
+  "controller_grid": [0,0.05,0.1,0.5,1],
+  "pi_reconstruction": {
+    "Csat": 1.0,
+    "KI": "maximum score in the initial burn-in, fixed before evaluation",
+    "status": "explicit reconstruction; the UP-OCP repository does not publish its tuned PI parameters"
+  },
+  "datasets": {
+    "AXP": {"sfogd_lr":25, "p_lr":0.1, "pi_lr":0.1, "table":3},
+    "AAPL": {"sfogd_lr":25, "p_lr":0.5, "pi_lr":0.1, "table":4},
+    "AMZN": {"sfogd_lr":100, "p_lr":0.5, "pi_lr":0.5, "table":5},
+    "GOOGL": {"sfogd_lr":100, "p_lr":0.5, "pi_lr":0.5, "table":6},
+    "elec2": {"sfogd_lr":1, "p_lr":0.5, "pi_lr":0.5, "table":7},
+    "sinusoid": {"sfogd_lr":100, "p_lr":0.5, "pi_lr":0.5, "table":8},
+    "stationary": {"sfogd_lr":100, "p_lr":0.1, "pi_lr":0.1, "table":9},
+    "quadratic": {"sfogd_lr":100, "p_lr":0.5, "pi_lr":0.5, "table":10}
+  }
+}

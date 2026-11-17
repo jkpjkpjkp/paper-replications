@@ -1,0 +1,27 @@
+{
+  "preregistered_at_utc": "2026-11-05T05:24:14Z",
+  "registered_before_country_download_or_outcome_inspection": true,
+  "purpose": "Transfer confirmation of configurations selected using the US discovery screen; no per-country tuning and no inference of country independence.",
+  "countries": ["Canada", "United Kingdom", "Germany", "Japan"],
+  "country_definition": "Sum all rows whose Country/Region exactly matches the predeclared country name, including its listed provinces and territories.",
+  "source_repository": "https://github.com/CSSEGISandData/COVID-19",
+  "source_commit_policy": "Resolve HEAD by git ls-remote after this registration, then download only the artifact at that immutable SHA.",
+  "source_artifact": "csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv",
+  "target": "Nonnegative daily reported case increments: clip first difference of country-aggregated cumulative cases at zero. The first increment is zero.",
+  "point_forecast": "Cases reported seven calendar days earlier, with no fitted parameters.",
+  "nonconformity_score": "Absolute difference between current daily cases and daily cases seven days earlier.",
+  "normalization": "Divide all scores by median of first 115 scores, falling back to their mean if nonpositive, then 1 if still nonpositive. Scale is fixed before evaluation.",
+  "burnin_scores": 115,
+  "evaluation_offset_after_burnin": 51,
+  "evaluation_start_score_index_zero_based": 166,
+  "initialization_protocols": {"cold": "Initialize every calibrator at score index 115.", "warm": "Initialize every calibrator at score index 0."},
+  "frozen_methods": {
+    "UP-paper": {"alpha": 0.025, "implementation": "Literal Algorithm 1"},
+    "UP": {"alpha": 0.025, "implementation": "Author experimental update, sensitivity analysis"},
+    "P": {"alpha": 0.035, "lr": 0.25, "window": 115},
+    "SFOGD": {"alpha": 0.025, "lr": 25.0},
+    "KT": {"alpha": 0.0075},
+    "DtACI": {"alpha": 0.05, "role": "Diagnostic baseline"}
+  },
+  "reporting": "Report all four countries, both initialization protocols, all six methods, actual empirical coverage, widths in original case-count units, longest error streak, and infinite interval fraction. Retain nonwinning/undercovering cases. No per-country tuning, hypothesis test, or independent-country confidence interval."
+}
