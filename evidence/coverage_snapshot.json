@@ -1,0 +1,29 @@
+{
+  "updated_at": "2026-11-09T05:46:27.447337+00:00",
+  "total_papers": 437,
+  "workflow_counts": {
+    "excluded": 47,
+    "queued": 258,
+    "waiting_resources": 30,
+    "partial": 31,
+    "blocked_access": 15,
+    "blocked_data": 32,
+    "existing_running": 3,
+    "reproducing": 3,
+    "blocked_method": 14,
+    "reviewing": 3,
+    "complete": 1
+  },
+  "legacy_return_counts": {
+    "positive-significant": 0,
+    "nominal-only": 0,
+    "positive-inconclusive": 2,
+    "nonpositive": 0,
+    "blocked": 52,
+    "not-applicable": 110,
+    "pending": 273,
+    "running": 0,
+    "complete-unclassified": 0
+  },
+  "note": "Legacy zero-cost +50/-50 protocol differs from protocol.txt; counts are metadata, not failure rates."
+}

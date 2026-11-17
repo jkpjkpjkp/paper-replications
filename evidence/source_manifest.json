@@ -1,0 +1,681 @@
+{
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "evidence_id": "E001",
+      "title": "User evaluation protocol",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "entire file",
+      "relative_path": "protocol.txt",
+      "sha256": "39a696b7f07ca179c59c19aa1e7341cd5a549756f5fb56f0d80dfa5c9857b08f",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "title": "Completed LiMT CZ202 experiment",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "entire specification; companion status.json and REPORT.txt",
+      "relative_path": "limt-us-reproduction/experiments/standard_characteristics/protocol.json",
+      "sha256": "e4aabb0a09811f1edcd4a0ce2bfb435ddd9ae89cd142b8f1e7b7640257ddf95c",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "title": "Independent recalculation of LiMT CZ202 results",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "all 36 rows; primary_results.csv and audit_validation.json",
+      "relative_path": "ijcai-paper/evidence/independent_hac.csv",
+      "sha256": "09f036d86a0c7c3337db9030c3cf57f6ec49982ad39d75bed90e5f6b0f757338",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "title": "LiMT CZ202 accounting and performance",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "full-period and subperiod rows; four ledgers checked by audit_results.py",
+      "relative_path": "limt-us-reproduction/experiments/standard_characteristics/analysis/performance.csv",
+      "sha256": "32625890635fbbf860baad0e7b39dec99882ad69ceee946799be97cd3671fd16",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "title": "LiMT CZ202 adverse missing-payoff diagnostic",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "value and volume rows",
+      "relative_path": "limt-us-reproduction/experiments/standard_characteristics/analysis/missing_stress.csv",
+      "sha256": "83f563d84862ae8aa3c16e8041b1d8b4031e3d3aa0beb9325d851cbec2e2c6ac",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E006",
+      "title": "LiMT CZ202 universe and feature audit",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "feature_names; universe_audit; data/universe_audit.csv",
+      "relative_path": "limt-us-reproduction/experiments/standard_characteristics/data/manifest.json",
+      "sha256": "10a46e53078b40cbc541636c8092a455ca31d83cc33ba59e0f7b10a2cb085080",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E007",
+      "title": "Legacy programme coverage snapshot",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "source timestamp, categories, counts; catalogue_437.csv",
+      "relative_path": "ijcai-paper/evidence/coverage_snapshot.json",
+      "sha256": "c218b170a34f0281377a8222e9f9eabaecf064b45902c7b99c04fe5f1a8e286c",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E008",
+      "title": "Other saved LiMT US transfer",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "full-period equal-dollar ensemble results and limitations",
+      "relative_path": "limt-us-reproduction/REPORT.txt",
+      "sha256": "2af62a69cf5f29ff659066825e0919392ef0de3ff4371e3cc8fbabd47b061f39",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E009",
+      "title": "Other saved zero-cost experiments",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "LiMT CSI300/CSI500 results and design limitations",
+      "relative_path": "no-cost-neutral-audit/REPORT.txt",
+      "sha256": "7149625b1d0f18b46a0baab6fba363aa35f312495cd7904c55e0ad5d2d902762",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E010",
+      "title": "Unfinished CS-GAT protocol transfer",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "prepared protocol and data manifest; no completed return-inference artifacts observed at initial audit",
+      "relative_path": "financial-graph-reproduction/protocol202/protocol.json",
+      "sha256": "6049856b7f7c022c7f8ee7fc4fb25ce71bbae49fc0e573124e1075a7285e51d5",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E011",
+      "title": "Post hoc paired block bootstrap",
+      "source_type": "local_artifact",
+      "confidentiality": "local_research_artifact_not_cleared_for_redistribution",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": ""
+      },
+      "locator": "all four rows; scripts/audit_results.py",
+      "relative_path": "ijcai-paper/evidence/posthoc_bootstrap.csv",
+      "sha256": "bbcc8ebb1b923b2c0ae9e80893d0d80735659ef6e2084b668c3c105a02532b65",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "inspected_or_recomputed",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E101",
+      "title": "Gu, Kelly and Xiu (2020)",
+      "bibtex_key": "gu2020",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://dachxiu.chicagobooth.edu/download/ML.pdf"
+      },
+      "locator": "published article abstract; portfolios and Table8; p2267 microcap sensitivity",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      },
+      "relative_path": "sources/gu2020.pdf",
+      "sha256": "05e4ef8a1c830c9f33a0f461f07c145f6e6be30fbd7996a09d0672de1413bd61"
+    },
+    {
+      "evidence_id": "E102",
+      "title": "Chen and Zimmermann (2022)",
+      "bibtex_key": "chen2022",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://www.nowpublishers.com/article/Details/CFR-0112"
+      },
+      "locator": "published abstract and metadata; earlier FEDS text introduction distinguishes replication definitions",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      },
+      "relative_path": "sources/chen2022.pdf",
+      "sha256": "3a22b9878385aee49a411c42a8ce68feba2bb04bf00fa76d372bd63cff03b7bf"
+    },
+    {
+      "evidence_id": "E103",
+      "title": "Hou, Xue and Zhang (2017)",
+      "bibtex_key": "hou2017",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://www.nber.org/papers/w23394"
+      },
+      "locator": "working-paper abstract; not the inaccessible 2020 full article",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E104",
+      "title": "Novy-Marx and Velikov (2016)",
+      "bibtex_key": "novymarx2016",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://www.nber.org/papers/w20721"
+      },
+      "locator": "earlier full text abstract; final citation confirmed by author publication list and Crossref",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      },
+      "relative_path": "sources/novymarx2016.pdf",
+      "sha256": "694db41db44968d1b23892b04774610a7c1a8762bc35eefa8076cb304b5d5b5f"
+    },
+    {
+      "evidence_id": "E105",
+      "title": "Avramov, Cheng and Metzker (2023)",
+      "bibtex_key": "avramov2023",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://cris.huji.ac.il/en/publications/machine-learning-vs-economic-restrictions-evidence-from-stock-ret/"
+      },
+      "locator": "institutional abstract and publication metadata",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E106",
+      "title": "Azevedo, Hoegner and Velikov, archived working paper",
+      "bibtex_key": "azevedo",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://afajof.org/management/viewp.php?n=75544"
+      },
+      "locator": "archived undated manuscript abstract and introduction; not claimed to be latest2026 version",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      },
+      "relative_path": "sources/azevedo.pdf",
+      "sha256": "175dd36679ad0d2d03cf09f2fbabb0ad2595e288cf8836d6ef8109efebd4bd1e"
+    },
+    {
+      "evidence_id": "E107",
+      "title": "Harvey, Liu and Zhu (2016)",
+      "bibtex_key": "harvey2016",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://people.duke.edu/~charvey/Research/Published_Papers/P118_and_the_cross.PDF"
+      },
+      "locator": "published abstract and multiple-testing framework",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      },
+      "relative_path": "sources/harvey2016.pdf",
+      "sha256": "15e407e31867dcd5bae6cf843200a85d1409180e1340322554ab3fcf88fb13bf"
+    },
+    {
+      "evidence_id": "E108",
+      "title": "White (2000)",
+      "bibtex_key": "white2000",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://www.econometricsociety.org/publications/econometrica/2000/09/01/reality-check-data-snooping"
+      },
+      "locator": "publisher abstract, metadata; full text retrieved from university",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      },
+      "relative_path": "sources/white2000.pdf",
+      "sha256": "675eb3226dee3af4dfa8089410f9bbf0a2798c7b58985c8334c42fb4983a9743"
+    },
+    {
+      "evidence_id": "E109",
+      "title": "Newey and West (1987)",
+      "bibtex_key": "newey1987",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://www.ssc.wisc.edu/~kwest/publications/1980/A%20Simple%20PSD%20HAC%20Covariance%20Matrix.pdf"
+      },
+      "locator": "published PDF, p703 inspected visually (scanned source); author order from PDF overrides society metadata error",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      },
+      "relative_path": "sources/newey1987.pdf",
+      "sha256": "efc06a3c0f97fd0221103c818ac1481053289582040c51ccd7d5c47c336db20a"
+    },
+    {
+      "evidence_id": "E110",
+      "title": "Yang et al. (2026), LiMT",
+      "bibtex_key": "yang2026",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://arxiv.org/abs/2609.25617"
+      },
+      "locator": "arXiv title/authors/date/abstract; local original paper and code retained in source project",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E111",
+      "title": "Yan et al. (2026), Arboreal Neural Network",
+      "bibtex_key": "yan2026",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://proceedings.mlr.press/v306/yan26o.html"
+      },
+      "locator": "official PMLR abstract, author list, citation",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E112",
+      "title": "Kenneth French official factor definitions",
+      "bibtex_key": "french",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html"
+      },
+      "locator": "FF5 2x3 and daily Mom definition pages opened",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E113",
+      "title": "CZ October2026 release",
+      "bibtex_key": "czdata",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://www.openassetpricing.com/data/"
+      },
+      "locator": "current release, revisions, option-signal early end dates",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E114",
+      "title": "IJCAI2027 main-track instructions",
+      "bibtex_key": "ijcai2027",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://2027.ijcai.org/ijcai-2027-call-for-papers-main-track/"
+      },
+      "locator": "page limits, anonymity, LLM policy, deadlines; official template link and archive",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      }
+    },
+    {
+      "evidence_id": "E115",
+      "title": "Scientific Agent Skills workflow attribution",
+      "bibtex_key": "workflow",
+      "source_type": "public_primary_source",
+      "confidentiality": "public",
+      "authors": [],
+      "year": null,
+      "identifiers": {
+        "url": "https://arxiv.org/abs/2609.00065"
+      },
+      "locator": "current arXiv authors, year, v2 revision and title opened; attribution in research_notes.txt only",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      },
+      "machine_review": {
+        "by": "Codex",
+        "on": "2026-11-10",
+        "status": "source_content_inspected",
+        "human_approval": "pending"
+      }
+    }
+  ],
+  "note": "Unverified means accountable human verification is pending; machine inspection is recorded separately."
+}

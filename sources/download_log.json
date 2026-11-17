@@ -1,0 +1,43 @@
+[
+  {
+    "id": "hou2020",
+    "url": "https://global-q.org/uploads/1/2/2/6/122679606/houxuezhang2020rfs.pdf",
+    "status": "failed",
+    "error": "400 Client Error: Bad Request for url: https://global-q.org/uploads/1/2/2/6/122679606/houxuezhang2020rfs.pdf"
+  },
+  {
+    "id": "gu2020",
+    "url": "https://dachxiu.chicagobooth.edu/download/ML.pdf",
+    "bytes": 1146229,
+    "sha256": "05e4ef8a1c830c9f33a0f461f07c145f6e6be30fbd7996a09d0672de1413bd61",
+    "status": "retrieved"
+  },
+  {
+    "id": "chen2022",
+    "url": "https://www.federalreserve.gov/econres/feds/files/2021-037pap.pdf",
+    "bytes": 1778015,
+    "sha256": "3a22b9878385aee49a411c42a8ce68feba2bb04bf00fa76d372bd63cff03b7bf",
+    "status": "retrieved"
+  },
+  {
+    "id": "harvey2016",
+    "url": "https://people.duke.edu/~charvey/Research/Published_Papers/P118_and_the_cross.PDF",
+    "bytes": 969629,
+    "sha256": "15e407e31867dcd5bae6cf843200a85d1409180e1340322554ab3fcf88fb13bf",
+    "status": "retrieved"
+  },
+  {
+    "id": "novymarx2016",
+    "url": "https://www.nber.org/system/files/working_papers/w20721/w20721.pdf",
+    "bytes": 2099323,
+    "sha256": "694db41db44968d1b23892b04774610a7c1a8762bc35eefa8076cb304b5d5b5f",
+    "status": "retrieved"
+  },
+  {
+    "id": "azevedo",
+    "url": "https://afajof.org/management/viewp.php?n=75544",
+    "bytes": 434056,
+    "sha256": "175dd36679ad0d2d03cf09f2fbabb0ad2595e288cf8836d6ef8109efebd4bd1e",
+    "status": "retrieved"
+  }
+]

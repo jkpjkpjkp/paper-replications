@@ -1,0 +1,107 @@
+TARGETED NARRATIVE LITERATURE EXTENSION -- 10 NOVEMBER 2026
+
+Question
+What existing evidence motivates cost-aware, risk-adjusted, statistically credible
+evaluation of ML return claims, and what evidence contradicts a universal assertion
+that ML methods cannot profit?
+
+Selection and search boundary
+This is a single-agent targeted narrative extension, not a systematic review.
+The 437-paper workbook is user-supplied and has no demonstrated population-level
+coverage. Literature discovery used Google through the user's available Chrome
+automation; claim assessment used author, publisher, institutional, official data,
+arXiv and research-society sources. No reference search uploaded local restricted
+financial data. No independent second-reviewer eligibility decisions were made.
+Search result snippets were used for discovery, not as verified paper results.
+No inference treats a citation, paper, market, seed or specification as an
+independent replicate unless that unit actually supplies independent observations.
+
+Recorded discovery queries
+1. machine learning asset pricing replication transaction costs non standard errors no alpha Chen Zimmermann Novy Marx Velikov
+2. Hou Xue Zhang 2020 Replicating Anomalies microcaps value weighted 65%
+3. Empirical Asset Pricing via Machine Learning Gu Kelly Xiu 2020 pdf authors
+4. Harvey Liu Zhu 2016 cross section expected returns t statistic three Novy Marx Velikov taxonomy anomalies trading costs 2016
+5. White 2000 reality check data snooping Hansen 2005 superior predictive ability official paper
+6. "The Expected Returns on Machine-Learning Strategies" Azevedo Hoegner Velikov journal
+7. Avramov Cheng Metzker Machine Learning versus Economic Restrictions 2023 Management Science
+8. Newey West 1987 Simple Positive Semi Definite Heteroskedasticity Autocorrelation Consistent Covariance Matrix Econometric Society
+9. Holm 1979 simple sequentially rejective multiple test procedure 6 65 70
+10. Replicating Anomalies Hou Xue Zhang hhy131 452 65
+Venue discovery: IJCAI 2027 call for papers author guidelines.
+
+THEMATIC SYNTHESIS
+
+Replication depends on matching the original question.
+Hou, Xue and Zhang's Replicating Anomalies emphasizes how microcap treatment and
+value weighting change inference. The available NBER page is the 2017 working
+paper (447 variables, 64%), while the published 2020 version is associated with
+a different count (452, 65%). The manuscript cites the opened 2017 version and
+does not silently mix its counts with those of the published version. Author-site
+PDF retrieval failed with HTTP400 and the publisher abstract returned HTTP403.
+The NBER page's automatically supplied published-version citation unusually adds
+an editor to the author list; the manuscript retains the three authors displayed
+on the actual working-paper record. The broader point is supported without
+quoting an unverified published-version numerical estimate.
+
+Chen and Zimmermann (2022) provide an essential counterweight. Their published
+abstract reports high reproduction among predictors with clear original evidence;
+their working-paper text explains why a permissive anomaly definition and altered
+weighting can yield different headline failure rates. Therefore a protocol transfer
+must not automatically be called a faithful refutation of an original paper.
+The 2021 working paper differs slightly from the 2022 published abstract in some
+regression summary values; those values are not imported into this manuscript.
+The October2026 official data page also documents revisions and early termination
+of option-related signals. Current-vintage inputs are not historical as-published
+archives, even when the signal code includes reporting lags.
+
+Costs and restrictions motivate, but do not predetermine, the result.
+Novy-Marx and Velikov (2016) examine turnover, cost mitigation, and net anomaly
+performance. Their earlier NBER full text is locally retrieved; the author's
+publication list and Crossref record verify the final publication identity.
+Avramov, Cheng and Metzker (2023), via its institutional publication record and
+abstract, finds that size/distress/market-state restrictions and costs attenuate
+ML performance. Its abstract also retains positive findings in some settings;
+this is not a claim that every strategy necessarily loses.
+
+Positive ML evidence must be treated fairly.
+Gu, Kelly and Xiu (2020) provide published full text via an author's university
+site. Their design includes value-weighted deciles, FF5+momentum analysis, and a
+NYSE twentieth-percentile exclusion sensitivity (published p2267). A claim that
+finance ML uniformly ignores such evaluation would be false. The source reports
+positive results; those are external literature findings, not independently
+reproduced results in the current local protocol.
+
+An archived American Finance Association working-paper copy by Azevedo, Hoegner
+and Velikov reports profitable after-cost ML strategies and considers post-
+publication decay and modern liquidity. Its abstract reports positive six-factor
+alpha with a t-statistic. The manuscript uses this only as contrary evidence,
+without transplanting its numerical result into our benchmark table. The author's
+current site lists a 2026 version, but the accessed AFA copy is undated and its
+PDF metadata indicate an older archive; the manuscript cites the archive as n.d.
+and does not label its contents as the verified latest2026 version. SSRN returned
+HTTP403. Current-version full-text verification remains a useful author follow-up.
+
+Inference must cover search, dependence and the benchmark contrast.
+Harvey, Liu and Zhu (2016), from the author's full published paper, motivates
+multiple-testing-aware factor evidence. White (2000), from the original society
+abstract and retrieved published PDF, addresses benchmark superiority after
+specification search. Newey and West (1987) motivates dependence-robust covariance.
+The manuscript describes the actual covariance calculation and finite-sample
+reference distribution; the independent audit reconstructs all36 saved tests.
+HAC assumptions and an isolated Holm family do not solve historical test reuse.
+
+Additional candidates discovered but not used as verified substantive evidence
+Hansen (2005), A Test for Superior Predictive Ability: institutional retrieval
+failed; no claim is based on the inaccessible full report.
+Holm (1979): title discovered, Crossref DOI lookup failed (404). The manuscript
+names the procedure actually implemented and describes its family, without adding
+an unverified bibliographic record or asserting DOI verification.
+Recent working papers on anachronistic testing-date bias and trading costs were
+discovered but not full-text assessed. Their snippets do not strengthen our result.
+
+RESULTING POSITION
+The literature supports a demand for clear economic estimands, credible costs,
+paired baseline comparisons, uncertainty and selection accounting. It does not
+support a universal negative statement about ML profitability. The original
+contribution available from this local record is a bounded evidence audit and
+one completed protocol-compatible transfer, not an exhaustive meta-analysis.

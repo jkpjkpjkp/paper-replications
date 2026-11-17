@@ -1,0 +1,6 @@
+PASS: 36 HAC rows, 4 ledgers, Holm36, output hashes, frozen inputs and 437 catalogue records.
+        case  block_sessions  resamples     seed    ci_low  ci_high                               interpretation
+ value_cost0              20       2000 20261110 -0.022405 0.129605 post_hoc_paired_circular_percentile_alpha_CI
+ value_cost0              60       2000 20261110 -0.026224 0.128556 post_hoc_paired_circular_percentile_alpha_CI
+value_cost10              20       2000 20261110 -0.097303 0.060215 post_hoc_paired_circular_percentile_alpha_CI
+value_cost10              60       2000 20261110 -0.094005 0.062104 post_hoc_paired_circular_percentile_alpha_CI

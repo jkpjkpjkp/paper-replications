@@ -1,0 +1,281 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "ijcai-paper",
+  "title": "When Forecasting Gains Do Not Establish Alpha: An Evidence Audit of Financial Machine Learning",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "paper.pdf",
+    "path_relative_to_collection": "ijcai-paper/paper.pdf",
+    "sha256": "e0bb25b096147c71559340f3f54750076024cc09c2e50de06dbd2cfc699f3ca3",
+    "bytes": 86132,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "Local research draft, not a published reference paper; extract corresponds to the saved PDF.",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 6,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 174
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 175,
+      "line_end": 411
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 412,
+      "line_end": 622
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 623,
+      "line_end": 833
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 834,
+      "line_end": 1010
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 1011,
+      "line_end": 1109
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 16,
+      "line_end": 72
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 73,
+      "line_end": 163
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 164,
+      "line_end": 265
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 266,
+      "line_end": 353
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 354,
+      "line_end": 426
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 427,
+      "line_end": 480
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 21,
+      "text": "Abstract"
+    },
+    {
+      "line": 206,
+      "text": "3.1 Investment Universe and Portfolio"
+    },
+    {
+      "line": 324,
+      "text": "3.2 Risk Adjustment and Uncertainty"
+    },
+    {
+      "line": 361,
+      "text": "4.1 Coverage Is Not a Failure Rate"
+    },
+    {
+      "line": 443,
+      "text": "4.2 LiMT Transfer Design"
+    },
+    {
+      "line": 525,
+      "text": "4.3 Independent Recalculation"
+    },
+    {
+      "line": 544,
+      "text": "5.1 Positive Returns Do Not Establish Positive"
+    },
+    {
+      "line": 547,
+      "text": "5 January 2017 to 31 December 2025. Value-weighted"
+    },
+    {
+      "line": 558,
+      "text": "1.000. Figure 1 shows the uncertainty directly."
+    },
+    {
+      "line": 656,
+      "text": "2025. Alpha and mean are annual arithmetic quantities; intervals"
+    },
+    {
+      "line": 660,
+      "text": "5.3 Other Saved Designs Prevent a Universal"
+    },
+    {
+      "line": 680,
+      "text": "6.1 Three Distinct Claims"
+    },
+    {
+      "line": 725,
+      "text": "5.2 Robustness and Precision"
+    },
+    {
+      "line": 793,
+      "text": "6.2 The Dummy Baseline Must Be Deﬁned"
+    },
+    {
+      "line": 903,
+      "text": "A Publication Standard for Return Claims"
+    },
+    {
+      "line": 907,
+      "text": "1. Declare the economic estimand. Specify the market,"
+    },
+    {
+      "line": 911,
+      "text": "2. Make the backtest auditable. Retain predictions and"
+    },
+    {
+      "line": 915,
+      "text": "3. Report uncertainty on both returns and alpha. Give"
+    },
+    {
+      "line": 926,
+      "text": "5. Account for selection and implementation. Freeze"
+    },
+    {
+      "line": 933,
+      "text": "6. Publish informative null ﬁndings. Neither an access"
+    },
+    {
+      "line": 1065,
+      "text": "References"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 15,
+      "line_end": 94
+    },
+    {
+      "id": 2,
+      "line_start": 87,
+      "line_end": 166
+    },
+    {
+      "id": 3,
+      "line_start": 159,
+      "line_end": 238
+    },
+    {
+      "id": 4,
+      "line_start": 231,
+      "line_end": 310
+    },
+    {
+      "id": 5,
+      "line_start": 303,
+      "line_end": 382
+    },
+    {
+      "id": 6,
+      "line_start": 375,
+      "line_end": 454
+    },
+    {
+      "id": 7,
+      "line_start": 447,
+      "line_end": 526
+    },
+    {
+      "id": 8,
+      "line_start": 519,
+      "line_end": 598
+    },
+    {
+      "id": 9,
+      "line_start": 591,
+      "line_end": 670
+    },
+    {
+      "id": 10,
+      "line_start": 663,
+      "line_end": 742
+    },
+    {
+      "id": 11,
+      "line_start": 735,
+      "line_end": 814
+    },
+    {
+      "id": 12,
+      "line_start": 807,
+      "line_end": 886
+    },
+    {
+      "id": 13,
+      "line_start": 879,
+      "line_end": 958
+    },
+    {
+      "id": 14,
+      "line_start": 951,
+      "line_end": 1030
+    },
+    {
+      "id": 15,
+      "line_start": 1023,
+      "line_end": 1102
+    },
+    {
+      "id": 16,
+      "line_start": 1095,
+      "line_end": 1110
+    }
+  ],
+  "line_count": 1110,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "a0a8ac53176588381c4b57d2b7f8cd7db37c76cba305ec528747b1e62ddc6712",
+      "bytes": 32262
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "c506dc6803ea5c59f3f92019e49db2a5cca2d2b34f3aab9d18b8f1599d8200c6",
+      "bytes": 44961
+    }
+  }
+}

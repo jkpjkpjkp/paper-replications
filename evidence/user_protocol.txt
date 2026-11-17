@@ -1,0 +1,9 @@
+this is how you should run tests:
+
+ Chen–Zimmermann + 市值加权：
+
+- 显式剔除上月末市值低于 NYSE 第20百分位的 microcap。
+- CZ 特征，训练后保留202项。
+- 主组合为市值加权 D10−D1，同时检验毛收益和交易成本后收益。
+- 回归 FF5 (Fama&French) + UMD，报告年化 alpha、HAC t值、置信区间及 p值。
+

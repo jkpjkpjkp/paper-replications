@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "document_id": "ijcai-finance-ml-audit",
+  "draft_status": "draft",
+  "study_design": "retrospective_artifact_audit_with_targeted_narrative_review",
+  "submission_ready": false,
+  "human_verification": {
+    "completed": false,
+    "verified_by": "",
+    "verified_on": ""
+  },
+  "confidentiality_review": {
+    "completed": false,
+    "external_services_authorized": false,
+    "policy_checked": false,
+    "verified_by": "",
+    "verified_on": "",
+    "note": "Local research processed locally; only public research queries and URLs used externally."
+  },
+  "required_statements": {
+    "ai_disclosure": "documented_in_research_notes_pending_final_author_review",
+    "author_contributions": "unresolved",
+    "code_availability": "local_only_public_release_unresolved",
+    "conflicts": "unresolved",
+    "consent": "not_assumed_applicable",
+    "data_availability": "licensed_sources_local",
+    "ethics": "draft_in_manuscript",
+    "funding": "unresolved"
+  },
+  "reporting_guidelines": [
+    "IJCAI2027_official_main_track_instructions"
+  ],
+  "registries": {
+    "source_manifest": "source_manifest.json",
+    "claim_evidence": "claim_evidence.csv",
+    "consistency_manifest": "audit_validation.json",
+    "reporting_coverage": "reporting_coverage.json",
+    "authorship_manifest": "authorship.json"
+  }
+}

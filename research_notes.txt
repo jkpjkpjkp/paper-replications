@@ -1,0 +1,134 @@
+RESEARCH DRAFT AND EVIDENCE AUDIT
+Prepared 10 November 2026; intended venue: IJCAI 2027, inferred from the next
+conference after the current date. No submission or external publication made.
+
+READ FIRST
+The completed evidence does not support the requested universal headline
+"no ML paper profits, therefore weaker than a dummy baseline and uninteresting."
+The paper instead makes the strongest supported statement: the one completed
+compatible model experiment identified in this audit does not establish positive
+FF5+momentum alpha under the specified CZ202 transfer. Its confidence intervals
+do not establish zero profit, equivalence, or baseline inferiority.
+
+DELIVERABLES
+- paper.pdf: anonymous, visibly labelled research draft, official IJCAI 2027 style.
+- paper.tex and references.bib: editable manuscript and bibliography.
+- evidence/primary_results.csv: four full-period weighting/cost alpha results.
+- evidence/independent_hac.csv: all 36 independently recomputed tests.
+- evidence/posthoc_bootstrap.csv: newly added robustness intervals, clearly post hoc.
+- evidence/catalogue_437.csv: every supplied catalogue record with its legacy
+  return-extension status. No source-record status is reclassified as a CZ failure.
+- evidence/coverage_snapshot.json: preserved programme counts and source timestamp.
+- evidence/source_manifest.json and claim_evidence.csv: source/claim map with
+  machine checks and human approval explicitly separated.
+- scripts/audit_results.py: reproducible local read-only analysis of source projects.
+- literature_review.txt: targeted related-work synthesis, including contrary evidence.
+- sources/: downloaded PUBLIC papers and metadata for local verification; these
+  copyrighted reference files are not a proposed public supplementary release.
+
+PRINCIPAL NUMERICAL FINDING
+LiMT / CZ202 / US historical large-500 / value-weighted D10-D1 / 2017-2025:
+2,260 trading days; +100% long/-100% short targets (200% gross).
+Gross: annual arithmetic mean 9.35%, FF5+momentum alpha 5.31%,
+95% HAC interval [-2.54%,13.16%], t=1.326, p=0.185.
+10bp ALL traded dollars: arithmetic mean 2.77%, alpha -1.27%,
+95% HAC interval [-9.11%,6.56%], t=-0.318, p=0.750.
+Holm36-adjusted alpha p-values both 1.000.
+The after-cost scenario omits borrowing, financing, impact and collateral yield.
+It is not a fully observed implementation-cost result.
+
+WHY THE ORIGINAL HEADLINE DOES NOT FOLLOW
+1. Profit is an estimate, significance is evidence, alpha is factor-model-relative,
+   and paired improvement over a baseline is a separate estimand.
+2. A p-value above .05 is not proof of zero expected performance. The after-cost
+   alpha interval still permits an economically material positive effect.
+3. A negative point estimate alone is not evidence of baseline inferiority.
+4. A constant forecast requires a tie rule before it defines a decile strategy.
+   A coherent tie-cancelling/no-trade control has zero spread and undefined Sharpe,
+   but no matched CZ202 predictive-baseline ledger is supplied in the completed run.
+5. The directory contains significant positive gross-return evidence in other
+   LiMT designs. These are outside the current protocol, and must be disclosed.
+6. The legacy programme has 437 catalogue records, not 437 completed compatible
+   reproductions. Its return extension records 273 pending, 52 blocked,
+   110 not applicable, and two completed positive-inconclusive records.
+7. Financial QA, credit risk, fraud detection and similar tasks need their own
+   objectives; a stock-profitability screen cannot establish their irrelevance.
+
+COMPLETED VERIFICATION
+The new analysis checked all saved CSV hashes against the experiment verification
+record, checked frozen source/input hashes, confirmed completion and CZ feature
+count, and independently recomputed every one of 36 intercept tests plus Holm36.
+For four ledgers it checked date uniqueness/order, sequential NAV arithmetic,
+net returns, exact scenario fee arithmetic, factor coverage and dollar neutrality.
+It did not retrain, select a new seed, flip score direction, overwrite original
+experiments, deploy a strategy, or claim to independently rebuild all CRSP data.
+The original experiment's source-holdings replay is distinguished from this new
+ledger/statistics audit in the manuscript.
+
+NEW ROBUSTNESS CALCULATIONS
+Circular paired (return,factors) block bootstrap, 2,000 resamples per cost/block
+case, NumPy random seed 20261110, percentile intervals for annual OLS alpha.
+Blocks20/60 give gross intervals [-2.24,12.96]% / [-2.62,12.86]% and cost10
+intervals [-9.73,6.02]% / [-9.40,6.21]%. These are post hoc robustness diagnostics,
+not preregistered tests. They do not adjust for the historical research search.
+
+BEFORE THIS CAN SUPPORT A STRONG IJCAI EMPIRICAL SUBMISSION
+Priority 1: Complete matched linear/ridge, tree, simple signal and no-information
+controls on identical dates and eligibility, with the same exposure and fee rules.
+Test paired return and alpha increments. Preserve all alternatives, including wins.
+Priority 2: Complete further selected RETURN-PREDICTION models under the actual
+protocol. The inspected CS-GAT protocol202 directory has prepared data but no
+completed return inference in the audit snapshot; preparation is not a null result.
+Use a documented inclusion rule to avoid selecting models for their failures.
+Priority 3: Extend beyond the historical large-500 universe. Report whether all
+202 predictors remain available/varying, source-month availability and missingness.
+Priority 4: Use a genuinely untouched or prospective confirmation period and a
+predeclared economically meaningful margin. Do not label already-inspected
+historical data a new holdout. Freeze the complete model/portfolio/cost search.
+Priority 5: Retain original-task reproductions separately. Replacing native daily
+market inputs with monthly CZ descriptors can change the task and handicap a
+temporal model; a failure of transfer does not refute the published benchmark.
+Priority 6: Human authors must check the exact source support and bibliographic
+metadata, approve scientific claims and authorship, finalize declarations and
+release permissions, and decide submission. The draft remains submission_ready=false.
+These are research limitations, not an outstanding request to approve an action.
+
+AUTHOR AND DISCLOSURE RECORD
+Authors/order/affiliations/funding/conflicts/contributions: unresolved, not invented.
+AI assistance actually used in this task: Codex inspected local artifacts, searched
+public sources, wrote analysis and drafting code, recalculated statistics and drafted
+the manuscript. Accountable human review and any required final disclosure remain
+pending. Do not claim that humans already verified generated content.
+
+VENUE CHECK
+Official IJCAI 2027 main-track call and author's kit checked 10 November 2026:
+https://2027.ijcai.org/ijcai-2027-call-for-papers-main-track/
+https://www.ijcai.org/authors_kit
+Template downloaded from:
+https://ijcai.org/sites/default/files/Guidelines/FormattingGuidelines-IJCAI-27.zip
+Main-track limit: seven body pages including tables/figures plus up to two
+reference pages. Optional ethics may appear with references. Double-blind
+submission; no acknowledgements or contribution statement at submission.
+Call lists abstract January 4, 2027 and full paper January 11, 2027, 23:59 AoE.
+Official call is authoritative when its details differ from template boilerplate.
+The main draft uses the unmodified official style and named bibliography style;
+a XeTeX compatibility definition preserves the required TemplateVersion metadata.
+
+WORKFLOW SOFTWARE ATTRIBUTION
+The scientific-writing and literature-review procedural skills materially informed
+the evidence audit and drafting workflow. Attribution (not financial evidence):
+Timothy Kassis, Vinayak Agarwal, Yuhuan He, Darshil Patel, and Aubrey M. Brueckner.
+Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents.
+2026. arXiv:2609.00065. https://doi.org/10.48550/arXiv.2609.00065
+Current arXiv metadata opened on 10 November 2026: v2, revised 2 September 2026;
+no journal reference observed. Citation deliberately uses the unversioned identifier.
+This attribution is recorded here rather than presented as substantive finance
+literature or an anonymous-submission acknowledgement.
+
+REBUILD
+From /home/jkp/data:
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 no-cost-neutral-audit/.venv/bin/python ijcai-paper/scripts/audit_results.py
+For PDF, from ijcai-paper:
+.tools/tectonic paper.tex --keep-logs --keep-intermediates
+Alternatively use pdflatex, bibtex, pdflatex, pdflatex with a suitable TeX installation.
+Rendering and pagination checks are recorded in evidence/document_validation.json.

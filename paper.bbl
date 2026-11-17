@@ -1,0 +1,86 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Avramov \bgroup \em et al.\egroup
+  }{2023}]{avramov2023}
+Doron Avramov, Si~Cheng, and Lior Metzker.
+\newblock Machine learning vs. economic restrictions: Evidence from stock
+  return predictability.
+\newblock {\em Management Science}, 69(5):2587--2619, 2023.
+
+\bibitem[\protect\citeauthoryear{Azevedo \bgroup \em et al.\egroup
+  }{nd}]{azevedo}
+Vitor Azevedo, Christopher Hoegner, and Mihail Velikov.
+\newblock The expected returns on machine-learning strategies.
+\newblock Working paper, archived American Finance Association copy, n.d.
+\newblock Undated archived manuscript; accessed November 10, 2026.
+  \url{https://afajof.org/management/viewp.php?n=75544}.
+
+\bibitem[\protect\citeauthoryear{Chen and Zimmermann}{2022}]{chen2022}
+Andrew~Y. Chen and Tom Zimmermann.
+\newblock Open source cross-sectional asset pricing.
+\newblock {\em Critical Finance Review}, 11(2):207--264, 2022.
+
+\bibitem[\protect\citeauthoryear{Chen and Zimmermann}{2026}]{czdata}
+Andrew~Y. Chen and Tom Zimmermann.
+\newblock Open source asset pricing: October 2026 data release, 2026.
+\newblock Data-Release-2026.10; accessed November 10, 2026.
+  \url{https://www.openassetpricing.com/data/}.
+
+\bibitem[\protect\citeauthoryear{French}{nd}]{french}
+Kenneth~R. French.
+\newblock Data library: Five factors and daily momentum factor.
+\newblock Dartmouth College, n.d.
+\newblock Accessed November 10, 2026.
+  \url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}.
+
+\bibitem[\protect\citeauthoryear{Gu \bgroup \em et al.\egroup }{2020}]{gu2020}
+Shihao Gu, Bryan Kelly, and Dacheng Xiu.
+\newblock Empirical asset pricing via machine learning.
+\newblock {\em The Review of Financial Studies}, 33(5):2223--2273, 2020.
+
+\bibitem[\protect\citeauthoryear{Harvey \bgroup \em et al.\egroup
+  }{2016}]{harvey2016}
+Campbell~R. Harvey, Yan Liu, and Heqing Zhu.
+\newblock {\ldots} and the cross-section of expected returns.
+\newblock {\em The Review of Financial Studies}, 29(1):5--68, 2016.
+
+\bibitem[\protect\citeauthoryear{Hou \bgroup \em et al.\egroup
+  }{2017}]{hou2017}
+Kewei Hou, Chen Xue, and Lu~Zhang.
+\newblock Replicating anomalies.
+\newblock Technical Report 23394, National Bureau of Economic Research, 2017.
+
+\bibitem[\protect\citeauthoryear{Newey and West}{1987}]{newey1987}
+Whitney~K. Newey and Kenneth~D. West.
+\newblock A simple, positive semi-definite, heteroskedasticity and
+  autocorrelation consistent covariance matrix.
+\newblock {\em Econometrica}, 55(3):703--708, 1987.
+
+\bibitem[\protect\citeauthoryear{Novy-Marx and Velikov}{2016}]{novymarx2016}
+Robert Novy-Marx and Mihail Velikov.
+\newblock A taxonomy of anomalies and their trading costs.
+\newblock {\em The Review of Financial Studies}, 29(1):104--147, 2016.
+
+\bibitem[\protect\citeauthoryear{White}{2000}]{white2000}
+Halbert White.
+\newblock A reality check for data snooping.
+\newblock {\em Econometrica}, 68(5):1097--1126, 2000.
+
+\bibitem[\protect\citeauthoryear{Yan \bgroup \em et al.\egroup
+  }{2026}]{yan2026}
+Wubin Yan, Wei Ma, Shixiang Wan, Dongchen Li, Shaoshun Kang, Qing Yang, and
+  Dongliang Xu.
+\newblock Arboreal neural network.
+\newblock In {\em Proceedings of the 43rd International Conference on Machine
+  Learning}, volume 306 of {\em Proceedings of Machine Learning Research},
+  pages 143908--143920. PMLR, 2026.
+
+\bibitem[\protect\citeauthoryear{Yang \bgroup \em et al.\egroup
+  }{2026}]{yang2026}
+Hengyi Yang, Sida Lin, Yiyan Qi, Yankai Chen, Haohan Zhang, Xianhua Peng, and
+  Jian Guo.
+\newblock Hierarchical multi-task learning with liquidity-aware signals for
+  stock forecasting.
+\newblock arXiv:2609.25617, 2026.
+
+\end{thebibliography}

@@ -1,0 +1,182 @@
+[
+  {
+    "path": "protocol.txt",
+    "sha256": "39a696b7f07ca179c59c19aa1e7341cd5a549756f5fb56f0d80dfa5c9857b08f",
+    "bytes": 362
+  },
+  {
+    "path": "paper-reproduction-audit/programme-status.json",
+    "sha256": "fd93c19c768ffbd4e0f79389de4aa55d32441002a01030f7af69507be5b03462",
+    "bytes": 13644076
+  },
+  {
+    "path": "paper-reproduction-audit/papers.json",
+    "sha256": "c8572aa4c637249335c62770a5c733c5262b98370f4d212edf9829f0ba8efbe8",
+    "bytes": 274454
+  },
+  {
+    "path": "paper-reproduction-audit/SOURCE_PROVENANCE.json",
+    "sha256": "7862f874159f1dcbc1095f375c7a1ea686addc401101b3477d0155a134913ec4",
+    "bytes": 5233
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/REPORT.txt",
+    "sha256": "aa36b53a4db9d1bdcb079b3579f226df8f97347d2c99ad428ad04607837bb584",
+    "bytes": 18749
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/protocol.json",
+    "sha256": "e4aabb0a09811f1edcd4a0ce2bfb435ddd9ae89cd142b8f1e7b7640257ddf95c",
+    "bytes": 4750
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/status.json",
+    "sha256": "c9b3edf1a5701a798197732652713d9b1f797d77b2cdabef185bb2abccfc5355",
+    "bytes": 1573
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/locked_before_training.json",
+    "sha256": "4539a84888baf65879ade1e8338f51271fe7546e713583a461cc9295abea6d68",
+    "bytes": 3680
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/verification.json",
+    "sha256": "3af82554651b2d1418fe48d776e1f20af166bb879b3dea9eb4879c4933d86876",
+    "bytes": 7366
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/data/manifest.json",
+    "sha256": "10a46e53078b40cbc541636c8092a455ca31d83cc33ba59e0f7b10a2cb085080",
+    "bytes": 6668
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/data/universe_audit.csv",
+    "sha256": "75f8eb77af6a2da0919c8caa76137e93ca116212614097c2a98fedc8b7530246",
+    "bytes": 307
+  },
+  {
+    "path": "no-cost-neutral-audit/REPORT.txt",
+    "sha256": "7149625b1d0f18b46a0baab6fba363aa35f312495cd7904c55e0ad5d2d902762",
+    "bytes": 10250
+  },
+  {
+    "path": "limt-us-reproduction/REPORT.txt",
+    "sha256": "2af62a69cf5f29ff659066825e0919392ef0de3ff4371e3cc8fbabd47b061f39",
+    "bytes": 13589
+  },
+  {
+    "path": "arboreal-reproduction/finance/REPORT.md",
+    "sha256": "2f23b14fd00590311563b0a3e18a380344796087f9e4ec1b8320a0a9101663a0",
+    "bytes": 7901
+  },
+  {
+    "path": "financial-graph-reproduction/protocol202/protocol.json",
+    "sha256": "6049856b7f7c022c7f8ee7fc4fb25ce71bbae49fc0e573124e1075a7285e51d5",
+    "bytes": 8013
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/value_cost0_ledger.csv",
+    "sha256": "d9d99a6c1ea06290546ff9d264d885ad8349c9948d33ba299c671f4c83fe2801",
+    "bytes": 574291
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/value_target_deciles.csv",
+    "sha256": "0ff128b09166fe781b9450237470042400ad2d3c469c77350e346802c94e35f9",
+    "bytes": 3317696
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/value_decile_summary.csv",
+    "sha256": "80dbb79b638d56360ea998e1fac21fc611fb076411b4e9a89293a15a1a2c21f7",
+    "bytes": 737
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/value_cost10_ledger.csv",
+    "sha256": "f4b48d934b2d7971313f6b92643b13f9ba0878dbe896f7bff09e20a1eabbdd96",
+    "bytes": 606381
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/value_missing_stress_ledger.csv",
+    "sha256": "e67dca89e75552fce44a2a55dbec73bb80137bf4a6e20f1e1cb5de9654afbf1c",
+    "bytes": 574280
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/value_seed0_ledger.csv",
+    "sha256": "1d549047b2758d098bf86b849b2de66e50e455dc777e79fa8d7e147b40f9b2cf",
+    "bytes": 574062
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/value_seed1_ledger.csv",
+    "sha256": "be409e4cbe4d10bce6c66fe043a85432b8a32371f27785abee72d90456765068",
+    "bytes": 573361
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/value_seed2_ledger.csv",
+    "sha256": "350acc935b0d6594e47e544e3683da0f722acda493aceb1702d3a0d345d1f966",
+    "bytes": 573417
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/volume_cost0_ledger.csv",
+    "sha256": "3b3dc0558281bd667cb7af72b92b0874251dd0556544a8c130953657b470cdfe",
+    "bytes": 572158
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/volume_target_deciles.csv",
+    "sha256": "635922a44dce461289c30614e70b9cd44ad3b3b888296cc0e8493c7c64149cc2",
+    "bytes": 3315656
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/volume_decile_summary.csv",
+    "sha256": "40d3ac2460eb75910c28b9923280aa3b5898a494e225946d75c94fd3172718d1",
+    "bytes": 726
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/volume_cost10_ledger.csv",
+    "sha256": "20ccc691677487a7472c31e1ce5e2a8782221ea23e4382bd3f90fa22167c3666",
+    "bytes": 601651
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/volume_missing_stress_ledger.csv",
+    "sha256": "61fd010fb97170650020c4b51c62009c8167df2ede855e7622567500e342c2de",
+    "bytes": 572163
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/volume_seed0_ledger.csv",
+    "sha256": "0de845ff8cd0d64c41cbe777949d289273d42603e8bf524fcec9bc8af0edafb9",
+    "bytes": 572180
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/volume_seed1_ledger.csv",
+    "sha256": "8ac7743d603b2b8f76e3d1217cbf9092216e91bf4c6388faae9c07fff92f6aac",
+    "bytes": 570716
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/volume_seed2_ledger.csv",
+    "sha256": "2d1b3fa9747dacc473f44788355c0b89bdea474b0b685059633d4c898aaff03d",
+    "bytes": 571460
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/alpha.csv",
+    "sha256": "bad3bfd65471b216808843291890c9587ad9a84242f13e0f9c383d37c74212d8",
+    "bytes": 11271
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/hac_sensitivity.csv",
+    "sha256": "66a8f0526b63a69eb172b792fdeb97bef9a6c59ac80dd1c4e5cfe58622473f12",
+    "bytes": 20972
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/performance.csv",
+    "sha256": "32625890635fbbf860baad0e7b39dec99882ad69ceee946799be97cd3671fd16",
+    "bytes": 3441
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/missing_stress.csv",
+    "sha256": "83f563d84862ae8aa3c16e8041b1d8b4031e3d3aa0beb9325d851cbec2e2c6ac",
+    "bytes": 1652
+  },
+  {
+    "path": "limt-us-reproduction/experiments/standard_characteristics/analysis/seed_diagnostics.csv",
+    "sha256": "93ce77089e784d70f3a9a0726fad30b394502115dee3c6b8b88d88489819c886",
+    "bytes": 1745
+  }
+]

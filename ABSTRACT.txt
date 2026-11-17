@@ -1,0 +1,9 @@
+When Forecasting Gains Do Not Establish Alpha: An Evidence Audit of Financial Machine Learning
+
+Condensed abstract
+
+Audits whether financial prediction gains establish investable, risk-adjusted returns
+under an explicit portfolio and cost protocol. One compatible LiMT transfer experiment
+does not establish statistically significant positive alpha; this does not prove zero
+profitability or baseline inferiority. The draft distinguishes catalogue coverage from
+completed evidence and proposes more precise reporting standards.

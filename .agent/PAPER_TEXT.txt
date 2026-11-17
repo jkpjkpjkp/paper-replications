@@ -1,0 +1,1110 @@
+When Forecasting Gains Do Not Establish Alpha: An Evidence Audit of Financial Machine Learning
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: paper.pdf
+Source SHA-256: e0bb25b096147c71559340f3f54750076024cc09c2e50de06dbd2cfc699f3ca3
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Note: Local research draft, not a published reference paper; extract corresponds to the saved PDF.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+When Forecasting Gains Do Not Establish Alpha:
+An Evidence Audit of Financial Machine Learning
+Anonymous Authors
+Research draft: evidence and author approval pending
+
+Abstract
+Financial prediction benchmarks can reward forecasting improvements without establishing investable, risk-adjusted gains. We audit a local research collection using a speciﬁed evaluation design: Chen–Zimmermann characteristics,
+exclusion of stocks below the lagged NYSE size
+twentieth percentile, value-weighted top-minusbottom deciles, transaction-cost scenarios, and
+Fama–French ﬁve-factor plus momentum alpha
+with dependence-robust uncertainty. The collection
+contains a 437-paper catalogue, but its legacy evaluations do not establish compliance with this design. One completed compatible experiment identiﬁed in the audit transfers LiMT to historical US
+large-cap equities with 202 retained characteristics
+and three-seed score averaging. Across 2,260 trading days in 2017–2025, its annual alpha is 5.31%
+before costs (95% HAC interval [−2.54, 13.16]%,
+p = 0.185) and −1.27% under a 10-basis-point alltrade cost scenario ([−9.11, 6.56]%, p = 0.750).
+Neither establishes positive alpha. These ﬁndings
+do not prove zero proﬁtability or inferiority to a
+dummy baseline. We distinguish proﬁtability, incremental performance, and evidence of economically negligible effects, and propose publication requirements that align ﬁnancial ML claims with the
+statistical and economic quantities actually tested.
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+
+1
+
+Introduction
+
+A return-prediction model may improve a benchmark score
+while leaving an investor with an uncertain economic beneﬁt. The relevant claim is not exhausted by a positive return
+estimate: trading rules, capitalization weights, factor exposures, implementation costs, and sampling uncertainty determine what that estimate establishes. Financial ML publications that claim proﬁtable trading should therefore identify
+the investment proposition being tested and report evidence
+for that proposition.
+We ask what the available evidence establishes when a
+ﬁnancial ML model is evaluated under an explicit investment protocol. A completed LiMT transfer does not establish signiﬁcant positive alpha under the speciﬁed design. The
+
+broader collection, however, is not a set of completed comparable experiments, and other saved designs contain positive
+gross-return evidence. This setting exposes two evaluation
+problems: catalogue size can overstate empirical coverage,
+and a non-signiﬁcant return estimate can be misread as proof
+of baseline inferiority. An evidence audit must address both
+before drawing conclusions about an architecture or the ﬁeld.
+Our evaluation design, supplied before this manuscript
+audit, combines individual-stock Chen–Zimmermann (CZ)
+characteristics, a lagged NYSE twentieth-percentile microcap
+screen, value-weighted D10−D1 portfolios, gross and aftercost returns, and FF5 plus momentum regressions. These
+components have precedents in empirical asset pricing, but
+their exact combination is a study speciﬁcation rather than
+a universal deﬁnition of ﬁnancial usefulness. In particular,
+changing a model’s input family or market is a transfer experiment, not necessarily a replication of its published claim.
+The contribution is threefold. First, we separate catalogue
+coverage from completed return evidence, preventing missing experiments from being counted as failures. Second, we
+independently reconstruct the reported uncertainty of a completed CZ202 LiMT experiment from saved return ledgers
+and factor observations. Third, we give an operational reporting standard for proﬁtability and baseline comparisons.
+We do not introduce a new forecasting architecture or claim
+a ﬁeld-wide impossibility result.
+
+2
+
+Related Evidence and Scope
+
+Investability and replication. Anomaly evidence depends
+on the object being reproduced. [Hou et al., 2017] emphasize microcap treatment and value weighting in an extensive
+replication exercise. [Chen and Zimmermann, 2022] instead
+report strong reproduction of predictors with clear original
+evidence and distinguish those predictors from insigniﬁcant
+or modiﬁed characteristics. Their ﬁndings caution against
+treating a changed portfolio speciﬁcation as a faithful test of
+every original ﬁnding. We use CZ as a standardized stockcharacteristic source, not as proof that all its constituent predictors either work or fail under our design.
+Trading costs also change the question. [Novy-Marx and
+Velikov, 2016] study cost mitigation and show why turnover
+and entry/retention rules matter. [Avramov et al., 2023] report that restrictions involving microcaps, distress, volatility
+states, and trading costs attenuate ML-based performance.
+
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+
+=== PDF PAGE 2 ===
+119
+
+These results motivate testing implementation assumptions
+explicitly. They do not imply that every ML strategy has negative expected returns.
+Evidence against a universal negative claim. [Gu et al.,
+2020] report economic gains from trees and neural networks;
+their published analysis includes value-weighted decile
+portfolios, factor-adjusted performance, and a microcapexclusion sensitivity. These dimensions are consequently not
+absent from ﬁnance ML as a whole. An archived workingpaper version of [Azevedo et al., nd] also reports positive
+after-cost ML strategy evidence, while considering publication timing and modern trading conditions. We reviewed the
+archived version available through the American Finance Association; we do not treat its estimates as a replication under the present protocol. The appropriate question is which
+methods and conditions survive a speciﬁed test, rather than
+whether ML can ever be useful in ﬁnance.
+Statistical selection. [Harvey et al., 2016] explain why extensive factor searches require stronger evidence than an isolated nominal signiﬁcance test. [White, 2000] explicitly formulates data-snooping-adjusted comparison with a benchmark. The present audit retains the experiment’s withinfamily adjustment, but does not claim to recover the full historical search over models, datasets, or research speciﬁcations. Likewise, repeating training seeds on the same return
+dates does not create new independent market histories.
+Review boundary. The literature extension is a targeted
+narrative review, searched on 10 November 2026 using public
+scholarly and author/publisher sources. It covers competing
+proﬁtability ﬁndings, replication design, costs, and inference.
+It is not an exhaustive systematic review, and its references
+are not additional completed experiments. The local 437record workbook is a supplied convenience collection, not a
+probability sample of all ML publications. It also includes
+ﬁnancial tasks without an investment-return estimand.
+
+120
+
+3
+
+121
+
+3.1 Investment Universe and Portfolio
+
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+
+122
+123
+124
+125
+
+What the Protocol Tests
+
+At a signal date in month m, let Mi,m−1 be stock i’s observed capitalization at the previous calendar month end. Let
+NYSE
+q.20,m−1
+be the twentieth percentile among eligible NYSE
+common stocks at that time. The microcap condition is
+NYSE
+Mi,m−1 ≥ q.20,m−1
+,
+
+126
+127
+128
+129
+130
+131
+132
+133
+
+with positive observed capitalization required. Unknown capitalization is excluded separately and counted. Membership,
+characteristic availability, and any additional universe restrictions must also be documented. This screen does not authorize selecting stocks on their future returns or survival.
+Rank eligible stocks by a model score whose direction is
+ﬁxed before evaluating returns. Let Lt and St be the top and
+bottom deciles. Ideal capitalization weights are
+Mi,m−1 1(i ∈ Lt ) Mi,m−1 1(i ∈ St )
+∗
+= P
+− P
+.
+wi,t
+j∈Lt Mj,m−1
+j∈St Mj,m−1
+
+134
+135
+
+(1)
+
+(2)
+
+This is a conventional +100%/ − 100% spread with 200%
+gross exposure. Its scale must be stated: a +50%/ − 50%
+
+portfolio has half the arithmetic return and alpha under exact linear scaling, while its mean-test statistic is unchanged.
+Compound wealth and cost-dependent execution require the
+actual ledger. Dollar neutrality alone does not imply zero
+market beta or neutrality to other factors.
+For executed weights wi,t , asset total returns ri,t , and
+return-unit costs ct , deﬁne
+X
+wi,t ri,t ,
+Rtnet = Rtgross − ct .
+(3)
+Rtgross =
+
+136
+137
+138
+139
+140
+141
+142
+
+i
+
+Portfolio targets and actual holdings can differ when positions
+cannot be traded. Return accounting must retain the resulting
+exposure, turnover, dividends, terminal payoffs, and missingpayoff diagnostics. A target-decile return table cannot substitute for an executed-holdings ledger.
+
+143
+144
+145
+146
+147
+
+3.2 Risk Adjustment and Uncertainty
+
+148
+
+The primary regression is
+
+149
+
+⊤
+
+Rt = α + β f t + εt ,
+
+(4)
+
+where ft contains market excess return, SMB, HML, RMW,
+CMA, and the French momentum series used as UMD. Factor
+deﬁnitions follow the ofﬁcial Data Library [French, nd]. The
+zero-investment spread is regressed directly on these factors;
+the risk-free rate is not subtracted again. We estimate gross
+and after-cost intercepts separately. Alpha is conditional on
+this factor model, not a model-free measure of skill or an executable hedge ﬁtted in advance.
+The completed daily experiment uses Bartlett HAC covariance with 20 lags, a ﬁnite-sample covariance correction, and
+two-sided t-reference intervals. Annual alpha is 252b
+α; it is
+not CAGR. Dependence-robust covariance follows the principle of [Newey and West, 1987]. Results at 5 and 60 lags are
+retained as sensitivities. An individual 95% interval is not a
+simultaneous interval for a searched family of strategies.
+Positive-alpha evidence requires a positive estimate with
+the lower conﬁdence bound above zero. A family-level assertion also requires the declared multiplicity procedure. This is
+an evidential requirement for an alpha claim, not a proposal
+to publish only signiﬁcant results. Inconclusive results, negative estimates, and failed replications remain scientiﬁcally
+relevant when their design and precision are informative.
+
+4
+
+Evidence Audit and Completed Experiment
+
+4.1 Coverage Is Not a Failure Rate
+The supplied catalogue contains 437 records. Its programme
+snapshot, timestamped 9 November 2026, describes an ongoing workﬂow. Its primary legacy return extension uses zero
+implementation costs and +50%/−50% holdings; it does not
+certify CZ202 inputs, capitalization weighting, the required
+size screen, or FF5+UMD alpha. Table 1 preserves that extension’s recorded categories. They cannot be pooled into a
+protocol-compliant success rate.
+One completed compatible experiment identiﬁed in this
+audit is the LiMT CZ202 US transfer. A separate allnonmicrocap CS-GAT protocol has a prepared input panel
+but no completed return-inference artifact in the inspected
+snapshot. It contributes no result here. Generic architectures,
+
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+
+=== PDF PAGE 3 ===
+Legacy return-extension category
+
+Records
+
+Pending
+Blocked
+Not applicable
+Completed, positive but inconclusive
+
+273
+52
+110
+2
+
+Total catalogue
+
+437
+
+Table 1: Recorded paper-level categories in the legacy programme
+snapshot. These are metadata under a different protocol, not outcomes of 437 completed CZ202 experiments. Workﬂow completion
+and return-extension completion are separate ﬁelds.
+
+191
+
+credit-risk classiﬁers, ﬁnancial question-answering systems,
+and unavailable or unﬁnished runs are not counted as unprofitable strategies. For example, applying ArbNN [Yan et al.,
+2026] to a newly constructed stock-ranking task does not directly test its original credit-risk claims.
+
+192
+
+4.2 LiMT Transfer Design
+
+187
+188
+189
+190
+
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+
+LiMT combines cross-stock and temporal modeling with
+liquidity-related auxiliary objectives [Yang et al., 2026].
+The completed local transfer uses a changing historical US
+largest-500 common-stock universe, followed by the explicit
+lagged NYSE size screen and CZ-record availability requirements. It therefore covers a large-cap subset of the eligible
+stock universe, not all nonmicrocap CRSP stocks.
+The ofﬁcial October 2026 CZ stock-level release supplies 209 available characteristics. Seven training-constant
+columns are dropped, leaving 202. Price, Size, and STreversal are absent from the public ﬁle and are not reconstructed.
+Within each source month, observed values are ranked over
+the available nonmicrocap common-stock population, average ties are mapped to [−1, 1], and missing values are mapped
+to neutral zero. These are stock-level predictors, not returns
+on factor portfolios. Each daily input uses only the preceding calendar month’s characteristics; there is no future ﬁll or
+stale carry across missing source months. The source release
+documents revisions and unequal end dates for some signals
+[Chen and Zimmermann, 2026].
+Training covers 2008–2014; validation covers 2015–2016;
+test forecasts cover 2017–2025. The implementation checks
+that label realizations do not cross training/validation boundaries. It uses a 21-session lookback, the full local model
+conﬁguration, three seeds, and validation daily return IC for
+checkpoint selection. The three prediction scores are averaged before ranking. Training labels retain daily price-return
+and liquidity-related auxiliary targets, while portfolio payoffs
+use CRSP total returns. Monthly characteristics repeated in a
+daily forecasting architecture are a substantive input change
+from the original task.
+The saved protocol ﬁxes signal at session t, assumed execution at t + 1 close, and total-return payoff at t + 2. Capitalization weights use the previous month end. The execution
+projection preserves frozen positions and imposes dollar neutrality. No observed stock-loan locates or actual closing ﬁlls
+are supplied. The after-cost scenario charges 10 basis points
+per dollar bought or sold, including establishment and ter-
+
+minal liquidation; it omits borrow fees, ﬁnancing, market impact, and collateral yield. We therefore call it an after-tradingcost scenario, not a fully implemented net-investor return.
+The experiment is retrospective. Its source, code, and input
+hashes were saved before this training run, but earlier experiments had already been examined. The speciﬁcation is not
+a preregistered independent conﬁrmation. Current-vintage
+CRSP and CZ data do not establish historical as-published
+availability.
+
+4.3 Independent Recalculation
+The manuscript audit reads existing artifacts without retraining or selecting a new model. It checks completion of all
+three seeds, frozen input hashes, saved output hashes, feature count, timestamp ordering, ledger identities, cost arithmetic, date uniqueness, factor coverage, and net exposure.
+It recomputes all 36 saved intercept tests using a separate
+NumPy implementation of the HAC sandwich covariance and
+reconstructs the Holm adjustment. The family comprises two
+weights, two costs, three windows, and three intercept speciﬁcations. This adjustment does not cover all earlier research
+decisions.
+We additionally compute circular paired block-bootstrap
+percentile intervals for the full-period value-weighted alpha,
+resampling returns and factors together in blocks of 20 or 60
+sessions, with 2,000 draws per case. These are newly added,
+post hoc robustness diagnostics. They do not turn an already inspected sample into conﬁrmatory evidence. Sourceholdings replay was recorded by the original experiment; our
+recalculation veriﬁes the saved summaries and ledger arithmetic rather than claiming a new end-to-end raw-data reconstruction.
+
+5
+
+Results
+
+5.1 Positive Returns Do Not Establish Positive
+Alpha
+The full-period ledger has 2,260 daily observations from
+5 January 2017 to 31 December 2025. Value-weighted
+D10−D1 earns a positive annual arithmetic mean of 9.35%
+gross and 2.77% under the 10 bp cost scenario. Its CAGRs
+are 7.84% and 0.97%, respectively. The corresponding meanreturn tests are inconclusive (p = 0.091 and p = 0.617). It
+would be incorrect to describe these realized returns as uniformly negative.
+Table 2 reports the primary risk-adjusted quantities. Gross
+FF5+UMD alpha is 5.31% per year, with a 95% HAC interval
+spanning −2.54% to 13.16%. After the stated trading costs,
+the estimate is −1.27%, with an interval spanning −9.11% to
+6.56%. Neither result establishes positive alpha even before
+multiple-testing adjustment. Holm-adjusted p-values are both
+1.000. Figure 1 shows the uncertainty directly.
+Supplementary raw-share-volume weighting also fails to
+establish positive full-period alpha: estimates are 9.13%
+gross (p = 0.216) and −8.81% after costs (p = 0.233). Raw
+share volume depends on share units and is not interchangeable with capitalization or dollar volume. These rows are retained to disclose the evaluated variants, not to replace the
+primary weighting after observing results.
+
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+
+=== PDF PAGE 4 ===
+Quantity
+
+Gross
+
+10 bp
+
+Annual arithmetic mean (%)
+Annual FF5+UMD alpha (%)
+95% HAC lower bound (%)
+95% HAC upper bound (%)
+HAC t-statistic, alpha
+Two-sided p, alpha
+Holm36 p, alpha
+
+9.35
+5.31
+−2.54
+13.16
+1.326
+0.185
+1.000
+
+2.77
+−1.27
+−9.11
+6.56
+−0.318
+0.750
+1.000
+
+Table 2: LiMT CZ202 US transfer, capitalization-weighted
+D10−D1, +100%/ − 100% target exposures, 2,260 days in 2017–
+2025. Alpha and mean are annual arithmetic quantities; intervals
+are individual HAC(20) intervals. Costs omit borrowing, ﬁnancing,
+impact, and collateral yield.
+
+5.3 Other Saved Designs Prevent a Universal
+Claim
+
+311
+312
+
+The earlier US LiMT experiment with Alpha158 inputs and
+equal-dollar ranking portfolios reports a signiﬁcant positive
+gross annual mean of 12.04% (p = 0.000218; within-family
+Holm p = 0.00457). Its 5 bp buy-side-only cost sensitivity
+is not signiﬁcant. The local zero-cost audit also records signiﬁcant gross means in two Chinese LiMT universes. These
+are different estimands and designs: they are neither protocolcompliant successes nor failures of the CZ202 test. They nevertheless rule out describing the entire directory as containing
+no positive gross-return evidence. Because inputs, weights,
+and cost conventions change together, the contrast is not an
+ablation identifying which change explains the difference.
+
+6
+
+What Would Establish Baseline Inferiority?
+
+6.1 Three Distinct Claims
+Gross
+10 bp
+
+−10
+
+−5
+
+0
+
+5
+
+10
+
+Annual alpha (%)
+
+Figure 1: Annual value-weighted FF5+UMD alpha with individual
+95% HAC(20) intervals. Both intervals contain zero and economically material positive and negative values. Shapes distinguish cost
+scenarios without relying on color.
+
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+
+5.2 Robustness and Precision
+The newly computed 20-session bootstrap alpha intervals are [−2.24, 12.96]% gross and [−9.73, 6.02]% after
+costs. With 60-session blocks they are [−2.62, 12.86]% and
+[−9.40, 6.21]%. Their qualitative interpretation agrees with
+the HAC intervals. Neither bootstrap design addresses unseen implementation costs or an unrecorded research search.
+The value-weighted ledger contains two missing heldpayoff records. The saved adverse diagnostic assigns an
+underlying return of −100% for a missing long payoff and
++100% for a missing short payoff, keeping the selections
+ﬁxed. Gross annual alpha becomes 5.17% (p = 0.196).
+This is a ﬁnite sensitivity, not a worst-case bound on short
+losses. In the universe audit, only eight of 1,131,000 original
+test stock-days are removed for falling below the lagged size
+threshold. The primary universe was already concentrated in
+large ﬁrms, so this experiment does not identify the isolated
+causal effect of eliminating microcaps.
+The intervals remain wide. In particular, the after-cost alpha upper bound of 6.56% prevents us from excluding economically meaningful positive performance. A signiﬁcance
+threshold alone cannot turn such uncertainty into evidence of
+economic irrelevance. Both negative and positive effect sizes
+compatible with the sample should remain visible.
+
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+
+325
+326
+
+Proﬁtability. A positive-alpha assertion concerns Equation 4. Positive realized mean returns can coexist with nonsigniﬁcant or negative alpha, and positive alpha can coexist
+with unmodeled implementation costs. Authors must state
+which quantity supports their economic claim.
+Incremental value. To compare model A with a baseline B, evaluate a paired difference on common dates under
+matched eligibility, exposure, and cost rules:
+∆t = RtA − RtB .
+
+313
+
+327
+328
+329
+330
+331
+332
+333
+334
+
+(5)
+
+Estimate its mean or factor-adjusted intercept with
+dependence-robust uncertainty. If the entire interval is
+below zero, the comparison supports inferiority for that
+estimand. A non-signiﬁcant test of A against zero does
+not supply this result. Nor does the difference between
+two separate signiﬁcance labels test the difference between
+models.
+Economic negligibility. Before evaluating outcomes,
+choose a practically meaningful annual margin δ. Equivalence requires an appropriate equivalence procedure, such as
+two one-sided tests with the corresponding interval wholly inside (−δ, δ). A non-inferiority claim uses its own one-sided
+margin and direction. Neither property follows from an ordinary p > 0.05. The current intervals are too broad to support
+a general assertion of negligible alpha.
+
+6.2 The Dummy Baseline Must Be Deﬁned
+A constant return forecast gives all stocks equal scores.
+Without a tie rule, a D10−D1 portfolio is undeﬁned and
+may spuriously trade an identiﬁer ordering. A coherent noinformation control can assign identical fractional membership to both extreme deciles so the long and short positions
+cancel; it then produces no trades and a zero spread. This
+convention is an analytical deﬁnition, not a newly executed
+experiment in this paper. The no-trade control has no meaningful Sharpe ratio because its volatility is zero. Its zero alpha
+does not make a noisy model statistically inferior.
+A no-trade control is also insufﬁcient as the only comparator. A serious architecture-value claim should include a
+matched linear or ridge model, a competitive tree model, and
+
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+
+=== PDF PAGE 5 ===
+370
+
+simple lagged signals, as appropriate to the task. A positive
+ML alpha alone does not prove improvement over them. No
+matched CZ202 baseline ledger is supplied by the completed
+experiment, so its incremental value remains untested here.
+A low forecast-error baseline, a no-trade portfolio, and an
+investable long-only market portfolio answer different questions and should not be conﬂated.
+
+371
+
+7
+
+364
+365
+366
+367
+368
+369
+
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+
+A Publication Standard for Return Claims
+
+We propose the following requirements for papers that claim
+proﬁtable asset-return forecasting or superior trading performance. These are recommendations, not existing IJCAI requirements.
+1. Declare the economic estimand. Specify the market,
+eligible universe, source vintages, information lags, holding
+horizon, score direction, portfolio weights, gross/net exposure, tie rule, and benchmark. Label faithful replications,
+method transfers, and exploratory adaptations separately. Explain which scientiﬁc claim the test can refute.
+2. Make the backtest auditable. Retain predictions and
+an ordered holdings/cash/NAV ledger, corporate-action treatment, missing-payoff counts and weights, turnover, initial
+trades, liquidation, and actual departures from target positions. Report the observed size-screen removals. A positive
+Sharpe ratio or a prediction table alone is insufﬁcient evidence of executable trading.
+3. Report uncertainty on both returns and alpha. Give
+estimates, dependence-robust standard errors, signed test
+statistics, conﬁdence intervals, and p-values for gross and
+stated after-cost returns. Report factor exposures and explain
+factor choice. Show economically meaningful units and separate annual arithmetic quantities from compounded growth.
+Test an economically motivated margin when asserting that
+an effect is negligible.
+4. Test paired baseline improvements. Use common return dates and comparable execution assumptions. Provide a no-information control and credible simple predictive baselines. Estimate uncertainty for the paired increment
+rather than inferring superiority from separate point estimates
+or separate signiﬁcance decisions. Disclose differences in
+model-selection budgets and missing-outcome coverage.
+5. Account for selection and implementation. Freeze
+checkpoints and score direction using training/validation information. Disclose all tested seeds, horizons, universes,
+costs, windows, and variants, identifying the multiplicity
+family and unresolved prior search. Preserve nominal and
+adjusted evidence together. Include turnover-linked cost sensitivities and distinguish assumed costs from observed ﬁlls,
+borrowing availability, ﬁnancing, and impact. A zero-cost result can test signal content without establishing deployable
+proﬁts.
+6. Publish informative null ﬁndings. Neither an access
+failure nor an unﬁnished experiment is a null return result.
+Conversely, a transparent negative or inconclusive ﬁnding
+can illuminate precision, domain transfer, or a model failure
+mode. Statistical signiﬁcance should discipline claims rather
+
+than become a ﬁlter that suppresses null evidence or rewards
+ever larger searches. Financial NLP, credit risk, fraud detection, and risk forecasting should be evaluated against their
+own declared decision objectives when proﬁtable stock selection is not the claimed contribution.
+
+8
+
+Limitations and Conclusion
+
+The principal limitation is breadth: this audit identiﬁes
+one completed compatible model family, not a completed
+protocol-compliant census. The large-cap universe, retrospective current-vintage inputs, daily use of monthly predictors, ﬁxed training interval, and idealized execution restrict
+generalization. The original LiMT paper studies different
+benchmarks and inputs; this transfer cannot establish that its
+original results are incorrect. Our statistical recalculation is
+independent of the saved inference implementation, but relies
+on the same historical market observations. The targeted literature review does not estimate a ﬁeld-wide replication rate.
+The defensible empirical statement is that the completed LiMT CZ202 transfer does not establish positive
+FF5+momentum alpha, either gross or under the stated cost
+scenario. Its uncertainty does not establish zero proﬁtability, economic negligibility, or inferiority to a dummy baseline. Future ﬁnance ML publications making return claims
+should connect them to auditable portfolios, matched baseline increments, explicit implementation assumptions, and
+selection-aware statistical uncertainty. Those requirements
+permit strong claims when supported and informative negative evidence when they are not.
+
+Ethical Considerations
+This manuscript concerns evaluation methodology and retrospective ﬁnancial research. No strategy was deployed by
+this manuscript audit. CRSP and other licensed underlying
+data require their applicable access permissions; a local ﬁle’s
+existence does not establish redistribution rights. The proposed artifact release should contain permitted code, aggregate results, and data-reconstruction instructions rather than
+restricted source data. Availability and release permissions
+remain to be ﬁnalized by the accountable authors.
+
+419
+420
+421
+422
+423
+
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+
+=== PDF PAGE 6 ===
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+
+References
+[Avramov et al., 2023] Doron Avramov, Si Cheng, and Lior
+Metzker. Machine learning vs. economic restrictions: Evidence from stock return predictability. Management Science, 69(5):2587–2619, 2023.
+[Azevedo et al., nd] Vitor Azevedo, Christopher Hoegner,
+and Mihail Velikov. The expected returns on machinelearning strategies. Working paper, archived American Finance Association copy, n.d. Undated archived
+manuscript; accessed November 10, 2026. https://afajof.
+org/management/viewp.php?n=75544.
+[Chen and Zimmermann, 2022] Andrew Y. Chen and Tom
+Zimmermann. Open source cross-sectional asset pricing.
+Critical Finance Review, 11(2):207–264, 2022.
+[Chen and Zimmermann, 2026] Andrew Y. Chen and Tom
+Zimmermann. Open source asset pricing: October 2026
+data release, 2026.
+Data-Release-2026.10; accessed
+November 10, 2026. https://www.openassetpricing.com/
+data/.
+[French, nd] Kenneth R. French. Data library: Five factors
+and daily momentum factor. Dartmouth College, n.d. Accessed November 10, 2026. https://mba.tuck.dartmouth.
+edu/pages/faculty/ken.french/data_library.html.
+[Gu et al., 2020] Shihao Gu, Bryan Kelly, and Dacheng Xiu.
+Empirical asset pricing via machine learning. The Review
+of Financial Studies, 33(5):2223–2273, 2020.
+[Harvey et al., 2016] Campbell R. Harvey, Yan Liu, and
+Heqing Zhu. . . . and the cross-section of expected returns.
+The Review of Financial Studies, 29(1):5–68, 2016.
+[Hou et al., 2017] Kewei Hou, Chen Xue, and Lu Zhang.
+Replicating anomalies. Technical Report 23394, National
+Bureau of Economic Research, 2017.
+[Newey and West, 1987] Whitney K. Newey and Kenneth D.
+West. A simple, positive semi-deﬁnite, heteroskedasticity
+and autocorrelation consistent covariance matrix. Econometrica, 55(3):703–708, 1987.
+[Novy-Marx and Velikov, 2016] Robert Novy-Marx and Mihail Velikov. A taxonomy of anomalies and their trading
+costs. The Review of Financial Studies, 29(1):104–147,
+2016.
+[White, 2000] Halbert White. A reality check for data snooping. Econometrica, 68(5):1097–1126, 2000.
+[Yan et al., 2026] Wubin Yan, Wei Ma, Shixiang Wan,
+Dongchen Li, Shaoshun Kang, Qing Yang, and Dongliang
+Xu. Arboreal neural network. In Proceedings of the 43rd
+International Conference on Machine Learning, volume
+306 of Proceedings of Machine Learning Research, pages
+143908–143920. PMLR, 2026.
+[Yang et al., 2026] Hengyi Yang, Sida Lin, Yiyan Qi, Yankai
+Chen, Haohan Zhang, Xianhua Peng, and Jian Guo. Hierarchical multi-task learning with liquidity-aware signals
+for stock forecasting. arXiv:2609.25617, 2026.
+
+=== END SOURCE TEXT ===

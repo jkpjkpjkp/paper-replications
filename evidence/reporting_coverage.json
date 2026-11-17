@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "disclaimer": "Non-scoring audit aid, not a compliance certificate.",
+  "guideline_id": "custom_financial_ml_evidence_audit",
+  "items": [
+    {
+      "topic": "study_scope",
+      "status": "addressed",
+      "locator_or_reason": "Sections1,2,4,8"
+    },
+    {
+      "topic": "protocol_and_timing",
+      "status": "addressed",
+      "locator_or_reason": "Sections3,4"
+    },
+    {
+      "topic": "estimates_and_uncertainty",
+      "status": "addressed",
+      "locator_or_reason": "Section5; evidence CSVs"
+    },
+    {
+      "topic": "matched_predictive_baselines",
+      "status": "missing",
+      "locator_or_reason": "No matching CZ202 baseline ledger; Section6 states limitation"
+    },
+    {
+      "topic": "multiplicity",
+      "status": "addressed",
+      "locator_or_reason": "Holm36 only; unrecorded prior search unresolved"
+    },
+    {
+      "topic": "external_validity",
+      "status": "addressed",
+      "locator_or_reason": "Sections4,8"
+    },
+    {
+      "topic": "review_completeness",
+      "status": "not_applicable",
+      "locator_or_reason": "Targeted narrative review, not systematic"
+    },
+    {
+      "topic": "authorship_and_declarations",
+      "status": "missing",
+      "locator_or_reason": "Accountable authors must finalize"
+    },
+    {
+      "topic": "release_permissions",
+      "status": "missing",
+      "locator_or_reason": "Local derived outputs do not establish redistribution rights"
+    }
+  ]
+}

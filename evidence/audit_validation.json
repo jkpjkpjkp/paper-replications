@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "rows_recomputed": 36,
+  "ledger_cases": 4,
+  "saved_output_hashes_checked": 21,
+  "frozen_inputs_changed": [],
+  "new_model_training": false,
+  "bootstrap_added_posthoc": true,
+  "human_source_and_claim_approval": "pending",
+  "submission_ready": false
+}
