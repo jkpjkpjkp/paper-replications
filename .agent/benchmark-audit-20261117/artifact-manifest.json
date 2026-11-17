@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-17",
+  "files": {
+    "/mnt/data/home/jkp/replications/proximal-resolve-20261117/baselines/nyse-o.mat.npz": {
+      "bytes": 199652,
+      "sha256": "c51fdd2e243b4bd09b7e5ca1e9c1afbef94a0f1ad84cf4e336bc328b0380c67a"
+    },
+    "/mnt/data/home/jkp/replications/proximal-resolve-20261117/baselines/summary.json": {
+      "bytes": 3635,
+      "sha256": "a806facb7bd8c6a2cbdb90b83a94c1c3d5544f61c1d81318333867c1885d2908"
+    },
+    "/mnt/data/home/jkp/replications/proximal-resolve-20261117/baselines/msci.mat.npz": {
+      "bytes": 37433,
+      "sha256": "4e756b6d776ee495841643aa9d77c89d644d71de5cb5406f2676deb2db394aa4"
+    },
+    "/mnt/data/home/jkp/replications/proximal-resolve-20261117/baselines/tse.mat.npz": {
+      "bytes": 47072,
+      "sha256": "32e33322d558c17b61ba0a3689e04b744e65dbd1135c9b1af467401f0f6622db"
+    },
+    "/mnt/data/home/jkp/replications/proximal-resolve-20261117/baselines/nyse-n.mat.npz": {
+      "bytes": 225445,
+      "sha256": "ec69af8b689c31d3c7e550a2db59e370cc37b6216cb0e1715e68f8a373bc0ec6"
+    },
+    "/mnt/data/home/jkp/replications/proximal-resolve-20261117/baselines/comparison.csv": {
+      "bytes": 3582,
+      "sha256": "e862b1ae95df60b2a8cfada81828fdbc701aa6d51de385ae6925306764810288"
+    },
+    "/mnt/data/home/jkp/replications/proximal-resolve-20261117/inner-audit.json": {
+      "bytes": 2493,
+      "sha256": "5363702d5d5761a6f426fe213a3cebfaf511892a4e76d52bece8b5abae470bf4"
+    },
+    "/mnt/data/home/jkp/replications/proximal-resolve-20261117/literal-bounded-preflight/incomplete.json": {
+      "bytes": 284,
+      "sha256": "6efdb07037a0a82a592f373963e38cff0b06fbc0392a79009eb76b116947fecd"
+    }
+  }
+}

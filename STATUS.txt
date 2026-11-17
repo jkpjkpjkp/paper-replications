@@ -1,0 +1,49 @@
+2: BCRP MSCI baseline, 0/0.25/0.5% transaction costs, fresh final wealth 1.505692888/1.494099969/1.482605155; paper Table 5 1.51/1.49/1.48 (all within 0.005 rounding).
+
+Assessment date: 2026-11-17.
+Scope: Fresh optimization and full-history backtests of the traditional BCRP
+baseline on the original 1,043-by-24 MSCI benchmark. This is a scoped level 2
+for a representative baseline experiment, not STCO/PSGA reproduction, inference
+from a released checkpoint, or replay of authors' portfolios/returns.
+
+Completed evidence:
+All four original author matrices were re-evaluated with new independent code.
+All 3 MSCI BCRP cost-rate cells match their two-decimal rounding intervals.
+Absolute wealth errors are 0.0043071120, 0.0040999687 and 0.0026051548;
+relative errors are -0.285239%, +0.275166% and +0.176024%. These are deterministic
+calculations, so there is no seed SD/SEM/CI. Tolerance is 0.005 wealth units.
+SLSQP and a separate exponential-cone optimizer agree on MSCI net wealth to
+4.97e-10; the SLSQP global total-log-wealth gap bound is 5.92e-9. Independent
+Brent root calculations verify self-financing transaction accounting.
+All 24 UBAH/BEST control cells also match rounding. The other nine BCRP cells
+(NYSE(O), NYSE(N), TSE) do not match rounding and remain unresolved.
+
+Unresolved proposed-method failure (preserved prominently):
+The archived main setting still matches 0/24 proposed-method Table 5 wealth
+cells within 1%. NYSE(N) STCO2, window 4, at 0.25% cost gives 3,153.9 versus
+600,000 (-99.5%); TSE STCO2 at zero cost gives 389.1 versus 95.92 (+305.6%).
+All 288 archived strategy/rate/window runs and 20 sensitivity backtests finished
+with solver checks. The fresh baseline result does not resolve those failures.
+
+Remaining gaps:
+The current author repository still ends at pinned commit a2e0473 (checked
+2026-11-17). Its supplied functions are not a runnable copy of PSGA. Algorithm
+2's moving inner anchor disagrees with subproblem (12); STCO2's window is not
+specified. Four new sampled inner solves confirm that the two anchor readings
+can produce very different weights. Correct executable PSGA experiment code,
+inner initialization/stopping details and window clarification are still needed.
+A literal moving-anchor preflight remained unfinished at its first rebalance
+(100 outer/438698 inner iterations under diagnostic caps); it supplies no
+completed financial comparison and is not evidence the method fails.
+Other competitor implementations and full-paper claims remain unverified.
+
+Evidence paths (relative to this STATUS.txt unless absolute):
+- BENCHMARK_REPRODUCTION.txt
+- .agent/benchmark-audit-20261117/comparison.csv
+- .agent/benchmark-audit-20261117/summary.json
+- scripts/audit_benchmarks.py
+- /mnt/data/home/jkp/replications/proximal-resolve-20261117/
+- ../.replication-local/artifacts/proximal-portfolio/REPORT.txt
+- ../.replication-local/artifacts/proximal-portfolio/results/main/paper_comparison.csv
+- ../.replication-local/artifacts/proximal-portfolio/reproduction_status.json
+

@@ -1,0 +1,132 @@
+Proximal Portfolio resolution audit - 2026-11-17
+
+Outcome
+Grade 2 is supported only for fresh optimization of the BCRP traditional
+baseline on MSCI, over the complete original 1,043-session, 24-asset matrix,
+at all three Table 5 transaction rates. No STCO/PSGA main-method mismatch was
+resolved. The previous main-method failure remains in STATUS.txt and in the
+unchanged archive. This is not whole-paper replication.
+
+Original source and scope
+Paper: Yao and Zhang, A Linearly Convergent Proximal Subgradient Algorithm for
+Sparse Portfolio Optimization with Transaction Cost (ICML 2026).
+Original PDF: ../.replication-local/artifacts/proximal-portfolio/sources/paper.pdf
+SHA256: b8336ed7587ebcb506458c83255708b235dc31c9401787b404c74d8570237e82
+Table 5 on original PDF page 22 was rendered and visually checked. Pages 5-6
+were also visually checked for equations (11)-(12), Lemma 3.7 and Algorithm 2.
+The full PDF extraction is indexed in .agent/PAPER_INDEX.json (pdf_text coverage).
+
+The paper names BCRP as one of its three reference baselines. The fresh audit
+computes all four data sets and all three costs, not just a chosen matching
+cell. Only the MSCI BCRP experiment satisfies the stated rounding tolerance.
+UBAH and BEST are data/accounting controls and are not the sole basis for
+the new grade. BCRP uses hindsight to optimize a constant long-only portfolio
+for gross log wealth, then applies that fixed portfolio at each cost rate;
+it is a benchmark, not a deployable causal forecasting strategy.
+
+Fresh BCRP Table 5 comparison (wealth begins at 1)
+Dataset   Cost      Paper       Fresh             Abs error     Within 0.005
+MSCI      0%       1.51        1.505692888         0.004307112   yes
+MSCI      0.25%    1.49        1.494099969         0.004099969   yes
+MSCI      0.5%     1.48        1.482605155         0.002605155   yes
+
+Relative errors: -0.285239%, +0.275166%, +0.176024%, respectively.
+Tolerance is half a unit in the paper's second decimal place, 0.005 wealth
+units. These deterministic computations have no seed SD, SEM or CI.
+The complete 36-row comparison, including every nonmatching dataset/cell, is
+.agent/benchmark-audit-20261117/comparison.csv. Nine BCRP cells on NYSE(O),
+NYSE(N) and TSE miss rounding. All 24 UBAH/BEST controls match rounding.
+This gives 27/36 baseline/control cells matching; it does not imply 27/36
+main-method results or rescue the main-method failure.
+
+Independent validation
+The new script reads only the four original author .mat inputs, not archived
+portfolios, wealth, predictions, or author outputs. Data and PDF SHA256 hashes
+match the archived provenance exactly. Shapes are NYSE(O) 5651x36, NYSE(N)
+6431x23, TSE 1259x88 and MSCI 1043x24.
+
+BCRP optimization is independently performed with SLSQP and with a CVXPY/
+Clarabel exponential-cone formulation. The latter uses log1p((x-1)@w), which
+equals log(x@w) because sum(w)=1 and improves numerical conditioning.
+For MSCI the maximum weight difference is 4.774e-8; the objective difference
+is 8.432e-13 total log wealth and the maximum net-wealth difference across
+the three costs is 4.962e-10. The concavity/first-order certificate bounds
+SLSQP's total-log-wealth suboptimality by 5.913e-9. Clarabel reports optimal
+for MSCI and TSE; its NYSE results report optimal_inaccurate, but agree with
+the separately certified SLSQP solutions to at most 2.943e-6 net wealth.
+The NYSE warnings are retained in the run log; no solver status alone was
+treated as a certificate or a reason to change the paper tolerance.
+
+Transaction fractions independently solve
+  theta + gamma * sum(abs(previous_drifted_weights-theta*w)) = 1
+with Brent's root algorithm. Initial holdings are zero, so the initial
+purchase costs 1/(1+gamma); no terminal liquidation cost is added. Maximum
+equation residual across all audited BCRP paths is 3.22e-15. BEST paths
+also agree with their closed-form buy-and-hold identities to relative 1e-10.
+SLSQP first-order, independent objective, self-financing and shape assertions
+all passed in the final full run. Full precision checks are in summary.json.
+
+Main-method failure and attempted resolution
+The archive still contains 288 strategy/rate/window backtests and 20
+sensitivity runs. Main STCO settings match 0/24 Table 5 wealth cells within
+1%: NYSE(N) STCO2 at window 4 and 0.25% cost gives 3153.9 versus 600000;
+TSE STCO2 at zero cost gives 389.1 versus 95.92. Window-5 sensitivities did
+not establish a representative match. BCRP on the other three datasets also
+fails the tighter two-decimal rounding comparison.
+
+Current GitHub main history was checked on 2026-11-17:
+https://github.com/Ting221/STCO/commits/main/
+It still ends at a2e04730cbdfb6ccb0017456d4f835a4d7446ec3 (Mar 31, 2026).
+The supplied STCO1_run.m calls absent DENRPO1_fun; STCO2_run.m declares
+DENRPO2_run and calls absent DENRPO2_fun. Supplied functions implement a
+different eta/tao/scalar-multiplier scheme, without the K/c/top-K PSGA loop.
+No corrected implementation was found in this release history.
+
+Algorithm 2 line 6 uses the moving inner w^j anchor, whereas the quadratic
+in subproblem (12) requires the fixed outer anchor. Four sampled MSCI
+subproblems at zero-based days 1,100,500,1042 were independently re-evaluated
+with both readings, tolerance 1e-8, rho=.618 and alpha=.0025. The fixed-anchor
+version differs from the exact convex prox by at most 8.324e-7 in a weight;
+the moving-anchor version differs by up to 0.958189181. These samples use
+archived drifted holdings, so they are diagnostics, not new backtest evidence.
+The original pseudocode also does not specify inner d/w initialization.
+
+A literal moving-anchor MSCI STCO1 0.25% preflight was attempted with inner
+w,d initialized from each outer iterate and mu reset. The first attempt was
+manually stopped after several minutes without a completed 50-day checkpoint.
+A bounded diagnostic then reached 100 outer iterations and 438698 total
+inner iterations on the first rebalance (day index 1) without satisfying the
+outer stopping condition. The diagnostic caps were 100 outer/100000 inner,
+smaller than the paper's 1e8; it is an unfinished verification, not a result
+showing method failure. No full-data numerical comparison is claimed from it.
+
+Remaining requirements are executable PSGA experiment code, clarification of
+the quadratic anchor and inner initialization/stopping rules, and STCO2's
+window. Other competitor implementations and full-paper claims remain open.
+WRONG.txt separates the verified specification/source inconsistencies from
+uncertain author intent and from the numerical mismatches themselves.
+
+Reproduce the fresh baseline audit
+From the collection root, using the existing pinned environment:
+  OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  .replication-local/artifacts/proximal-portfolio/.venv/bin/python \
+  proximal-portfolio/scripts/audit_benchmarks.py \
+  --data .replication-local/artifacts/proximal-portfolio/upstream/STCO-code \
+  --paper .replication-local/artifacts/proximal-portfolio/sources/paper.pdf \
+  --output /mnt/data/home/jkp/replications/proximal-resolve-20261117/baselines
+
+Audit artifacts
+Local summaries: .agent/benchmark-audit-20261117/{summary.json,comparison.csv}
+New code: scripts/audit_benchmarks.py, scripts/audit_inner_anchor.py,
+          scripts/audit_literal_algorithm2.py
+Complete run: /mnt/data/home/jkp/replications/proximal-resolve-20261117/
+  baselines/: fresh weights, full daily wealth/fraction paths, summary/comparison
+  baselines.log: full final solver output, including NYSE numerical warnings
+  inner-audit.json: eight fixed/moving-anchor diagnostic evaluations
+  literal-preflight.log: interrupted first literal attempt
+  literal-bounded-preflight/{incomplete.json}: explicit incomplete receipt
+  upstream-history.txt: current author repository history
+  table5.png, algorithm2.png, proximal-subproblem.png: inspected PDF renders
+Historical main evidence remains unchanged at
+  ../.replication-local/artifacts/proximal-portfolio/REPORT.txt
+  ../.replication-local/artifacts/proximal-portfolio/results/main/paper_comparison.csv

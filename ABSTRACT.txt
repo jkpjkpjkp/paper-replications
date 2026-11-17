@@ -1,0 +1,9 @@
+A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+Condensed abstract
+
+Formulates portfolio selection with both transaction costs and a fixed sparsity limit,
+then replaces the difficult discrete constraint with an equivalent difference-of-convex
+formulation under suitable penalties. A proximal subgradient algorithm has global and
+linear convergence guarantees. Experiments compare its return-risk trade-off with
+existing portfolio strategies.

@@ -1,0 +1,316 @@
+{
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "evidence_id": "E001",
+      "title": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost",
+      "authors": [
+        "Xiaoting Yao",
+        "Na Zhang"
+      ],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "https://openreview.net/forum?id=yZAo4TPqhE",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "sources/paper.pdf: Sections 3-4; Appendix B, Tables 4-7",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "title": "Pinned author source",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "https://github.com/Ting221/STCO/tree/a2e04730cbdfb6ccb0017456d4f835a4d7446ec3",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "upstream/STCO-code: All .m functions; git commit in metadata",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "title": "Computed market results",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "results/main/metrics.csv: All rows",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "title": "Table 5/7 comparisons",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "results/main/paper_comparison.csv: 24 proposed-method rows",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "title": "Numerical validation",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "results/validation/summary.json: All fields and linked audit CSVs",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E006",
+      "title": "Test result",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "results/tests.log: Final pytest summary",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E007",
+      "title": "Backtest implementation",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "stco/market.py: Prediction, accounting, baselines, metrics",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E008",
+      "title": "Solver implementation",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "stco/solver.py: Prox, ADMM reference, PSGA and event skipping",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E009",
+      "title": "Experiment metadata",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "results/main/metadata.json: Parameters, shape, hashes, environment",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E010",
+      "title": "Risk comparisons",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "results/main/paper_risk_comparison.csv: 24 Table 6 rows",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E011",
+      "title": "Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "https://arxiv.org/abs/2609.00065",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "arXiv metadata; current v2, revised 2026-09-02",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E012",
+      "title": "Benchmark comparisons",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "results/main/baseline_comparison.csv: 36 Table 5 benchmark cells",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E013",
+      "title": "Display generation",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "scripts/plot_results.py: All figure transformations",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    },
+    {
+      "evidence_id": "E014",
+      "title": "Parameter sensitivity",
+      "authors": [],
+      "year": 2026,
+      "source_type": "other",
+      "confidentiality": "public",
+      "identifiers": {
+        "url": "",
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": ""
+      },
+      "locator": "results/sensitivity/paper_comparison.csv: Tables 2 and 3, 32 cells",
+      "verification": {
+        "source_opened": true,
+        "status": "unverified",
+        "verified_by": "",
+        "verified_on": ""
+      }
+    }
+  ]
+}

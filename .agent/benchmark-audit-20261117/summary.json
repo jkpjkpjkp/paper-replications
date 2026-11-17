@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-17",
+  "scope": "Fresh traditional baseline optimization; no STCO claim",
+  "paper_sha256": "b8336ed7587ebcb506458c83255708b235dc31c9401787b404c74d8570237e82",
+  "script_sha256": "b53a926014a27835b46f0ca0a44d2fd9584f4282ee0d9bb41613152fa6a8dd73",
+  "python": "3.14.8",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "cvxpy": "1.9.3",
+  "datasets": {
+    "NYSE(O)": {
+      "slsqp_iterations": 10,
+      "global_log_gap_bound": 1.6525374402220905e-09,
+      "mean_log_gap_bound": 2.9243274468626623e-13,
+      "conic_status": "optimal_inaccurate",
+      "independent_total_log_objective_difference": 9.50350909079134e-13,
+      "weight_max_difference": 2.1139945349801792e-10,
+      "shape": [
+        5651,
+        36
+      ],
+      "sha256": "d69006454ac25b3eead931fd7964a15da6f13d3383dea1c652c1cd8a3b3a1b0e",
+      "accounting_residual_0": 0.0,
+      "independent_net_wealth_difference_0": 2.404760834906483e-10,
+      "accounting_residual_1": 3.219646771412954e-15,
+      "independent_net_wealth_difference_1": 5.858282747794874e-10,
+      "accounting_residual_2": 3.219646771412954e-15,
+      "independent_net_wealth_difference_2": 9.641212272981647e-10
+    },
+    "NYSE(N)": {
+      "slsqp_iterations": 12,
+      "global_log_gap_bound": 8.261156814182158e-08,
+      "mean_log_gap_bound": 1.2845835506425374e-11,
+      "conic_status": "optimal_inaccurate",
+      "independent_total_log_objective_difference": 4.600764214046649e-12,
+      "weight_max_difference": 9.06208272866138e-08,
+      "shape": [
+        6431,
+        23
+      ],
+      "sha256": "9b68189218f845a54c6760b1c37a100aa7437498a0df79e7178772735e76808e",
+      "accounting_residual_0": 0.0,
+      "independent_net_wealth_difference_0": 5.543796532947454e-10,
+      "accounting_residual_1": 2.220446049250313e-16,
+      "independent_net_wealth_difference_1": 1.7899709661151064e-06,
+      "accounting_residual_2": 2.886579864025407e-15,
+      "independent_net_wealth_difference_2": 2.942664977467757e-06
+    },
+    "TSE": {
+      "slsqp_iterations": 9,
+      "global_log_gap_bound": 8.077175887466481e-06,
+      "mean_log_gap_bound": 6.41554875890904e-09,
+      "conic_status": "optimal",
+      "independent_total_log_objective_difference": 2.3564261653064023e-11,
+      "weight_max_difference": 4.950564261446688e-06,
+      "shape": [
+        1259,
+        88
+      ],
+      "sha256": "5e623ef7656ca2ce9d028db7f640913e6f015d60364ccccd3b6f63c8f83857ce",
+      "accounting_residual_0": 0.0,
+      "independent_net_wealth_difference_0": 1.5977175138459643e-10,
+      "accounting_residual_1": 2.220446049250313e-16,
+      "independent_net_wealth_difference_1": 2.6194654676459095e-06,
+      "accounting_residual_2": 1.3322676295501878e-15,
+      "independent_net_wealth_difference_2": 5.0293975455417694e-06
+    },
+    "MSCI": {
+      "slsqp_iterations": 11,
+      "global_log_gap_bound": 5.912788703099636e-09,
+      "mean_log_gap_bound": 5.669020808340974e-12,
+      "conic_status": "optimal",
+      "independent_total_log_objective_difference": 8.431033649003439e-13,
+      "weight_max_difference": 4.773204929919839e-08,
+      "shape": [
+        1043,
+        24
+      ],
+      "sha256": "889a89f67f8d6ebae56befae7e63fd3ff61ad4b47e9ee53f5f1d8d06b404b128",
+      "accounting_residual_0": 0.0,
+      "independent_net_wealth_difference_0": 1.2680967387268538e-12,
+      "accounting_residual_1": 1.1102230246251565e-16,
+      "independent_net_wealth_difference_1": 2.506197471774385e-10,
+      "accounting_residual_2": 2.220446049250313e-16,
+      "independent_net_wealth_difference_2": 4.961242527912191e-10
+    }
+  },
+  "matches": 27,
+  "cells": 36
+}

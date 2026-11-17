@@ -1,0 +1,1559 @@
+A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/artifacts/proximal-portfolio/sources/paper.pdf
+Source SHA-256: b8336ed7587ebcb506458c83255708b235dc31c9401787b404c74d8570237e82
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+Layout extraction: spacing retains approximate PDF columns and tables.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+ A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio
+                    Optimization with Transaction Cost
+
+
+                                                  Xiaoting Yao 1 Na Zhang 2
+
+
+                          Abstract                                      gorithm achieves lower risk while keeping higher
+                                                                        return than classical TCO models.
+       Transaction cost optimization (TCO) of online
+       portfolio selection is crucial in computing science,
+       due to the significant impact of transaction costs
+       in practical short-term trading. Moreover, spar-            1. Introduction
+       sity of portfolio vector is often desired to enhance
+       stability and decrease risk. However, there is a            Short-term portfolio optimization (SPO) aims to seek higher
+       lack of models considering transaction costs and            returns through frequent trading, such as hourly and daily,
+       sparsity simultaneously in the literature. In this          which leads to significant transaction costs. However, most
+       paper, we first propose a K-sparse TCO model                existing strategies (Lai et al., 2018b; Luo et al., 2020; Lin
+       that minimizes the negative return and transaction          et al., 2024a; Li et al., 2026) do not take transaction cost
+       costs while keeping the portfolio vector being K-           into consideration, leading to poor performance in prac-
+       sparse. Noting that the model is NP-hard due to             tice. Thus, transaction cost optimization (TCO) turns into a
+       the K-sparse constraint, we bypass this difficulty          vitally important problem in SPO.
+       by reformulating the sparse model to a nonsmooth            The original extension of TCO stems from (Bauer & Ko-
+       difference of convex (DC) optimization problem.             havi, 1999)’s proof that incorporating transaction costs in
+       We show that both problems are equivalent by                the Universal Portfolio framework (Cover, 1991) remains
+       proving that the penalty parameter is large enough.         theoretically valid. The other widely adopted extension
+       Then, to overcome the difficulty caused by the              was proposed by (Györfi & Vajda, 2008), they assumed
+       nonsmoothness and the simplex constraint of the             that incurred transaction cost is proportional to the wealth
+       model, we develop a proximal subgradient algo-              transferred during rebalancing. However, they either did
+       rithm (PSGA) to solve the DC problem and apply              not consider transaction cost into decision process, or could
+       the alternating direction of multipliers (ADMM)             only handle simple linear conditions. In order to address
+       to compute the proximity operator of the corre-             complex short-term scenarios, heuristic algorithms or ma-
+       sponding function. Furthermore, we establish the            chine learning methods (Lai et al., 2018a; Lim et al., 2022;
+       global convergence of the entire sequence gen-              Zhao et al., 2021b; Corsaro et al., 2022) need to be consid-
+       erated by PSGA through showing the surrogate                ered. (Konno et al., 2005) proposed a branch-and-bound
+       function satisfies the Kurdyka-Łojasiewicz (KL)             method to attack long-short portfolio optimization problems
+       property. In addition, by showing the KL expo-              involving concave functions and DC transaction costs. (Das
+       nent of the surrogate function is 1/2, we establish         et al., 2013) considered the challenge of transaction costs by
+       the R-linear convergence rate of PSGA for any ar-           leveraging machine learning methodologies and employed
+       bitrary initial point. Finally, we compare our pro-         a genetic programming algorithm to derive an effective so-
+       posed algorithm with other state-of-the-art strate-         lution. Further, (Li et al., 2017) were the first to exploit
+       gies on four benchmark real-market data sets, with          mathematical method for online portfolio selection with
+       the numerical results showing that the proposed al-         transaction costs. They clarified the relationship between
+   1
+    School of Computer Science and Engineering, Sun Yat-sen        net wealth and transaction costs, and further derived explicit
+University, Guangzhou 510275, China 2 Department of Applied        solutions for portfolio updates. Recently, approaches based
+Mathematics College Mathematics and Informatics, South China       on (Li et al., 2017) that regularize transaction costs have
+Agricultural University, Guangzhou 510642, China. Correspon-       attracted increasing attention (Pham Dinh et al., 2016; Zhou
+dence to: Na Zhang <nazhang2014@scau.edu.cn >.                     et al., 2022; Yao & Zhang, 2023b). Although these meth-
+Proceedings of the 43 rd International Conference on Machine       ods performed better in real investment than most previous
+Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026       strategies, they may suffer from poor generality due to the
+by the author(s).                                                  absence of regularization for portfolio variable.
+
+                                                               1
+
+=== PDF PAGE 2 ===
+       A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+On the other hand, one may require a K-sparse portfolio to                  consideration of short-term investment, sparsity, and
+improve the stability of the TCO model, where the number                    transaction costs—a combination that, to the best of our
+of selected assets is restricted to a K-size to maintain sim-               knowledge, has been rarely explored simultaneously in
+plicity and save time and financial costs (Brodie et al., 2009;             the existing literature.
+Lin et al., 2024a). Common approaches to enforcing sparse
+constraints include combinatorial methods, such as mixed-                 • We bypass the difficulty caused by the K-sparse con-
+integer programming (Günlük & Linderoth, 2010; Bertsimas                  straint of the model through reformulating the K-
+& Cory-Wright, 2022), however, research (Lin et al., 2024b)                 sparse TCO model into a nonsmooth DC optimization
+pointed out that these methods require visiting about 1300-                 problem. We show that both problems are equivalent
+77000 nodes, remaining higher computational burden for                      in the sense that the DC problem is an exact penalty
+practical investment. Besides, reinforcement learning (RL)                  problem of the K-sparse TCO model. Specifically,
+has also been applied to solve sparse constraints (Jiang et al.,            both problems share the same global (local) optimal
+2017; Betancourt & Chen, 2021; Wu & Li, 2024; Song et al.,                  solutions provided that the penalty parameter is large
+2025), but as (Lai & Yang, 2022) pointed out, RL is more                    enough.
+suitable for long-term investment, such as monthly or yearly,             • In order to solve the nonsmooth DC problem, we de-
+because its parameters need a stable distribution, and it op-               sign a PSGA and ADMM to compute the proximity
+erates as a black-box model, whereas our work prioritizes                   operator of the corresponding function. We establish
+interpretability. Hence, a suitable method for the sparse port-             the global convergence of the entire sequence gener-
+folio problem in the short-term is based on machine learn-                  ated by PSGA by constructing a surrogate function. It
+ing. (Lai et al., 2018b) were the first to consider sparsity in             is worth noting that a central theoretical novelty of our
+short-term investments and proposed the short-term sparse                   paper is that we utilize a more streamlined auxiliary
+portfolio optimization (SSPO) framework. They applied ℓ1                    function. This strategic choice allows us to establish
+norm to portfolio variable to induce sparsity and utilized                  that its Kurdyka-Łojasiewicz (KL) exponent is 1/2,
+the alternating direction method of multipliers (ADMM)                      which in turn directly leads to a linear convergence
+to obtain the closed-form solution of the model. The ℓ1                     rate.
+norm regularization, serving as a convex relaxation of ℓ0 to
+generate sparsity, has been widely adopted in SSPO (Gao
+                                                                       The structure of the paper is outlined as follows. In Sec-
+& Yang, 2019; Corsaro et al., 2022; Shen et al., 2014; Zhao
+                                                                       tion 2, we review the related works. Section 3 is devoted
+et al., 2021a). However, the ℓ1 norm often yields insufficient
+                                                                       to the K-sparse TCO model as well as its DC reformula-
+sparsity that can not meet the sparsity requirements in real-
+                                                                       tion, and the PSGA for solving it. In Section 4, we conduct
+world investments. Therefore, (Luo et al., 2020) optimized
+                                                                       numerical experiments to evaluate the effectiveness of the
+SSPO by replacing ℓ1 with ℓ0 and obtained three kinds of
+                                                                       proposed algorithms. Finally, we conclude the paper with a
+closed-form solutions. Furthermore, (Wang et al., 2023)
+                                                                       summary of the key findings in Section 5.
+directly used the ℓ0 norm to construct sparse portfolios and
+employed ADMM for solving the optimization problem.
+                                                                       2. Related Works
+Although sparse portfolio selection has been extensively
+investigated in the past decades, existing literature seldom           In this section, we review some existing works related to
+takes transaction costs into consideration. In this paper, we          portfolio selection and transaction cost optimization.
+propose a K-sparse TCO model, which considers transac-
+tion costs and the sparsity of the portfolio vector simulta-           2.1. Sparse Short-term Portfolio Selection
+neously. The difficulty for solving this model comes from
+three aspects. The first one is the K-sparse constraint, mak-          Short-term portfolio optimization (SPO) aims to maximize
+ing the model NP-hard. The second and third difficulties               cumulative wealth in a short investment period. Hence, the
+are from the nonsmoothness of the objective function, and              classical Kelly’s Exponential Growth Rate (1956) approach
+the simplex constraint, respectively. In this paper, we by-            indicated that the selected m-diamond portfolio vector w
+pass the first difficulty through reformulating the model to a         can be directly integrated with online learning schemes over
+difference of convex (DC) problem and tackle the last two              historical returns, that is,
+difficulties by proximal subgradient algorithm (PSGA) and                                            T
+                                                                                                     X
+ADMM. Our main contributions are summarized as below.                                w∗ = arg max          log w⊤ x[t] ,         (1)
+                                                                                             w∈Rm    t=1
+   • We propose a K-sparse TCO model, which minimizes
+     the sum of the negative return and the transaction cost           where x[t] denotes real relative price vector in t-th invest-
+                                                                                                                  PT
+     while maintaining the portfolio vector being K-sparse.            ment period for t = 1, 2, · · · , T . Thus, t=1 log w⊤ x[t]
+     A key innovation of our model lies in its integrated              implies the hindsight cumulative wealth after invested for T
+
+                                                                   2
+
+=== PDF PAGE 3 ===
+       A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+periods. However, it is obvious that (1) is a hindsight strat-            where γ is the transaction cost rate, θ[t−1] is net wealth
+egy, which is infeasible to implement in reality. Moreover,               proportion implicated transaction costs in (t − 1)-th period.
+the lack of consideration for variable sparsity in (1) results            Note that ŵ[t−1] denotes the asset allocation at the end of
+                                                                                                             w      ·x[t−1]
+in increased risk and cost.                                               (t − 1)-th period, i.e., ŵ[t−1] = w[t−1]
+                                                                                                               ⊤            , where · is the
+                                                                                                                    x
+                                                                                                                 [t−1]   [t−1]
+
+Recently, (Lai et al., 2018b) are the first to propose the                element-wise product. Therefore, they attack the transaction
+following sparse short-term portfolio optimization (SSPO)                 cost problem by presenting the following TCO framework
+model with ℓ1 regularization:
+                                                                            w[t+1] = arg min −E{log w⊤ q[t] } + λ||ŵ[t] − w||1 .
+                                    ⊤                                                   w∈∆m
+          w[t+1] = arg min −w q[t] + λ||w||1 ,                 (2)
+                       w∈∆m                                                                                                             (4)
+
+where λ is the regularization parameter, q[t] is the pre-
+                                                                          Besides, it is worth noting that, with the inclusion of transac-
+dicted relative price at t-th period, and ∆m = {w ∈ Rm      + :           tion costs, the approach to computing cumulative wealth has
+w⊤ 1 = 1} is the m-dimensional simplex, restricting port-
+                                                                          been modified. Li et al. (2017) pointed out that cumulative
+folios are self-finance and no margin and no shorting. Dif-
+                                                                          wealth ST invested for T periods should be computed by
+ferent from (1), (2) updates the portfolio w in (t + 1)-th
+period, denoted as w[t+1] , by incorporating the information                                         T
+                                                                                                     Y
+                                                                                                           ⊤
+available from the first t periods, making it feasible for real                           ST = S0        (w[t] x[t] )θ[t−1] ,           (5)
+world implementation. Its performance is subsequently as-                                            t=1
+sessed by comparing the cumulative wealth attained over                   where S0 represents the normalization of initial capital and
+T investment periods. Besides, ||w||1 is the convex relax-                it is always set to 1.
+ation of ℓ0 for inducing sparse portfolios. However, the ℓ1
+regularization in (2) may reduce the sparsity of the primal               Although the TCO model (4) achieves better cumulative
+variable w. To this end, (Luo et al., 2020) optimized SSPO                wealth in real investment, it may lack of stability and gener-
+and proposed following ℓ0 -SSPO model with closed form                    ality since no regularization on w is considered in the model.
+solutions:                                                                This will result in a high risk of this model. To address this
+                                                                          issue, we will incorporate a sparse regularization term on w
+           w[t+1] = arg min −w⊤ q[t] + λ||w||0 ,               (3)        to enhance model robustness and mitigate risk.
+                       w∈∆m
+
+where ||w||0 counts the number of nonzero elements of                     3. PSGA (Proximal Subgradient Algorithm)
+w. In addition to the previously discussed models, SSPO                      for Sparse Transaction Cost Optimization
+literature encompasses various methodological approaches
+such as moving average reversion (Li et al., 2015; 2011;                  In this section, we first propose a K-sparse transaction cost
+2012) and risk-minimization frameworks (Lintner, 1965;                    optimization problem for portfolio selection and reformulate
+Lai et al., 2020; Shi et al., 2024). Due to the limitation of             it to a DC (difference of convex) optimization problem. The
+space, we omit a detailed discussion of these methods.                    equivalence of both problems is established in the sense that
+                                                                          they have the same global and local solution sets provided
+Although the above portfolio optimization methods may
+                                                                          that regularization parameter is larger than a prefixed num-
+achieve good sparsity, they fail to incorporate the practical
+                                                                          ber related to the problem. Then, a proximal subgradient
+consideration of transaction costs, resulting in a wide gap
+                                                                          algorithm is developed for solving the DC reformulation.
+between theory and practice. Quantitative evidence support-
+ing this observation is presented in Section of Experimental
+                                                                          3.1. K-sparse Transaction Cost Optimization and its
+Results.
+                                                                               DC Reformulation
+2.2. Transaction Cost Optimization                                        In order to obtain high return, reduce transaction costs, and
+                                                                          simultaneously maintain a smaller number of assets, we
+In order to achieve higher returns, frequent transactions oc-
+                                                                          propose the following K-sparse TCO (STCO) model:
+cur in SPO. This leads to significant transaction cost. There-
+fore, it is evident that transaction cost optimization (TCO)                      w[t+1] ∈ arg min −q⊤
+                                                                                                     [t] w + λ||w − ŵ[t] ||1
+problem is necessary to be considered. Li et al. (2017) are                                   w∈∆m
+the first to apply mathematical techniques to address the                                        s.t. ||w||0 ≤ K,                       (6)
+problem of SPO with transaction costs. They demonstrated
+that transaction costs is inversely correlated to ||w − ŵ[t] ||1 ,       where λ > 0 is a regularization parameter, and K is the
+which can be derived from                                                 number of selected assets. We can take several observations
+                                                                          in model (6). The first term of the objective function indi-
+           1 = θ[t−1] + γ||ŵ[t−1] − w[t] θ[t−1] ||1 ,                    cates the negative return, where its minimization leads to
+
+                                                                      3
+
+=== PDF PAGE 4 ===
+       A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+increased wealth in a short-term. The last term λ||w−ŵ[t] ||1         With the help of the above proposition, we obtain the
+is a transaction cost positive related term, contributing to           following theorem regarding the exact penalty formula-
+the objective of reducing transaction cost. Moreover, the              tion (8) for problem (6). We denote the objective func-
+K-sparse constraint enforces cardinality control by limiting           tions of (6) and (8) by f and fc , respectively. Specifically,
+the number of selected assets no more than K, resulting in             f (w) = −q⊤                                           ⊤
+                                                                                      [t] w + λ||w − ŵ[t] ||1 , fc (w) = −q[t] w +
+lower risk of the portfolio selection model.                           λ||w − ŵ[t] ||1 + c(||w||1 − ||w||(K) ).
+The difficulty of tackling problem (6) comes from three                Theorem 3.3. Let√L be the Lipschitz constant of f on ∆m ,
+aspects. The first one is the ℓ0 constraint, making it NP-             then for all c > 2 2L, the following statements hold:
+hard. The second and third difficulties are from the non-
+smoothness of the ℓ1 -norm and the simplex constraint, re-              (i) wc ∈ ∆m is a global optimal solution of problem (6)
+spectively. In the following, we bypass the first difficulty                if and only if wc is a global optimal solution of prob-
+through reformulating problem (6) into a difference of con-                 lem (8);
+vex (DC) problem. The idea is motivated by the work
+of (Gotoh et al., 2018). It is obvious that the ℓ0 constraint is       (ii) wc ∈ Ω is a local optimal solution of problem (6) if and
+equivalent to the constraint: ||w||1 − ||w||(K) = 0, where                  only if wc is a local optimal solution of problem (8).
+∥w∥(K) is the vector K-norm of w, defined as ∥w∥(K) :=
+PK                                                                     The proof of Theorem 3.3 is provided in appendix A.3. The-
+   i=1 |w(i) | with |w(i) | denoting the i-th largest element
+                                                                       orem 3.3 tells us that problems (6) and (8) are equivalent in
+of the absolute values of w. Consequently, problem (6) is
+                                                                       the sense that both problems share the same global (local)
+equivalently reformulated to the following model:
+                                                                       optimal solution sets provided that the penalty parameter c
+       w[t+1] ∈ arg min −q⊤
+                          [t] w + λ||w − ŵ[t] ||1                     is large enough. Therefore, we will design numerical algo-
+                   w∈∆m
+                                                                       rithms solving problems (8) instead of solving problem (6).
+                 s.t. ||w||1 − ||w||(K) = 0.                (7)
+To attack the difficulty caused by the non-convex constraint           3.2. Proximal Subgradient Algorithm
+of problem (7), a normal approach is to penalizing the con-            This section is devoted to the algorithm design for prob-
+straint into the objective. This leads to the following DC             lem (8), which is a DC relaxation of K-sparse transaction
+transaction cost optimization problem:                                 cost optimization problem (6). We will first present the defi-
+w[t+1] ∈ arg min −q⊤
+                   [t] w + λ||w − ŵ[t] ||1 − c||w||(K) ,
+                                                                       nition of a critical point of problem (8), and then establish
+            w∈∆m                                                       the relationship between critical points and local minimizers
+                                                            (8)        of problem (8) and (6). Then, we characterize critical points
+where c > 0 is the penalty parameter, the term ||w||1 is               of problem (8) by a fixed point equation. Lastly, a proximal
+missed since w ∈ ∆m implies ||w||1 = 1. Fortunately,                   subgradient algorithm is developed with the help of this
+problem (8) has a better structure than problems (6) and (7),          characterization.
+since it is a DC problem. In the remaining part of this sub-           We begin with the definition of critical points of problem (8).
+section, we dedicate to showing that the DC formulation (8)            The definition and calculus rules of the notion of subdiffer-
+is an exact penalty formulation of problem (6).                        ential are presented in appendix A.1.
+We begin with the existence of optimal solutions to problems           Definition 3.4. We say w∗ is a critical point of problem (8)
+(6) and (8), which can be derived from the continuity of their         if w∗ ∈ ∆m and the following inclusion holds for some
+objective functions and the compactness of their constraints.          v ∈ ∂|| · ||(K) (w∗ ):
+This result is presented in the following theorem.
+                                                                           0 ∈ ∂f (w∗ ) + ∂ι∆m (w∗ ) + c(∂|| · ||1 (w∗ ) − v),
+Theorem 3.1. For any λ, c > 0 and K ≥ 1, the optimal
+solution sets of problems (6) and (8) are nonempty.                    where ι∆m (w) denotes the indicator function of ∆m , that is,
+In order to show the exact penalty property of problem (8),            ι∆m (w) = 0 if w ∈ ∆m and ι∆m (w) = +∞ otherwise.
+we first present in the following proposition that the distance        It is obvious from the generalized Fermat’s Rule that a lo-
+between w to the constraint set Ω of problem (6) can be                cal minimizer of problem (8) must be a critical point of
+bounded by p(w), where p(w) = ||w||1 − ||w||(K) and                    problem (8). Besides, we will illustrate in the following
+Ω := {w ∈ ∆m : ||w||0 ≤ K}. Due to the limitation of                   proposition that some critical points with some easily ver-
+space, all the proofs in this paper are placed in the appendix.        ified properties must be local minimizers of problem (8)
+The proof of Proposition 3.2 is provided in appendix A.2 .             or (6).
+Proposition 3.2. For all w ∈ ∆m , there holds
+                                    √                                  Proposition 3.5. Let w∗ ∈ ∆m be a critical point of prob-
+                   dist(w, Ω) ≤ 2 2p(w).                               lem (8). Then, the following statements hold:
+
+                                                                   4
+
+=== PDF PAGE 5 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+Algorithm 1 PSGA for solving problem (8)                               where g1 (w) = −w⊤ (q[t] + cvk ) + 2α    1
+                                                                                                                  ||w − wk ||22 +
+Input: parameters c > 0, α > 0; tolerance ϵ and max                    ι∆m (w), g2 (w) = λ||w − ŵ[t] ||1 . By this way, the aug-
+iteration kmax .                                                       mented Lagrangian function of problem (12) is presented
+                        1
+  1: Initialize: w0 = ( m        1
+                          ,··· , m ), k = 0.                           as:
+                               ||wk+1 −wk ||2                                                                     ρ
+ 2: while k ≤ kmax or             ||wk+1 ||2
+                                              > ϵ do                   L(w, d, µ) = g1 (w) + g2 (d) + µ⊤ (w − d) + ||w − d||22 ,
+ 3:     k
+       v ∈ ∂|| · ||(K) (w ).    k                                                                                 2
+                                                                                                                        (13)
+ 4:
+                                                                       where µ is the Lagrangian multiplier, ρ > 0 controls the ap-
+       wk+1 = proxαf +ι∆m (wk + αcvk ).                     (11)       proximation of d to w. Thus, ADMM generates the appro-
+                                                                       priate iteration for any arbitrary initial point (w0 , d0 , µ0 ):
+ 5:   k = k + 1.
+ 6: end while                                                                       k+1
+                                                                                     w     ∈ arg min L(w, dk , µk ),               (14)
+Output: Portfolio updates w[t+1] = wk+1 .
+                                                                                   
+                                                                                              w∈Rm
+                                                                                   
+                                                                                   
+                                                                                   
+                                                                                       k+1
+                                                                                     d     ∈ arg min L(wk+1 , d, µk ),             (15)
+                                                                                   
+                                                                                   
+                                                                                             d∈Rm
+                                                                                    k+1
+          ∗
+ (i) If |w(K)       ∗
+              | > |w(K+1) |, then it is a local minimizer of                         µ     = µk + ρ(wk+1 − dk+1 ).                 (16)
+     problem (8).
+                                                                       The following lemmas derive closed-form solutions of prob-
+(ii) If ||w∗ ||0 = K, then w∗ is a local minimizer of prob-
+                                                                       lems (14) and (15), and their proofs are provided in appendix
+     lems (8) and (6).
+                                                                       A.6 and A.7, respectively.
+                                                                       Lemma 3.7. The closed-form solution of the optimization
+The proof of Proposition 3.5 is provided in appendix A.4.
+                                                                       problem (14) is
+We next characterize in the following theorem a critical
+point of problem (8) by a solution of a fixed point equation                               1    1
+with the help of the notion of proximity operators. We first           wk+1 = P∆m { 1          ( wk + ρdk + q[t] + cvk − µk )} ,
+                                                                                         α + ρ  α
+recall that for a proper closed convex function g : Rm →
+(−∞ + ∞], its proximity operator, denoted by proxg , is                where P∆m denotes the projection onto simplex ∆m .
+defined at w ∈ Rm by
+                                                                       Lemma 3.8. The closed-form solution of the optimization
+                             
+                                       1
+                                                                      problem (15) is
+      proxg (w) := arg min g(u) + ∥u − w∥22 . (9)
+                      u∈Rm             2                                                                             λ
+                                                                                   dk+1 = ŵ[t] + sign(ϕ)[|ϕ| −        ]+ ,
+                                                                                                                     ρ
+Theorem 3.6. The vector w∗ is a critical point of prob-
+lem (8) if and only if w∗ satisfies the following fixed point          where ϕ = wk+1 + ρ1 µk − ŵ[t] , and ([x]+ )i = max{xi , 0}
+equation for some α > 0 and v ∈ ∂∥ · ∥(K) (w∗ ):                       for i = 1, · · · , m, x ∈ Rm
+                                                                                                  +.
+
+              w∗ = proxαf +ι∆m (w∗ + αcv).                  (10)       The detail procedure of PSGA-ADMM framework is sum-
+                                                                       marized in Algorithm 2. We point out that P∆m can be
+The proof of Theorem 3.6 is provided in appendix A.5.                  computed efficiently as shown in (Duchi et al., 2008).
+Inspired by Theorem 3.6, we develop a proximal subgradient
+                                                                       We next establish in Theorem 3.9 the convergence of
+algorithm (PSGA) for solving problem (8), which is stated
+                                                                       ADMM applied to solving problem (11) by showing that the
+in Algorithm 1.
+                                                                       corresponding Lagrangian function (13) has a saddle point.
+                                                                       Its proof is provided in appendix A.8.
+3.3. ADMM for Solving Problem (11)
+                                                                       Theorem 3.9. Let {(wk , dk , µk ) : k ∈ N} be generated by
+Note that the proximity operator of αf + ι∆m has no closed             (14), (15) and (16). Then, {wk − dk : k ∈ N} converges to
+form solution. We apply the alternating direction method               0, and {wk : k ∈ N} converges to an optimal solution of
+of multipliers (ADMM) to compute proxαf +ι∆m in this                   problem (11).
+section. The definition of proximity operator and (11) yield
+that:
+                                                                       3.4. Convergence Analysis for PSGA
+             k+1        k+1
+        (w         ,w         ) ∈ arg min g1 (w) + g2 (d)              This subsection is devoted to the convergence analysis of
+                                  w,d∈Rm
+                                                                       PSGA. Although PSGA can be viewed as a proximal DC
+                              s.t. w = d,                   (12)       algorithm proposed in (Gotoh et al., 2018), the convergence
+
+                                                                   5
+
+=== PDF PAGE 6 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+Algorithm 2 PSGA-ADMM for the problem (8)                           any w, v ∈ Rm ,
+Input: parameters c, α, λ, ρ > 0; window size ω; tolerance
+ϵ and max iteration kmax .                                           H(w, v) ≥ f (w) + ι∆m (w) − c∥w∥(K) = Q(w). (19)
+                        1           1
+ 1: Initialize: w0 = ( m  ,··· , m    ), k = 0.
+                                                                    The next proposition illustrates that, for PSGA, the objective
+ 2: while k ≤ kmax do
+                                                                    function values Q as well as the auxiliary function values
+ 3:    Initialize: µ0 = (0, · · · , 0), j = 0.
+                                                                    H of the iterative sequence monotonically decreases, and
+ 4:    Set v ∈ ∂|| · ||(K) (wk ).
+                                                                    the gap between the successive iterates vanishes.
+ 5:    repeat
+ 6:       wj+1 = P∆m { 1 1+ρ ( α1 wj + ρdj + q[t] + cv −            Proposition 3.10. Let Q and H be defined by (17) and
+           j
+         µ )}.
+                           α
+                                                                    (18), respectively. Let {(wk , vk ) : k ∈ N} be generated
+ 7:      dj+1 = ŵ[t] + sign(ϕ)[|ϕ| − λρ ]+ .                       by PSGA for any arbitrary w0 ∈ ∆m . Then, the following
+                                                                    statements hold:
+ 8:      µj+1 = µj + ρ(wj+1 − dj+1 ).
+ 9:      j = j + 1.
+                j+1
+                     −wj ||2                                         (i) For some a > 0, there has
+10:   until ||w||wj+1  ||2    ≤ ϵ or j > kmax
+         k+1        j+1
+11:   w k+1   = wk .                                                        Q(wk+1 ) ≤ H(wk+1 , vk )
+12:   if ||w||wk+1
+                −w ||2
+                           ≤ ϵ then
+                   ||2
+                     k+1
+                                                                                       ≤ Q(wk ) − a∥wk+1 − wk ∥22
+13:      return w          and break.
+14:   end if                                                                           ≤ H(wk , vk−1 ) − a∥wk+1 − wk ∥22 ;
+15:   k = k + 1.
+16: end while                                                       (ii) limk→∞ ∥wk+1 − wk ∥2 = 0;
+Output: Portfolio updates w[t+1] = wk+1 .
+                                                                    (iii) limk→∞ Q(wk ) and limk→∞ H(wk+1 , vk ) exist.
+
+of the entire sequence generated by it is not established in        The proof of Proposition 3.10 is provided in appendix A.9.
+this literature. The global convergence of the sequence gen-        In order to analyze the global convergence and convergence
+erated by extrapolation proximal DC algorithm (pDCAe )              rate of PSGA, we require to establish the KL property and
+for solving a DC problem is established in (Liu et al., 2019)       the KL exponent of H, respectively. The next proposition
+by constructing an auxiliary function and showing it is a           demonstrates that H defined by (18) is a KL function and
+KL function. Motivated by pDCAe , we construct a differ-            its KL exponent is 1/2. The proof of Proposition 3.11 is
+ent auxiliary function which is more straightforward than           placed in supplementary material A.10.
+that of pDCAe . This auxiliary function will facilitate to
+                                                                    Proposition 3.11. Let H be defined by (18). Then H is a
+establish the R-linear convergence rate of PSGA in this
+                                                                    KL function. Furthermore, the KL exponent of H is 1/2.
+paper by showing its KL exponent is 1/2. To this end,
+we first denote the objective function of problem (8) by            With the help of Proposition 3.11, we establish in the follow-
+Q : Rm → (−∞, +∞], i.e.                                             ing theorem the global convergence of the entire sequence
+           Q(w) := f (w) + ι∆m − c||w||(K) .            (17)        generated by PSGA, through proving the sufficient descent
+                                                                    condition and relative error condition in (Proposition 2.7,
+                                                                    Li et al., 2022). The details of the proof are provided in
+In order to show the convergence of the entire sequence             supplementary material A.11.
+generated by PSGA, we make use of the following auxiliary
+function and its KL property extensively in our analysis:           Theorem 3.12. Let {wk : k ∈ N} be generated by PSGA
+                                                                    for any arbitrary w0 ∈ ∆m . Then we have:
+ H(w, v) := f (w) + ι∆m (w) + ιS(K)
+                                ∗   (v) − ⟨w, cv⟩, (18)
+                                                                     (i) There exists w∗ ∈ ∆m such that limk→∞ wk = w∗
+          ∗
+where S(K)    is the dual norm of the vector K-norm (Wu                  and w∗ is a critical point of problem (8);
+et al., 2014), i.e.,
+        ∗
+                                                                    (ii) If w∗ in Item (i) satisfies |w(K)
+                                                                                                       ∗         ∗
+                                                                                                           | > |w(K+1) |, then
+       S(K) = {z ∈ Rm : ∥z∥(K)∗ ≤ 1}                                        k
+                                                                         {w : k ∈ N} converges to a local minimizer of prob-
+               = {z ∈ Rm : ∥z∥∞ ≤ 1, ∥z∥1 ≤ K}.                          lem (8).
+
+It is clear that ιS(K)
+                     ∗  (v) = (c∥ · ∥(K) )∗ (cv), where             (iii) If w∗ in Item (i) satisfies ∥w∗ ∥0 = K, then {wk :
+            ∗
+(c∥ · ∥(K) ) is the conjugate function of c∥ · ∥(K) . There-              k ∈ N} converges to a local minimizer of problem (6)
+fore, it yields from the Fenchel-Young inequality that for                and (8).
+
+                                                                6
+
+=== PDF PAGE 7 ===
+       A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+
+
+
+Figure 1. Cumulative wealth with varying transaction costs achieved by the proposed STCO1 and STCO2 in the four datasets. In order to
+emphasize the results under transaction costs and ensure clarity of the plot lines, we only present the comparison with benchmarks and
+TCO algorithms.
+
+
+In addition to the sequential convergence of PSGA, we can              4.1. Results for Cumulative Wealth with Transaction
+also establish the R-linear convergence rate of PSGA since                  Cost
+the KL exponent of H is 1/2. The main result is stated in
+                                                                       Cumulative wealth stands as one of the most critical metrics
+the following theorem, and the detail of its proof is placed
+                                                                       in investment analysis. We compare SSPO implementations
+in appendix A.12.
+                                                                       with and without transaction cost algorithms to expose the
+Theorem 3.13. Let {wk : k ∈ N} be generated by PSGA                    importance of TCO and show the superiority of our research.
+for any arbitrary w0 ∈ ∆m . Then, {wk : k ∈ N} con-                    As defined in (5), cumulative wealth with transaction cost is
+verges R-linearly to a w∗ . Specifically, there exist a0 > 0,          computed accordingly throughout the paper.
+b0 ∈ (0, 1) and k0 > 0 such that                                       In order to highlight the main findings while keeping the
+                                                                       presentation concise, we report summarized results in Ta-
+                                                                       ble 1. The complete results are provided in Table 5 in
+            ∥wk − w∗ ∥2 ≤ a0 bk0      for   k ≥ k0 .                   Appendix B.5, which shows the cumulative wealth in fixed
+                                                                       transaction cost rate 0%, 0.25% and 0.5%. Firstly, we ob-
+                                                                       serve from Table 5 that comparing with benchmarks, the
+                                                                       proposed methods outperform benchmarks in most cases,
+4. Experimental Results                                                which lays the availability foundation. Moreover, strategies
+Extensive experiments with real-world financial datasets,              that ignore transaction costs (SSPO, S1, S2, and S3) may
+which are NYSE(O) (Cover, 1991), NYSE(N) (Györfi                      achieve higher returns in zero-cost scenarios. However, their
+et al., 2012; Li et al., 2013), TSE (Borodin et al., 2004)             performance degrades rapidly with increasing transaction
+and MSCI (Li et al., 2012), are conducted to evaluate                  costs, eventually dropping to zero even when transaction
+the performance of the proposed PSGA-ADMM for solv-                    costs approach just 0.5%. In contrast, STCO maintains pos-
+ing STCO. Moreover, we also consider three baseline                    itive returns. As for strategies considering transaction costs,
+methods: Ubah, Best and Bcrp (Cover, 1991), as well                    TCO preserves returns as transaction costs rise, while STCO
+as 10 state-of-the-art methods: TCO1 (Li et al., 2017),                consistently outperforms TCO in most cases. These results
+TCO2 (Li et al., 2017), SSPO (Lai et al., 2018b), S1, S2               demonstrate the superiority of the proposed method in most
+and S3 (Luo et al., 2020), DENRPO1-PARM, DENRPO1-                      cases under non-zero transaction costs.
+OLMAR, DENRPO2-PARM and DENRPO2-OLMAR(Yao                              Besides, Figure 1 reveals the cumulative wealth in vary-
+& Zhang, 2023a) as competitors in the experiments. Param-              ing transaction costs ranging from 0% to 1% comparing
+eters of the proposed algorithm are set to: c = 8e−6 , K =             with TCO. Noting that the proposed STCO method always
+10, λ = 10γ, α = 0.0025, ρ = 0.618, ϵ = 10−8 , and                     gains more wealth than TCO in most cases in a continuous
+kmax = 108 . The detailed analysis of parameter sensitivity            transaction costs ascending process.
+and the related experiments are presented in appendix B.1.
+Furthermore, we consider q[t] in the following two cases               4.2. Results for Return and Risk Factors
+according to the average reversion theory, q[t]1 := x1[t] and
+                                                                       In this subsection, we exhibit numerical results of three re-
+q[t]2 := w1 (1 + x1[t] + · · · + ⊙w−21x          ), called STCO1
+                                   i=0   [t−i]                         turn and risk factors, which are Mean Excess Return (MER),
+and STCO2, respectively. For simplicity, the details of the            α factor and β factor. MER quantifies average excess return
+datasets are placed in the appendix B.2, the competing algo-           generated by a portfolio strategy relative to the Ubah bench-
+rithms and the source code of PSGA-ADMM are provided                   mark. A higher MER indicates a superior portfolio strategy.
+in appendix B.3.
+
+                                                                   7
+
+=== PDF PAGE 8 ===
+       A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+Table 1. Cumulative wealth with transaction costs from the proposed STCO1 and STCO2 and the compared algorithms in four data-sets,
+where UBAH is the benchmark, SSPO is the strategy without considering transaction costs, and TCOs are transaction cost optimization
+algorithms.
+
+                                               NYSE(O)                                             NYSE(N)
+        ALGORITHMS               0%              0.25%              0.5%               0%             0.25%           0.5%
+        UBAH                   14.50             14.46            14.43               18.06           18.01          17.97
+        SSPO                 1.06E+18          2.45E+11         5.66E+04            1.62E+09         154.92           0.00
+        TCO1                 1.35E+14          5.57E+09         2.33E+06            9.15E+06        3.81E+03         143.47
+        TCO2                 1.47E+13          4.34E+07         1.52E+04            2.35E+07        2.14E+03          57.61
+        STCO1                6.16E+15          3.04E+11         6.54E+06            7.48E+05         274.18           53.88
+        STCO2                7.59E+16          1.24E+10         1.07E+05            3.46E+08        6.00E+05         271.82
+                                                    TSE                                               MSCI
+        ALGORITHMS                  0%              0.25%               0.5%            0%             0.25%           0.5%
+        UBAH                        1.61             1.61               1.60            0.91            0.90           0.90
+        SSPO                      364.94             11.78              0.38            7.51            0.38           0.02
+        TCO1                        149              7.66               0.91            9.68            1.52           1.13
+        TCO2                      152.98             31.71              4.99            5.66            1.42           0.84
+        STCO1                    1216.92             5.60               1.49           11.48            2.65           1.21
+        STCO2                      95.92             3.97               4.88           15.17            2.05           0.76
+
+
+Moreover, Sharpe (1964) shows that the intrinsic excess                 proposed STCO method selects only a small number of
+return, referred to as α factor in the financial industry, con-         assets while maintaining strong portfolio performance.
+stitutes the part of expected return. An excellent algorithm
+has the higher α factor. Besides, β factor (Sharpe, 1964)               5. Concluding Remarks
+measures the risk of a portfolio strategy relative to the Ubah
+benchmark. A value of β > 0 (β < 0) signifies a positive                In this paper, we propose a K-sparse TCO model which
+(negative) correlation between the strategy return and the              considers the transaction cost in the online portfolio selec-
+Ubah benchmark return. Furthermore, |β| < 1 (|β| > 1) im-               tion and the sparsity of the asset vector simultaneously, and
+plies that the strategy return exhibits lower (higher) volatility       develop an R-linearly convergent algorithm to solve it. Nu-
+compared to the Ubah benchmark. The detail for computing                merical experiments demonstrate that benefiting from the
+MER, α and β factor are shown in appendix B.4.                          sparsity term, the proposed model decreases the risk of the
+                                                                        model while maintaining a high return. Noting the signif-
+Table 6 placed in appendix B.5 show above return and risk
+                                                                        icant impact of the sparsity, future work will incorporate
+factors of STCO comparing with TCO and DENRPO strate-
+                                                                        the deep learning technique to learn a more adaptive data-
+gies in transaction cost rate γ = 0%, γ = 0.25% and
+                                                                        driven sparsity promoting neural network to enhance the
+γ = 0.5%. It is obviously that STCO achieves greater MER
+                                                                        performance of the sparse TCO model in various investment
+and α factor as well as smaller β factor in most cases. This
+                                                                        markets.
+verifies that the sparsity of the portfolio vector considered
+in the proposed model decreases the risk of the model while
+maintaining a high return.                                              Acknowledgements
+                                                                        This research was funded by the National Science Founda-
+4.3. Sparsity for STCO
+                                                                        tion of China grant number 12271181 and by the Guangzhou
+In this subsection, we examine the sparsity of the portfolios           Basic Research Program grant number 2025A04J5240.
+generated by STCO. Sparsity can be measured by the num-
+ber of nonzero elements of the portfolio vector w. The re-              Impact Statement
+sults are reported in Table 7 in appendix B.6, which presents
+the average sparsity and the corresponding standard devia-              This paper presents work whose goal is to advance the field
+tion of the portfolios generated by STCO1 and STCO2 and                 of Machine Learning. There are many potential societal
+other state-of-the-art algorithms with sparsity level K = 10            consequences of our work, none which we feel must be
+in transaction rate γ = 0% and γ = 0.25%. We observe that               specifically highlighted here.
+the average sparsity of STCO1 is about 1.0531 on NYSE(O)
+when γ = 0%, and similar values can also be observed
+across other datasets and settings. This indicates that the
+
+
+                                                                    8
+
+=== PDF PAGE 9 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+References                                                          Cui, Y. and Pang, J.-S. Modern Nonconvex Nondifferen-
+                                                                      tiable Optimization. SIAM, 2021.
+Attouch, H. and Bolte, J. On the convergence of the prox-
+  imal algorithm for nonsmooth functions involving ana-             Das, P., Johnson, N., and Banerjee, A. Online lazy updates
+  lytic features. Mathematical Programming, 116(1):5–16,              for portfolio selection with transaction costs. In Proceed-
+  2009.                                                               ings of the Twenty-Seventh AAAI Conference on Artificial
+                                                                      Intelligence, pp. 202–208, 2013.
+Attouch, H., Bolte, J., Redont, P., and Soubeyran, A. Proxi-
+  mal alternating minimization and projection methods for           Duchi, J., Shalev-Shwartz, S., Singer, Y., and Chandra, T.
+  nonconvex problems: An approach based on the Kurdyka–               Efficient projections onto the ℓ1 -ball for learning in high
+  Łojasiewicz inequality. Mathematics of Operations Re-               dimensions. In Proceedings of the 25th International
+  search, 35(2):438–457, 2010.                                       Conference on Machine Learning, pp. 272–279, 2008.
+
+Attouch, H., Bolte, J., and Svaiter, B. F. Convergence of           Facchinei, F. and Pang, J. S. Finite-Dimensional Variational
+  descent methods for semi-algebraic and tame problems:               Inequalities and Complementarity Problems. Springer,
+  Proximal algorithms, forward–backward splitting, and                2003.
+  regularized Gauss–Seidel methods. Mathematical Pro-
+                                                                    Gao, L. and Yang, R. Sparse online portfolio selection based
+  gramming, 137(1):91–129, 2013.
+                                                                      on proximal gradient. In 2019 International Conference
+Bauer, E. and Kohavi, R. An empirical comparison of voting            on Machine Learning, Big Data and Business Intelligence
+  classification algorithms: Bagging, boosting, and variants.         (MLBDBI), pp. 345–349, 2019.
+  Machine Learning, 36(1):105–139, 1999.                            Gotoh, J.-y., Takeda, A., and Tono, K. DC formulations and
+Bertsekas, D. P. Convex optimization algorithms, 2015.                algorithms for sparse optimization problems. Mathemati-
+                                                                      cal Programming, 169(1):141–176, 2018.
+Bertsimas, D. and Cory-Wright, R. A scalable algorithm
+  for sparse portfolio selection. INFORMS Journal on                Günlük, O. and Linderoth, J. Perspective reformulations of
+  Computing, 34(3), 2022.                                             mixed integer nonlinear programs with indicator vari-
+                                                                      ables. Mathematical Programming, 124(1):183–205,
+Betancourt, C. and Chen, W. H. Deep reinforcement learn-              2010.
+  ing for portfolio management of markets with a dynamic
+                                                                    Györfi, L. and Vajda, I. Growth optimal investment with
+  number of assets. Expert Systems with Applications, 164:
+                                                                      transaction costs. In International Conference on Algo-
+  114002, 2021.
+                                                                      rithmic Learning Theory, pp. 108–122, 2008.
+Bolte, J., Daniilidis, A., and Lewis, A. The łojasiewicz in-
+                                                                    Györfi, L., Ottucsák, G., and Walk, H. Machine learning for
+  equality for nonsmooth subanalytic functions with appli-
+                                                                      financial engineering, 2012.
+  cations to subgradient dynamical systems. SIAM Journal
+  on Optimization, 17(4):1205–1223, 2007.                           Jiang, Z., Xu, D., and Liang, J. A deep reinforcement learn-
+                                                                       ing framework for the financial portfolio management
+Bolte, J., Sabach, S., and Teboulle, M. Proximal alternating           problem. arXiv preprint arXiv:1706.10059, 2017.
+  linearized minimization for nonconvex and nonsmooth
+  problems. Mathematical Programming, 146(1):459–494,               Kelly, J. L. A new interpretation of information rate. The
+  2014.                                                               Bell System Technical Journal, 35(4):917–926, 1956.
+
+Borodin, A., El-Yaniv, R., and Gogan, V. Can we learn               Konno, H., Akishino, K., and Yamamoto, R. Optimization
+  to beat the best stock. Journal of Artificial Intelligence          of a long-short portfolio under nonconvex transaction
+  Research, 21(1):579–594, 2004.                                      cost. Computational Optimization and Applications, 32
+                                                                      (1):115–132, 2005.
+Brodie, J., Daubechies, I., De Mol, C., Giannone, D., and
+  Loris, I. Sparse and stable Markowitz portfolios. Pro-            Lai, Z. R. and Yang, H. A survey on gaps between mean-
+  ceedings of the National Academy of Sciences, 106(30):              variance approach and exponential growth rate approach
+  12267–12272, 2009.                                                  for portfolio optimization. ACM Computing Surveys, 55
+                                                                      (2), 2022.
+Corsaro, S., De Simone, V., Marino, Z., and Scognamiglio,
+  S. L1-regularization in portfolio selection with machine          Lai, Z. R., Dai, D. Q., Ren, C. X., and Huang, K. K. Radial
+  learning. Mathematics, 10(4):1–15, 2022.                            basis functions with adaptive input and composite trend
+                                                                      representation for portfolio selection. IEEE Transactions
+Cover, T. M. Universal portfolios. Mathematical finance, 1            on Neural Networks and Learning Systems, 29(12):6214–
+  (1):1–29, 1991.                                                     6226, 2018a.
+
+                                                                9
+
+=== PDF PAGE 10 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+Lai, Z. R., Yang, P. Y., Fang, L. D., and Wu, X. T. Short-           Liu, T., Pong, T. K., and Takeda, A. A refined convergence
+  term sparse portfolio optimization based on alternating              analysis of pDCAe with applications to simultaneous
+  direction method of multipliers. The Journal of Machine              sparse recovery and outlier detection. Computational
+  Learning Research, 19(1):1–28, 2018b.                                Optimization and Applications, 73(1):69–100, 2019.
+Lai, Z. R., Tan, L., Wu, X., and Fang, L. Loss control               Luo, Z., Yu, X., Xiu, N., and Wang, X. Closed-form solu-
+  with rank-one covariance estimate for short-term portfolio           tions for short-term sparse portfolio optimization. Opti-
+  optimization. Journal of Machine Learning Research, 21               mization, 71(7):1937–1953, 2020.
+  (97):1–37, 2020.
+                                                                     Mordukhovich, B. S. Variational Analysis and Generalized
+Li, B., Hoi, S. C. H., and Gopalkrishnan, V. CORN:                    Differentiation I: Basic Theory, volume 330 of Funda-
+  Correlation-driven nonparametric learning approach for              mental Principles of Mathematical Sciences. Springer,
+  portfolio selection. ACM Transactions on Intelligent Sys-           2006.
+  tems and Technology, 2(3):1–29, 2011.
+                                                                     Pham Dinh, T., Le Thi, H. A., Pham, V. N., and Niu, Y.-S.
+Li, B., Zhao, P. L., Hoi, S. C. H., and Gopalkrishnan, V.
+                                                                       DC programming approaches for discrete portfolio opti-
+  PAMR: Passive aggressive mean reversion strategy for
+                                                                       mization under concave transaction costs. Optimization
+  portfolio selection. Machine Learning, 87(2):221–258,
+                                                                       Letters, 10:261–282, 2016.
+  2012.
+Li, B., Hoi, S. C. H., Zhao, P. L., and Gopalkrishnan, V.            Rockafellar, R. T. Convex Analysis. Princeton Mathematical
+  Confidence weighted mean reversion strategy for online               Series. Princeton University Press, 1970.
+  portfolio selection. ACM Transactions on Knowledge
+                                                                     Rockafellar, R. T. and Wets, R. J. B. Variational Analysis.
+  Discovery from Data, 7(1):1–38, 2013.
+                                                                       Springer, 1998.
+Li, B., Hoi, S. C. H., Sahoo, D., and Liu, Z. Y. Moving
+  average reversion strategy for on-line portfolio selection.        Sharpe, W. F. Capital asset prices: A theory of market
+  Artificial Intelligence, 222:104–123, 2015.                          equilibrium under conditions of risk. Journal of Finance,
+                                                                       19(3):425–442, 1964.
+Li, B., Wang, J. L., Huang, D. J., and Hoi, S. C. H. Trans-
+  action cost optimization for online portfolio selection.           Shen, W. W., Wang, J., and Ma, S. Q. Doubly regularized
+  Quantitative Finance, 18(8):1411–1424, 2017.                         portfolio with risk minimization. In Proceedings of the
+                                                                       Twenty-Eighth AAAI Conference on Artificial Intelligence,
+Li, C., Lin, Y., and Lai, Z. R. Logarithmic-exponential                AAAI’14, pp. 1286–1292, 2014.
+  utility for portfolio optimization. Expert Systems with
+  Applications, 301:130439, 2026.                                    Shi, Z. L., Li, X. P., Leung, C. S., and So, H. C. Cardinality
+                                                                       constrained portfolio optimization via alternating direc-
+Li, Q., Shen, L., Zhang, N., and Zhou, J. A proximal al-               tion method of multipliers. IEEE Transactions on Neural
+  gorithm with backtracked extrapolation for a class of                Networks and Learning Systems, 35(2):2901–2909, 2024.
+  structured fractional programming. Applied and Compu-
+  tational Harmonic Analysis, 56:98–122, 2022.                       Song, G., Zhao, T., Ma, X., Lin, P., and Cui, C. Rein-
+                                                                       forcement learning-based portfolio optimization with de-
+Lim, Q. Y. E., Cao, Q., and Quek, C. Dynamic portfo-
+                                                                       terministic state transition. Information Sciences, 690:
+  lio rebalancing through reinforcement learning. Neural
+                                                                       121538, 2025.
+  Computing and Applications, 34(9):7125–7139, 2022.
+Lin, Y., Lai, Z. R., and Li, C. A globally optimal portfolio         Wang, H., Zhang, W., He, Y., and Cao, W. ℓ0 -norm based
+  for m-sparse Sharpe ratio maximization. In Advances in              short-term sparse portfolio optimization algorithm based
+  Neural Information Processing Systems, volume 37, pp.               on alternating direction method of multipliers. Signal
+  17133–17160, 2024a.                                                 Processing, 208:108957, 2023.
+
+Lin, Y., Zhang, Y., Lai, Z. R., and Li, C. Autonomous sparse         Wright, S. J., Nowak, R. D., and Figueiredo, M. A. T. Sparse
+  mean-CVaR portfolio optimization. In Proceedings of                 reconstruction by separable approximation. IEEE Trans-
+  the 41st International Conference on Machine Learning,              actions on Signal Processing, 57(7):2479–2493, 2009.
+  volume 235, pp. 30440–30456, 2024b.
+                                                                     Wu, B. and Li, L. Reinforcement learning for continuous-
+Lintner, J. The valuation of risk assets and the selection of         time mean-variance portfolio selection in a regime-
+  risky investments in stock portfolios and capital budgets.          switching market. Journal of Economic Dynamics and
+  Review of Economics and Statistics, 47(1):13–37, 1965.              Control, 158:104787, 2024.
+
+                                                                10
+
+=== PDF PAGE 11 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+Wu, B., Ding, C., Sun, D., and Toh, K. C. On the Moreau–
+ Yosida regularization of the vector k-norm related func-
+ tions. SIAM Journal on Optimization, 24(2):766–794,
+ 2014.
+Yao, X. T. and Zhang, N. Doubly elastic net regularized
+  online portfolio optimization with transaction costs. Sci-
+  entific Reports, 13(1):18937, 2023a.
+
+Yao, X. T. and Zhang, N. Elastic-net regularized online port-
+  folio selection with transaction costs. In 2023 IEEE 2nd
+  International Conference on Electrical Engineering, Big
+  Data and Algorithms (EEBDA), pp. 1495–1502, 2023b.
+
+Yin, P., Esser, E., and Xin, J. Ratio and difference of ℓ1 and
+  ℓ2 norms and sparse representation with coherent dictio-
+  naries. Communications in Information and Systems, 14
+  (2):87–109, 2014.
+Zhao, H. X., Kong, L. C., and Qi, H.-D. Optimal portfolio
+  selections via ℓ1,2 -norm regularization. Computational
+  Optimization and Applications, 80(3):853–881, 2021a.
+Zhao, L., Zou, S., Huang, M., and Wang, G. Distributed reg-
+  ularized stochastic configuration networks via the elastic
+  net. Neural Computing and Applications, 33(8):3281–
+  3297, 2021b.
+
+Zhou, H. J., Yao, X. T., Cai, S. H., and Zhang, N. Trans-
+  action cost regularization for online portfolio selection.
+  In 2022 IEEE 2nd International Conference on Data Sci-
+  ence and Computer Application (ICDSCA), pp. 288–295,
+  2022.
+
+
+
+
+                                                                 11
+
+=== PDF PAGE 12 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+A. Theoretical Analysis
+A.1. Notation and Preliminaries
+We begin with our preferred notations. We denote by Rn the Euclidean space of dimension n, and denote B(x, δ) as
+an open ball centered at x ∈ Rn with radius δ > 0, i.e., B(x, δ) := {z ∈ Rn : ∥x − z∥2 < δ}. The Cartesian product
+of the sets A1 and A2 is denoted by A1 × A2 . The distance from a vector x ∈ Rn to a set A ⊆ Rn is denoted by
+dist(x, A) := inf{∥x − y∥2 : y ∈ A}. The indicator function on a nonempty set A ⊆ Rn is defined by
+                                                      (
+                                                         0,     if x ∈ A,
+                                            ιA (x) =
+                                                         +∞, else.
+
+An extended-real-valued function φ : Rn → (−∞, +∞] is said to be proper if its domain dom φ := {x ∈ Rn :
+φ(x) < +∞} is nonempty. A proper function φ is said to be closed if φ is lower semi-continuous on Rn . A function
+φ : Rn → (−∞, +∞] is said to be Lipschitz continuous on a set A with a modulus L > 0, if there exists δ > 0 such that
+
+                                               ∥φ(u) − φ(v)∥2 ≤ L∥u − v∥2
+
+holds for all u, v ∈ B(x, δ) ∩ A.
+We next review some preliminaries on subdifferentials of nonconvex functions (Cui & Pang, 2021; Mordukhovich, 2006;
+Rockafellar & Wets, 1998). For a proper function φ, the Fréchet subdifferential at x ∈ dom φ is defined by
+                                      (                                                   )
+                                               n           φ(z) −  φ(x) −  ⟨y, z −  x⟩
+                            ∂φ(x) := y ∈ R : lim
+                            b                          inf                             ≥0 ,
+                                                    z→x
+                                                    z̸=x
+                                                                   ∥z − x∥2
+
+and the limiting subdifferential at x ∈ dom φ is defined by
+                           n                                                                    o
+                 ∂φ(x) := y ∈ Rn : ∃xk → x, φ(xk ) → φ(x), y k → y with y k ∈ ∂φ(x
+                                                                              b   k
+                                                                                    ) for each k .
+
+We set ∂φ(x)
+         b      = ∂φ(x) = ∅ by convention when x ∈       / dom φ, and define dom ∂φ := {x : ∂φ(x) ̸= ∅}. For a convex φ,
+the Fréchet and limiting subdifferential both consist with the classical subdifferential of a convex function at each x ∈ dom φ
+(Rockafellar and Wets, 1998, Proposition 8.12), that is,
+
+                      ∂φ(x)
+                      b     = ∂φ(x) = {y ∈ Rn : φ(z) − φ(x) − ⟨y, z − x⟩ ≥ 0, for all z ∈ Rn }.
+
+It is clear that ∂(αφ)(x) = α∂φ(x) for all α > 0 and x ∈ dom φ. For proper lower semicontinuous functions φ1 , φ2 :
+Rn → (−∞, +∞], there holds ∂(φ1 +φ2 )(x) ⊆ ∂φ1 (x)+∂φ2 (x) if φ1 is locally Lipschitz continuous around x. If φ1 and
+φ2 are further convex, we have ∂(φ1 −φ2 )(x) ⊆ ∂φ1 (x)−∂φ2 (x) for x ∈ dom ∂φ2 . For a function φ : Rn → (−∞, +∞],
+the generalized Fermat’s Rule states that 0 ∈ ∂φ(x∗ ) holds if x∗ ∈ dom(φ) is a local minimizer of φ (Rockafellar and Wets,
+1998, Theorem 10.1).
+The convex conjugate function φ∗ : Rn → [−φ(0), +∞] is defined at y ∈ Rn as φ∗ (y) := sup{⟨x, y⟩ − φ(x) : x ∈ Rn }.
+The conjugate φ∗ is a proper closed convex function (Rockafellar, 1970, Theorem 12.2). Furthermore, for any x, y ∈ Rn ,
+the following three statements are equivalent (Rockafellar and Wets, 1998, Proposition 11.3):
+
+                                    ⟨x, y⟩ = φ(x) + φ∗ (y) ⇔ y ∈ ∂φ(x) ⇔ x ∈ ∂φ∗ (y).
+
+Therefore, it is clear that the Fenchel-Young Inequality, i.e., φ(x) + φ∗ (y) ≥ ⟨x, y⟩, holds for all x, y ∈ Rn , and it becomes
+an equality when y ∈ ∂φ(x). Besides, from the Fenchel-Young Inequality, we know that y ∈ dom φ∗ if y ∈ ∂φ(x) for some
+x ∈ Rn .
+
+A.2. Proof of Proposition 3.2
+Proof. For ∀ ϵ > 0, take z ∈ Ω, w̄ ∈ B(z, ϵ) ∩ ∆m . If w̄ ∈ Ω, then we can get dist(w̄, Ω) = 0 and p(w̄) = 0 to end the
+proof. Thus, we can finish the proof if and only if for any w̄ ∈ [B(z, ϵ) ∩ ∆m ] \ Ω satisfies the condition.
+
+                                                              12
+
+=== PDF PAGE 13 ===
+        A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+In this case, we can take w̄ ∈ [B(z, ϵ) ∩ ∆m ] \ Ω, thus p(w̄) > 0 and dist(w̄, Ω) > 0. For any w ∈ ∆m , let
+                                                               2p(w̄)
+                                          h(w) = p(w) +                  ||w − w̄||,
+                                                             dist(w̄, Ω)
+it can be proofed by the definition that h(w) is a lower semi-continuous function in the closed set. Thus, we can assume
+y ∈ ∆m is the optimal solution of arg min h(w), then we have
+                                     w∈∆m
+
+                                                          2p(w̄)
+                                      h(y) = p(y) +                 ||y − w̄|| ≤ h(w),                                 (20)
+                                                        dist(w̄, Ω)
+further derived from (20) that
+                                                               2p(w̄)
+                                        0 ≤ p(y) ≤ p(w) +               ||w − y||.                                     (21)
+                                                            dist(w̄, Ω)
+Substitute w = w̄ into (21) and the inequality can be deduced to
+                                                      1
+                                       ||y − w̄|| ≤     dist(w̄, Ω) < dist(w̄, Ω) ≤ ϵ.                                 (22)
+                                                      2
+Therefore, y ̸∈ Ω and we can get p(y) > 0 and ||y||0 > k, that is y(K) , y(K+1) > 0. Let ī and j̄ denote the index of K-th
+and (K + 1)-th largest element of y, respectively. Take ŷ = y − yj (ej − ei ) ∈ ∆m , then we have
+                                                                          √
+                                         ||ŷ − y|| = ||yj (ej − ei )|| = 2yj ,                                        (23)
+thus,
+                                       p(y) − p(ŷ) = ||ŷ||(K) − ||y||(K) = yj > 0.                                   (24)
+Substitute w = ŷ into (21) and then it leads to:
+                                                                            √
+                                                   2p(w̄)                 2 2p(w̄)
+                                  p(y) − p(ŷ) ≤             ||ŷ − y|| =             yj .                             (25)
+                                                 dist(w̄, Ω)              dist(w̄, Ω)
+                    √
+Thus dist(w̄, Ω) ≤ 2 2p(w̄), then we finish the proof.
+
+A.3. Proof of Theorem 3.3
+Proof. We first prove Item (i). For the sufficiency. If p(wc ) > 0, then for all w, wc ∈ ∆m ,
+                                           fc (wc ) = f (wc ) + cp(wc )
+                                                                 √
+                                                    > f (wc ) + 2 2Lp(wc )
+                                                    ≥ f (wc ) + L||wc − ΠΩ (w)||                                       (26)
+                                                    ≥ f (ΠΩ (w))
+                                                    = fc (ΠΩ (w)),
+where the second inequality is found by Proposition 3.2 , the last inequality is held since f (w) is Lipschitz continuous
+on ∆m , and the last equality is deduced from p(ΠΩ (w)) = 0. Thus, fc (wc ) > fc (ΠΩ (w)), which conflicts with that wc
+is the global optimal solution of problem (8). Therefore, p(wc ) = 0, that is wc ∈ Ω and fc (w) = f (w). Then for all
+w, wc ∈ ∆m ,
+                                           f (wc ) = fc (wc ) ≤ fc (w) = f (w),                                       (27)
+implying that wc ∈ ∆m is the global optimal solution of problem (6).
+For the necessity. If wc ∈ ∆m is the global optimal solution of problem (6) then for all w ∈ ∆m , we have
+                                       fc (wc ) = f (wc ) ≤ f (ΠΩ (w))
+                                                          ≤ f (w) + L||w − ΠΩ (w)||
+                                                                     √
+                                                          ≤ f (w) + 2 2Lp(w)                                           (28)
+                                                          < f (w) + cp(w)
+                                                          = fc (w),
+
+                                                              13
+
+=== PDF PAGE 14 ===
+       A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+where the second inequality is held since f (w) is Lipschitz continuous. Thus, fc (wc ) ≤ fc (w), indicates that wc is the
+global optimal solution of problem (8). Combining the sufficiency and the necessity, we finish the proof.
+We next show Item (ii). For the necessity. If wc ∈ Ω is a local optimal solution of problem (6) then for all w ∈ B(wc , ϵ) and
+ϵ > 0, there has p(wc ) = 0 and f (wc ) ≤ f (w). Since p(w) is continuous, there exists ϵ̂ > 0 such that ||p(w) − p(wc )|| =
+p(w) ≤ 4√ϵ 2 for all w ∈ B(wc , ϵ̂). Take 0 < ϵ̃ ≤ min( 2ϵ , ϵ̂), then for all w ∈ B(wc , ϵ̃),
+                                                                     √       ϵ
+                                      dist(w, Ω) = ||w − ΠΩ (w)|| ≤ 2 2p(w) ≤ .                                             (29)
+                                                                             2
+Thus, it indicates that
+                                                                                         ϵ
+                              ||wc − ΠΩ (w)|| ≤ ||w − ΠΩ (w)|| + ||w − wc || ≤             + ϵ̃ < ϵ,                        (30)
+                                                                                         2
+that is ΠΩ (w) ∈ B(wc , ϵ) ∩ Ω. Considering Proposition 3.2 and (29), we have
+
+                                        fc (wc ) = f (wc ) ≤ f (ΠΩ (w))
+                                                          ≤ f (w) + L||w − ΠΩ (w)||
+                                                                     √
+                                                          ≤ f (w) + 2 2Lp(w)                                                (31)
+                                                          < f (w) + cp(w)
+                                                          = fc (w),
+
+thus wc is a local optimal solution of problem (8).
+For the sufficiency. If wc ∈ Ω is a local optimal solution of problem (8), then p(wc ) = 0. Therefore, for all w ∈
+B(wc , ϵ) ∩ Ω,
+                                         f (wc ) = fc (wc ) ≤ fc (w) = f (w),                                  (32)
+that is wc is a local optimal solution of problem (6).
+
+A.4. Proof of Proposition 3.5
+Proof. We first prove Item (i). Let W ∗ := {w(1)
+                                             ∗              ∗
+                                                 , · · · , w(K)            ∗
+                                                                }. Since |w(K)       ∗
+                                                                               | > |w(K+1) |, we have
+
+                ∂∥ · ∥(K) (w∗ ) = {(v1 , v2 , · · · , vm ) : vi = sign(wi∗ ) if wi∗ ∈ W ∗ and vi = 0 otherwise}.
+
+Thus, it yields that
+
+       ∂∥ · ∥1 (w∗ ) − ∂∥ · ∥(K) (w∗ ) ={(v1 , v2 , · · · , vm ) : vi = 0 if wi∗ ∈ W ∗ , vi = sign(wi∗ ) if 0 ̸= wi∗ ∈
+                                                                                                                     / W∗
+                                         and vi ∈ [−1, 1] if wi∗ = 0}.                                                      (33)
+
+Without loss of generality, we suppose wi∗ = w(i)
+                                                ∗
+                                                  for i ∈ {1, 2, · · · , K}. Then, w∗ is a critical point of problem (8) is
+equivalent to
+                                                                       X m
+                                   0 ∈ ∂f (w∗ ) + ∂ι∆m (w∗ ) + c∂           |wi |(w∗ ),                               (34)
+                                                                            i=K+1
+       Pm                                                                                                    Pm
+since ∂ i=K+1 |wi |(w∗ ) = ∂∥ · ∥1 (w∗ ) − ∂∥ · ∥(K) (w∗ ) due to (33). Noting that f (w) + ι∆m (w) +           i=K+1 |wi | is a
+convex function, we deduce from (34) that
+
+                                                                     m
+                                                                     X
+                                        ∗
+                                      w ∈ arg min f (w) + c                  |wi | : w ∈ ∆m .                               (35)
+                                                                    i=K+1
+           ∗         ∗
+Invoking |w(K) | > |w(K+1) |, there exists δ > 0 such that for any w ∈ B(w∗ , δ) there holds
+
+                                                                    K
+                                                                    X
+                                                      ∥w∥(K) =            |wi |.                                            (36)
+                                                                    i=1
+
+                                                               14
+
+=== PDF PAGE 15 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+Therefore, (35) leads to that for any w ∈ B(w∗ , δ) ∩ ∆m ,
+                            m
+                            X                                         m
+                                                                      X
+      ∗            ∗
+ f (w ) + ι∆m (w ) + c            |wi∗ | ≤ f (w) + ι∆m (w) + c             |wi | = f (w) + ι∆m (w) + c(∥w∥1 − ∥w∥(K) ), (37)
+                          i=K+1                                    i=K+1
+
+                                                                      PK
+where the last equality comes from (36). In view of ∥w∗ ∥(K) =                  ∗                         ∗
+                                                                          i=1 |wi |. (37) indicates that w is a local minimizer of
+problem (8).
+We next show Item (ii). Item (i) implies that w∗ is a local minimizer of problem (8). We next dedicate to proving it is also a
+local minimizer of problem (6). Without loss of generality, we suppose supp(w∗ ) = {1, 2, · · · , K}. Then, similar with the
+previous proof, (34) and (35) hold.
+Due to ∥w∗ ∥0 = K, there exists δ > 0 such that
+
+                       supp(w) = {1, 2, . . . , K}    for all w ∈ B(w∗ , δ) ∩ {w ∈ ∆m : ∥w∥0 ≤ K}.
+
+Then, (35) together with supp(w∗ ) = supp(w) = {1, 2, . . . , K} yields that for all w ∈ B(w∗ , δ) ∩ {w ∈ ∆m : ∥w∥0 ≤
+K}, there holds
+                                                      m
+                                                      X                            m
+                                                                                   X
+                             f (w∗ ) = f (w∗ ) + c           |wi∗ | ≤ f (w) + c           |wi | = f (w).
+                                                     i=K+1                        i=K+1
+
+
+This indicates that w∗ is a local minimizer of problem (6).
+
+
+
+A.5. Proof of Theorem 3.6
+Proof. From the definition of proximity operators (9), (10) is equivalent to
+
+                                                           1
+                                      w∗ = arg min αf (w) + ∥w − w∗ − αcv∥22 ,
+                                            w∈∆m           2
+
+which can be rewritten as
+                                                               1
+                                  w∗ = arg min αf (w) + c∥w∥1 + ∥w − w∗ − αcv∥22 ,                                           (38)
+                                        w∈∆m                   2
+due to ∥w∥1 = 1 for all w ∈ ∆m .
+Noting that (38) is a convex optimization problem, by applying the generalized Fermat’s Rule to (38), we obtain that (38) is
+equivalent to that w∗ is a critical point of problem 8. We then complete the proof immediately.
+
+
+
+A.6. Proof of Lemma 3.7
+Proof. We simply (14) as follows:
+
+                                         1                 ρ
+                       wk+1 ∈ arg min      ||w − wk ||22 + ||w − dk ||22 + < w, µk − q[t] − cvk >
+                                 w∈∆m 2α                    2
+                                        1 1                 1   1
+                              = arg min ( + ρ)||w − 1          ( wk + ρdk + q[t] + cvk − µk ||22 )
+                                 w∈∆m 2 α                 α +ρ
+                                                                α
+                                        1     1 k
+                              =P∆m { 1       ( w + ρdk + q[t] + cvk − µk )} .
+                                      α +  ρ  α
+
+
+
+                                                                 15
+
+=== PDF PAGE 16 ===
+       A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+A.7. Proof of Lemma 3.8
+Proof. Problem (15) can be reformulated as:
+                                                               ρ
+                              dk+1 ∈ arg min λ||d − ŵ[t] ||1 + ||wk+1 − d||22 − < d, µk >
+                                      d∈R m                    2
+                                                               ρ     1                                                        (39)
+                                   = arg min λ||d − ŵ[t] ||1 + ||d − (ρwk+1 + µk )||22 .
+                                      d∈Rm                     2     ρ
+Let z = d − ŵ[t] , then (39) is equivaluated to
+                                              λ         1    1
+                               zk+1 ∈ arg min ||z||1 + ||z − (ρwk+1 + µk − ρŵ[t] )||22
+                                       z∈Rm ρ           2    ρ
+                                              λ         1
+                                    = arg min ||z||1 + ||z − ϕ||22
+                                       z∈Rm ρ           2
+                                                  λ
+                                    =sign(ϕ)[|ϕ| − ]+ ,
+                                                   ρ
+where ϕ = ρ1 (ρwk+1 + µk − ρŵ[t] ). Hence, the closed-form solution of d is
+                                                                                     λ
+                                     dk+1 = ŵ[t] + zk+1 = ŵ[t] + sign(ϕ)[|ϕ| −       ]+ .
+                                                                                     ρ
+
+
+
+A.8. Proof of Theorem 3.9
+Proof. We can find in (Bertsekas, 2015) that the convergence of the ADMM is guaranteed when the Lagrangian function
+associated with the optimization problem admits a saddle point. Thus, we delicate to demonstrate in the following that
+Lagrangian function (13) has a saddle point to establish the convergence of ADMM applied for problem (11).
+We first show that the optimal solution set of problem (11) is nonempty. It is obvious that f + ι∆m is convex, then its
+corresponding proximity operator problem proxf +ι∆m is a strong convex problem. This indicates problem (11) exist an
+optimal solution. We suppose w∗ is an optimal solution of problem (11). That is w∗ ∈ arg min g1 (w) + g2 (w). Then, the
+Fermat’s rule leads to 0 ∈ ∂(g1 + g2 )(w∗ ). Since g1 , g2 are convex and
+                                       dom(g2 ) := {x ∈ Rm : g2 (x) < +∞} = Rm ,
+we have 0 ∈ ∂g1 (w∗ ) + ∂g2 (w∗ ). Thus, there exists
+                                        µ∗ ∈ ∂g2 (w∗ ) such that − µ∗ ∈ ∂g1 (w∗ ).
+
+Set d∗ = w∗ . We next show (w∗ , d∗ , µ∗ ) is a saddle point of L(w, d, µ).
+First, it is obvious that                 (
+                                              0 ∈ ∂g1 (w∗ ) + µ∗ + ρ(w∗ − d∗ ),
+                                              0 ∈ ∂g2 (d∗ ) − µ∗ + ρ(d∗ − w∗ ),
+which leads to (w∗ , d∗ ) is a minimizer of L(w, d, µ∗ ) due to the convexity of L(w, d, µ∗ ). This implies that
+                                                   L(w∗ , d∗ , µ∗ ) ≤ L(w, d, µ∗ )
+for all w, d ∈ Rm . Second, it is easy to see
+                                                L(w∗ , d∗ , µ∗ ) ≥ L(w∗ , d∗ , µ)
+for any µ ∈ Rm , since w∗ = d∗ .
+Therefore, we can obtain that the Lagrangian function (13) has a saddle point, i.e., there exists (w∗ , d∗ , µ∗ ) such that
+                                       L(w∗ , d∗ , µ) ≤ L(w∗ , d∗ , µ∗ ) ≤ L(w, d, µ∗ )
+for all w, d, µ ∈ Rm . This together with Proposition 5.4.1 in (Bertsekas, 2015) leads to the convergence of ADMM. We
+complete the proof.
+
+                                                                 16
+
+=== PDF PAGE 17 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+A.9. Proof of Proposition 3.10
+Proof. Since Q is lower bounded, Items (ii) and (iii) of this proposition are direct consequences of Item (i). Thus, we
+dedicate to showing Item (i) in the remaining part of this proof.
+We deduce from the definition of proximity operators and (10) that
+                                       1                                              1
+             αf (wk+1 ) + ι∆m (wk+1 ) + ∥wk+1 − wk − αcvk ∥22 ≤ αf (wk ) + ι∆m (wk ) + ∥αcvk ∥22 ,
+                                       2                                              2
+which implies that
+                                            1
+              f (wk+1 ) + ι∆m (wk+1 ) +       ∥wk+1 − wk ∥22 − ⟨wk+1 − wk , cvk ⟩ ≤ f (wk ) + ι∆m (wk ).               (40)
+                                           2α
+
+On the other hand, invoking ιS(K)
+                              ∗   (v) = (c∥ · ∥(K) )∗ (cv) and vk ∈ ∂∥ · ∥(K) (wk ), we have
+
+                         ιS(K)
+                           ∗   (vk ) − ⟨wk+1 , cvk ⟩ =⟨wk , cvk ⟩ − c∥ · ∥(K) (wk ) − ⟨wk+1 , cvk ⟩
+                                                                                                                       (41)
+                                                       = − c∥ · ∥(K) (wk ) − ⟨wk+1 − wk , cvk ⟩,
+
+where the first equality is from the Young’s inequality. Summing (40) and (41) leads to
+                                                                     1
+                                     H(wk+1 , vk ) ≤ Q(wk ) −          ∥wk+1 − wk ∥22 .
+                                                                    2α
+
+Finally, this together with (19) implies Item (i). We complete the proof immediately.
+
+A.10. Proof of Proposition 3.11
+We require to review the notion of KL property. This property and the associated notion of KL exponent have been used
+extensively in the convergence analysis of various first-order methods (Attouch & Bolte, 2009; Attouch et al., 2010; 2013;
+Bolte et al., 2014).
+Definition A.1. (Kurdyka-Lojasiewicz (KL) property and exponent) We say that a proper function φ : Rn → (−∞, +∞]
+                                                      b ∈ dom ∂φ if there are a ∈ (0, +∞], a neighborhood U of x
+satisfies the Kurdyka-Lojasiewicz (KL) property at an x                                                        b, and a
+continuous concave function ϕ : [0, a) → [0, +∞) with ϕ(0) = 0 such that:
+
+ (i) ϕ is continuously differentiable on (0, a) with ϕ′ > 0 on (0, a);
+(ii) for every x ∈ U with φ(b
+                            x) < φ(x) < φ(b
+                                          x) + a, it holds that
+
+                                             ϕ′ (φ(x) − φ(b
+                                                          x)) dist(0, ∂φ(x)) ≥ 1.                                      (42)
+
+If φ satisfies the KL property at xb ∈ dom ∂φ and the ϕ in (42) can be chosen as ϕ(v) = a0 v1−θ for some a0 > 0 and
+θ ∈ [0, 1), then we say that φ satisfies the KL property at x
+                                                            b with exponent θ.
+
+A proper function φ : Rn → (−∞, +∞] is called a KL function if it satisfies the KL property at each point of dom ∂φ. KL
+functions encompass extensive functions arisen in various applications. For instance, a subanalytic function ( Facchinei and
+Pang, 2003, Definition 6.6.1) φ, which is continuous around x ∈ dom ∂φ, satisfies the KL property at x (Bolte et al., 2014,
+Theorem 3.1). Moreover, a proper semi-algebraic function φ, which is lower semicontinuous around x ∈ dom ∂φ, satisfies
+the KL property at x with some exponent θ ∈ [0, 1) (Attouch et al., 2010; Bolte et al., 2014).
+We next review the notion of semi-algebraic function. A function φ : Rn → (−∞, +∞] is said to be semialgebraic if its
+graph Graph(φ) := {(x, s) ∈ Rn × R : s = φ(x)} is a semialgebraic subset of Rn+1 , that is, there exist a finite number of
+real polynomial functions Gij , Hij : Rn+1 → R such that
+                                             p \
+                                             [ q
+                              Graph(φ) =               {z ∈ Rn+1 : Gij (z) = 0, Hij (z) < 0}.
+                                             j=1 i=1
+
+
+                                                              17
+
+=== PDF PAGE 18 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+                                                                                                                 ∗
+It is obvious that H is a lower semicontinuous function due to the continuity of f and the closedness of ∆m and S(K) . By
+simple calculation, we have
+
+           Graph(H) ={(w, v, z) ∈ Rm × Rm × R : z = H(w, v)}
+                       ={(w, v, z) ∈ Rm × Rm × R : −q⊤
+                                                     [t] w + λ∥w − ŵ[t] ∥1 − ⟨w, cv⟩ = z, w ≥ 0,
+                           m
+                           X
+                                 wi = 1, ∥v∥∞ ≤ 1, ∥v∥1 ≤ K}
+                           i=1
+                              [           \                                                    m
+                                                                                               X
+                       =                         {(w, v, z) ∈ Rm × Rm × R : −q⊤
+                                                                              [t] w + λ              ai (w − ŵ[t] )i −
+                           ai ∈{−1,1} di ∈{−1,1}                                               i=1
+                           m
+                           X
+                                 cwi vi − z = 0, −ai (w − ŵ[t] )i ≤ 0, −wi ≤ 0, vi − 1 ≤ 0 for i = 1, 2, . . . , m,
+                           i=1
+                                           m
+                                           X
+                           ⟨w, 1m ⟩ = 1,         vi di − K ≤ 0}.
+                                           i=1
+
+
+This implies that H is a semialgebraic function. Therefore, H is a KL function due to the lower semicontinuity of H.
+We next show the KL exponent of H is 1/2. In view of the definition of H, we can rewrite it as
+
+                                              H(w, v) = min{Qu (x) + Pu (x)},
+                                                           u∈Γ
+
+where Γ := {u ∈ Rm : ui ∈ {−1, 1}, ∀i}, Qu are quadratic functions and Pu are polyhedral functions indexed by u.
+Specifically, for each u ∈ Γ, one can define Pu as the indicator function on the set {(w, v) : w ∈ ∆m , ∥v∥∞ ≤ 1, ∥v∥1 ≤
+K, u ◦ (w − ŵ[t] ) ≥ 0}, and Qu is chosen as −q⊤ [t] w + λ⟨u, w − ŵ[t] ⟩ − ⟨w, cv⟩, where ◦ is the Hadamard product. It is
+obvious that Pu is a polyhedral function and Qu is a quadratic function for each u ∈ Γ. Then, invoking (Bolte et al., 2007,
+                                                                       ∗
+Corollary 5.2), H satisfies the KL property at each point of ∆m × S(K)     with exponent 1/2.
+
+A.11. Proof of Theorem 3.12
+We first review a framework for proving sequential convergence using the KL property.
+Proposition A.2. (Li et al., 2022, Proposition 2.7) Let Ψ : Rn × Rm → (−∞, +∞] be proper lower semicontinuous.
+Consider a bounded sequence {(uk , vk ) ∈ Rn × Rm : k ∈ N} satisfying the following three conditions:
+
+ (i) (Sufficient descent condition). There exists a > 0 such that
+
+                                 Ψ(uk+1 , vk+1 ) + a∥uk+1 − uk ∥22 ≤ Ψ(uk , vk ),         for all k ∈ N;
+
+(ii) (Relative error condition). There exists b > 0, such that
+
+                                   dist(0, ∂Ψ(uk+1 , vk+1 )) ≤ b∥uk+1 − uk ∥2 ,         for all k ∈ N;
+
+(iii) (Continuity condition). The limit Ψ∞ := limk→∞ Ψ(uk , vk ) exists and Ψ ≡ Ψ∞ holds on Υ, where Υ denotes the set
+      of accumulation points of {(uk , vk ) : k ∈ N}.
+                                                                       P∞
+If Ψ satisfies the KL property at each point of Υ, then we have          k=0 ∥u
+                                                                                  k+1
+                                                                                        − uk ∥2 < +∞, limk→∞ uk = u∗ and
+0 ∈ ∂Ψ(u∗ , v∗ ) for some (u∗ , v∗ ) ∈ Υ.
+
+Next, we present a proposition regarding the relative error condition for the sequence generated by PSGA.
+Proposition A.3. Let {(wk , vk ) : k ∈ N} be generated by PSGA for any arbitrary w0 ∈ ∆m . Then there exists b > 0 such
+that
+                                       dist(0, ∂H(wk+1 , vk )) ≤ b∥wk+1 − wk ∥2 .                                  (43)
+
+                                                                 18
+
+=== PDF PAGE 19 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+Proof. It is obvious that
+                                                                                        
+                    ∂H(wk+1 , vk ) = ∂f (wk+1 ) + ∂ι∆m (wk+1 ) − cv × ∂ιS(K)
+                                                                         ∗   (vk ) − cwk+1 .
+
+
+In order to show (43), it suffices to prove
+
+                               dist(0, ∂f (wk+1 ) + ∂ι∆m (wk+1 ) − cv) ≤ b1 ∥wk+1 − wk ∥2                               (44)
+
+and
+                       dist(0, ∂ιS(K)
+                                  ∗   (vk ) − cwk+1 ) ≤ b2 ∥wk+1 − wk ∥2 for some b1 , b2 > 0.             (45)
+                                                                  ∗                           ∗
+Since vk ∈ ∂∥ · ∥(K) (wk ) from PSGA, we have wk ∈ ∂ c∥ · ∥(K) (cvk ). Invoking that c∥ · ∥(K) (v) = ιS(K)
+                                                                                                       ∗   (v),
+this leads to
+                                                  cwk ∈ ∂ιS(K)
+                                                             ∗ (vk ).
+
+Therefore,
+                                                                                          
+                     dist 0, ∂ιS(K)
+                                ∗   (vk ) − cwk+1 = dist 0, ∂ιS(K)
+                                                               ∗   (vk ) − cwk + cwk − cwk+1
+                                                     ≤ c∥wk+1 − wk ∥2 ,
+
+which implies (45). We next prove (44).
+According to (11), we deduce from the definition of proximity operators and the generalized Fermat’s Rule that
+
+                                   wk + αcvk − wk+1 ∈ α∂f (wk+1 ) + ∂ι∆m (wk+1 ).
+
+This yields that
+                                 wk − wk+1
+                                              ∈ ∂f (wk+1 ) + ∂ι∆m (wk+1 ) − cvk
+                                     α
+due to αι∆m = ι∆m for any α > 0. Then, (44) follows immediately. We complete the proof.
+
+Now, we are ready to show Theorem 3.12.
+
+Proof. Since wk ∈ ∆m for k ∈ N and vk ∈ ∂∥ · ∥(K) (wk ), we have that {(wk , vk ) : k ∈ N} is bounded due to the
+convexity of ∥ · ∥(K) . Then, Item (i) follows from Proposition A.2, Proposition A.3, Proposition 3.11, and the continuity of
+f . Items (ii) and (iii) are direct results of Proposition 3.5.
+
+A.12. Proof of Theorem 3.13
+In order to show the R-linear convergence rate of PSGA, we first establish a proposition regarding the general convergence
+rate of PSGA under the KL exponent assumption. The proof is very similar to those for other first-order algorithms based on
+the KL exponent; see, for example, (Attouch & Bolte, 2009; Wright et al., 2009; Yin et al., 2014) . Therefore, we omit the
+detail of the proof here.
+Proposition A.4. Let {wk : k ∈ N} be generated by PSGA for any arbitrary w0 ∈ ∆m and suppose that {wk : k ∈ N}
+converges to w∗ . Assume that H satisfies the KL property with exponent θ ∈ [0, 1). Then, the following statements hold:
+
+ (i) If θ = 0, then {wk : k ∈ N} converges to w∗ finitely;
+
+(ii) If θ ∈ (0, 12 ], then ∥wk − w∗ ∥2 ≤ a0 bk0 for any k ≥ k0 with k0 > 0, a0 > 0, b0 ∈ (0, 1);
+
+(iii) If θ ∈ ( 21 , 1), then ∥wk − w∗ ∥2 ≤ a1 k −(1−θ)/(2θ−1) for any k ≥ k1 with some k1 > 0 and a1 > 0.
+
+Then, Theorem 3.13 is a direct consequence of Theorem 3.12, Proposition A.4 and Proposition 3.11.
+
+                                                             19
+
+=== PDF PAGE 20 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+B. Experimental Results
+B.1. Parameter Sensitivity
+We evaluate the sensitivity of parameters K and c to illustrate the reasonableness of the selected parameter values and
+the robustness of the proposed STCO method. We first examine the effect of the sparsity parameter K by conducting
+experiments for K = 10 and K = 15. The cumulative wealth results of STCO1 and STCO2 under sparsity levels K = 10
+and K = 15 in TSE and MSCI datasets are presented in Table 2. It can be observed that the cumulative wealth is almost
+unchanged when K varies from 10 to 15, indicating that the proposed method is insensitive to K within a moderate range.
+This also supports the choice of K = 10 used in our experiments.
+
+      Table 2. Cumulative wealth of STCO1 and STCO2 under sparsity levels K = 10 and K = 15 in TSE and MSCI datasets.
+
+                                                                   TSE               MSCI
+                               ALGORITHMS (γ = 0%)
+                                                           K=10          K=15    K=10      K=15
+                                       STCO1             1216.92     1216.92     11.48     11.48
+                                       STCO2              95.92       95.92      15.17     15.17
+                                                                     TSE                MSCI
+                               ALGORITHMS (γ = 0.25%)
+                                                             K=10        K=15   K=10       K=15
+                                        STCO1                 5.60       5.60    2.65       2.65
+                                        STCO2                 3.97       3.97    2.05       2.05
+
+
+Moreover, we provide   √ a detailed discussion for the practical choice of the penalty parameter c without exhaustive tuning.
+The condition c > 2 2L in Theorem 3.3 provides a sufficient theoretical guideline for choosing c. In practice, however, L
+may be difficult to estimate accurately and we observed that the proposed method is not highly sensitive to the exact value of
+c as long as it lies within a reasonable range. As shown in Table 3, the cumulative wealth remains very stable across different
+values of c. For example, on NYSE(N) with γ = 0.25%, the cumulative wealth of STCO1 remains around 274.18, while
+that of STCO2 remains around 6.00E+5; on TSE with γ = 0%, the cumulative wealth of STCO1 remains around 1216.92,
+and that of STCO2 remains around 95.92. These results indicate that the portfolio performance is not highly sensitive to c
+within a moderate range. Therefore, we set c = 8 × 10−6 in all experiments.
+
+Table 3. Cumulative wealth of STCO1 and STCO2 under different values of c on the NYSE(N) dataset with γ = 0.25% and on the TSE
+dataset with γ = 0%.
+
+                                               NYSE(N) (γ = 0.25%)          TSE (γ = 0%)
+                                  c VALUES
+                                               STCO1        STCO2          STCO1     STCO2
+                                  2E-6         274.15      6.00E+5         1216.92      95.92
+                                  4E-6         274.18      6.00E+5         1216.92      95.92
+                                  8E-6         274.18      6.00E+5         1216.92      95.92
+                                  1.6E-5       274.18      6.00E+5         1216.92      95.92
+
+
+B.2. Datasets Information
+We conduct numerical experiments on 4 benchmark datasets, which are NYSE(O), NYSE(N), TSE and MSCI. They collects
+historical relative price from New York Exchange, Toronto Stock Exchange and the stock markets of 24 countries around
+the world, where the element in i-th row and j-th column represents the daily relative price of j-th asset during i-th period.
+Detail is shown in Table 4.
+
+B.3. Comparison Approaches
+All compared strategies and their parameter value are detailed below:
+
+ a) Ubah: Uniformly buy-and-hold strategy;
+ b) Best: Best-stock in hindsight;
+
+                                                              20
+
+=== PDF PAGE 21 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+                              Table 4. Information of four benchmark data-sets from real markets.
+
+                       Datasets       Region                         Time                 Days      Stocks
+                      NYSE(O)          US           07/M ar/1962 ∽ 31/Dec/1984            5651       36
+                      NYSE(N)          US           01/Jan/1985 ∽ 30/Jun/2010             6431       23
+                        TSE          Toronto        04/Jan/1994 ∽ 31/Dec/1998             1259       88
+                       MSCI        24 countries     01/Apr/2006 ∽ 31/M ar/2010            1043       24
+
+
+
+ c) Bcrp : Best Constant Rebalanced Portfolios in hindsight;
+ d) TCO1 : Transaction Cost Optimization, parameters are set to λ = 10γ, η = 10;
+ e) TCO2 : Transaction Cost Optimization, parameters are set to λ = 10γ, w = 4, η = 10;
+  f) SSPO : Short-term Sparse Portfolio Optimization, parameters are set to η = 0.005, ζ = 500, w = 5, λ = 0.5,
+     γ = 0.01;
+ g) S1 : parameters are set to w = 5, ϵ = 0.001 (NYSE(O), NYSE(N)), ϵ = 0.01 (TSE), ϵ = 0.003 (MSCI);
+ h) S2 : parameters are set to w = 5, ϵ = 0.001 (NYSE(O), NYSE(N)), ϵ = 0.01 (TSE), ϵ = 0.003 (MSCI);
+  i) S3 : parameters are set to w = 5, st = 3, ϵ = 0.001 (NYSE(O), NYSE(N)), ϵ = 0.01 (TSE), ϵ = 0.003 (MSCI).
+  j) DENRPO1-PARM : parameters are set to α = 0.999
+                                               ρm , ρ = 0.618, λ = 10γ, η = 0.00025 and τ = 0.00005.
+
+ k) DENRPO1-OLMAR : parameters are set to α = 0.999
+                                               ρm , ρ = 0.618, λ = 10γ, η = 0.00025 and τ = 0.00005.
+
+  l) DENRPO2-PARM : parameters are set to α = 0.999
+                                               ρm , ρ = 0.618, λ = 10γ, η = 0.00025 and τ = 0.00005.
+
+ m) DENRPO2-OLMAR : parameters are set to α = 0.999
+                                               ρm , ρ = 0.618, λ = 10γ, η = 0.00025 and τ = 0.00005.
+
+
+The codes of PSGA-ADMM are accessible via the link: https://github.com/Ting221/STCO.
+
+B.4. Calculus Rules of Return and Risk Factors
+Different from the normal MER, we develop to represent the net proportion gained or lost wealth with transaction cost as
+follows:
+                                                    ⊤
+                                            rt = (w[t] x[t] − 1) ∗ θ[t−1] .
+Hence, MER can be denoted by:
+                                                                        T
+                                                                    1X
+                                         M ER = r̄s − r̄m =               rs,t − rm,t ,
+                                                                    T t=1
+where rs,t and rm,t denote daily excess returns of a portfolio strategy and Ubah benchmark on the t-th day, respectively.
+Moreover, Sharpe (1964) shows that the α factor can be expressed as follows:
+                                                              ĉ(rs , rm )
+                                                       β̂ =                ,                                          (46)
+                                                                σ̂ 2 (rm )
+                                                       α̂ = r¯s − β̂ r¯m ,                                            (47)
+
+where ĉ(·, ·) and σ̂(·) denotes the sample covariance and the standard deviation computed over a period of T trading days,
+respectively. Besides, β factor can be computed as shown in (46).
+
+B.5. Results for Cumulative Wealth, Return and Risk Factors
+Experimental results of Cumulative Wealth with transaction cost rate 0%, 0.25% and 0.5% are presented in Table 5,
+meanwhile MER, α Factor and β Factor are detailed in Table 6.
+
+                                                               21
+
+=== PDF PAGE 22 ===
+      A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+Table 5. Cumulative wealth with transaction costs from the proposed STCO1 and STCO2 and the compared algorithms in four data-sets,
+where UBAH, BEST and BCRP are benchmarks, SSPO, S1, S2 and S3 are strategies without considering transaction costs, and TCOs and
+DENRPOs are transaction cost optimization algorithms. Besides, we highlight the top two values in each column.
+
+                                                   NYSE(O)                                      NYSE(N)
+        ALGORITHMS                     0%            0.25%            0.5%            0%            0.25%         0.5%
+        U BAH                        14.50           14.46             14.43        18.06           18.01         17.97
+        B EST                        54.14           54.01             53.87        83.51           83.30         83.09
+        B CRP                       252.07          181.03            133.52       119.71           98.02        80.23
+        SSPO                       1.06E+18        2.45E+11          5.66E+04     1.62E+09         154.92         0.00
+        S1                         1.24E+18        8.27E+10          5.53E+03     2.97E+09          93.65         0.00
+        S2                         1.29E+18        8.12E+10          5.62E+03     2.87E+09          93.95         0.00
+        S3                         1.24E+18        8.26E+10          5.52E+03     2.97E+09          93.46         0.00
+        TCO1                       1.35E+14        5.57E+09          2.33E+06     9.15E+06        3.81E+03       143.47
+        TCO2                       1.47E+13        4.34E+07          1.52E+04     2.35E+07        2.14E+03        57.61
+        DENRPO1-PARM               5.78E+15        2.10E+11          7.99E+06     9.61E+05         296.58        55.02
+        DENRPO1-OLMAR              3.57E+16        7.36E+09          6.59E+04     2.19E+08        2.92E+03       893.22
+        DENRPO2-PARM               5.78E+15        2.10E+11          8.02E+06     9.61E+05         297.64        54.27
+        DENRPO2-OLMAR              3.57E+16        7.37E+09          6.61E+04     2.19E+08        2.91E+03       886.46
+        STCO1                      6.16E+15        3.04E+11          6.54E+06     7.48E+05         274.18        53.88
+        STCO2                      7.59E+16        1.24E+10          1.07E+05     3.46E+08        6.00E+05       271.82
+                                                       TSE                                          MSCI
+        ALGORITHMS                       0%             0.25%           0.5%           0%           0.25%          0.5%
+        U BAH                            1.61            1.61            1.60         0.91           0.90           0.90
+        B EST                            6.28            6.26            6.25         1.50           1.50           1.50
+        B CRP                            6.70           6.38             6.12        1.51            1.49           1.48
+        SSPO                            364.94          11.78            0.38         7.51           0.38           0.02
+        S1                              227.29           6.73            0.20        10.17           0.43           0.02
+        S2                              249.08           6.18            0.15        10.35           0.39           0.01
+        S3                              227.66           6.76            0.20        10.16           0.42           0.02
+        TCO1                              149            7.66            0.91         9.68           1.52           1.13
+        TCO2                            152.98          31.71            4.99         5.66           1.42           0.84
+        DENRPO1-PARM                   1471.29           6.89            1.83        10.84           2.62           1.30
+        DENRPO1-OLMAR                   365.16           3.93            1.53        16.21           2.15           0.96
+        DENRPO2-PARM                   1471.12           6.89            1.84        10.61           2.48           1.21
+        DENRPO2-OLMAR                   365.18           3.93            1.52        16.21           2.15           0.96
+        STCO1                          1216.92           5.60            1.49        11.48           2.65           1.21
+        STCO2                            95.92           3.97            4.88        15.17           2.05           0.76
+
+
+B.6. Results for Sparsity
+Experimental results of the average and standard deviation of sparsity of the portfolios generated by STCO1 and STCO2 and
+other state-of-the-art algorithms with K = 10 under transaction cost rate γ = 0% and 0.25% are summarized in Table 7.
+The results show that the proposed STCO methods select only a small number of assets on average across all datasets and
+transaction cost settings, which confirms the sparsity-promoting effect of the proposed model.
+
+
+
+
+                                                                22
+
+=== PDF PAGE 23 ===
+     Table 6. MER, α Factor and β Factor achieved by the proposed STCO1 and STCO2 algorithms, in comparison with TCOs and DENRPOs on four datasets with transaction costs. In
+     order to emphasize the results under transaction costs, we only present the comparison with transaction costs optimization algorithms, which are TCOs and DENRPOs. Additionally,
+     the top two performances in each column (excluding BEST benchmark rows) are highlighted in bold.
+
+      ALGORITHMS                          NYSE(O)                            NYSE(N)                              TSE                            MSCI
+         (MER)
+                                  0%        0.25%        0.5%        0%        0.25%        0.5%        0%       0.25%      0.5%        0%       0.25%      0.5%
+      BEST                      0.0003      0.0003      0.0003     0.0003      0.0003      0.0003     0.0016    0.0016     0.0016     0.0004    0.0004     0.0004
+      TCO1                      0.0056      0.0051      0.0035     0.0024      0.0020      0.0013     0.0047    0.0046     0.0028     0.0024    0.0009     0.0003
+      TCO2                      0.0052      0.0038      0.0020     0.0026      0.0017      0.0010     0.0048    0.0050     0.0034     0.0019    0.0007     0.0001
+      DENRPO1-PARM              0.0065      0.0069      0.0038     0.0022      0.0023      0.0014     0.0068    0.0060     0.0039     0.0026    0.0017     0.0005
+      DENRPO1-OLMAR             0.0069      0.0052      0.0024     0.0031      0.0021      0.0015     0.0059    0.0040     0.0027     0.0029    0.0012     0.0001
+      DENRPO2-PARM              0.0065      0.0069      0.0038     0.0022      0.0023      0.0014     0.0068    0.0060     0.0039     0.0025    0.0017     0.0004
+      DENRPO2-OLMAR             0.0069      0.0052      0.0024     0.0031      0.0021      0.0015     0.0059    0.0040     0.0027     0.0029    0.0012     0.0001
+      STCO1                     0.0065      0.0070      0.0037     0.0021      0.0022      0.0014     0.0065    0.0058     0.0039     0.0026    0.0018     0.0004
+      STCO2                     0.0070      0.0053      0.0026     0.0032      0.0030      0.0014     0.0049    0.0039     0.0037     0.0029    0.0012     0.0000
+      ALGORITHMS                          NYSE(O)                            NYSE(N)                              TSE                            MSCI
+      (α FACTOR )
+                                  0%        0.25%        0.5%        0%        0.25%        0.5%        0%       0.25%      0.5%        0%       0.25%      0.5%
+      BEST                      0.0003      0.0003      0.0003     0.0004      0.0004      0.0004     0.0015    0.0015     0.0015     0.0005    0.0005     0.0005
+23    TCO1                      0.0055      0.0050      0.0034     0.0023      0.0020      0.0013     0.0045    0.0044     0.0026     0.0024    0.0009     0.0003
+      TCO2                      0.0051      0.0036      0.0019     0.0025      0.0017      0.0010     0.0046    0.0048     0.0032     0.0019    0.0007     0.0000
+      DENRPO1-PARM              0.0064      0.0067      0.0038     0.0021      0.0022      0.0014     0.0067    0.0056     0.0038     0.0026    0.0017     0.0005
+      DENRPO1-OLMAR             0.0067      0.0050      0.0024     0.0030      0.0020      0.0015     0.0057    0.0038     0.0026     0.0029    0.0012     0.0001
+      DENRPO2-PARM              0.0064      0.0067      0.0038     0.0021      0.0022      0.0014     0.0067    0.0057     0.0038     0.0025    0.0017     0.0004
+      DENRPO2-OLMAR             0.0067      0.0050      0.0024     0.0030      0.0020      0.0015     0.0057    0.0038     0.0026     0.0029    0.0012     0.0001
+      STCO1                     0.0064      0.0068      0.0037     0.0021      0.0022      0.0014     0.0064    0.0056     0.0036     0.0026    0.0017     0.0005
+      STCO2                     0.0069      0.0051      0.0025     0.0031      0.0030      0.0013     0.0046    0.0036     0.0034     0.0029    0.0012     0.0000
+      ALGORITHMS                          NYSE(O)                            NYSE(N)                              TSE                            MSCI
+      (β FACTOR )
+                                  0%        0.25%        0.5%        0%        0.25%        0.5%        0%       0.25%      0.5%        0%       0.25%      0.5%
+      BEST                      0.9169      0.9169      0.9169     0.8904      0.8904      0.8904     1.4552    1.4551     1.4551     0.4585    0.4585     0.4585
+      TCO1                      1.2092      1.2428      1.1515     1.0799      1.0398      0.9972     1.4721    1.5109     1.5131     1.1279    1.0780     0.9270
+      TCO2                      1.2781      1.3211      1.1964     1.1450      1.0935      1.0614     1.5308    1.5476     1.5499     1.1532    1.1601     1.1264
+      DENRPO1-PARM              1.2354      1.2474      1.0851     1.0855      1.0492      0.9956     1.3099    1.5395     1.2146     1.1289    1.1202     0.9684
+      DENRPO1-OLMAR             1.3124      1.3454      1.1309     1.1817      1.1848      1.0607     1.5291    1.5904     1.4146     1.1789    1.1297     1.0289
+      DENRPO2-PARM              1.2354      1.2474      1.0852     1.0855      1.0492      0.9954     1.3099    1.5395     1.2146     1.1270    1.1231     0.9750
+      DENRPO2-OLMAR             1.3125      1.3454      1.1310     1.1817      1.1849      1.0602     1.5291    1.5904     1.4139     1.1789    1.1297     1.0289
+      STCO1                     1.2288      1.2533      1.0839     1.0840      1.0504      0.9968     1.3058    1.5341     1.2108     1.1262    1.1219     0.9736
+      STCO2                     1.2774      1.3226      1.1812     1.1461      1.1145      1.1114     1.6606    1.6350     1.6758     1.1782    1.0570     1.1675
+                                                                                                                                                                                        A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+=== PDF PAGE 24 ===
+     Table 7. Average and standard deviation of sparsity of the portfolios generated by STCO1 and STCO2 and other state-of-the-art algorithms under transaction cost rate γ = 0% and
+     0.25%
+
+                                                                   NYSE(O)                   NYSE(N)                      TSE                       MSCI
+                      A LGORITHM                S TATISTIC
+                                                             γ = 0%      γ = 0.25%     γ = 0%     γ = 0.25%      γ = 0%     γ = 0.25%      γ = 0%      γ = 0.25%
+                                                  MEAN        1.0488       1.0488       1.0706      1.0706       1.0921       1.0921        1.2061       1.2061
+                      S1
+                                                   STD        0.5119       0.5119       0.6573      0.6573       2.4562       2.4562       1.4651        1.4651
+                                                  MEAN        1.0062       1.0062       1.0034      1.0034       1.0691       1.0691        1.0221       1.0221
+                      S2
+                                                   STD        0.4656       0.4656       0.2743      0.2743       2.4519       2.4519       0.7122        0.7122
+                                                  MEAN        1.0487       1.0487       1.0580      1.0580       1.0921       1.0921        1.1438       1.1438
+                      S3
+                                                   STD        0.5110       0.5110       0.3664      0.3664       2.4562       2.4562       0.8045        0.8045
+                                                  MEAN        7.6556       7.5861       7.5116      7.4886       6.7665       6.7482       10.4688      10.6616
+                      TCO1
+                                                   STD        3.5488       3.5078       3.2425      3.2964       4.1446       4.1448       3.8044        4.1774
+                                                  MEAN        6.2674       6.1996       5.9793      5.9364       5.5941       5.5909        8.2042       8.1668
+24                    TCO2
+                                                   STD        3.0564       3.0300       2.9270      2.9246       3.9788       3.9549       3.4682        3.7179
+                                                  MEAN        1.0143       1.0143       1.0089      1.0089       1.0778       1.0778        1.0297       1.0297
+                      SSPO
+                                                   STD        0.4741       0.4741       0.2840      0.2840       2.4534       2.4534       0.7173        0.7173
+                                                  MEAN        1.0322       1.0448       1.0361      1.1406       1.0818       1.1160        1.2550       2.5216
+                      DENRPO1-PARM
+                                                   STD        0.5052       0.5152       0.3341      0.6991       2.4541       2.4940       2.0577        3.9176
+                                                  MEAN        1.0379       1.0848       1.0373      1.1246       1.0921       1.2836        1.0738       5.7948
+                      DENRPO1-OLMAR
+                                                   STD        0.4978       0.8616       0.3316      1.0319       2.4562       3.9862       0.7469        5.8775
+                                                  MEAN        1.0322       1.0444       1.0361      1.1306       1.0818       1.1160        1.2550       2.8217
+                      DENRPO2-PARM
+                                                   STD        0.5052       0.5149       0.3341      0.6618       2.4541       2.4940       2.0577        4.2794
+                                                  MEAN        1.0379       1.0846       1.0373      1.1235       1.0921       1.2828        1.0738       5.7948
+                      DENRPO2-OLMAR
+                                                   STD        0.4978       0.8615       0.3316      1.0128       2.4562       3.9862       0.7469        5.8775
+                                                  MEAN        1.0531       1.0821       1.0620      1.1827       1.0961       1.1461        1.3126       2.8849
+                      STCO1
+                                                   STD        0.5248       0.5546       0.3721      0.7330       2.4565       2.4985       2.0675        4.2975
+                                                  MEAN        1.0541       1.1308       1.0571      1.1549       1.1064       1.3193        1.1189       2.1381
+                      STCO2
+                                                   STD        0.5145       0.8857       0.3602      0.8471       2.4582       4.0208       0.7783        3.9186
+                                                                                                                                                                                       A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost
+
+=== END SOURCE TEXT ===

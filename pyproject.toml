@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stco-reproduction"
+version = "0.1.0"
+description = "Independent reproduction of Yao and Zhang (ICML 2026)"
+requires-python = ">=3.11"
+dependencies = ["numpy", "scipy", "pandas", "matplotlib", "numba", "h5py"]
+
+[project.optional-dependencies]
+test = ["pytest", "cvxpy"]
+
+[tool.setuptools.packages.find]
+include = ["stco*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

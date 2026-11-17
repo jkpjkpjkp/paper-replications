@@ -1,0 +1,29 @@
+Paper/code issues checked on 2026-11-17
+
+1. Verified specification inconsistency; author intent remains uncertain.
+Original PDF page 6, Algorithm 2 line 6 uses the current inner w^j in the
+quadratic-anchor term. Equations (11)-(12) and Lemma 3.7 (page 5) instead
+require the fixed outer iterate. Visually checked both original pages.
+For a fixed outer anchor a, the proximal objective includes ||w-a||^2/(2 alpha).
+Replacing a by successive inner w changes the problem being solved.
+Four sampled MSCI subproblems were checked using the paper's alpha=.0025,
+rho=.618 and relative-change stopping tolerance 1e-8. The moving-anchor
+reading differs from the exact prox by up to 0.958189181 in one weight;
+fixed-anchor ADMM differs by at most 8.324e-7. The samples use uniform inner
+initialization and archived drifted holdings; this is a diagnostic, not a
+full financial replication. It does not establish which reading the authors
+actually used. A typo or missing inner initialization specification is possible.
+Evidence: /mnt/data/home/jkp/replications/proximal-resolve-20261117/inner-audit.json;
+stco/solver.py: prox_admm and prox_exact; .agent/PAPER_LAYOUT.txt pages 5-6.
+
+2. Verified source-release mismatch; not evidence of deliberate misconduct.
+upstream/STCO-code/STCO1_run.m calls absent DENRPO1_fun. STCO2_run.m declares
+DENRPO2_run and calls absent DENRPO2_fun. Supplied STCO*_fun.m functions have
+eta/tao terms and scalar multiplier updates, with no K/c/top-K PSGA loop.
+The author GitHub main history on 2026-11-17 still ends at archived commit
+a2e04730cbdfb6ccb0017456d4f835a4d7446ec3. No corrected release was found.
+https://github.com/Ting221/STCO/commits/main/
+The mismatch blocks a faithful source-code reproduction of the stated method.
+
+The numerical wealth mismatch by itself is not a methodological-flaw finding.
+No claim is made here that the paper's convergence theorem is false.

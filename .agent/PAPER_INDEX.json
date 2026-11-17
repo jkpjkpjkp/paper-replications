@@ -1,0 +1,750 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "proximal-portfolio",
+  "title": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/proximal-portfolio/sources/paper.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/proximal-portfolio/sources/paper.pdf",
+    "sha256": "b8336ed7587ebcb506458c83255708b235dc31c9401787b404c74d8570237e82",
+    "bytes": 1542175,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 24,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 95
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 96,
+      "line_end": 197
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 198,
+      "line_end": 334
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 335,
+      "line_end": 440
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 441,
+      "line_end": 615
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 616,
+      "line_end": 764
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 765,
+      "line_end": 849
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 850,
+      "line_end": 1039
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1040,
+      "line_end": 1143
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1144,
+      "line_end": 1246
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1247,
+      "line_end": 1272
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1273,
+      "line_end": 1344
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 1345,
+      "line_end": 1436
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1437,
+      "line_end": 1543
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1544,
+      "line_end": 1650
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1651,
+      "line_end": 1721
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1722,
+      "line_end": 1803
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1804,
+      "line_end": 1900
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1901,
+      "line_end": 1965
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1966,
+      "line_end": 2095
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 2096,
+      "line_end": 2187
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 2188,
+      "line_end": 2458
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 2459,
+      "line_end": 2963
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 2964,
+      "line_end": 3239
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 70
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 71,
+      "line_end": 140
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 141,
+      "line_end": 220
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 221,
+      "line_end": 287
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 288,
+      "line_end": 380
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 381,
+      "line_end": 466
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 467,
+      "line_end": 524
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 525,
+      "line_end": 592
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 593,
+      "line_end": 661
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 662,
+      "line_end": 729
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 730,
+      "line_end": 768
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 769,
+      "line_end": 834
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 835,
+      "line_end": 894
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 895,
+      "line_end": 965
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 966,
+      "line_end": 1035
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1036,
+      "line_end": 1091
+    },
+    {
+      "page": 17,
+      "segment": 17,
+      "line_start": 1092,
+      "line_end": 1158
+    },
+    {
+      "page": 18,
+      "segment": 18,
+      "line_start": 1159,
+      "line_end": 1228
+    },
+    {
+      "page": 19,
+      "segment": 19,
+      "line_start": 1229,
+      "line_end": 1293
+    },
+    {
+      "page": 20,
+      "segment": 20,
+      "line_start": 1294,
+      "line_end": 1354
+    },
+    {
+      "page": 21,
+      "segment": 21,
+      "line_start": 1355,
+      "line_end": 1416
+    },
+    {
+      "page": 22,
+      "segment": 22,
+      "line_start": 1417,
+      "line_end": 1470
+    },
+    {
+      "page": 23,
+      "segment": 23,
+      "line_start": 1471,
+      "line_end": 1513
+    },
+    {
+      "page": 24,
+      "segment": 24,
+      "line_start": 1514,
+      "line_end": 1558
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 15,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio"
+    },
+    {
+      "line": 20,
+      "text": "Abstract"
+    },
+    {
+      "line": 51,
+      "text": "1. Introduction"
+    },
+    {
+      "line": 97,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 154,
+      "text": "2. Related Works"
+    },
+    {
+      "line": 169,
+      "text": "2.1. Sparse Short-term Portfolio Selection"
+    },
+    {
+      "line": 199,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 288,
+      "text": "3. PSGA (Proximal Subgradient Algorithm)"
+    },
+    {
+      "line": 307,
+      "text": "2.2. Transaction Cost Optimization"
+    },
+    {
+      "line": 336,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 381,
+      "text": "3.2. Proximal Subgradient Algorithm"
+    },
+    {
+      "line": 442,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 538,
+      "text": "3.3. ADMM for Solving Problem (11)"
+    },
+    {
+      "line": 554,
+      "text": "3.4. Convergence Analysis for PSGA"
+    },
+    {
+      "line": 617,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 766,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 772,
+      "text": "4.1. Results for Cumulative Wealth with Transaction"
+    },
+    {
+      "line": 813,
+      "text": "4. Experimental Results"
+    },
+    {
+      "line": 836,
+      "text": "4.2. Results for Return and Risk Factors"
+    },
+    {
+      "line": 851,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1000,
+      "text": "5. Concluding Remarks"
+    },
+    {
+      "line": 1022,
+      "text": "4.3. Sparsity for STCO"
+    },
+    {
+      "line": 1041,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1043,
+      "text": "References"
+    },
+    {
+      "line": 1145,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1248,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1274,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1346,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1438,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1545,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1652,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1723,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1805,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1902,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 1967,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 2097,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 2161,
+      "text": "M ER = r̄s − r̄m ="
+    },
+    {
+      "line": 2189,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 2196,
+      "text": "U BAH"
+    },
+    {
+      "line": 2197,
+      "text": "B EST"
+    },
+    {
+      "line": 2198,
+      "text": "B CRP"
+    },
+    {
+      "line": 2325,
+      "text": "U BAH"
+    },
+    {
+      "line": 2326,
+      "text": "B EST"
+    },
+    {
+      "line": 2327,
+      "text": "B CRP"
+    },
+    {
+      "line": 2962,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    },
+    {
+      "line": 2991,
+      "text": "A LGORITHM"
+    },
+    {
+      "line": 3017,
+      "text": "S TATISTIC"
+    },
+    {
+      "line": 3238,
+      "text": "A Linearly Convergent Proximal Subgradient Algorithm for Sparse Portfolio Optimization with Transaction Cost"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2757
+    },
+    {
+      "id": 39,
+      "line_start": 2750,
+      "line_end": 2829
+    },
+    {
+      "id": 40,
+      "line_start": 2822,
+      "line_end": 2901
+    },
+    {
+      "id": 41,
+      "line_start": 2894,
+      "line_end": 2973
+    },
+    {
+      "id": 42,
+      "line_start": 2966,
+      "line_end": 3045
+    },
+    {
+      "id": 43,
+      "line_start": 3038,
+      "line_end": 3117
+    },
+    {
+      "id": 44,
+      "line_start": 3110,
+      "line_end": 3189
+    },
+    {
+      "id": 45,
+      "line_start": 3182,
+      "line_end": 3240
+    }
+  ],
+  "line_count": 3240,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "0539a944d510ab616e7edd34dec0128d4c80b7b1296f4a48d6aad2e5b73ee50f",
+      "bytes": 84153
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "8464ee9bae2d7f005a45cc4689057ca9426f3876091d460c08a307687672bfc1",
+      "bytes": 128911
+    }
+  }
+}
