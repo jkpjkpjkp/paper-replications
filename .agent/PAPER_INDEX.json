@@ -1,0 +1,496 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "MDP Pricing",
+  "title": "Error Propagation in Dynamic Programming: From Stochastic Control to American Option Pricing",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/MDP Pricing/sources/paper-v2.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/MDP Pricing/sources/paper-v2.pdf",
+    "sha256": "9ecc7a091cb81c05ebfd5b9affbf0bd2a42a756ddc0b7e8aefd104208acf7c70",
+    "bytes": 751513,
+    "urls": [
+      "https://arxiv.org/abs/2509.20239v2"
+    ]
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 16,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 94,
+      "line_end": 186
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 187,
+      "line_end": 348
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 349,
+      "line_end": 535
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 536,
+      "line_end": 742
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 743,
+      "line_end": 955
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 956,
+      "line_end": 1161
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 1162,
+      "line_end": 1399
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 1400,
+      "line_end": 1648
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 1649,
+      "line_end": 1754
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 1755,
+      "line_end": 1861
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 1862,
+      "line_end": 2056
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 2057,
+      "line_end": 2277
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 2278,
+      "line_end": 2500
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 2501,
+      "line_end": 2652
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 2653,
+      "line_end": 2925
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 81
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 82,
+      "line_end": 170
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 171,
+      "line_end": 252
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 253,
+      "line_end": 346
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 347,
+      "line_end": 441
+    },
+    {
+      "page": 6,
+      "segment": 6,
+      "line_start": 442,
+      "line_end": 546
+    },
+    {
+      "page": 7,
+      "segment": 7,
+      "line_start": 547,
+      "line_end": 636
+    },
+    {
+      "page": 8,
+      "segment": 8,
+      "line_start": 637,
+      "line_end": 696
+    },
+    {
+      "page": 9,
+      "segment": 9,
+      "line_start": 697,
+      "line_end": 783
+    },
+    {
+      "page": 10,
+      "segment": 10,
+      "line_start": 784,
+      "line_end": 851
+    },
+    {
+      "page": 11,
+      "segment": 11,
+      "line_start": 852,
+      "line_end": 912
+    },
+    {
+      "page": 12,
+      "segment": 12,
+      "line_start": 913,
+      "line_end": 994
+    },
+    {
+      "page": 13,
+      "segment": 13,
+      "line_start": 995,
+      "line_end": 1090
+    },
+    {
+      "page": 14,
+      "segment": 14,
+      "line_start": 1091,
+      "line_end": 1181
+    },
+    {
+      "page": 15,
+      "segment": 15,
+      "line_start": 1182,
+      "line_end": 1265
+    },
+    {
+      "page": 16,
+      "segment": 16,
+      "line_start": 1266,
+      "line_end": 1355
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 22,
+      "text": "Abstract"
+    },
+    {
+      "line": 66,
+      "text": "1. Introduction and Related Work"
+    },
+    {
+      "line": 164,
+      "text": "2. Setting and Stochastic Control Model"
+    },
+    {
+      "line": 442,
+      "text": "3. Sample-Based Value Function"
+    },
+    {
+      "line": 594,
+      "text": "1 Function ContVal(x, z"
+    },
+    {
+      "line": 612,
+      "text": "6 Function DataGen(nt , Mt , µt , πt , Ct , W"
+    },
+    {
+      "line": 746,
+      "text": "4. Error Analysis and Backward Propagation"
+    },
+    {
+      "line": 785,
+      "text": "4.1. Error decomposition"
+    },
+    {
+      "line": 1152,
+      "text": "5. Simulations"
+    },
+    {
+      "line": 1377,
+      "text": "6. Conclusions and Future Work"
+    },
+    {
+      "line": 1603,
+      "text": "References"
+    },
+    {
+      "line": 1738,
+      "text": "2. Preprint, 2001."
+    },
+    {
+      "line": 1804,
+      "text": "338. Springer, 2008."
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 741
+    },
+    {
+      "id": 11,
+      "line_start": 734,
+      "line_end": 813
+    },
+    {
+      "id": 12,
+      "line_start": 806,
+      "line_end": 885
+    },
+    {
+      "id": 13,
+      "line_start": 878,
+      "line_end": 957
+    },
+    {
+      "id": 14,
+      "line_start": 950,
+      "line_end": 1029
+    },
+    {
+      "id": 15,
+      "line_start": 1022,
+      "line_end": 1101
+    },
+    {
+      "id": 16,
+      "line_start": 1094,
+      "line_end": 1173
+    },
+    {
+      "id": 17,
+      "line_start": 1166,
+      "line_end": 1245
+    },
+    {
+      "id": 18,
+      "line_start": 1238,
+      "line_end": 1317
+    },
+    {
+      "id": 19,
+      "line_start": 1310,
+      "line_end": 1389
+    },
+    {
+      "id": 20,
+      "line_start": 1382,
+      "line_end": 1461
+    },
+    {
+      "id": 21,
+      "line_start": 1454,
+      "line_end": 1533
+    },
+    {
+      "id": 22,
+      "line_start": 1526,
+      "line_end": 1605
+    },
+    {
+      "id": 23,
+      "line_start": 1598,
+      "line_end": 1677
+    },
+    {
+      "id": 24,
+      "line_start": 1670,
+      "line_end": 1749
+    },
+    {
+      "id": 25,
+      "line_start": 1742,
+      "line_end": 1821
+    },
+    {
+      "id": 26,
+      "line_start": 1814,
+      "line_end": 1893
+    },
+    {
+      "id": 27,
+      "line_start": 1886,
+      "line_end": 1965
+    },
+    {
+      "id": 28,
+      "line_start": 1958,
+      "line_end": 2037
+    },
+    {
+      "id": 29,
+      "line_start": 2030,
+      "line_end": 2109
+    },
+    {
+      "id": 30,
+      "line_start": 2102,
+      "line_end": 2181
+    },
+    {
+      "id": 31,
+      "line_start": 2174,
+      "line_end": 2253
+    },
+    {
+      "id": 32,
+      "line_start": 2246,
+      "line_end": 2325
+    },
+    {
+      "id": 33,
+      "line_start": 2318,
+      "line_end": 2397
+    },
+    {
+      "id": 34,
+      "line_start": 2390,
+      "line_end": 2469
+    },
+    {
+      "id": 35,
+      "line_start": 2462,
+      "line_end": 2541
+    },
+    {
+      "id": 36,
+      "line_start": 2534,
+      "line_end": 2613
+    },
+    {
+      "id": 37,
+      "line_start": 2606,
+      "line_end": 2685
+    },
+    {
+      "id": 38,
+      "line_start": 2678,
+      "line_end": 2757
+    },
+    {
+      "id": 39,
+      "line_start": 2750,
+      "line_end": 2829
+    },
+    {
+      "id": 40,
+      "line_start": 2822,
+      "line_end": 2901
+    },
+    {
+      "id": 41,
+      "line_start": 2894,
+      "line_end": 2926
+    }
+  ],
+  "line_count": 2926,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "94eb77275ad521f768a504649a854523e1134cc71c3389d59873a05c6ab1f6af",
+      "bytes": 66302
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "70a6a641ab22e7f1adef253a6f2e7c272d30f570278d0bb94570aa72610eae6c",
+      "bytes": 133444
+    }
+  }
+}

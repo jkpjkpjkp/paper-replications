@@ -1,0 +1,2926 @@
+Error Propagation in Dynamic Programming: From Stochastic Control to American Option Pricing
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/artifacts/MDP Pricing/sources/paper-v2.pdf
+Source SHA-256: 9ecc7a091cb81c05ebfd5b9affbf0bd2a42a756ddc0b7e8aefd104208acf7c70
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+Error Propagation in Dynamic Programming:
+From Stochastic Control to American Option Pricing
+
+Andrea Della Vecchia 1 Damir Filipović 1
+
+arXiv:2509.20239v2 [stat.ML] 2 Oct 2026
+
+Abstract
+
+advances in machine learning, particularly in tasks such as
+sampling from unnormalized distributions (Zhang & Chen,
+2021; Berner et al., 2022; Richter & Berner, 2023; Vargas et al., 2023), nonconvex optimization (Chaudhari et al.,
+2018), optimal transport (Villani et al., 2008), and the numerical solution of backward stochastic differential equations
+(BSDEs) (Carmona, 2016).
+
+This paper investigates theoretical and methodological foundations for stochastic optimal control (SOC) in discrete time. We start formulating the control problem in a general dynamic
+programming framework, introducing the mathematical structure needed for a detailed convergence analysis. The associate value function is
+estimated through a sequence of approximations
+combining nonparametric regression methods and
+Monte Carlo subsampling. The regression step
+is performed within reproducing kernel Hilbert
+spaces (RKHSs), exploiting the classical KRR algorithm, while Monte Carlo sampling methods
+are introduced to estimate the continuation value.
+To assess the accuracy of our value function estimator, we propose a natural error decomposition
+and rigorously control the resulting error terms
+at each time step. We then analyze how this error propagates backward in time-from maturity to
+the initial stage-a relatively underexplored aspect
+of the SOC literature. Finally, we illustrate how
+our analysis naturally applies to a key financial
+application: the pricing of American options.
+
+Despite the extensive literature on continuous-time
+SOC (Bertsekas, 2012), its discrete-time counterpart remains highly relevant in practice, as it naturally arises in
+computational and data-driven settings where decisions are
+made at fixed time intervals (Bertsekas & Shreve, 1996;
+Hernández-Lerma & Lasserre, 2012; Puterman, 2014). At
+the same time, discrete-time SOC poses distinct challenges,
+largely because many of the analytical tools available in
+continuous time are no longer applicable. Nevertheless, it
+still offers opportunities for the development of scalable
+numerical methods, particularly through dynamic programming and function approximation. Discrete-time SOC is
+central to modern applications in operations research, financial engineering or reinforcement learning (RL) (Sutton
+et al., 1998). At its core lies a dynamic programming (DP)
+recursion, where the value function is computed backward
+in time via the Bellman operator (Bellman, 1966). In highdimensional settings, solving this recursion exactly is often
+infeasible, inspiring a large body of research focused on
+developing scalable and efficient approximations. These approaches typically estimate value functions from data using
+simulation or function approximation. In recent years, deep
+learning has greatly expanded the scalability of these methods, enabling their application to high-dimensional control
+problems (Han et al., 2016; Domingo i Enrich et al., 2024).
+
+1. Introduction and Related Work
+Stochastic optimal control (SOC) provides a principled
+framework for sequential decision-making under uncertainty. It plays a foundational role in a wide range of
+scientific and engineering domains, including economics
+and finance (Fleming & Stein, 2004; Pham, 2009; Åström,
+2012), robotics (Gorodetsky et al., 2018; Theodorou et al.,
+2011), molecular dynamics (Hartmann & Schütte, 2012;
+Hartmann et al., 2013; Zhang et al., 2014; Holdijk et al.,
+2023), and stochastic filtering and data assimilation (Mitter, 2002; Reich, 2019). More recently, SOC has inspired
+
+Despite this empirical progress, the theoretical understanding of learning-based SOC remains limited. A key challenge
+lies in quantifying how local errors deriving from function
+approximation, sampling noise, or optimization inaccuracies, propagate through the Bellman recursion over time.
+Studying this requires a rigorous and principled mathematical framework in which to analyze error accumulation in
+high-dimensional value function approximations. In this
+work, we propose such a framework based on reproducing
+kernel Hilbert spaces (RKHS), which enables us to derive
+
+1
+EPFL, Lausanne, Switzerland. Correspondence to: Andrea
+Della Vecchia <andrea.dellavecchia@epfl.ch>.
+
+Proceedings of the 43 rd International Conference on Machine
+Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026
+by the author(s).
+
+1
+
+=== PDF PAGE 2 ===
+Error Propagation in Dynamic Programming
+
+explicit error bounds and control error propagation in approximate dynamic programming.
+
+ables us to replace the chosen function approximator—for
+instance, kernel methods—with alternative predictors such
+as neural networks, by adjusting only the learning-error
+component, without altering the overall structure of the
+analysis. Similarly, the sampling error can be addressed independently by replacing Monte Carlo estimation with more
+sophisticated quadrature schemes. Third, for the resulting
+problem formulation, we derive explicit convergence rates
+for the backward propagation of the error over time, under
+standard statistical learning assumptions and allowing for
+model misspecification. Finally, we illustrate the practical
+soundness of our approach through the well-known problem
+of American option pricing, showing step by step how it
+can be rigorously formulated within our setting. For this
+application, we also provide an initial empirical comparison
+with standard benchmark methods from the literature.
+
+A classical application of discrete-time SOC is the pricing
+of American-style options, also known as Bermudan options
+when exercise opportunities are discrete. This problem can
+be formulated as a finite-horizon optimal stopping problem under stochastic dynamics. While such problems can,
+in principle, be solved exactly (Peskir & Shiryaev, 2006;
+Lamberton & Lapeyre, 2011), well-established numerical
+methods, such as tree-based approaches or PDE solvers,
+struggle with the curse of dimensionality as complexity increases (Broadie & Glasserman, 1997; Bally et al., 2003;
+Jain & Oosterlee, 2012). Monte Carlo–based methods have
+become widespread in high-dimensional applications. Notable examples include regression-based techniques (Tsitsiklis & Van Roy, 1999; Longstaff & Schwartz, 2001), dual and
+hybrid primal-dual formulations (Rogers, 2002; Haugh &
+Kogan, 2004; Andersen & Broadie, 2004; Belomestny et al.,
+2013; Lelong, 2018), and Malliavin calculus methods for
+estimating conditional expectations (Lions & Regnier, 2001;
+Bouchard & Touzi, 2004; Bally et al., 2005; Abbas-Turki &
+Lapeyre, 2012). More recently, machine learning (Williams
+& Rasmussen, 2006) and deep learning approaches (Kohler
+et al., 2010; Nielsen, 2015; Becker et al., 2019; Goudenege
+et al., 2020) have shown strong empirical performance in
+this domain. However, these methods often lack rigorous
+theoretical guarantees on accuracy and generalization.
+
+Organization In Section 2, we introduce the problem setting and formalize it within a precise mathematical framework that provides the foundation for the subsequent analysis. In Section 3, we present our algorithm and describe
+the approximation steps required to address the inaccessibility of the theoretical expectations introduced earlier. In
+particular, we detail the Monte Carlo approximation and
+the employed KRR estimator, and introduce the resulting
+KRR-DP algorithm (Algorithm 1). In Section 4, we study
+how approximation errors propagate backward in time. We
+present a transparent error decomposition and show how
+each term can be controlled, leading to the statistical guarantees summarized in Theorem 1. Finally, Section 5 reports
+numerical results for the studied application to American
+option pricing.
+
+Our work aims to bridge this gap by developing a kernelbased algorithm for discrete-time SOC that come with provable convergence guarantees and theoretical error bounds.
+Contributions The main novelty of this work lies in the introduction of a precise mathematical formulation of discretetime stochastic optimal control within a general RKHS
+framework, together with a fully modular error decomposition for approximate dynamic programming via backward
+induction under minimal assumptions. This formulation allows us to study how approximation errors propagate backward in time in a principled manner. To the best of our
+knowledge, such a unified formulation and decomposition
+do not appear in the existing literature.
+More specifically, first, we propose a general mathematical
+formulation of approximate dynamic programming through
+backward induction. Second, we provide a rigorous and
+transparent decomposition of the total approximation error into three distinct components: regression error, Monte
+Carlo sampling error, and propagation error. The key conceptual novelty lies in the modular control of error propagation in approximate dynamic programming, where learning
+error, sampling error, and Bellman-induced contraction are
+disentangled in an intuitive and flexible way. This separation
+allows each source of error to be analyzed and improved
+independently. In particular, the resulting framework en-
+
+2. Setting and Stochastic Control Model
+Consider a discrete time horizon t = {0, 1, . . . , T }. We
+define a stochastic process Z := (Zt )Tt=0 on a filtered probability space (Ω, F, (FtZ )Tt=0 , P), where (FtZ )Tt=0 is the natural filtration generated by Z. The random variables Zt
+are mutually independent (but not necessarily identically
+distributed) and takeQvalues in measurable spaces Zt . We
+T
+denote by P(dz) = t=0 Pt (dzt ) the distribution of Z on
+the path space Z = Z0 × · · · × ZT , which we identify
+with Ω without loss of generality. Any square-integrable
+adapted process, such as an asset price process, can be written in the form Xt = Xt (Z0 , . . . , Zt ), for some function
+Xt ∈ L2P0 ×···×Pt .
+Controlled Markov process X0u , . . . , XTu taking values in
+state spaces X0 , . . . , XT is defined by
+®
+X0u = p0 (Z0 ),
+
+(1)
+u
+Xt+1
+= πt Xtu , ut , Zt+1 ,
+with t ∈ {0, . . . , T − 1}, where p0 : Z0 → X0 is the initial
+2
+
+=== PDF PAGE 3 ===
+Error Propagation in Dynamic Programming
+
+state distribution, πt : Xt × Ut × Zt+1 → Xt+1 is a Markov
+transition function encoding how the system transitions from
+−1
+one state to the next, and u = (ut )Tt=0
+∈ U is a stochastic
+control law, where each ut : Xt → Ut is Ft -measurable.
+
+often called the behavior policy in the RL literature (Sutton
+et al., 1998), and let µt denote the distribution of Xtū on
+Xt . We introduce the following assumption to ensure that,
+if Φ ∈ L2µT , then the optimal value function satisfying the
+dynamic system 7 belongs to L2µt for all t ∈ {0, . . . , T }.
+
+A control law u is said to be admissible if the maps
+(x, z) 7→ πt (x, ut (x), z) satisfy suitable regularity conditions. In particular, we assume that the operator
+
+
+u
+Ptu f (x) := E f (Xt+1
+) | Xtu = x =
+
+
+= E f πt (x, u, Zt+1 ) =
+Z
+
+=
+f πt (x, u, z) Pt+1 (dz),
+(2)
+
+Assumption 1 (Square integrability). There exist constants
+cF > 0 and cP > 0 such that, for all t ∈ {0, . . . , T }:
+ess sup |Ft (·, u)|
+u∈Ut
+
+u∈Ut
+
+defines a Markov transition kernel from Xt to Xt+1 , for all
+u ∈ Ut . With a slight abuse of notation, we will sometimes
+use the alternative, also common definition in kernel form
+ u
+
+Ptu (x, A) := P Xt+1
+∈ A | Xtu = x =
+Z
+=
+1A (πt (x, u, z))Pt+1 (dz)
+(3)
+
+L2µt
+
+⩽ cP ∥g∥L2µ
+
+,
+
+t+1
+
+for all g ∈ L2µt+1 . We further assume Φ ∈ L2µT .
+Under these conditions, Tt : L2µt+1 → L2µt , see Lemma 2
+in Appendix A for the complete proof. Then Vt ∈ L2µt for
+all t = {0, . . . , T }, and the dynamic programming problem 7 holds in each corresponding L2µt space. Notice that
+this assumption is weaker than those commonly used in
+SOC/MDP analyses, often requiring uniformly bounded
+utility functions and compact state spaces (which would
+immediately imply our boundedness condition). Further
+details on this assumption are discussed in Appendix D.
+
+Zt+1
+
+with A ∈ B(Xt+1 ), i.e. the Borel σ-algebra on the space
+Xt+1 . In the following, it will be clear which one of the two
+representations we are using. The connection between the
+two is simply
+Z
+Ptu f (x) =
+f (x′ )Ptu (x, dx′ ).
+(4)
+
+The main goal in the following will be to find a good estimate of the optimal value function at the initial time t = 0,
+i.e. V0 , by leveraging the recursive formulation in equation 7.
+
+Xt+1
+
+Example 1 (American Options). An American option is a
+financial contract that gives the holder the right, but not the
+obligation, to buy or sell an underlying asset at a specified
+strike price at any time up to the expiration date.
+Let X be an exogenous Markov process, i.e., it is not influenced by any control variable or decision. Let Qt =
+Qt (x, dx′ ) denote its Markov transition kernel from Xt to
+Xt+1 , which specifies the conditional distribution of the next
+state Xt+1 given the current state Xt = x. Suppose the
+underlying asset has a price at time t given by a function
+St (Xt ). An American (call) option with strike K pays
+
+The objective of stochastic optimal control is to maximize
+a gain function over all admissible control laws. In the
+discrete-time setting, this is given by the sum of the partial
+rewards Ft : Xt × Ut → R for t = 0, . . . , T − 1, and the
+terminal reward Φ = FT : XT → R. Then, we define the
+optimal value function Vt : Xt → R at time t as
+"T −1
+#
+X
+u
+u
+u
+u
+Vt := sup E
+Fs (Xs , us (Xs )) + Φ (XT ) | Xt .
+s=t
+
+(5)
+We now introduce the Bellman operator at time t as
+Tt f (x) := ess sup Ft (x, u) + Ptu f (x).
+
+(8)
+1/2
+
+ess sup |Ptu g|
+
+Zt+1
+
+u∈U
+
+⩽ cF ,
+L2µt
+
++
+
+Ct (Xt ) = (St (Xt ) − K)
+
+(6)
+
+u∈Ut
+
+(9)
+
+if exercised at time t. In practice, the dimension of the state
+space can be very high. For instance, St (Xt ) could represent the maximum price in a basket of assets at time t, as in
+a so-called American max-call option.
+The holder of the American option aims to maximize the
+expected payoff E[Cτ (Xτ )] over all exercise strategies, i.e.,
+over all stopping times τ . We now cast this problem as a
+stochastic optimal control problem 7. To this end, we introduce a cemetery state ∆† ∈
+/ Xt and define the augmented
+∆†
+state space Xt := Xt ∪ {∆† }. Any measurable function
+∆
+f on Xt is extended to Xt † by setting f (∆† ) := 0. This is
+
+Bellman’s principle (Bellman, 1966) implies that the optimal value function solves the dynamic programming equation (Bertsekas & Shreve, 1996; Kallsen, 2016)
+®
+VT (x) = Φ(x),
+(7)
+Vt (x) = Tt Vt+1 (x),
+t ∈ {0, . . . , T − 1}.
+We now want to represent equation 7 as a functional dynamic programming equation in some appropriate L2 spaces.
+To this end, we fix an auxiliary admissible control law ū,
+3
+
+=== PDF PAGE 4 ===
+Error Propagation in Dynamic Programming
+
+dynamic programming equation—fails in practice, resulting
+in a nested Monte Carlo procedure whose computational
+cost grows exponentially with T , making it infeasible for
+large time horizons.
+To mitigate this, we adopt a more efficient approach: we
+proceed backward in time and use regression to construct
+a sequence of function approximators for each Vt . At each
+stage, we generate samples and solve a supervised learning
+problem, leveraging the approximation of Vt+1 obtained
+in the previous step (with the terminal condition VT = Φ
+known a priori). Specifically, assume we have already comı λt+1 (this Û·
+puted an approximation of Vt+1 , denoted by W
+t+1
+notation will be explained below in equation 18). We then
+t
+generate training data {(xi , yi )}ni=1
+, where xi ∼ µt and
+
+a standard technique in the theory of Markov processes, see
+Revuz & Yor (2013).
+Define now the control space as Ut := {0, 1}, where u = 0
+represents exercising the option and u = 1 holding it. The
+controlled Markov transition kernel Ptu is given by:
+®
+Qt (x, A ∩ Xt+1 )
+if u = 1, x ∈ Xt ,
+u
+Pt (x, A) =
+δ∆† (A)
+otherwise,
+∆
+for A ∈ B(Xt+1
+), meaning that the controlled process Xtu
+follows the exogenous dynamics until the option is exercised,
+after which it is absorbed in the state ∆† . Define also:
+
+Ft (·, 1) = 0,
+
+Ft (·, 0) = Ct ,
+
+Φ = CT .
+
+(10)
+
+‹t W
+ı λt+1 (xi ).
+yi = T
+t+1
+
+An admissible control law u then consists of measur∆
+able functions ut : Xt † → {0, 1}, with the convention
+ut (∆† ) = 0. The associated exercise strategy is defined by:
+τ := inf{t | ut = 0} ∧ T,
+
+We now solve the corresponding regression problem using
+a suitable supervised learning method.
+A classical choice is regularized empirical risk minimization
+(ERM) with Tikhonov regularization. Combined with kernel
+methods, and with the natural choice of the square loss as
+the loss function, this yields the well-known Kernel Ridge
+Regression (KRR).
+
+(11)
+
+i.e., the first time t ∈ {0, . . . , T − 1} such that ut = 0, or
+T if no such time exists (with inf ∅ = ∞).
+The dynamic programming problem 7 then becomes:
+®
+VT (x) = CT (x),
+(12)
+Vt (x) = max {Ct (x), e−r Qt Vt+1 (x)} ,
+
+Assumption 2 (Reproducing Kernel Hilbert Space). Let Hk
+be a separable reproducing kernel Hilbert space (RKHS)
+of real-valued functions on X , with inner product ⟨·, ·⟩Hk
+and associated norm ∥ · ∥Hk . Let k : X × X → R be the
+reproducing kernel of Hk and assume it is bounded, i.e.,
+there exists κ > 0 such that supx∈X k(x, x) ⩽ κ2 .
+
+which selects the maximum between the immediate exercise
+value and the (discounted) continuation value. Here, r
+denotes the risk-free interest rate.
+
+Remark 1. Although we use standard well-spread Monte
+Carlo sampling in this step, this is not the only viable choice.
+Any quadrature rule (e.g., monomial rules) can be used in
+place of equation 13 to approximate the operator Ptu . This
+flexibility can be especially valuable in high-dimensional settings or when Monte Carlo sampling error is non-negligible,
+as some quadrature methods may achieve much higher precision using fewer points.
+
+3. Sample-Based Value Function
+Approximation
+Stochastic dynamic control problem 7 is not directly solvable in practice, primarily because we do not have access
+to the true expectation in Ptu . A standard way to address
+this issue is to approximate the expectation via Monte Carlo
+(t+1) Mt
+t
+simulation. Let {zi
+}i=1 ∼ PM
+t+1 be i.i.d. samples from
+the distribution of the stochastic driver Zt+1 . We then define
+M
+t
+Ä
+ä
+X
+(t+1)
+‹tu f (x) := 1
+P
+f πt (x, u, zi
+) ,
+Mt i=1
+¶
+©
+‹t f (x) := ess sup Ft (x, u) + P
+‹tu f (x) ,
+T
+
+KRR estimator. For a regularization parameter λt > 0,
+the KRR estimator at time t is defined as
+n
+t
+X
+2
+ctλt : = arg min 1
+W
+(yi − f (xi )) + λt ∥f ∥2Hk (16)
+n
+t i=1
+f ∈Hk
+
+(13)
+
+Note that at maturity, the value function VT is known and
+equals Φ, so no approximation is needed at the final step.
+‹t W
+ı λt+1 is the regression
+Also note that, given equation 15, T
+t+1
+target function, i.e.,
+î
+ó
+‹t W
+ı λt+1 = arg min E (Y − f (X))2 =
+Wt∗ := T
+t+1
+
+u∈Ut
+
+the empirical approximation of Ptu and the associated empirical Bellman operator, respectively.
+By the Law of Large Numbers we obtain:
+a.s.
+‹tu f (x) −
+P
+−→ Ptu f (x),
+
+a.s.
+‹t f (x) −
+T
+−→ Tt f (x),
+
+(15)
+
+(14)
+
+f ∈L2µt
+
+hÄ
+ä2 i
+‹t W
+ı λt+1 (X) − f (X)
+= arg min E T
+t+1
+
+for Mt → ∞. However, a naive application of this ap‹u in the
+proximation—by recursively replacing Ptu with P
+t
+
+f ∈L2µt
+
+4
+
+(17)
+
+=== PDF PAGE 5 ===
+Error Propagation in Dynamic Programming
+λ
+
+K > 0, for which St (Xt ) = max{Xt1 , . . . , Xtd }, and the
+payoff at time t is given by
+
+‹t W
+ı t+1 ∈ L2 under Assumption 1. In general,
+since T
+µt
+t+1
+∗
+Wt ∈
+/ Hk , i.e. the model is misspecified. We will mention
+this further in the next section when introducing the wellknown source condition.
+Before turning to the statistical analysis, we introduce a
+refinement of our estimator, which also justifies the notation Û· used above. This step will be important to control
+approximation errors in the next section. We recall the
+following definitions, see Chapter 6 in (Steinwart & Christmann, 2008a). Given a threshold parameter B > 0, we
+define the clipped version of a ∈ R as:
+Û
+a := min{max{a, −B}, B}.
+
+ã+
+
+1⩽i⩽d
+
+πt (x, u, z) :=
+(
+∆†
+
+
+
+x ⊙ exp r − 21 σ 2 + σ ⊙ (ρ1/2 z)
+
+. (21)
+
+if u = 0,
+otherwise,
+
+with σ = (σ1 , . . . , σd )⊤ , ⊙ the elementwise multiplication.
+Algorithm 1: KRR-DP for American Option Pricing
+(backward induction with MC + KRR)
+−1
+−1
+Inputs: T ; {Ct , µt πt , nt , Mt }Tt=0
+; KRR {Θt }Tt=0
+.
+λ
+d
+0
+ı : R → R of V0 .
+Output: Estimator W
+0
+
+// MC estimate under ‘‘hold’’ (u = 1)
+ı λt+1 ):
+1 Function ContVal(x, z
+b, πt , W
+t+1
+2
+for j = 1, . . . , Mt do
+3
+x
+ej ← πt (x, u=1, zi );
+4
+end
+PMt ı λt+1
+Wt+1 (e
+5
+return e−r∆t M1t j=1
+xj );
+“t , ybt ) at stage t
+// Generate (X
+ı λt+1 ):
+6 Function DataGen(nt , Mt , µt , πt , Ct , W
+t+1
+i.i.d.
+“t = [x1 , . . . , xn ]⊤ , xi ∼ µt ;
+7
+Sample X
+t
+
+i.i.d.
+
+8
+
+Example 2 (American Options (cont.)). We now return to 9
+the American options application introduced in Example 1, 10
+and continue adapting our model to this setting. Here, the
+state vector Xt = (Xt1 , . . . , Xtd )⊤ ∈ Rd+ represents the
+11
+prices of d underlying assets at time t. A common model
+for their evolution is geometric Brownian motion (GBM),
+12
+whose dynamics are given by
+13
+
+dXti = rXti dt + σi Xti (ρ1/2 dBt )i ,
+
+max Xti − K
+
+The transition function πt : Rd+ × Ut × Rd → Rd+ is defined
+as
+
+(18)
+
+We say that a loss function ℓ is clippable at level B > 0 if
+for all y ∈ Y and a ∈ R, ℓ(y, Û
+a) ⩽ ℓ(y, a).
+It is easy to verify that many loss functions are clippable. In
+particular, the square loss (which we use) can be clipped at
+B when the output y ∈ [−B, B]. Note that if Y is generated
+as in equation 15, a sufficient condition for boundedness is
+supx∈Xt , u∈Ut |Ft (x, u)| < B. In practice, Ft (x, u) is often
+unbounded (e.g., option payoffs), but boundedness can be
+enforced without loss of rigor by restricting the dynamics to
+a compact subset of the state space. In financial applications,
+for instance, µt is typically induced by a discretized geometric Brownian motion, hence log-normal with exponentially
+decaying tails. Consequently, large deviations of Xt are
+extremely rare, and truncation introduces only negligible
+ıtλt ,
+error while allowing the use of the clipped estimator W
+as required in (Steinwart & Christmann, 2008b).
+The resulting method–that for simplicity we will indicate
+as KRR-DP (Kernel Ridge Regression-Dynamic Programming) in the following–is summarized in Algorithm 1.
+
+Å
+
++
+
+Ct (Xt ) = (St (Xt ) − K) =
+
+(19)
+
+Sample zbt+1 = [z1 , . . . , zMt ]⊤ , zi ∼ Pt+1 ;
+parallel for i = 1, . . . , nt do
+ı λt+1 ) ; //
+qi ← ContVal(xi , zbt+1 , πt , W
+t+1
+// MC continuation
+
+yi ← max Ct (xi ), qi ;
+// Bellman:
+// exercise vs. continue
+end
+“t , ybt = [y1 , . . . , yn ]⊤ )
+return (X
+t
+
+// Main backward pass
+Function
+for i = 1, . . . , d, with r ∈ R the risk-free rate, σi > 0 the
+OptionPricing({(nt , Mt , µt , πt , Ct , Θt )}Tt=0 ):
+d×d
+volatility of asset i, ρ ∈ R
+the correlation matrix and
+ı λT ← CT ≡ Φ;
+W
+// known terminal
+T
+Bt = (Bt1 , . . . , Btd )⊤ a d-dimensional Brownian motion 15
+16
+for
+t
+=
+T
+−1,
+.
+.
+.
+,
+0
+do
+with independent components. We consider discrete times
+“t , ybt ) ←
+17
+(X
+t = 0, . . . , T and approximate the dynamics with
+ı λt+1 );
+DataGen(nt , Mt , µt , πt , Ct , W
+Ä
+ä
+t+1
+
+i
+i
+1/2
+1 2
+Xt+1 = Xt · exp r − 2 σi + σi (ρ z)i ,
+(20) 18
+ıtλt ← Regression((X
+“t , ybt ), Θt )
+W
+19
+end
+where z = (z1 , . . . , zd )⊤ ∼ N (0, Id ) is a vector of indeı λ0
+20
+return W
+0
+pendent standard Gaussian variables.
+As an example, we define a max-call option with strike price
+14
+
+5
+
+=== PDF PAGE 6 ===
+Error Propagation in Dynamic Programming
+
+4. Error Analysis and Backward Propagation
+
+expected error of our estimator on new data compared to
+the regression function.
+
+In this section, our primary goal is to provide theoretical
+ıtλt and to study how the error
+guarantees for our estimator W
+propagates backward in time from T to 0. In particular, we
+ıtλt
+are interested in analyzing the rate of convergence of W
+to the target value function Vt in some norm, as a function
+of the sample sizes nt and Mt . A natural choice is to bound
+ıtλt − Vt 2 2 .
+Et = W
+L
+
+Assumption 3 (Source Condition). There exists βt ∈ (0, 1]
+β /2
+such that Wt∗ ∈ Lkt (L2µt ), where Lk : L2µt → L2µt is the
+integral operator associated with the kernel k.
+Assumption 3 and equivalent formulations (e.g., Assumption 4 in (Rudi et al., 2015a)) are standard in the literature
+(Smale & Zhou, 2007; Caponnetto & De Vito, 2007). The
+parameter βt quantifies the smoothness of the target function Wt∗ and how well it can be approximated by elements
+in Hk . When βt = 1, we are in the well-specified setting,
+i.e., Wt∗ ∈ Hk . Importantly, our results also cover the
+misspecified setting with βt < 1, where Wt∗ ∈
+/ Hk . This
+regime is more general and realistic, and goes beyond much
+of the classical analysis, which typically focuses on the wellspecified case.
+Under the square loss, Assumption 3 is directly related
+to the approximation error, as shown in (Smale & Zhou,
+2003; Steinwart et al., 2009). Using a result from Corollary 6 in (Steinwart et al., 2009) (see Appendix B.1), we
+obtain the following upper bound in terms of nt : choosing
+
+(22)
+
+µt
+
+4.1. Error decomposition
+To do so, we split the total error into three components:
+ıtλt − T
+‹t W
+ı λt+1 2 2 + T
+‹t W
+ı λt+1 − Tt W
+ı λt+1 2 2
+Et ≲ W
+t+1
+t+1
+t+1
+L
+L
+µt
+
+µt
+
+ı λt+1 − Tt Vt+1 2 2 .
++ Tt W
+t+1
+L
+
+(23)
+
+µt
+
+Notice that the rigorous mathematical formulation established above ensures the well-definedness of all terms, allowing us to meaningfully leverage this structure to decompose
+the total error. The resulting splitting is a key advantage
+of our framework: the error separates into three distinct
+components, each associated with a different approximation
+step. Because the bound is fully modular, each term can
+be improved independently without affecting the rest of the
+analysis.
+Term I depends only on the regression method—while we
+use kernel ridge regression for its clear statistical guarantees, other function approximators (e.g., neural networks)
+could be substituted, with the corresponding excess-risk
+guarantees incorporated accordingly. Term II isolates the
+sampling error, so Monte Carlo can be replaced by more
+refined schemes such as quadrature or variance-reduced estimators. Term III captures the intrinsic propagation induced
+by the dynamics and is unaffected by choices in the first
+two terms. This flexible structure allows us to work on
+each component independently while preserving the overall
+analysis.
+
+−
+
+βt
+
+βt +1
+ıtλt − T
+‹t W
+ı λt+1 2 2 ≲ n−
+W
+.
+t
+t+1
+L
+
+(25)
+
+µt
+
+We refer to Appendix B.1 for further details. Note that the
+above rate can be made faster by assuming some polynomial
+(or even exponential) decay of the spectrum of the integral
+operator Lk . This is deeply connected to the well-known
+capacity assumption, which for simplicity is not assumed
+here in the main text. Further details and the resulting faster
+rate can be found in Appendix B.1.
+Term II: Monte Carlo Error. The second term accounts
+for the Monte Carlo error introduced when approximating
+the unknown expectation in Tt , as discussed in Section 3.
+‹t from Eqs. 6 and 13,
+Using the definitions of Tt and T
+together with Lemma 1 in Appendix A, and denoting
+ı λt+1 (πt (x, u, z)) : u ∈ Ut }, we obtain
+Ftx = {z 7→ W
+t+1
+that, with high probability,
+
+Term I: Regression Error. The first term is the standard
+machine learning error due to the fact that our estimator
+minimizes the empirical risk in equation 16, based only on
+t
+a finite sample {(xi , yi )}ni=1
+. Our target is the regression
+λ
+t+1
+‹t W
+ı
+function Wt∗ = T
+,
+as
+defined in equation 17. Term
+t+1
+ıtλt :
+I then corresponds to the so-called excess risk of W
+
+‹t W
+ı λt+1 − Tt W
+ı λt+1 2 2 ⩽
+T
+t+1
+t+1
+L
+µt
+
+2
+
+M
+
+t
+1 X
+⩽ sup
+f (zj ) − E[f (Zt+1 )]
+f ∈Ftx Mt j=1
+
+ıtλt ) − R(Wt∗ ) :=
+R(W
+î
+ó
+ıtλt (X))2 − (Y − W ∗ (X))2 =
+= E (Y − W
+t
+ıtλt − Wt∗ 2 2 ,
+= W
+L
+
+1
+
+λt ∼ nt βt +1 , with high probability,
+
+“ tx ) +
+≲ ER(F
+
+(24)
+
+µt
+
+ıtλt ) is the
+(see (Caponnetto & De Vito, 2007)), where R(W
+λ
+λ
+t+1
+∗
+t
+ıt and R(W ) = R(T
+‹t W
+ı
+risk of W
+t
+t+1 ). It represents the
+
+1
+Mt
+
+≲
+L2µt
+
+2
+
+L2µt
+
+where the last inequality follows from the boundedness
+ı λt+1 and an application of Boucheron et al. (2005,
+of W
+t+1
+
+6
+
+=== PDF PAGE 7 ===
+Error Propagation in Dynamic Programming
+
+“ tx ) denotes the well-known emTheorem 3.2), while R(F
+pirical Rademacher complexity of Ftx (see definition in
+Appendix B.2). Bounding such complexities is a classical
+problem in statistical learning theory (Bartlett & Mendelson,
+2002). In our setting, we focus on two relevant cases: (i)
+finite classes, as in American options where the control set
+is binary (Ut = {0, 1}), and (ii) Lipschitz transitions πt ,
+which are typical in financial models once the state space is
+a compact set (see the discussion about truncation in previous section). Using results from (Massart, 2000; Bartlett &
+Mendelson, 2002) (see Appendix B.2), we obtain for both
+cases
+»
+“ tx ) ≲ 1/Mt .
+(26)
+ER(F
+
+Example 3 (American Options (cont.)). Returning to our
+application to American option pricing in Example 1, we
+now adapt Theorem 1 to this setting. Note that WT∗ = VT =
+Ψ is typically non-smooth for common payoff functions,
+see equation 9 or Fig. 3-1 in Appendix C). As discussed
+above, for standard kernel choices such as the RBF kernel,
+this places us in the misspecified regime, where the smoothness parameters {βt }t may be small. From equation 12, the
+Bellman operator Tt : L2µt+1 → L2µt takes the form:
+
+Tt g = max Ct , e−r Qt g .
+
+We now verify that the assumptions required by Theorem 1
+are satisfied. First condition in equation 8 in Assumption 1
+is straightforward since Ut = {0, 1} and Ft is defined as
+in equation 10: ess supu∈{0,1} |Ft (·, u)| = Ft (·, 0) = Ct .
+We let cF be the squared L2µt -norm of Ct , which is assumed
+to be finite. Moreover, since Qt is a Markov transition
+kernel, it defines a non-expansive operator:
+Z
+Z
+2
+2
+′ 2
+∥Qt g∥L2 ⩽
+g(x )
+Q(x, dx′ )dµt ⩽ ∥g∥L2
+,
+
+Term III: Propagation Error. This term captures the
+error inherited from the previous step t + 1. By Lemma 2
+in Appendix A, we have:
+ı λt+1 − Tt Vt+1 2 2 ⩽ cP W
+ı λt+1 − Vt+1 2 2 .
+Tt W
+t+1
+t+1
+Lµt
+Lµt
+|
+{z
+}
+Et+1
+
+µt
+
+Theorem 1 (Error Backpropagation). Under Assumptions 1, 2, 3, and provided that condition 26 holds, with
+high probability:
+Et =
+
+Å
+
+1
+nt
+
++ cP Et+1 ,
+
+µ0
+
+T
+−1
+X
+t=0
+
+t
+
+t
+
+(27)
+
+t+1
+
+Then, Assumption 1 is satisfied with cP = e−2r .
+
+for t ∈ {0, . . . , T − 1}. Furthermore,
+ı λ0 − V0 2 2 ≲
+E0 = W
+0
+L
+
+µt+1
+
+Xt
+
+∥Tt g∥L2µ = ∥ max(Ct , e−r Qt g)∥L2µ ⩽ cF + e−r ∥g∥L2µ
+
+t
+ã β β+1
+t
+
+Xt+1
+
+where we used Jensen’s inequality and Fubini’s theorem.
+Therefore, condition 8 in Assumption 1 is also satisfied. We
+can now bound the Bellman operator Tt :
+
+β
+
+t
+− 1
+the choice λt ∼ nt βt +1 and Mt ∼ ntβt +1 , we have with
+
+ıtλt − Vt 2 2 ≲
+W
+Lµt
+
+(29)
+
+ctP
+
+Å
+
+1
+nt
+
+ã
+
+βt
+βt +1
+
+.
+
+Corollary 1 (American Option Pricing). From Theorem 1,
+in the setting described in Example 1, 2 and 3, and following
+Algorithm 1, we have with high probability:
+
+(28)
+
+ı λ0 − V0 2 2 ≲
+W
+0
+L
+µ0
+
+Note that, as desirable, the error vanishes as nt → ∞ for
+all t. In the non-asymptotic regime, the convergence rate
+depends on the smoothness parameters {βt }t , which reflect
+the level of misspecification of the problem. Although the
+‹tu may act as a smoothing operator,
+expectation operator P
+the supremum in the Bellman operator prevents us from
+guaranteeing a smoothing effect through time. As a result, the problem generally remains misspecified throughout
+the backward recursion. Note also that the constant cP in
+Assumption 1 plays a key role in controlling the resulting
+error propagation. When cP < 1, as in our option pricing
+setting (see Example 3 below), the recursion becomes contractive, so errors are damped rather than amplified, making
+convergence faster and more stable. Beyond option pricing, this contractive behavior also arises in a broad class of
+discrete-time stochastic optimal control models, including
+discounted Markov decision processes, economic models
+with discounted utility or revenue, and dissipative physical
+systems (e.g., energy storage).
+
+T
+−1
+X
+t=0
+
+e−2rt
+
+Å
+
+1
+nt
+
+t
+ã β β+1
+t
+
+.
+
+(30)
+
+Notice that, in the common case of a positive interest rate
+e−2rt < 1 (i.e. cP < 1), the Bellman operator is contractive
+in this setting. This contraction plays a crucial role: it
+damps the propagated errors across time steps, thereby
+facilitating convergence of the overall approximation.
+
+5. Simulations
+In this section, we present a basic implementation of KRRDP Algorithm 1 and conduct an initial evaluation of the
+effectiveness of the proposed method for the above studied
+example of American option pricing. More comprehensive experiments and optimized implementations will be the
+subject of future work. We compare our results with the
+numerical benchmarks reported in Goudenege et al. (2020).
+Specifically, we replicate the results in their Table 1 and
+Table 3, which correspond to pricing a geometric basket
+7
+
+=== PDF PAGE 8 ===
+Error Propagation in Dynamic Programming
+Table 1. Results for a Geometric basket Put option, see Table 1 in (Goudenege et al., 2020).
+
+KRR-DP
+
+GPR-Tree
+
+GPR-EI
+
+Ekvall
+
+Benchmark
+
+d
+
+Price
+
+95% CI
+
+Time
+
+Price
+
+Time
+
+Price
+
+Time
+
+Price
+
+Price
+
+2
+5
+10
+20
+40
+
+4.63
+3.46
+2.98
+2.70
+2.55
+
+[4.58, 4.68]
+[3.42, 3.50]
+[2.94, 3.03]
+[2.68, 2.72]
+[2.53, 2.57]
+
+2s
+3s
+4s
+21s
+87s
+
+4.61
+3.44
+2.93
+2.72
+/
+
+22s
+23s
+60s
+49609s
+/
+
+4.57
+3.41
+2.93
+2.63
+2.53
+
+26s
+27s
+30s
+29s
+38s
+
+4.62
+3.44
+2.90
+2.70
+2.57
+
+4.62
+3.45
+2.97
+2.70
+2.56
+
+Table 2. Results for a Max-Call option, see Table 3 in (Goudenege et al., 2020).
+
+KRR-DP
+
+GPR-Tree
+
+GPR-EI
+
+GPR-MC
+
+Ekvall
+
+d
+
+Price
+
+95% CI
+
+Time
+
+Price
+
+Time
+
+Price
+
+Time
+
+Price
+
+Price
+
+2
+5
+10
+20
+40
+
+16.93
+27.16
+35.14
+42.62
+50.44
+
+[16.86, 17.00]
+[26.98, 27.33]
+[34.94, 35.35]
+[42.30, 42.93]
+[50.01, 50.87]
+
+5s
+5s
+6s
+27s
+118s
+
+16.93
+27.19
+35.08
+43.00
+/
+
+20s
+26s
+106s
+51090s
+/
+
+16.82
+26.95
+34.84
+42.62
+49.53
+
+28s
+27s
+29s
+35s
+41s
+
+16.86
+27.20
+35.17
+42.76
+50.70
+
+16.86
+27.20
+/
+/
+/
+
+M while preserving statistical guarantees (e.g. more sophisticated quadrature rules) will be the basis for a competitive
+large-scale implementation, and constitute the natural direction for follow-up work.
+
+put option and a max-call option, respectively. Note that a
+theoretical benchmark exists for geometric basket put options only. The parameters are set reproducing the ones in
+Goudenege et al. (2020): T = 9, X0i = 100 for 1 ⩽ i ⩽ d,
+K = 100, r = 0.05, σi = 0.2 for 1 ⩽ i ⩽ d, ρij = 0.2
+for 1 ⩽ i ̸= j ⩽ d. As regards the KRR solver, we employ the efficient FALKON algorithm (Meanti et al., 2020),
+which uses Nyström-based random projections (Williams
+& Seeger, 2000) to achieve substantial computational savings while retaining optimal statistical performance (Rudi
+et al., 2015b; Della Vecchia et al., 2021; 2024; 2026). Importantly, FALKON is fully compatible with our theoretical
+analysis: its Nyström approximation enjoys provably optimal excess-risk guarantees (given a sufficient number of
+centers, see Section 6 in Della Vecchia et al. (2024)), and
+thus can directly replace the full KRR estimator in Term I
+of our error decomposition with no further modifications.
+Indeed, thanks to the modular structure of our bounds, this
+substitution preserves the convergence rate in equation 25,
+does not affect the other terms, and leaves the overall propagation rate in equation 28 unchanged—while significantly
+reducing computational cost. A description of the involved
+benchmarks and further details on our simulations are given
+in Appendix C.
+These preliminary results suggest that our method performs
+competitively with the considered benchmarks, offering a
+favorable trade-off between accuracy and computational efficiency. As the dimension increases, however, the runtime
+grows noticeably, with the Monte Carlo component (Term
+II) emerging as the main computational bottleneck. The
+study and incorporation of alternatives to standard Monte
+Carlo capable of reducing the required number of samples
+
+6. Conclusions and Future Work
+In this work, we addressed SOC problems in discrete time
+and introduced a kernel-based regression framework for
+their solution. Our approach combines backward recursion
+via empirical Bellman operators with Monte Carlo simulation and regularized learning techniques to construct datadriven approximations of the value function. The framework
+is supported by rigorous theoretical guarantees, including
+explicit error bounds.
+Several promising directions remain open for future work.
+First, to extend the preliminary simulations presented above
+into a more comprehensive experimental study, incorporating real-world datasets from other applications (e.g. partial
+equilibrium, optimal consumption, or goal-based investing
+problems) and comparing with more complex models (e.g.
+neural networks, RL algorithms). In parallel, there is significant room to improve computational efficiency, especially in
+high-dimensional settings, by developing a competitive implementation of the algorithm. While the regression step can
+be accelerated, as in our simulations, using established scalability techniques that preserve the statistical guarantees of
+KRR (e.g., sketching, random features, Nyström), the main
+bottleneck in our pipeline appears to be the Monte Carlo
+data-generation step. Reducing the number M of required
+simulated points is critical for speeding up the DATAG EN
+function in Algorithm 1.
+
+8
+
+=== PDF PAGE 9 ===
+Error Propagation in Dynamic Programming
+t=2
+
+t=4
+
+50
+
+50
+40
+30
+20
+10
+0
+120
+
+X01100 80
+
+60
+
+140
+
+120
+
+80
+100 2
+
+60
+
+140
+
+120
+
+X21100 80
+
+X0
+
+60
+
+t=6
+
+140
+
+120
+
+80
+100 2
+
+60
+
+X2
+
+60
+
+140
+
+120
+
+80
+100 2
+
+X6
+
+60
+
+140
+
+120
+
+80
+100 2
+
+60
+
+X4
+
+t=T
+
+50
+
+60
+50
+40
+30
+20
+10
+0
+
+40
+30
+
+V8(X)
+
+V6(X)
+
+60
+
+120
+
+t=8
+
+120
+
+X61100 80
+
+140
+
+X41100 80
+
+50
+40
+30
+20
+10
+0
+140
+
+V4(X)
+
+20
+10
+0
+
+V2(X)
+
+30
+
+V0(X)
+
+140
+
+50
+40
+30
+20
+10
+0
+
+40
+
+140
+
+120
+
+X81100 80
+
+60
+
+140
+
+120
+
+80
+100 2
+
+X8
+
+60
+
+20
+
+VT(X)
+
+t=0
+
+10
+0
+140
+
+120
+
+XT1100 80
+
+60
+
+140
+
+120
+
+80
+100 2
+
+60
+
+XT
+
+Figure 1. Value function estimates for the Max-Call option (d = 2), see Table 2.
+
+Impact Statement
+
+Bartlett, P. L. and Mendelson, S. Rademacher and gaussian
+complexities: Risk bounds and structural results. Journal
+of Machine Learning Research, 3(Nov):463–482, 2002.
+
+This paper presents work whose goal is to advance the field
+of machine learning. There are many potential societal
+consequences of our work, none of which we feel must be
+specifically highlighted here.
+
+Becker, S., Cheridito, P., and Jentzen, A. Deep optimal
+stopping. Journal of Machine Learning Research, 20(74):
+1–25, 2019.
+
+References
+
+Bellman, R. Dynamic programming. science, 153(3731):
+34–37, 1966.
+
+Abbas-Turki, L. and Lapeyre, B. American options by
+malliavin calculus and nonparametric variance and bias
+reduction methods. SIAM Journal on Financial Mathematics, 3(1):479–510, 2012.
+
+Belomestny, D., Schoenmakers, J., and Dickmann, F. Multilevel dual approach for pricing american style derivatives.
+Finance and Stochastics, 17:717–742, 2013.
+
+Andersen, L. and Broadie, M. Primal-Dual Simulation Algorithm for Pricing Multidimensional American Options.
+Management Science, 50(9):1222–1234, 2004. ISSN
+0025-1909. URL https://www.jstor.org/stable/30046229.
+Publisher: INFORMS.
+
+Berner, J., Richter, L., and Ullrich, K. An optimal control perspective on diffusion-based generative modeling.
+arXiv preprint arXiv:2211.01364, 2022.
+
+Åström, K. J. Introduction to stochastic control theory.
+Courier Corporation, 2012.
+
+Bertsekas, D. and Shreve, S. E. Stochastic optimal control:
+the discrete-time case, volume 5. Athena Scientific, 1996.
+
+Bally, V., Pagès, G., and Printems, J. First-order schemes
+in the numerical quantization method. Mathematical
+Finance, 13(1):1–16, 2003.
+
+Bouchard, B. and Touzi, N. Discrete-time approximation
+and monte-carlo simulation of backward stochastic differential equations. Stochastic Processes and their Applications, 111(2):175–206, 2004.
+
+Bertsekas, D. Dynamic programming and optimal control:
+Volume I, volume 4. Athena scientific, 2012.
+
+Bally, V., Caramellino, L., and Zanette, A. Pricing and
+hedging american options by monte carlo methods using
+a malliavin calculus approach. Monte Carlo Methods and
+Applications, 11(2):97–133, 2005.
+
+Boucheron, S., Bousquet, O., and Lugosi, G. Theory of
+classification: A survey of some recent advances. ESAIM:
+probability and statistics, 9:323–375, 2005.
+9
+
+=== PDF PAGE 10 ===
+Error Propagation in Dynamic Programming
+
+Broadie, M. and Glasserman, P. Pricing american-style securities using simulation. Journal of Economic Dynamics
+and Control, 21(8-9):1323–1352, 1997.
+
+Hartmann, C. and Schütte, C. Efficient rare event simulation
+by optimal nonequilibrium forcing. Journal of Statistical
+Mechanics: Theory and Experiment, 2012(11):P11004,
+2012.
+
+Caponnetto, A. and De Vito, E. Optimal rates for the regularized least-squares algorithm. Foundations of Computational Mathematics, 7:331–368, 2007.
+
+Hartmann, C., Banisch, R., Sarich, M., Badowski, T., and
+Schütte, C. Characterization of rare events in molecular
+dynamics. Entropy, 16(1):350–376, 2013.
+
+Carmona, R. Lectures on BSDEs, stochastic control, and
+stochastic differential games with financial applications.
+SIAM, 2016.
+
+Haugh, M. B. and Kogan, L. Pricing american options: A
+duality approach. Operations Research, 52(2):258–270,
+2004.
+
+Chaudhari, P., Oberman, A., Osher, S., Soatto, S., and Carlier, G. Deep relaxation: partial differential equations
+for optimizing deep neural networks. Research in the
+Mathematical Sciences, 5:1–30, 2018.
+
+Hernández-Lerma, O. and Lasserre, J. B. Discrete-time
+Markov control processes: basic optimality criteria, volume 30. Springer Science & Business Media, 2012.
+
+Della Vecchia, A., Mourtada, J., De Vito, E., and Rosasco, L.
+Regularized erm on random subspaces. In International
+Conference on Artificial Intelligence and Statistics, pp.
+4006–4014. PMLR, 2021.
+
+Holdijk, L., Du, Y., Hooft, F., Jaini, P., Ensing, B., and
+Welling, M. Stochastic optimal control for collective
+variable free sampling of molecular transition paths. Advances in Neural Information Processing Systems, 36:
+79540–79556, 2023.
+
+Della Vecchia, A., De Vito, E., Mourtada, J., and Rosasco, L.
+The nyström method for convex loss functions. Journal
+of Machine Learning Research, 25(360):1–60, 2024.
+
+Jain, S. and Oosterlee, C. W. Pricing high-dimensional
+bermudan options using the stochastic grid method. International Journal of Computer Mathematics, 89(9):1186–
+1211, 2012.
+
+Della Vecchia, A., Watusadisi, A. M., De Vito, E., and
+Rosasco, L. Computational efficiency under covariate
+shift in kernel ridge regression. Advances in Neural Information Processing Systems, 38:141618–141648, 2026.
+
+Kallsen, J. Stochastic Optimal Control in Mathematical
+Finance. Lecture Notes (WS2015/16), 2016.
+Kohler, M., Krzyżak, A., and Todorović, N. Pricing of
+high-dimensional american options by neural networks.
+Mathematical Finance, 20(3):383–410, 2010.
+
+Domingo i Enrich, C., Han, J., Amos, B., Bruna, J., and
+Chen, R. T. Stochastic optimal control matching. Advances in Neural Information Processing Systems, 37:
+112459–112504, 2024.
+
+Lamberton, D. and Lapeyre, B. Introduction to stochastic
+calculus applied to finance. Chapman and Hall/CRC,
+2011.
+
+Ekvall, N. A lattice approach for pricing of multivariate
+contingent claims. European Journal of Operational
+Research, 91(2):214–228, 1996.
+
+Ledoux, M. and Talagrand, M. Probability in Banach
+Spaces: isoperimetry and processes, volume 23. Springer
+Science & Business Media, 1991.
+
+Fleming, W. H. and Stein, J. L. Stochastic optimal control,
+international finance and debt. Journal of Banking &
+Finance, 28(5):979–996, 2004.
+
+Lelong, J. Dual pricing of american options by wiener chaos
+expansion. SIAM Journal on Financial Mathematics, 9
+(2):493–519, 2018.
+
+Gorodetsky, A., Karaman, S., and Marzouk, Y. Highdimensional stochastic optimal control using continuous tensor decompositions. The International Journal of
+Robotics Research, 37(2-3):340–377, 2018.
+
+Lions, P.-L. and Regnier, H. Calcul du prix et des sensibilités
+d’une option américaine par une méthode de monte carlo,
+2. Preprint, 2001.
+
+Goudenege, L., Molent, A., and Zanette, A. Machine learning for pricing american options in high-dimensional
+markovian and non-markovian models. Quantitative Finance, 20(4):573–591, 2020.
+
+Longstaff, F. A. and Schwartz, E. S. Valuing american
+options by simulation: a simple least-squares approach.
+The Review of Financial Studies, 14(1):113–147, 2001.
+
+Han, J. et al. Deep learning approximation for stochastic control problems. arXiv preprint arXiv:1611.07422,
+2016.
+
+Massart, P. Some applications of concentration inequalities
+to statistics. In Annales de la Faculté des sciences de
+Toulouse: Mathématiques, volume 9, pp. 245–303, 2000.
+10
+
+=== PDF PAGE 11 ===
+Error Propagation in Dynamic Programming
+
+Meanti, G., Carratino, L., Rosasco, L., and Rudi, A. Kernel
+methods through the roof: handling billions of points
+efficiently. Advances in Neural Information Processing
+Systems, 33:14410–14422, 2020.
+
+Steinwart, I. and Christmann, A. Support Vector Machines.
+Springer Science & Business Media, September 2008b.
+ISBN 978-0-387-77242-4. Google-Books-ID: HUnqnrpYt4IC.
+
+Mitter, S. K. Filtering and stochastic control: A historical
+perspective. IEEE Control Systems Magazine, 16(3):67–
+76, 2002.
+
+Steinwart, I., Hush, D. R., Scovel, C., et al. Optimal rates
+for regularized least squares regression. In COLT, pp.
+79–93, 2009.
+
+Nielsen, M. A. Neural networks and deep learning, volume 25. Determination press San Francisco, CA, USA,
+2015.
+
+Sutton, R. S., Barto, A. G., et al. Reinforcement learning:
+An introduction, volume 1. MIT press Cambridge, 1998.
+Theodorou, E., Stulp, F., Buchli, J., and Schaal, S. An
+iterative path integral stochastic optimal control approach
+for learning robotic tasks. IFAC Proceedings Volumes, 44
+(1):11594–11601, 2011.
+
+Peskir, G. and Shiryaev, A. Optimal stopping and freeboundary problems. Springer, 2006.
+Pham, H. Continuous-time stochastic control and optimization with financial applications, volume 61. Springer
+Science & Business Media, 2009.
+
+Tsitsiklis, J. N. and Van Roy, B. Optimal stopping of
+markov processes: Hilbert space theory, approximation algorithms, and an application to pricing high-dimensional
+financial derivatives. IEEE Transactions on Automatic
+Control, 44(10):1840–1851, 1999.
+
+Puterman, M. L. Markov decision processes: discrete
+stochastic dynamic programming. John Wiley & Sons,
+2014.
+
+Vargas, F., Grathwohl, W., and Doucet, A. Denoising diffusion samplers. arXiv preprint arXiv:2302.13834, 2023.
+
+Reich, S. Data assimilation: the schrödinger perspective.
+Acta Numerica, 28:635–711, 2019.
+
+Villani, C. et al. Optimal transport: old and new, volume
+338. Springer, 2008.
+
+Revuz, D. and Yor, M. Continuous martingales and Brownian motion, volume 293. Springer Science & Business
+Media, 2013.
+
+Williams, C. and Seeger, M. Using the nyström method to
+speed up kernel machines. Advances in neural information processing systems, 13, 2000.
+
+Richter, L. and Berner, J. Improved sampling via learned
+diffusions. arXiv preprint arXiv:2307.01198, 2023.
+Rogers, L. C. G. Monte carlo valuation of american options.
+Mathematical Finance, 12(3):271–286, 2002.
+
+Williams, C. K. and Rasmussen, C. E. Gaussian processes
+for machine learning, volume 2. MIT press Cambridge,
+MA, 2006.
+
+Rudi, A., Camoriano, R., and Rosasco, L. Less is more:
+Nyström computational regularization. arXiv preprint
+arXiv:1507.04717, 28, 2015a.
+
+Zhang, Q. and Chen, Y. Path integral sampler: a stochastic control approach for sampling. arXiv preprint
+arXiv:2111.15141, 2021.
+
+Rudi, A., Camoriano, R., and Rosasco, L. Less is
+More: Nyström Computational Regularization. December 2015b.
+
+Zhang, T. Learning bounds for kernel regression using
+effective data dimensionality. Neural Computation, 17
+(9):2077–2098, 2005.
+
+Shalev-Shwartz, S. and Ben-David, S. Understanding machine learning: From theory to algorithms. Cambridge
+university press, 2014.
+
+Zhang, W., Wang, H., Hartmann, C., Weber, M., and Schütte,
+C. Applications of the cross-entropy method to importance sampling and optimal control of diffusions. SIAM
+Journal on Scientific Computing, 36(6):A2654–A2672,
+2014.
+
+Smale, S. and Zhou, D.-X. Estimating the approximation
+error in learning theory. Analysis and Applications, 1(01):
+17–41, 2003.
+
+A. Auxiliary Lemmas
+
+Smale, S. and Zhou, D.-X. Learning theory estimates via
+integral operators and their approximations. Constructive
+approximation, 26(2):153–172, 2007.
+
+In this section, we prove a number of technical results that
+are instrumental for establishing the theoretical properties
+of our Bellman recursion in L2µt spaces. In particular, we
+aim to verify that the Bellman operator Tt is well defined
+
+Steinwart, I. and Christmann, A. Support vector machines.
+Springer Science & Business Media, 2008a.
+11
+
+=== PDF PAGE 12 ===
+Error Propagation in Dynamic Programming
+
+and Lipschitz continuous under mild assumptions. These
+properties are essential for proving stability and convergence
+of our value function approximations.
+
+where we used Lemma 1 and Assumption 1. For the Lipschitz property, we compute:
+∥Tt g − Tt f ∥L2µ =
+
+We begin with a useful lemma on the behavior of essential
+suprema, which allows us to control expressions of the
+form ess supu∈Ut {Ft (·, u) + Ptu g} arising in the Bellman
+operator.
+Lemma 1. Let {Ya }a∈A and {Za }a∈A be two collections of
+random variables indexed by a parameter set A, such that
+ess supa∈A |Ya | < ∞ and ess supa∈A |Za | < ∞ almost
+surely. Then the following inequalities hold almost surely:
+
+t
+
+= ess sup Ft (·, u) + Ptu g − ess sup Ft (·, u) + Ptu f
+u∈Ut
+
+a∈A
+
+u∈Ut
+
+a∈A
+
+1/2
+
+⩽ cP ∥g − f ∥L2µ
+
+again applying Lemma 1 and that Ptu is a linear operator.
+
+(32)
+
+B. Technical Details on Section 4
+
+a∈A
+
+B.1. Term I
+In this section, we give further details about the analysis of
+our learning-based approximation scheme in Section 4.
+We start with the optimal learning rates established for regularized empirical risk minimization in RKHS. The following
+theorem is taken from Steinwart et al. (2009).
+Theorem ((Steinwart et al., 2009, Theorem 1)). Let k be
+a bounded measurable kernel on X with ∥k∥∞ = 1 and
+separable RKHS H. Let
+Aq (λ) := inf (λ∥f ∥qH + R(f ) − R∗ ) .
+
+With this result in hand, we now analyze the properties
+of the Bellman operator Tt as defined in equation 6. The
+following lemma shows that, under suitable assumptions, Tt
+maps L2µt+1 to L2µt in a controlled way and satisfies a global
+Lipschitz bound.
+Lemma 2. Under conditions 8 in Assumption 1, the Bellman operator Tt defines a Lipschitz continuous map satisfying:
+1/2
+
+∥Tt g∥L2µ ⩽ cF + cP ∥g∥L2µ
+t
+
+,
+
+f ∈H
+
+where a ⩾ 16M 4 and p ∈ (0, 1). Assume further that there
+exist constants C ⩾ 1 and s ∈ (0, 1] such that
+
+(33)
+,
+
+(34)
+
+∥f ∥∞ ⩽ C∥f ∥sH · ∥f ∥1−s
+L2 (PX )
+
+t+1
+
+for all g, f ∈ L2µt+1 and t = 0, . . . , T − 1.
+
+u∈Ut
+
+1
+
+Å pq 2q ã q−2p+pq
+Ä ä
+a B
++
+R fbλ −R∗ ⩽ 9Aq (λ) + cp,q
+λ2p nq
+Å
+ã 2s
+120C 2 B 2−2s τ Aq (λ) q
+3516B 2 τ
++
++
+,
+n
+λ
+n
+
+L2µt
+
+⩽ ess sup |Ft (·, u)| + ess sup |Ptu g|
+u∈Ut
+
+u∈Ut
+
+L2µt
+
+1/2
+
+⩽ cF + cP ∥g∥L2µ
+
+L2µt
+
++ ess sup |Ptu g|
+
+⩽ ess sup |Ft (·, u)|
+
+(37)
+
+for all f ∈ H. Then, for all q ⩾ 1, there exists a constant
+cp,q depending only on p and q such that for all λ ∈ (0, 1],
+τ > 0, and n ⩾ 1, with probability at least 1 − 3e−τ
+
+Proof. We begin by bounding the operator norm:
+∥Tt g∥L2µ = ess sup {Ft (·, u) + Ptu g}
+
+(35)
+
+Moreover, let P be a distribution on X × [−B, B], where
+B > 0 is some constant. For ν = PX assume that the
+extended sequence of eigenvalues of the integral operator
+satisfies
+1
+(36)
+µi (Lk ) ⩽ ai− p , i ⩾ 1,
+
+t+1
+
+2
+2
+∥Tt g − Tt f ∥L2µ ⩽ cP ∥g − f ∥L2µ
+t
+
+u∈Ut
+
+,
+
+t+1
+
+Proof. The first bound follows from the general inequality |ess supa∈A Ya | ⩽ ess supa∈A |Ya |. For the second
+inequality, we exploit the invariance under translations:
+the statement holds if we replace Ya and Za by Ya +
+C and Za + C, for any random variable C. Choosing C = max {ess supa∈A (−Ya ), ess supa∈A (−Za )}, we
+can assume without loss of generality that Ya , Za ⩾ 0.
+Then we obtain from equation 31 that ess supa∈A Ya ⩽
+ess supa∈A |Ya − Za | + ess supa∈A Za , and same for Ya
+and Za exchanged, which proves equation 32.
+
+t
+
+L2µt
+
+a∈A
+
+ess sup Ya − ess sup Za ⩽ ess sup |Ya − Za | .
+a∈A
+
+L2µt
+
+⩽ ess sup |Ptu (g − f )|
+
+ess sup (Ya + Za ) ⩽ ess sup |Ya | + ess sup |Za | , (31)
+a∈A
+
+u∈Ut
+
+u∈Ut
+
+with R∗ := R(f ∗ ) the risk of the Bayes function f ∗ ∈
+L2 (PX ) and fbλ the data dependent estimator from ERM
+algorithm.
+
+L2µt
+
+,
+
+t+1
+
+12
+
+=== PDF PAGE 13 ===
+Error Propagation in Dynamic Programming
+
+Note that equation 36 is exactly the condition mentioned
+under equation 25. We give here more details on the connection with the capacity assumption. Before defining it,
+we define the so-called effective dimension (Zhang, 2005;
+Caponnetto & De Vito, 2007), for α > 0, as
+X σj
+dα = Tr((Lk + αI)−1 Lk ) =
+(38)
+σj + α
+j
+
+A similar result, leading to even faster rates, can be obtained
+assuming an exponential decay.
+
+where (σj )j are the strictly positive eigenvalues of Lk , with
+eigenvalues counted with respect to their multiplicity and ordered in a non-increasing way, and (uj ) is the corresponding
+family of eigenvectors.
+
+Proof.
+
+Proposition 2 (Exponential eigenvalues decay (Della Vecchia et al., 2024, Proposition 3)). If for some γ, p ∈ R+ σi ⩽
+γe−pi then
+log(1 + γ/α)
+dα ⩽
+(42)
+p
+
+∞
+∞
+X
+X
+1
+1
+σi
+⩽
+=
+⩽
+σ +α
+1 + α/σi
+1 + α′ epi
+i=1
+i=1
+i=1 i
+Z +∞
+1
+⩽
+dx
+(43)
+1 + α′ epx
+0
+
+dα =
+
+Assumption 4 (Capacity Assumption). There exist constants p ⩾ 1 and Q > 0 such that, for all α ∈ (0, 1]
+dα ⩽ Qα−1/p .
+
+where α′ = α/γ. Using the change of variables t = epx we
+get
+Z
+1 +∞
+1
+1
+(43) =
+dt
+p 1
+1 + α′ t t
+Z
+1 +∞ h 1
+α′ i
+=
+−
+dt
+p 1
+t
+1 + α′ t
+h
+i
++∞
+1
+=
+log t − log(1 + α′ t)
+=
+p
+1
+ t i+∞
+1h
+log
+=
+=
+p
+1 + α′ t 1
+h
+i
+1
+=
+log(1/α′ ) + log(1 + α′ )
+(44)
+p
+
+This assumption, standard in statistical learning theory (see
+Caponnetto & De Vito, 2007; Smale & Zhou, 2007), is often referred to as a capacity condition, as it quantifies the
+effective size of the RKHS via the decay of the eigenvalues
+of the integral operator Lk (see Proposition 1 and 2 below).
+Note that the case p = 1 corresponds to no spectral assumption (i.e. the weakest possible capacity control), which is
+the setting we adopt in the main text.
+The following two results provide a tight bound on the
+effective dimension under the assumption of a polynomial
+decay or an exponential decay of the eigenvalues σj of Lk .
+Since the covariance operator Σ and the integral operator Lk
+share the same eigenvalues, we equivalently report known
+proofs for Σ in the following.
+
+So we finally obtain
+i log(1 + γ/α)
+1h
+dα ⩽
+log(γ/α) + log(1 + α/γ) =
+p
+p
+(45)
+
+Proposition 1 (Polynomial eigenvalues decay (Caponnetto
+& De Vito, 2007, Proposition 3)). If for some γ ∈ R+ and
+1 < p < +∞
+σi ⩽ γi−p
+then
+
+p
+dα ⩽ γ
+α−1/p
+p−1
+
+Specializing this result to ridge regression, and under an
+additional approximation condition on the learning target,
+we obtain a more explicit convergence rate in terms of the
+sample size.
+
+(39)
+
+Proof. Since the function σ/(σ + α) is increasing in σ and
+using the spectral theorem Σ = U DU ∗ combined with the
+fact that Tr(U DU ∗ ) = Tr(U (U ∗ D)) = TrD
+
+Corollary (Steinwart et al. (2009, Corollary 6)). Assume
+s = p = 1, q = 2, and suppose the 2-approximation error
+function satisfies
+
+∞
+X
+σi
+γ
+⩽
+σ
++
+α
+γ
++
+ip α
+i
+i=1
+i=1
+(40)
+The function γ/(γ + xp α) is positive and decreasing, so
+Z ∞
+Z ∞
+γ
+γ
+−1/p
+dα ⩽
+dx = α
+dτ
+pα
+γ
++
+x
+γ
++
+τp
+0
+0
+p
+⩽γ
+α−1/p
+(41)
+p−1
+R∞
+since 0 (γ + τ p )−1 ⩽ p/(p − 1).
+
+dα = Tr(Σ(Σ + αI)−1 ) =
+
+∞
+X
+
+∞
+X
+
+A2 (λ) ⩽ cλβ ,
+
+λ>0
+
+(46)
+
+for some constants c > 0 and β > 0. Define a sequence of
+1
+regularization parameters λ := n− β+1 . Then there exists a
+constant K ⩾ 1 depending only on a, B, and c, such that
+for all τ ⩾ 1 and n ⩾ 1,
+Ä ä
+β
+R fbλ − R(f ∗ ) ⩽ Kτ n− β+1
+(47)
+with probability at least 1 − 3e−τ n
+13
+
+β
+β+1
+
+.
+
+=== PDF PAGE 14 ===
+Error Propagation in Dynamic Programming
+
+c λt+1 is LW -Lipschitz,
+and we define
+W
+t+1
+:=
+Πxt
+{z 7→ πt (x, u, z) : u ∈ Ut } , then the
+c λt+1 ◦ Πxt satisfies
+composition class Ftx = W
+t+1
+
+This is the result reported in Theorem 1, given that source
+condition in Assumption 3 implies condition in equation 46
+as shown in Smale & Zhou (2003).
+B.2. Term II
+
+“ tx ) ⩽ LW · R(Π
+“ xt ).
+R(F
+
+We start by defining the empirical Rademacher complexity:
+“ x ) := Eσ sup
+R(F
+t
+
+Mt
+1 X
+
+f ∈Ftx
+
+Mt i=1
+
+σi f (zi ) ,
+
+Assuming that πt (x, u, z) is Lπ -Lipschitz in u and applying standard covering number arguments we obtain
+
+(48)
+E“
+R(Ftx ) ≲
+
+with σ1 , . . . , σMt independent Rademacher variables, i.e.
+P(σi = 1) = P(σi = −1) = 1/2.
+
+f ∈F
+
+i=1
+
+n
+
+“ (F(X1n ))+
+⩽ 2ER
+
+with
+
+Lemma
+(Massart’s
+Lemma
+(Massart,
+2000),
+(Shalev-Shwartz & Ben-David, 2014, Lemma 26.8)).
+Let F = {f1 , . . . , fK } be a finite class of functions
+satisfying ∥f ∥∞ ⩽ b for all f ∈ F. Then,
+
+2 log 1δ
+,
+n
+(49)
+
+…
+“
+R(F) ⩽ b
+
+(50)
+
+where A ⊂ Rn and F(xn1 ) is the class of vectors
+(f (x1 ), . . . , f (xn )) for f ∈ F.
+
+f ∈F
+
+(55)
+
+#
+"
+#
+n
+n
+X
+σi f (zi )
+1X
+σi ϕi (f (zi )) ⩽ L·Eσ sup
+,
+Eσ sup
+n
+f ∈F i=1
+f ∈F n i=1
+(56)
+where σ1 , . . . , σn are independent Rademacher random
+variables.
+"
+
+We also have:
+sup Ef (X) −
+
+2 log K
+.
+n
+
+Lemma (Contraction Inequality (Bartlett & Mendelson,
+2002, Thm. 12), (Ledoux & Talagrand, 1991, Cor. 3.17)).
+Let F ⊂ RZ be a class of real-valued functions, and let
+ϕ1 , . . . , ϕn : R → R be L-Lipschitz functions. Let S =
+{z1 , . . . , zn } ⊂ Z be a fixed sample. Then
+
+n
+
+1 X
+“
+σi ai ,
+R(A) = E sup
+a∈A n i=1
+
+(54)
+
+We report the two above mentioned results.
+
+Lemma ((Boucheron et al., 2005, Theorem 3.2)). Let
+X1 , . . . , Xn be i.i.d. random variables in a set X and let F
+be a class of functions X → [−1, 1]. Then, with probability
+at least 1 − δ,
+sup Ef (X) −
+
+LW · Lπ
+√
+.
+Mt
+
+This can be useful in the continuous control case, e.g.,
+Ut ⊂ [0, 1], as the class Πxt is no longer finite.
+
+To control the empirical approximation error uniformly over
+a function class, we rely on the following concentration
+inequality due to Boucheron et al. (2005).
+
+n
+X
+f (Xi )
+
+(53)
+
+n
+X
+f (Xi )
+i=1
+
+n
+
+“ (F(X1n )) +
+⩽ 2R
+
+2 log 2δ
+.
+n
+(51)
+
+There are several well-studied cases in which the
+Rademacher complexity can be upper bounded. We highlight two such cases that are particularly relevant for the
+financial applications of interest here.
+
+B.3. Final Bound
+Given the above upper bounds on the three terms in equa1
+tion 23, and choosing λ ∼ n− βt +1 , we have with high
+probability
+
+• Using Massart’s Lemma (Massart, 2000): if Ftx is
+finite, i.e., Ftx = {f1 , . . . , fK }, then
+E“
+R(Ftx ) ≲
+
+log K
+.
+Mt
+
+Å
+Et ≲
+
+(52)
+
+1
+nt
+
+t
+ã β β+1
+t
+
++
+
+1
++ cP Et+1 .
+Mt
+
+(57)
+
+βt
+
+Selecting Mt ∼ ntβt +1 gives the result in Theorem 1.
+
+This result is particularly relevant for our application
+to American options, as the control set Ut = {0, 1} is
+finite at each time step t.
+
+C. Numerical Simulations
+Firstly, we briefly describe the benchmark methods used for
+comparison in Tables 1 and 2, following (Goudenege et al.,
+2020).
+
+• Using Talagrand’s Contraction Lemma (Ledoux
+& Talagrand, 1991):
+if Ftx is not finite,
+14
+
+=== PDF PAGE 15 ===
+Error Propagation in Dynamic Programming
+
+function f ∈ L2µt+1 , we study under which condition Ptu f
+belongs to L2µt , with
+Z
+Ptu f (x) =
+f (x′ ) Ptu (x, dx′ ).
+(58)
+
+GPR-Tree. This method combines Gaussian Process Regression (GPR) with a tree-based exercise strategy. At each
+time step, the continuation value is estimated using GPR,
+and a decision tree determines whether to exercise or continue. The method is designed to reduce variance and improve interpretability, particularly in low-dimensional settings. We report the results from Goudenege et al. (2020,
+Tables 1–3) using P = 1000 training points, which offers
+the highest reported accuracy despite increased computational cost compared to P = 250 or P = 500.
+
+Xt+1
+
+Using Jensen’s inequality:
+∥Ptu f ∥2L2µ
+
+′
+
+f (x ) Ptu (x, dx′ )
+
+=
+
+t
+
+Xt
+
+Z
+
+µt (dx) ⩽
+
+Xt+1
+
+f (x′ )2
+
+⩽
+
+GPR-EI. GPR with Expected Improvement (EI) follows
+a sequential design strategy inspired by Bayesian optimization. It actively selects the most informative sample points
+by maximizing expected improvement in the value function,
+enabling a more data-efficient approximation of the continuation value. As with GPR-Tree, we report the results with
+P = 1000 training points.
+
+å2
+
+ÇZ
+
+Z
+
+Xt+1
+
+Z
+
+Ptu (x, dx′ )µt (dx) . (59)
+X
+{z
+}
+| t
+=: qtu (dx′ )
+
+If the pushforward measure qtu is absolutely continuous
+with respect to µt+1 and admits a bounded Radon–Nikodym
+derivative, i.e.,
+dqtu
+dµt+1
+
+GPR-MC. This variant uses GPR to estimate the continuation value within a standard Monte Carlo regression
+framework. It replaces linear regression with nonparametric
+GPR to improve accuracy, especially in high-dimensional
+problems.
+
+⩽ cP < ∞,
+
+(60)
+
+1/2
+
+(61)
+
+L∞
+µ
+
+t+1
+
+then we obtain:
+∥Ptu f ∥L2µ ⩽ cP ∥f ∥L2µ
+t
+
+Ekvall. This baseline method is based on the lattice-based
+regression approach proposed in (Ekvall, 1996), which approximates the value function using basis functions and
+optimal stopping. It serves as a classical benchmark for
+evaluating newer machine learning-based methods.
+
+t+1
+
+,
+
+which is exactly the requirement in Assumption 1.
+Although condition 61 may appear strong, it can often be
+verified in applications. Indeed, observe that
+Z
+
+
+2
+∥f ∥L2µ
+=
+E f (πt (x, ūt (x), Zt+1 ))2 µt (dx).
+t+1
+
+Benchmark. A closed-form analytical solution is available only for the Geometric Basket Put option.
+
+Xt
+
+(62)
+Therefore, a sufficient structural condition for 61 to hold is
+the pointwise inequality:
+
+Our method. We kept a basic implementation, exploiting classic libraries. We report the average performance of
+our method over 10 repetitions, along with corresponding
+confidence intervals. The regularization parameter is simply
+set to λ = 10−6 , and the RBF kernel lengthscale is selected
+from the grid {40, 80}. Sample sizes increase with dimensionality; for instance: for d = 2, we use n = 200, M = 50;
+for d = 20, we use n = 800, M = 100. All experiments
+were run on Google Colab using an NVIDIA T4 GPU (16
+GB) with a single Intel Xeon CPU and approximately 12 GB
+of RAM. The FALKON algorithm (Meanti et al., 2020) is
+taken from https://github.com/FalkonML/falkon. For the geometric basket option example, we plot the behaviour of the
+excess squared error of our method against the theoretical
+benchmark as a function of n, see Figure 2.
+
+2
+
+sup E [f (πt (x, u, Zt+1 ))] ⩽
+u∈Ut
+
+
+
+⩽ c2P,t E f (πt (x, ūt (x), Zt+1 ))2 ,
+
+(63)
+
+for µt -a.e. x ∈ Xt . This provides a more verifiable condition for establishing Assumption 1, especially in simulationbased settings where the behavior distribution is known or
+controlled.
+
+D. Sufficient Conditions for Well-Posedness
+We discuss here the minimal condition needed for our formulation to be well posed in relation to Assumption 1. Given a
+15
+
+=== PDF PAGE 16 ===
+Error Propagation in Dynamic Programming
+
+Error vs n, d=20
+
+Error vs n, d=40
+
+1.0
+
+1.75
+1.50
+
+0.8
+
+Error
+
+Error
+
+1.25
+
+0.6
+
+1.00
+0.75
+
+0.4
+
+0.50
+
+0.2
+
+0.25
+
+0.0
+
+0.00
+
+250
+
+500
+
+750
+
+1000
+n
+
+1250
+
+1500
+
+1750
+
+2000
+
+500
+
+1000
+
+1500
+
+2000
+n
+
+2500
+
+3000
+
+3500
+
+4000
+
+Figure 2. Geometric basket put option: excess quadratic error as a function of the sample size n for dimensions d = 20 and d = 40.
+
+t=2
+
+t=4
+
+40
+35
+30
+25
+20
+15
+10
+5
+0
+140
+
+120
+
+X01100 80
+
+60
+
+140
+
+120
+
+80
+100 2
+
+60
+
+140
+
+120
+
+X21100 80
+
+X0
+
+60
+
+t=6
+
+140
+
+120
+
+80
+100 2
+
+60
+
+V4(X)
+
+X2
+
+60
+
+140
+
+120
+
+80
+100 2
+
+X6
+
+60
+
+140
+
+120
+
+80
+100 2
+
+60
+
+X4
+
+t=T
+
+50
+
+30
+25
+20
+15
+10
+5
+0
+
+40
+30
+
+V8(X)
+
+V6(X)
+
+60
+
+120
+
+t=8
+
+120
+
+1
+X6100
+80
+
+140
+
+X41100 80
+
+35
+30
+25
+20
+15
+10
+5
+0
+140
+
+35
+30
+25
+20
+15
+10
+5
+0
+
+V2(X)
+
+V0(X)
+
+40
+35
+30
+25
+20
+15
+10
+5
+0
+
+140
+
+120
+
+1
+X8100
+80
+
+60
+
+140
+
+120
+
+80
+100 2
+
+X8
+
+60
+
+20
+10
+0
+140
+
+120
+
+1
+XT100
+80
+
+60
+
+140
+
+Figure 3. Value function estimates for the Geometric Basket Put option (d = 2), see Table 1.
+
+16
+
+120
+
+80
+100 2
+
+XT
+
+60
+
+VT(X)
+
+t=0
+
+=== END SOURCE TEXT ===

@@ -1,0 +1,17 @@
+{
+  "source":"https://arxiv.org/html/2509.20239v2#S5",
+  "geometric_put": [
+    {"dimension":2,"price":4.63,"ci_low":4.58,"ci_high":4.68,"seconds":2,"benchmark":4.62},
+    {"dimension":5,"price":3.46,"ci_low":3.42,"ci_high":3.50,"seconds":3,"benchmark":3.45},
+    {"dimension":10,"price":2.98,"ci_low":2.94,"ci_high":3.03,"seconds":4,"benchmark":2.97},
+    {"dimension":20,"price":2.70,"ci_low":2.68,"ci_high":2.72,"seconds":21,"benchmark":2.70},
+    {"dimension":40,"price":2.55,"ci_low":2.53,"ci_high":2.57,"seconds":87,"benchmark":2.56}
+  ],
+  "max_call": [
+    {"dimension":2,"price":16.93,"ci_low":16.86,"ci_high":17.00,"seconds":5,"benchmark":16.86},
+    {"dimension":5,"price":27.16,"ci_low":26.98,"ci_high":27.33,"seconds":5,"benchmark":27.20},
+    {"dimension":10,"price":35.14,"ci_low":34.94,"ci_high":35.35,"seconds":6,"benchmark":35.17},
+    {"dimension":20,"price":42.62,"ci_low":42.30,"ci_high":42.93,"seconds":27,"benchmark":42.76},
+    {"dimension":40,"price":50.44,"ci_low":50.01,"ci_high":50.87,"seconds":118,"benchmark":50.70}
+  ]
+}

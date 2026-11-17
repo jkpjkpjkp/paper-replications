@@ -1,0 +1,9 @@
+Error Propagation in Dynamic Programming: From Stochastic Control to American Option Pricing
+
+Condensed abstract
+
+Develops a dynamic-programming framework for discrete-time stochastic control using
+kernel ridge regression and Monte Carlo estimates of continuation values. The analysis
+separates regression, sampling, and propagated errors and bounds their accumulation
+backward through time. American option pricing illustrates the framework and its
+convergence guarantees.

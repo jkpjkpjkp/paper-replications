@@ -1,0 +1,9 @@
+{
+  "description": "Independent Algorithm 1 reconstruction; unreported settings are assumptions, see README.txt",
+  "market": {"spot":100,"strike":100,"rate":0.05,"volatility":0.2,"correlation":0.2,"maturity":1,"steps":9},
+  "repetitions": 10,
+  "base_seed": 20261106,
+  "dimensions": {"2":{"n":200,"m":50},"5":{"n":400,"m":50},"10":{"n":600,"m":100},"20":{"n":800,"m":100},"40":{"n":1200,"m":100}},
+  "training": {"lengthscales":[40,80],"regularization":0.000001,"validation_n":128,"batch_size":4096,"max_centers":null,"max_call_clip":10000},
+  "threads": 2
+}

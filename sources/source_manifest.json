@@ -1,0 +1,47 @@
+{
+  "access_date": "2026-11-06",
+  "sources": [
+    {
+      "id": "E1",
+      "title": "Error Propagation in Dynamic Programming: From Stochastic Control to American Option Pricing",
+      "authors": [
+        "Andrea Della Vecchia",
+        "Damir Filipović"
+      ],
+      "version_date": "2026-10-02",
+      "url": "https://arxiv.org/abs/2509.20239v2",
+      "download_url": "https://arxiv.org/pdf/2509.20239v2",
+      "local_path": "sources/paper-v2.pdf",
+      "sha256": "9ecc7a091cb81c05ebfd5b9affbf0bd2a42a756ddc0b7e8aefd104208acf7c70",
+      "locators": [
+        "Algorithm 1, PDF p.5",
+        "Section 4, PDF pp.6-7",
+        "Tables 1 and 2, PDF p.8",
+        "Appendix C, PDF pp.14-15",
+        "Figure 2 and Figure 3, PDF p.16"
+      ],
+      "assessment": "Read locally and checked by the computational assistant; no human verification asserted"
+    },
+    {
+      "id": "E2",
+      "title": "Machine Learning for Pricing American Options in High-Dimensional Markovian and non-Markovian models",
+      "authors": [
+        "Ludovic Goudenège",
+        "Andrea Molent",
+        "Antonino Zanette"
+      ],
+      "version_date": "2019-06-19",
+      "url": "https://arxiv.org/abs/1905.09474v3",
+      "download_url": "https://arxiv.org/pdf/1905.09474v3",
+      "local_path": "sources/benchmark.pdf",
+      "sha256": "b5fe1e0af6f195ab3da39c13b00d577aa5671003cd9beb126797611727074d9a",
+      "locators": [
+        "Section 3, time-grid definition",
+        "Section 8.1, one-year maturity and 10 exercise steps",
+        "Section 8.1.1, geometric reduction and 1000-step CRR benchmark",
+        "Tables 1 and 3, cited comparison values"
+      ],
+      "assessment": "Read locally and checked by the computational assistant; no human verification asserted"
+    }
+  ]
+}

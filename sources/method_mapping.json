@@ -1,0 +1,15 @@
+{
+  "target": "E1 in source_manifest.json",
+  "mapping": [
+    {"source":"Eq. (16), regularized empirical squared loss","implementation":"krrdp/kernel.py:KRR.fit","detail":"Full solve K+n*lambda*I, optional whitened Nystrom restriction","status":"Implemented; solver differs from FALKON"},
+    {"source":"Eq. (18), symmetric clipping","implementation":"krrdp/kernel.py:KRR.predict","detail":"B=100 put, B=10000 call","status":"B is an assumption; states not compactly truncated"},
+    {"source":"Algorithm 1, ContVal and DataGen","implementation":"krrdp/pricing.py:continuation and train","detail":"Shared M innovations, discounted continuation, regress Bellman maximum","status":"Primary implementation"},
+    {"source":"Algorithm 1, terminal and backward pass","implementation":"krrdp/pricing.py:train","detail":"Known exact terminal payoff; fresh input and innovation samples by stage","status":"Primary implementation"},
+    {"source":"Eq. (20), GBM dynamics","implementation":"krrdp/market.py:Market.marginal and factors","detail":"Equicorrelation common-factor sampler; drift and noise use consistent dt","status":"One-year maturity inferred from E2; discrete horizon 9 from E1"},
+    {"source":"Eq. (23), three error components","implementation":"krrdp/diagnostics.py:error_decomposition","detail":"Exact finite-state residual decomposition with true population marginals","status":"Numerical illustration; not a proof"},
+    {"source":"Propagation contraction and Corollary 1","implementation":"krrdp/diagnostics.py:error_decomposition","detail":"Check propagation MSE <= exp(-2*r*dt)*next-stage MSE","status":"2160 finite-state numerical checks"},
+    {"source":"Tables 1 and 2","implementation":"scripts/run_suite.py and scripts/report.py","detail":"10 seeds per payoff/dimension; all measured results retained","status":"Method-level reconstruction with explicit missing settings"},
+    {"source":"Figure 2","implementation":"scripts/run_extensions.py:convergence","detail":"5 seeds, n sweep, M proportional sqrt(n), max 256 centers","status":"Exploratory reconstruction; source protocol incomplete"},
+    {"source":"Figures 1 and 3","implementation":"scripts/run_surfaces.py","detail":"Learn across Uniform[60,140]^2 initial prices and propagated marginals","status":"Qualitative reconstruction; distinct from deterministic-spot tables"}
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "description": "ten_steps sensitivity; not paper-reported protocol",
+  "market": {
+    "spot": 100,
+    "strike": 100,
+    "rate": 0.05,
+    "volatility": 0.2,
+    "correlation": 0.2,
+    "maturity": 1,
+    "steps": 10
+  },
+  "repetitions": 10,
+  "base_seed": 20261106,
+  "dimensions": {
+    "2": {
+      "n": 200,
+      "m": 50
+    },
+    "20": {
+      "n": 800,
+      "m": 100
+    }
+  },
+  "training": {
+    "lengthscales": [
+      40,
+      80
+    ],
+    "regularization": 1e-06,
+    "validation_n": 128,
+    "batch_size": 4096,
+    "max_centers": null,
+    "max_call_clip": 10000
+  },
+  "threads": 2
+}
