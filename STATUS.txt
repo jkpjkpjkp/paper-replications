@@ -1,0 +1,25 @@
+2: at least one representative experiment matches the paper's claim
+
+
+
+Scope: Released RURA algorithm and native evaluation; manuscript equations differ.
+
+Evidence and explanation:
+All 24 RURA Table 1/2 nDCG/ROI/utility cells match printed rounding across the full
+released users and rolling slices. At lambda 0.5, native nDCG is 0.1053285%, ROI
+0.3877940%, and scaled utility 3.5932722 x 1e-4. Native helper agreement is exact for
+nDCG and within 6.94e-18 for ROI. These are deterministic aggregate comparisons, not
+independent-user uncertainty estimates.
+
+Limits / next requirement:
+The independently implemented paper equations match 0/50 cells and yield different
+values (lambda 0.5 nDCG 0.7856051%, ROI 7.1113093%). Native upstream baseline cells also
+disagree. Missing baseline generators and substantial algorithm/metric/provenance
+differences prevent level 3. Level 2 credits the released algorithm's representative
+numerical result only.
+
+Evidence paths (relative to this STATUS.txt):
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/REPORT.txt
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/evidence/native-output-verification.json
+- ../.replication-local/artifacts/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/experiment-inventory.json
+

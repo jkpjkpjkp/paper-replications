@@ -1,0 +1,21 @@
+features_dir: /data/features
+candidates_dir: /data/candidates
+profiles_dir: /data/profiles
+slices_file: /data/splits/slices.jsonl
+out_dir: runs
+
+method: rura_la
+lambda_div: 0.05
+beta_pop: 0.10
+use_cov: true
+require_cov: true
+L: 128
+w_max: 0.4
+eps_improve: 1e-9
+diag_eps: 1e-10
+
+device: gpu
+num_workers: 16
+chunk_rows: 200000
+seed: 2025
+log: logs/rura.log

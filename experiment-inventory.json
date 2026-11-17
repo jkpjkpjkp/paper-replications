@@ -1,0 +1,500 @@
+{
+  "scope": "All original final-paper observed-data requirements; no covariance/UF/CRRA experiments are reported as required ablations",
+  "datasets": [
+    {
+      "id": "far_trans",
+      "uses_observed_financial_data": true,
+      "origin": "Public FAR-Trans (Sanz-Cruzado et al.2024); de-identified investor transactions, daily closes and customer profiles",
+      "period": "2018-01 through2022-11",
+      "reported_customers": 29090,
+      "reported_transactions": 388049,
+      "reported_assets": 806,
+      "reported_assets_with_transactions": 321,
+      "asset_classes": [
+        "equities",
+        "bonds",
+        "mutual funds"
+      ],
+      "risk_groups": [
+        "Conservative",
+        "Income",
+        "Balanced",
+        "Aggressive",
+        "Unknown"
+      ],
+      "source_evidence": {
+        "url": "https://dl.acm.org/doi/pdf/10.1145/3773966.3779383?download=true",
+        "path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+        "section": "4.1",
+        "printed_page": 1229
+      },
+      "local_data_status": "official archive located; not downloaded; no prepared data reused",
+      "archive_bytes": 3866306020,
+      "archive_file_id": "1KA23UTBJF8iwG2fE7q1iIIruOmYdCZbP",
+      "uncompressed_size": null,
+      "data_license": "Not yet established; inspect archive metadata",
+      "corporate_action_total_return_convention": "Not established; paper reports close-to-close EUR-equivalent pricing; release price schema calls close_eur."
+    }
+  ],
+  "evaluation_protocol": {
+    "construction_slice_start": "2019-08-01",
+    "construction_slice_end": "2021-11-18",
+    "slice_step": "8weeks",
+    "validation": "[t,t+6months)",
+    "test": "[t+6months,t+12months)",
+    "features": "Strictly before t; validate likelihood isotonic calibrators on validation then freeze test",
+    "shortlist_L": 30,
+    "display_k": 10,
+    "existing_holdings": "exclude at construction t",
+    "price_exclusions": "Common exclusions for assets with invalid test start/end closes; future endpoint validity must be separately audited as selection limitation",
+    "aggregation": "per-user/slice metrics, then user-weighted slice aggregation",
+    "seed": 2025,
+    "seed_basis": "README; final paper says fixed seeds without integer or number of repeats",
+    "tie_breaking": "deterministic; exact paper tie key not stated",
+    "upstream_training": "No new upstream training required by original comparison; release candidates need provenance audit"
+  },
+  "original_paper_experiments": [
+    {
+      "id": "upstream",
+      "original_paper": true,
+      "dataset": "far_trans",
+      "status": "partial",
+      "method": "Frozen upstream blended-score order, uniform evaluation weights",
+      "metrics": [
+        "binary nDCG@10 percent vs new test-window buys",
+        "equal-weight top10 ROI percent; start/end closes; fixed30bp roundtrip friction"
+      ],
+      "reported": {
+        "ndcg_percent": 0.7604,
+        "roi_percent": -0.3897
+      },
+      "evidence": {
+        "path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+        "sections": [
+          "3.2-3.3",
+          "4.1-4.2"
+        ],
+        "tables": [
+          1
+        ]
+      },
+      "executed": false,
+      "execution_scope": "Full16slices,allreleased users,on frozen shortlists; see explicit equation-config adaptations",
+      "config": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/equation-config.json",
+      "execution_status": "complete_methodological_all16slices",
+      "results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/paper-equations",
+      "limitation": "Exact release solver/inputs/pricing differ from final-paper equations and endpoint/baseline details are underspecified; no table agreement.",
+      "reason": "Original exact baseline generator/numeric settings or tie policy not supplied. Published descriptions implemented without test tuning; reported cells not recovered."
+    },
+    {
+      "id": "rura_lambda0.1",
+      "original_paper": true,
+      "dataset": "far_trans",
+      "status": "partial",
+      "method": "Paper eq3-5 diagonal quadratic utility, water-filling,lambda0.1",
+      "metrics": [
+        "binary nDCG@10 percent vs new test-window buys",
+        "equal-weight top10 ROI percent; start/end closes; fixed30bp roundtrip friction",
+        "CARA proxy utility mean overall and by five risk categories; Table2 units1e-4"
+      ],
+      "reported": {
+        "ndcg_percent": 0.0955,
+        "roi_percent": 0.2924,
+        "utility_x1e4": [
+          6.489,
+          3.327,
+          4.542,
+          1.333,
+          4.618,
+          3.602
+        ]
+      },
+      "evidence": {
+        "path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+        "sections": [
+          "3.2-3.3",
+          "4.1-4.2"
+        ],
+        "tables": [
+          1,
+          2
+        ]
+      },
+      "executed": false,
+      "execution_scope": "Full16slices,allreleased users,on frozen shortlists; see explicit equation-config adaptations",
+      "config": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/equation-config.json",
+      "execution_status": "complete_full_artifact_equation_scope",
+      "results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/paper-equations",
+      "limitation": "Exact release solver/inputs/pricing differ from final-paper equations and endpoint/baseline details are underspecified; no table agreement.",
+      "reported_metric_artifact_replication": "complete24/24RURA cells across lambda.1/.5/.9",
+      "published_equation_execution": "complete_all16slices; numerical disagreement",
+      "native_results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/released-algorithm",
+      "reason": "Reported cells reproduced by released entropy/token and native metric conventions,not the stated quadratic/water-filling/equal-slate conventions."
+    },
+    {
+      "id": "rura_lambda0.5",
+      "original_paper": true,
+      "dataset": "far_trans",
+      "status": "partial",
+      "method": "Paper eq3-5 diagonal quadratic utility, water-filling,lambda0.5",
+      "metrics": [
+        "binary nDCG@10 percent vs new test-window buys",
+        "equal-weight top10 ROI percent; start/end closes; fixed30bp roundtrip friction",
+        "CARA proxy utility mean overall and by five risk categories; Table2 units1e-4"
+      ],
+      "reported": {
+        "ndcg_percent": 0.1053,
+        "roi_percent": 0.3878,
+        "utility_x1e4": [
+          6.458,
+          3.32,
+          4.533,
+          1.332,
+          4.608,
+          3.593
+        ]
+      },
+      "evidence": {
+        "path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+        "sections": [
+          "3.2-3.3",
+          "4.1-4.2"
+        ],
+        "tables": [
+          1,
+          2
+        ]
+      },
+      "executed": false,
+      "execution_scope": "Full16slices,allreleased users,on frozen shortlists; see explicit equation-config adaptations",
+      "config": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/equation-config.json",
+      "execution_status": "complete_full_artifact_equation_scope",
+      "results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/paper-equations",
+      "limitation": "Exact release solver/inputs/pricing differ from final-paper equations and endpoint/baseline details are underspecified; no table agreement.",
+      "reported_metric_artifact_replication": "complete24/24RURA cells across lambda.1/.5/.9",
+      "published_equation_execution": "complete_all16slices; numerical disagreement",
+      "native_results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/released-algorithm",
+      "reason": "Reported cells reproduced by released entropy/token and native metric conventions,not the stated quadratic/water-filling/equal-slate conventions."
+    },
+    {
+      "id": "rura_lambda0.9",
+      "original_paper": true,
+      "dataset": "far_trans",
+      "status": "partial",
+      "method": "Paper eq3-5 diagonal quadratic utility, water-filling,lambda0.9",
+      "metrics": [
+        "binary nDCG@10 percent vs new test-window buys",
+        "equal-weight top10 ROI percent; start/end closes; fixed30bp roundtrip friction",
+        "CARA proxy utility mean overall and by five risk categories; Table2 units1e-4"
+      ],
+      "reported": {
+        "ndcg_percent": 0.1155,
+        "roi_percent": 0.5166,
+        "utility_x1e4": [
+          6.442,
+          3.312,
+          4.515,
+          1.331,
+          4.581,
+          3.583
+        ]
+      },
+      "evidence": {
+        "path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+        "sections": [
+          "3.2-3.3",
+          "4.1-4.2"
+        ],
+        "tables": [
+          1,
+          2
+        ]
+      },
+      "executed": false,
+      "execution_scope": "Full16slices,allreleased users,on frozen shortlists; see explicit equation-config adaptations",
+      "config": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/equation-config.json",
+      "execution_status": "complete_full_artifact_equation_scope",
+      "results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/paper-equations",
+      "limitation": "Exact release solver/inputs/pricing differ from final-paper equations and endpoint/baseline details are underspecified; no table agreement.",
+      "reported_metric_artifact_replication": "complete24/24RURA cells across lambda.1/.5/.9",
+      "published_equation_execution": "complete_all16slices; numerical disagreement",
+      "native_results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/released-algorithm",
+      "reason": "Reported cells reproduced by released entropy/token and native metric conventions,not the stated quadratic/water-filling/equal-slate conventions."
+    },
+    {
+      "id": "cm1",
+      "original_paper": true,
+      "dataset": "far_trans",
+      "status": "partial",
+      "method": "Probability-weighted Sharpe using adoption,return-facing signal,inverse volatility",
+      "metrics": [
+        "binary nDCG@10 percent vs new test-window buys",
+        "equal-weight top10 ROI percent; start/end closes; fixed30bp roundtrip friction",
+        "CARA proxy utility mean overall and by five risk categories; Table2 units1e-4"
+      ],
+      "reported": {
+        "ndcg_percent": 0.0988,
+        "roi_percent": -0.3981,
+        "utility_x1e4": [
+          6.352,
+          3.202,
+          4.401,
+          1.277,
+          4.443,
+          3.484
+        ]
+      },
+      "evidence": {
+        "path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+        "sections": [
+          "3.2-3.3",
+          "4.1-4.2"
+        ],
+        "tables": [
+          1,
+          2
+        ]
+      },
+      "executed": false,
+      "execution_scope": "Full16slices,allreleased users,on frozen shortlists; see explicit equation-config adaptations",
+      "config": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/equation-config.json",
+      "execution_status": "complete_methodological_all16slices",
+      "results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/paper-equations",
+      "limitation": "Exact release solver/inputs/pricing differ from final-paper equations and endpoint/baseline details are underspecified; no table agreement.",
+      "reason": "Original exact baseline generator/numeric settings or tie policy not supplied. Published descriptions implemented without test tuning; reported cells not recovered."
+    },
+    {
+      "id": "cm2",
+      "original_paper": true,
+      "dataset": "far_trans",
+      "status": "partial",
+      "method": "Nonnegative unit-sum mean-variance diagonal optimization; projected updates, same risk/profile construction",
+      "metrics": [
+        "binary nDCG@10 percent vs new test-window buys",
+        "equal-weight top10 ROI percent; start/end closes; fixed30bp roundtrip friction",
+        "CARA proxy utility mean overall and by five risk categories; Table2 units1e-4"
+      ],
+      "reported": {
+        "ndcg_percent": 0.0402,
+        "roi_percent": -0.907,
+        "utility_x1e4": [
+          5.712,
+          2.884,
+          3.959,
+          1.153,
+          4.014,
+          3.137
+        ]
+      },
+      "evidence": {
+        "path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+        "sections": [
+          "3.2-3.3",
+          "4.1-4.2"
+        ],
+        "tables": [
+          1,
+          2
+        ]
+      },
+      "executed": false,
+      "execution_scope": "Full16slices,allreleased users,on frozen shortlists; see explicit equation-config adaptations",
+      "config": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/equation-config.json",
+      "execution_status": "complete_methodological_all16slices",
+      "results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/paper-equations",
+      "limitation": "Exact release solver/inputs/pricing differ from final-paper equations and endpoint/baseline details are underspecified; no table agreement.",
+      "reason": "Original exact baseline generator/numeric settings or tie policy not supplied. Published descriptions implemented without test tuning; reported cells not recovered."
+    },
+    {
+      "id": "cm3",
+      "original_paper": true,
+      "dataset": "far_trans",
+      "status": "partial",
+      "method": "Minimize GaussianCVaR alpha0.95, diagonal risk, nonnegative unit-sum, projected updates",
+      "metrics": [
+        "binary nDCG@10 percent vs new test-window buys",
+        "equal-weight top10 ROI percent; start/end closes; fixed30bp roundtrip friction",
+        "CARA proxy utility mean overall and by five risk categories; Table2 units1e-4"
+      ],
+      "reported": {
+        "ndcg_percent": 0.0243,
+        "roi_percent": -0.4995,
+        "utility_x1e4": [
+          5.712,
+          2.884,
+          3.959,
+          1.153,
+          4.014,
+          3.137
+        ]
+      },
+      "evidence": {
+        "path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+        "sections": [
+          "3.2-3.3",
+          "4.1-4.2"
+        ],
+        "tables": [
+          1,
+          2
+        ]
+      },
+      "executed": false,
+      "execution_scope": "Full16slices,allreleased users,on frozen shortlists; see explicit equation-config adaptations",
+      "config": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/equation-config.json",
+      "execution_status": "complete_methodological_all16slices",
+      "results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/paper-equations",
+      "limitation": "Exact release solver/inputs/pricing differ from final-paper equations and endpoint/baseline details are underspecified; no table agreement.",
+      "reason": "Original exact baseline generator/numeric settings or tie policy not supplied. Published descriptions implemented without test tuning; reported cells not recovered."
+    },
+    {
+      "id": "lambda_sensitivity_figure1",
+      "original_paper": true,
+      "dataset": "far_trans",
+      "status": "partial",
+      "ablation": "Diversification lambda sensitivity over displayed0.1..0.9 domain",
+      "metrics": [
+        "binary nDCG@10 percent vs new test-window buys",
+        "equal-weight top10 ROI percent; start/end closes; fixed30bp roundtrip friction",
+        "CARA proxy utility mean overall and by five risk categories; Table2 units1e-4"
+      ],
+      "grid_note": "Figure1 visually confirms9points lambda0.1..0.9 in steps0.1; exact intermediate y-values are graphical only,not fabricated as numeric targets.",
+      "evidence": {
+        "path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+        "section": "4.2 Figure1",
+        "printed_page": 1230
+      },
+      "executed": false,
+      "execution_scope": "Full16slices,allreleased users,on frozen shortlists; see explicit equation-config adaptations",
+      "config": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/equation-config.json",
+      "execution_status": "complete_full_artifact_equation_scope",
+      "results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/paper-equations",
+      "limitation": "Exact release solver/inputs/pricing differ from final-paper equations and endpoint/baseline details are underspecified; no table agreement.",
+      "published_equation_curve": "complete9lambda points x16slices",
+      "released_algorithm_curve": "complete9lambda points x16slices",
+      "figure": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/released-algorithm/implementation-comparison.png",
+      "reason": "Both fixed curves saved; native curve reconstructs reported3table anchors,stated equations produce a different curve."
+    }
+  ],
+  "seeds_repeats": {
+    "status": "complete_fixed_artifact_seed_scope",
+    "paper": "Fixed seeds and deterministic tie breaking; numeric seed/repeat count not reported",
+    "release": "README sets seed2025",
+    "planned": "Seed2025 frozen artifacts; deterministic equation computation; full13variant first/last slice reruns plus independent optimizer comparisons,not extra independent days",
+    "seed": 2025,
+    "separate_stochastic_repeats": "None specified beyond fixed seed in final paper/release; deterministic Eq reruns first/last full slices and2304native source parity checks performed; not independent trading days."
+  },
+  "optional_release_variants": {
+    "required": false,
+    "variants": [
+      "rura_uf",
+      "rura_la_no_sigma",
+      "rura_la_crra",
+      "covariance-enabled mode"
+    ],
+    "reason": "Not evaluated in original final paper; do not expand required scope from extra code paths"
+  },
+  "required_user_extensions": {
+    "market_neutral_5bp": {
+      "status": "pending",
+      "required": true,
+      "separate_from_original_paper": true,
+      "protocol_path": "/home/jkp/data/paper-reproduction-audit/RETURN_EVALUATION_PROTOCOL.txt",
+      "protocol_sha256": "7204e5fc78d78892e85e33a08d2d131474fe2b724796605f02e45f45de30ae79",
+      "details_field": "market_neutral_5bp"
+    },
+    "market_neutral_nocost": {
+      "id": "market_neutral_nocost",
+      "required": true,
+      "primary": true,
+      "status": "blocked",
+      "details_field": "market_neutral_nocost",
+      "separate_from_original_paper": true,
+      "protocol_path": "/home/jkp/data/paper-reproduction-audit/RETURN_EVALUATION_PROTOCOL.txt"
+    }
+  },
+  "data_release_audit": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/evidence/release-audit-compact.json",
+  "equation_variants": [
+    "upstream",
+    "rura_lambda0.1",
+    "rura_lambda0.2",
+    "rura_lambda0.3",
+    "rura_lambda0.4",
+    "rura_lambda0.5",
+    "rura_lambda0.6",
+    "rura_lambda0.7",
+    "rura_lambda0.8",
+    "rura_lambda0.9",
+    "cm1",
+    "cm2",
+    "cm3"
+  ],
+  "released_algorithm_audit": {
+    "status": "complete_verified_artifact_scope",
+    "config": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/release-config.json",
+    "separate_from_published_equation_scope": true,
+    "parity": "passed_exact1152cases",
+    "results_path": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/released-algorithm",
+    "method_slice_runs": 144,
+    "source_author_parity_checks": 2304,
+    "reported_RURA_cells_recovered": 24,
+    "results": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/results/released-algorithm/status.json",
+    "verification": "/home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/evidence/native-output-verification.json"
+  },
+  "native_upstream_baseline": {
+    "status": "partial",
+    "original_paper": true,
+    "method": "frozen upstream top10",
+    "config": {
+      "name": "native_upstream_baseline",
+      "status": "prepared",
+      "command": "python /home/jkp/data/paper-reproduction-audit/run_guarded.py --paper-id 388 --memory-gib 4 --threads 1 --disk-gib 0.2 --cwd /home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking -- env PYTHONDONTWRITEBYTECODE=1 /home/jkp/data/prism-vq-reproduction/.venv/bin/python /home/jkp/data/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/native_upstream.py",
+      "memory_gib": 4,
+      "threads": 1,
+      "disk_gib": 0.2,
+      "gpu_mib": 0,
+      "scope": "All16slices,allusers,frozen upstream top10 and unchanged author evaluation helpers; use cached future-filter-free30,not a second full score-table scan. Same predeclared native conventions; no financial signal/hyperparameter change."
+    },
+    "execution_status": "complete",
+    "metrics": {
+      "status": "complete",
+      "method_slice_runs": 16,
+      "user_slices": 465440,
+      "ndcg_percent": 0.6713779258122251,
+      "roi_percent": -0.4893899283352769,
+      "source": "Frozen released upstream row order,eligible and unheld filter,uniform10slate,unchanged author label/nDCG/ROI helpers; exact native calendar-date pricing",
+      "paper_reported": {
+        "ndcg_percent": 0.7604,
+        "roi_percent": -0.3897
+      },
+      "test_selection": "None; native conventions fixed before execution,not tuned to target cells",
+      "daily_market_neutral": false,
+      "differences": {
+        "ndcg_percent": -0.08902207418777486,
+        "roi_percent": -0.0996899283352769
+      },
+      "matches_printed_rounding": {
+        "ndcg_percent": false,
+        "roi_percent": false
+      }
+    },
+    "reason": "Frozen source-row order/native helper interpretation does not recover reported baseline; exact original baseline generator and tie policy are not provided. No posthoc tie/score/price tuning."
+  },
+  "execution_totals": {
+    "equation_methods": 13,
+    "equation_method_slice_runs": 208,
+    "native_RURA_lambdas": 9,
+    "native_RURA_method_slice_runs": 144,
+    "native_upstream_variants": 1,
+    "native_upstream_method_slice_runs": 16,
+    "method_slice_runs": 368,
+    "signal_definition_variants": 23,
+    "unique_original_user_slices": 465440,
+    "method_user_evaluations": 10705120,
+    "source_rows_streamed_for_full_shortlists": 332707102,
+    "original_datasets": 1,
+    "original_slices": 16,
+    "original_users": 29090,
+    "trading_variants_executed": 0
+  }
+}

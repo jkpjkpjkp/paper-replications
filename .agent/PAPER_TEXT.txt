@@ -1,0 +1,719 @@
+Risk-Aware Utility Re-Ranking for Financial Asset Recommendation
+
+AGENT-READABLE PAPER REFERENCE
+Coverage: pdf_text
+Original source: ../.replication-local/artifacts/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf
+Source SHA-256: 3d6a3874f8967c976e31457d2420f16bc4f7a1624626e7f085a5c5fd52ef2903
+Index and provenance: PAPER_INDEX.json
+This is a text reference, not a replication assessment.
+For experiment scope, read the project README and STATUS.txt when present.
+Equations, tables and figures require checking against the original source.
+
+=== BEGIN SOURCE TEXT ===
+
+=== PDF PAGE 1 ===
+Risk-Aware Utility Re-Ranking for Financial Asset
+Recommendation
+Keigo Sakurai
+
+Takahiro Ogawa
+
+Miki Haseyama
+
+Hokkaido University
+Sapporo, Japan
+sakurai@lmd.ist.hokudai.ac.jp
+
+Hokkaido University
+Sapporo, Japan
+ogawa@lmd.ist.hokudai.ac.jp
+
+Hokkaido University
+Sapporo, Japan
+mhaseyama@lmd.ist.hokudai.ac.jp
+
+Anjyu Anan
+
+Kei Nakagawa
+
+Nomura Asset Management Co, Ltd.
+Tokyo, Japan
+Kobe University
+Kobe, Japan
+an2anju555@gmail.com
+
+Osaka Metropolitan University
+Osaka, Japan
+kei.nak.0315@gmail.com
+
+Abstract
+
+asset recommendations [1, 3, 6, 7, 11, 16, 19]. In the finance domain,
+downstream recommendation results directly affect monetary returns (e.g., ROI), so optimizing only preference-alignment metrics
+common in web recommendation (e.g., click- or view-based nDCG)
+is insufficient. At the same time, if preference alignment is not adequately maintained, users are less likely to adopt (i.e., purchase) the
+recommendations, diminishing system value before any investment
+outcomes materialize [2, 9, 10, 12]. Therefore, financial asset recommendations must jointly consider both the preference alignment
+necessary for adoption and the return-oriented performance that
+leads to gains.
+However, two unresolved challenges remain in this domain: (A)
+the trade-off between preference alignment and return performance,
+and (B) the heterogeneity of investors’ risk preferences. First, the
+two objectives (preference alignment and return performance) do
+not move in lockstep: improving one often degrades the other [4,
+13]. Price- or return-driven ranking can weaken diversification
+and overlook user tastes, whereas preference-only ranking may
+increase adoption but depress realized returns; a well-calibrated
+balance is therefore required. Second, while aggressive investors
+tend to prefer higher-return, higher-volatility assets, conservative
+investors prioritize stability [5, 8]. Prior works [4, 13, 21, 22] have
+not sufficiently personalized recommendations to reflect this risk
+tolerance.
+To address the above challenges, we acknowledge the inherent
+trade-off between preference alignment and return performance,
+formulate a re-ranking task to improve returns with minimal loss of
+preference alignment, and propose Risk-aware Utility re-RAnking
+(RURA) as a concrete solution. RURA takes the top candidates produced by an upstream recommendation model optimized for preference alignment and reorders them to maximize an expected-utility
+function parameterized by the user’s risk tolerance. The utility
+function, standard in finance, maps outcome distributions to user
+satisfaction; for example, small losses yield only minor utility reductions for aggressive investors but substantially reduce utility for
+conservative investors. By maximizing expected utility, RURA recommends assets whose gain profiles are tailored to each investor’s
+risk tolerance. Moreover, by presenting items in descending order
+of the re-ranking score, RURA preserves the stability of the original
+
+A financial recommender system couples two objectives: ranking
+for preference alignment so that users actually adopt the recommendations, and ranking for outcome quality so that adoption translates
+into value. These objectives can conflict: return-driven lists may
+narrow diversification and miss user tastes, while relevance-only
+lists deliver weak realized returns. To address these problems, we
+propose Risk-aware Utility re-RAnking (RURA), a plug-in method
+that operates on the upstream top candidates and optimizes a userspecific expected-utility objective. RURA injects investor risk tolerance into the utility, includes a likelihood-aware variant that
+integrates calibrated adoption probabilities, and uses a single hyperparameter to control diversification to preserve upstream order
+while trading minimal nDCG loss for ROI gains. Experiments on a
+real-world dataset demonstrate that RURA outperforms risk-aware
+baselines in ROI while keeping nDCG within the range of a strong
+risk-aware baseline and delivering higher expected utility across
+risk groups.
+
+CCS Concepts
+• Information systems → Content ranking; Personalization.
+
+Keywords
+Financial asset recommendation; utility-aware ranking; re-ranking
+ACM Reference Format:
+Keigo Sakurai, Takahiro Ogawa, Miki Haseyama, Anjyu Anan, and Kei Nakagawa. 2026. Risk-Aware Utility Re-Ranking for Financial Asset Recommendation. In Proceedings of the Nineteenth ACM International Conference on Web
+Search and Data Mining (WSDM ’26), February 22–26, 2026, Boise, ID, USA.
+ACM, New York, NY, USA, 5 pages. https://doi.org/10.1145/3773966.3779383
+
+1
+
+Introduction
+
+The expansion of retail investing and the mainstream adoption of
+online trading have heightened the need for personalized financial
+
+This work is licensed under a Creative Commons Attribution 4.0 International License.
+WSDM ’26, Boise, ID, USA
+© 2026 Copyright held by the owner/author(s).
+ACM ISBN 979-8-4007-2292-9/2026/02
+https://doi.org/10.1145/3773966.3779383
+
+1227
+
+=== PDF PAGE 2 ===
+WSDM ’26, February 22–26, 2026, Boise, ID, USA
+
+Keigo Sakurai, Takahiro Ogawa, Miki Haseyama, Anjyu Anan, & Kei Nakagawa
+
+ranking, and a hyperparameter enables continuous control over
+the trade-off between nDCG degradation and ROI improvement.
+
+2
+
+therefore a proxy for risk-preference alignment rather than monetary utility. The dispersion proxy 𝜎𝑢,𝑖,𝑡 ≥ 0 is computed from pre-𝑡
+prices; when unavailable, we impute slice-level medians to maintain nonnegativity, which attenuates cross-sectional dispersion. We
+use a user-specific positive scale 𝐵𝑢 carried over from profiles, and
+item-level adoption likelihoods 𝑝𝑢,𝑖,𝑡 ∈ [0, 1] fitted on the validation
+window and then frozen for testing.
+
+Task Definition
+
+We formalize re-ranking for financial asset recommendation under temporal evaluation. For each user 𝑢 and evaluation slice 𝑡
+(e.g., a trading period), an upstream recommender produces a candidate set C𝑢,𝑡 = {𝑖 1, . . . , 𝑖 𝐿 } of size 𝐿 with per-item signals. Our
+system re-ranks only within C𝑢,𝑡 ; no new items are introduced, and
+the upstream model remains unchanged. The goal is to improve
+return-oriented performance while keeping the loss in preference
+alignment small, where alignment is measured by binary nDCG@𝑘
+computed against new-purchase labels in the test window (not
+against the upstream order).
+
+3.2
+
+Inputs. (i) Candidate set C𝑢,𝑡 with item-wise signals (𝜇𝑢,𝑖,𝑡 , 𝜎𝑢,𝑖,𝑡 ).
+The quantity 𝜇𝑢,𝑖,𝑡 is a return-facing score available at time 𝑡 (priority: blended upstream score; otherwise channel-specific scores).
+The quantity 𝜎𝑢,𝑖,𝑡 ≥ 0 is a per-item volatility proxy computed from
+prices strictly before 𝑡; when unavailable, we use a diagonal surrogate by imputing slice-level medians to ensure non-negativity.
+Optional adoption likelihoods 𝑝𝑢,𝑖,𝑡 ∈ [0, 1] calibrated on validation
+may also be provided.
+(ii) User profiles providing a positive scalar risk aversion parameter
+𝜌𝑢 > 0 (mapped from profiles or coarse risk buckets; higher tolerance corresponds to smaller 𝜌𝑢 ) and a user-specific utility scale
+𝐵𝑢 > 0.
+
+{𝑤𝑢,𝑖,𝑡 }
+
+s.t.
+
+∑︁
+
+𝑤𝑢,𝑖,𝑡 ≤ 1,
+
+𝑤𝑢,𝑖,𝑡 ≥ 0.
+
+The linear term rewards higher return-facing signals; the quadratic term penalizes risk in proportion to user aversion 𝜌𝑢 ; the
+𝜆 > 0 term discourages single-name concentration. Our risk term
+operationalizes a mean–variance trade-off in the spirit of classical portfolio selection [14]. A covariance-enabled variant replaces
+Í 2
+⊤
+2
+𝑖 𝜎𝑢,𝑖,𝑡 𝑤𝑢,𝑖,𝑡 with w Σ𝑢,𝑡 w; experiments use the diagonal setting
+2
+Σ𝑢,𝑡 = diag(𝜎𝑢,𝑖,𝑡 ). During evaluation, learned weights induce the
+ordering only; the displayed ranking is the descending order of
+𝑤𝑢,𝑖,𝑡 , and only the top-𝑘 items are presented.
+
+3.3
+
+Solver and output ranking
+
+Problem (3) is strictly concave on a convex simplex. Under the
+diagonal-risk approximation, it admits a water-filling solution. Define
+𝑎𝑖 := 𝑝𝑢,𝑖,𝑡 𝐵𝑢 𝜇𝑢,𝑖,𝑡 ,
+
+2
+𝑏𝑖 := 2𝑢 𝑝𝑢,𝑖,𝑡 𝐵𝑢2 𝜎𝑢,𝑖,𝑡
++ 𝜆,
+𝜌
+
+then the optimal weights take the form
+n 𝑎 −𝜏 o
+𝑖
+★
+𝑤𝑢,𝑖,𝑡
+= max 0,
+,
+2𝑏𝑖
+
+Personalized utility via risk preferences
+
+(4)
+
+(5)
+
+Í ★
+where the scalar threshold 𝜏 is chosen so that 𝑖 𝑤𝑢,𝑖,𝑡
+≤ 1 , with
+equality when the budget constraint is active. The threshold is
+found by a monotone search in 𝑂 (𝐿 log 𝐿). The final display ranks
+★ and presents the top-𝑘.
+items by 𝑤𝑢,𝑖,𝑡
+
+Each user 𝑢 has a base risk-aversion coefficient 𝜌𝑢(0) estimated from
+profile signals (or coarse buckets). Heterogeneity is modeled by an
+ordinal group 𝑔(𝑢) ∈ G with group-specific positive scale 𝑠𝑔 (𝑢 ) , and
+with 𝑠𝑔1 > 𝑠𝑔2 > · · · > 𝑠𝑔 |G| > 0.
+
+2
+𝑤𝑢,𝑖,𝑡
+
+𝑖
+
+Proposed Method: RURA
+
+𝜌𝑢 = 𝑠𝑔 (𝑢 ) 𝜌𝑢(0) ,
+
+∑︁
+𝑖 ∈ C𝑢,𝑡
+
+RURA re-ranks, for each user 𝑢 and evaluation slice 𝑡, only the
+fixed candidate set C𝑢,𝑡 = {𝑖 1, . . . , 𝑖 𝐿 } produced by the upstream
+recommender at time 𝑡. All signals are strictly time-aligned: the
+return-facing score 𝜇𝑢,𝑖,𝑡 and dispersion proxy 𝜎𝑢,𝑖,𝑡 use data prior
+to 𝑡; adoption likelihoods 𝑝𝑢,𝑖,𝑡 are calibrated on [𝑡, 𝑡+Δ) and then
+held fixed for testing on [𝑡+Δ, 𝑡+2Δ). No information from [𝑡, ∞) is
+used for construction. The learned weights serve only to induce an
+ordering, and the displayed top-𝑘 is evaluated with equal weights
+as described in Section 4.1.
+
+3.1
+
+𝑖 ∈ C𝑢,𝑡
+
+− 𝜆
+
+Outputs. Nonnegative display weights 𝑤𝑢,𝑖,𝑡 for 𝑖 ∈ C𝑢,𝑡 satisÍ
+fying 𝑖 𝑤𝑢,𝑖,𝑡 ≤ 1; the shown ranking is the descending order of
+𝑤𝑢,𝑖,𝑡 , and the top-𝑘 items are presented.
+
+3
+
+Objective and constraints
+
+For each (𝑢, 𝑡), RURA selects nonnegative display weights on the
+normalized simplex
+
+Δ = w ∈ R𝐿≥0 : 1⊤ w ≤ 1 .
+(2)
+Í
+The leftover mass 1 − 𝑖 𝑤𝑢,𝑖,𝑡 represents a cash option within the
+optimization, consistent with classical separation results. We use a
+likelihood-aware diagonal-risk program:
+
+∑︁ 
+𝜌
+2
+2
+max
+𝑝𝑢,𝑖,𝑡 𝐵𝑢 𝜇𝑢,𝑖,𝑡 𝑤𝑢,𝑖,𝑡 − 2𝑢 𝑝𝑢,𝑖,𝑡 𝐵𝑢2 𝜎𝑢,𝑖,𝑡
+𝑤𝑢,𝑖,𝑡
+(3)
+
+(1)
+
+4
+
+Smaller 𝜌𝑢 corresponds to higher risk tolerance. We adopt the
+constant–absolute–risk–aversion (CARA) utility [15] 𝑢 𝜌 (𝑥) = 1 −
+exp(−𝜌𝑥), which increases with outcome 𝑥 and penalizes downside
+more strongly as 𝜌 grows.
+For each item 𝑖 and slice 𝑡, 𝜇𝑢,𝑖,𝑡 denotes a return-facing signal
+available at 𝑡. It is monotone in expected return but not calibrated
+in currency units; any “expected-utility” quantity built from 𝜇 is
+
+Experiments
+
+We address two research questions:
+• RQ1: Can RURA improve return-oriented performance while
+keeping losses in preference alignment (nDCG@𝑘) small?
+• RQ2: Does injecting user risk tolerance into the utility lead to
+systematically higher expected utility?
+The code is available at: https://github.com/kyomusso/RURA.
+
+1228
+
+=== PDF PAGE 3 ===
+Risk-Aware Utility Re-Ranking for Financial Asset Recommendation
+
+4.1
+
+WSDM ’26, February 22–26, 2026, Boise, ID, USA
+
+Table 1: Test-set nDCG@10 and ROI@10 (%). Bold indicates
+the best value and underline indicates the second best among
+RURA and CMs.
+
+Experimental settings
+
+Dataset. We use the public FAR-Trans dataset [18] spanning January 2018–November 2022, pairing de-identified investor–asset
+transactions with daily price series and customer profiles. To the
+best of our knowledge, FAR-Trans is the only dataset that jointly
+provides transaction data, price data, and the risk-tolerance information. The corpus includes 29,090 customers, 388,049 transactions,
+and 806 assets; asset classes cover equities, bonds, and mutual funds,
+with 321 assets exhibiting at least one transaction. Profiles provide
+bank-assessed risk categories (Conservative, Income, Balanced, Aggressive) from a MiFID-II compliant questionnaire; users without
+a label are grouped as Unknown. Assets lacking valid start or end
+closes inside a given evaluation window are excluded from that
+window for all methods to ensure comparability. All slice-𝑡 features
+are constructed using data strictly before 𝑡. Volatility proxies 𝜎
+are computed from pre-𝑡 prices; missing values are imputed by
+slice-level medians to maintain nonnegativity and avoid spurious
+dispersion gaps. Returns are based on close-to-close data and should
+be read as backtested outcomes under this pricing convention.
+
+Method
+Upstream recommender
+RURA (𝜆=0.1)
+RURA (𝜆=0.5)
+RURA (𝜆=0.9)
+CM1 (Probability-weighted Sharpe)
+CM2 (Mean–Variance)
+CM3 (CVaR)
+
+nDCG@10 (%)
+
+ROI@10 (%)
+
+0.7604
+0.0955
+0.1053
+0.1155
+0.0988
+0.0402
+0.0243
+
+-0.3897
+0.2924
+0.3878
+0.5166
+-0.3981
+-0.9070
+-0.4995
+
+The solution is obtained by projected updates on the simplex, and
+the learned weights induce the ranking. For fairness, the risk aversion and scaling follow the same 𝜌𝑢 and 𝐵𝑢 construction used for
+RURA.
+CM3: Conditional Value at Risk (CVaR)-focused portfolio [17]. A downside-risk objective minimizes Gaussian CVaR with
+a confidence level 𝛼 = 0.95 under the same diagonal risk and nonnegative, unit-sum constraints. Projected updates yield weights that
+determine the ranking. This baseline emphasizes tail protection
+and serves as a complementary risk-focused comparator to CM2.
+
+Evaluation Protocol. We use rolling slices every eight weeks from
+2019-08-01 to 2021-11-18 with horizon Δ = 6 months. For each user
+𝑢 and slice 𝑡: (i) construction uses data < 𝑡; (ii) validation [𝑡, 𝑡+Δ)
+fits adoption calibrators (isotonic regression) and selects hyperparameters; (iii) testing [𝑡+Δ, 𝑡+2Δ) evaluates final models. Slices
+are strictly time-ordered without shuffling; overlaps arise from the
+rolling design and do not introduce leakage because calibrators
+and hyperparameters are frozen before testing. Candidates are the
+upstream top-𝑀 per (𝑢, 𝑡) with deterministic tie-breaking; items already held at 𝑡 are excluded to target new purchases. The re-ranking
+stage operates within C𝑢,𝑡 using a shortlist 𝐿 = 30 and slate size
+𝑘 = 10. Assets without valid prices in a test window are excluded
+from that window for all methods. After validation, the same hyperparameters are used across overlapping slices, and random seeds
+and tie-breaking are fixed for reproducibility.
+
+Evaluation Metrics. We report two primary metrics and a diagnostic expected-utility measure. Unless noted here, all quantities
+are computed per user and slice, and then averaged over slices with
+user weighting. Returns are not annualized.
+nDCG@𝒌 (preference alignment). Binary relevance is defined
+by new purchases in the test window; nDCG@𝑘 is computed on the
+top-𝑘 ranking for each user using these labels. We report nDCG@𝑘
+as percentages.
+ROI@𝒌 (return performance). We compute the realized period
+return of the recommended slate using start/end closes from the
+test window. With equal display weights 𝑤𝑖 = 1/𝑘 for the top-𝑘
+items, the per-user return is
+!
+end
+∑︁
+∑︁
+𝑃𝑖,𝑡
+𝑤𝑖 , (6)
+ROI@𝑘 (𝑢, 𝑡) =
+𝑤𝑖 start − 1 − 𝑓
+𝑃𝑖,𝑡
+𝑖 ∈top-𝑘 (𝑢,𝑡 )
+𝑖 ∈top-𝑘 (𝑢,𝑡 )
+
+Baselines. All comparative methods (CMs) operate post hoc on
+the same candidate sets C𝑢,𝑡 , exclude items already held at 𝑡, and
+share 𝑘 = 10, 𝐿 = 30, and the rolling protocol above. No retraining
+of the upstream model is performed. All methods are evaluated
+under the same assumptions. As a production-style benchmark, we
+first consider the upstream recommender: items are ranked by the
+upstream blended score, and the top-𝑘 are displayed with uniform
+slate weights. This setting reflects the ranking deployed in practice,
+absent any post hoc risk adjustment. We then compare against
+three widely used risk–return heuristics that cover complementary
+design points:
+CM1: Probability-weighted Sharpe [20]. Each item receives a
+Sharpe-style score that combines adoption likelihood, the returnfacing signal, and inverse volatility. The top-𝑘 by this score are
+selected, and static display weights are set proportional to the
+scores and renormalized to sum to one; these weights induce the
+ranking. This baseline reflects a simple, high-precision heuristic
+that favors high-𝜇, low-𝜎 items adjusted for adoption.
+CM2: Mean–variance optimization [14]. A nonnegative, unitsum mean–variance program is solved on the candidate subset
+using a diagonal covariance built from per-item dispersion proxies.
+
+start and 𝑃 end are the asset’s start and end closes in the test
+where 𝑃𝑖,𝑡
+𝑖,𝑡
+window, and the total friction 𝑓 = {fees_bps_buy + fees_bps_sell +
+slippage_bps}/10,000. We set fees_bps_buy = 10, fees_bps_sell =
+10, and slippage_bps = 10, so 𝑓 = 0.003. Reported ROI values are
+in percent.
+Expected utility@𝒌 (risk alignment). To quantify alignment
+with user risk preferences, we use the CARA utility 𝑢 𝜌 (𝑥) = 1 −
+exp(−𝜌𝑥). For user 𝑢 at slice 𝑡, let 𝜌𝑢 > 0 be the risk aversion
+mapped from profiles with category-based scaling, and let 𝜇𝑢,𝑖,𝑡 be
+the return-facing signal available at time 𝑡. The proxy expectedutility score is
+∑︁ 
+
+1
+EU𝑢 (𝑡)@𝑘 =
+1 − exp −𝜌𝑢 𝜇𝑢,𝑖,𝑡 ,
+(7)
+𝑘
+𝑖 ∈top-𝑘 (𝑢,𝑡 )
+
+which reflects risk-preference alignment rather than monetary utility because 𝜇 is not calibrated in currency units. We report overall
+means and group-wise breakdowns by risk category.
+
+1229
+
+=== PDF PAGE 4 ===
+WSDM ’26, February 22–26, 2026, Boise, ID, USA
+
+Keigo Sakurai, Takahiro Ogawa, Miki Haseyama, Anjyu Anan, & Kei Nakagawa
+
+Table 2: CARA expected utility by risk group; values are scaled by 10−4 . The “Overall” column aggregates users with slice-level
+user weighting.
+Method
+RURA (𝜆=0.1)
+RURA (𝜆=0.5)
+RURA (𝜆=0.9)
+CM1 (Probability-weighted Sharpe)
+CM2 (Mean–Variance)
+CM3 (CVaR)
+
+Income
+
+Balanced
+
+Conservative
+
+Unknown
+
+Overall
+
+6.489
+6.458
+6.442
+6.352
+5.712
+5.712
+
+3.327
+3.320
+3.312
+3.202
+2.884
+2.884
+
+4.542
+4.533
+4.515
+4.401
+3.959
+3.959
+
+1.333
+1.332
+1.331
+1.277
+1.153
+1.153
+
+4.618
+4.608
+4.581
+4.443
+4.014
+4.014
+
+3.602
+3.593
+3.583
+3.484
+3.137
+3.137
+
+(a) ROI and nDCG vs
+
+0.55
+
+ROI@10 (%)
+nDCG@10 (%)
+
+0.50
+
+displayed slate, results should be interpreted as ranking quality under simplified execution assumptions. Overall, RURA achieves the
+best ROI among all methods while keeping nDCG@𝑘 comparable
+to CM1 and avoiding the collapse observed in CM2/CM3.
+
+0.115
+
+0.45
+
+0.110
+
+0.40
+
+0.105
+
+0.35
+
+0.100
+
+0.30
+
+0.095
+
+nDCG@10 (%)
+
+ROI@10 (%)
+
+Aggressive
+
+RQ2: Expected utility by risk group. Table 2 and Figure 1(b) compare CARA expected utility across risk groups using the returnfacing score 𝜇 available at time 𝑡. As 𝜇 is a monotone return-facing
+signal rather than a calibrated expectation in monetary units, the
+reported expected-utility values quantify alignment with risk preferences and should be read as a proxy measure. RURA exceeds
+CM1–CM3 in every group. For example at 𝜆=0.5, RURA improves
+the proxy utility over CM1 by approximately +3.0% (Balanced),
++3.7% (Income), +1.7% (Aggressive), +4.3% (Conservative), and
++3.7% (Unknown); gains over CM2/CM3 are larger (about +14–15%
+in Balanced/Income). The user-weighted overall proxy utility likewise favors RURA (e.g., 3.593 × 10−4 vs. CM1’s 3.484 × 10−4 and
+CM2/CM3’s 3.137 × 10−4 ). The slight decline of the proxy as 𝜆
+increases is consistent with its construction: it averages 𝜇 with
+equal weights and ignores dispersion, so stronger diversification
+can lower the proxy average even as realized ROI improves.
+Our results show that RURA consistently improves ROI, while
+maintaining preference alignment and increasing expected utility
+across diverse risk groups. Beyond finance, the same utility-based
+re-ranking principle is expected to extend to other domains, where
+heterogeneous user preferences and outcome-driven objectives also
+play a critical role.
+
+(diversification strength)
+
+(b) Proxy utility vs
+
+Proxy utility (×1e 4)
+
+3.600
+3.595
+3.590
+3.585
+3.580
+
+0.1
+
+0.2
+
+0.3
+
+0.4
+0.5
+0.6
+0.7
+(diversification strength)
+
+0.8
+
+0.9
+
+Figure 1: Trade-off between nDCG@10 and ROI@10 as the
+diversification strength 𝜆 varies for RURA.
+
+4.2
+
+Results
+
+5
+
+RQ1: nDCG@𝑘 vs. ROI@𝑘. Table 1 and Figure 1(a) show that
+RURA attains a positive ROI for all 𝜆 while keeping nDCG@𝑘 in the
+same qualitative range as CM1. At 𝜆=0.9, RURA achieves ROI@𝑘 =
+0.5166%, whereas the upstream ranker is negative (−0.3897%) and
+CM1–CM3 are also negative (−0.3981%/−0.9070%/−0.4995%). This
+corresponds to an upstream-relative lift of +0.9063 percentage
+points. RURA’s nDCG@𝑘 increases monotonically with 𝜆 from
+0.0955% to 0.1155%, remaining close to (and slightly higher than)
+CM1 (0.0988%) and clearly above CM2/CM3 (0.0402%/0.0243%),
+though still far below the upstream recommender (0.7604%). The
+monotonic trend is consistent with the design: a larger diversification penalty 𝜆 discourages single-name concentration and, together
+with likelihood weighting 𝑝𝑢,𝑖,𝑡 , shifts mass toward adoptable items
+with lower dispersion, which improves realized ROI without collapsing preference alignment. Because weights are used only to
+induce rankings and ROI is computed with equal weights over the
+
+Conclusion
+
+In this paper, we have proposed RURA, a post hoc framework
+that reorders the top candidates from an upstream recommender
+by maximizing a user-specific expected-utility objective. RURA
+injects risk tolerance to map monetary outcomes to user satisfaction,
+tailoring gain profiles for conservative versus aggressive investors
+while preserving the stability of the upstream ranking. Evaluated
+on the FAR-Trans dataset under a leakage-free rolling protocol,
+RURA achieves the best ROI among all compared methods, and it
+delivers consistently higher expected utility across risk groups.
+
+Acknowledgments
+This work was partly supported by JSPS KAKENHI Grant Numbers
+JP24K02942, JP23K21676, and JP23KJ0044. We would like to thank
+Takehiro Takayanagi (The University of Tokyo) for his valuable
+comments and helpful discussions.
+
+1230
+
+=== PDF PAGE 5 ===
+Risk-Aware Utility Re-Ranking for Financial Asset Recommendation
+
+WSDM ’26, February 22–26, 2026, Boise, ID, USA
+
+References
+
+Knowledge-aware and Conversational Recommender Systems Workshop at the
+Conference on Information and Knowledge Management. 26–30.
+[12] MirZat Ullah Khan. 2017. Impact of availability bias and loss aversion bias on
+investment decision making, moderating role of risk perception. Management
+and Administration 1, 1 (2017), 17–28.
+[13] Youngbin Lee, Yejin Kim, Javier Sanz-Cruzado, Richard McCreadie, and Yongjae
+Lee. 2024. Stock recommendations for individual investors: A temporal graph
+network approach with mean-variance efficient sampling. In Proceedings of the
+ACM International Conference on AI in Finance. 795–803.
+[14] Harry Markowitz. 1952. Portfolio selection. The Journal of Finance 7, 1 (1952),
+77–91.
+[15] John W Pratt. 1978. Risk aversion in the small and in the large. In Uncertainty in
+Economics. Elsevier, 59–79.
+[16] Ke Ren and Avinash Malik. 2019. Investment recommendation system for lowliquidity online peer to peer lending (P2PL) marketplaces. In Proceedings of the
+ACM International Conference on Web Search and Data Mining. 510–518.
+[17] R Tyrrell Rockafellar, Stanislav Uryasev, et al. 2000. Optimization of conditional
+value-at-risk. Journal of Risk 2 (2000), 21–42.
+[18] Javier Sanz-Cruzado, Nikolaos Droukas, and Richard McCreadie. 2024. FARTrans: An investment dataset for financial asset recommendation. In Proceedings
+of the IJCAI Workshop on Recommender Systems in Finance.
+[19] Javier Sanz-Cruzado, Richard McCreadie, Nikolaos Droukas, Craig Macdonald,
+and Iadh Ounis. 2022. On transaction-based metrics as a proxy for profitability
+of financial asset recommendations. In Proceedings of the International Workshop
+on Personalization and Recommender Systems in Financial Services.
+[20] William F Sharpe. 1998. The sharpe ratio. Streetwise–the Best of the Journal of
+Portfolio Management 3, 3 (1998), 169–85.
+[21] Takehiro Takayanagi, Chung-Chi Chen, and Kiyoshi Izumi. 2023. Personalized
+dynamic recommender system for investors. In Proceedings of the International
+ACM SIGIR Conference on Research and Development in Information Retrieval.
+2246–2250.
+[22] Takehiro Takayanagi, Kiyoshi Izumi, Atsuo Kato, Naoyuki Tsunedomi, and Yukina Abe. 2023. Personalized stock recommendation with investors’ attention and
+contextual information. In Proceedings of the International ACM SIGIR Conference
+on Research and Development in Information Retrieval. 3339–3343.
+
+[1] Baptiste Barreau and Laurent Carlier. 2020. History-augmented collaborative
+filtering for financial recommendations. In Proceedings of the ACM Conference on
+Recommender Systems. 492–497.
+[2] Utpal Bhattacharya, Andreas Hackethal, Simon Kaesler, Benjamin Loos, and
+Steffen Meyer. 2012. Is unbiased financial advice to retail investors sufficient?
+Answers from a large field study. The Review of Financial Studies 25, 4 (2012),
+975–1032.
+[3] Jun Chang, Wenting Tu, Changrui Yu, and Chuan Qin. 2021. Assessing dynamic
+qualities of investor sentiments for stock recommendation. Information Processing
+and Management 58, 2 (2021), 102452.
+[4] Munki Chung, Junhyeong Lee, Yongjae Lee, and Woo Chang Kim. 2025. Mean
+variance efficient collaborative filtering for stock recommendations. In Proceedings of the ACM International Conference on AI in Finance. 806–813.
+[5] Rama Cont. 2001. Empirical properties of asset returns: stylized facts and statistical issues. Quantitative Finance 1, 2 (2001), 223.
+[6] Chunjing Gan, Binbin Hu, Bo Huang, Tianyu Zhao, Yingru Lin, Wenliang Zhong,
+Zhiqiang Zhang, Jun Zhou, and Chuan Shi. 2023. Which matters most in making
+fund investment decisions? A multi-granularity graph disentangled learning
+framework. In Proceedings of the International ACM SIGIR Conference on Research
+and Development in Information Retrieval. 2516–2520.
+[7] Ashraf Ghiye, Baptiste Barreau, Laurent Carlier, and Michalis Vazirgiannis. 2023.
+Adaptive collaborative filtering with personalized time decay functions for financial product recommendation. In Proceedings of the ACM Conference on Recommender Systems. 798–804.
+[8] John Grable and Ruth H Lytton. 1999. Financial risk tolerance revisited: the
+development of a risk assessment instrument. Financial Services Review 8, 3
+(1999), 163–181.
+[9] Yoontae Hwang, Yongjae Lee, and Frank J Fabozzi. 2023. Identifying household
+finance heterogeneity via deep clustering. Annals of Operations Research 325, 2
+(2023), 1255–1289.
+[10] Yoontae Hwang, Junpyo Park, Jang Ho Kim, Yongjae Lee, and Frank J Fabozzi.
+2024. Heterogeneous trading behaviors of individual investors: A deep clustering
+approach. Finance Research Letters 65 (2024), 105481.
+[11] Mao Kang, Ye Bi, Zhenyu Wu, Jianming Wang, and Jing Xiao. 2019. A Heterogeneous Conversational Recommender System for Financial Products.. In
+
+1231
+
+=== END SOURCE TEXT ===

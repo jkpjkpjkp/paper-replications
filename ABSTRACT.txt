@@ -1,0 +1,9 @@
+Risk-Aware Utility Re-Ranking for Financial Asset Recommendation
+
+Condensed abstract
+
+Reorders recommendations to balance investor preferences with financial performance and
+individual risk tolerance. Starting from candidates selected by a preference-based
+recommender, the method maximizes a personalized expected-utility objective. Experiments
+assess whether risk-aware re-ranking improves investment outcomes while limiting losses
+in recommendation relevance.

@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "generated_by": "_replication/prepare_paper_texts.py",
+  "generated_on": "2026-11-17",
+  "project": "risk-aware-utility-reranking",
+  "title": "Risk-Aware Utility Re-Ranking for Financial Asset Recommendation",
+  "coverage": "pdf_text",
+  "source": {
+    "path_relative_to_project": "../.replication-local/artifacts/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+    "path_relative_to_collection": ".replication-local/artifacts/paper-reproduction-audit/workspaces/388-risk-aware-utility-reranking/sources/paper.pdf",
+    "sha256": "3d6a3874f8967c976e31457d2420f16bc4f7a1624626e7f085a5c5fd52ef2903",
+    "bytes": 1074765,
+    "urls": []
+  },
+  "method": "Poppler pdftotext UTF-8, reading order plus separate layout extraction",
+  "note": "",
+  "limitations": [
+    "No OCR or figure interpretation is synthesized.",
+    "Mathematical symbols, two-column reading order, and table alignment may be lossy.",
+    "HTML captures have no verified PDF page numbers; appendix conversion may be incomplete."
+  ],
+  "text_file": "PAPER_TEXT.txt",
+  "line_numbering": "1-based, inclusive",
+  "page_count": 5,
+  "pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 14,
+      "line_end": 122
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 123,
+      "line_end": 302
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 303,
+      "line_end": 450
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 451,
+      "line_end": 645
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 646,
+      "line_end": 718
+    }
+  ],
+  "layout_file": "PAPER_LAYOUT.txt",
+  "layout_pages": [
+    {
+      "page": 1,
+      "segment": 1,
+      "line_start": 15,
+      "line_end": 84
+    },
+    {
+      "page": 2,
+      "segment": 2,
+      "line_start": 85,
+      "line_end": 182
+    },
+    {
+      "page": 3,
+      "segment": 3,
+      "line_start": 183,
+      "line_end": 265
+    },
+    {
+      "page": 4,
+      "segment": 4,
+      "line_start": 266,
+      "line_end": 353
+    },
+    {
+      "page": 5,
+      "segment": 5,
+      "line_start": 354,
+      "line_end": 399
+    }
+  ],
+  "heading_candidates": [
+    {
+      "line": 49,
+      "text": "Abstract"
+    },
+    {
+      "line": 626,
+      "text": "Conclusion"
+    },
+    {
+      "line": 651,
+      "text": "References"
+    },
+    {
+      "line": 713,
+      "text": "2024. Heterogeneous trading behaviors of individual investors: A deep clustering"
+    }
+  ],
+  "chunks": [
+    {
+      "id": 1,
+      "line_start": 14,
+      "line_end": 93
+    },
+    {
+      "id": 2,
+      "line_start": 86,
+      "line_end": 165
+    },
+    {
+      "id": 3,
+      "line_start": 158,
+      "line_end": 237
+    },
+    {
+      "id": 4,
+      "line_start": 230,
+      "line_end": 309
+    },
+    {
+      "id": 5,
+      "line_start": 302,
+      "line_end": 381
+    },
+    {
+      "id": 6,
+      "line_start": 374,
+      "line_end": 453
+    },
+    {
+      "id": 7,
+      "line_start": 446,
+      "line_end": 525
+    },
+    {
+      "id": 8,
+      "line_start": 518,
+      "line_end": 597
+    },
+    {
+      "id": 9,
+      "line_start": 590,
+      "line_end": 669
+    },
+    {
+      "id": 10,
+      "line_start": 662,
+      "line_end": 719
+    }
+  ],
+  "line_count": 719,
+  "files": {
+    "PAPER_TEXT.txt": {
+      "sha256": "391c541c08195abe928f927fd9ad5fa766c06fd81f4a668ad7ea97c0d7d566af",
+      "bytes": 28314
+    },
+    "PAPER_LAYOUT.txt": {
+      "sha256": "44f876d527069b54a74266dbfc6a85bf313c160112611aa81a43c686a6629839",
+      "bytes": 47665
+    }
+  }
+}

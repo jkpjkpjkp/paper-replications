@@ -1,0 +1,80 @@
+{
+  "paper_id": 388,
+  "created_before_any_empirical_test_metrics": "2026-11-09T01:49:00.667372+00:00",
+  "evaluation_level": "artifact-based methodological reproduction of final-paper equations; source discrepancies and underspecification preclude exact numerical replication claim",
+  "source_version": "Final WSDM2026 DOI10.1145/3773966.3779383,pp1227-1231",
+  "code_commit": "64b267e9294cd9d6a987ab671a27fc60c7845471",
+  "datasets": [
+    "Full official FAR-Trans-derived RURA release,all16slices,all29090 released users"
+  ],
+  "seed": 2025,
+  "shortlist_size": 30,
+  "display_size": 10,
+  "upstream": "Frozen released row order verified score_blend nonincreasing; preserve input order for ties",
+  "profile": "Use already-scaled profiles_riskmap_cat gamma_or_eta as rho and B; preserve disclosed risk-order inconsistency; no double category scaling",
+  "proposed": {
+    "equation": "max sum(p*B*mu*w - .5*rho*p*B^2*sigma2*w^2) - lambda*sum(w^2), w>=0,sum(w)<=1",
+    "mu": "score_blend",
+    "sigma2": "released pre-slice market_stats; missing slice median",
+    "lambdas": [
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9
+    ],
+    "solver": "64-step KKT water-filling bisection,exact published quadratic program up to numeric tolerance"
+  },
+  "cm1": {
+    "score": "p*mu/sqrt(max(sigma2,1e-12))",
+    "detail_limit": "Paper describes probability-weighted Sharpe,without formula,clipping or risk-free rate; assume zero risk-free rate. With nonnegative released scores,renormalization preserves order."
+  },
+  "cm2": {
+    "equation": "max B*mu.w - .5*rho*B^2*sum(sigma2*w^2),w>=0,sum(w)=1",
+    "solver": "KKT water-filling; exact optimum rather than unspecified finite projected iterations",
+    "detail_limit": "Original projected-step count,tolerance and exact coefficient implementation not released."
+  },
+  "cm3": {
+    "equation": "min kappa*sqrt(sum(sigma2*w^2))-mu.w,w>=0,sum(w)=1; kappa=phi(Phi^-1(.95))/.05",
+    "alpha": 0.95,
+    "solver": "64-step monotone KKT threshold for diagonal GaussianCVaR",
+    "detail_limit": "Standard Gaussian-loss CVaR interpretation; paper gives no explicit baseline equation or iteration settings. Positive B multiplies objective and does not change weights; no unsupported extra rho penalty introduced."
+  },
+  "numerics": {
+    "float": "float64",
+    "tie_break": "stable original shortlist order",
+    "effective_diagonal_curvature_floor": 1e-12,
+    "centering": "Center linear scores per row for numerical stability of constrained QP; enforce CM2 unit budget",
+    "CM1_CM3_variance_floor": 1e-12,
+    "RURA_variance": "Native nonnegative released variance; quadratic diversification makes d strictly positive"
+  },
+  "labels": "First transaction per user/asset in half-open test interval is BUY,and net quantity held before test_start<=0; globally stable date sort. All new labels count in nDCG ideal denominator. Construction-held assets excluded from candidates.",
+  "roi": {
+    "weights": "Uniform1/10 on displayed slate; learned weights induce ranking only",
+    "price_endpoint_rule": "Per asset:first/last positive observed close strictly inside half-open test interval; store dates/gaps. Interpretation frozen before any performance. Original release exact calendar-date equality differs.",
+    "period_friction": 0.003,
+    "reported_units": "percent;not annualized;not daily strategy return"
+  },
+  "utility": "Mean(-expm1(-rho*score_blend)) over displayed10; Table2 units1e-4; no B in Eq7",
+  "aggregation": "User-weighted all user-slices,plus5risk groups; all variants retained",
+  "selection": "None on test. All13predeclared methods reported; no best variant selected. Published data/table already inspected,so retrospective.",
+  "validation": [
+    "Budget/positivity checks",
+    "Independent SLSQP objective checks for RURA,CM2 and CM3 on8real profiles each first/last slice",
+    "Exact all13variant full-user deterministic rerun first/last slice",
+    "Full original reported-cell comparisons",
+    "All finite profile/probability/variance range checks",
+    "Every equal-slate utility <= frozen top-mu upper bound",
+    "Input/endpoint/config/code and ranking hashes"
+  ],
+  "market_neutral_nocost": {
+    "status": "blocked",
+    "trading_variants_tested": 0,
+    "reason": "No dividends/coupons/verified total-return prices; unavailable upstream/profile point-in-time provenance; no daily NAV inference fabricated."
+  },
+  "required_original_vs_optional": "All original Table1/2 methods and Figure1 sensitivity domain; release-only UF/CRRA/covariance experiments remain optional/unexecuted."
+}

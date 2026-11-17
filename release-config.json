@@ -1,0 +1,33 @@
+{
+  "scope": "Additional full official released-algorithm audit,distinct from final-paper equations",
+  "lambdas": [
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9
+  ],
+  "source": "Immutable upstream/src/rura_core_fast.py;commit64b267e9294cd9d6a987ab671a27fc60c7845471",
+  "source_parameters": {
+    "method": "rura_la",
+    "use_cov": false,
+    "L_tokens": 30,
+    "k": 10,
+    "w_max": 0.4,
+    "lambda_div": "all9fixed0.1..0.9",
+    "beta_pop": 0.1,
+    "seed": 2025
+  },
+  "candidate_set": "All eligible,unheld released candidates (about650..770peruser),as author run_rura.py actually supplies; does not impose published30-item shortlist",
+  "mu_for_solver": "features/r,not blended upstream score",
+  "metrics": "Native learned-weight ROI with exact calendar-date closes and inclusive new-buy labels; single-scaled utility and README double-scaled utility saved separately",
+  "risk_scaling_note": "README evaluate_utility applies category scales again to already-scaled profiles_riskmap_cat; audit both,do not tune scales",
+  "variants_selected_by_test": 0,
+  "all9variants_reported": true,
+  "prior_equation_results_retained": true,
+  "primary_market_neutral_status": "blocked; neither native period ROI nor six-month labels substitute for daily ledger"
+}
