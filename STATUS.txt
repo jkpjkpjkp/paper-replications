@@ -1,86 +1,88 @@
-0: blocked
-Assessment date: 2026-11-17
+1: Kronos-base pretrained CSI300 reconstruction (seed 0), annualized excess return: rerun 13.7190%/year; paper 19.11%/year.
+Assessment date: 2026-11-17 (Asia/Shanghai)
 
+Scope: Released-checkpoint inference and investment-simulation reconstruction,
+not pretraining, fine-tuning, exact author-data replay or whole-paper replication.
+Seed 0 is complete; seeds 1 and 2 are running to measure sampling variability.
 
+Completed comparison: arXiv 2508.02739v1 Table 10, Kronos-base CSI300.
+Paper AER 0.1911; local 0.1371901823. Absolute error 0.0539098177 (5.3910
+percentage points/year); relative error 28.2103% below paper.
+Paper IR 1.3782; local 1.2059265748. Absolute error 0.1722734252;
+relative error 12.4999% below paper.
+Both exceed printed rounding tolerance 0.00005 in dimensionless units. The paper
+does not report Table 10 seed SD/SEM/CI; a single local seed has no measured seed
+uncertainty. This is a material mismatch for the reconstructed experiment,
+with data/protocol substitutions explicitly retained below.
 
-Scope: Pretrained Kronos-base CSI300 Table 10 reconstruction is running;
-no completed representative paper comparison yet.
+Annualization sensitivity: primary Qlib default is 238 sessions/year. Using
+252 sessions produces AER 0.145260193 and IR 1.240888208; this does not resolve
+the discrepancy.
 
-Current attempt — 2026-11-17:
-Target: CSI300 investment simulation, paper annualized excess return 0.1911
-(19.11%/year) and information ratio 1.3782. Printed rounding tolerance: 0.00005;
-paper seed SD/SEM/CI is not reported for Table 10. Local AER/IR and their errors
-are pending full inference/backtesting. Seeds 0/1/2 are requested; report their
-SD separately, not as a confidence interval.
+Execution-timing sensitivity on identical seed-0 forecasts:
+Replacing the demo's close-to-close limit filter with an opening-price limit
+proxy gives AER 0.117692740 (11.7693%/year) and IR 1.050140990. Absolute errors
+versus paper are 0.073407260 (7.3407 percentage points/year) and 0.328059010;
+relative errors are 38.4130% and 23.8034%. See WRONG.txt: the primary demo-based
+open execution can consult the execution day's close in its tradability filter.
+The paper's exact execution settings are unknown; this does not prove the
+published numbers share that flaw. Retain both results prominently.
 
-Prepared 66,338 eligible stock-day windows, 317 historical CSI300 constituents,
-225 signal dates. Test trades span 2024-07-01 through 2025-06-05. Released base
-revision 2b554741eca47781b64468546e77fef3e85130e6 and tokenizer revision
-0e0117387f39004a9016484a186a908917e22426 are pinned and SHA256-verified.
-No training or fine-tuning: 90-session context, 10-session forecast, temperature
-0.6, top-p 0.9, ten sampled paths, top 50/drop 5, hold at least five sessions,
-0.15% buy/sell costs. Qlib uses previous-close signals and next-open execution.
+Experiment:
+- 66,338 eligible stock-day forecasts across 317 historical CSI300 constituents
+  and 225 signal dates; 225 backtest sessions, 2024-07-01 through 2025-06-05.
+- Released base revision 2b554741eca47781b64468546e77fef3e85130e6 and tokenizer
+  revision 0e0117387f39004a9016484a186a908917e22426; config/weight SHA256 checked.
+- 90-session context; 10-session forecast; ten Monte Carlo paths; T=0.6;
+  top-p=0.9; Eq. 13 signal in inverse-transformed price units.
+- Top 50/drop 5, minimum hold five sessions, 0.15% costs in both directions.
+  Previous-close signals, next-open execution; 95% allocation, 9.5% limit proxy,
+  minimum fee 5, initial account 100 million, as documented in protocol.json.
+- Data: joshuaxql/qlib_data@ee0fa6b2299cb5e927d2df491888c84f6c9c027a.
+  Raw prices/share volume converted to Qlib adjustment conventions. Historical
+  membership evaluated at signal formation; missing prices break contexts.
 
-Scope limitations: the shared community data are not the original author
-snapshot. The terminal date comes from the released demo config; the paper only
-specifies July 2024 onward. Open execution, minimum fees, 95% allocation and the
-9.5% price-limit proxy follow released example/Qlib defaults, not a fully
-recovered paper specification. Primary annualization is Qlib's 238 days; a
-252-day sensitivity is saved. Full details are frozen in protocol.json.
+Limits:
+The original author data snapshot is unavailable. The paper specifies July
+2024 onward; the terminal date above comes from released finetune/config.py.
+Open execution, minimum fees, allocation and daily limit proxy are reconstructed
+from released example/Qlib defaults. The demo's normalized-price-change signal
+also differs from paper Eq. 13; this run implements the paper equation. These
+substitutions prevent claiming exact author-data equivalence or attributing the
+entire numerical gap to the model. CSI800, multi-frequency forecasting,
+volatility, synthetic-data tasks and pretraining remain unverified.
 
-Completed validation is execution evidence only:
-- Context/input/checkpoint hashes recorded; raw shared files remain unchanged.
-- Five-day Qlib plumbing check produced trades, finite reports and nonzero costs.
-- Float32 cached inference checked against the released implementation across
-  context lengths 90–100; maximum checked logit difference < 0.00002, within
-  atol=rtol=0.0001. Two actual contexts with ten sampled paths each produced
-  exactly equal reference/cached forecasts in the recorded validation case.
-- Fully resident GPU inference and the first partially resident launch failed
-  due to shared-GPU memory pressure. Logs are retained. The initial successful shards
-  used blockwise CPU transfers. After GPU memory became available, the run
-  resumed with the full model on GPU, preserving saved shards and RNG grouping.
-  No weights were quantized.
+Validation and run history:
+Cached float32 logits agree with released inference within atol=rtol=0.0001 at
+context lengths 90–100; maximum observed difference <0.00002. Two actual
+contexts with ten paths each had exactly equal sampled forecasts in the recorded
+check. This is not a universal bitwise guarantee. Source/input hashes, Qlib
+trading/cost integration and checkpoint configuration hashes were checked.
+Initial fully/partly resident GPU attempts exhausted shared GPU memory; logs
+are preserved. Initial successful shards used blockwise CPU transfers. The run
+then resumed fully on GPU when memory became available, retaining shards and
+RNG grouping. No weights were quantized. Per-shard device provenance is saved.
 
-Live artifacts: /mnt/data/home/jkp/replications/kronos-base-20261117/
-Service: systemctl --user status kronos-base-20261117.service
-Read progress.json, run.log, and failure.json if present. Each completed seed
-automatically writes seed-N/metrics.json and updates summary.json. Grade remains
-0 pending completed inference/backtests and evidence review; job launch and
-numerical implementation checks do not constitute matching paper results.
+Historical evidence preserved:
+The earlier pilot used 64 windows per model/seed/horizon at sparse 2026 origins.
+Kronos-base seed 0 horizon 1 return MAE was 0.018520 versus local persistence
+0.017179. Neither is a matched published target. That pilot established execution,
+not numerical replication or a paper-level failure; it was not rerun here.
+Other projects in the old alpha-research workspace are not Kronos results.
 
-Evidence and explanation:
-Saved inference covers 64 windows per model/seed/horizon, not the paper's benchmark
-suite or pretraining. For illustration Kronos-base seed 0 horizon 1 has return MAE
-0.018520 versus local persistence 0.017179, but neither is a matched published target.
-This is execution evidence, not evidence of agreement or a paper-level numerical
-failure.
+Live run: /mnt/data/home/jkp/replications/kronos-base-20261117/
+Service: kronos-base-20261117.service (user systemd).
+Remaining work: finish seeds 1/2, repeat opening-limit sensitivity, assess seed
+means/SD and synchronize this record and /home/jkp/data/REPLICATION_STATUS.txt.
 
-Limits / next requirement:
-Complete and assess the current three-seed CSI300 reconstruction against Table
-10, while retaining the data/protocol substitutions. Exact author-data replay,
-CSI800, multi-frequency forecasting, volatility and synthetic-data tasks remain
-unverified. Other items in the old alpha-research workspace are separate projects,
-not Kronos replication results.
-
-Evidence paths (relative to this STATUS.txt):
-- ../.replication-local/artifacts/LLM/alpha-research-reproduction/results/kronos/summary.json
-- README.md
-- scripts/reproduce_pretrained.py and scripts/kronos_cached.py
+Evidence:
+- /mnt/data/home/jkp/replications/kronos-base-20261117/seed-0/metrics.json
+- /mnt/data/home/jkp/replications/kronos-base-20261117/seed-0/daily-report.csv
+- /mnt/data/home/jkp/replications/kronos-base-20261117/open-limit-sensitivity/seed-0/metrics.json
+- /mnt/data/home/jkp/replications/kronos-base-20261117/summary.json
 - /mnt/data/home/jkp/replications/kronos-base-20261117/protocol.json
 - /mnt/data/home/jkp/replications/kronos-base-20261117/manifest.json
 - /mnt/data/home/jkp/replications/kronos-base-20261117/cache_validation.json
-- /mnt/data/home/jkp/replications/kronos-base-20261117/backtest_validation.json
 - /mnt/data/home/jkp/replications/kronos-base-20261117/RUN_NOTES.txt
-
-
-Blocker triage and new work — 2026-11-17:
-Original blocker: BENCHMARK DATA + SPECIFICATION. A complete CSI300 reconstruction
-is now being attempted with documented substitutions. Exact data/specification
-gaps remain, and numerical results are pending. See BLOCKER.txt. Grade remains 0.
-
-Execution-timing audit — 2026-11-17:
-The released demo combines open execution with Qlib's scalar daily-change limit
-filter, which can use the execution day's closing price to reject an opening
-trade. Paper applicability is unresolved; see WRONG.txt. Primary reconstruction
-results must retain this caveat. A separate opening-price-limit sensitivity will
-reuse saved forecasts; it does not change the initially frozen inference run.
+- ../.replication-local/artifacts/LLM/alpha-research-reproduction/results/kronos/summary.json
+- README.md, BLOCKER.txt, WRONG.txt and scripts/reproduce_pretrained.py

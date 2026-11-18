@@ -1,4 +1,4 @@
-PRIMARY BLOCKER: BENCHMARK DATA + SPECIFICATION
+REMAINING EXACT-REPLAY GAPS: AUTHOR DATA + BACKTEST SPECIFICATION
 Assessed: 2026-11-17 (Asia/Shanghai)
 
 DATA: YES: matched evaluation sample/universe not recovered
@@ -29,7 +29,9 @@ resident GPU attempts exhausted shared memory; initial successful shards used bl
 transfers. When GPU memory became available, inference resumed with the model
 on GPU, preserving the original sampling configuration and saved shards. It is managed by the user systemd service
 kronos-base-20261117.service, saves atomic prediction shards and resumes them.
-No completed model AER/IR is available yet. Inspect progress.json and run.log,
+Seed 0 is complete: AER 0.137190182 vs paper 0.1911; IR 1.205926575 vs
+1.3782. Opening-limit sensitivity: AER 0.117692740 and IR 1.050140990.
+Seeds 1/2 are running; the reconstructed comparison is grade 1. Inspect progress.json and run.log,
 and failure.json if present; a service launch is not evidence of completion.
 
 Next requirement:
@@ -46,5 +48,6 @@ Evidence (paths relative to /home/jkp/data):
 - /mnt/data/home/jkp/replications/kronos-base-20261117/protocol.json
 - /mnt/data/home/jkp/replications/kronos-base-20261117/RUN_NOTES.txt
 
-Numerical replication status remains 0 until a representative comparison is
-completed and assessed. Starting a job or matching a smoke-test cell is not a match.
+Numerical replication status is now 1 based on the completed seed-0
+reconstruction; its mismatch, substitutions and timing caveat are recorded in
+STATUS.txt and WRONG.txt. The original 64-window pilot remains non-comparable.

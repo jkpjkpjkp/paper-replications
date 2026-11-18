@@ -13,6 +13,14 @@ comes from the authors' released demo configuration. The original data snapshot
 and complete backtest specification are unavailable, so agreement would not
 establish an exact author-data replay. See `STATUS.txt` and `BLOCKER.txt`.
 
+## First completed result
+
+Seed 0 gives AER **13.7190%/year** and IR **1.205927**, versus the paper's
+19.11%/year and 1.3782. Seeds 1/2 are still running. A separate opening-price
+limit sensitivity gives 11.7693%/year and 1.050141. The demo-derived primary
+limit filter can use closing information for opening trades; see `WRONG.txt`.
+This is a material mismatch in the reconstructed experiment, recorded as grade 1.
+
 ## Current run
 
 Artifacts: `/mnt/data/home/jkp/replications/kronos-base-20261117/`.
