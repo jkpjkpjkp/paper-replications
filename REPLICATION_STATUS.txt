@@ -68,7 +68,7 @@ LEVEL  PROJECT / STATUS PATH
   0    Set Sequence/STATUS.txt
   0    song26l/STATUS.txt
   0    tra/STATUS.txt
-  0    transalpha/STATUS.txt — Original CSI300 Table 3 target fixed (2026-11-18): IC 0.0664, Sharpe 3.1769; original intraday inputs unavailable. Six CZ202 adaptation fits complete: IC 0.014600, net Sharpe -0.212746.
+  0    transalpha/STATUS.txt — CZ202 transfer re-audited (2026-11-18): IC 0.014600, net Sharpe -0.212746 vs linear 0.019100/0.180632; no observed advantage. Difference intervals include zero. Original-paper match remains unverified.
   1    alphaqcm/STATUS.txt — AlphaQCM IQN CSI300 (seed 0, 50,000 steps), IC: rerun 0.062207; paper 0.0849 +/- 0.0103 seed SD.
   1    alphasage/STATUS.txt — AlphaSAGE CSI300 adaptive 50-alpha pool (seed 0), IC: rerun 0.049129; paper 0.079.
   1    arboreal/STATUS.txt — ArbNN MagicTelescope, Frame split seed 42 and expanded validation grid (training seed 0), AUC: rerun 0.944804; paper 0.974 +/- 0.001 seed SD.
@@ -239,6 +239,19 @@ search, but original data/protocol access remains unresolved. No new fit or
 numerical comparison has run. Grade remains 0; counts and prior daily/CZ202
 results are unchanged. Evidence: transalpha/sources/official-repository-20261118.json
 and transalpha/sources/paper-setting-recheck-20261118.json.
+
+TransAlpha authorized CZ202 transfer assessment (2026-11-18): re-audited six
+existing trained fits and independently rechecked CRSP universe/return alignment.
+TransAlpha has lower IC and net Sharpe in all three seed pairs. Mean differences
+against the linear control are -0.0045004845 IC and -0.3933785341 net Sharpe.
+Joint paired month-block bootstrap (10,000 draws, six-month blocks) gives 95%
+intervals [-0.022038, 0.013029] and [-1.380938, 0.478396], respectively; lengths
+3/12 also include zero. There is no observed advantage in the fixed CZ202
+experiment, but the short shared test path does not establish clear inferiority.
+This is completed reanalysis, with no new fitting or test tuning. Original-paper
+grade stays 0; groups/counts unchanged. Full baseline/ablation reproduction is
+not claimed. Evidence: transalpha/results/cz202/TRANSFER_REPORT.txt and
+transalpha/results/cz202/transfer_analysis.json.
 
 PDU GPUShare preparation (2026-11-18):
 The previous NASDAQ CPU service is inactive and stopped during epoch 0
