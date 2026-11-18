@@ -1,0 +1,8 @@
+{
+  "path": "song26l_metadata_4704ce7396474211b49679c356a6a69a/sp500_security_names.parquet",
+  "rows": 1088,
+  "bytes": 50311,
+  "sha256": "004b03d86f103c0095d9f29b25d062bfaf92f789f56c6a9bebf814a4decbdc8a",
+  "source_sql": "SELECT * FROM crsp_a_stock.stocknames_v2 WHERE nameenddt>=DATE '2019-01-01' AND namedt<=DATE '2025-08-01' AND permno IN (SELECT permno FROM crsp_a_indexes.dsp500list_v2 WHERE mbrstartdt<=DATE '2025-08-01' AND mbrenddt>=DATE '2019-01-01') ORDER BY permno,namedt",
+  "completed_utc": "2026-11-03T03:36:40.731095+00:00"
+}

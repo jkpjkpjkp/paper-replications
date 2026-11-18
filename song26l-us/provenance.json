@@ -1,0 +1,20 @@
+{
+  "paper": {
+    "title": "The Label Horizon Paradox: Rethinking Supervision Targets in Financial Forecasting",
+    "path": "/home/jkp/papers/predict/song26l.pdf",
+    "sha256": "144985d895bce1057beb6bf916177c95b1996572f32df00be968e32053785ce9"
+  },
+  "authors_demo": {
+    "requested_url": "https://github.com/Chenhui-Song/label-horizon-paradox",
+    "canonical_url": "https://github.com/EFundAI/label-horizon-paradox",
+    "commit": "81c8098acdab2b0008a10f88c7e47321207ad509",
+    "note": "Standalone A-share daily demo; original experimental features and data are not released"
+  },
+  "primary_documentation": [
+    "https://wrds-www.wharton.upenn.edu/pages/about/data-vendors/nyse-trade-and-quote-taq/",
+    "https://www.nyse.com/publicdocs/nyse/data/Daily_TAQ_Client_Spec_v3.3c.pdf",
+    "https://www.ctaplan.com/publicdocs/ctaplan/CTS_Pillar_Output_Specification.pdf",
+    "https://wrds-www.wharton.upenn.edu/pages/wrds-research/macros/wrds-macros-vw_avgprice/"
+  ],
+  "checked_utc": "2026-11-03T03:43:32.706972+00:00"
+}

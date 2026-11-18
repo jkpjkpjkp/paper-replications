@@ -1,0 +1,8 @@
+{
+  "path": "song26l_metadata_4704ce7396474211b49679c356a6a69a/taq_crsp_link_2021.parquet",
+  "rows": 127988,
+  "bytes": 205288,
+  "sha256": "620d7e1839412f01eaad7a6204d722f4d72ffeec47a7f4672705af5f28724002",
+  "source_sql": "SELECT * FROM wrdsapps_link_crsp_taqm.taqmclink WHERE date>=DATE '2021-01-01' AND date<=LEAST(DATE '2021-12-31',DATE '2025-08-01') AND permno IN (SELECT permno FROM crsp_a_indexes.dsp500list_v2 WHERE mbrstartdt<=DATE '2025-08-01' AND mbrenddt>=DATE '2019-01-01') ORDER BY date,permno,sym_root,sym_suffix",
+  "completed_utc": "2026-11-03T03:36:56.048510+00:00"
+}

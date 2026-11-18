@@ -1,0 +1,8 @@
+{
+  "path": "song26l_metadata_4704ce7396474211b49679c356a6a69a/sp500_membership.parquet",
+  "rows": 626,
+  "bytes": 6873,
+  "sha256": "659a7495043e180da90459ae9d22e919ca851ad9ac4414d0270e78961ef1188e",
+  "source_sql": "SELECT * FROM crsp_a_indexes.dsp500list_v2 WHERE mbrstartdt<=DATE '2025-08-01' AND mbrenddt>=DATE '2019-01-01' ORDER BY permno,mbrstartdt",
+  "completed_utc": "2026-11-03T03:36:39.667349+00:00"
+}

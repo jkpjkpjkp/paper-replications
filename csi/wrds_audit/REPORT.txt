@@ -1,0 +1,51 @@
+WRDS CSI minute-bar access audit
+Checked: 2026-11-18
+
+Outcome: BLOCKED. No CSI minute bars were downloaded.
+
+Requested scope inferred from this project: constituent-stock 1-minute bars
+for CSI 300, CSI 500, and CSI 1000. Main study: January 2019 through July
+2025. Stress study additionally requires 2018. Required raw fields:
+open, high, low, close, amount, volume, and transaction count.
+Reference: .agent/PAPER_TEXT.txt, Appendix A.1-A.2 (PDF page 12).
+
+The existing WRDS Jupyter credential authenticated successfully. Metadata
+queries ran against the live WRDS PostgreSQL catalog. The audit inspected
+1,287 relations in CSMAR/Wind schemas (including public views, underlying
+relations, historical schemas, and samples) and 12,044 columns in the public
+CSMAR/Wind schemas. There were 271 public CSMAR views and 257 public Wind
+views. None had accessible underlying sources for this account.
+
+No relation name/description matching minute, intraday, high-frequency,
+or tick was found in these CSMAR/Wind schemas. Column metadata did not
+identify a minute-bar table. This is a catalog discovery result, not proof
+that no Chinese intraday dataset exists anywhere outside the checked sources.
+The stock price tables found are daily or lower frequency.
+
+Actual SELECT ... LIMIT 1 probes confirmed permission denied:
+- csmar.trdnew_dalyr -> csmar_trade
+- csmar.trd_dalyr -> csmar_trade
+- wind.ashareeodprices -> wind_ashare
+- wind.aindexeodprices -> wind_ashare
+- wind.aindexmembers -> wind_ashare
+
+Visible public schema names and SELECT flags do not establish data access;
+the underlying sources deny it. Restoring CSMAR/Wind permissions alone
+would not establish availability of minute-frequency data.
+
+To proceed: identify an authorized Chinese A-share minute/tick source with
+2018-2025 coverage and transaction count, plus historical CSI membership.
+No replacement daily data were downloaded and no training runs were changed.
+
+Evidence:
+- schemas.json: schema visibility and USAGE privileges
+- candidate_tables.json: table metadata and underlying source privileges
+- candidate_columns.json: public CSMAR/Wind column metadata
+- intraday_candidates.json: broader China/intraday catalog search
+- access_probes.json: actual SQL permission errors
+Each evidence file contains its query and UTC timestamp.
+
+Official WRDS CSMAR product overview (checked 2026-11-18):
+https://wrds-www.wharton.upenn.edu/pages/about/data-vendors/china-stock-market-accounting-research-csmar/
+The public page describes the CSMAR products; the account-specific access
+findings above come from live database probes, not from that page.

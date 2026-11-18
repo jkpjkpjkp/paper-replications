@@ -1,0 +1,35 @@
+{
+  "checked_at": "2026-11-18T01:48:14.033021+00:00",
+  "probes": [
+    {
+      "table": "csmar.trdnew_dalyr",
+      "sql": "SELECT 1 AS row_exists FROM csmar.trdnew_dalyr LIMIT 1",
+      "status": "error",
+      "error": "ProgrammingError: (psycopg2.errors.InsufficientPrivilege) permission denied for schema csmar_trade\n\n[SQL: SELECT 1 AS row_exists FROM csmar.trdnew_dalyr LIMIT 1]\n(Background on this error at: https://sqlalche.me/e/20/f405)"
+    },
+    {
+      "table": "csmar.trd_dalyr",
+      "sql": "SELECT 1 AS row_exists FROM csmar.trd_dalyr LIMIT 1",
+      "status": "error",
+      "error": "ProgrammingError: (psycopg2.errors.InsufficientPrivilege) permission denied for schema csmar_trade\n\n[SQL: SELECT 1 AS row_exists FROM csmar.trd_dalyr LIMIT 1]\n(Background on this error at: https://sqlalche.me/e/20/f405)"
+    },
+    {
+      "table": "wind.ashareeodprices",
+      "sql": "SELECT 1 AS row_exists FROM wind.ashareeodprices LIMIT 1",
+      "status": "error",
+      "error": "ProgrammingError: (psycopg2.errors.InsufficientPrivilege) permission denied for schema wind_ashare\n\n[SQL: SELECT 1 AS row_exists FROM wind.ashareeodprices LIMIT 1]\n(Background on this error at: https://sqlalche.me/e/20/f405)"
+    },
+    {
+      "table": "wind.aindexeodprices",
+      "sql": "SELECT 1 AS row_exists FROM wind.aindexeodprices LIMIT 1",
+      "status": "error",
+      "error": "ProgrammingError: (psycopg2.errors.InsufficientPrivilege) permission denied for schema wind_ashare\n\n[SQL: SELECT 1 AS row_exists FROM wind.aindexeodprices LIMIT 1]\n(Background on this error at: https://sqlalche.me/e/20/f405)"
+    },
+    {
+      "table": "wind.aindexmembers",
+      "sql": "SELECT 1 AS row_exists FROM wind.aindexmembers LIMIT 1",
+      "status": "error",
+      "error": "ProgrammingError: (psycopg2.errors.InsufficientPrivilege) permission denied for schema wind_ashare\n\n[SQL: SELECT 1 AS row_exists FROM wind.aindexmembers LIMIT 1]\n(Background on this error at: https://sqlalche.me/e/20/f405)"
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "checked_at": "2026-11-18T01:46:54.488573+00:00",
+  "sql": "SELECT nspname AS schema, has_schema_privilege(oid,'USAGE') AS accessible FROM pg_namespace WHERE nspname ~* '(csmar|china|chinese|wind|cnrds|resset|gta|lseg|tick|intraday)' ORDER BY 1",
+  "rows": [
+    {
+      "schema": "csmar",
+      "accessible": true
+    },
+    {
+      "schema": "csmar_af",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_af_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_cd",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_cd_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_cg",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_cg_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_colc",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_colc_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_financial",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_financial_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_funds",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_funds_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_hld",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_hld_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_ini",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_ini_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_ipo_a",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_ipo_a_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_ma",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_ma_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_rs",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_rs_old",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_trade",
+      "accessible": false
+    },
+    {
+      "schema": "csmar_trade_old",
+      "accessible": false
+    },
+    {
+      "schema": "wind",
+      "accessible": true
+    },
+    {
+      "schema": "wind_ashare",
+      "accessible": false
+    },
+    {
+      "schema": "wind_code",
+      "accessible": false
+    },
+    {
+      "schema": "windsmp",
+      "accessible": false
+    },
+    {
+      "schema": "wrdsapps_evtstudy_intraday_rav",
+      "accessible": false
+    },
+    {
+      "schema": "wrdsapps_evtstudy_intraday_rav_old",
+      "accessible": false
+    },
+    {
+      "schema": "wrdsapps_windices",
+      "accessible": true
+    },
+    {
+      "schema": "wrdsapps_windices_old",
+      "accessible": false
+    }
+  ]
+}

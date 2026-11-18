@@ -1,0 +1,4070 @@
+[
+  {
+    "schema": "contrib_liquidity_taq",
+    "table": "bbd",
+    "kind": "r",
+    "description": "Trade-Time Measures of Liquidity (Updated 2025-05-30)",
+    "estimated_rows": 324949,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "contrib_liquidity_taq",
+    "table": "ilc",
+    "kind": "r",
+    "description": "Institutional Liquidity Cost (Updated 2025-05-30)",
+    "estimated_rows": 423424,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "crsp_a_indexes",
+    "table": "dsp500list",
+    "kind": "r",
+    "description": "Daily S&P500 Constituents (Updated 2025-02-12)",
+    "estimated_rows": 2064,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "crsp_a_indexes",
+    "table": "dsp500list_v2",
+    "kind": "r",
+    "description": "Daily S&P 500 Constituents adapted by WRDS (Updated 2026-02-06)",
+    "estimated_rows": 2084,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "crsp_a_stock",
+    "table": "dsedist",
+    "kind": "r",
+    "description": "CRSP Daily Stock Event -Distribution (Updated 2025-02-08)",
+    "estimated_rows": 1064794,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "crsp_a_stock",
+    "table": "dsenames",
+    "kind": "r",
+    "description": "CRSP Daily Stock Event - Name History (Updated 2025-02-08)",
+    "estimated_rows": 117859,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "crsp_a_stock",
+    "table": "dsf_v2",
+    "kind": "r",
+    "description": "Daily Stock File created by WRDS (Updated 2026-02-06)",
+    "estimated_rows": 110257376,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "crsp_a_stock",
+    "table": "stocknames",
+    "kind": "r",
+    "description": "Company Names with Effective Name Dates (Updated 2025-02-08)",
+    "estimated_rows": 83280,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "crsp_a_stock",
+    "table": "stocknames_v2",
+    "kind": "r",
+    "description": "Company Names with Effective Name Dates created by WRDS (Updated 2026-07-16)",
+    "estimated_rows": 86060,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taq_common_new",
+    "table": "names",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 0,
+    "schema_access": false,
+    "table_select": false
+  },
+  {
+    "schema": "taqm_2003",
+    "table": "complete_nbbo_2003",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 2974448896,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2003",
+    "table": "cqm_2003",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 69185568768,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2003",
+    "table": "ctm_2003",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 1261255296,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2003",
+    "table": "mastm_2003",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2003",
+    "table": "nbbom_2003",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 7624848384,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2003",
+    "table": "wct_2003",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 1927200384,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2003",
+    "table": "wrds_iid_2003",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 602729,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2004",
+    "table": "complete_nbbo_2004",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 57676738560,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2004",
+    "table": "cqm_2004",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 1178595229696,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2004",
+    "table": "ctm_2004",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 17534472192,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2004",
+    "table": "mastm_2004",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2004",
+    "table": "nbbom_2004",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 157648142336,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2004",
+    "table": "wct_2004",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 26923907072,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2004",
+    "table": "wrds_iid_2004",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1933415,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2005",
+    "table": "complete_nbbo_2005",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 89693732864,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2005",
+    "table": "cqm_2005",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 1984665223168,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2005",
+    "table": "ctm_2005",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 26235420672,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2005",
+    "table": "mastm_2005",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2005",
+    "table": "nbbom_2005",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 269397442560,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2005",
+    "table": "wct_2005",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 39927140352,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2005",
+    "table": "wrds_iid_2005",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1935122,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2006",
+    "table": "complete_nbbo_2006",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 363690885120,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2006",
+    "table": "cqm_2006",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 4968337637376,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2006",
+    "table": "ctm_2006",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 49589506048,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2006",
+    "table": "mastm_2006",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2006",
+    "table": "nbbom_2006",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 617791356928,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2006",
+    "table": "wct_2006",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 76910575616,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2006",
+    "table": "wrds_iid_2006",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1931854,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2007",
+    "table": "complete_nbbo_2007",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 1203031900160,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2007",
+    "table": "cqm_2007",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 25558501031936,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2007",
+    "table": "ctm_2007",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 160506331136,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2007",
+    "table": "mastm_2007",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2007",
+    "table": "nbbom_2007",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 3367441793024,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2007",
+    "table": "wct_2007",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 206962114560,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2007",
+    "table": "wrds_iid_2007",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1977251,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2008",
+    "table": "complete_nbbo_2008",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 4116807155712,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2008",
+    "table": "cqm_2008",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 104093364256768,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2008",
+    "table": "ctm_2008",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 531888275456,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2008",
+    "table": "mastm_2008",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2008",
+    "table": "nbbom_2008",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 13944280317952,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2008",
+    "table": "wct_2008",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 668646637568,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2008",
+    "table": "wrds_iid_2008",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1999326,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2009",
+    "table": "complete_nbbo_2009",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 4384443596800,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2009",
+    "table": "cqm_2009",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 133413797363712,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2009",
+    "table": "ctm_2009",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 514703360000,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2009",
+    "table": "mastm_2009",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2009",
+    "table": "nbbom_2009",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 13365000798208,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2009",
+    "table": "wct_2009",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 632547049472,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2009",
+    "table": "wrds_iid_2009",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1938686,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2010",
+    "table": "complete_nbbo_2010",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 4817831854080,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2010",
+    "table": "cqm_2010",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 177824681951232,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2010",
+    "table": "ctm_2010",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 369077747712,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2010",
+    "table": "mastm_2010",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 1019298,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2010",
+    "table": "nbbom_2010",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 13612122898432,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2010",
+    "table": "wct_2010",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 459872436224,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2010",
+    "table": "wrds_iid_2010",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1955372,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2011",
+    "table": "complete_nbbo_2011",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 6173326049280,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2011",
+    "table": "cqm_2011",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 367615444779008,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2011",
+    "table": "ctm_2011",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 409394020352,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2011",
+    "table": "mastm_2011",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 1991865,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2011",
+    "table": "nbbom_2011",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 23692404850688,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2011",
+    "table": "wct_2011",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 511512313856,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2011",
+    "table": "wrds_iid_2011",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1881645,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2011_new",
+    "table": "cqm_2011",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": false
+  },
+  {
+    "schema": "taqm_2011_new",
+    "table": "ctm_2011",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": false
+  },
+  {
+    "schema": "taqm_2011_new",
+    "table": "mastm_2011",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 0,
+    "schema_access": false,
+    "table_select": false
+  },
+  {
+    "schema": "taqm_2012",
+    "table": "complete_nbbo_2012",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 2581278752768,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2012",
+    "table": "cqm_2012",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 183691976376320,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2012",
+    "table": "ctm_2012",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 266566172672,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2012",
+    "table": "mastm_2012",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 1972354,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2012",
+    "table": "nbbom_2012",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 11792640114688,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2012",
+    "table": "wct_2012",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 326997639168,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2012",
+    "table": "wrds_iid_2012",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1852582,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2013",
+    "table": "complete_nbbo_2013",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 1819902607360,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2013",
+    "table": "cqm_2013",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 161721608044544,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2013",
+    "table": "ctm_2013",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 254293966848,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2013",
+    "table": "mastm_2013",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 1977773,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2013",
+    "table": "nbbom_2013",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 8851654967296,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2013",
+    "table": "wct_2013",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 313639469056,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2013",
+    "table": "wrds_iid_2013",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1882103,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2014",
+    "table": "complete_nbbo_2014",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 2279625981952,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2014",
+    "table": "cqm_2014",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 220897650671616,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2014",
+    "table": "ctm_2014",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 428504154112,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2014",
+    "table": "mastm_2014",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2040607,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2014",
+    "table": "nbbom_2014",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 11990334439424,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2014",
+    "table": "wct_2014",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 513074429952,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2014",
+    "table": "wrds_iid_2014",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 1965282,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2015",
+    "table": "complete_nbbo_2015",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 4365406961664,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2015",
+    "table": "cqm_2015",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 363867045625856,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2015",
+    "table": "ctm_2015",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 716499255296,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2015",
+    "table": "mastm_2015",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2098662,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2015",
+    "table": "nbbom_2015",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 17288261533696,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2015",
+    "table": "wct_2015",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 630313844736,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2015",
+    "table": "wrds_iid_2015",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 2015490,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2016",
+    "table": "complete_nbbo_2016",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 8687909339136,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2016",
+    "table": "cqm_2016",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 551030647422976,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2016",
+    "table": "ctm_2016",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 1091691413504,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2016",
+    "table": "mastm_2016",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2107976,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2016",
+    "table": "nbbom_2016",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 24144863297536,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2016",
+    "table": "wct_2016",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 790139633664,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2016",
+    "table": "wrds_iid_2016",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 2054793,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2017",
+    "table": "complete_nbbo_2017",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 4803380379648,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2017",
+    "table": "cqm_2017",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 227161323601920,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2017",
+    "table": "ctm_2017",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 724759019520,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2017",
+    "table": "mastm_2017",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2121588,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2017",
+    "table": "nbbom_2017",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 7337983606784,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2017",
+    "table": "wct_2017",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 658163367936,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2017",
+    "table": "wrds_iid_2017",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 2040052,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2018",
+    "table": "complete_nbbo_2018",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 11865735299072,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2018",
+    "table": "cqm_2018",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 580085396537344,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2018",
+    "table": "ctm_2018",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 1284873650176,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2018",
+    "table": "luld_cqm_2018",
+    "kind": "p",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": 12884862976,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2018",
+    "table": "luld_ctm_2018",
+    "kind": "p",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": 11039772672,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2018",
+    "table": "mastm_2018",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2172357,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2018",
+    "table": "nbbom_2018",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 20794528759808,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2018",
+    "table": "wct_2018",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 979284983808,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2018",
+    "table": "wrds_iid_2018",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 2099324,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "complete_nbbo_2019",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 10348963823616,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "complete_nbbo_20190102",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 249477600,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "cqm_2019",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 520235765465088,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "cqm_20190102",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 1266941184,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "ctm_2019",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 1341438164992,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "ctm_20190102",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 39849532,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "luld_cqm_2019",
+    "kind": "p",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": 14185318400,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "luld_cqm_20190102",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 6696672,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "luld_ctm_2019",
+    "kind": "p",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": 10908548096,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "luld_ctm_20190102",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 6676231,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "mastm_2019",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2225970,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "mastm_20190102",
+    "kind": "r",
+    "description": "TAQ Master file",
+    "estimated_rows": 8728,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "nbbom_2019",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 18239757221888,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "nbbom_20190102",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 219170128,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "wct_2019",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 1060451188736,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "wct_20190102",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 39848568,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2019",
+    "table": "wrds_iid_2019",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 2160438,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2020",
+    "table": "complete_nbbo_2020",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 25224051425280,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2020",
+    "table": "cqm_2020",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 1308187445690368,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2020",
+    "table": "ctm_2020",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 3589527568384,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2020",
+    "table": "luld_cqm_2020",
+    "kind": "p",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": 16644841472,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2020",
+    "table": "luld_ctm_2020",
+    "kind": "p",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": 12646066176,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2020",
+    "table": "mastm_2020",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2288158,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2020",
+    "table": "nbbom_2020",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 48714806722560,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2020",
+    "table": "wct_2020",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 2785502035968,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2020",
+    "table": "wrds_iid_2020",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 2247008,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2021",
+    "table": "complete_nbbo_2021",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 27934811226112,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2021",
+    "table": "cqm_2021",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 2226128525721600,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2021",
+    "table": "ctm_2021",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 4786755207168,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2021",
+    "table": "luld_cqm_2021",
+    "kind": "p",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": 22550155264,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2021",
+    "table": "luld_ctm_2021",
+    "kind": "p",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": 17155889152,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2021",
+    "table": "mastm_2021",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2719616,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2021",
+    "table": "nbbom_2021",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 63929023725568,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2021",
+    "table": "wct_2021",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 3616285392896,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2021",
+    "table": "wrds_iid_2021",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 2666574,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2022",
+    "table": "complete_nbbo_2022",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 59283509084160,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2022",
+    "table": "cqm_2022",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 3925388581404672,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2022",
+    "table": "ctm_2022",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 6066972655616,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2022",
+    "table": "luld_cqm_2022",
+    "kind": "p",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": 27304747008,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2022",
+    "table": "luld_ctm_2022",
+    "kind": "p",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": 20594173952,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2022",
+    "table": "mastm_2022",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 3044321,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2022",
+    "table": "nbbom_2022",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 138978019770368,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2022",
+    "table": "wct_2022",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 4534964322304,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2022",
+    "table": "wrds_iid_2022",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 2873704,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2023",
+    "table": "complete_nbbo_2023",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 26580550156288,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2023",
+    "table": "cqm_2023",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 2004282995900416,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2023",
+    "table": "ctm_2023",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 5075506298880,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2023",
+    "table": "luld_cqm_2023",
+    "kind": "p",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": 24824582144,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2023",
+    "table": "luld_ctm_2023",
+    "kind": "p",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": 18876612608,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2023",
+    "table": "mastm_2023",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2864764,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2023",
+    "table": "nbbom_2023",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 84187667234816,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2023",
+    "table": "wct_2023",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 3669010939904,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2023",
+    "table": "wrds_iid_2023",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 2726316,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2024",
+    "table": "complete_nbbo_2024",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 23982103330816,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2024",
+    "table": "cqm_2024",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 1938446784397312,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2024",
+    "table": "ctm_2024",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 6325156184064,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2024",
+    "table": "luld_cqm_2024",
+    "kind": "p",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": 24738738176,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2024",
+    "table": "luld_ctm_2024",
+    "kind": "p",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": 18981556224,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2024",
+    "table": "mastm_2024",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2801306,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2024",
+    "table": "nbbom_2024",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 82755127869440,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2024",
+    "table": "wct_2024",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 4433440145408,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2024",
+    "table": "wrds_iid_2024",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 2708911,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "complete_nbbo_2025",
+    "kind": "p",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 23223221616640,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "complete_nbbo_20250102",
+    "kind": "r",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": 370376384,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "complete_nbbo_20250731",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 323086144,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "cqm_2025",
+    "kind": "p",
+    "description": "TAQ Quotes",
+    "estimated_rows": 1741283894755328,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "cqm_20250102",
+    "kind": "r",
+    "description": "TAQ Quotes",
+    "estimated_rows": 2313872896,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "cqm_20250731",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 1967988736,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "ctm_2025",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": 8252525903872,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "ctm_20250102",
+    "kind": "r",
+    "description": "TAQ Trades",
+    "estimated_rows": 88455488,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "ctm_20250731",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 125719560,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "luld_cqm_2025",
+    "kind": "p",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": 19187175424,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "luld_cqm_20250102",
+    "kind": "r",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": 8332890,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "luld_cqm_20250731",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 8732030,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "luld_ctm_2025",
+    "kind": "p",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": 14962739200,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "luld_ctm_20250102",
+    "kind": "r",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": 8333550,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "luld_ctm_20250731",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 8732157,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "mastm_2025",
+    "kind": "p",
+    "description": "TAQ Master file",
+    "estimated_rows": 2402573,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "mastm_20250102",
+    "kind": "r",
+    "description": "TAQ Master file",
+    "estimated_rows": 11163,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "mastm_20250731",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 11667,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "nbbom_2025",
+    "kind": "p",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 80977640554496,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "nbbom_20250102",
+    "kind": "r",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": 436690112,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "nbbom_20250731",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 386002848,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "wct_2025",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 5693883023360,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "wct_20250102",
+    "kind": "r",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": 88134880,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "wct_20250731",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 125719240,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "wrds_iid_2025",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": 2848848,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026",
+    "table": "complete_nbbo_2026",
+    "kind": "p",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026",
+    "table": "cqm_2026",
+    "kind": "p",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026",
+    "table": "ctm_2026",
+    "kind": "p",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026",
+    "table": "luld_cqm_2026",
+    "kind": "p",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026",
+    "table": "luld_ctm_2026",
+    "kind": "p",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026",
+    "table": "mastm_2026",
+    "kind": "p",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026",
+    "table": "nbbom_2026",
+    "kind": "p",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026",
+    "table": "wct_2026",
+    "kind": "p",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026",
+    "table": "wrds_iid_2026",
+    "kind": "r",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026_old",
+    "table": "ctm_2026",
+    "kind": "p",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026_old",
+    "table": "wct_2026",
+    "kind": "p",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqm_2026_old",
+    "table": "wrds_iid_2026",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 408639,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2003",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2004",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2005",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2006",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2007",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2008",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2009",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2010",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2011",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2012",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2013",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2014",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2015",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2016",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2017",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2018",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2019",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_20190102",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2020",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2021",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2022",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2023",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2024",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2025",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_20250102",
+    "kind": "v",
+    "description": "WRDS Complete NBBO - Supplements NYSE Official NBBOs",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_20250731",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "complete_nbbo_2026",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2003",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2004",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2005",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2006",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2007",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2008",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2009",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2010",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2011",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2012",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2013",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2014",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2015",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2016",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2017",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2018",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2019",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_20190102",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2020",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2021",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2022",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2023",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2024",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2025",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_20250102",
+    "kind": "v",
+    "description": "TAQ Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_20250731",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "cqm_2026",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2003",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2004",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2005",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2006",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2007",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2008",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2009",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2010",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2011",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2012",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2013",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2014",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2015",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2016",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2017",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2018",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2019",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_20190102",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2020",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2021",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2022",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2023",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2024",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2025",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_20250102",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_20250731",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "ctm_2026",
+    "kind": "v",
+    "description": "TAQ Trades",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_2018",
+    "kind": "v",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_2019",
+    "kind": "v",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_20190102",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_2020",
+    "kind": "v",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_2021",
+    "kind": "v",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_2022",
+    "kind": "v",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_2023",
+    "kind": "v",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_2024",
+    "kind": "v",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_2025",
+    "kind": "v",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_20250102",
+    "kind": "v",
+    "description": "TAQ Quote LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_20250731",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_cqm_2026",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_2018",
+    "kind": "v",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_2019",
+    "kind": "v",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_20190102",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_2020",
+    "kind": "v",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_2021",
+    "kind": "v",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_2022",
+    "kind": "v",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_2023",
+    "kind": "v",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_2024",
+    "kind": "v",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_2025",
+    "kind": "v",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_20250102",
+    "kind": "v",
+    "description": "TAQ Trade LULD",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_20250731",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "luld_ctm_2026",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2003",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2004",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2005",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2006",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2007",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2008",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2009",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2010",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2011",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2012",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2013",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2014",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2015",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2016",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2017",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2018",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2019",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_20190102",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2020",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2021",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2022",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2023",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2024",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2025",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_20250102",
+    "kind": "v",
+    "description": "TAQ Master file",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_20250731",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "mastm_2026",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2003",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2004",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2005",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2006",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2007",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2008",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2009",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2010",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2011",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2012",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2013",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2014",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2015",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2016",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2017",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2018",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2019",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_20190102",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2020",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2021",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2022",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2023",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2024",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2025",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_20250102",
+    "kind": "v",
+    "description": "NYSE Official SIP NBBO",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_20250731",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "nbbom_2026",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2003",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2004",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2005",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2006",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2007",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2008",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2009",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2010",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2011",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2012",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2013",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2014",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2015",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2016",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2017",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2018",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2019",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_20190102",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2020",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2021",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2022",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2023",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2024",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2025",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_20250102",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_20250731",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wct_2026",
+    "kind": "v",
+    "description": "WRDS Consolidated Trades Matched to Prevailing Quotes",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2003",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2004",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2005",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2006",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2007",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2008",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2009",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2010",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2011",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2012",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2013",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2014",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2015",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2016",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2017",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2018",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2019",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2020",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2021",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2022",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2023",
+    "kind": "v",
+    "description": null,
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2024",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2025",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqmsec",
+    "table": "wrds_iid_2026",
+    "kind": "v",
+    "description": "WRDS Intraday Indicators Dataset Daily Summary",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqsamp",
+    "table": "cq0002",
+    "kind": "v",
+    "description": "Dummy dataset for Consolidate quotes (Updated 2025-01-14)",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqsamp",
+    "table": "ct0002",
+    "kind": "v",
+    "description": "Dummy dataset for Consolidate quotes (Updated 2025-01-14)",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqsamp",
+    "table": "div_200801",
+    "kind": "v",
+    "description": "20080102 NYSE/AMEX/NASDAQ Dividends (Updated 2025-01-14)",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqsamp",
+    "table": "mast_200801",
+    "kind": "v",
+    "description": "20080102 NYSE/AMEX/NASDAQ Master table (Updated 2025-01-14)",
+    "estimated_rows": -1,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqsamp_all",
+    "table": "cq0002",
+    "kind": "r",
+    "description": "Dummy dataset for Consolidate quotes (Updated 2025-01-14)",
+    "estimated_rows": 0,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqsamp_all",
+    "table": "ct0002",
+    "kind": "r",
+    "description": "Dummy dataset for Consolidate quotes (Updated 2025-01-14)",
+    "estimated_rows": 0,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqsamp_all",
+    "table": "div_200801",
+    "kind": "r",
+    "description": "20080102 NYSE/AMEX/NASDAQ Dividends (Updated 2025-01-14)",
+    "estimated_rows": 952,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "taqsamp_all",
+    "table": "mast_200801",
+    "kind": "r",
+    "description": "20080102 NYSE/AMEX/NASDAQ Master table (Updated 2025-01-14)",
+    "estimated_rows": 10816,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "wrdsapps_evtstudy_intraday_rav",
+    "table": "rpevts",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 127633,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "wrdsapps_evtstudy_intraday_rav_old",
+    "table": "rpevts",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 124165,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taq",
+    "table": "tclink",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 1988835,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taqm",
+    "table": "taqmclink",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 27705042,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taqm",
+    "table": "taqmclink_cusip_2003",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 30698,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taqm",
+    "table": "taqmclink_cusip_2010",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 25522,
+    "schema_access": true,
+    "table_select": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taqm_old",
+    "table": "taqmclink",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 24490152,
+    "schema_access": false,
+    "table_select": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taqm_old",
+    "table": "taqmclink_cusip_2010",
+    "kind": "r",
+    "description": null,
+    "estimated_rows": 22156,
+    "schema_access": false,
+    "table_select": true
+  }
+]

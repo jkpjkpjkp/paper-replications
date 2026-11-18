@@ -1,0 +1,291 @@
+{
+  "complete": true,
+  "created_utc": "2026-11-03T03:36:59.568792+00:00",
+  "scope": {
+    "first_date": "2019-01-01",
+    "last_date": "2025-08-01",
+    "membership_endpoints": "inclusive",
+    "auxiliary_selection": "active member OR prior trading session member",
+    "missing_values": "preserved; no synthetic prices, returns or rows",
+    "splits": {
+      "train": "2019-01-01 <= date < 2023-07-01",
+      "validation": "2023-07-01 <= date < 2024-07-01",
+      "test": "2024-07-01 <= date <= 2025-07-31",
+      "label_extension": "2025-08-01"
+    }
+  },
+  "source_files": [
+    {
+      "rows": 1913322,
+      "first_date": "2019-01-02",
+      "last_date": "2019-12-31",
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2019.parquet",
+      "receipt_path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2019.done.json",
+      "bytes": 97066886,
+      "sha256": "68d3c0b2325d77b2cf9efc2ccfd78f937d86f64999923c904f576ea45c337894"
+    },
+    {
+      "rows": 1950357,
+      "first_date": "2020-01-02",
+      "last_date": "2020-12-31",
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2020.parquet",
+      "receipt_path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2020.done.json",
+      "bytes": 100425428,
+      "sha256": "c40a88088c2b340d9f28c4cf78f761a065dfc2b03a6b0e1c0710a1de071c340d"
+    },
+    {
+      "rows": 2188964,
+      "first_date": "2021-01-04",
+      "last_date": "2021-12-31",
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2021.parquet",
+      "receipt_path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2021.done.json",
+      "bytes": 112324991,
+      "sha256": "523f8f7ebb058069750adcf305ce194cbbd32aa2122bc06bf9ec3f17833efc73"
+    },
+    {
+      "rows": 2391799,
+      "first_date": "2022-01-03",
+      "last_date": "2022-12-30",
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2022.parquet",
+      "receipt_path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2022.done.json",
+      "bytes": 122518519,
+      "sha256": "228303bdb935bb86ac887f257632e6c0590f4033f1c1b41d085a28480e71ecd6"
+    },
+    {
+      "rows": 2356072,
+      "first_date": "2023-01-03",
+      "last_date": "2023-12-29",
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2023.parquet",
+      "receipt_path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2023.done.json",
+      "bytes": 121614276,
+      "sha256": "4cdeadf7705212ba501397130193e811b5451ac664ddc0e41e6ac378aa49391d"
+    },
+    {
+      "rows": 2403637,
+      "first_date": "2024-01-02",
+      "last_date": "2024-12-31",
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2024.parquet",
+      "receipt_path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2024.done.json",
+      "bytes": 125588814,
+      "sha256": "a1c5042e6e6cd4a178ec6ba3404db85145dba50ffa5f47ee34f7dc25a1d8d933"
+    },
+    {
+      "rows": 2541801,
+      "first_date": "2025-01-02",
+      "last_date": "2025-12-31",
+      "path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2025.parquet",
+      "receipt_path": "/home/jkp/data/crsp-daily/data/crsp_a_stock/dsf_v2/2025.done.json",
+      "bytes": 134645000,
+      "sha256": "8168b487134f92f91b46e589cade98b85a18e8197c5c992eea2fe1519f742da0"
+    }
+  ],
+  "membership_source": {
+    "path": "/home/jkp/data/song26l-us/metadata/sp500_membership.parquet",
+    "sha256": "659a7495043e180da90459ae9d22e919ca851ad9ac4414d0270e78961ef1188e",
+    "raw_rows": 626,
+    "relevant_distinct_intervals": 626
+  },
+  "calendar": {
+    "schedule": "XNYS",
+    "timezone": "America/New_York",
+    "exchange_calendars_version": "4.13.2",
+    "observed_CRSP_dates_equal_XNYS_sessions": true,
+    "session_counts": [
+      {
+        "session_split": "train",
+        "sessions": 1132,
+        "early_closes": 7
+      },
+      {
+        "session_split": "validation",
+        "sessions": 250,
+        "early_closes": 2
+      },
+      {
+        "session_split": "test",
+        "sessions": 272,
+        "early_closes": 4
+      },
+      {
+        "session_split": "label_extension",
+        "sessions": 1,
+        "early_closes": 0
+      }
+    ]
+  },
+  "universe": {
+    "rows": 834313,
+    "securities": 625,
+    "active_rows": 834190,
+    "previous_only_rows": 123,
+    "active_rows_without_CRSP_record": 34,
+    "missing_active_records": [
+      {
+        "session_date": "2019-07-10",
+        "permno": 87184
+      },
+      {
+        "session_date": "2019-07-11",
+        "permno": 87184
+      },
+      {
+        "session_date": "2019-07-12",
+        "permno": 87184
+      },
+      {
+        "session_date": "2019-09-19",
+        "permno": 76639
+      },
+      {
+        "session_date": "2019-09-20",
+        "permno": 76639
+      },
+      {
+        "session_date": "2020-01-27",
+        "permno": 90272
+      },
+      {
+        "session_date": "2020-10-05",
+        "permno": 83862
+      },
+      {
+        "session_date": "2020-10-06",
+        "permno": 61815
+      },
+      {
+        "session_date": "2020-10-06",
+        "permno": 83862
+      },
+      {
+        "session_date": "2020-10-07",
+        "permno": 61815
+      },
+      {
+        "session_date": "2020-10-08",
+        "permno": 61815
+      },
+      {
+        "session_date": "2020-10-09",
+        "permno": 61815
+      },
+      {
+        "session_date": "2021-01-20",
+        "permno": 92239
+      },
+      {
+        "session_date": "2021-04-16",
+        "permno": 27043
+      },
+      {
+        "session_date": "2021-04-19",
+        "permno": 27043
+      },
+      {
+        "session_date": "2021-08-27",
+        "permno": 11896
+      },
+      {
+        "session_date": "2022-03-01",
+        "permno": 14704
+      },
+      {
+        "session_date": "2022-10-31",
+        "permno": 14295
+      },
+      {
+        "session_date": "2023-03-14",
+        "permno": 11786
+      },
+      {
+        "session_date": "2023-03-14",
+        "permno": 90090
+      },
+      {
+        "session_date": "2023-05-02",
+        "permno": 12448
+      },
+      {
+        "session_date": "2023-05-03",
+        "permno": 12448
+      },
+      {
+        "session_date": "2023-10-16",
+        "permno": 79678
+      },
+      {
+        "session_date": "2023-10-17",
+        "permno": 79678
+      },
+      {
+        "session_date": "2024-05-06",
+        "permno": 75241
+      },
+      {
+        "session_date": "2024-05-07",
+        "permno": 75241
+      },
+      {
+        "session_date": "2024-11-25",
+        "permno": 15069
+      },
+      {
+        "session_date": "2024-12-19",
+        "permno": 14763
+      },
+      {
+        "session_date": "2024-12-20",
+        "permno": 14763
+      },
+      {
+        "session_date": "2025-07-03",
+        "permno": 86979
+      },
+      {
+        "session_date": "2025-07-07",
+        "permno": 86979
+      },
+      {
+        "session_date": "2025-07-08",
+        "permno": 86979
+      },
+      {
+        "session_date": "2025-07-21",
+        "permno": 28484
+      },
+      {
+        "session_date": "2025-07-22",
+        "permno": 28484
+      }
+    ]
+  },
+  "auxiliary": {
+    "rows": 834254,
+    "columns": 57,
+    "duplicate_keys": 0,
+    "null_keys": 0,
+    "adjustment_factor_quality": {
+      "null_price_factor": 47,
+      "nonpositive_price_factor": 0,
+      "null_share_factor": 47,
+      "nonpositive_share_factor": 0
+    }
+  },
+  "label_boundary_note": "Session splits annotate input dates. Purge training/validation examples whose future labels cross a split boundary when constructing model tensors.",
+  "output_files": [
+    {
+      "path": "/home/jkp/data/song26l-us/support/trading_calendar.parquet",
+      "bytes": 27360,
+      "sha256": "80741877f7cdd02227b3ec42ec371fbc88a19dc6dd1734ab5fd0fa7192ce54c2"
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/support/sp500_daily_membership.parquet",
+      "bytes": 88342,
+      "sha256": "553167a3428733f562675e50461d2764087d37c5a1c4271ea573c93053c4c87a"
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/support/crsp_daily_auxiliary.parquet",
+      "bytes": 44717529,
+      "sha256": "0cbe4872e0fa2e0801ae86698e49123f5fd41bf328dd07a61b909ca463752c88"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "support_days": 10,
+  "query_days": 10,
+  "support_stocks": 5029,
+  "query_stocks": 5027,
+  "finite_nonzero_hypergradient": true,
+  "hypergradient_norm": 6.46554254579712e-10,
+  "peak_cuda_allocated_MiB": 1727.87451171875
+}

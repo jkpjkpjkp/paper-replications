@@ -1,0 +1,8 @@
+{
+  "path": "song26l_metadata_4704ce7396474211b49679c356a6a69a/taq_trade_partitions.parquet",
+  "rows": 1655,
+  "bytes": 14457,
+  "sha256": "bd373df27cbc36233c17e10eee7a978b3e42e7f7f558ab8e16fb19fb83c55272",
+  "source_sql": "SELECT n.nspname AS schema,c.relname AS table,c.reltuples::bigint AS estimated_rows FROM pg_class c JOIN pg_namespace n ON c.relnamespace=n.oid WHERE n.nspname ~ '^taqm_20(19|20|21|22|23|24|25)$' AND c.relname ~ '^ctm_[0-9]{8}$' AND substring(c.relname from 5)>= '20190101' AND substring(c.relname from 5)<='20250801' ORDER BY 2",
+  "completed_utc": "2026-11-03T03:36:42.077417+00:00"
+}

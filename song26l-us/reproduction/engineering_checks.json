@@ -1,0 +1,35 @@
+{
+  "status": "passed_initial_checks",
+  "created_utc": "2026-11-03T12:18:17.170250+00:00",
+  "scientific_invariants_passed": 9,
+  "gpu_full_batch": {
+    "device": "NVIDIA GeForce RTX 4060",
+    "stocks_per_date": 500,
+    "support_dates": 10,
+    "query_dates": 10,
+    "patches": 26,
+    "features": 72,
+    "candidate_horizons": 390,
+    "elapsed_seconds": 0.154605764,
+    "peak_allocated_mb": 1747.902464,
+    "hypergradient_norm": 1.6014072290460035e-09,
+    "evidence_type": "synthetic engineering check, not financial evidence"
+  },
+  "features_and_boundaries": "72 feature descriptors, missingness flags, and date-boundary purge verified",
+  "actual_split_label": {
+    "real_split_adjusted_label": 0.00649484945461154,
+    "naive_unadjusted_label": -0.8993505150374385
+  },
+  "connection_recovery": "Lost socket causes a fresh kernel and exactly one checksum-verified completion",
+  "hypergradient": {
+    "analytic": [
+      0.007867014322466549,
+      -0.00786701432246655
+    ],
+    "finite_difference": [
+      0.007867014315543486,
+      -0.007867014315543486
+    ],
+    "constant_prediction_loss": 2.0
+  }
+}

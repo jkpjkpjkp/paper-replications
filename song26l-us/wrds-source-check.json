@@ -1,0 +1,254 @@
+[
+  {
+    "schema": "crsp_a_indexes",
+    "table": "dsp500list_v2",
+    "columns": [
+      {
+        "name": "permno",
+        "type": "integer",
+        "description": "PERMNO"
+      },
+      {
+        "name": "indno",
+        "type": "integer",
+        "description": "INDNO"
+      },
+      {
+        "name": "mbrstartdt",
+        "type": "date",
+        "description": "Constituent Membership Start Date"
+      },
+      {
+        "name": "mbrenddt",
+        "type": "date",
+        "description": "Constituent Membership End Date"
+      },
+      {
+        "name": "mbrflg",
+        "type": "character varying(12)",
+        "description": "Constituent Membership Flag"
+      },
+      {
+        "name": "indfam",
+        "type": "integer",
+        "description": "INDFAM - CRSP Unique Index Family Number"
+      }
+    ],
+    "sample": [
+      {
+        "permno": 10006,
+        "indno": 1000500,
+        "mbrstartdt": "1957-03-01",
+        "mbrenddt": "1984-07-18",
+        "mbrflg": "NORM",
+        "indfam": 1100500
+      },
+      {
+        "permno": 10030,
+        "indno": 1000500,
+        "mbrstartdt": "1957-03-01",
+        "mbrenddt": "1969-01-08",
+        "mbrflg": "NORM",
+        "indfam": 1100500
+      },
+      {
+        "permno": 10049,
+        "indno": 1000500,
+        "mbrstartdt": "1925-12-31",
+        "mbrenddt": "1932-10-01",
+        "mbrflg": "NORM",
+        "indfam": 1100500
+      }
+    ]
+  },
+  {
+    "schema": "crsp_a_stock",
+    "table": "stocknames_v2",
+    "columns": [
+      {
+        "name": "permno",
+        "type": "integer",
+        "description": "PERMNO"
+      },
+      {
+        "name": "permco",
+        "type": "integer",
+        "description": "PERMCO"
+      },
+      {
+        "name": "namedt",
+        "type": "date",
+        "description": "Security Information Start Date"
+      },
+      {
+        "name": "nameenddt",
+        "type": "date",
+        "description": "Security Information End Date"
+      },
+      {
+        "name": "securitybegdt",
+        "type": "date",
+        "description": "Begin Date of Stock Data"
+      },
+      {
+        "name": "securityenddt",
+        "type": "date",
+        "description": "End Date of Stock Data"
+      },
+      {
+        "name": "hdrcusip",
+        "type": "character varying(8)",
+        "description": "Header CUSIP -8 Characters"
+      },
+      {
+        "name": "hdrcusip9",
+        "type": "character varying(9)",
+        "description": "Header CUSIP -9 Characters"
+      },
+      {
+        "name": "cusip",
+        "type": "character varying(8)",
+        "description": "CUSIP"
+      },
+      {
+        "name": "cusip9",
+        "type": "character varying(9)",
+        "description": "CUSIP9"
+      },
+      {
+        "name": "ticker",
+        "type": "character varying(5)",
+        "description": "Ticker"
+      },
+      {
+        "name": "issuernm",
+        "type": "character varying(50)",
+        "description": "Issuer Name"
+      },
+      {
+        "name": "primaryexch",
+        "type": "character varying(1)",
+        "description": "Primary Exchange"
+      },
+      {
+        "name": "conditionaltype",
+        "type": "character varying(3)",
+        "description": "Conditional Type"
+      },
+      {
+        "name": "tradingstatusflg",
+        "type": "character varying(1)",
+        "description": "Trading Status Flag"
+      },
+      {
+        "name": "shareclass",
+        "type": "character varying(1)",
+        "description": "Share Class"
+      },
+      {
+        "name": "sharetype",
+        "type": "character varying(3)",
+        "description": "Share Type"
+      },
+      {
+        "name": "securitytype",
+        "type": "character varying(4)",
+        "description": "Security Type"
+      },
+      {
+        "name": "securitysubtype",
+        "type": "character varying(3)",
+        "description": "Security Sub-Type"
+      },
+      {
+        "name": "usincflg",
+        "type": "character varying(1)",
+        "description": "US Incorporation Flag"
+      },
+      {
+        "name": "issuertype",
+        "type": "character varying(4)",
+        "description": "Issuer Type"
+      },
+      {
+        "name": "siccd",
+        "type": "integer",
+        "description": "Sic Code"
+      }
+    ],
+    "sample": [
+      {
+        "permno": 10000,
+        "permco": 7952,
+        "namedt": "1986-01-07",
+        "nameenddt": "1987-06-11",
+        "securitybegdt": "1986-01-07",
+        "securityenddt": "1987-06-11",
+        "hdrcusip": "68391610",
+        "hdrcusip9": "683916100",
+        "cusip": "68391610",
+        "cusip9": "683916100",
+        "ticker": "OMFGA",
+        "issuernm": "OPTIMUM MANUFACTURING INC",
+        "primaryexch": "Q",
+        "conditionaltype": "RW",
+        "tradingstatusflg": "A",
+        "shareclass": "A",
+        "sharetype": "NS",
+        "securitytype": "EQTY",
+        "securitysubtype": "COM",
+        "usincflg": "Y",
+        "issuertype": "ACOR",
+        "siccd": 3990
+      },
+      {
+        "permno": 10001,
+        "permco": 7953,
+        "namedt": "1986-01-09",
+        "nameenddt": "1993-11-21",
+        "securitybegdt": "1986-01-09",
+        "securityenddt": "2017-08-03",
+        "hdrcusip": "36720410",
+        "hdrcusip9": "367204104",
+        "cusip": "39040610",
+        "cusip9": "390406106",
+        "ticker": "GFGC",
+        "issuernm": "GREAT FALLS GAS CO",
+        "primaryexch": "Q",
+        "conditionaltype": "RW",
+        "tradingstatusflg": "A",
+        "shareclass": null,
+        "sharetype": "NS",
+        "securitytype": "EQTY",
+        "securitysubtype": "COM",
+        "usincflg": "Y",
+        "issuertype": "CORP",
+        "siccd": 4920
+      },
+      {
+        "permno": 10001,
+        "permco": 7953,
+        "namedt": "1993-11-22",
+        "nameenddt": "2008-02-04",
+        "securitybegdt": "1986-01-09",
+        "securityenddt": "2017-08-03",
+        "hdrcusip": "36720410",
+        "hdrcusip9": "367204104",
+        "cusip": "29274A10",
+        "cusip9": "29274A105",
+        "ticker": "EWST",
+        "issuernm": "ENERGY WEST INC",
+        "primaryexch": "Q",
+        "conditionaltype": "RW",
+        "tradingstatusflg": "A",
+        "shareclass": null,
+        "sharetype": "NS",
+        "securitytype": "EQTY",
+        "securitysubtype": "COM",
+        "usincflg": "Y",
+        "issuertype": "CORP",
+        "siccd": 4920
+      }
+    ]
+  }
+]

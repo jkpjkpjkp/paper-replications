@@ -1,0 +1,770 @@
+[
+  {
+    "schema": "taqm_2019",
+    "table": "ctm_20190102",
+    "columns": [
+      {
+        "name": "date",
+        "type": "date",
+        "description": null
+      },
+      {
+        "name": "time_m",
+        "type": "time without time zone",
+        "description": null
+      },
+      {
+        "name": "time_m_nano",
+        "type": "smallint",
+        "description": null
+      },
+      {
+        "name": "ex",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "sym_root",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "sym_suffix",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tr_scond",
+        "type": "character varying(4)",
+        "description": null
+      },
+      {
+        "name": "size",
+        "type": "integer",
+        "description": null
+      },
+      {
+        "name": "price",
+        "type": "numeric",
+        "description": null
+      },
+      {
+        "name": "tr_stop_ind",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tr_corr",
+        "type": "character varying(2)",
+        "description": null
+      },
+      {
+        "name": "tr_seqnum",
+        "type": "bigint",
+        "description": null
+      },
+      {
+        "name": "tr_id",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tr_source",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tr_rf",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "part_time",
+        "type": "time without time zone",
+        "description": null
+      },
+      {
+        "name": "part_time_nano",
+        "type": "smallint",
+        "description": null
+      },
+      {
+        "name": "trf_time",
+        "type": "time without time zone",
+        "description": null
+      },
+      {
+        "name": "trf_time_nano",
+        "type": "smallint",
+        "description": null
+      },
+      {
+        "name": "tte_ind",
+        "type": "character varying(1)",
+        "description": null
+      }
+    ],
+    "sample": [
+      {
+        "date": "2019-01-02",
+        "time_m": "07:09:30.261991",
+        "time_m_nano": 0,
+        "ex": "K",
+        "sym_root": "A",
+        "sym_suffix": null,
+        "tr_scond": "TI",
+        "size": 5,
+        "price": "67.5",
+        "tr_stop_ind": "N",
+        "tr_corr": "00",
+        "tr_seqnum": 46801,
+        "tr_id": "52983525027901",
+        "tr_source": "C",
+        "tr_rf": null,
+        "part_time": "07:09:30.261311",
+        "part_time_nano": 0,
+        "trf_time": null,
+        "trf_time_nano": 0,
+        "tte_ind": "0"
+      },
+      {
+        "date": "2019-01-02",
+        "time_m": "09:30:00.005621",
+        "time_m_nano": 0,
+        "ex": "T",
+        "sym_root": "A",
+        "sym_suffix": null,
+        "tr_scond": "T",
+        "size": 100,
+        "price": "66.45",
+        "tr_stop_ind": "N",
+        "tr_corr": "00",
+        "tr_seqnum": 200701,
+        "tr_id": "62879130466386",
+        "tr_source": "C",
+        "tr_rf": null,
+        "part_time": "09:30:00.005031",
+        "part_time_nano": 660,
+        "trf_time": null,
+        "trf_time_nano": 0,
+        "tte_ind": "0"
+      },
+      {
+        "date": "2019-01-02",
+        "time_m": "09:30:13.399668",
+        "time_m_nano": 0,
+        "ex": "N",
+        "sym_root": "A",
+        "sym_suffix": null,
+        "tr_scond": "O",
+        "size": 12123,
+        "price": "66.5",
+        "tr_stop_ind": "N",
+        "tr_corr": "00",
+        "tr_seqnum": 309901,
+        "tr_id": "52983627989555",
+        "tr_source": "C",
+        "tr_rf": null,
+        "part_time": "09:30:13.397667",
+        "part_time_nano": 0,
+        "trf_time": null,
+        "trf_time_nano": 0,
+        "tte_ind": "0"
+      }
+    ]
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "ctm_20250731",
+    "columns": [
+      {
+        "name": "date",
+        "type": "date",
+        "description": null
+      },
+      {
+        "name": "time_m",
+        "type": "time without time zone",
+        "description": null
+      },
+      {
+        "name": "time_m_nano",
+        "type": "smallint",
+        "description": null
+      },
+      {
+        "name": "ex",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "sym_root",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "sym_suffix",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tr_scond",
+        "type": "character varying(4)",
+        "description": null
+      },
+      {
+        "name": "size",
+        "type": "integer",
+        "description": null
+      },
+      {
+        "name": "price",
+        "type": "numeric",
+        "description": null
+      },
+      {
+        "name": "tr_stop_ind",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tr_corr",
+        "type": "character varying(2)",
+        "description": null
+      },
+      {
+        "name": "tr_seqnum",
+        "type": "bigint",
+        "description": null
+      },
+      {
+        "name": "tr_id",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tr_source",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tr_rf",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "part_time",
+        "type": "time without time zone",
+        "description": null
+      },
+      {
+        "name": "part_time_nano",
+        "type": "smallint",
+        "description": null
+      },
+      {
+        "name": "trf_time",
+        "type": "time without time zone",
+        "description": null
+      },
+      {
+        "name": "trf_time_nano",
+        "type": "smallint",
+        "description": null
+      },
+      {
+        "name": "tte_ind",
+        "type": "character varying(1)",
+        "description": null
+      }
+    ],
+    "sample": [
+      {
+        "date": "2025-07-31",
+        "time_m": "04:13:17.851820",
+        "time_m_nano": 719,
+        "ex": "P",
+        "sym_root": "A",
+        "sym_suffix": null,
+        "tr_scond": "TI",
+        "size": 43,
+        "price": "117.63",
+        "tr_stop_ind": "N",
+        "tr_corr": "00",
+        "tr_seqnum": 4579,
+        "tr_id": "52983525032265",
+        "tr_source": "C",
+        "tr_rf": null,
+        "part_time": "04:13:17.851785",
+        "part_time_nano": 67,
+        "trf_time": null,
+        "trf_time_nano": 0,
+        "tte_ind": "0"
+      },
+      {
+        "date": "2025-07-31",
+        "time_m": "04:55:40.842167",
+        "time_m_nano": 101,
+        "ex": "K",
+        "sym_root": "A",
+        "sym_suffix": null,
+        "tr_scond": "FTI",
+        "size": 5,
+        "price": "117.65",
+        "tr_stop_ind": "N",
+        "tr_corr": "00",
+        "tr_seqnum": 6887,
+        "tr_id": "52983525031015",
+        "tr_source": "C",
+        "tr_rf": null,
+        "part_time": "04:55:40.841926",
+        "part_time_nano": 0,
+        "trf_time": null,
+        "trf_time_nano": 0,
+        "tte_ind": "1"
+      },
+      {
+        "date": "2025-07-31",
+        "time_m": "04:55:40.842326",
+        "time_m_nano": 491,
+        "ex": "K",
+        "sym_root": "A",
+        "sym_suffix": null,
+        "tr_scond": "FTI",
+        "size": 79,
+        "price": "117.65",
+        "tr_stop_ind": "N",
+        "tr_corr": "00",
+        "tr_seqnum": 6888,
+        "tr_id": "52983525031016",
+        "tr_source": "C",
+        "tr_rf": null,
+        "part_time": "04:55:40.842084",
+        "part_time_nano": 0,
+        "trf_time": null,
+        "trf_time_nano": 0,
+        "tte_ind": "1"
+      }
+    ]
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taqm",
+    "table": "taqmclink",
+    "columns": [
+      {
+        "name": "date",
+        "type": "date",
+        "description": "Date"
+      },
+      {
+        "name": "sym_root",
+        "type": "character varying(6)",
+        "description": "Security symbol root"
+      },
+      {
+        "name": "sym_suffix",
+        "type": "character varying(10)",
+        "description": "Security symbol suffix"
+      },
+      {
+        "name": "permno",
+        "type": "integer",
+        "description": "PERMNO"
+      },
+      {
+        "name": "cusip",
+        "type": "character varying(8)",
+        "description": "CUSIP Header"
+      },
+      {
+        "name": "ncusip",
+        "type": "character varying(8)",
+        "description": "CUSIP"
+      },
+      {
+        "name": "shrcls",
+        "type": "character varying(4)",
+        "description": "Share Class (CRSP)"
+      },
+      {
+        "name": "ticker",
+        "type": "character varying(8)",
+        "description": "Ticker Symbol (CRSP)"
+      },
+      {
+        "name": "match_lvl",
+        "type": "double precision",
+        "description": "Match Level"
+      }
+    ],
+    "sample": [
+      {
+        "date": "2003-09-10",
+        "sym_root": "A",
+        "sym_suffix": null,
+        "permno": 87432,
+        "cusip": "00846U10",
+        "ncusip": "00846U10",
+        "shrcls": null,
+        "ticker": "A",
+        "match_lvl": 1.0
+      },
+      {
+        "date": "2003-09-11",
+        "sym_root": "A",
+        "sym_suffix": null,
+        "permno": 87432,
+        "cusip": "00846U10",
+        "ncusip": "00846U10",
+        "shrcls": null,
+        "ticker": "A",
+        "match_lvl": 1.0
+      },
+      {
+        "date": "2003-09-12",
+        "sym_root": "A",
+        "sym_suffix": null,
+        "permno": 87432,
+        "cusip": "00846U10",
+        "ncusip": "00846U10",
+        "shrcls": null,
+        "ticker": "A",
+        "match_lvl": 1.0
+      }
+    ]
+  },
+  {
+    "schema": "taqm_2025",
+    "table": "mastm_20250731",
+    "columns": [
+      {
+        "name": "date",
+        "type": "date",
+        "description": null
+      },
+      {
+        "name": "symbol_15",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "sec_desc",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "cusip",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "sec_type",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "cta_symbol",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "old_symbol",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "test_symbol_flag",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "listed_exchange",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tape",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "uot",
+        "type": "integer",
+        "description": null
+      },
+      {
+        "name": "round_lot",
+        "type": "integer",
+        "description": null
+      },
+      {
+        "name": "nyse_industry_code",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "shares_outstanding",
+        "type": "numeric",
+        "description": null
+      },
+      {
+        "name": "halt_delay_reason",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "specialist_clearing_agent",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "specialist_clearing_num",
+        "type": "integer",
+        "description": null
+      },
+      {
+        "name": "specialist_post_num",
+        "type": "integer",
+        "description": null
+      },
+      {
+        "name": "specialist_panel",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tron_nysemkt",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tron_nasdaqbx",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tron_nsx",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_finra",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_ise",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_edge_a",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_edge_x",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_chx",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_nyse",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_arca",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_nasdaq",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_cboe",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_psx",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_batsy",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_bats",
+        "type": "character varying(1)",
+        "description": null
+      },
+      {
+        "name": "tron_iex",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tick_pilot_indicator",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "effective_date",
+        "type": "date",
+        "description": null
+      },
+      {
+        "name": "tron_ltse",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tron_memx",
+        "type": "text",
+        "description": null
+      },
+      {
+        "name": "tron_miax",
+        "type": "text",
+        "description": null
+      }
+    ],
+    "sample": [
+      {
+        "date": "2025-07-31",
+        "symbol_15": "A",
+        "sec_desc": "Agilent Technologies Inc.",
+        "cusip": "00846U101",
+        "sec_type": "A",
+        "cta_symbol": "A",
+        "old_symbol": null,
+        "test_symbol_flag": "N",
+        "listed_exchange": "N",
+        "tape": "A",
+        "uot": 1,
+        "round_lot": 100,
+        "nyse_industry_code": "114A",
+        "shares_outstanding": "284.07",
+        "halt_delay_reason": null,
+        "specialist_clearing_agent": "G",
+        "specialist_clearing_num": 5,
+        "specialist_post_num": 8,
+        "specialist_panel": "I",
+        "tron_nysemkt": "1",
+        "tron_nasdaqbx": "1",
+        "tron_nsx": "1",
+        "tron_finra": "1",
+        "tron_ise": "0",
+        "tron_edge_a": "1",
+        "tron_edge_x": "1",
+        "tron_chx": "1",
+        "tron_nyse": "1",
+        "tron_arca": "1",
+        "tron_nasdaq": "1",
+        "tron_cboe": "0",
+        "tron_psx": "1",
+        "tron_batsy": "1",
+        "tron_bats": "1",
+        "tron_iex": "1",
+        "tick_pilot_indicator": null,
+        "effective_date": "1999-11-18",
+        "tron_ltse": "1",
+        "tron_memx": "1",
+        "tron_miax": "1"
+      },
+      {
+        "date": "2025-07-31",
+        "symbol_15": "AA",
+        "sec_desc": "Alcoa Corporation",
+        "cusip": "013872106",
+        "sec_type": "A",
+        "cta_symbol": "AA",
+        "old_symbol": null,
+        "test_symbol_flag": "N",
+        "listed_exchange": "N",
+        "tape": "A",
+        "uot": 1,
+        "round_lot": 100,
+        "nyse_industry_code": "130A",
+        "shares_outstanding": "258.9",
+        "halt_delay_reason": null,
+        "specialist_clearing_agent": "G",
+        "specialist_clearing_num": 5,
+        "specialist_post_num": 8,
+        "specialist_panel": "U",
+        "tron_nysemkt": "1",
+        "tron_nasdaqbx": "1",
+        "tron_nsx": "1",
+        "tron_finra": "1",
+        "tron_ise": "0",
+        "tron_edge_a": "1",
+        "tron_edge_x": "1",
+        "tron_chx": "1",
+        "tron_nyse": "1",
+        "tron_arca": "1",
+        "tron_nasdaq": "1",
+        "tron_cboe": "0",
+        "tron_psx": "1",
+        "tron_batsy": "1",
+        "tron_bats": "1",
+        "tron_iex": "1",
+        "tick_pilot_indicator": null,
+        "effective_date": "2016-10-18",
+        "tron_ltse": "0",
+        "tron_memx": "1",
+        "tron_miax": "1"
+      },
+      {
+        "date": "2025-07-31",
+        "symbol_15": "AAA",
+        "sec_desc": "Alternative Access First Priority CLO Bond ETF",
+        "cusip": "46144X610",
+        "sec_type": "ETF",
+        "cta_symbol": "AAA",
+        "old_symbol": null,
+        "test_symbol_flag": "N",
+        "listed_exchange": "P",
+        "tape": "B",
+        "uot": 1,
+        "round_lot": 100,
+        "nyse_industry_code": "416A",
+        "shares_outstanding": "1.7",
+        "halt_delay_reason": null,
+        "specialist_clearing_agent": null,
+        "specialist_clearing_num": null,
+        "specialist_post_num": null,
+        "specialist_panel": null,
+        "tron_nysemkt": "0",
+        "tron_nasdaqbx": "0",
+        "tron_nsx": "0",
+        "tron_finra": "1",
+        "tron_ise": "0",
+        "tron_edge_a": "0",
+        "tron_edge_x": "1",
+        "tron_chx": "0",
+        "tron_nyse": "0",
+        "tron_arca": "1",
+        "tron_nasdaq": "0",
+        "tron_cboe": "0",
+        "tron_psx": "0",
+        "tron_batsy": "1",
+        "tron_bats": "0",
+        "tron_iex": "0",
+        "tick_pilot_indicator": null,
+        "effective_date": "2022-10-17",
+        "tron_ltse": "0",
+        "tron_memx": "0",
+        "tron_miax": "0"
+      }
+    ]
+  }
+]

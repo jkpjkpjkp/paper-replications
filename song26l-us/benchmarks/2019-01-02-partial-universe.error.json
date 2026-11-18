@@ -1,0 +1,5 @@
+{
+  "date": "2019-01-02",
+  "error": "Relations no longer have fetchone(): a relation keeps no result between calls, so every call runs it again. Use rel.limit(1).fetchall() instead.",
+  "utc": "2026-11-03T03:40:14.750581+00:00"
+}

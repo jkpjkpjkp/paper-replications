@@ -1,0 +1,262 @@
+[
+  {
+    "schema": "contrib_liquidity_taq",
+    "accessible": true
+  },
+  {
+    "schema": "contrib_liquidity_taq_old",
+    "accessible": false
+  },
+  {
+    "schema": "factset",
+    "accessible": true
+  },
+  {
+    "schema": "factset_common",
+    "accessible": false
+  },
+  {
+    "schema": "factset_common_old",
+    "accessible": false
+  },
+  {
+    "schema": "factset_ff_int",
+    "accessible": false
+  },
+  {
+    "schema": "factset_ff_int_old",
+    "accessible": false
+  },
+  {
+    "schema": "factset_ff_usc",
+    "accessible": false
+  },
+  {
+    "schema": "factset_ff_usc_old",
+    "accessible": false
+  },
+  {
+    "schema": "factset_own",
+    "accessible": false
+  },
+  {
+    "schema": "factset_own_old",
+    "accessible": false
+  },
+  {
+    "schema": "factset_revere_common",
+    "accessible": false
+  },
+  {
+    "schema": "factset_revere_common_old",
+    "accessible": false
+  },
+  {
+    "schema": "factset_revere_geo_rev",
+    "accessible": false
+  },
+  {
+    "schema": "factset_revere_geo_rev_old",
+    "accessible": false
+  },
+  {
+    "schema": "factset_revere_ind_class",
+    "accessible": false
+  },
+  {
+    "schema": "factset_revere_ind_class_old",
+    "accessible": false
+  },
+  {
+    "schema": "factset_revere_supply_chain",
+    "accessible": false
+  },
+  {
+    "schema": "factset_revere_supply_chain_old",
+    "accessible": false
+  },
+  {
+    "schema": "taq",
+    "accessible": true
+  },
+  {
+    "schema": "taq_common",
+    "accessible": true
+  },
+  {
+    "schema": "taq_common_new",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2003",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2004",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2005",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2006",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2007",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2008",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2009",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2009_new",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2010",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2011",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2011_new",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2012",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2013",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2014",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2015",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2016",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2017",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2018",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2019",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2020",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2021",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2022",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2023",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2023_new",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2024",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2025",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2026",
+    "accessible": true
+  },
+  {
+    "schema": "taqm_2026_new",
+    "accessible": false
+  },
+  {
+    "schema": "taqm_2026_old",
+    "accessible": false
+  },
+  {
+    "schema": "taqmsamp",
+    "accessible": true
+  },
+  {
+    "schema": "taqmsamp_all",
+    "accessible": true
+  },
+  {
+    "schema": "taqmsec",
+    "accessible": true
+  },
+  {
+    "schema": "taqsamp",
+    "accessible": true
+  },
+  {
+    "schema": "taqsamp_all",
+    "accessible": true
+  },
+  {
+    "schema": "taqsamp_all_new",
+    "accessible": false
+  },
+  {
+    "schema": "wrdsapps_evtstudy_intraday_rav",
+    "accessible": false
+  },
+  {
+    "schema": "wrdsapps_evtstudy_intraday_rav_old",
+    "accessible": false
+  },
+  {
+    "schema": "wrdsapps_link_crsp_factset",
+    "accessible": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_factset_old",
+    "accessible": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taq",
+    "accessible": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taqm",
+    "accessible": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taqm_new",
+    "accessible": true
+  },
+  {
+    "schema": "wrdsapps_link_crsp_taqm_old",
+    "accessible": false
+  }
+]

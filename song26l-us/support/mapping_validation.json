@@ -1,0 +1,343 @@
+{
+  "complete": true,
+  "created_utc": "2026-11-03T03:42:12.734305+00:00",
+  "policy": {
+    "official_match_level": "smallest available per security/day; equally ranked distinct symbols retained",
+    "fallback": "exact same-day dated CRSP cusip[8] = TAQ master cusip[1:8]",
+    "header_CUSIP_or_ticker_fallback": false,
+    "symbol_ambiguity": "all symbol/date candidates mapping to multiple PERMNOs excluded",
+    "multiple_symbols_one_security_day": "retained and explicitly flagged"
+  },
+  "sources": [
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2019.parquet",
+      "bytes": 182807,
+      "sha256": "d3ffaa74cc76f696b19e22a46126987d57496400d47f417b2cba84245039dec8",
+      "rows": 127475,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2019.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2020.parquet",
+      "bytes": 200109,
+      "sha256": "b684fc07b5349525c8caa2d2d1b6b5f1eef8cbe4618182cba6c647e27595d4f0",
+      "rows": 127928,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2020.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2021.parquet",
+      "bytes": 205288,
+      "sha256": "620d7e1839412f01eaad7a6204d722f4d72ffeec47a7f4672705af5f28724002",
+      "rows": 127988,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2021.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2022.parquet",
+      "bytes": 182121,
+      "sha256": "4c4b2bfd7ed9d2fa30520c9855b068f5e4370f2139f62c80690ffdff0ce44370",
+      "rows": 126566,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2022.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2023.parquet",
+      "bytes": 177279,
+      "sha256": "9ae574427d9eef021f9e2b760b6c0d251cb09018e8d3cf29756e27a5592c8113",
+      "rows": 125395,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2023.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2024.parquet",
+      "bytes": 215344,
+      "sha256": "cd3f6ca9223900e917a8975f6f6d959bea4c8b2a1711b6e2d6ea5a4effdbfdb9",
+      "rows": 126372,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2024.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2025.parquet",
+      "bytes": 966,
+      "sha256": "d3e64d305a1f6ae31b23df71cb3b68f44fa9c9742febf3aa136fb11059caf7bc",
+      "rows": 0,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_crsp_link_2025.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_master_2019.parquet",
+      "bytes": 19178538,
+      "sha256": "c596954777a6a2e09dec16493fd105ef808ddf833418f02f2550cced5219bd5c",
+      "rows": 2225970,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_master_2019.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_master_2020.parquet",
+      "bytes": 20730750,
+      "sha256": "f8a293c2188efd520d53aadec9d2bc8cd09b41e15baf57d21dcabaa052e2d356",
+      "rows": 2288158,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_master_2020.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_master_2021.parquet",
+      "bytes": 27228695,
+      "sha256": "96abbdf408203da736c4129927fc1b8028e33e8d717dc8d9d95a73191f7cca5f",
+      "rows": 2719616,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_master_2021.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_master_2022.parquet",
+      "bytes": 31847249,
+      "sha256": "1abc042dc74c28d865ae8c40e831c0217c5e53dfc2478d357de544bbe65d1aa3",
+      "rows": 3044321,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_master_2022.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_master_2023.parquet",
+      "bytes": 29612453,
+      "sha256": "acc2187313067d516678e784a968663361fbd38bc46fe1a7968584c06536b9a4",
+      "rows": 2864764,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_master_2023.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_master_2024.parquet",
+      "bytes": 28124628,
+      "sha256": "4e89cd885a97c8ccbfb09b134b7609e6e76feeeae1a247bd0603364117c1e028",
+      "rows": 2801306,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_master_2024.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/metadata/taq_master_2025.parquet",
+      "bytes": 16846054,
+      "sha256": "5b26276ef2306c3c72e7f9eaa5d9ef775fab8469b7020c2b40ddf01b452c3367",
+      "rows": 1646977,
+      "receipt_path": "/home/jkp/data/song26l-us/metadata/taq_master_2025.receipt.json",
+      "receipt_verified": true
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/support/sp500_daily_membership.parquet",
+      "bytes": 88342,
+      "sha256": "553167a3428733f562675e50461d2764087d37c5a1c4271ea573c93053c4c87a",
+      "rows": 834313
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/support/crsp_daily_auxiliary.parquet",
+      "bytes": 44717529,
+      "sha256": "0cbe4872e0fa2e0801ae86698e49123f5fd41bf328dd07a61b909ca463752c88",
+      "rows": 834254
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/support/trading_calendar.parquet",
+      "bytes": 27360,
+      "sha256": "80741877f7cdd02227b3ec42ec371fbc88a19dc6dd1734ab5fd0fa7192ce54c2",
+      "rows": 1655
+    }
+  ],
+  "universe_security_days": 834313,
+  "mapped_security_days": 834212,
+  "unresolved_security_days": 101,
+  "mapping_rows": 834212,
+  "duplicate_symbol_date_keys": 0,
+  "ambiguous_symbol_date_keys": 1,
+  "multiple_symbol_security_days": 0,
+  "mapping_counts_by_year_and_method": [
+    {
+      "year": 2019,
+      "mapping_method": "exact_dated_cusip8",
+      "mapping_rows": 18573,
+      "security_days": 18573
+    },
+    {
+      "year": 2019,
+      "mapping_method": "wrds_taq_crsp_link",
+      "mapping_rows": 108699,
+      "security_days": 108699
+    },
+    {
+      "year": 2020,
+      "mapping_method": "exact_dated_cusip8",
+      "mapping_rows": 18110,
+      "security_days": 18110
+    },
+    {
+      "year": 2020,
+      "mapping_method": "wrds_taq_crsp_link",
+      "mapping_rows": 109663,
+      "security_days": 109663
+    },
+    {
+      "year": 2021,
+      "mapping_method": "exact_dated_cusip8",
+      "mapping_rows": 17094,
+      "security_days": 17094
+    },
+    {
+      "year": 2021,
+      "mapping_method": "wrds_taq_crsp_link",
+      "mapping_rows": 110174,
+      "security_days": 110174
+    },
+    {
+      "year": 2022,
+      "mapping_method": "exact_dated_cusip8",
+      "mapping_rows": 16573,
+      "security_days": 16573
+    },
+    {
+      "year": 2022,
+      "mapping_method": "wrds_taq_crsp_link",
+      "mapping_rows": 109869,
+      "security_days": 109869
+    },
+    {
+      "year": 2023,
+      "mapping_method": "exact_dated_cusip8",
+      "mapping_rows": 16396,
+      "security_days": 16396
+    },
+    {
+      "year": 2023,
+      "mapping_method": "wrds_taq_crsp_link",
+      "mapping_rows": 109365,
+      "security_days": 109365
+    },
+    {
+      "year": 2024,
+      "mapping_method": "exact_dated_cusip8",
+      "mapping_rows": 16826,
+      "security_days": 16826
+    },
+    {
+      "year": 2024,
+      "mapping_method": "wrds_taq_crsp_link",
+      "mapping_rows": 109939,
+      "security_days": 109939
+    },
+    {
+      "year": 2025,
+      "mapping_method": "exact_dated_cusip8",
+      "mapping_rows": 72931,
+      "security_days": 72931
+    }
+  ],
+  "unresolved_by_year_and_reason": [
+    {
+      "year": 2019,
+      "unresolved_reason": "ambiguous_symbol_maps_to_multiple_permnos",
+      "security_days": 1
+    },
+    {
+      "year": 2019,
+      "unresolved_reason": "no_dated_CRSP_observation_for_CUSIP_fallback",
+      "security_days": 8
+    },
+    {
+      "year": 2019,
+      "unresolved_reason": "no_valid_dated_CRSP_CUSIP8",
+      "security_days": 9
+    },
+    {
+      "year": 2020,
+      "unresolved_reason": "no_dated_CRSP_observation_for_CUSIP_fallback",
+      "security_days": 12
+    },
+    {
+      "year": 2020,
+      "unresolved_reason": "no_valid_dated_CRSP_CUSIP8",
+      "security_days": 5
+    },
+    {
+      "year": 2021,
+      "unresolved_reason": "no_dated_CRSP_observation_for_CUSIP_fallback",
+      "security_days": 7
+    },
+    {
+      "year": 2021,
+      "unresolved_reason": "no_valid_dated_CRSP_CUSIP8",
+      "security_days": 5
+    },
+    {
+      "year": 2022,
+      "unresolved_reason": "no_dated_CRSP_observation_for_CUSIP_fallback",
+      "security_days": 6
+    },
+    {
+      "year": 2022,
+      "unresolved_reason": "no_valid_dated_CRSP_CUSIP8",
+      "security_days": 11
+    },
+    {
+      "year": 2023,
+      "unresolved_reason": "no_dated_CRSP_observation_for_CUSIP_fallback",
+      "security_days": 10
+    },
+    {
+      "year": 2023,
+      "unresolved_reason": "no_valid_dated_CRSP_CUSIP8",
+      "security_days": 3
+    },
+    {
+      "year": 2024,
+      "unresolved_reason": "no_dated_CRSP_observation_for_CUSIP_fallback",
+      "security_days": 8
+    },
+    {
+      "year": 2024,
+      "unresolved_reason": "no_valid_dated_CRSP_CUSIP8",
+      "security_days": 4
+    },
+    {
+      "year": 2025,
+      "unresolved_reason": "no_dated_CRSP_observation_for_CUSIP_fallback",
+      "security_days": 8
+    },
+    {
+      "year": 2025,
+      "unresolved_reason": "no_valid_dated_CRSP_CUSIP8",
+      "security_days": 4
+    }
+  ],
+  "rejected_by_reason": [
+    {
+      "rejection_reason": "symbol_maps_to_multiple_permnos",
+      "candidate_rows": 2
+    }
+  ],
+  "official_match_levels": [
+    {
+      "match_lvl": 1.0,
+      "candidate_rows": 615657
+    },
+    {
+      "match_lvl": 2.0,
+      "candidate_rows": 42053
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/jkp/data/song26l-us/support/taq_daily_mappings.parquet",
+      "bytes": 699477,
+      "sha256": "e7df60f0177e94b3c7141093953446125ca4302bcec832cff2224f4f8615db74",
+      "rows": 834212
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/support/taq_mapping_unresolved.parquet",
+      "bytes": 2256,
+      "sha256": "376c93419a7bede8e45c6f5f1a8f550194124bea8b7a2b81fd4f37b30385bf7c",
+      "rows": 101
+    },
+    {
+      "path": "/home/jkp/data/song26l-us/support/taq_mapping_rejected.parquet",
+      "bytes": 2795,
+      "sha256": "c0ca55bf084690a3da45105f82cdeffa8783f27e4b45719fe483fb763674a51c",
+      "rows": 2
+    }
+  ]
+}

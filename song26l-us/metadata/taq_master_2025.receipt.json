@@ -1,0 +1,8 @@
+{
+  "path": "song26l_metadata_bfb4f30f262044a19a6de7d6a55b2939/taq_master_2025.parquet",
+  "rows": 1646977,
+  "bytes": 16846054,
+  "sha256": "5b26276ef2306c3c72e7f9eaa5d9ef775fab8469b7020c2b40ddf01b452c3367",
+  "source_sql": "SELECT date,symbol_15,cusip,sec_desc,sec_type,listed_exchange,tape FROM taqm_2025.mastm_2025 WHERE date<=DATE '2025-08-01' ORDER BY date,symbol_15",
+  "completed_utc": "2026-11-03T03:37:48.490493+00:00"
+}

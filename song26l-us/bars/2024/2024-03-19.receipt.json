@@ -1,0 +1,32 @@
+{
+  "state": "complete",
+  "date": "2024-03-19",
+  "path": "wrds_song26l_taq_19e44286f593452bae844675ccd0ab47/2024-03-19.parquet",
+  "name": "2024-03-19.parquet",
+  "format": "parquet",
+  "bytes": 11582583,
+  "sha256": "13a34196b47644a2b2f47852db72a05ad119436b54c61a95b6ab0e7e4808c64b",
+  "copy_rows": 22326598,
+  "totals": {
+    "rows": 196016,
+    "securities": 503,
+    "volume": 1629257853,
+    "trades": 22326598,
+    "amount": 235653010002.30597,
+    "price_eligible_trades": 6378392,
+    "minutes_without_eligible_price": 20074,
+    "minutes_with_multiple_symbols": 0
+  },
+  "mapped_securities": 503,
+  "mapped_symbols": 503,
+  "missing_permnos": [],
+  "close_time_exclusive": "16:00:00",
+  "price_condition_sql": "coalesce(t.tr_scond,'') ~ '^[ @EFKX56O]*$'",
+  "volume_condition_sql": "coalesce(t.tr_scond,'') !~ '[MQ9]'",
+  "elapsed_seconds": 84.737,
+  "completed_utc": "2026-11-03T12:17:34.537594+00:00",
+  "worker_sha256": "f1af4cb509a809a5e26a0ce0b9036710dd5a2dd75fbb58c0229f47ba5ab74fc8",
+  "mappings_sha256": "f5a35c69af7d0d96c1d6757745d9c0b3061855b0cd4936f2fbdc3f964fa55577",
+  "local_file": "/home/jkp/data/song26l-us/bars/2024/2024-03-19.parquet",
+  "verified_utc": "2026-11-03T12:17:39.359619+00:00"
+}
