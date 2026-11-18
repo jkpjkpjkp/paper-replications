@@ -1,0 +1,105 @@
+CURRENT/RESTATED COMPUSTAT RECONSTRUCTION — authorized 2026-11-18
+
+Objective: run the paper's Table 2 forecasting comparison using the user's
+available standard Compustat and CRSP data. Historical Snapshot is a fidelity
+limitation, not a launch blocker for this explicitly authorized substitution.
+No original data, existing runtime or archived experiment is deleted.
+
+Output root: /mnt/data/home/jkp/replications/lookahead-restated-20261118/
+Entry point: .venv/bin/python /home/jkp/data/Lookahead/reproduction/empirical/run_experiment.py
+The coordinator records a PID, stage, failure or completion in run_status.json;
+each fit has progress.json, restart checkpoint, best weights and predictions.
+It resumes at the last completed epoch and skips completed fits. Source hashes
+are recorded. Logs and data stay outside the source repository.
+
+Inputs and provenance:
+- Raw standard Compustat fundq and company, downloaded 2026-11-02, in
+  /home/jkp/data/compustat/all-parquet/comp/.
+- CRSP monthly v2 and primary CCM interval links; no active-company-only filter.
+- Legacy short-interest GUI download; rows without identifiers and conflicting
+  duplicate values are excluded. Match CCM issue ID, lag one month and stop
+  carrying it after 90 days. This lag is an assumption, not verified release dates.
+  Raw shares short / current shares outstanding can be distorted by splits
+  between the reported short-interest date and formation; that auxiliary feature
+  has not been independently reconciled to daily split events.
+- FRED CPIAUCSL, January 2010 normalization; downloaded file hash saved.
+- Local Fama-French daily risk-free returns, compounded monthly.
+
+Population and time:
+US-incorporated ordinary common stocks, NYSE/AMEX/NASDAQ; exclude historical SIC
+6000–6999. Largest linked security per company/month. Market cap >= $100m in
+January 2010 dollars. Require 60 continuous monthly observations before a
+formation date and five observed annual-spaced EBIT inputs. Eligibility never
+uses a future return or label. CURRENT company GICS supplies industry inputs:
+historical industry membership is not established by this data.
+
+Financial construction:
+INDL/STD/C/D/USD quarterly statements; deterministic duplicate-period resolution
+keeps the last fiscal-year/quarter assignment and counts discarded duplicates.
+Four consecutive quarters of sales, COGS, SGA and operating income after
+depreciation (EBIT). Operating cash flow and capital expenditure YTD values are
+first differenced within fiscal year, then accumulated for four consecutive
+quarters to form FCF. MRQ fields follow Section 3's list. That list enumerates
+18 items although Section 4.1 says 17 targets; this reconstruction retains all
+18 rather than guessing which item the authors omitted. This is an unresolved
+original-schema ambiguity, not a claim the paper's model has 18 targets.
+
+Availability is max(datadate + four calendar months, valid rdq). Use only reports
+available by month-end; forward fill within company, never backward fill. This
+conservative lag does NOT remove historical restatement leakage. Initially
+missing financial/short-interest/momentum inputs are imputed with training-input
+means (zero after scaling); missing financial labels are masked in the loss.
+Use MRQ net PPE, stockholders' equity, and the explicit other-asset fields.
+
+Momentum: cumulative CRSP total returns over 1/3/6/9 months, converted to
+monthly cross-sectional percentile ranks. Four real-cap size buckets use
+$300m/$2bn/$10bn cutoffs. GICS union includes historical and current groups plus
+unknown. These are documented choices where released data mappings are absent.
+
+Forecasts:
+Five annual input timestamps, one-year-ahead financial labels at each step.
+All financial inputs AND labels divided by last-input market cap, then feature
+standardization fitted solely on training-company input sequences. One-hot
+features retain their coding. Hold out 30% of training companies, fixed seed 521.
+Training/validation labels end by December 1999 (last formation December 1998).
+Formation dates in 1999 are an unused fitting gap and provide December 1999's
+portfolio signal. Test forecast origins are January 2000–December 2019, with
+labels through December 2020 where available. This origin-date convention and
+strict label boundary are explicit because the paper's split wording is ambiguous.
+
+Models:
+QFM: last observed EBIT. AutoReg: pooled ordinary least squares on five annual
+EBIT lags. Linear: pooled OLS on all five-year financial/auxiliary inputs.
+MLP, LSTM, UQ-MLP, UQ-LSTM: architecture reconstructed directly from the released
+runtime, 2048/512 hidden units, one layer, batch norm, MLP dropout 0.25 / LSTM
+recurrent dropout 0.25, max norm 3, gradient global norm 1, AdaDelta lr 0.01.
+Weighted multi-target losses follow released code (MLP .75, LSTM .5/.7).
+UQ heads output variance, softplus floored at 1e-6; Gaussian loss is error^2/var
++ log(var), following the code's variance convention. Max 150 epochs, validation
+EBIT MSE checkpoint selection and patience 25, matching the released trainer.
+Ten seeds 521–530; UQ prediction uses ten dropout draws per model. Ensemble total
+variance uses E[var + mean^2] - E[mean]^2. All full-population fits run sequentially.
+The genetic hyperparameter search is not repeated; published settings are fixed.
+
+Portfolio diagnostic (NOT the original simulator):
+At each month end, rank positive-EV companies by EBIT/EV or forecast EBIT/EV;
+UQ divides forecast EBIT by variance of market-cap-normalized EBIT. Select top
+50 with deterministic tie resolution, equal-weight next month's CRSP total
+returns. Exclude securities already delisted during the FORMATION month
+(MthDelFlg != N) or without a final-session price. Retain delisting returns in
+the following HOLDING month; never screen on that future month's delisting flag.
+CRSP confirms N means no delisting during that period:
+https://www.crsp.org/wp-content/uploads/2023/10/crsp_us_stock.pdf (page 15).
+EV = market cap + current debt + long-term debt + preferred stock - cash.
+If a held-security return is absent, mark the entire monthly return missing;
+do not silently drop the holding or report a full-period CAR. Save holdings.
+This is gross, month-end execution. It does NOT implement the proprietary first
+ten trading days VWAP execution, 10% volume participation, $0.01/share commission,
+quadratic slippage or 300 randomized starting portfolios. Therefore the saved
+portfolio diagnostic cannot establish a match to the paper's CAR/Sharpe.
+
+Assessment:
+The MSE metric also depends on the population and scaling reconstruction; save
+paper values, observed errors and all substitutions, without calling this an
+exact replication. Preserve the original missing-Snapshot evidence. No final
+neural result exists until the corresponding complete.json and predictions exist.

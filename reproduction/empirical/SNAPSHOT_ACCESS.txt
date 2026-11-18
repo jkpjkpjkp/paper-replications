@@ -1,0 +1,43 @@
+HOW TO OBTAIN HISTORICAL SNAPSHOT DATA — checked 2026-11-18
+
+1. Ask your institution's WRDS/library data administrator whether its S&P
+   subscription includes Compustat Snapshot, product/schema comp_snapshot.
+   Standard Compustat North America and compsamp_snapshot sample access do not
+   establish this entitlement. If licensed, ask WRDS to check your account access.
+
+2. If the institution does not license it, ask the administrator or S&P Global
+   Market Intelligence for an institutional subscription/quote. WRDS's contact
+   page explicitly supports adding data to an existing account. Do not assume
+   that a new token or downloading the standard data again will add entitlement.
+
+Request text (draft only; not sent):
+"We are reproducing Chauhan et al. (ICML 2020), Uncertainty-Aware Lookahead
+Factor Models for Quantitative Investing. Our WRDS account can query standard
+Compustat, but SELECT on comp_snapshot.wrds_csa_pit and
+comp_snapshot.wrds_csq_pit returns SQLSTATE 42501, permission denied for schema
+comp_snapshot. Does our institution license Compustat Snapshot? If so, please
+enable/check our entitlement. Otherwise, please advise on adding the product.
+We need annual and quarterly historical versions, effective/availability dates,
+active and inactive US firms, and clarification of vintage coverage for a study
+spanning 1970–2019. We need the full product, not sample tables."
+
+3. A second route is to ask the paper's authors for their processed monthly panel,
+   exact field mapping and vintage/availability construction, subject to their
+   redistribution license. They may be able to provide preprocessing code even
+   if the proprietary data cannot be shared. No request has been sent.
+
+Coverage caution: S&P's current public Compustat Financials page advertises
+point-in-time snapshots from 1987. The paper combines North America and Snapshot
+over 1970–2019, but does not fully specify its pre-Snapshot construction. Ask the
+vendor/authors about actual vintage start dates; old fiscal dates are not proof
+of archived information availability on those dates. comp_pit is a distinct
+product, not automatically an interchangeable replacement.
+
+Official sources:
+https://wrds-www.wharton.upenn.edu/pages/about/data-vendors/sp-global-market-intelligence/
+https://wrds-www.wharton.upenn.edu/pages/about/contact-wrds/
+https://www.spglobal.com/market-intelligence/en/solutions/products/fundamental-data
+Paper:
+https://proceedings.mlr.press/v119/chauhan20a.html
+Local access evidence:
+../evidence/wrds-compustat-access-20261117.json

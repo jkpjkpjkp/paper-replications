@@ -1,5 +1,7 @@
 # LFM Quant reproduction adapter
 
+An empirical reconstruction using the user's available standard Compustat and CRSP data was authorized on 2026-11-18. See [the protocol](empirical/PROTOCOL.txt), [the coordinator](empirical/run_experiment.py), and [Snapshot access instructions](empirical/SNAPSHOT_ACCESS.txt). Outputs and live status are under `/mnt/data/home/jkp/replications/lookahead-restated-20261118/`. The sections below describe the earlier synthetic adapter; the new empirical run is separate and preserves that evidence.
+
 Run the released-code integration for [Uncertainty-Aware Lookahead Factor Models for Quantitative Investing](https://proceedings.mlr.press/v119/chauhan20a.html). This folder provides explicit repairs to the author source, regression tests and a reproducible synthetic smoke run. The original investment experiment still requires historical Snapshot data and missing empirical construction details; the smoke outputs are not financial evidence.
 
 ## Prepare and install

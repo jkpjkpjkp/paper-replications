@@ -27,6 +27,6 @@ cd .replication-local/workspace/lfm-quant
 bash run_smoke.sh
 ```
 
-The smoke run generates a labelled synthetic fixture and verifies code integration. It is not a paper investment-return experiment. A full empirical run additionally needs authorized historical Compustat Snapshot vintages or the authors' processed panel, the exact field mapping/universe, and the portfolio construction. Existing current/restated Compustat files cannot establish that historical snapshot. No month–firm–return result is claimed for this incomplete empirical experiment.
+The smoke run generates a labelled synthetic fixture and verifies code integration. It is not a paper investment-return experiment. Exact reproduction needs historical Compustat Snapshot vintages or the authors' processed panel and the missing preprocessing/execution specifications. On 2026-11-18 the user authorized a reconstruction with the available current/restated Compustat and CRSP data. Its source and explicit substitutions are in `reproduction/empirical/PROTOCOL.txt`; live outputs are in `/mnt/data/home/jkp/replications/lookahead-restated-20261118/`. Snapshot is a fidelity limitation for this run, not a launch blocker. Forecast comparisons and monthly gross portfolio diagnostics are labeled separately from the original simulator's net returns.
 
 The code was released by Euclidean Technologies; the author README describes it as MIT-licensed. The original attribution and text are preserved in the local archive. No new license is assigned to third-party material during this cleanup.

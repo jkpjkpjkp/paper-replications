@@ -1,32 +1,56 @@
-0: blocked
-Assessment date: 2026-11-17
+1: Lookahead current/restated-data QFM, standardized EBIT MSE: rerun 1.094017; paper 0.65.
+Assessment date: 2026-11-18
 
+Scope: User-authorized current/restated-data reconstruction of Table 2 forecasting.
+This is a substituted-data comparison, not an exact original-data reproduction.
+The parent and reproduction status files describe the same paper.
 
+Completed evidence:
+Built 2,520,627 company/month rows and 851,170 five-year sequences. Training:
+239,675; validation: 105,244; test: 465,104 sequences, of which 440,247 have
+observed future EBIT. Training/validation targets end by December 1999; test
+forecast origins are January 2000–December 2019. Four regression checks passed.
+Independent QFM error and raw CRSP holding-date/return reconciliation passed.
 
-Scope: Blocked original Lookahead/LFM experiment; see also reproduction/STATUS.txt.
+Model       Local standardized EBIT MSE    Paper Table 2    Absolute difference
+QFM         1.094017093                  0.65             0.444017093
+AutoReg     0.933178661                  0.58             0.353178661
+Linear      1.011244265                  0.52             0.491244265
 
-Evidence and explanation:
-Standard Compustat access is working, and annual/quarterly files are already local.
-Fresh WRDS SELECT checks on 2026-11-17 confirm that the full historical Snapshot
-panel remains unavailable: comp_snapshot annual/quarterly PIT tables and compsnap
-aliases return permission denied (SQLSTATE 42501); comp_pit also denies access.
-Snapshot sample annual/quarterly queries succeed. This confirms the archived failure.
-The local TensorFlow adapter passed
-synthetic integration checks and verified 1,440 synthetic forecast rows, but no original
-experiment ran. Synthetic execution is not a match to a published financial result.
+These errors materially exceed a 0.005 rounding tolerance for the paper's
+two-decimal MSE values. The training-population scale differs from the authors'
+unknown preprocessing, so this does not isolate or establish a method failure.
+No baseline seed uncertainty is measured; these are deterministic fitted baselines.
 
-Limits / next requirement:
-Obtain an authorized historical Snapshot source or the original processed panel with
-vintage provenance, then run the original forecasting/portfolio comparison. Current-
-vintage Compustat is not an equivalent replacement.
+Neural work is running: four full-size model variants, ten seeds each, maximum
+150 epochs with validation early stopping. Read live run_status.json and each
+seed complete.json; planned/running fits are not completed evidence.
+First completed MLP seed (not the ten-model ensemble): test MSE 1.622925524; paper ensemble 0.48.
 
-Evidence paths (relative to this STATUS.txt):
-- reproduction/evidence/wrds-compustat-access-20261117.json
-- ../compustat/README.txt
-- ../.replication-local/artifacts/lfm-quant/results/status.json
-- README.md
+Portfolio diagnostic:
+Top-50 equal-weight gross monthly portfolios now have 240 months with no missing
+held returns for the completed models. Formation-month delistings/stale prices
+are excluded; following-month delisting returns remain included. The initial
+missing-return diagnostic and correction are preserved in before_formation_delisting_fix/.
+These gross results do not reproduce the proprietary first-ten-day execution,
+liquidity/cost model or 300 randomized initial portfolios, and do not establish
+a match to the paper's CAR/Sharpe.
 
+Fidelity limitations / earlier blocker:
+WRDS checks on 2026-11-17 found standard Compustat accessible but full Snapshot
+and comp_pit denied (SQLSTATE 42501); only Snapshot samples are accessible. On
+2026-11-18 the user explicitly authorized standard/restated data, making missing
+Snapshot a fidelity limitation rather than a launch blocker for this run.
+The paper lists 18 financial items but says 17 outputs; this reconstruction uses
+all 18. Reporting lags, missingness, universe, current GICS, short-interest
+handling and portfolio simplifications are explicit in empirical/PROTOCOL.txt.
+The historical adapter passed eight tests and 1,440 synthetic forecast rows;
+that smoke evidence was never a financial reproduction and is retained.
 
-Blocker triage and new work — 2026-11-17:
-Primary blocker: DATA (LICENSED HISTORICAL SNAPSHOT) + SPECIFICATION. See BLOCKER.txt for data/compute flags,
-current actions, remaining requirements and evidence. Grade remains 0.
+Evidence root:
+/mnt/data/home/jkp/replications/lookahead-restated-20261118/
+- panel_audit.json, comparison.json, RESULTS.txt, verification.json
+- logs/tests.log, logs/tests_final.log, run_status.json, model seed directories
+Source/protocol: /home/jkp/data/Lookahead/reproduction/empirical/
+Access evidence: /home/jkp/data/Lookahead/reproduction/evidence/wrds-compustat-access-20261117.json
+Historical smoke: /home/jkp/data/.replication-local/artifacts/lfm-quant/results/status.json

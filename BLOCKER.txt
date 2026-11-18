@@ -1,9 +1,10 @@
-PRIMARY BLOCKER: DATA (LICENSED HISTORICAL SNAPSHOT) + SPECIFICATION
-Assessed: 2026-11-17 (Asia/Shanghai)
+CURRENT WORK: AUTHORIZED CURRENT/RESTATED-DATA RECONSTRUCTION
+Assessed: 2026-11-18 (Asia/Shanghai)
 
-DATA: YES
-COMPUTE: NO: local TensorFlow CPU integration already works
-SPECIFICATION / PAPER TARGET: YES: empirical mappings/universe not fully specified
+DATA: NOT A LAUNCH BLOCKER for the user-authorized standard Compustat run.
+EXACT ORIGINAL DATA: still unavailable; historical Snapshot access remains denied.
+COMPUTE: local RTX 4060 / TensorFlow 2.15.1 GPU verified.
+SPECIFICATION: reconstruction choices recorded in reproduction/empirical/PROTOCOL.txt.
 
 Standard Compustat is accessible and downloaded; the full historical Compustat
 Snapshot panel remains unavailable to the current WRDS account. Fresh read-only
@@ -20,9 +21,18 @@ Current/restated Compustat is not a substitute for original vintage history.
 The synthetic 1,440-row integration check is not a financial paper comparison.
 
 Action / next requirement:
-No empirical launch. Obtain authorized historical Snapshot data or a processed
-panel with vintage provenance and validate prices, short interest, industry,
-capitalization and field mappings. Reuse the reproduction adapter afterward.
+On 2026-11-18 the user explicitly authorized reproduction with the available
+standard Compustat data. A new empirical run is building the monthly panel and
+will run forecasting baselines and the full-size MLP/LSTM/UQ variants, ten seeds
+each, with saved checkpoints. Live status:
+/mnt/data/home/jkp/replications/lookahead-restated-20261118/run_status.json
+
+Historical Snapshot is retained as a fidelity limitation, not a stop condition
+for this adapted run. Exact original reproduction still needs historical
+provenance and the missing author preprocessing/execution specifications. The
+current portfolio calculation is an explicit monthly gross-return diagnostic;
+it does not reproduce the proprietary execution simulator or its reported costs.
+See reproduction/empirical/SNAPSHOT_ACCESS.txt for product/access request details.
 
 Evidence (paths relative to /home/jkp/data):
 - Lookahead/reproduction/evidence/wrds-compustat-access-20261117.json
@@ -31,5 +41,7 @@ Evidence (paths relative to /home/jkp/data):
 - .replication-local/artifacts/lfm-quant/results/status.json
 - Lookahead/reproduction/README.md
 
-Numerical replication status remains 0 until a representative comparison is
-completed and assessed. Starting a job or matching a smoke-test cell is not a match.
+Numerical status is now 1 for the completed current/restated-data QFM baseline:
+standardized EBIT MSE 1.094017 versus paper 0.65. AutoReg and Linear also differ.
+The neural ensembles are running; see STATUS.txt for scope and completed evidence.
+Starting a job or matching a smoke-test cell is not a match.

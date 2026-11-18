@@ -1,30 +1,56 @@
-0: blocked
-Assessment date: 2026-11-17
+1: Lookahead current/restated-data QFM, standardized EBIT MSE: rerun 1.094017; paper 0.65.
+Assessment date: 2026-11-18
 
+Scope: User-authorized current/restated-data reconstruction of Table 2 forecasting.
+This is a substituted-data comparison, not an exact original-data reproduction.
+The parent and reproduction status files describe the same paper.
 
+Completed evidence:
+Built 2,520,627 company/month rows and 851,170 five-year sequences. Training:
+239,675; validation: 105,244; test: 465,104 sequences, of which 440,247 have
+observed future EBIT. Training/validation targets end by December 1999; test
+forecast origins are January 2000–December 2019. Four regression checks passed.
+Independent QFM error and raw CRSP holding-date/return reconciliation passed.
 
-Scope: Blocked original-paper adapter; same paper as the parent Lookahead folder.
+Model       Local standardized EBIT MSE    Paper Table 2    Absolute difference
+QFM         1.094017093                  0.65             0.444017093
+AutoReg     0.933178661                  0.58             0.353178661
+Linear      1.011244265                  0.52             0.491244265
 
-Evidence and explanation:
-Eight regression tests and synthetic integration passed, including 1,440 forecast rows.
-The archived status explicitly records original_experiment_run=false and
-paper_reproduction=blocked. Full historical Compustat Snapshot data/processed monthly
-panel is missing; there are no paper-comparable measured errors or confidence intervals.
+These errors materially exceed a 0.005 rounding tolerance for the paper's
+two-decimal MSE values. The training-population scale differs from the authors'
+unknown preprocessing, so this does not isolate or establish a method failure.
+No baseline seed uncertainty is measured; these are deterministic fitted baselines.
 
-Fresh WRDS access check on 2026-11-17: ordinary comp.funda, comp.fundq,
-comp.co_filedate and comp.sec_shortint SELECTs succeed. Full annual/quarterly
-Snapshot PIT tables and their compsnap aliases still return permission denied for
-schema comp_snapshot (SQLSTATE 42501); comp_pit also denies access. Snapshot sample
-annual/quarterly queries succeed. Standard data availability does not resolve the
-historical-vintage requirement. Numerical grade remains 0; no new empirical run.
+Neural work is running: four full-size model variants, ten seeds each, maximum
+150 epochs with validation early stopping. Read live run_status.json and each
+seed complete.json; planned/running fits are not completed evidence.
+First completed MLP seed (not the ten-model ensemble): test MSE 1.622925524; paper ensemble 0.48.
 
-Limits / next requirement:
-Supply the historical panel and run the paper's representative experiment. Do not count
-this extension as another successfully replicated paper.
+Portfolio diagnostic:
+Top-50 equal-weight gross monthly portfolios now have 240 months with no missing
+held returns for the completed models. Formation-month delistings/stale prices
+are excluded; following-month delisting returns remain included. The initial
+missing-return diagnostic and correction are preserved in before_formation_delisting_fix/.
+These gross results do not reproduce the proprietary first-ten-day execution,
+liquidity/cost model or 300 randomized initial portfolios, and do not establish
+a match to the paper's CAR/Sharpe.
 
-Evidence paths (relative to this STATUS.txt):
-- evidence/wrds-compustat-access-20261117.json
-- ../../.replication-local/artifacts/lfm-quant/results/status.json
-- ../../.replication-local/artifacts/lfm-quant/README.txt
+Fidelity limitations / earlier blocker:
+WRDS checks on 2026-11-17 found standard Compustat accessible but full Snapshot
+and comp_pit denied (SQLSTATE 42501); only Snapshot samples are accessible. On
+2026-11-18 the user explicitly authorized standard/restated data, making missing
+Snapshot a fidelity limitation rather than a launch blocker for this run.
+The paper lists 18 financial items but says 17 outputs; this reconstruction uses
+all 18. Reporting lags, missingness, universe, current GICS, short-interest
+handling and portfolio simplifications are explicit in empirical/PROTOCOL.txt.
+The historical adapter passed eight tests and 1,440 synthetic forecast rows;
+that smoke evidence was never a financial reproduction and is retained.
 
-Scale and update instructions: ../../AGENTS.md
+Evidence root:
+/mnt/data/home/jkp/replications/lookahead-restated-20261118/
+- panel_audit.json, comparison.json, RESULTS.txt, verification.json
+- logs/tests.log, logs/tests_final.log, run_status.json, model seed directories
+Source/protocol: /home/jkp/data/Lookahead/reproduction/empirical/
+Access evidence: /home/jkp/data/Lookahead/reproduction/evidence/wrds-compustat-access-20261117.json
+Historical smoke: /home/jkp/data/.replication-local/artifacts/lfm-quant/results/status.json
