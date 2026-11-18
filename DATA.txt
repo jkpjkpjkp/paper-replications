@@ -1,3 +1,12 @@
+CZ202 transfer request — assessed 2026-11-18
+==========================================
+The user authorized using CZ202 to test whether TransAlpha's results transfer.
+All six existing monthly fits were re-audited against these inputs. The CRSP
+universe, lagged feature/return alignment and accounting checks passed again.
+The frozen CZ202 experiment shows no observed advantage over the linear control;
+see results/cz202/TRANSFER_REPORT.txt for estimates and uncertainty. Original
+intraday data availability below does not block this completed CZ202 assessment.
+
 Original-paper input recheck — 2026-11-18
 ========================================
 Requested original-setting target: TransAlpha CSI300, Table 3.

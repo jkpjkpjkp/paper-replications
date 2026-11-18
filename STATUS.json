@@ -62,5 +62,70 @@
         }
       }
     }
+  },
+  "cz202_transfer_assessment": {
+    "assessment_date": "2026-11-18",
+    "complete": true,
+    "training": "Reanalysis of six existing trained fits; no new training or test tuning",
+    "conclusion": "No advantage over the linear control was observed under the fixed CZ202 protocol. This is not a same-setting numerical replication of the paper.",
+    "report": "results/cz202/TRANSFER_REPORT.txt",
+    "statistics": "results/cz202/transfer_analysis.json",
+    "transalpha_minus_linear": {
+      "ic": {
+        "mean": -0.0045004845244078695,
+        "per_seed": [
+          -0.008865852141388833,
+          -0.0017331803542470943,
+          -0.0029024210775876816
+        ],
+        "positive_seed_count": 0
+      },
+      "rank_ic": {
+        "mean": -0.0008202595085760415,
+        "per_seed": [
+          -0.0017869399790111616,
+          0.00635490297741282,
+          -0.007028741524129783
+        ],
+        "positive_seed_count": 1
+      },
+      "gross_sharpe": {
+        "mean": -0.4447380659622883,
+        "per_seed": [
+          -0.5549931024148331,
+          -0.2572028720200709,
+          -0.5220182234519608
+        ],
+        "positive_seed_count": 0
+      },
+      "net_sharpe": {
+        "mean": -0.3933785341437206,
+        "per_seed": [
+          -0.4968884287072879,
+          -0.19766666049927473,
+          -0.4855805132245993
+        ],
+        "positive_seed_count": 0
+      }
+    },
+    "paired_six_month_block_ci95": {
+      "ic": [
+        -0.02203808530230893,
+        0.01302923602935643
+      ],
+      "rank_ic": [
+        -0.013932507557420804,
+        0.013131876135484251
+      ],
+      "gross_sharpe": [
+        -1.4233114649196705,
+        0.41929530821076
+      ],
+      "net_sharpe": [
+        -1.3809379523403642,
+        0.47839552681795067
+      ]
+    },
+    "original_paper_grade": 0
   }
 }

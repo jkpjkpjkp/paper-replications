@@ -86,6 +86,17 @@ def main():
         assert indices.shape == (BOOTSTRAP_DRAWS, 48)
         # Advanced indexing yields [variant, seed, draw, month, metric].
         sample_statistics = statistics(arrays[:, :, indices, :]).mean(axis=1)
+        # Check axis/order handling against a separate scalar implementation.
+        for draw in range(3):
+            for v in range(2):
+                scalar = []
+                for s in range(3):
+                    sample = arrays[v, s][indices[draw]]
+                    scalar.append([np.mean(sample[:, 0]), np.mean(sample[:, 1]),
+                        np.sqrt(12) * np.mean(sample[:, 2]) / np.std(sample[:, 2], ddof=1),
+                        np.sqrt(12) * np.mean(sample[:, 3]) / np.std(sample[:, 3], ddof=1)])
+                np.testing.assert_allclose(sample_statistics[v, draw], np.mean(scalar, axis=0),
+                                           rtol=0, atol=1e-12)
         paired = sample_statistics[0] - sample_statistics[1]
         bootstrap[str(block)] = {
             "model_mean_ci95": {
@@ -100,11 +111,19 @@ def main():
     for path in (OUT / "audit.json", OUT / "source_verification.json", OUT / "protocol.json",
                  ROOT / "sources/paper_table3_transalpha.csv", Path(__file__).resolve()):
         provenance[str(path.relative_to(ROOT))] = sha(path)
+    no_observed_advantage = bool(means[0, 0] <= means[1, 0] and means[0, 3] <= means[1, 3])
+    conclusion = ("No advantage over the linear control was observed under the fixed CZ202 protocol."
+                  if no_observed_advantage else "The fixed CZ202 protocol shows mixed or positive TransAlpha point estimates; inspect uncertainty.")
+    lower_counts = {k: int((differences[:, j] < 0).sum()) for j, k in enumerate(METRICS)}
+    alpha_cover_zero = sum(r["net_alpha_ci95"][0] <= 0 <= r["net_alpha_ci95"][1]
+                           for r in per_run if r["variant"] == "transalpha")
+    primary_difference_cis = bootstrap["6"]["difference_ci95"]
+    zero_in_all_primary_cis = all(a <= 0 <= b for a, b in primary_difference_cis.values())
     result = {
         "assessment_date": datetime.now(ZoneInfo("Asia/Shanghai")).date().isoformat(),
         "scope": "Reanalysis of six existing fresh-training CZ202 fits; no new training or hyperparameter search",
         "question": "Does the reconstructed TransAlpha show predictive/profitability advantage with monthly CZ202 inputs?",
-        "conclusion": "No advantage over the linear control was observed under the fixed CZ202 protocol. This does not reproduce the paper's claimed advantage and is not a same-setting numerical replication.",
+        "conclusion": conclusion + " This is not a same-setting numerical replication of the paper.",
         "months": expected_months, "seeds": list(SEEDS), "per_run": per_run, "summary": summary,
         "transalpha_minus_linear": {k: {"mean": float(differences[:, j].mean()),
             "per_seed": differences[:, j].tolist(), "positive_seed_count": int((differences[:, j] > 0).sum())}
@@ -120,12 +139,13 @@ def main():
         "paper_comparison": {"comparable": False, "absolute_error": None, "relative_error": None,
             "reason": "CZ202 monthly US inputs, different splits and value-weighted deciles replace private Chinese 15-minute factors and long-short 50. The control is not the published DLinear."},
         "checks": {"passed": True, "all_six_saved_run_metrics_recomputed": True,
-            "identical_test_months": True, "current_independent_audits_passed": True},
+            "identical_test_months": True, "current_independent_audits_passed": True,
+            "bootstrap_axis_order_checked_against_scalar_loop": True},
         "input_hashes": provenance,
     }
     (OUT / "transfer_analysis.json").write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     lines = ["CZ202 transfer assessment — " + result["assessment_date"],
-        "No TransAlpha advantage observed in the frozen monthly CZ202 experiment.",
+        conclusion,
         "Six existing trained fits re-audited; this assessment did not retrain or tune models.",
         "Train 2009-2019; validation 2020-2021; test 2022-2025 (48 shared months).",
         "202 features; 16 calendar-month history; three fixed seeds; validation-IC selection.",
@@ -139,8 +159,10 @@ def main():
     for j, k in enumerate(METRICS):
         cis = [bootstrap[str(b)]["difference_ci95"][k] for b in BLOCK_LENGTHS]
         lines.append(f"{k} | {differences[:, j].mean():.6f} | " + " | ".join(f"[{a:.6f}, {b:.6f}]" for a, b in cis))
-    lines += ["", "TransAlpha has lower IC and net Sharpe than the control in all three seed pairs.",
-        "All three TransAlpha net FF5+UMD alpha 95% HAC intervals include zero.",
+    lines += ["", f"TransAlpha has lower IC in {lower_counts['ic']}/3 seed pairs and lower net Sharpe in {lower_counts['net_sharpe']}/3.",
+        f"TransAlpha net FF5+UMD alpha 95% HAC intervals include zero in {alpha_cover_zero}/3 seeds.",
+        ("All four primary difference intervals include zero; this sample does not establish clear superiority or inferiority."
+         if zero_in_all_primary_cis else "Inspect primary difference intervals per metric; intervals are pointwise, not multiplicity-adjusted."),
         "Bootstrap: 10,000 circular block draws, RNG 20261118; joint monthly resampling",
         "preserves pairing across six models. Primary block length 6; lengths 3/12 are",
         "sensitivity checks. Intervals are exploratory, pointwise, conditional on these fits;",
@@ -155,8 +177,8 @@ def main():
         "the CZ/CRSP source is current-vintage rather than historically as-published.",
         "", "Evidence: transfer_analysis.json (statistics/provenance), audit.json,",
         "source_verification.json, protocol.json, and each seed's saved scores/checkpoint.",
-        "Reproduce assessment: PYTHON_CZ scripts/analyze_cz202_transfer.py",
-        "PYTHON_CZ=/home/jkp/data/.replication-local/artifacts/ordered-reproductions/.venv-tra/bin/python"]
+        "Reproduce assessment:",
+        "  /home/jkp/data/.replication-local/artifacts/ordered-reproductions/.venv-tra/bin/python scripts/analyze_cz202_transfer.py"]
     (OUT / "TRANSFER_REPORT.txt").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
 

@@ -1,5 +1,23 @@
-0: CSI300 Table 3 reproduction awaits original 400-factor intraday inputs; adaptations complete.
+0: original-paper match unverified; completed CZ202 transfer test shows no observed model advantage.
 Assessment date: 2026-11-18
+
+CZ202 transfer assessment (2026-11-18):
+The user authorized CZ202 as the alternative input. Reused and independently
+re-audited all six completed monthly fits; no new training or test-set tuning.
+TransAlpha minus linear control: mean IC -0.0045004845 and mean net Sharpe
+-0.3933785341. IC and net Sharpe are lower for TransAlpha in all three seed
+pairs. No predictive/profitability advantage is observed in this frozen setup.
+Paired circular month-block bootstrap (10,000 draws, six-month primary blocks):
+IC difference 95% interval [-0.022038, 0.013029]; net Sharpe difference interval
+[-1.380938, 0.478396]. Three-/twelve-month block sensitivity intervals also
+include zero. Thus the short shared test path does not establish statistically
+clear superiority or inferiority. Intervals are exploratory, pointwise and
+conditional on the six trained models, not uncertainty across new training fits.
+The linear control is not the paper's DLinear. The main baseline suite and
+ablations were not tested on CZ202. This completed transfer test does not
+establish an original-setting numerical match; original-paper grade remains 0.
+Report: results/cz202/TRANSFER_REPORT.txt. Statistics/provenance:
+results/cz202/transfer_analysis.json. Rerun: scripts/analyze_cz202_transfer.py.
 
 Original-setting request (2026-11-18):
 Selected representative experiment: TransAlpha CSI300, Table 3. Paper targets
@@ -43,6 +61,10 @@ also do not establish an original intraday numerical comparison. Neither the
 main private benchmark nor CSI2000/full-market experiments has been reproduced.
 
 Verification:
+On 2026-11-18, all six saved-score/portfolio/HAC audits and the independent
+477,772-row CRSP/CZ source-alignment check passed again. The new comparison
+recomputed every reported metric from monthly series and checked vectorized
+bootstrap statistics against a separate scalar calculation.
 15 implementation tests passed. The calendar/label-independence check also
 passed in the actual training environment. Saved checkpoint samples replay
 exactly. Six runs passed independent saved-score IC, market-cap decile and
@@ -67,6 +89,8 @@ Evidence paths (relative to this file):
 - reproduce_cz202.sh
 - results/cz202/protocol.json
 - results/cz202/REPORT.txt
+- results/cz202/TRANSFER_REPORT.txt and results/cz202/transfer_analysis.json
+- scripts/analyze_cz202_transfer.py
 - results/cz202/summary.json
 - results/cz202/completion.json
 - results/cz202/data_audit.json

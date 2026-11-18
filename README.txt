@@ -108,3 +108,16 @@ See DATA.txt for inputs, exact missingness counts, history imputation, source
 vintage limitations and missing original-paper inputs. CZ outputs are separate
 at results/cz202/; the original daily protocol and its 27 results are preserved.
 A completed CZ adaptation does not establish an original intraday paper match.
+
+CZ202 transfer assessment (2026-11-18)
+====================================
+The six completed fits were independently re-audited. TransAlpha has lower
+IC and net Sharpe than the linear control in all three seed pairs. Paired
+month-block confidence intervals include zero, so the 48-month test period
+does not establish clear superiority or inferiority. The fixed CZ202 setup
+does not reproduce an observed TransAlpha advantage. No new model fitting or
+test tuning was performed for this assessment.
+See results/cz202/TRANSFER_REPORT.txt and transfer_analysis.json for the
+comparison, bootstrap sensitivity, paper-reference context and limitations.
+To regenerate the comparison after the six-run audit:
+  /home/jkp/data/.replication-local/artifacts/ordered-reproductions/.venv-tra/bin/python scripts/analyze_cz202_transfer.py
