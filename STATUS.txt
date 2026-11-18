@@ -1,5 +1,5 @@
 0: blocked
-Assessment date: 2026-11-17
+Assessment date: 2026-11-18
 
 
 
@@ -28,3 +28,14 @@ current actions, remaining requirements and evidence. Grade remains 0.
 Fresh local CPU attempt: ../.replication-local/runs/blocked-20261117/pdu/
 Live service and progress were checked at launch; run-status.json is a dated receipt,
 not permanent proof of liveness. No completed comparison is claimed for this attempt.
+
+GPUShare preparation — 2026-11-18:
+The earlier CPU service is inactive; its last log is epoch 0, step 550, so it
+did not finish a training epoch. A one-seed full NASDAQ case is now packaged
+for one RTX 4090 at the observed GPUShare rate of CNY 1.99/hour. The intended
+provider shutdown limit is 24 hours; the training process limit is 23 hours.
+No instance has been purchased or started: account balance is CNY 1.14 and
+funding is pending. Seven correctness tests pass; the independent verifier
+passes a temporary fixture and rejects a corrupted metric. These are software
+checks, not a paper result, and the numerical grade remains 0.
+Plan and payload: ../.replication-local/runs/pdu-gpushare-20261118/

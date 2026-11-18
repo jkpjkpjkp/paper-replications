@@ -94,6 +94,25 @@ selection. Pass `--device cpu` explicitly when needed. `--stocks` and
 Use a unique `--tag` for a changed run. The summary consumes available saved runs;
 inspect its coverage rather than assuming all requested runs completed.
 
+For one bounded NASDAQ cloud case, `cloud_case.py` runs the seven correctness
+tests, benchmarks checkpointed versus batched graph execution, trains seed 42
+on the full universe, and audits the saved predictions with `verify_case.py`.
+It selects execution mode using throughput only, before training, and retains
+the same model equations. The default remains checkpointed execution in
+`train.py`; `--graph-mode batched` requires substantially more GPU memory.
+
+```bash
+./run.sh cloud_case.py --max-hours 23 --cpu-threads 4
+```
+
+The runner writes `case-receipt.json`, `benchmark.json`, `environment.txt`,
+`logs/`, `results/`, and `case-artifacts.tar.gz`. Its process time limit does
+not stop cloud billing: set a provider shutdown deadline separately and stop
+the instance after retrieving artifacts. The predeclared paper comparison
+screens both SR and MRR against two published seed standard deviations;
+this is descriptive, not a confidence interval or proof of exact replication.
+Input, trading-horizon and metric discrepancies still apply.
+
 ## Outputs and calendar-month returns
 
 Each `results/<tag>/` retains checkpoints, predictions and metrics. The summary

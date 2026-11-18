@@ -24,7 +24,7 @@ def target_days(start, end, window=4):
 
 def main(args):
     random.seed(args.seed); np.random.seed(args.seed); torch.manual_seed(args.seed)
-    torch.set_num_threads(2)
+    torch.set_num_threads(args.cpu_threads)
     torch.backends.cudnn.benchmark=False
     torch.backends.cuda.matmul.allow_tf32=False
     torch.backends.cudnn.allow_tf32=False
@@ -38,7 +38,7 @@ def main(args):
     tensors={name:torch.as_tensor(data[name][:n].astype(np.float32),device=args.device)
              for name in ['features','price','truth','mask']}
     graph=torch.as_tensor(edge,device=args.device)
-    model=PDUModel(n,device=args.device)
+    model=PDUModel(n,device=args.device,memory_efficient=args.graph_mode=='checkpointed')
     optimizer=torch.optim.Adam([p for p in model.parameters() if p.requires_grad],lr=args.lr,weight_decay=.001)
     out=ROOT/'results'/args.tag;out.mkdir(parents=True,exist_ok=False)
     config=vars(args)|{'data_sha256':hashlib.sha256(panel.read_bytes()).hexdigest(),
@@ -113,6 +113,9 @@ if __name__=='__main__':
     p.add_argument('--patience',type=int,default=20)
     p.add_argument('--lr',type=float,default=.001)
     p.add_argument('--device',default='cuda' if torch.cuda.is_available() else 'cpu')
+    p.add_argument('--graph-mode',choices=['checkpointed','batched'],default='checkpointed',
+                   help='Batched graphs use more memory; model equations are unchanged')
+    p.add_argument('--cpu-threads',type=int,default=2)
     p.add_argument('--stocks',type=int,default=0,help='Diagnostic subset only; first N source tickers')
     p.add_argument('--train-steps',type=int,default=0,help='Diagnostic cap; 0 uses all 752 days')
     main(p.parse_args())

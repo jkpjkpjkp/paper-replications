@@ -1,8 +1,8 @@
-PRIMARY BLOCKER: DATA/SPECIFICATION FOR EXACT REPLICATION; COMPUTE ATTEMPT STARTED
-Assessed: 2026-11-17 (Asia/Shanghai)
+PRIMARY BLOCKER: DATA/SPECIFICATION FOR EXACT REPLICATION; CLOUD RUN AWAITS FUNDING
+Assessed: 2026-11-18 (Asia/Shanghai)
 
 DATA: PARTIAL: public RSR inputs recovered; author preprocessing/frozen arrays absent
-COMPUTE: YES: full training was unfinished; now using local CPU
+COMPUTE: YES: full training unfinished; CPU stopped, GPUShare case prepared
 SPECIFICATION / PAPER TARGET: YES: code/metric/trading-horizon discrepancies
 
 NASDAQ and NYSE reconstructed inputs exist. Previous results were one-update
@@ -12,14 +12,18 @@ no responses as of 2026-11-17. The repaired model, validation-MSE selection,
 close-to-close return treatment and NDCG/DD conventions are disclosed deviations.
 
 Action / next requirement:
-STARTED full NASDAQ seed 42 on CPU, 1,026 stocks, all 752 training dates per
+Previously started full NASDAQ seed 42 on CPU, 1,026 stocks, all 752 training dates per
 epoch, maximum 300 epochs, patience 20. Unit: replication-pdu-20261117.service.
 Run directory: .replication-local/runs/blocked-20261117/pdu/
 Targets: Table 2 NASDAQ SR 2.2112 +/- 0.1283 seed SD; MRR 0.0407 +/- 0.0005
 seed SD. One new seed has no measured seed uncertainty. Completion will replay
 saved predictions and write comparison.json, retaining metric/protocol caveats.
+The CPU service is now inactive, with its last log at epoch 0, step 550.
+One full NASDAQ seed is packaged for GPUShare RTX 4090 (CNY 1.99/hour), with
+a planned 24-hour provider shutdown limit and 23-hour process limit. Current
+balance is CNY 1.14; a CNY 50 top-up was requested. No instance has been rented.
 This is a reconstructed-protocol attempt, not certification of original inputs.
-No rental or paid data required; archived diagnostics are preserved.
+Archived diagnostics are preserved. Software tests passed; full training remains pending.
 
 Evidence (paths relative to /home/jkp/data):
 - .replication-local/artifacts/pdu/RESULTS.txt
@@ -27,6 +31,7 @@ Evidence (paths relative to /home/jkp/data):
 - .replication-local/runs/blocked-20261117/pdu-issues.json
 - .replication-local/runs/blocked-20261117/pdu/launch-plan.json
 - .replication-local/runs/blocked-20261117/pdu/run-status.json
+- .replication-local/runs/pdu-gpushare-20261118/launch-plan.json
 
 Numerical replication status remains 0 until a representative comparison is
 completed and assessed. Starting a job or matching a smoke-test cell is not a match.
