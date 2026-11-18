@@ -29,7 +29,13 @@ def fit(data,out,cfg,year,seed,kind,device,benchmark=False):
         saved=json.loads((directory/'complete.json').read_text())
         if saved['config']!=cfg:
             raise ValueError('Refusing to reuse a run with a different configuration')
+        if saved['model_code_sha256']!=digest(ROOT/'setseq/model.py') or saved['train_code_sha256']!=digest(Path(__file__)):
+            raise ValueError('Refusing to mix completed runs from different source versions')
+        if saved['panel_manifest_sha256']!=digest(data/'panels'/str(year)/'manifest.json'):
+            raise ValueError('Refusing to reuse a fit after changing its input panel')
         print(f'reuse {kind} {seed} {year}',flush=True);return saved
+    if (directory/'history.jsonl').exists():
+        (directory/'history.jsonl').rename(directory/f'history-incomplete-{time.time_ns()}.jsonl')
     derived_seed=10000*seed+year
     initialize(derived_seed)
     rng=np.random.default_rng(derived_seed)
