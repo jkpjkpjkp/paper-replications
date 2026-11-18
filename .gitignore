@@ -3,6 +3,7 @@ __pycache__/
 .pytest_cache/
 data/
 *.log
+/sources/official-transalpha/
 
 # BEGIN managed upload rules
 # Shared publication policy. Source modules named data are allowlisted per paper.

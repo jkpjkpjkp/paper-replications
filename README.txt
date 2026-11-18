@@ -66,11 +66,17 @@ with stock IDs aligned across all 16 observations; rows are not reshaped
 after independently deleting observations on each day.
 
 Exact intraday replication remains pending:
+The current representative target is CSI300 Table 3, specified separately in
+.agent/ORIGINAL_EXPERIMENT.json (2026-11-18). It has no completed local run.
+See sources/paper-setting-recheck-20261118.json for the renewed input search.
 The paper says processed anonymous HDF5 factors are provided, but has no
-download/code URL. Title, author, GitHub, and Hugging Face searches on
-2026-11-06 did not locate an official artifact. Search receipts and the
-publisher PDF are saved under sources/. This is a bounded search result,
-not proof that no release exists. Reproducing its Table 3 needs the exact
+download/code URL. A user-Chrome search on 2026-11-18 located the official
+repository at https://github.com/Barnett888/TransAlpha. Its only commit,
+3fb748e453610f5272c9978e769735e3cf07dcbe, contains a 69-byte README, license
+and two Git metadata files; there is no runnable code, data or download link.
+There are no tags, releases or issues. See sources/official-repository-20261118.json
+for the pinned file inventory and browser receipts. This supersedes the older
+search's failure to locate the repository. Reproducing Table 3 still needs the exact
 400-factor 15-minute panel, aligned stock IDs/returns, preprocessing,
 chosen hyperparameters, and precise long/short backtest rules. The daily
 source cannot reconstruct these inputs. CSI2000 and full-market experiments

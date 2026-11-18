@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-18",
+  "repository_url": "https://github.com/Barnett888/TransAlpha",
+  "discovery": "User Chrome Google search of author email found Barnett888; its GitHub profile links TransAlpha and identifies it as the official paper repository.",
+  "commit": "3fb748e453610f5272c9978e769735e3cf07dcbe",
+  "commit_date": "2026-05-14T18:23:06+08:00",
+  "commit_count": 1,
+  "branches": [
+    "origin",
+    "origin/main"
+  ],
+  "tags": [],
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 66,
+      "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 3730,
+      "sha256": "e5ded23a06db48b6ac7629b2ea8a6dded7911f08b9633e0c15c18a0fc8bfe9d0"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1060,
+      "sha256": "88b111d8ecb19049531b6435c6c3d089e785383db85cd38946ff60f78ef9a516"
+    },
+    {
+      "path": "README.md",
+      "bytes": 69,
+      "sha256": "b909fad152cd97aca0b8f44376c73ee6382588f87d4fb4b00c9d88cb9bfd39cd"
+    }
+  ],
+  "readme": "# TransAlpha\nofficial source code for TransAlpha paper in IJCAI 2026",
+  "runnable_code_present": false,
+  "data_present": false,
+  "download_link_in_readme": false,
+  "issue_count": 0,
+  "conclusion": "Official repository located, but it is a four-file placeholder. It does not provide the code, original factors or protocol needed to train the selected experiment.",
+  "receipts": [
+    "sources/chrome-search-author-20261118.json",
+    "sources/chrome-author-repositories-20261118.json",
+    "sources/chrome-official-repo-20261118.json",
+    "sources/chrome-official-repo-content-20261118.json",
+    "sources/chrome-official-issues-20261118.json",
+    "sources/chrome-official-releases-20261118.json"
+  ],
+  "release_count": 0
+}

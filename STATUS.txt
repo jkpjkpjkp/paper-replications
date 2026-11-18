@@ -1,5 +1,22 @@
-0: no verified original-paper comparison; CZ202 monthly adaptation complete.
-Assessment date: 2026-11-17
+0: CSI300 Table 3 reproduction awaits original 400-factor intraday inputs; adaptations complete.
+Assessment date: 2026-11-18
+
+Original-setting request (2026-11-18):
+Selected representative experiment: TransAlpha CSI300, Table 3. Paper targets
+are IC 0.0664, rank IC 0.0713, ICIR 0.4159 and Sharpe 3.1769. The original
+train/validation/test dates, 400 factors, 15-minute frequency, 16-step history,
+model/loss settings and all nine targets are in .agent/ORIGINAL_EXPERIMENT.json.
+No original-setting training has started; local metrics and replication errors
+remain unavailable. Paper std entries are not verified seed uncertainty or CIs.
+The 2026-11-18 user-Chrome search found the official repository:
+https://github.com/Barnett888/TransAlpha
+Commit 3fb748e453610f5272c9978e769735e3cf07dcbe contains only README.md,
+LICENSE, .gitignore and .gitattributes. There is no runnable code, dataset,
+README download link, release, tag or issue containing additional artifacts.
+This corrects the earlier failure to locate an official repository, but does
+not resolve access to original inputs. Search and pinned repository evidence:
+sources/paper-setting-recheck-20261118.json and
+sources/official-repository-20261118.json. Grade remains 0.
 
 Scope and completed evidence:
 Fresh monthly US CZ202 training: TransAlpha and a linear control, seeds 0/1/2
@@ -39,10 +56,13 @@ See DATA.txt for source paths, exact missing-cell/history counts, neutral-fill
 assumptions and current-vintage limitations. No target labels are missing in
 the three experiment splits. The original anonymous 400-factor intraday panel,
 aligned identifiers/returns, preprocessing, selected settings and execution
-rules are still unavailable. Existing bounded searches did not locate an
-official release. The blocker file was removed; these gaps remain documented.
+rules are still unavailable. The official repository is now located but is a
+placeholder. The blocker file was removed; these gaps remain documented.
 
 Evidence paths (relative to this file):
+- .agent/ORIGINAL_EXPERIMENT.json
+- sources/paper-setting-recheck-20261118.json
+- sources/official-repository-20261118.json and sources/chrome-*-20261118.json
 - DATA.txt
 - reproduce_cz202.sh
 - results/cz202/protocol.json

@@ -1,3 +1,15 @@
+Original-paper input recheck — 2026-11-18
+========================================
+Requested original-setting target: TransAlpha CSI300, Table 3.
+User-Chrome search located https://github.com/Barnett888/TransAlpha, identified
+as the official repository. Commit 3fb748e453610f5272c9978e769735e3cf07dcbe
+contains only README.md, LICENSE, .gitignore and .gitattributes. No model code,
+original factors, labels, download link, releases, tags or issues are provided.
+The original 400-factor 15-minute HDF5 panel remains unavailable. No training
+for this original-setting request has started. See .agent/ORIGINAL_EXPERIMENT.json
+and sources/official-repository-20261118.json. The following completed CZ202
+adaptation record is retained separately from the original-setting request.
+
 CZ202 inputs and missing data — assessed 2026-11-17
 =================================================
 

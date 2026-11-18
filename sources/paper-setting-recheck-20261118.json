@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-18",
+  "requested_scope": "Reproduce a representative experiment in the original paper setting",
+  "selected_experiment": "TransAlpha CSI300, Table 3",
+  "outcome": "Official repository found through user Chrome; repository is a placeholder and original inputs remain unavailable. No new training or numerical comparison.",
+  "primary_sources_checked": [
+    "https://ijcai.org/proceedings/2026/580",
+    "https://ijcai.org/proceedings/2026/0580.pdf",
+    "sources/paper.pdf",
+    "sources/page-5.png",
+    "sources/table-7.png"
+  ],
+  "search_queries": [
+    "\"TransAlpha\" \"Lightweight\" code dataset",
+    "\"TransAlpha\" \"barnettyang\"",
+    "\"TransAlpha\" site:github.com",
+    "\"TransAlpha\" dataset HDF5 download",
+    "\"barnettyang\" github",
+    "\"TransAlpha\" site:huggingface.co/datasets",
+    "\"TransAlpha\" site:zenodo.org"
+  ],
+  "search_method": "Initial web search followed by completed Google, GitHub author-profile, repository and issue/release inspections using the user Chrome connection.",
+  "search_result": "Title searches did not locate the repository. Searching the exact author email found Barnett888; direct profile inspection located its official TransAlpha repository. Its only commit contains four metadata files and no code or data.",
+  "limitations": "Bounded search, not proof that no public or private release exists. Search snippets for similarly named people were not treated as author identity or an official repository.",
+  "local_checks": {
+    "roots": [
+      "/home/jkp/data",
+      "/mnt/data/home/jkp/replications"
+    ],
+    "method": "Filename search including hidden and ignored paths for TransAlpha and HDF5 extensions, excluding environment/cache/git/node_modules directories; no symlink traversal. Read current project records, archive mapping and historical TransAlpha audit/search receipts.",
+    "finding": "No original TransAlpha HDF5 candidate located in searched paths. Inspected project inputs are daily Alpha158 and monthly CZ202 adaptations."
+  },
+  "chrome_followup": {
+    "user_requested": true,
+    "session": "transalpha-paper-20261118",
+    "state": "search_completed",
+    "connection": "Initial stale relay recovered once user Chrome became available; status confirmed live transport.",
+    "finding": "https://github.com/Barnett888/TransAlpha",
+    "repository_audit": "sources/official-repository-20261118.json",
+    "search_receipts": [
+      "sources/chrome-search-data-20261118.json",
+      "sources/chrome-search-author-20261118.json",
+      "sources/chrome-search-github-20261118.json",
+      "sources/chrome-search-huggingface-20261118.json"
+    ]
+  },
+  "experiment_specification": ".agent/ORIGINAL_EXPERIMENT.json",
+  "validation": "Specification JSON parsed; local PDF SHA256 verified; all nine target means agree with sources/paper_table3_transalpha.csv and the visually inspected Table 3.",
+  "grade": 0
+}

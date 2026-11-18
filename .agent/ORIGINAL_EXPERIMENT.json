@@ -1,0 +1,115 @@
+{
+  "assessment_date": "2026-11-18",
+  "experiment": "TransAlpha CSI300, Table 3",
+  "state": "blocked_missing_original_inputs",
+  "training_started": false,
+  "paper": {
+    "title": "TransAlpha: Lightweight Design Empowers Stock Return Forecasting",
+    "url": "https://ijcai.org/proceedings/2026/580",
+    "pdf": "sources/paper.pdf",
+    "sha256": "b0dea83e4f84da8ebf6ebc4062f17569ef4b67c6ae154b88d82340c75619db73",
+    "settings_reference": "Sections 3.1-3.4 and 4.1, printed pages 5210-5213",
+    "target_reference": "Table 3, printed page 5215; visually checked against sources/table-7.png"
+  },
+  "paper_settings": {
+    "universe": "CSI300",
+    "frequency_minutes": 15,
+    "input_features": 400,
+    "feature_source": "Original production firm's anonymous proprietary alpha factors in HDF5",
+    "lookback_steps": 16,
+    "hidden_dimension": 64,
+    "csd_threshold": 0.001,
+    "target": "15-minute forward stock return",
+    "train": [
+      "2021-01-04",
+      "2023-09-28"
+    ],
+    "validation": [
+      "2023-10-09",
+      "2023-12-29"
+    ],
+    "test": [
+      "2024-01-02",
+      "2024-12-31"
+    ],
+    "loss_order": [
+      "rank",
+      "huber",
+      "correlation",
+      "product",
+      "regularization"
+    ],
+    "loss_weights": [
+      0.4,
+      0.05,
+      0.4,
+      0.1,
+      0.05
+    ],
+    "hyperparameter_selection": "Validation grid search; grid and selected values not published",
+    "portfolio_description": "Naive long-short 50",
+    "liquidation_cost_rate": 0.001,
+    "framework": "PyTorch 2.7.0, CUDA 11.8",
+    "paper_hardware": "Four RTX 4090 GPUs; AMD EPYC 7T83 server"
+  },
+  "paper_targets": {
+    "ic": {
+      "mean": 0.0664,
+      "reported_std": 0.1597
+    },
+    "rank_ic": {
+      "mean": 0.0713,
+      "reported_std": 0.162
+    },
+    "icir": {
+      "mean": 0.4159,
+      "reported_std": 2.4046
+    },
+    "rank_icir": {
+      "mean": 0.4401,
+      "reported_std": 2.2722
+    },
+    "annualized_return": {
+      "mean": 0.273,
+      "reported_std": 0.0878
+    },
+    "information_ratio": {
+      "mean": 3.5075,
+      "reported_std": 0.084
+    },
+    "sharpe": {
+      "mean": 3.1769,
+      "reported_std": 0.0805
+    },
+    "maximum_drawdown": 0.0392,
+    "turnover": 0.1931
+  },
+  "uncertainty_caution": "Table 3 labels parentheses as std without enough detail to interpret them as seed SD, SEM, or a CI. Do not use them as a replication acceptance band.",
+  "original_data_path": null,
+  "official_code_url": null,
+  "missing_inputs": [
+    "Original CSI300 400-factor HDF5 panel for the paper's splits, with aligned stock IDs and timestamps",
+    "Observed forward returns and exact label endpoint conventions, including end-of-day handling",
+    "Original universe membership and normalization, clipping and missing-data processing",
+    "Selected learning rate, dropout, batch size, head specification, epochs, stopping rule, seeds and validation search grid",
+    "Portfolio leg weights, execution and rebalance timing, turnover definition, IR benchmark, aggregation and annualization"
+  ],
+  "sample_count_ambiguity": {
+    "paper_test_days": 242,
+    "paper_cross_sections_per_day": 16,
+    "paper_claimed_total": 3856,
+    "arithmetic_total": 3872,
+    "resolution": "Use the original timestamp manifest to establish actual coverage; do not silently drop a day or invent missing bars."
+  },
+  "local_results": null,
+  "absolute_error": null,
+  "relative_error": null,
+  "comparison_tolerance": null,
+  "scope_boundary": "Existing 27 daily CSI fits and six monthly CZ202 fits are adaptations. They are not results for this experiment. No synthetic factors, repeated daily bars, or padded substitute features may be represented as the original data.",
+  "official_repository": {
+    "url": "https://github.com/Barnett888/TransAlpha",
+    "commit": "3fb748e453610f5272c9978e769735e3cf07dcbe",
+    "state": "placeholder_no_code_or_data",
+    "audit": "sources/official-repository-20261118.json"
+  }
+}

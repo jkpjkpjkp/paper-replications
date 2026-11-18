@@ -7,8 +7,17 @@
   "report": "results/REPORT.txt",
   "audited_runs": 27,
   "all_completed_runs_audited": true,
-  "assessment_date": "2026-11-17",
+  "assessment_date": "2026-11-18",
   "original_paper_grade": 0,
+  "original_setting_request": {
+    "experiment": "TransAlpha CSI300, Table 3",
+    "state": "blocked_missing_original_inputs",
+    "training_started": false,
+    "specification": ".agent/ORIGINAL_EXPERIMENT.json",
+    "input_recheck": "sources/paper-setting-recheck-20261118.json",
+    "chrome_search": "Complete: official Barnett888/TransAlpha repository found; only four metadata files, no code or data.",
+    "official_repository_audit": "sources/official-repository-20261118.json"
+  },
   "cz202": {
     "scope": "Fresh monthly US adaptation; no comparable original paper target",
     "completed_runs": 6,
