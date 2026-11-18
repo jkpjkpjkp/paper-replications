@@ -163,10 +163,6 @@
       "branch": "paper/monthly-coforecast"
     },
     {
-      "path": "multihorizon-forecast",
-      "branch": "paper/multihorizon-forecast"
-    },
-    {
       "path": "pdu",
       "branch": "paper/pdu"
     },
@@ -193,7 +189,7 @@
       "branch": "paper/risk-aware-utility-reranking"
     },
     {
-      "path": "song26l",
+      "path": "NODATA/song26l",
       "branch": "paper/song26l"
     },
     {

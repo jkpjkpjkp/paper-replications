@@ -43,12 +43,23 @@ then rerun preparation. Existing project ignore rules are preserved.
 
 ```bash
 git remote add origin git@github.com:jkpjkpjkp/paper-replications.git
-git push origin main 'refs/heads/paper/*:refs/heads/paper/*'
+python - <<'PY'
+import json
+import subprocess
+from pathlib import Path
+
+manifest = json.loads(Path('_replication/upload_projects.json').read_text())
+branches = ['main', *(project['branch'] for project in manifest['projects'])]
+refs = [f'refs/heads/{branch}:refs/heads/{branch}' for branch in branches]
+subprocess.run(['git', 'push', '--atomic', 'origin', *refs], check=True)
+PY
 ```
 
 If `origin` already exists, inspect `git remote -v` and skip the add command when
-it has the intended URL. Push only `main` and the `paper/*` refs. Avoid `--mirror`,
-`--all`, force pushes, or pushing original project histories. This keeps existing
+it has the intended URL. Push only `main` and the paper branches listed in the
+manifest. The older local `paper/multihorizon-forecast` branch is excluded from
+upload; do not use a `paper/*` wildcard. Avoid `--mirror`, `--all`, force pushes,
+or pushing original project histories. This keeps existing
 upstream branches/tags and previously committed data local. No remote is created
 or pushed by the preparation script itself.
 

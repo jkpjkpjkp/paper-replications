@@ -1,4 +1,4 @@
-REPLICATION STATUS — 2026-11-17
+REPLICATION STATUS — 2026-11-18
 
 Grades below assess completed saved evidence. On 2026-11-17, new finite CPU
 attempts were started for TRA and PDU; neither is a completed comparison yet.
@@ -9,7 +9,7 @@ Read each project's STATUS.txt and BLOCKER.txt for scope, limitations and paths.
 2 = at least one representative result approximately matches
 3 = all main experiments run and match
 
-Counts: 0: 16, 1: 11, 2: 19, 3: 0 (46 status files).
+Counts: 0: 13, 1: 14, 2: 19, 3: 0 (46 status files).
 Includes two nested extensions of existing papers; these are not independent papers.
 The multihorizon study has no fixed paper target and is marked 0.
 Monthly-coforecast has a scoped NGBoost component benchmark; its CRSP study remains independent.
@@ -44,15 +44,23 @@ also denies access. Only Snapshot sample queries succeed. Both Lookahead status
 files remain grade 0; no representative financial comparison has run. Evidence:
 Lookahead/reproduction/evidence/wrds-compustat-access-20261117.json.
 
+Lookahead authorized adaptation (2026-11-18): the user approved standard/restated
+Compustat. An empirical reconstruction is running on the local GPU, with source
+and explicit substitutions in Lookahead/reproduction/empirical/PROTOCOL.txt.
+Historical Snapshot remains an exact-data limitation, not a launch blocker for
+this run. Live status: /mnt/data/home/jkp/replications/lookahead-restated-20261118/run_status.json.
+Both numerical grades are now 1, scoped to the completed current/restated-data
+QFM baseline: standardized EBIT MSE 1.094017 vs paper 0.65 (absolute error
+0.444017; rounding tolerance 0.005). AutoReg/Linear are 0.933179/1.011244 vs
+0.58/0.52. The neural ensembles are running. Gross monthly portfolio diagnostics
+are not the original net simulation. See the project STATUS files for limitations.
+
 LEVEL  PROJECT / STATUS PATH
   0    CRYPTO/archetypetrader/STATUS.txt
   0    CRYPTO/temg-tta/STATUS.txt
-  0    Kronos/STATUS.txt — Pretrained CSI300 Table 10 reconstruction running (66,338 windows, seeds 0/1/2); no completed AER/IR yet.
   0    limt/extensions/us/STATUS.txt
   0    LLM/Portfolio Pilot/STATUS.txt
   0    LLM/RADAR/STATUS.txt
-  0    Lookahead/reproduction/STATUS.txt
-  0    Lookahead/STATUS.txt
   0    multihorizon-forecast/STATUS.txt
   0    NIPS26/stable-alpha/STATUS.txt
   0    NODATA/hga-mt/STATUS.txt
@@ -60,11 +68,12 @@ LEVEL  PROJECT / STATUS PATH
   0    Set Sequence/STATUS.txt
   0    song26l/STATUS.txt
   0    tra/STATUS.txt
-  0    transalpha/STATUS.txt — CZ202 US monthly adaptation: six fits complete; TransAlpha IC 0.014600, net Sharpe -0.212746; original private intraday comparison remains unavailable.
+  0    transalpha/STATUS.txt — Original CSI300 Table 3 target fixed (2026-11-18): IC 0.0664, Sharpe 3.1769; original intraday inputs unavailable. Six CZ202 adaptation fits complete: IC 0.014600, net Sharpe -0.212746.
   1    alphaqcm/STATUS.txt — AlphaQCM IQN CSI300 (seed 0, 50,000 steps), IC: rerun 0.062207; paper 0.0849 +/- 0.0103 seed SD.
   1    alphasage/STATUS.txt — AlphaSAGE CSI300 adaptive 50-alpha pool (seed 0), IC: rerun 0.049129; paper 0.079.
   1    arboreal/STATUS.txt — ArbNN MagicTelescope, Frame split seed 42 and expanded validation grid (training seed 0), AUC: rerun 0.944804; paper 0.974 +/- 0.001 seed SD.
   1    hermes/STATUS.txt — HERMES S&P500 Figure 3 reconstruction (three seeds), IC: rerun -0.001003 +/- 0.000480 seed SD; paper 0.050.
+  1    Kronos/STATUS.txt — Pretrained CSI300 reconstruction (seed 0), AER: rerun 13.7190%/year; paper 19.11%/year. IR 1.205927 vs 1.3782; opening-limit sensitivity AER 11.7693%, IR 1.050141. Seeds 1/2 running.
   1    limt/STATUS.txt — LiMT CSI300 Alpha158 adaptation (three seeds), IC: rerun 0.043949 +/- 0.001060 seed SD; paper 0.0575.
   1    LLM/alphaprobe/STATUS.txt — AlphaPROBE CSI300 reduced 0.6B run (seed 0), IC: rerun 0.03860; paper 0.0584.
   1    LLM/financial-emoji-transfer/STATUS.txt — TF-IDF text+emoji English-to-Japanese transfer, accuracy gap: rerun 0.075679; paper 0.158.
@@ -72,6 +81,8 @@ LEVEL  PROJECT / STATUS PATH
   1    PDE/STATUS.txt — F-SPDENO Phi4 fixed initial condition, reconstructed M2, relative L2 error: rerun 0.81138 +/- 0.27401 seed SD; paper Table 1 0.012.
   1    rise/STATUS.txt — RISE TFB NASDAQ/NYSE, horizons 24/36/48/60, official-block layout, average MSE: rerun 0.788789; paper 0.657.
   1    stable/STATUS.txt — STABLE US revised paper-settings reconstruction (two seeds), mean annualized Sharpe: rerun 0.501 +/- 0.052 seed SD; paper 1.85.
+  1    Lookahead/STATUS.txt — current/restated-data QFM EBIT MSE 1.094017 vs paper 0.65; neural ensembles running.
+  1    Lookahead/reproduction/STATUS.txt — current/restated-data QFM EBIT MSE 1.094017 vs paper 0.65; neural ensembles running.
   2    corporate-graph-anomalies/STATUS.txt — Parent-paper LOF Elliptic AUROC: archived local fit independently re-evaluated, 45.0857028871% vs arXiv v1 Table 1 45.1%; four AUROC/AUPRC cells match rounding. EB-GAD and corporate extension remain unverified.
   2    CRYPTO/cex-dex-hmm/STATUS.txt
   2    diffusion-dfl/STATUS.txt — Fresh one-seed synthetic score loss 0.343821317 vs 0.362 (5.022% error); paired baseline 0.405261308 vs 0.393 (3.120%). User-accepted approximate match; protocol differences, absent seed uncertainty and prior portfolio mismatch retained.
@@ -146,15 +157,16 @@ Grade 0 -> 2 is restricted to this fresh NGBoost component benchmark; no
 validation of the independent monthly CRSP study or SHARV/CMK/neural models
 is implied. Full evidence: monthly-coforecast/NGBOOST_YACHT_REPRODUCTION.txt.
 
-Kronos-base pretrained attempt (2026-11-17):
-A full CSI300 Table 10 reconstruction is running: 66,338 windows, 317 historical
-constituents, 225 signal dates, seeds 0/1/2. Paper targets: AER 0.1911 and IR
-1.3782. Released checkpoints are pinned; cached float32 inference and Qlib
-trading/cost checks passed. Community data, the demo-derived 2025-06-05 end
-and remaining execution assumptions are documented. Initial GPU-memory failures
-are retained; initial shards used CPU transfers, then resumed fully on GPU.
-Artifacts: /mnt/data/home/jkp/replications/kronos-base-20261117/. Grade remains
-0 pending completed model backtests and assessment. No aggregate count change.
+Kronos-base pretrained comparison (2026-11-17):
+Seed 0 completes 66,338 forecasts and 225 CSI300 backtest sessions. AER is
+0.137190182 vs paper 0.1911 (5.3910 pp/year lower; 28.21% relative error); IR
+is 1.205926575 vs 1.3782 (12.50% lower). Grade changes from 0 to 1 for this
+community-data reconstruction; seeds 1/2 continue. An opening-price-limit
+sensitivity gives AER 0.117692740 and IR 1.050140990. The primary demo-derived
+filter uses closing-price changes for opening execution: see Kronos/WRONG.txt;
+applicability to the paper is unresolved. Data snapshot, terminal date and
+execution substitutions remain explicit. This is pretrained inference only.
+Artifacts: /mnt/data/home/jkp/replications/kronos-base-20261117/.
 
 Diffusion-DFL GPUShare synthetic pilot (2026-11-17):
 Completed one fresh seed plus paired two-stage baseline. Score test loss
@@ -215,3 +227,24 @@ daily CSI adaptations and the unresolved original-data/specification gaps
 remain explicitly recorded. Missing data and imputation are in transalpha/DATA.txt;
 the project blocker file was removed as requested. Full results and checks:
 transalpha/results/cz202/REPORT.txt and transalpha/results/cz202/audit.json.
+
+TransAlpha original-setting request (2026-11-18): selected CSI300 Table 3,
+with all paper settings/targets and unresolved specifications recorded in
+transalpha/.agent/ORIGINAL_EXPERIMENT.json. Search in the user's Chrome found
+the official repository https://github.com/Barnett888/TransAlpha. Its sole
+commit 3fb748e453610f5272c9978e769735e3cf07dcbe contains only four metadata
+files, with no model code, original factors or download link; no tags, releases
+or issues provide further artifacts. This corrects the earlier repository
+search, but original data/protocol access remains unresolved. No new fit or
+numerical comparison has run. Grade remains 0; counts and prior daily/CZ202
+results are unchanged. Evidence: transalpha/sources/official-repository-20261118.json
+and transalpha/sources/paper-setting-recheck-20261118.json.
+
+PDU GPUShare preparation (2026-11-18):
+The previous NASDAQ CPU service is inactive and stopped during epoch 0
+(last logged step 550); its running receipt is stale. One full NASDAQ seed
+is packaged for an RTX 4090 at observed CNY 1.99/hour, with a planned 24-hour
+provider shutdown limit. Account funding is pending (balance CNY 1.14); no
+instance has been purchased. Seven software tests and an independent verifier
+fixture pass, but no new trained comparison exists. Grade remains 0; counts
+unchanged. Plan: .replication-local/runs/pdu-gpushare-20261118/launch-plan.json.

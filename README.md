@@ -1,6 +1,6 @@
 # Paper replications
 
-36 paper and study projects, kept in **one GitHub repository**. Each paper has an independent `paper/<name>` branch; `main` contains the catalogue and shared tools.
+35 paper and study projects, kept in **one GitHub repository**. Each paper has an independent `paper/<name>` branch; `main` contains the catalogue and shared tools.
 
 Only source code, configuration, references, and small written assessments are included. Shared datasets, generated results, checkpoints, environments, `LLM/`, and `CRYPTO/` stay local. Data access and environments must be supplied separately.
 
@@ -33,19 +33,18 @@ Only source code, configuration, references, and small written assessments are i
 | `limt` | [paper/limt](https://github.com/jkpjkpjkp/paper-replications/tree/paper/limt) |
 | `liu26y` | [paper/liu26y](https://github.com/jkpjkpjkp/paper-replications/tree/paper/liu26y) |
 | `monthly-coforecast` | [paper/monthly-coforecast](https://github.com/jkpjkpjkp/paper-replications/tree/paper/monthly-coforecast) |
-| `multihorizon-forecast` | [paper/multihorizon-forecast](https://github.com/jkpjkpjkp/paper-replications/tree/paper/multihorizon-forecast) |
 | `pdu` | [paper/pdu](https://github.com/jkpjkpjkp/paper-replications/tree/paper/pdu) |
 | `prism-vq` | [paper/prism-vq](https://github.com/jkpjkpjkp/paper-replications/tree/paper/prism-vq) |
 | `proximal-portfolio` | [paper/proximal-portfolio](https://github.com/jkpjkpjkp/paper-replications/tree/paper/proximal-portfolio) |
 | `rise` | [paper/rise](https://github.com/jkpjkpjkp/paper-replications/tree/paper/rise) |
 | `risk-aware-utility-reranking` | [paper/risk-aware-utility-reranking](https://github.com/jkpjkpjkp/paper-replications/tree/paper/risk-aware-utility-reranking) |
-| `song26l` | [paper/song26l](https://github.com/jkpjkpjkp/paper-replications/tree/paper/song26l) |
+| `NODATA/song26l` | [paper/song26l](https://github.com/jkpjkpjkp/paper-replications/tree/paper/song26l) |
 | `stable` | [paper/stable](https://github.com/jkpjkpjkp/paper-replications/tree/paper/stable) |
 | `tra` | [paper/tra](https://github.com/jkpjkpjkp/paper-replications/tree/paper/tra) |
 | `transalpha` | [paper/transalpha](https://github.com/jkpjkpjkp/paper-replications/tree/paper/transalpha) |
 | `vision-to-value-evaluation` | [paper/vision-to-value-evaluation](https://github.com/jkpjkpjkp/paper-replications/tree/paper/vision-to-value-evaluation) |
 
-Lookahead/reproduction and limt/extensions/us remain with their parent papers. `NIPS26` and `NODATA` are organizational groups; their individual papers have separate branches. The scratch catalogue `paper/` is excluded.
+Lookahead/reproduction and limt/extensions/us remain with their parent papers. `NIPS26` and `NODATA` are organizational groups; their individual papers have separate branches. The scratch catalogue `paper/` and `multihorizon-forecast` are excluded.
 
 ## Clone
 
