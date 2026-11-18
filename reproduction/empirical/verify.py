@@ -18,11 +18,13 @@ def verify(out):
             WHERE r.permno IS NULL OR r.mthdelflg<>'N' OR r.mthprcdt<>r.mthcaldt OR h.available>h.date""").fetchall()[0][0]
         wrong=c.sql(f"""SELECT count(*) FROM h LEFT JOIN '{BASE}/crsp-monthly/parquet/*.parquet' r
             ON h.permno=r.permno AND year(r.mthcaldt)*12+month(r.mthcaldt)=h.month_id
-            WHERE r.mthret IS NULL OR abs(r.mthret-h.mthret)>1e-12""").fetchall()[0][0]
+            WHERE (r.mthret IS NULL)<>(h.mthret IS NULL) OR abs(r.mthret-h.mthret)>1e-12""").fetchall()[0][0]
+        missing=c.sql('SELECT count(*) FROM h WHERE mthret IS NULL').fetchall()[0][0]
         counts=c.sql('select count(*),count(distinct month_id),count(distinct (permno,month_id)) from h').fetchall()[0]
         assert counts==(12000,240,12000) and bad==0 and wrong==0,(file,counts,bad,wrong)
         checks[file.stem]={'rows':counts[0],'months':counts[1],'duplicate_holdings':0,
-                          'invalid_formation_rows':bad,'missing_or_incorrect_held_returns':wrong}
+                          'invalid_formation_rows':bad,'incorrect_held_returns':wrong,
+                          'missing_held_returns':missing}
     x=np.load(out/'x.npy',mmap_mode='r');y=np.load(out/'y.npy',mmap_mode='r')
     meta=pd.read_parquet(out/'samples.parquet')
     mask=meta.split.eq('test').to_numpy()&np.isfinite(y[:,-1,3])

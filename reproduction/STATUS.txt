@@ -54,3 +54,12 @@ Evidence root:
 Source/protocol: /home/jkp/data/Lookahead/reproduction/empirical/
 Access evidence: /home/jkp/data/Lookahead/reproduction/evidence/wrds-compustat-access-20261117.json
 Historical smoke: /home/jkp/data/.replication-local/artifacts/lfm-quant/results/status.json
+--- AUTOMATIC EMPIRICAL PROGRESS ---
+Updated UTC: 2026-11-18T02:06:45.367633+00:00
+Completed neural fits: 3/40; run_status.json is authoritative for active/failed/completed state.
+mlp: 1/10 members; test EBIT MSE 1.622925524; paper 0.48.
+uq_lstm: 1/10 members; test EBIT MSE 0.986330266; paper 0.48.
+lstm: 1/10 members; test EBIT MSE 0.947006532; paper 0.48.
+Grade 1 remains scoped to the documented substituted-data baseline mismatch.
+This progress update does not upgrade fidelity or claim a paper match.
+--- END AUTOMATIC EMPIRICAL PROGRESS ---

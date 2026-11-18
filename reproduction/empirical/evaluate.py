@@ -102,3 +102,5 @@ if __name__=='__main__':
     evaluate(out)
     from verify import verify
     verify(out)
+    from refresh_progress import refresh
+    refresh(out)
