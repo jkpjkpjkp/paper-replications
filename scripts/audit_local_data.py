@@ -82,7 +82,7 @@ def audit(data_root, out):
     pd.DataFrame(summary).to_csv(out / "candidate_cohort_summary.csv", index=False)
     factors = data_root / "factors-daily/ff3_daily.parquet"
     db.read_parquet(str(factors)).create_view("ff3", replace=True)
-    factor_audit = db.execute("""SELECT count(*) rows, count(DISTINCT date) unique_dates,
+    factor_audit = db.execute("""SELECT count(*) AS n_rows, count(DISTINCT date) unique_dates,
         min(date) first_date,max(date) last_date,
         count(*) FILTER (WHERE rf IS NULL) missing_rf FROM ff3
         WHERE date BETWEEN DATE '1994-01-01' AND DATE '2021-12-31'""").df().to_dict("records")[0]

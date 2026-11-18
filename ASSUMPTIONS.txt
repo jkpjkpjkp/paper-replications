@@ -1,0 +1,144 @@
+EQUITY RECONSTRUCTION: CHOICES FROZEN BEFORE TEST RESULTS
+Date: 2026-11-18. User authorized reconstruction using best judgment.
+
+Scope
+-----
+Reconstruct the 79-input daily equity task and compare Set-Sequence with its
+LongConv backbone, 2002-2021, five seeds each, annual refits on the preceding
+eight years. This is fresh training on reconstructed data. It is not the
+authors' released code/data, and does not cover the proprietary mortgage task,
+synthetic contagion, other sequence baselines, or separately net-trained models.
+
+Sources
+-------
+Target: A Set-Sequence Model for Time Series, arXiv:2505.11243v2, equations
+1-3 and Tables 4, 7, 8, 10, 11. Archived original PDF is unchanged.
+Feature reference: Chen, Pelger and Zhu, Deep Learning in Asset Pricing,
+https://economics.yale.edu/sites/default/files/deep_learning_in_asset_pricing.pdf
+Downloaded 2026-11-18. This is the June 2019 manuscript version, not the final
+2024 supplement. Appendix B, printed pp.65-67 (PDF pp.66-68), supplies formulas.
+Official current author page points to SSRN appendix 3600206; its reader
+returned HTTP 403. Differences from the final reference remain possible.
+LongConv: https://github.com/Elliotepsteino/safari, commit
+b385a6ab0a6a9fdd2fbf8810e10e2d68000599a9. Apache-2.0 license retained in setseq/.
+
+Data and timing
+---------------
+CRSP CIZ daily 1989-2021 (1989-1993 warm-up) and FF3 daily factors are local
+2026 downloads. Returns and RF are decimal, capitalization is thousands of USD,
+Compustat money values are millions. PERMNO is the security identifier.
+500 EQTY/COM stocks per year, with complete returns in all eight training years
+AND the test year, ordered by capitalization on the last training date. This
+retains the paper's ex-post test-completeness filter and hence its selection
+using future availability. It is not a prospectively tradable universe rule.
+Exact author vintage, quarter-cap convention and stock universe are unavailable.
+
+At input close t all rolling calculations end at t; weights predict t+1 excess
+returns. Never shift the label backward to the feature date. Aggregation and
+ranks use the same selected 500 stocks at every date of that annual fit.
+
+Accounting: use Chen's annual formulas, despite the target paper's broad
+reference to quarterly characteristics. Standard consolidated domestic INDL,
+STD, C, D records in USD, with official effective-dated CCM primary links.
+Availability is fiscal date plus six calendar months plus one day; expire
+after 18 months or CCM link expiry. No backfill. Annual lag calculations require
+300-430 days between consecutive statements. The source is standard restated
+Compustat, not a historical point-in-time vintage; lagging does not remove
+later restatements. Annual updates are an explicit reconstruction choice.
+
+Features
+--------
+The ordered 40 base inputs are in configs/equity_features.json. The 39 median
+inputs follow Table 11 order. DP2A aliases DPI2A, ST_REV aliases ST_Rev.
+Accounting formulas follow the reference appendix, with its working-capital
+formula explicitly subtracting DLC. OP uses Compustat XINT for interest expense
+(the appendix's text labels it TIE). Q follows the CEQ item code, despite the
+reference's inconsistent prose description. Missing preferred stock, deferred
+tax credits, debt components, minority interest, IVAO, R&D and advertising
+are zero only where explicitly coded; other missing inputs remain missing.
+Missing XSGA is zero for OP/OL, but remains missing for FC2Y. Positive book
+equity is required for book-equity denominators. A2ME/BEME/CF2P/E2P use market
+cap from the December immediately before the report's availability year.
+Q and LME use current daily market cap. Exact formulas live in setseq/features.py.
+The initial input audit found WCAPCH almost completely missing in the current
+Compustat vintage. Before training, its CF input was reconstructed as the change
+in ACT-LCT between consecutive annual balance sheets wherever WCAPCH is absent.
+No zero-filled CF run was trained. Financial firms with missing ACT/LCT remain
+missing and use the stated neutral-rank imputation.
+
+Market windows: one month=21 trading sessions, one year=252, five years=1260.
+r2_1 and ST_Rev both use the past 21-session cumulative return, as the reference
+describes both as prior/lagged one-month returns. They are intentionally duplicate
+inputs. r12_2: 231 sessions skipping 21; r12_7: 126 skipping 126; r36_13: 504
+skipping 252. Ret_D1: daily return; Ret_W1: past five-session compounded return;
+STD_W1: five-session population SD; Variance: 42-session population variance.
+Rel2High: split-adjusted close / past 252-session maximum (minimum 120).
+Vol: five-session sum of contemporaneous unadjusted share volume, choosing
+Table 10's weekly label over the Appendix F daily-volume prose. Future cumulative
+split factors are never used for absolute volume levels. LTurnover uses adjusted
+past 21-session volume / current adjusted shares, where final-vintage split scale
+cancels. Spread: average relative quoted spread over 21 sessions, minimum 10.
+Invalid or crossed quotes are missing.
+Beta: three-session log-excess-return correlation over 1260 sessions (minimum
+750), multiplied by the 252-session daily log-excess-return volatility ratio
+(minimum 120). Resid_Var: 42-session OLS residual variance on intercept+FF3,
+requiring all observations. SUV: fit daily adjusted volume on intercept and
+positive/negative return magnitudes using the preceding 60 sessions; standardize
+today's residual by that fit's residual SD, then average over 21 sessions.
+This specifies the reference's otherwise incomplete SUV regression horizon.
+
+Ranks: average ties, (rank-1)/(n-1)-0.5; missing=0. A constant cross-section
+becomes zero. RF is retained as a common daily numeric value, not ranked.
+Median features are computed from raw available values before rank normalization.
+Table 11 transformations use daily differences; log is defined only for positive
+medians. Invalid transformed values are replaced with the TRAINING median,
+centered by that median, divided by TRAINING population SD, and clipped to +/-10.
+Zero-variance columns use scale 1. Test observations never fit preprocessing.
+
+Model and training
+------------------
+Six residual Set-Sequence layers, hidden width 64, three-date trailing chunks,
+phi output 5, pooled set summary 2. phi/rho/psi are two-linear-layer FFNs with
+GELU, hidden width 64 and dropout 0.1. Mean aggregation; no stock-ID embedding.
+LongConv has length 30, two channels, learned diagonal skip, GELU and GLU output
+mixing. Kernel initialization SD .002 and soft threshold .003 follow upstream
+config; kernel dropout is 0 following target Table 8. No smoothing. Residual
+dropout 0.1 and post-LayerNorm. A linear encoder and per-date scalar head produce
+signed weights, normalized to L1 exposure 1. No imposed dollar neutrality.
+Baseline has the same encoder, six LongConv/residual/norm blocks and head,
+but no phi/rho/psi. Parameters are reported; capacities are not equal.
+
+AdamW LR .003, constant schedule; kernel weight decay .05, others zero; gradient
+norm clip 1.0. 30 epochs. Nine randomly sampled 246-session training windows per
+epoch (ceil(train days/246)), stratified by start position. This epoch definition
+is a choice because the paper omits batches/epoch. All 500 units train jointly
+under the portfolio Sharpe objective, including in the individual-backbone model.
+Use the final epoch; no hyperparameter search or selection on the test period.
+Initialization seeds 0-4; each fit derives its RNG seed as 10000*seed+test_year.
+CUDA BF16 autocast for dense layers, float32 FFT/reductions. Runtime settings and
+source hashes accompany every checkpoint. Chunked inference includes the full
+causal receptive history (186 preceding dates for Set-Sequence, 174 for baseline).
+
+Evaluation
+----------
+Concatenate all 20 chronological OOS years, then annualize with 252 sessions.
+Report arithmetic annual mean excess return, population volatility, Sharpe,
+market beta, average L1 turnover and fraction of negative-weight stocks.
+Initial holdings are cash. At year boundaries turnover closes departing stocks
+and aligns continuing stocks by PERMNO. No resetting to cash each year.
+Paper reports five initialization means/SD; local sample seed SD uses ddof=1.
+Predeclared approximate Sharpe bands are the paper's descriptive seed SD:
+Set-Sequence +/-0.12 and LongConv +/-0.14. These are not confidence intervals
+or tests of equivalence. All six metric differences are reported, even if a
+single metric happens to match. A one-seed or short-period fit is preliminary.
+Post-hoc net returns subtract .0005*turnover+.0001*short exposure. They are
+diagnostics only, not reproduction of Table 9's separately net-trained model.
+
+Artifacts
+---------
+Source code/configs in this project. Generated input panels, logs, checkpoints,
+dated security weights, audits and comparisons:
+/mnt/data/home/jkp/replications/set-sequence-20261118/
+Convenience link: ../.replication-local/runs/set-sequence-20261118/
+Historical archives are left intact. Completion markers are written only after
+checkpoint and prediction export; starting training does not establish a match.
